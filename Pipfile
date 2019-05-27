@@ -10,6 +10,8 @@ async-timeout = "<4.0,>=3.0"
 aiohttp = "*"
 pyglet = "*"
 numpy = "*"
+scipy = "*"
+scikit-image = "*"
 
 [dev-packages]
 pytest = "*"
@@ -17,6 +19,8 @@ mypy = "*"
 pillow = "*"
 pytest-asyncio = "*"
 hypothesis = "*"
+pytest-benchmark = "*"
+numba = "*"
 
 [requires]
 python_version = "3.7"

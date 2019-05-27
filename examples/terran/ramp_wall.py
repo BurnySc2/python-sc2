@@ -60,7 +60,7 @@ class RampWallBot(sc2.BotAI):
 
         await self._client.send_debug()
 
-        # # Filter locations close to finished supply depots
+        # Filter locations close to finished supply depots
         if depots:
             depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
 

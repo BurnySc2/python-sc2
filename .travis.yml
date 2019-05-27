@@ -33,6 +33,7 @@ jobs:
         - docker exec -i app bash -c "cd /root/template && pipenv install --dev --python 3.7"
         # Run tests
         - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
+        - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/test_benchmark_distance_two_points.py --benchmark-compare"
         # Shut down and remove container
         - docker rm -f app
 
