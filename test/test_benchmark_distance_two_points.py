@@ -80,15 +80,6 @@ def distance_numpy_square_sum_njit(p1, p2) -> Union[int, float]:
     return np.sum((p1 - p2) ** 2, axis=0)
 
 
-def something(duration=0.000001):
-    """
-    Function that needs some serious benchmarking.
-    """
-    time.sleep(duration)
-    # You may return anything you want, like the result of a computation
-    return 123
-
-
 # Points as Point2 object
 p1 = Point2((random.uniform(0, 300), random.uniform(0, 300)))
 p2 = Point2((random.uniform(0, 300), random.uniform(0, 300)))
