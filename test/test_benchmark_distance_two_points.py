@@ -21,7 +21,7 @@ def distance_to_python_raw(s, p):
 def distance_to_squared_python_raw(s, p):
     return (s[0] - p[0]) ** 2 + (s[1] - p[1]) ** 2
 
-def distance_to_hypot(s, p):
+def distance_to_math_hypot(s, p):
     return math.hypot((s[0] - p[0]), (s[1] - p[1]))
 
 def distance_scipy_euclidean(p1, p2) -> Union[int, float]:
@@ -40,7 +40,7 @@ def distance_sum_squared_sqrt(p1, p2) -> Union[int, float]:
 
 def distance_sum_squared(p1, p2) -> Union[int, float]:
     """ Distance calculation using numpy """
-    return np.sum((p1 - p2) ** 2)
+    return np.sum((p1 - p2) ** 2, axis=0)
 
 @njit
 def distance_python_raw_njit(p1: Point2, p2: Point2) -> Union[int, float]:
@@ -60,14 +60,14 @@ def distance_numpy_linalg_norm_njit(p1, p2):
 
 
 @njit("float64(float64[:], float64[:])")
-def distance_numpy_square_sum_njit_sqrt_njit(p1, p2) -> Union[int, float]:
+def distance_numpy_square_sum_sqrt_njit(p1, p2) -> Union[int, float]:
     """ Distance calculation using numpy + numba, same structure as distance13 """
     return np.sqrt(np.sum((p1 - p2) ** 2))
 
 @njit("float64(float64[:], float64[:])")
 def distance_numpy_square_sum_njit(p1, p2) -> Union[int, float]:
     """ Distance calculation using numpy + numba, same structure as distance13 """
-    return np.sum((p1 - p2) ** 2)
+    return np.sum((p1 - p2) ** 2, axis=0)
 
 
 
@@ -79,7 +79,7 @@ def something(duration=0.000001):
     # You may return anything you want, like the result of a computation
     return 123
 
-
+# Points as Point2 object
 p1 = Point2((
     random.uniform(0, 300),
     random.uniform(0, 300),
@@ -88,9 +88,12 @@ p2 = Point2((
     random.uniform(0, 300),
     random.uniform(0, 300),
 ))
+# Points as numpy array to get most accuracy if all points do not need to be converted before calculation
 p1_np = np.asarray(p1)
 p2_np = np.asarray(p2)
-correct_result = distance_to_hypot(p1, p2)
+
+# Correct result to ensure that in the functions the correct result is calculated
+correct_result = distance_to_math_hypot(p1, p2)
 
 # print(p1, p1_np)
 # print(p2, p2_np)
@@ -100,7 +103,7 @@ correct_result = distance_to_hypot(p1, p2)
 distance_python_raw_njit(p1_np, p2_np)
 distance_python_raw_square_njit(p1_np, p2_np)
 distance_numpy_linalg_norm_njit(p1_np, p2_np)
-distance_numpy_square_sum_njit_sqrt_njit(p1_np, p2_np)
+distance_numpy_square_sum_sqrt_njit(p1_np, p2_np)
 distance_numpy_square_sum_njit(p1_np, p2_np)
 
 def check_result(result1, result2, accuracy = 1e-5):
@@ -108,8 +111,8 @@ def check_result(result1, result2, accuracy = 1e-5):
         return True
     return False
 
-def test_hypot(benchmark):
-    result = benchmark(distance_to_hypot, p1, p2)
+def test_distance_to_math_hypot(benchmark):
+    result = benchmark(distance_to_math_hypot, p1, p2)
     assert check_result(result, correct_result)
 
 def test_distance_to_python_raw(benchmark):
@@ -148,8 +151,8 @@ def test_distance_numpy_linalg_norm_njit(benchmark):
     result = benchmark(distance_numpy_linalg_norm_njit, p1_np, p2_np)
     assert check_result(result, correct_result)
 
-def test_distance_numpy_square_sum_njit_sqrt_njit(benchmark):
-    result = benchmark(distance_numpy_square_sum_njit_sqrt_njit, p1_np, p2_np)
+def test_distance_numpy_square_sum_sqrt_njit(benchmark):
+    result = benchmark(distance_numpy_square_sum_sqrt_njit, p1_np, p2_np)
     assert check_result(result, correct_result)
 
 def test_distance_numpy_square_sum_njit(benchmark):
