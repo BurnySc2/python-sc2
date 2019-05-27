@@ -55,11 +55,16 @@ class Blip:
 class Common:
     ATTRIBUTES = [
         "player_id",
-        "minerals", "vespene",
-        "food_cap", "food_used",
-        "food_army", "food_workers",
-        "idle_worker_count", "army_count",
-        "warp_gate_count", "larva_count"
+        "minerals",
+        "vespene",
+        "food_cap",
+        "food_used",
+        "food_army",
+        "food_workers",
+        "idle_worker_count",
+        "army_count",
+        "warp_gate_count",
+        "larva_count",
     ]
 
     def __init__(self, proto):
@@ -105,7 +110,6 @@ class GameState:
         self.action_errors = response_observation.action_errors  # error actions since last loop
 
         # https://github.com/Blizzard/s2client-proto/blob/51662231c0965eba47d5183ed0a6336d5ae6b640/s2clientprotocol/sc2api.proto#L575
-        # TODO: implement alerts https://github.com/Blizzard/s2client-proto/blob/51662231c0965eba47d5183ed0a6336d5ae6b640/s2clientprotocol/sc2api.proto#L640
         self.observation = response_observation.observation
         self.observation_raw = self.observation.raw_data
         self.dead_units: Set[int] = self.observation_raw.event.dead_units  # returns set of tags of units that died
@@ -132,7 +136,7 @@ class GameState:
         self.watchtowers: Units = Units([])
         self.units: Units = Units([])
 
-        for unit in self.observation.raw_data.units:
+        for unit in self.observation_raw.units:
             if unit.is_blip:
                 self._blipUnits.append(unit)
             else:

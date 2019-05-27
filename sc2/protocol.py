@@ -1,15 +1,13 @@
 import asyncio
-import sys
 
 import logging
-logger = logging.getLogger(__name__)
+import sys
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from .data import Status
 
 logger = logging.getLogger(__name__)
-
 
 
 class ProtocolError(Exception):
@@ -33,7 +31,8 @@ class Protocol:
         try:
             await self._ws.send_bytes(request.SerializeToString())
         except TypeError:
-            raise ConnectionAlreadyClosed("Cannot send: Connection already closed.")
+            logger.exception("Cannot send: Connection already closed.")
+            raise ConnectionAlreadyClosed("Connection already closed.")
         logger.debug(f"Request sent")
 
         response = sc_pb.Response()

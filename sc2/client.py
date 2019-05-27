@@ -178,7 +178,8 @@ class Client(Protocol):
     async def query_pathing(
         self, start: Union[Unit, Point2, Point3], end: Union[Point2, Point3]
     ) -> Optional[Union[int, float]]:
-        """ Caution: returns 0 when path not found """
+        """ Caution: returns "None" when path not found
+        Try to combine queries with the function below because the pathing query is generally slow. """
         assert isinstance(start, (Point2, Unit))
         assert isinstance(end, Point2)
         if isinstance(start, Point2):
@@ -209,7 +210,6 @@ class Client(Protocol):
         """ Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])
         -> returns [distance1, distance2]
         Caution: returns 0 when path not found
-        Might merge this function with the function above
         """
         assert zipped_list, "No zipped_list"
         assert isinstance(zipped_list, list), f"{type(zipped_list)}"
@@ -240,7 +240,7 @@ class Client(Protocol):
         return [float(d.distance) for d in results.query.pathing]
 
     async def query_building_placement(
-        self, ability: AbilityId, positions: List[Union[Unit, Point2, Point3]], ignore_resources: bool = True
+        self, ability: AbilityId, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
         assert isinstance(ability, AbilityData)
         result = await self._execute(
@@ -257,16 +257,15 @@ class Client(Protocol):
         return [ActionResult(p.result) for p in result.query.placements]
 
     async def query_available_abilities(
-        self, units: Union[List[Unit], "Units"], ignore_resource_requirements: bool = False
+        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
         """ Query abilities of multiple units """
+        input_was_a_list = True
         if not isinstance(units, list):
             """ Deprecated, accepting a single unit may be removed in the future, query a list of units instead """
             assert isinstance(units, Unit)
             units = [units]
             input_was_a_list = False
-        else:
-            input_was_a_list = True
         assert units
         result = await self._execute(
             query=query_pb.RequestQuery(
@@ -274,7 +273,7 @@ class Client(Protocol):
                 ignore_resource_requirements=ignore_resource_requirements,
             )
         )
-        """ Fix for bots that only query a single unit """
+        """ Fix for bots that only query a single unit, may be removed soon """
         if not input_was_a_list:
             return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities][0]
         return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities]
@@ -337,18 +336,22 @@ class Client(Protocol):
             )
         )
 
-    async def debug_kill_unit(self, unit_tags: Union[Units, List[int], Set[int]]):
+    async def debug_kill_unit(self, unit_tags: Union[Unit, Units, List[int], Set[int]]):
         if isinstance(unit_tags, Units):
             unit_tags = unit_tags.tags
+        if isinstance(unit_tags, Unit):
+            unit_tags = [unit_tags.tag]
         assert unit_tags
 
         await self._execute(
             debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(kill_unit=debug_pb.DebugKillUnit(tag=unit_tags))])
         )
 
-    async def move_camera(self, position: Union[Unit, Point2, Point3]):
+    async def move_camera(self, position: Union[Unit, Units, Point2, Point3]):
         """ Moves camera to the target position """
-        assert isinstance(position, (Unit, Point2, Point3))
+        assert isinstance(position, (Unit, Units, Point2, Point3))
+        if isinstance(position, Units):
+            position = position.center
         if isinstance(position, Unit):
             position = position.position
         await self._execute(
@@ -380,7 +383,7 @@ class Client(Protocol):
         await self._execute(action=sc_pb.RequestAction(actions=[action]))
 
     async def debug_text(self, texts: Union[str, list], positions: Union[list, set], color=(0, 255, 0), size_px=16):
-        """ Deprecated, may be removed soon """
+        """ Deprecated, may be removed soon. Use combination of "debug_text_simple", "debug_text_screen" or "debug_text_world" together with "send_debug" instead. """
         if isinstance(positions, (set, list)):
             if not positions:
                 return
@@ -486,8 +489,6 @@ class Client(Protocol):
         """ Helper function for color conversion """
         if color is None:
             return debug_pb.Color(r=255, g=255, b=255)
-        elif isinstance(color, tuple) and len(color) == 3:
-            return debug_pb.Color(r=color[0], g=color[1], b=color[1])
         else:
             r = getattr(color, "r", getattr(color, "x", 255))
             g = getattr(color, "g", getattr(color, "y", 255))
@@ -511,7 +512,7 @@ class Client(Protocol):
         """ Helper function to create debug texts """
         color = self.to_debug_color(color)
         pt3d = self.to_debug_point(pos) if isinstance(pos, Point3) else None
-        virtual_pos = self.to_debug_point(pos) if not isinstance(pos, Point3) else None
+        virtual_pos = self.to_debug_point(pos) if pos is not None and not isinstance(pos, Point3) else None
 
         return debug_pb.DebugText(color=color, text=text, virtual_pos=virtual_pos, world_pos=pt3d, size=size)
 

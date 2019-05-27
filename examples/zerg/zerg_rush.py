@@ -62,7 +62,7 @@ class ZergRushBot(sc2.BotAI):
             for drone in self.workers.random_group_of(3):
                 await self.do(drone.gather(extractor))
 
-        if self.minerals > 500 and self.workers.exists:
+        if self.minerals > 500:
             for d in range(4, 15):
                 pos = hatchery.position.to2.towards(self.game_info.map_center, d)
                 if await self.can_place(HATCHERY, pos):
@@ -76,7 +76,7 @@ class ZergRushBot(sc2.BotAI):
                 await self.do(larvae.random.train(DRONE))
 
         if not self.extractor_started:
-            if self.can_afford(EXTRACTOR) and self.workers.exists:
+            if self.can_afford(EXTRACTOR):
                 drone = self.workers.random
                 target = self.state.vespene_geyser.closest_to(drone.position)
                 err = await self.do(drone.build(EXTRACTOR, target))
@@ -84,7 +84,7 @@ class ZergRushBot(sc2.BotAI):
                     self.extractor_started = True
 
         elif not self.spawning_pool_started:
-            if self.can_afford(SPAWNINGPOOL) and self.workers.exists:
+            if self.can_afford(SPAWNINGPOOL):
                 for d in range(4, 15):
                     pos = hatchery.position.to2.towards(self.game_info.map_center, d)
                     if await self.can_place(SPAWNINGPOOL, pos):

@@ -140,14 +140,14 @@ class Point2(Pointlike):
 
     def distance2_to(self, other: "Point2"):
         """Squared distance to a point."""
-        assert isinstance(other, Point2)
+        assert isinstance(other, Point2), f"other is not of type Point2"
         return (self[0] - other[0]) ** 2 + (self[1] - other[1]) ** 2
 
     def random_on_distance(self, distance):
         if isinstance(distance, (tuple, list)):  # interval
             distance = distance[0] + random.random() * (distance[1] - distance[0])
 
-        assert distance > 0
+        assert distance > 0, f"Distance is not greater than 0"
         angle = random.random() * 2 * math.pi
 
         dx, dy = math.cos(angle), math.sin(angle)
@@ -167,9 +167,9 @@ class Point2(Pointlike):
     def circle_intersection(self, p: "Point2", r: Union[int, float]) -> Set["Point2"]:
         """ self is point1, p is point2, r is the radius for circles originating in both points
         Used in ramp finding """
-        assert self != p
+        assert self != p, f"self is equal to p"
         distanceBetweenPoints = self.distance_to(p)
-        assert r > distanceBetweenPoints / 2
+        assert r >= distanceBetweenPoints / 2
         # remaining distance from center towards the intersection, using pythagoras
         remainingDistanceFromCenter = (r ** 2 - (distanceBetweenPoints / 2) ** 2) ** 0.5
         # center of both points

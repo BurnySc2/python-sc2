@@ -1,5 +1,5 @@
 from bisect import bisect_left
-from functools import lru_cache, reduce
+from functools import lru_cache
 from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
 
 from .constants import ZERGLING
@@ -13,13 +13,6 @@ from .unit_command import UnitCommand
 # TODO move to constants, add more?
 FREE_ABILITIES = {"Lower", "Raise", "Land", "Lift", "Hold", "Harvest"}
 
-def split_camel_case(text) -> list:
-    """Splits words from CamelCase text."""
-    return list(reduce(
-        lambda a, b: (a + [b] if b.isupper() else a[:-1] + [a[-1] + b]),
-        text,
-        []
-    ))
 
 class GameData:
     def __init__(self, data):
@@ -51,14 +44,10 @@ class GameData:
             if unit.creation_ability == ability:
                 if unit.id == ZERGLING:
                     # HARD CODED: zerglings are generated in pairs
-                    return Cost(
-                        unit.cost.minerals * 2,
-                        unit.cost.vespene * 2,
-                        unit.cost.time
-                    )
+                    return Cost(unit.cost.minerals * 2, unit.cost.vespene * 2, unit.cost.time)
                 # Correction for morphing units, e.g. orbital would return 550/0 instead of actual 150/0
                 morph_cost = unit.morph_cost
-                if morph_cost: # can be None
+                if morph_cost:  # can be None
                     return morph_cost
                 # Correction for zerg structures without morph: Extractor would return 75 instead of actual 25
                 return unit.cost_zerg_corrected
@@ -69,7 +58,9 @@ class GameData:
 
         return Cost(0, 0)
 
+
 class AbilityData:
+
     ability_ids: List[int] = [ability_id.value for ability_id in AbilityId][1:]  # sorted list
 
     @classmethod
@@ -112,15 +103,14 @@ class AbilityData:
 
     @property
     def is_free_morph(self) -> bool:
-        parts = split_camel_case(self._proto.link_name)
-        for p in parts:
-            if p in FREE_ABILITIES:
-                return True
+        if any(free in self._proto.link_name for free in FREE_ABILITIES):
+            return True
         return False
 
     @property
     def cost(self) -> "Cost":
         return self._game_data.calculate_ability_cost(self.id)
+
 
 class UnitTypeData:
     def __init__(self, game_data, proto):
@@ -209,11 +199,7 @@ class UnitTypeData:
 
     @property
     def cost(self) -> "Cost":
-        return Cost(
-            self._proto.mineral_cost,
-            self._proto.vespene_cost,
-            self._proto.build_time
-        )
+        return Cost(self._proto.mineral_cost, self._proto.vespene_cost, self._proto.build_time)
 
     @property
     def cost_zerg_corrected(self) -> "Cost":
@@ -222,11 +208,7 @@ class UnitTypeData:
             # a = self._game_data.units(UnitTypeId.ZERGLING)
             # print(a)
             # print(vars(a))
-            return Cost(
-                self._proto.mineral_cost - 50,
-                self._proto.vespene_cost,
-                self._proto.build_time
-            )
+            return Cost(self._proto.mineral_cost - 50, self._proto.vespene_cost, self._proto.build_time)
         else:
             return self.cost
 
@@ -244,10 +226,10 @@ class UnitTypeData:
             self._game_data.units[tech_alias.value].cost.vespene for tech_alias in self.tech_alias
         )
         return Cost(
-                self._proto.mineral_cost - tech_alias_cost_minerals,
-                self._proto.vespene_cost - tech_alias_cost_vespene,
-                self._proto.build_time
-            )
+            self._proto.mineral_cost - tech_alias_cost_minerals,
+            self._proto.vespene_cost - tech_alias_cost_vespene,
+            self._proto.build_time,
+        )
 
 
 class UpgradeData:

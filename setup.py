@@ -10,7 +10,7 @@ test_requirements = convert_deps_to_pip(pfile['dev-packages'], r=False)
 setup(
     name = "sc2",
     packages = find_packages(),
-    version = "0.11.1",
+    version = "0.11.0",
     description = "A StarCraft II API Client for Python 3",
     license="MIT",
     author = "Hannes Karppila",

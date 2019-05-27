@@ -9,6 +9,8 @@ from sc2 import Race, Difficulty
 from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.position import Point2, Point3
+from sc2.unit import Unit
+from sc2.units import Units
 
 
 class RampWallBot(sc2.BotAI):
@@ -58,7 +60,7 @@ class RampWallBot(sc2.BotAI):
 
         await self._client.send_debug()
 
-        # Filter locations close to finished supply depots
+        # # Filter locations close to finished supply depots
         if depots:
             depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
 
@@ -82,6 +84,8 @@ class RampWallBot(sc2.BotAI):
                 w = ws.random
                 await self.do(w.build(BARRACKS, barracks_placement_position))
 
+    async def on_building_construction_complete(self, unit: Unit):
+        print(f"Construction of building {unit} completed at {unit.position}.")
 
     def terrain_to_z_height(self, h):
         # Required for drawing ramp points
@@ -96,13 +100,13 @@ class RampWallBot(sc2.BotAI):
                 p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z))
                 p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.5))
                 # print(f"Drawing {p0} to {p1}")
-                color = (255, 0, 0)
+                color = Point3((255, 0, 0))
                 if p in ramp.upper:
-                    color = (0, 255, 0)
+                    color = Point3((0, 255, 0))
                 if p in ramp.upper2_for_ramp_wall:
-                    color = (0, 255, 255)
+                    color = Point3((0, 255, 255))
                 if p in ramp.lower:
-                    color = (0, 0, 255)
+                    color = Point3((0, 0, 255))
                 self._client.debug_box_out(p0, p1, color=color)
 
 
@@ -122,7 +126,8 @@ class RampWallBot(sc2.BotAI):
             p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z))
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.5))
             # print(f"Drawing {p0} to {p1}")
-            self._client.debug_box_out(p0, p1, color=(255, 0, 0))
+            color = Point3((255, 0, 0))
+            self._client.debug_box_out(p0, p1, color=color)
 
     def draw_vision_blockers(self):
         for p in self.game_info.vision_blockers:
@@ -132,7 +137,8 @@ class RampWallBot(sc2.BotAI):
             p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z))
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.5))
             # print(f"Drawing {p0} to {p1}")
-            self._client.debug_box_out(p0, p1, color=(255, 0, 0))
+            color = Point3((255, 0, 0))
+            self._client.debug_box_out(p0, p1, color=color)
 
 def main():
     map = random.choice(
@@ -146,7 +152,6 @@ def main():
             "PortAleksanderLE",
             "StasisLE",
             "DarknessSanctuaryLE",
-            "SequencerLE", # Upper right has a different ramp top
             "ParaSiteLE",  # Has 5 upper points at the main ramp
             "AcolyteLE",  # Has 4 upper points at the ramp to the in-base natural and 2 upper points at the small ramp
             "HonorgroundsLE",  # Has 4 or 9 upper points at the large main base ramp

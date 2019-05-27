@@ -26,14 +26,14 @@ class Ramp:
     def _placement_grid(self):
         return self.__game_info.placement_grid
 
-    @property
+    @property_immutable_cache
     def size(self) -> int:
         return len(self._points)
 
     def height_at(self, p: Point2) -> int:
         return self._height_map[p]
 
-    @property
+    @property_mutable_cache
     def points(self) -> Set[Point2]:
         return self._points.copy()
 
@@ -51,7 +51,7 @@ class Ramp:
                 result.add(p)
         return result
 
-    @property
+    @property_mutable_cache
     def upper2_for_ramp_wall(self) -> Set[Point2]:
         """ Returns the 2 upper ramp points of the main base ramp required for the supply depot and barracks placement properties used in this file. """
         if len(self.upper) > 5:
@@ -64,14 +64,14 @@ class Ramp:
             upper2.pop()
         return set(upper2)
 
-    @property
+    @property_immutable_cache
     def top_center(self) -> Point2:
         upper = self.upper
         length = len(upper)
         pos = Point2((sum(p.x for p in upper) / length, sum(p.y for p in upper) / length))
         return pos
 
-    @property
+    @property_mutable_cache
     def lower(self) -> Set[Point2]:
         current_min = 10000
         result = set()
@@ -84,7 +84,7 @@ class Ramp:
                 result.add(p)
         return result
 
-    @property
+    @property_immutable_cache
     def bottom_center(self) -> Point2:
         lower = self.lower
         length = len(lower)
@@ -125,7 +125,7 @@ class Ramp:
             return max(intersects, key=lambda p: p.distance_to_point2(anyLowerPoint))
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
-    @property
+    @property_mutable_cache
     def corner_depots(self) -> Set[Point2]:
         """ Finds the 2 depot positions on the outside """
         if not self.upper2_for_ramp_wall:
@@ -143,7 +143,7 @@ class Ramp:
             return intersects
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
-    @property
+    @property_immutable_cache
     def barracks_can_fit_addon(self) -> bool:
         """ Test if a barracks can fit an addon at natural ramp """
         # https://i.imgur.com/4b2cXHZ.png
@@ -211,13 +211,13 @@ class GameInfo:
             and map_area.y <= b < map_area.y + map_area.height
             and self.placement_grid[(a, b)] == 0
         ]
-        # devide points into ramp points and vision blockers
-        ramp_points = [point for point in points if not equal_height_around(point)]
-        vision_blockers = set(point for point in points if equal_height_around(point))
-        ramps = [Ramp(group, self) for group in self._find_groups(ramp_points)]
-        return ramps, vision_blockers
+        # divide points into ramp points and vision blockers
+        rampPoints = [point for point in points if not equal_height_around(point)]
+        visionBlockers = set(point for point in points if equal_height_around(point))
+        ramps = [Ramp(group, self) for group in self._find_groups(rampPoints)]
+        return ramps, visionBlockers
 
-    def _find_groups(self, points: Set[Point2], minimum_points_per_group: int = 5):
+    def _find_groups(self, points: Set[Point2], minimum_points_per_group: int = 8):
         """
         From a set of points, this function will try to group points together by
         painting clusters of points in a rectangular map using flood fill algorithm.

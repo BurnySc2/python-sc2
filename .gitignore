@@ -23,6 +23,3 @@ mini_games/
 # Editors
 .idea/
 .vscode/
-
-# Temp image files
-*.png

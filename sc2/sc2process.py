@@ -55,6 +55,8 @@ class SC2Process:
         kill_switch.add(self)
 
         def signal_handler(*args):
+            # unused arguments: signal handling library expects all signal
+            # callback handlers to accept two positional arguments
             kill_switch.kill_all()
 
         signal.signal(signal.SIGINT, signal_handler)

@@ -95,7 +95,7 @@ class Units(list):
 
     @property
     def first(self) -> Unit:
-        assert self
+        assert self, "Units object is empty"
         return self[0]
 
     # NOTE former argument 'require_all' is not needed any more
@@ -109,7 +109,7 @@ class Units(list):
 
     @property
     def random(self) -> Unit:
-        assert self.exists
+        assert self, "Units object is empty"
         return random.choice(self)
 
     def random_or(self, other: any) -> Unit:
@@ -151,7 +151,7 @@ class Units(list):
         return position.closest(self)
 
     def furthest_to(self, position: Union[Unit, Point2, Point3]) -> Unit:
-        assert self.exists
+        assert self, "Units object is empty"
         if isinstance(position, Unit):
             position = position.position
         return position.furthest(self)
@@ -235,7 +235,7 @@ class Units(list):
         'self.units.same_tech(UnitTypeId.ORBITALCOMMAND)'
         returns OrbitalCommand and OrbitalCommandFlying
         This also works with a set/list/dict parameter, e.g. 'self.units.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})'
-        Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and others
+        Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit
         """
         if isinstance(other, UnitTypeId):
             other = {other}
@@ -358,4 +358,3 @@ class UnitSelection(Units):
             assert isinstance(
                 selection, (UnitTypeId, set)
             ), f"selection is not None or of type UnitTypeId or Set[UnitTypeId]"
-

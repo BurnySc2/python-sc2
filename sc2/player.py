@@ -1,5 +1,6 @@
-from .data import AIBuild, PlayerType, Race, Difficulty
 from .bot_ai import BotAI
+from .data import AIBuild, Difficulty, PlayerType, Race
+
 
 class AbstractPlayer:
     def __init__(self, p_type, race=None, name=None, difficulty=None, ai_build=None, fullscreen=False):
@@ -36,9 +37,9 @@ class Human(AbstractPlayer):
 
     def __str__(self):
         if self.name is not None:
-            return f"Human({self.race}, name={self.name !r})"
+            return f"Human({self.race._name_}, name={self.name !r})"
         else:
-            return f"Human({self.race})"
+            return f"Human({self.race._name_})"
 
 
 class Bot(AbstractPlayer):
@@ -53,9 +54,9 @@ class Bot(AbstractPlayer):
 
     def __str__(self):
         if self.name is not None:
-            return f"Bot({self.race}, {self.ai}, name={self.name !r})"
+            return f"Bot {self.ai.__class__.__name__}({self.race._name_}), name={self.name !r})"
         else:
-            return f"Bot({self.race}, {self.ai})"
+            return f"Bot {self.ai.__class__.__name__}({self.race._name_})"
 
 
 class Computer(AbstractPlayer):
@@ -65,12 +66,14 @@ class Computer(AbstractPlayer):
     def __str__(self):
         return f"Computer {self.difficulty._name_}({self.race._name_}, {self.ai_build.name})"
 
+
 class Observer(AbstractPlayer):
     def __init__(self):
         super().__init__(PlayerType.Observer)
 
     def __str__(self):
-        return f"Observer()"
+        return f"Observer"
+
 
 class Player(AbstractPlayer):
     @classmethod
