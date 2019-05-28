@@ -55,11 +55,11 @@ def numpy_fromiter_tuple(my_tuple):
 
 def numpy_fromiter_np_float(x, y):
     # Calculate distances between each of the points
-    return np.fromiter((x, y), dtype=float, count=2)
+    return np.fromiter((x, y), dtype=np.float, count=2)
 
 def numpy_fromiter_np_float_tuple(my_tuple):
     # Calculate distances between each of the points
-    return np.fromiter(my_tuple, dtype=float, count=2)
+    return np.fromiter(my_tuple, dtype=np.float, count=2)
 
 def numpy_zeros(x, y):
     # Calculate distances between each of the points

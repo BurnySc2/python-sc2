@@ -99,39 +99,30 @@ def square_to_condensed(i, j, amount):
     return amount * j - j * (j + 1) // 2 + i - 1 - j
 
 
-for i1 in range(amount):
-    for i2 in range(amount):
-        if i1 == i2: continue
-        print(i1, i2, square_to_condensed(i1, i2, amount), len(m2))
-        assert m2[square_to_condensed(i1, i2, amount)] == m2[square_to_condensed(i2, i1, amount)] == m1[i1, i2]
-
 # Test if distance in cdist is same as in pdist, and that the indices function is correct
 indices = set()
 for i1 in range(amount):
     for i2 in range(amount):
         if i1 == i2:
             # Diagonal entries are zero
-            assert True
             continue
-        else:
-            # m1 = cdist square matrix
-            v1 = m1[i1, i2]
-            # m2 = pdist condensed matrix vector
-            index = square_to_condensed(i1, i2, amount)
-            # print(i1, i2, index)
-            indices.add(index)
-            v2 = m2[index]
+        # m1: cdist square matrix
+        v1 = m1[i1, i2]
+        # m2: pdist condensed matrix vector
+        index = square_to_condensed(i1, i2, amount)
+        # print(i1, i2, index, len(m2))
+        indices.add(index)
+        v2 = m2[index]
 
-            # Test if convert indices functions work
-            j1, j2 = condensed_to_square(index, amount)
-            # Swap if first is bigger than 2nd
-            if i1 > i2:
-                i2, i1 = i1, i2
-            assert j1 == i1 and j2 == i2, f"{j1} == {i1} and {j2} == {i2}"
+        # Test if convert indices functions work
+        j1, j2 = condensed_to_square(index, amount)
+        # Swap if first is bigger than 2nd
+        assert j1 == i1 and j2 == i2 or j2 == i1 and j2 == i1, f"{j1} == {i1} and {j2} == {i2}"
 
-            # Assert if the values of cdist is the same as the value of pdist
-            assert v1 == v2, f"m1[i1, i2] is {v1}, m2[index] is {v2}"
-# assert len(indices) == len(m2), f"{len(indices)} == {len(m2)}"
+        # Assert if the values of cdist is the same as the value of pdist
+        assert v1 == v2, f"m1[i1, i2] is {v1}, m2[index] is {v2}"
+# Test that all indices were generated using the for loop above
+assert len(indices) == len(m2), f"{len(indices)} == {len(m2)}"
 assert max(indices) == len(m2) - 1
 assert min(indices) == 0
 
