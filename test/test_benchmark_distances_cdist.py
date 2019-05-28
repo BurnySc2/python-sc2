@@ -79,9 +79,9 @@ def distance_matrix_scipy_cdist_matching(ps):
     return cdist(ps, ps, "matching")
 
 
-def distance_matrix_scipy_cdist_minkowski(ps):
-    # Calculate distances between each of the points
-    return cdist(ps, ps, "minkowski")
+# def distance_matrix_scipy_cdist_minkowski(ps):
+#     # Calculate distances between each of the points
+#     return cdist(ps, ps, "minkowski")
 
 
 def distance_matrix_scipy_cdist_rogerstanimoto(ps):
@@ -109,9 +109,9 @@ def distance_matrix_scipy_cdist_sokalsneath(ps):
     return cdist(ps, ps, "sokalsneath")
 
 
-def distance_matrix_scipy_cdist_wminkowski(ps):
-    # Calculate distances between each of the points
-    return cdist(ps, ps, "wminkowski")
+# def distance_matrix_scipy_cdist_wminkowski(ps):
+#     # Calculate distances between each of the points
+#     return cdist(ps, ps, "wminkowski")
 
 
 def distance_matrix_scipy_cdist_yule(ps):
@@ -208,9 +208,9 @@ def test_distance_matrix_scipy_cdist_matching(benchmark):
     # assert check_result(result, correct_result)
 
 
-def test_distance_matrix_scipy_cdist_minkowski(benchmark):
-    result = benchmark(distance_matrix_scipy_cdist_minkowski, points)
-    # assert check_result(result, correct_result)
+# def test_distance_matrix_scipy_cdist_minkowski(benchmark):
+#     result = benchmark(distance_matrix_scipy_cdist_minkowski, points)
+#     # assert check_result(result, correct_result)
 
 
 def test_distance_matrix_scipy_cdist_rogerstanimoto(benchmark):
@@ -238,9 +238,9 @@ def test_distance_matrix_scipy_cdist_sokalsneath(benchmark):
     # assert check_result(result, correct_result)
 
 
-def test_distance_matrix_scipy_cdist_wminkowski(benchmark):
-    result = benchmark(distance_matrix_scipy_cdist_wminkowski, points)
-    # assert check_result(result, correct_result)
+# def test_distance_matrix_scipy_cdist_wminkowski(benchmark):
+#     result = benchmark(distance_matrix_scipy_cdist_wminkowski, points)
+#     # assert check_result(result, correct_result)
 
 
 def test_distance_matrix_scipy_cdist_yule(benchmark):

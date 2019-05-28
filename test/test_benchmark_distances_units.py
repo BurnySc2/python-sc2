@@ -99,7 +99,14 @@ def square_to_condensed(i, j, amount):
     return amount * j - j * (j + 1) // 2 + i - 1 - j
 
 
+for i1 in range(amount):
+    for i2 in range(amount):
+        if i1 == i2: continue
+        print(i1, i2, square_to_condensed(i1, i2, amount), len(m2))
+        assert m2[square_to_condensed(i1, i2, amount)] == m2[square_to_condensed(i2, i1, amount)] == m1[i1, i2]
+
 # Test if distance in cdist is same as in pdist, and that the indices function is correct
+indices = set()
 for i1 in range(amount):
     for i2 in range(amount):
         if i1 == i2:
@@ -111,6 +118,8 @@ for i1 in range(amount):
             v1 = m1[i1, i2]
             # m2 = pdist condensed matrix vector
             index = square_to_condensed(i1, i2, amount)
+            # print(i1, i2, index)
+            indices.add(index)
             v2 = m2[index]
 
             # Test if convert indices functions work
@@ -122,7 +131,9 @@ for i1 in range(amount):
 
             # Assert if the values of cdist is the same as the value of pdist
             assert v1 == v2, f"m1[i1, i2] is {v1}, m2[index] is {v2}"
-
+# assert len(indices) == len(m2), f"{len(indices)} == {len(m2)}"
+assert max(indices) == len(m2) - 1
+assert min(indices) == 0
 
 def test_distance_matrix_scipy_cdist(benchmark):
     result = benchmark(distance_matrix_scipy_cdist, points)

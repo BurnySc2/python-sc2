@@ -35,6 +35,7 @@ jobs:
         - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
         - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/test_benchmark_distance_two_points.py --benchmark-compare"
         - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/test_benchmark_distances_units.py --benchmark-compare"
+        - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/test_benchmark_array_creation.py --benchmark-compare"
         # Shut down and remove container
         - docker rm -f app
 
