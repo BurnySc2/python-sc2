@@ -7,19 +7,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from scipy.spatial.distance import cdist, pdist
+from scipy.spatial.distance import pdist
 import math
 import numpy as np
-
-try:
-    from numba import njit
-
-    _numba_imported = True
-except:
-    logger.error(
-        f"Could not import numba in file {__file__}. Please install numba to have faster distance calculations using command 'pip install numba'"
-    )
-    _numba_imported = False
 
 from typing import List, Dict, Tuple, Iterable, Generator
 
@@ -124,27 +114,16 @@ class DistanceCalculation:
     # Distance calculation using the pre-calculated matrix above
 
     def _distance_squared_unit_to_unit(self, unit1: Unit, unit2: Unit):
-        assert unit1.tag != unit2.tag, f"unit1 is unit2: {unit1} == {unit2}, do not check distance for the same unit to save performance"
+        if unit1.tag == unit2.tag:
+            return 0
         # Calculate dict and distances and cache them
         self._unit_index_dict
         self._pdist
         # Calculate index, needs to be after pdist has been calculated and cached
         condensed_index = self._get_index_of_two_units(unit1, unit2)
-        # assert self._unit_index_dict[unit1.position_tuple] < self._units_count, f"Index of unit1 {unit1} is larger than amount of units calculated: {self._unit_index_dict[unit1.position_tuple]} < {self._units_count}"
-        # assert self._unit_index_dict[unit2.position_tuple] < self._units_count, f"Index of unit2 {unit2} is larger than amount of units calculated: {self._unit_index_dict[unit2.position_tuple]} < {self._units_count}"
         assert condensed_index < len(
             self._cached_pdist
         ), f"Condensed index is larger than amount of calculated distances: {condensed_index} < {len(self._cached_pdist)}, units that caused the assert error: {unit1} and {unit2}"
-        distance = self._pdist[condensed_index]
-        return distance
-
-    def _distance_squared_pos_to_pos(self, pos1: Tuple[float, float], pos2: Tuple[float, float]):
-        # Calculate dict and distances
-        self._unit_index_dict
-        self._pdist
-        assert pos1 in self._unit_index_dict
-        assert pos2 in self._unit_index_dict
-        condensed_index = self._get_index_of_two_positions(pos1, pos2)
         distance = self._pdist[condensed_index]
         return distance
 

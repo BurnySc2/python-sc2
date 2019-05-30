@@ -39,14 +39,21 @@ class Units(list):
             chain(
                 iter(self),
                 (other_unit for other_unit in other if other_unit.tag not in (self_unit.tag for self_unit in self)),
-            )
-        , self._bot_object)
+            ),
+            self._bot_object,
+        )
 
     def __and__(self, other: "Units") -> "Units":
-        return Units((other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self)), self._bot_object)
+        return Units(
+            (other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self)),
+            self._bot_object,
+        )
 
     def __sub__(self, other: "Units") -> "Units":
-        return Units((self_unit for self_unit in self if self_unit.tag not in (other_unit.tag for other_unit in other)), self._bot_object)
+        return Units(
+            (self_unit for self_unit in self if self_unit.tag not in (other_unit.tag for other_unit in other)),
+            self._bot_object,
+        )
 
     def __hash__(self):
         return hash(unit.tag for unit in self)
@@ -97,7 +104,7 @@ class Units(list):
     def random_group_of(self, n: int) -> "Units":
         """ Returns self if n >= self.amount. """
         if n < 1:
-            return Units([])
+            return Units([], self._bot_object)
         elif n >= self.amount:
             return self
         else:
