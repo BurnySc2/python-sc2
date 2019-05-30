@@ -103,6 +103,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         return client._game_result[player_id]
     gs = GameState(state.observation)
     proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
+    ai._initialize_variables()
     ai._prepare_step(gs, proto_game_info)
     ai._prepare_first_step()
     try:

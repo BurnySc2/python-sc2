@@ -29,7 +29,7 @@ class BotAI(DistanceCalculation):
 
     EXPANSION_GAP_THRESHOLD = 15
 
-    def __init__(self):
+    def _initialize_variables(self):
         # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/
         # The bot ID will stay the same each game so your bot can "adapt" to the opponent
         DistanceCalculation.__init__(self)
