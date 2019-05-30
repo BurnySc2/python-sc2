@@ -157,7 +157,7 @@ class BotAI(DistanceCalculation):
 
         # Distance we group resources by
         RESOURCE_SPREAD_THRESHOLD = 8.5
-        geysers = self.state.vespene_geyser
+        geysers = self.vespene_geyser
         # Create a group for every resource
         resource_groups = [[resource] for resource in self.state.resources]
         # Loop the merging process as long as we change something
@@ -300,7 +300,7 @@ class BotAI(DistanceCalculation):
 
         WARNING: This is quite slow when there are lots of workers or multiple bases.
         """
-        if not self.state.mineral_field or not self.workers or not self.townhalls.ready:
+        if not self.mineral_field or not self.workers or not self.townhalls.ready:
             return
         actions = []
         worker_pool = [worker for worker in self.workers.idle]
@@ -325,7 +325,7 @@ class BotAI(DistanceCalculation):
             else:
                 # get tags of minerals around expansion
                 local_minerals_tags = {
-                    mineral.tag for mineral in self.state.mineral_field if mineral.distance_to(mining_place) <= 8
+                    mineral.tag for mineral in self.mineral_field if mineral.distance_to(mining_place) <= 8
                 }
                 # get all target tags a worker can have
                 # tags of the minerals he could mine at that base
@@ -348,7 +348,7 @@ class BotAI(DistanceCalculation):
         if len(worker_pool) > len(deficit_mining_places):
             all_minerals_near_base = [
                 mineral
-                for mineral in self.state.mineral_field
+                for mineral in self.mineral_field
                 if any(mineral.distance_to(base) <= 8 for base in self.townhalls.ready)
             ]
         # distribute every worker in the pool
@@ -370,26 +370,25 @@ class BotAI(DistanceCalculation):
                 deficit_mining_places.remove(current_place)
                 # if current place is a gas extraction site, go there
                 if current_place.vespene_contents:
-                    actions.append(worker.gather(current_place))
+                    self.do(worker.gather(current_place))
                 # if current place is a gas extraction site,
                 # go to the mineral field that is near and has the most minerals left
                 else:
                     local_minerals = [
-                        mineral for mineral in self.state.mineral_field if mineral.distance_to(current_place) <= 8
+                        mineral for mineral in self.mineral_field if mineral.distance_to(current_place) <= 8
                     ]
                     target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents)
-                    actions.append(worker.gather(target_mineral))
+                    self.do(worker.gather(target_mineral))
             # more workers to distribute than free mining spots
             # send to closest if worker is doing nothing
             elif worker.is_idle and all_minerals_near_base:
                 target_mineral = min(all_minerals_near_base, key=lambda mineral: mineral.distance_to(worker))
-                actions.append(worker.gather(target_mineral))
+                self.do(worker.gather(target_mineral))
             else:
                 # there are no deficit mining places and worker is not idle
                 # so dont move him
                 pass
 
-        await self.do_actions(actions)
 
     @property
     def owned_expansions(self) -> Dict[Point2, Unit]:
@@ -658,17 +657,16 @@ class BotAI(DistanceCalculation):
             return ActionResult.Error
         return await self.do(unit.build(building, p))
 
-    def do(self, action, subtract_cost=True, subtract_supply=True):
-        """ Not recommended. Use self.do_actions once per iteration instead to reduce lag:
-        self.actions = []
-        cc = self.townhalls(COMMANDCENTER).random
-        self.actions.append(cc.train(SCV))
-        await self.do_action(self.actions) """
-
+    def do(self, action, subtract_cost=False, subtract_supply=False, can_afford_check=False):
         if subtract_cost:
             cost: "Cost" = self._game_data.calculate_ability_cost(action.ability)
-            self.minerals -= cost.minerals
-            self.vespene -= cost.vespene
+            if can_afford_check:
+                if self.minerals >= cost.minerals and self.vespene >= cost.vespene:
+                    self.minerals -= cost.minerals
+                    self.vespene -= cost.vespene
+                else:
+                    # Dont do action if can't afford
+                    return
         if subtract_supply and action.ability in abilityid_to_unittypeid:
             unit_type = abilityid_to_unittypeid[action.ability]
             required_supply = self._game_data.units[unit_type.value]._proto.food_required
@@ -678,8 +676,8 @@ class BotAI(DistanceCalculation):
                 self.supply_left -= required_supply
         self.actions.append(action)
 
-    async def do_actions(self, actions: List["UnitCommand"], prevent_double=True):
-        """ Unlike 'self.do()', this function does not instantly subtract minerals and vespene. """
+    async def _do_actions(self, actions: List["UnitCommand"], prevent_double=True):
+        """ Used internally by main.py automatically, use self.do() instead! """
         if not actions:
             return None
         if prevent_double:

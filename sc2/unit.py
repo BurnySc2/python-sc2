@@ -426,7 +426,7 @@ class Unit:
         return self._proto.facing
 
     # TODO: a function that checks if this unit is facing another unit
-    def is_facing_unit(self, other_unit: "Unit") -> bool:
+    def is_facing_unit(self, other_unit: "Unit", angle_error: float = 1e-3) -> bool:
         pass
 
     @property
@@ -698,7 +698,7 @@ class Unit:
     @property_mutable_cache
     def passengers(self) -> Set["Unit"]:
         """ Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism. """
-        return {Unit(unit) for unit in self._proto.passengers}
+        return {Unit(unit, self._bot_object) for unit in self._proto.passengers}
 
     @property_mutable_cache
     def passengers_tags(self) -> Set[int]:
@@ -821,7 +821,7 @@ class Unit:
 
     def hold_position(self, queue=False) -> "UnitCommand":
         """ Orders a unit to stop moving. It will not move until it gets new orders. """
-        return self(AbilityId.HOLDPOSITION_HOLD , queue=queue)
+        return self(AbilityId.HOLDPOSITION_HOLD, queue=queue)
 
     def stop(self, queue=False) -> "UnitCommand":
         """ Orders a unit to stop, but can start to move on its own
@@ -833,7 +833,7 @@ class Unit:
         """ Orders a unit to patrol between position it has when the command starts and the target position.
         Can be queued up to seven patrol points. If the last point is the same as the starting
         point, the unit will patrol in a circle. """
-        return self(AbilityId.PATROL_PATROL , target=position, queue=queue)
+        return self(AbilityId.PATROL_PATROL, target=position, queue=queue)
 
     def repair(self, repair_target, queue=False) -> "UnitCommand":
         """ Order an SCV or MULE to repair. """

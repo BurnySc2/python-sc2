@@ -122,9 +122,9 @@ for i1 in range(amount):
         # Assert if the values of cdist is the same as the value of pdist
         assert v1 == v2, f"m1[i1, i2] is {v1}, m2[index] is {v2}"
 # Test that all indices were generated using the for loop above
-assert len(indices) == len(m2), f"{len(indices)} == {len(m2)}"
 assert max(indices) == len(m2) - 1
 assert min(indices) == 0
+assert len(indices) == len(m2), f"{len(indices)} == {len(m2)}"
 
 def test_distance_matrix_scipy_cdist(benchmark):
     result = benchmark(distance_matrix_scipy_cdist, points)

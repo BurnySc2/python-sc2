@@ -143,10 +143,10 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     await ai.on_step(iteration)
                     realtime_game_loop = ai.state.game_loop
                     # Commit bot actions
-                    await ai.do_actions(ai.actions)
+                    await ai._do_actions(ai.actions)
                     ai.actions.clear()
                     # Commit debug queries
-                    await ai._client.send_debug()
+                    await ai._client._send_debug()
             else:
                 if time_penalty_cooldown > 0:
                     time_penalty_cooldown -= 1
@@ -156,10 +156,10 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     await ai.issue_events()
                     await ai.on_step(iteration)
                     # Commit bot actions
-                    await ai.do_actions(ai.actions)
+                    await ai._do_actions(ai.actions)
                     ai.actions.clear()
                     # Commit debug queries
-                    await ai._client.send_debug()
+                    await ai._client._send_debug()
                 else:
                     out_of_budget = False
                     budget = time_limit - time_window.available
@@ -197,10 +197,10 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                             time_window.clear()
 
                     # Commit bot actions
-                    await ai.do_actions(ai.actions)
+                    await ai._do_actions(ai.actions)
                     ai.actions.clear()
                     # Commit debug queries
-                    await ai._client.send_debug()
+                    await ai._client._send_debug()
         except Exception as e:
             if isinstance(e, ProtocolError) and e.is_game_over_error:
                 if realtime:
