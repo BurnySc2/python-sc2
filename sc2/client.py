@@ -382,44 +382,12 @@ class Client(Protocol):
         )
         await self._execute(action=sc_pb.RequestAction(actions=[action]))
 
-    async def debug_text(self, texts: Union[str, list], positions: Union[list, set], color=(0, 255, 0), size_px=16):
-        """ Deprecated, may be removed soon. Use combination of "debug_text_simple", "debug_text_screen" or "debug_text_world" together with "send_debug" instead. """
-        if isinstance(positions, (set, list)):
-            if not positions:
-                return
-
-            if isinstance(texts, str):
-                texts = [texts] * len(positions)
-            assert len(texts) == len(positions)
-
-            await self._execute(
-                debug=sc_pb.RequestDebug(
-                    debug=[
-                        debug_pb.DebugCommand(
-                            draw=debug_pb.DebugDraw(
-                                text=(
-                                    debug_pb.DebugText(
-                                        text=t,
-                                        color=debug_pb.Color(r=color[0], g=color[1], b=color[2]),
-                                        world_pos=common_pb.Point(x=p.x, y=p.y, z=getattr(p, "z", 10)),
-                                        size=size_px,
-                                    )
-                                    for t, p in zip(texts, positions)
-                                )
-                            )
-                        )
-                    ]
-                )
-            )
-        else:
-            await self.debug_text([texts], [positions], color)
-
     def debug_text_simple(self, text: str):
-        """ Draws a text in the top left corner of the screen (up to a max of 6 messages it seems). Don't forget to add 'await self._client.send_debug'. """
+        """ Draws a text in the top left corner of the screen (up to a max of 6 messages it seems). """
         self._debug_texts.append(self.to_debug_message(text))
 
     def debug_text_screen(self, text: str, pos: Union[Point2, Point3, tuple, list], color=None, size: int = 8):
-        """ Draws a text on the screen with coordinates 0 <= x, y <= 1. Don't forget to add 'await self._client.send_debug'. """
+        """ Draws a text on the screen with coordinates 0 <= x, y <= 1. """
         assert len(pos) >= 2
         assert 0 <= pos[0] <= 1
         assert 0 <= pos[1] <= 1
@@ -442,7 +410,7 @@ class Client(Protocol):
         return self.debug_text_world(text, pos, color, size)
 
     def debug_line_out(self, p0: Union[Unit, Point2, Point3], p1: Union[Unit, Point2, Point3], color=None):
-        """ Draws a line from p0 to p1. Don't forget to add 'await self._client.send_debug'. """
+        """ Draws a line from p0 to p1. """
         self._debug_lines.append(
             debug_pb.DebugLine(
                 line=debug_pb.Line(p0=self.to_debug_point(p0), p1=self.to_debug_point(p1)),
@@ -451,7 +419,7 @@ class Client(Protocol):
         )
 
     def debug_box_out(self, p_min: Union[Unit, Point2, Point3], p_max: Union[Unit, Point2, Point3], color=None):
-        """ Draws a box with p_min and p_max as corners. Don't forget to add 'await self._client.send_debug'. """
+        """ Draws a box with p_min and p_max as corners. """
         self._debug_boxes.append(
             debug_pb.DebugBox(
                 min=self.to_debug_point(p_min), max=self.to_debug_point(p_max), color=self.to_debug_color(color)
@@ -459,13 +427,13 @@ class Client(Protocol):
         )
 
     def debug_sphere_out(self, p: Union[Unit, Point2, Point3], r: Union[int, float], color=None):
-        """ Draws a sphere at point p with radius r. Don't forget to add 'await self._client.send_debug'. """
+        """ Draws a sphere at point p with radius r. """
         self._debug_spheres.append(
             debug_pb.DebugSphere(p=self.to_debug_point(p), r=r, color=self.to_debug_color(color))
         )
 
-    async def send_debug(self):
-        """ Sends the debug draw execution. Put this after your debug creation functions. """
+    async def _send_debug(self):
+        """ Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer. """
         if self._debug_texts or self._debug_lines or self._debug_boxes or self._debug_spheres:
             await self._execute(
                 debug=sc_pb.RequestDebug(
