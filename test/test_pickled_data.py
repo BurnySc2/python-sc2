@@ -9,7 +9,6 @@ from sc2.game_state import GameState
 from sc2.bot_ai import BotAI
 from sc2.units import Units
 from sc2.unit import Unit
-from sc2.unit import UnitGameData
 from sc2.position import Point2, Point3, Size, Rect
 
 from sc2.ids.unit_typeid import UnitTypeId
@@ -51,7 +50,6 @@ def get_map_specific_bots() -> Iterable[BotAI]:
         game_data = GameData(raw_game_data.data)
         game_info = GameInfo(raw_game_info.game_info)
         game_state = GameState(raw_observation)
-        UnitGameData._game_data = game_data
         bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
         bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
 
@@ -107,8 +105,8 @@ class TestClass:
         assert bot.start_location is None  # Is populated by main.py
         bot._game_info.player_start_location = bot.townhalls.random.position
         assert bot.townhalls.random.position not in bot.enemy_start_locations
-        assert bot.known_enemy_units == Units([])
-        assert bot.known_enemy_structures == Units([])
+        assert bot.known_enemy_units == Units([], bot)
+        assert bot.known_enemy_structures == Units([], bot)
         bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
         assert bot.main_base_ramp  # Test if any ramp was found
         # TODO: Cache all expansion positions for a map and check if it is the same
