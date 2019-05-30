@@ -112,7 +112,6 @@ class GameState:
         # https://github.com/Blizzard/s2client-proto/blob/51662231c0965eba47d5183ed0a6336d5ae6b640/s2clientprotocol/sc2api.proto#L575
         self.observation = response_observation.observation
         self.observation_raw = self.observation.raw_data
-        self.dead_units: Set[int] = self.observation_raw.event.dead_units  # returns set of tags of units that died
         self.alerts = self.observation.alerts
         self.player_result = response_observation.player_result
         self.chat = response_observation.chat

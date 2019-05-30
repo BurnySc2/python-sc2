@@ -46,8 +46,6 @@ class BotAI:
         self.army_count: int = None
         self.warp_gate_count: int = None
         self.larva_count: int = None
-        self.cached_known_enemy_structures = None
-        self.cached_known_enemy_units = None
 
     @property
     def time(self) -> Union[int, float]:
@@ -816,9 +814,6 @@ class BotAI:
 
         self.idle_worker_count: int = state.common.idle_worker_count
         self.army_count: int = state.common.army_count
-        # reset cached values
-        self.cached_known_enemy_structures = None
-        self.cached_known_enemy_units = None
 
     async def issue_events(self):
         """ This function will be automatically run from main.py and triggers the following functions:
