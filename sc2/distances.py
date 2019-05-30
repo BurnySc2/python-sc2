@@ -1,4 +1,4 @@
-from sc2.position_tuple import Point2
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
 from sc2.game_state import GameState
@@ -48,7 +48,7 @@ class DistanceCalculation:
 
     def generate_unit_indices(self):
         if self._generated_frame != self.state.game_loop:
-            self.__unit_index_dict = {unit.position_tuple: index for index, unit in enumerate(self.state.units)}
+            self.__unit_index_dict = {unit.position_tuple: index for index, unit in enumerate(self.units)}
             self._generated_frame = self.state.game_loop
         return self.__unit_index_dict
 
@@ -118,11 +118,11 @@ class DistanceCalculation:
     def _distance_pos_to_pos(self, pos1: Tuple[float, float], pos2: Tuple[float, float]):
         return self.distance_math_hypot(pos1, pos2)
 
-    def _distance_units_to_pos(self, units: Units, pos: Tuple[float, float]) -> Generator[float]:
+    def _distance_units_to_pos(self, units: Units, pos: Tuple[float, float]) -> Generator[float, None, None]:
         """ This function does not scale well, if len(units) > 100 it gets fairly slow """
         return (self.distance_math_hypot(u.position_tuple, pos) for u in units)
 
-    def _distance_unit_to_points(self, unit: Unit, points: Iterable[Tuple[float, float]]) -> Generator[float]:
+    def _distance_unit_to_points(self, unit: Unit, points: Iterable[Tuple[float, float]]) -> Generator[float, None, None]:
         """ This function does not scale well, if len(points) > 100 it gets fairly slow """
         pos = unit.position_tuple
         return (self.distance_math_hypot(p, pos) for p in points)

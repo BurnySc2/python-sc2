@@ -22,7 +22,7 @@ class RampWallBot(sc2.BotAI):
             cc = cc.first
 
         if self.can_afford(SCV) and self.workers.amount < 16 and cc.is_idle:
-            await self.do(cc.train(SCV))
+            self.do(cc.train(SCV))
 
         # Raise depos when enemies are nearby
         for depo in self.units(SUPPLYDEPOT).ready:
@@ -30,13 +30,13 @@ class RampWallBot(sc2.BotAI):
                 if unit.position.to2.distance_to(depo.position.to2) < 15:
                     break
             else:
-                await self.do(depo(MORPH_SUPPLYDEPOT_LOWER))
+                self.do(depo(MORPH_SUPPLYDEPOT_LOWER))
 
         # Lower depos when no enemies are nearby
         for depo in self.units(SUPPLYDEPOTLOWERED).ready:
             for unit in self.known_enemy_units.not_structure:
                 if unit.position.to2.distance_to(depo.position.to2) < 10:
-                    await self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
+                    self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
                     break
 
         depot_placement_positions = self.main_base_ramp.corner_depots
@@ -58,8 +58,6 @@ class RampWallBot(sc2.BotAI):
         # Draw vision blockers
         # self.draw_vision_blockers()
 
-        await self._client.send_debug()
-
         # Filter locations close to finished supply depots
         if depots:
             depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
@@ -73,7 +71,7 @@ class RampWallBot(sc2.BotAI):
             ws = self.workers.gathering
             if ws:  # if workers were found
                 w = ws.random
-                await self.do(w.build(SUPPLYDEPOT, target_depot_location))
+                self.do(w.build(SUPPLYDEPOT, target_depot_location))
 
         # Build barracks
         if depots.ready and self.can_afford(BARRACKS) and not self.already_pending(BARRACKS):
@@ -82,7 +80,7 @@ class RampWallBot(sc2.BotAI):
             ws = self.workers.gathering
             if ws and barracks_placement_position:  # if workers were found
                 w = ws.random
-                await self.do(w.build(BARRACKS, barracks_placement_position))
+                self.do(w.build(BARRACKS, barracks_placement_position))
 
     async def on_building_construction_complete(self, unit: Unit):
         print(f"Construction of building {unit} completed at {unit.position}.")

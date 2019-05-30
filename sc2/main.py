@@ -12,7 +12,6 @@ from .player import Bot, Human
 from .portconfig import Portconfig
 from .protocol import ConnectionAlreadyClosed, ProtocolError
 from .sc2process import SC2Process
-from .unit import UnitGameData
 
 logger = logging.getLogger(__name__)
 
@@ -145,6 +144,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     realtime_game_loop = ai.state.game_loop
                     # Commit bot actions
                     await ai.do_actions(ai.actions)
+                    ai.actions.clear()
                     # Commit debug queries
                     await ai._client.send_debug()
             else:
@@ -157,6 +157,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     await ai.on_step(iteration)
                     # Commit bot actions
                     await ai.do_actions(ai.actions)
+                    ai.actions.clear()
                     # Commit debug queries
                     await ai._client.send_debug()
                 else:
@@ -197,6 +198,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
                     # Commit bot actions
                     await ai.do_actions(ai.actions)
+                    ai.actions.clear()
                     # Commit debug queries
                     await ai._client.send_debug()
         except Exception as e:

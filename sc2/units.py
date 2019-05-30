@@ -40,13 +40,13 @@ class Units(list):
                 iter(self),
                 (other_unit for other_unit in other if other_unit.tag not in (self_unit.tag for self_unit in self)),
             )
-        )
+        , self._bot_object)
 
     def __and__(self, other: "Units") -> "Units":
-        return Units(other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self))
+        return Units((other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self)), self._bot_object)
 
     def __sub__(self, other: "Units") -> "Units":
-        return Units(self_unit for self_unit in self if self_unit.tag not in (other_unit.tag for other_unit in other))
+        return Units((self_unit for self_unit in self if self_unit.tag not in (other_unit.tag for other_unit in other)), self._bot_object)
 
     def __hash__(self):
         return hash(unit.tag for unit in self)
@@ -120,14 +120,14 @@ class Units(list):
         if isinstance(position, Unit):
             return min(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self) ** 0.5
         # TODO: improve using numpy to calculate closest to the target if target is point
-        return min(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self) ** 0.5
+        return min(self._bot_object._distance_units_to_pos(self, position))
 
     def furthest_distance_to(self, position: Union[Unit, Point2, Point3]) -> float:
         """ Returns the distance between the furthest unit from this group to the target unit """
         assert self, "Units object is empty"
         if isinstance(position, Unit):
             return max(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self) ** 0.5
-        return max(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self) ** 0.5
+        return max(self._bot_object._distance_units_to_pos(self, position))
 
     def closest_to(self, position: Union[Unit, Point2, Point3]) -> Unit:
         assert self, "Units object is empty"
@@ -136,10 +136,9 @@ class Units(list):
                 (unit1 for unit1 in self),
                 key=lambda unit2: self._bot_object._distance_squared_unit_to_unit(unit2, position),
             )
-        return min(
-            (unit1 for unit1 in self),
-            key=lambda unit2: self._bot_object._distance_squared_unit_to_unit(unit2, position),
-        )
+
+        distances = self._bot_object._distance_units_to_pos(self, position)
+        return min(((unit, dist) for unit, dist in zip(self, distances)), key=lambda my_tuple: my_tuple[1])[0]
 
     def furthest_to(self, position: Union[Unit, Point2, Point3]) -> Unit:
         assert self, "Units object is empty"
@@ -148,9 +147,8 @@ class Units(list):
                 (unit1 for unit1 in self),
                 key=lambda unit2: self._bot_object._distance_squared_unit_to_unit(unit2, position),
             )
-        return max(
-            (unit1 for unit1 in self), key=lambda unit2: self._bot_object._distance_units_to_pos(unit2, position)
-        )
+        distances = self._bot_object._distance_units_to_pos(self, position)
+        return max(((unit, dist) for unit, dist in zip(self, distances)), key=lambda my_tuple: my_tuple[1])[0]
 
     def closer_than(self, distance: Union[int, float], position: Union[Unit, Point2, Point3]) -> "Units":
         assert self, "Units object is empty"
@@ -452,12 +450,12 @@ class Units(list):
 class UnitSelection(Units):
     def __init__(self, parent, selection=None):
         if isinstance(selection, (UnitTypeId)):
-            super().__init__(unit for unit in parent if unit.type_id == selection)
+            super().__init__((unit for unit in parent if unit.type_id == selection), parent._bot_object)
         elif isinstance(selection, set):
             assert all(isinstance(t, UnitTypeId) for t in selection), f"Not all ids in selection are of type UnitTypeId"
-            super().__init__(unit for unit in parent if unit.type_id in selection)
+            super().__init__((unit for unit in parent if unit.type_id in selection), parent._bot_object)
         elif selection is None:
-            super().__init__(unit for unit in parent)
+            super().__init__((unit for unit in parent), parent._bot_object)
         else:
             assert isinstance(
                 selection, (UnitTypeId, set)

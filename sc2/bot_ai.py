@@ -117,12 +117,12 @@ class BotAI(DistanceCalculation):
     @property_cache_once_per_frame
     def known_enemy_units(self) -> Units:
         """List of known enemy units, including structures."""
-        return self.state.enemy_units
+        return self.enemy_units
 
     @property_cache_once_per_frame
     def known_enemy_structures(self) -> Units:
         """List of known enemy units, structures only."""
-        return self.state.enemy_units.structure
+        return self.enemy_units.structure
 
     @property
     def main_base_ramp(self) -> "Ramp":
@@ -690,7 +690,6 @@ class BotAI(DistanceCalculation):
         #     self.vespene -= cost.vespene
 
         result = await self._client.actions(actions)
-        actions.clear()
         return result
 
     def prevent_double_actions(self, action):
@@ -781,7 +780,7 @@ class BotAI(DistanceCalculation):
 
         self._units_previous_map: dict = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
-        self.units: Units = Units([])
+        self.units: Units = Units([], self)
 
     def _prepare_first_step(self):
         """First step extra preparations. Must not be called before _prepare_step."""
@@ -837,7 +836,7 @@ class BotAI(DistanceCalculation):
             if unit.is_blip:
                 self._blipUnits.append(unit)
             else:
-                unit_obj = Unit(unit)
+                unit_obj = Unit(unit, self)
                 self.all_units.append(unit_obj)
                 alliance = unit.alliance
                 # Alliance.Neutral.value = 3

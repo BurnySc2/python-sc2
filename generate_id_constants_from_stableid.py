@@ -71,7 +71,8 @@ def parse_data(data):
             key = "_" + key
 
         if key in abilities and v["index"] == 0:
-            print(f"{key} has value 0")
+            print(f"{key} has value 0 and id {v['id']}, overwriting {key}: {abilities[key]}")
+            abilities[key] = v["id"]
             # raise ValueError
         else:
             abilities[key] = v["id"]

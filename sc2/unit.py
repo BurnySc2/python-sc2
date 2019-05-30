@@ -69,6 +69,8 @@ class Unit:
     def __init__(self, proto_data, bot_object: "BotAI"):
         self._proto = proto_data
         self._bot_object = bot_object
+        # Used by property_immutable_cache
+        self.cache = {}
 
     def __repr__(self) -> str:
         """ Returns string of this form: PassengerUnit(name='SCV', tag=4396941328). """
@@ -590,7 +592,7 @@ class Unit:
     @property_mutable_cache
     def orders(self) -> List[UnitOrder]:
         """ Returns the a list of the current orders. """
-        return [UnitOrder.from_proto(order) for order in self._proto.orders]
+        return [UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders]
 
     @property_immutable_cache
     def order_target(self) -> Optional[Union[int, Point2]]:
