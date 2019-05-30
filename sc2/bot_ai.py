@@ -6,11 +6,13 @@ from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
 
 from .cache import property_cache_forever, property_cache_once_per_frame
+from .constants import abilityid_to_unittypeid, geyser_ids, mineral_ids
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
+from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
 
 # imports for mypy and pycharm autocomplete
-from .game_state import GameState, Blip
+from .game_state import Blip, GameState
 from .ids.ability_id import AbilityId
 from .ids.unit_typeid import UnitTypeId
 from .ids.upgrade_id import UpgradeId
@@ -18,8 +20,6 @@ from .pixel_map import PixelMap
 from .position import Point2, Point3
 from .unit import Unit
 from .units import Units
-from .constants import geyser_ids, mineral_ids, abilityid_to_unittypeid
-from .distances import DistanceCalculation
 
 logger = logging.getLogger(__name__)
 
@@ -34,10 +34,19 @@ class BotAI(DistanceCalculation):
         # The bot ID will stay the same each game so your bot can "adapt" to the opponent
         DistanceCalculation.__init__(self)
         self.opponent_id: int = None
-        self.units: Units = None
-        self.workers: Units = None
-        self.townhalls: Units = None
-        self.gas_buildings: Units = None
+        self.all_units: Units = Units([], self)
+        self.units: Units = Units([], self)
+        self.workers: Units = Units([], self)
+        self.townhalls: Units = Units([], self)
+        self.structures: Units = Units([], self)
+        self.gas_buildings: Units = Units([], self)
+        self.enemy_units: Units = Units([], self)
+        self.enemy_structures: Units = Units([], self)
+        self.resources: Units = Units([], self)
+        self.destructables: Units = Units([], self)
+        self.watchtowers: Units = Units([], self)
+        self.mineral_field: Units = Units([], self)
+        self.vespene_geyser: Units = Units([], self)
         self.minerals: int = None
         self.vespene: int = None
         self.supply_army: Union[float, int] = None
@@ -50,6 +59,10 @@ class BotAI(DistanceCalculation):
         self.warp_gate_count: int = None
         self.larva_count: int = None
         self.actions = []
+        self.blips: Set[Blip] = set()
+        self._units_previous_map: dict = dict()
+        self._structures_previous_map: dict = dict()
+        self._previous_upgrades: Set[UpgradeId] = set()
 
     @property
     def time(self) -> Union[int, float]:
@@ -113,16 +126,6 @@ class BotAI(DistanceCalculation):
         """Possible start locations for enemies."""
         return self._game_info.start_locations
 
-    @property_cache_once_per_frame
-    def known_enemy_units(self) -> Units:
-        """List of known enemy units, including structures."""
-        return self.enemy_units
-
-    @property_cache_once_per_frame
-    def known_enemy_structures(self) -> Units:
-        """List of known enemy units, structures only."""
-        return self.enemy_units.structure
-
     @property
     def main_base_ramp(self) -> "Ramp":
         """ Returns the Ramp instance of the closest main-ramp to start location.
@@ -159,7 +162,7 @@ class BotAI(DistanceCalculation):
         RESOURCE_SPREAD_THRESHOLD = 8.5
         geysers = self.vespene_geyser
         # Create a group for every resource
-        resource_groups = [[resource] for resource in self.state.resources]
+        resource_groups = [[resource] for resource in self.resources]
         # Loop the merging process as long as we change something
         found_something = True
         while found_something:
@@ -388,7 +391,6 @@ class BotAI(DistanceCalculation):
                 # there are no deficit mining places and worker is not idle
                 # so dont move him
                 pass
-
 
     @property
     def owned_expansions(self) -> Dict[Point2, Unit]:
@@ -777,12 +779,6 @@ class BotAI(DistanceCalculation):
         if len(self._game_info.player_races) == 2:
             self.enemy_race: Race = Race(self._game_info.player_races[3 - self.player_id])
 
-        self._units_previous_map: dict = dict()
-        self._structures_previous_map: dict = dict()
-        self._previous_upgrades: Set[UpgradeId] = set()
-        self.units: Units = Units([], self)
-        self.structures: Units = Units([], self)
-
     def _prepare_first_step(self):
         """First step extra preparations. Must not be called before _prepare_step."""
         if self.townhalls:
@@ -792,14 +788,15 @@ class BotAI(DistanceCalculation):
     def _prepare_step(self, state, proto_game_info):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
-        self._prepare_units()
         # update pathing grid
         self._game_info.pathing_grid: PixelMap = PixelMap(
             proto_game_info.game_info.start_raw.pathing_grid, in_bits=True, mirrored=False
         )
-        # Required for events
+        # Required for events, needs to be before self.units are initialized so the old units are stored
         self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
         self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
+
+        self._prepare_units()
         self.minerals: int = state.common.minerals
         self.vespene: int = state.common.vespene
         self.supply_army: int = state.common.food_army
@@ -819,7 +816,8 @@ class BotAI(DistanceCalculation):
         self.army_count: int = state.common.army_count
 
     def _prepare_units(self):
-        self._blipUnits = []
+        # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
+        self.blips: Set[Blip] = set()
         self.units: Units = Units([], self)
         self.structures: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
@@ -836,7 +834,7 @@ class BotAI(DistanceCalculation):
 
         for unit in self.state.observation_raw.units:
             if unit.is_blip:
-                self._blipUnits.append(unit)
+                self.blips.add(Blip(unit))
             else:
                 unit_obj = Unit(unit, self)
                 self.all_units.append(unit_obj)
@@ -860,9 +858,9 @@ class BotAI(DistanceCalculation):
                         self.destructables.append(unit_obj)
                 # Alliance.Self.value = 1
                 elif alliance == 1:
-                    unit_id = unit.type_id
+                    unit_id = unit_obj.type_id
                     if unit_obj.is_structure:
-                        self.structures.append(unit_obj)                        
+                        self.structures.append(unit_obj)
                         if unit_id in race_townhalls[self.race]:
                             self.townhalls.append(unit_obj)
                         elif unit_id == race_gas[self.race]:
@@ -877,8 +875,6 @@ class BotAI(DistanceCalculation):
                         self.enemy_structures.append(unit_obj)
                     else:
                         self.enemy_units.append(unit_obj)
-        # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
-        self.blips: Set[Blip] = {Blip(unit) for unit in self._blipUnits}
 
     async def issue_events(self):
         """ This function will be automatically run from main.py and triggers the following functions:
@@ -889,29 +885,30 @@ class BotAI(DistanceCalculation):
         """
         await self._issue_unit_dead_events()
         await self._issue_unit_added_events()
-        for structure in self.structures:
-            await self._issue_building_complete_event(structure)
-        if len(self._previous_upgrades) != len(self.state.upgrades):
-            for upgrade_completed in self.state.upgrades - self._previous_upgrades:
-                await self.on_upgrade_complete(upgrade_completed)
-            self._previous_upgrades = self.state.upgrades
+        await self._issue_building_events()
+        await self._issue_upgrade_events()
 
     async def _issue_unit_added_events(self):
         for unit in self.units:
             if unit.tag not in self._units_previous_map:
                 await self.on_unit_created(unit)
+
+    async def _issue_upgrade_events(self):
+        difference = self.state.upgrades - self._previous_upgrades
+        for upgrade_completed in difference:
+            await self.on_upgrade_complete(upgrade_completed)
+        self._previous_upgrades = self.state.upgrades
+
+    async def _issue_building_events(self):
         for structure in self.structures:
+            if structure.build_progress < 1:
+                continue
             if structure.tag not in self._structures_previous_map:
                 await self.on_building_construction_started(structure)
-
-    async def _issue_building_complete_event(self, structure):
-        if structure.build_progress < 1:
-            return
-        if structure.tag not in self._structures_previous_map:
-            return
-        structure_prev = self._structures_previous_map[structure.tag]
-        if structure_prev.build_progress < 1:
-            await self.on_building_construction_complete(structure)
+                continue
+            structure_prev = self._structures_previous_map[structure.tag]
+            if structure_prev.build_progress < 1:
+                await self.on_building_construction_complete(structure)
 
     async def _issue_unit_dead_events(self):
         for unit_tag in self.state.dead_units:

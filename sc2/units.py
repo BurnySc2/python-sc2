@@ -43,6 +43,15 @@ class Units(list):
             self._bot_object,
         )
 
+    def __add__(self, other: "Units") -> "Units":
+        return Units(
+            chain(
+                iter(self),
+                (other_unit for other_unit in other if other_unit.tag not in (self_unit.tag for self_unit in self)),
+            ),
+            self._bot_object,
+        )
+
     def __and__(self, other: "Units") -> "Units":
         return Units(
             (other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self)),
@@ -316,7 +325,7 @@ class Units(list):
         self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]
     ) -> "Units":
         """ Filters all units that are not of a specific type """
-        # example: self.known_enemy_units.exclude_type([OVERLORD])
+        # example: self.enemy_units.exclude_type([OVERLORD])
         if isinstance(other, UnitTypeId):
             other = {other}
         if isinstance(other, list):
