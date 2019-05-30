@@ -676,6 +676,7 @@ class BotAI(DistanceCalculation):
             if required_supply > 0:
                 self.supply_used += required_supply
                 self.supply_left -= required_supply
+                # TODO: if unit created from larva: reduce larva count by 1
         self.actions.append(action)
 
     async def _do_actions(self, actions: List["UnitCommand"], prevent_double=True):
