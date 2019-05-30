@@ -90,7 +90,7 @@ class MarineSplitChallenge(sc2.BotAI):
                     else:
                         print("No retreat positions detected for unit {} at {}.".format(unit, unit.position.rounded))
 
-        await self.do_actions(actions)
+        self.do_actions(actions)
 
 
 

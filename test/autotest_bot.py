@@ -137,7 +137,7 @@ class TestBot(sc2.BotAI):
     # Test BotAI action: train SCV
     async def test_botai_actions1(self):
         if self.can_afford(UnitTypeId.SCV):
-            await self.do(self.townhalls.random.train(UnitTypeId.SCV))
+            self.do(self.townhalls.random.train(UnitTypeId.SCV))
 
     # Test BotAI action: move all SCVs to center of map
     async def test_botai_actions2(self):
@@ -145,7 +145,7 @@ class TestBot(sc2.BotAI):
         center = self._game_info.map_center
         for scv in self.workers:
             combined_actions.append(scv.move(center))
-        await self.do_actions(combined_actions)
+        self.do_actions(combined_actions)
 
     # Test BotAI action: move some scvs to the center, some to minerals
     async def test_botai_actions3(self):
@@ -159,7 +159,7 @@ class TestBot(sc2.BotAI):
         mf = self.state.mineral_field.closest_to(self.townhalls.random)
         for scv in scvs2:
             combined_actions.append(scv.gather(mf))
-        await self.do_actions(combined_actions)
+        self.do_actions(combined_actions)
 
     # Test BotAI action: move all SCVs to mine minerals near townhall
     async def test_botai_actions4(self):
@@ -167,7 +167,7 @@ class TestBot(sc2.BotAI):
         mf = self.state.mineral_field.closest_to(self.townhalls.random)
         for scv in self.workers:
             combined_actions.append(scv.gather(mf))
-        await self.do_actions(combined_actions)
+        self.do_actions(combined_actions)
 
     # Test BotAI action: self.expand_now()
     async def test_botai_actions5(self):

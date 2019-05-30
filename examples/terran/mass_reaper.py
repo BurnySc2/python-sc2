@@ -60,7 +60,7 @@ class MassReaperBot(sc2.BotAI):
                 w = self.select_build_worker(location)
                 if w and self.can_afford(UnitTypeId.COMMANDCENTER):
                     # the worker will be commanded to build the command center
-                    error = await self.do(w.build(UnitTypeId.COMMANDCENTER, location))
+                    error = self.do(w.build(UnitTypeId.COMMANDCENTER, location))
                     if error:
                         print(error)
 
@@ -186,7 +186,7 @@ class MassReaperBot(sc2.BotAI):
         # when running out of mineral fields near command center, fly to next base with minerals
 
         # execuite actions
-        await self.do_actions(self.combinedActions)
+        self.do_actions(self.combinedActions)
 
 
 

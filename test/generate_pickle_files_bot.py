@@ -42,7 +42,7 @@ class ExporterBot(sc2.BotAI):
 
     async def on_step(self, iteration):
         actions = []
-        await self.do_actions(actions)
+        self.do_actions(actions)
 
     def get_pickle_file_path(self) -> str:
         folder_path = os.path.dirname(__file__)

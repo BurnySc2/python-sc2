@@ -19,7 +19,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
 
         if not self.townhalls.ready.exists:
             for worker in self.workers:
-                await self.do(worker.attack(self.enemy_start_locations[0]))
+                self.do(worker.attack(self.enemy_start_locations[0]))
             return
         else:
             nexus = self.townhalls.ready.random
@@ -27,21 +27,21 @@ class ThreebaseVoidrayBot(sc2.BotAI):
         if not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST):
             abilities = await self.get_available_abilities(nexus)
             if AbilityId.EFFECT_CHRONOBOOSTENERGYCOST in abilities:
-                await self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus))
+                self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus))
 
         for idle_worker in self.workers.idle:
             mf = self.state.mineral_field.closest_to(idle_worker)
-            await self.do(idle_worker.gather(mf))
+            self.do(idle_worker.gather(mf))
 
         if self.units(VOIDRAY).amount > 10 and iteration % 50 == 0:
             for vr in self.units(VOIDRAY).idle:
-                await self.do(vr.attack(self.select_target(self.state)))
+                self.do(vr.attack(self.select_target(self.state)))
 
         for a in self.gas_buildings:
             if a.assigned_harvesters < a.ideal_harvesters:
                 w = self.workers.closer_than(20, a)
                 if w.exists:
-                    await self.do(w.random.gather(a))
+                    self.do(w.random.gather(a))
 
         if self.supply_left < 2 and not self.already_pending(PYLON):
             if self.can_afford(PYLON):
@@ -50,7 +50,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
 
         if self.workers.amount < self.townhalls.amount*15 and nexus.is_idle:
             if self.can_afford(PROBE):
-                await self.do(nexus.train(PROBE))
+                self.do(nexus.train(PROBE))
 
         elif not self.structures(PYLON).exists and not self.already_pending(PYLON):
             if self.can_afford(PYLON):
@@ -81,7 +81,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
                     break
 
                 if not self.gas_buildings.closer_than(1.0, vg).exists:
-                    await self.do(worker.build(ASSIMILATOR, vg))
+                    self.do(worker.build(ASSIMILATOR, vg))
 
         if self.structures(PYLON).ready.exists and self.structures(CYBERNETICSCORE).ready.exists:
             pylon = self.structures(PYLON).ready.random
@@ -91,7 +91,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
 
         for sg in self.structures(STARGATE).ready.idle:
             if self.can_afford(VOIDRAY):
-                await self.do(sg.train(VOIDRAY))
+                self.do(sg.train(VOIDRAY))
 
 def main():
     sc2.run_game(sc2.maps.get("(2)CatalystLE"), [

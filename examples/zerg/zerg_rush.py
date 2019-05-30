@@ -21,7 +21,7 @@ class ZergRushBot(sc2.BotAI):
 
         if not self.townhalls(HATCHERY).ready.exists:
             for unit in self.workers | self.units(ZERGLING) | self.units(QUEEN):
-                await self.do(unit.attack(self.enemy_start_locations[0]))
+                self.do(unit.attack(self.enemy_start_locations[0]))
             return
 
         hatchery = self.townhalls(HATCHERY).ready.first
@@ -29,57 +29,57 @@ class ZergRushBot(sc2.BotAI):
 
         target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
         for zl in self.units(ZERGLING).idle:
-            await self.do(zl.attack(target))
+            self.do(zl.attack(target))
 
         for queen in self.units(QUEEN).idle:
             abilities = await self.get_available_abilities(queen)
             if AbilityId.EFFECT_INJECTLARVA in abilities:
-                await self.do(queen(EFFECT_INJECTLARVA, hatchery))
+                self.do(queen(EFFECT_INJECTLARVA, hatchery))
 
         if self.vespene >= 100:
             sp = self.structures(SPAWNINGPOOL).ready
             if sp.exists and self.minerals >= 100 and not self.mboost_started:
-                await self.do(sp.first(RESEARCH_ZERGLINGMETABOLICBOOST))
+                self.do(sp.first(RESEARCH_ZERGLINGMETABOLICBOOST))
                 self.mboost_started = True
 
             if not self.moved_workers_from_gas:
                 self.moved_workers_from_gas = True
                 for drone in self.workers:
                     m = self.state.mineral_field.closer_than(10, drone.position)
-                    await self.do(drone.gather(m.random, queue=True))
+                    self.do(drone.gather(m.random, queue=True))
 
         if self.supply_left < 2:
             if self.can_afford(OVERLORD) and larvae.exists:
-                await self.do(larvae.random.train(OVERLORD))
+                self.do(larvae.random.train(OVERLORD))
 
         if self.structures(SPAWNINGPOOL).ready.exists:
             if larvae.exists and self.can_afford(ZERGLING):
-                await self.do(larvae.random.train(ZERGLING))
+                self.do(larvae.random.train(ZERGLING))
 
         if self.gas_buildings.ready.exists and not self.moved_workers_to_gas:
             self.moved_workers_to_gas = True
             extractor = self.gas_buildings.first
             for drone in self.workers.random_group_of(3):
-                await self.do(drone.gather(extractor))
+                self.do(drone.gather(extractor))
 
         if self.minerals > 500:
             for d in range(4, 15):
                 pos = hatchery.position.to2.towards(self.game_info.map_center, d)
                 if await self.can_place(HATCHERY, pos):
                     self.spawning_pool_started = True
-                    await self.do(self.workers.random.build(HATCHERY, pos))
+                    self.do(self.workers.random.build(HATCHERY, pos))
                     break
 
         if self.drone_counter < 3:
             if self.can_afford(DRONE):
                 self.drone_counter += 1
-                await self.do(larvae.random.train(DRONE))
+                self.do(larvae.random.train(DRONE))
 
         if not self.extractor_started:
             if self.can_afford(EXTRACTOR):
                 drone = self.workers.random
                 target = self.state.vespene_geyser.closest_to(drone.position)
-                err = await self.do(drone.build(EXTRACTOR, target))
+                err = self.do(drone.build(EXTRACTOR, target))
                 if not err:
                     self.extractor_started = True
 
@@ -89,14 +89,14 @@ class ZergRushBot(sc2.BotAI):
                     pos = hatchery.position.to2.towards(self.game_info.map_center, d)
                     if await self.can_place(SPAWNINGPOOL, pos):
                         drone = self.workers.closest_to(pos)
-                        err = await self.do(drone.build(SPAWNINGPOOL, pos))
+                        err = self.do(drone.build(SPAWNINGPOOL, pos))
                         if not err:
                             self.spawning_pool_started = True
                             break
 
         elif not self.queeen_started and self.structures(SPAWNINGPOOL).ready.exists:
             if self.can_afford(QUEEN):
-                r = await self.do(hatchery.train(QUEEN))
+                r = self.do(hatchery.train(QUEEN))
                 if not r:
                     self.queeen_started = True
 

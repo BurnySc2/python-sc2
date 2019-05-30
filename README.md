@@ -51,7 +51,7 @@ class WorkerRushBot(sc2.BotAI):
     async def on_step(self, iteration):
         if iteration == 0:
             for worker in self.workers:
-                await self.do(worker.attack(self.enemy_start_locations[0]))
+                self.do(worker.attack(self.enemy_start_locations[0]))
 
 run_game(maps.get("Abyssal Reef LE"), [
     Bot(Race.Zerg, WorkerRushBot()),

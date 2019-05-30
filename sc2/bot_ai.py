@@ -655,7 +655,7 @@ class BotAI(DistanceCalculation):
         unit = unit or self.select_build_worker(p)
         if unit is None or not self.can_afford(building):
             return ActionResult.Error
-        return await self.do(unit.build(building, p))
+        return self.do(unit.build(building, p))
 
     def do(self, action, subtract_cost=False, subtract_supply=False, can_afford_check=False):
         if subtract_cost:
@@ -902,7 +902,7 @@ class BotAI(DistanceCalculation):
             return
         if structure.tag not in self._structures_previous_map:
             return
-        structure_prev = self._structure_previous_map[structure.tag]
+        structure_prev = self._structures_previous_map[structure.tag]
         if structure_prev.build_progress < 1:
             await self.on_building_construction_complete(structure)
 

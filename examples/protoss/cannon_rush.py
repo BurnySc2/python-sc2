@@ -12,14 +12,14 @@ class CannonRushBot(sc2.BotAI):
 
         if not self.townhalls.exists:
             for worker in self.workers:
-                await self.do(worker.attack(self.enemy_start_locations[0]))
+                self.do(worker.attack(self.enemy_start_locations[0]))
             return
         else:
             nexus = self.townhalls.first
 
         if self.workers.amount < 16 and nexus.is_idle:
             if self.can_afford(PROBE):
-                await self.do(nexus.train(PROBE))
+                self.do(nexus.train(PROBE))
 
         elif not self.structures(PYLON).exists and not self.already_pending(PYLON):
             if self.can_afford(PYLON):
