@@ -17,12 +17,12 @@ class ThreebaseVoidrayBot(sc2.BotAI):
         if iteration == 0:
             await self.chat_send("(glhf)")
 
-        if not self.units(NEXUS).ready.exists:
+        if not self.townhalls.ready.exists:
             for worker in self.workers:
                 await self.do(worker.attack(self.enemy_start_locations[0]))
             return
         else:
-            nexus = self.units(NEXUS).ready.random
+            nexus = self.townhalls.ready.random
 
         if not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST):
             abilities = await self.get_available_abilities(nexus)
@@ -37,7 +37,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
             for vr in self.units(VOIDRAY).idle:
                 await self.do(vr.attack(self.select_target(self.state)))
 
-        for a in self.units(ASSIMILATOR):
+        for a in self.gas_buildings:
             if a.assigned_harvesters < a.ideal_harvesters:
                 w = self.workers.closer_than(20, a)
                 if w.exists:
@@ -48,29 +48,29 @@ class ThreebaseVoidrayBot(sc2.BotAI):
                 await self.build(PYLON, near=nexus)
             return
 
-        if self.workers.amount < self.units(NEXUS).amount*15 and nexus.is_idle:
+        if self.workers.amount < self.townhalls.amount*15 and nexus.is_idle:
             if self.can_afford(PROBE):
                 await self.do(nexus.train(PROBE))
 
-        elif not self.units(PYLON).exists and not self.already_pending(PYLON):
+        elif not self.structures(PYLON).exists and not self.already_pending(PYLON):
             if self.can_afford(PYLON):
                 await self.build(PYLON, near=nexus)
 
-        if self.units(NEXUS).amount < 3 and not self.already_pending(NEXUS):
+        if self.townhalls.amount < 3 and not self.already_pending(NEXUS):
             if self.can_afford(NEXUS):
                 await self.expand_now()
 
-        if self.units(PYLON).ready.exists:
-            pylon = self.units(PYLON).ready.random
-            if self.units(GATEWAY).ready.exists:
-                if not self.units(CYBERNETICSCORE).exists:
+        if self.structures(PYLON).ready.exists:
+            pylon = self.structures(PYLON).ready.random
+            if self.structures(GATEWAY).ready.exists:
+                if not self.structures(CYBERNETICSCORE).exists:
                     if self.can_afford(CYBERNETICSCORE) and not self.already_pending(CYBERNETICSCORE):
                         await self.build(CYBERNETICSCORE, near=pylon)
             else:
                 if self.can_afford(GATEWAY) and not self.already_pending(GATEWAY):
                     await self.build(GATEWAY, near=pylon)
 
-        for nexus in self.units(NEXUS).ready:
+        for nexus in self.townhalls.ready:
             vgs = self.state.vespene_geyser.closer_than(20.0, nexus)
             for vg in vgs:
                 if not self.can_afford(ASSIMILATOR):
@@ -80,16 +80,16 @@ class ThreebaseVoidrayBot(sc2.BotAI):
                 if worker is None:
                     break
 
-                if not self.units(ASSIMILATOR).closer_than(1.0, vg).exists:
+                if not self.gas_buildings.closer_than(1.0, vg).exists:
                     await self.do(worker.build(ASSIMILATOR, vg))
 
-        if self.units(PYLON).ready.exists and self.units(CYBERNETICSCORE).ready.exists:
-            pylon = self.units(PYLON).ready.random
-            if self.units(STARGATE).amount < 3 and not self.already_pending(STARGATE):
+        if self.structures(PYLON).ready.exists and self.structures(CYBERNETICSCORE).ready.exists:
+            pylon = self.structures(PYLON).ready.random
+            if self.structures(STARGATE).amount < 3 and not self.already_pending(STARGATE):
                 if self.can_afford(STARGATE):
                     await self.build(STARGATE, near=pylon)
 
-        for sg in self.units(STARGATE).ready.idle:
+        for sg in self.structures(STARGATE).ready.idle:
             if self.can_afford(VOIDRAY):
                 await self.do(sg.train(VOIDRAY))
 

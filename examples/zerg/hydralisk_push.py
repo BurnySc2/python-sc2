@@ -30,7 +30,7 @@ class Hydralisk(sc2.BotAI):
                 await self.do(larvae.random.train(OVERLORD))
                 return
 
-        if self.units(HYDRALISKDEN).ready.exists:
+        if self.structures(HYDRALISKDEN).ready.exists:
             if self.can_afford(HYDRALISK) and larvae.exists:
                 await self.do(larvae.random.train(HYDRALISK))
                 return
@@ -47,21 +47,21 @@ class Hydralisk(sc2.BotAI):
             if AbilityId.EFFECT_INJECTLARVA in abilities:
                 await self.do(queen(EFFECT_INJECTLARVA, hq))
 
-        if not (self.units(SPAWNINGPOOL).exists or self.already_pending(SPAWNINGPOOL)):
+        if not (self.structures(SPAWNINGPOOL).exists or self.already_pending(SPAWNINGPOOL)):
             if self.can_afford(SPAWNINGPOOL):
                 await self.build(SPAWNINGPOOL, near=hq)
 
-        if self.units(SPAWNINGPOOL).ready.exists:
-            if not self.units(LAIR).exists and hq.is_idle:
+        if self.structures(SPAWNINGPOOL).ready.exists:
+            if not self.townhalls(LAIR).exists and hq.is_idle:
                 if self.can_afford(LAIR):
                     await self.do(hq.build(LAIR))
 
-        if self.units(LAIR).ready.exists:
-            if not (self.units(HYDRALISKDEN).exists or self.already_pending(HYDRALISKDEN)):
+        if self.townhalls(LAIR).ready.exists:
+            if not (self.structures(HYDRALISKDEN).exists or self.already_pending(HYDRALISKDEN)):
                 if self.can_afford(HYDRALISKDEN):
                     await self.build(HYDRALISKDEN, near=hq)
 
-        if self.units(EXTRACTOR).amount < 2 and not self.already_pending(EXTRACTOR):
+        if self.gas_buildings.amount < 2 and not self.already_pending(EXTRACTOR):
             if self.can_afford(EXTRACTOR):
                 drone = self.workers.random
                 target = self.state.vespene_geyser.closest_to(drone.position)
@@ -73,13 +73,13 @@ class Hydralisk(sc2.BotAI):
                 await self.do(larva.train(DRONE))
                 return
 
-        for a in self.units(EXTRACTOR):
+        for a in self.gas_buildings:
             if a.assigned_harvesters < a.ideal_harvesters:
                 w = self.workers.closer_than(20, a)
                 if w.exists:
                     await self.do(w.random.gather(a))
 
-        if self.units(SPAWNINGPOOL).ready.exists:
+        if self.structures(SPAWNINGPOOL).ready.exists:
             if not self.units(QUEEN).exists and hq.is_ready and hq.is_idle:
                 if self.can_afford(QUEEN):
                     await self.do(hq.train(QUEEN))

@@ -143,7 +143,7 @@ class TestBot(sc2.BotAI):
     async def test_botai_actions2(self):
         combined_actions = []
         center = self._game_info.map_center
-        for scv in self.units(UnitTypeId.SCV):
+        for scv in self.workers:
             combined_actions.append(scv.move(center))
         await self.do_actions(combined_actions)
 
@@ -165,7 +165,7 @@ class TestBot(sc2.BotAI):
     async def test_botai_actions4(self):
         combined_actions = []
         mf = self.state.mineral_field.closest_to(self.townhalls.random)
-        for scv in self.units(UnitTypeId.SCV):
+        for scv in self.workers:
             combined_actions.append(scv.gather(mf))
         await self.do_actions(combined_actions)
 
@@ -196,7 +196,7 @@ class TestBot(sc2.BotAI):
             self.tests_done_by_name.add("test_botai_actions4_successful")
 
     async def test_botai_actions5_successful(self):
-        if self.units(UnitTypeId.COMMANDCENTER).amount >= 2:
+        if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
             self.tests_done_by_name.add("test_botai_actions5_successful")
 
     # Test self.state variables
@@ -218,7 +218,7 @@ class TestBot(sc2.BotAI):
         assert len(self._game_info.map_ramps) >= 2, self._game_info.map_ramps
         assert len(self._game_info.player_races) == 2, self._game_info.player_races
         self.tests_done_by_name.add("test_game_info_static_variables")
- 
+
     # Test unit.py
     async def test_unit(self):
         scv1, scv2, scv3 = self.workers[:3]

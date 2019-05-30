@@ -19,12 +19,12 @@ class ZergRushBot(sc2.BotAI):
         if iteration == 0:
             await self.chat_send("(glhf)")
 
-        if not self.units(HATCHERY).ready.exists:
+        if not self.townhalls(HATCHERY).ready.exists:
             for unit in self.workers | self.units(ZERGLING) | self.units(QUEEN):
                 await self.do(unit.attack(self.enemy_start_locations[0]))
             return
 
-        hatchery = self.units(HATCHERY).ready.first
+        hatchery = self.townhalls(HATCHERY).ready.first
         larvae = self.units(LARVA)
 
         target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
@@ -37,7 +37,7 @@ class ZergRushBot(sc2.BotAI):
                 await self.do(queen(EFFECT_INJECTLARVA, hatchery))
 
         if self.vespene >= 100:
-            sp = self.units(SPAWNINGPOOL).ready
+            sp = self.structures(SPAWNINGPOOL).ready
             if sp.exists and self.minerals >= 100 and not self.mboost_started:
                 await self.do(sp.first(RESEARCH_ZERGLINGMETABOLICBOOST))
                 self.mboost_started = True
@@ -52,13 +52,13 @@ class ZergRushBot(sc2.BotAI):
             if self.can_afford(OVERLORD) and larvae.exists:
                 await self.do(larvae.random.train(OVERLORD))
 
-        if self.units(SPAWNINGPOOL).ready.exists:
+        if self.structures(SPAWNINGPOOL).ready.exists:
             if larvae.exists and self.can_afford(ZERGLING):
                 await self.do(larvae.random.train(ZERGLING))
 
-        if self.units(EXTRACTOR).ready.exists and not self.moved_workers_to_gas:
+        if self.gas_buildings.ready.exists and not self.moved_workers_to_gas:
             self.moved_workers_to_gas = True
-            extractor = self.units(EXTRACTOR).first
+            extractor = self.gas_buildings.first
             for drone in self.workers.random_group_of(3):
                 await self.do(drone.gather(extractor))
 
@@ -94,7 +94,7 @@ class ZergRushBot(sc2.BotAI):
                             self.spawning_pool_started = True
                             break
 
-        elif not self.queeen_started and self.units(SPAWNINGPOOL).ready.exists:
+        elif not self.queeen_started and self.structures(SPAWNINGPOOL).ready.exists:
             if self.can_afford(QUEEN):
                 r = await self.do(hatchery.train(QUEEN))
                 if not r:

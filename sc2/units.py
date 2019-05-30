@@ -318,9 +318,9 @@ class Units(list):
 
     def same_tech(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> "Units":
         """ Usage:
-        'self.units.same_tech(UnitTypeId.COMMANDCENTER)' or 'self.units.same_tech(UnitTypeId.ORBITALCOMMAND)'
+        'self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)' or 'self.townhalls.same_tech(UnitTypeId.ORBITALCOMMAND)'
         returns all CommandCenter, CommandCenterFlying, OrbitalCommand, OrbitalCommandFlying, PlanetaryFortress
-        This also works with a set/list/dict parameter, e.g. 'self.units.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})'
+        This also works with a set/list/dict parameter, e.g. 'self.structures.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})'
         Untested: This should return the equivalents for Hatchery, WarpPrism, Observer, Overseer, SupplyDepot and others
         """
         if isinstance(other, UnitTypeId):
@@ -340,11 +340,11 @@ class Units(list):
 
     def same_unit(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> "Units":
         """ Usage:
-        'self.units.same_tech(UnitTypeId.COMMANDCENTER)'
+        'self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)'
         returns CommandCenter and CommandCenterFlying,
-        'self.units.same_tech(UnitTypeId.ORBITALCOMMAND)'
+        'self.townhalls.same_tech(UnitTypeId.ORBITALCOMMAND)'
         returns OrbitalCommand and OrbitalCommandFlying
-        This also works with a set/list/dict parameter, e.g. 'self.units.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})'
+        This also works with a set/list/dict parameter, e.g. 'self.structures.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})'
         Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit
         """
         if isinstance(other, UnitTypeId):

@@ -272,7 +272,7 @@ class Unit:
 
     @property
     def is_vespene_geyser(self) -> bool:
-        """ Checks if the unit is a non-empty vespene geyser. """
+        """ Checks if the unit is a non-empty vespene geyser or gas extraction building. """
         return self._type_data.has_vespene
 
     @property
@@ -529,7 +529,7 @@ class Unit:
 
     @property
     def mineral_contents(self) -> int:
-        """ Returns the amount of minerals rmaining in a mineral field. """
+        """ Returns the amount of minerals remaining in a mineral field. """
         return self._proto.mineral_contents
 
     @property
@@ -739,7 +739,7 @@ class Unit:
     @property
     def ideal_harvesters(self) -> int:
         """ Returns the ideal harverster count for unit.
-        3 for geysers, 2*n for n mineral patches on that base."""
+        3 for gas buildings, 2*n for n mineral patches on that base."""
         return self._proto.ideal_harvesters
 
     @property

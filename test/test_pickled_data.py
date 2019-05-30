@@ -88,7 +88,7 @@ class TestClass:
         assert bot.units.amount == bot.townhalls.amount + bot.workers.amount
         assert bot.workers.amount == 12
         assert bot.townhalls.amount == 1
-        assert bot.geysers.amount == 0
+        assert bot.gas_buildings.amount == 0
         assert bot.minerals == 50
         assert bot.vespene == 0
         assert bot.supply_army == 0
@@ -239,11 +239,11 @@ class TestClass:
         assert state.psionic_matrix
         assert state.game_loop == 0
         assert state.score
-        assert state.own_units == bot.units
-        assert not state.enemy_units
-        assert state.mineral_field
-        assert state.vespene_geyser
-        assert state.resources
+        assert bot.units == bot.units
+        assert not bot.enemy_units
+        assert bot.mineral_field
+        assert bot.vespene_geyser
+        assert bot.resources
         # There may be maps without destructables
         assert isinstance(state.destructables, (list, set, dict))
         assert state.units

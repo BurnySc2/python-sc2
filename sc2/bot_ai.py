@@ -37,7 +37,7 @@ class BotAI(DistanceCalculation):
         self.units: Units = None
         self.workers: Units = None
         self.townhalls: Units = None
-        self.geysers: Units = None
+        self.gas_buildings: Units = None
         self.minerals: int = None
         self.vespene: int = None
         self.supply_army: Union[float, int] = None
@@ -99,8 +99,7 @@ class BotAI(DistanceCalculation):
         UnitUnderAttack
         UpgradeComplete
         VespeneExhausted
-        WarpInComplete
-        
+        WarpInComplete        
         """
         assert isinstance(alert_code, Alert), f"alert_code {alert_code} is no Alert"
         return alert_code.value in self.state.alerts
@@ -289,10 +288,10 @@ class BotAI(DistanceCalculation):
         """
         Distributes workers across all the bases taken.
         Keyword `resource_ratio` takes a float. If the current minerals to gas
-        ratio is bigger than `resource_ratio`, this function prefer filling geysers
+        ratio is bigger than `resource_ratio`, this function prefer filling gas_buildings
         first, if it is lower, it will prefer sending workers to minerals first.
-        This is only for workers that need to be moved anyways, it will NOT will
-        geysers on its own.
+        This is only for workers that need to be moved anyways, it will NOT fill
+        gas_buildings on its own.
 
         NOTE: This function is far from optimal, if you really want to have
         refined worker control, you should write your own distribution function.
@@ -306,17 +305,17 @@ class BotAI(DistanceCalculation):
         actions = []
         worker_pool = [worker for worker in self.workers.idle]
         bases = self.townhalls.ready
-        geysers = self.geysers.ready
+        gas_buildings = self.gas_buildings.ready
 
         # list of places that need more workers
         deficit_mining_places = []
 
-        for mining_place in bases | geysers:
+        for mining_place in bases | gas_buildings:
             difference = mining_place.surplus_harvesters
             # perfect amount of workers, skip mining place
             if not difference:
                 continue
-            if mining_place.is_vespene_geyser:
+            if mining_place.has_vespene:
                 # get all workers that target the gas extraction site
                 # or are on their way back from it
                 local_workers = self.workers.filter(
@@ -565,7 +564,7 @@ class BotAI(DistanceCalculation):
         if "LEVEL" in upgrade_type.name:
             level = upgrade_type.name[-1]
         creationAbilityID = self._game_data.upgrades[upgrade_type.value].research_ability.id
-        for structure in self.units.filter(lambda unit: unit.is_structure and unit.is_ready):
+        for structure in self.structures.filter(lambda unit: unit.is_ready):
             for order in structure.orders:
                 if order.ability.id is creationAbilityID:
                     if level and order.ability.button_name[-1] != level:
@@ -575,14 +574,16 @@ class BotAI(DistanceCalculation):
 
     @property_cache_once_per_frame
     def _abilities_all_units(self) -> Counter:
-        """ Cache for the already_pending function, includes protoss units warping in, and all units in production, and all structures, and all morphs """
+        """ Cache for the already_pending function, includes protoss units warping in,
+        all units in production and all structures, and all morphs """
         abilities_amount = Counter()
-        for unit in self.units:  # type: Unit
+        for unit in self.units + self.structures:  # type: Unit
             for order in unit.orders:
                 abilities_amount[order.ability] += 1
             if not unit.is_ready:
                 if self.race != Race.Terran or not unit.is_structure:
-                    # If an SCV is constructing a building, already_pending would count this structure twice (once from the SCV order, and once from "not structure.is_ready")
+                    # If an SCV is constructing a building, already_pending would count this structure twice
+                    # (once from the SCV order, and once from "not structure.is_ready")
                     abilities_amount[self._game_data.units[unit.type_id.value].creation_ability] += 1
 
         return abilities_amount
@@ -603,7 +604,7 @@ class BotAI(DistanceCalculation):
         if self.race != Race.Terran:
             # If an SCV is constructing a building, already_pending would count this structure twice
             # (once from the SCV order, and once from "not structure.is_ready")
-            for unit in self.units.structure.not_ready:  # type: Unit
+            for unit in self.structures:  # type: Unit
                 abilities_amount[self._game_data.units[unit.type_id.value].creation_ability] += 1
         return abilities_amount
 
@@ -660,7 +661,7 @@ class BotAI(DistanceCalculation):
     def do(self, action, subtract_cost=True, subtract_supply=True):
         """ Not recommended. Use self.do_actions once per iteration instead to reduce lag:
         self.actions = []
-        cc = self.units(COMMANDCENTER).random
+        cc = self.townhalls(COMMANDCENTER).random
         self.actions.append(cc.train(SCV))
         await self.do_action(self.actions) """
 
@@ -779,8 +780,10 @@ class BotAI(DistanceCalculation):
             self.enemy_race: Race = Race(self._game_info.player_races[3 - self.player_id])
 
         self._units_previous_map: dict = dict()
+        self._structures_previous_map: dict = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
         self.units: Units = Units([], self)
+        self.structures: Units = Units([], self)
 
     def _prepare_first_step(self):
         """First step extra preparations. Must not be called before _prepare_step."""
@@ -798,10 +801,10 @@ class BotAI(DistanceCalculation):
         )
         # Required for events
         self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
-        self.units: Units = self.own_units
+        self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
         self.workers: Units = self.units(race_worker[self.race])
-        self.townhalls: Units = self.units(race_townhalls[self.race])
-        self.geysers: Units = self.units(race_gas[self.race])
+        self.townhalls: Units = self.structures(race_townhalls[self.race])
+        self.gas_buildings: Units = self.structures(race_gas[self.race])
         self.minerals: int = state.common.minerals
         self.vespene: int = state.common.vespene
         self.supply_army: int = state.common.food_army
@@ -820,11 +823,12 @@ class BotAI(DistanceCalculation):
         self.idle_worker_count: int = state.common.idle_worker_count
         self.army_count: int = state.common.army_count
 
-
     def _prepare_units(self):
         self._blipUnits = []
-        self.own_units: Units = Units([], self)
+        self.units: Units = Units([], self)
+        self.structures: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
+        self.enemy_structures: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
         self.resources: Units = Units([], self)
@@ -858,10 +862,16 @@ class BotAI(DistanceCalculation):
                         self.destructables.append(unit_obj)
                 # Alliance.Self.value = 1
                 elif alliance == 1:
-                    self.own_units.append(unit_obj)
+                    if unit_obj.is_structure:
+                        self.structures.append(unit_obj)
+                    else:
+                        self.units.append(unit_obj)
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
-                    self.enemy_units.append(unit_obj)
+                    if unit_obj.is_structure:
+                        self.enemy_structures.append(unit_obj)
+                    else:
+                        self.enemy_units.append(unit_obj)
         # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
         self.blips: Set[Blip] = {Blip(unit) for unit in self._blipUnits}
 
@@ -874,8 +884,8 @@ class BotAI(DistanceCalculation):
         """
         await self._issue_unit_dead_events()
         await self._issue_unit_added_events()
-        for unit in self.units.structure:
-            await self._issue_building_complete_event(unit)
+        for structure in self.structures:
+            await self._issue_building_complete_event(structure)
         if len(self._previous_upgrades) != len(self.state.upgrades):
             for upgrade_completed in self.state.upgrades - self._previous_upgrades:
                 await self.on_upgrade_complete(upgrade_completed)
@@ -884,54 +894,68 @@ class BotAI(DistanceCalculation):
     async def _issue_unit_added_events(self):
         for unit in self.units:
             if unit.tag not in self._units_previous_map:
-                if unit.is_structure:
-                    await self.on_building_construction_started(unit)
-                else:
-                    await self.on_unit_created(unit)
+                await self.on_unit_created(unit)
+        for structure in self.structures:
+            if structure.tag not in self._structures_previous_map:
+                await self.on_building_construction_started(structure)
 
-    async def _issue_building_complete_event(self, unit):
-        if unit.build_progress < 1:
+    async def _issue_building_complete_event(self, structure):
+        if structure.build_progress < 1:
             return
-        if unit.tag not in self._units_previous_map:
+        if structure.tag not in self._structures_previous_map:
             return
-        unit_prev = self._units_previous_map[unit.tag]
-        if unit_prev.build_progress < 1:
-            await self.on_building_construction_complete(unit)
+        structure_prev = self._structure_previous_map[structure.tag]
+        if structure_prev.build_progress < 1:
+            await self.on_building_construction_complete(structure)
 
     async def _issue_unit_dead_events(self):
         for unit_tag in self.state.dead_units:
             await self.on_unit_destroyed(unit_tag)
 
     async def on_unit_destroyed(self, unit_tag):
-        """ Override this in your bot class.
-        Note that this function uses unit tags because the unit does not exist any more. """
+        """
+        Override this in your bot class.
+        Note that this function uses unit tags and not the unit objects
+        because the unit does not exist any more.
+        """
 
     async def on_unit_created(self, unit: Unit):
-        """ Override this in your bot class. """
+        """ Override this in your bot class. This function is called when a unit is created. """
 
     async def on_building_construction_started(self, unit: Unit):
-        """ Override this in your bot class. """
+        """
+        Override this in your bot class.
+        This function is called when a building construction has started.
+        """
 
     async def on_building_construction_complete(self, unit: Unit):
-        """ Override this in your bot class. Note that this function is also
-        triggered at the start of the game for the starting base building."""
+        """
+        Override this in your bot class. This function is called when a building
+        construction is completed.
+        """
 
     async def on_upgrade_complete(self, upgrade: UpgradeId):
-        """ Override this in your bot class. """
+        """
+        Override this in your bot class. This function is called with the upgrade id of an upgrade
+        that was not finished last step and is now.
+        """
 
-    def on_start(self):
-        """ Allows initializing the bot when the game data is available. """
-
-    async def on_start_async(self):
-        """ This function is run after "on_start". At this point, game_data, game_info and
-        the first iteration of game_state (self.state) are available. """
+    async def on_start(self):
+        """
+        Override this in your bot class. This function is called after "on_start". 
+        At this point, game_data, game_info and the first iteration of game_state (self.state) are available.
+        """
 
     async def on_step(self, iteration: int):
-        """Ran on every game step (looped in realtime mode)."""
+        """
+        You need to implement this function!
+        Override this in your bot class.
+        This function is called on every game step (looped in realtime mode).
+        """
         raise NotImplementedError
 
-    def on_end(self, game_result: Result):
-        """ Triggered at the end of a game. """
+    async def on_end(self, game_result: Result):
+        """ Override this in your bot class. This function is called at the end of a game. """
 
 
 class CanAffordWrapper:

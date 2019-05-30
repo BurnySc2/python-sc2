@@ -15,7 +15,7 @@ from sc2.units import Units
 
 class RampWallBot(sc2.BotAI):
     async def on_step(self, iteration):
-        cc = self.units(COMMANDCENTER)
+        cc = self.townhalls(COMMANDCENTER)
         if not cc.exists:
             return
         else:
@@ -25,7 +25,7 @@ class RampWallBot(sc2.BotAI):
             self.do(cc.train(SCV))
 
         # Raise depos when enemies are nearby
-        for depo in self.units(SUPPLYDEPOT).ready:
+        for depo in self.structures(SUPPLYDEPOT).ready:
             for unit in self.known_enemy_units.not_structure:
                 if unit.position.to2.distance_to(depo.position.to2) < 15:
                     break
@@ -33,7 +33,7 @@ class RampWallBot(sc2.BotAI):
                 self.do(depo(MORPH_SUPPLYDEPOT_LOWER))
 
         # Lower depos when no enemies are nearby
-        for depo in self.units(SUPPLYDEPOTLOWERED).ready:
+        for depo in self.structures(SUPPLYDEPOTLOWERED).ready:
             for unit in self.known_enemy_units.not_structure:
                 if unit.position.to2.distance_to(depo.position.to2) < 10:
                     self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
@@ -47,7 +47,7 @@ class RampWallBot(sc2.BotAI):
         # If you prefer to have the barracks in the middle without room for addons, use the following instead
         # barracks_placement_position = self.main_base_ramp.barracks_in_middle
 
-        depots = self.units(SUPPLYDEPOT) | self.units(SUPPLYDEPOTLOWERED)
+        depots = self.structures(SUPPLYDEPOT) | self.structures(SUPPLYDEPOTLOWERED)
 
         # Draw ramp points
         self.draw_ramp_points()
@@ -75,7 +75,7 @@ class RampWallBot(sc2.BotAI):
 
         # Build barracks
         if depots.ready and self.can_afford(BARRACKS) and not self.already_pending(BARRACKS):
-            if self.units(BARRACKS).amount + self.already_pending(BARRACKS) > 0:
+            if self.structures(BARRACKS).amount + self.already_pending(BARRACKS) > 0:
                 return
             ws = self.workers.gathering
             if ws and barracks_placement_position:  # if workers were found
