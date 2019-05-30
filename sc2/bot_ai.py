@@ -800,9 +800,6 @@ class BotAI(DistanceCalculation):
         # Required for events
         self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
         self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
-        self.workers: Units = self.units(race_worker[self.race])
-        self.townhalls: Units = self.structures(race_townhalls[self.race])
-        self.gas_buildings: Units = self.structures(race_gas[self.race])
         self.minerals: int = state.common.minerals
         self.vespene: int = state.common.vespene
         self.supply_army: int = state.common.food_army
@@ -833,6 +830,9 @@ class BotAI(DistanceCalculation):
         self.destructables: Units = Units([], self)
         self.watchtowers: Units = Units([], self)
         self.all_units: Units = Units([], self)
+        self.workers: Units = Units([], self)
+        self.townhalls: Units = Units([], self)
+        self.gas_buildings: Units = Units([], self)
 
         for unit in self.state.observation_raw.units:
             if unit.is_blip:
@@ -860,10 +860,17 @@ class BotAI(DistanceCalculation):
                         self.destructables.append(unit_obj)
                 # Alliance.Self.value = 1
                 elif alliance == 1:
+                    unit_id = unit.type_id
                     if unit_obj.is_structure:
-                        self.structures.append(unit_obj)
+                        self.structures.append(unit_obj)                        
+                        if unit_id in race_townhalls[self.race]:
+                            self.townhalls.append(unit_obj)
+                        elif unit_id == race_gas[self.race]:
+                            self.gas_buildings.append(unit_obj)
                     else:
                         self.units.append(unit_obj)
+                        if unit_id == race_worker[self.race]:
+                            self.workers.append(unit_obj)
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
                     if unit_obj.is_structure:
