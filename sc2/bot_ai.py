@@ -10,7 +10,7 @@ from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_town
 from .game_data import AbilityData, GameData
 
 # imports for mypy and pycharm autocomplete
-from .game_state import GameState
+from .game_state import GameState, Blip
 from .ids.ability_id import AbilityId
 from .ids.unit_typeid import UnitTypeId
 from .ids.upgrade_id import UpgradeId
@@ -18,11 +18,13 @@ from .pixel_map import PixelMap
 from .position import Point2, Point3
 from .unit import Unit
 from .units import Units
+from .constants import geyser_ids, mineral_ids, abilityid_to_unittypeid
+from .distances import DistanceCalculation
 
 logger = logging.getLogger(__name__)
 
 
-class BotAI:
+class BotAI(DistanceCalculation):
     """Base class for bots."""
 
     EXPANSION_GAP_THRESHOLD = 15
@@ -30,6 +32,7 @@ class BotAI:
     def __init__(self):
         # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/
         # The bot ID will stay the same each game so your bot can "adapt" to the opponent
+        DistanceCalculation.__init__(self)
         self.opponent_id: int = None
         self.units: Units = None
         self.workers: Units = None
@@ -46,8 +49,7 @@ class BotAI:
         self.army_count: int = None
         self.warp_gate_count: int = None
         self.larva_count: int = None
-        self.cached_known_enemy_structures = None
-        self.cached_known_enemy_units = None
+        self.actions = []
 
     @property
     def time(self) -> Union[int, float]:
@@ -655,27 +657,25 @@ class BotAI:
             return ActionResult.Error
         return await self.do(unit.build(building, p))
 
-    async def do(self, action):
+    def do(self, action, subtract_cost=True, subtract_supply=True):
         """ Not recommended. Use self.do_actions once per iteration instead to reduce lag:
         self.actions = []
         cc = self.units(COMMANDCENTER).random
         self.actions.append(cc.train(SCV))
         await self.do_action(self.actions) """
-        if not self.can_afford(action):
-            logger.warning(f"Cannot afford action {action}")
-            return ActionResult.Error
 
-        r = await self._client.actions(action)
-
-        if not r:  # success
-            cost = self._game_data.calculate_ability_cost(action.ability)
+        if subtract_cost:
+            cost: "Cost" = self._game_data.calculate_ability_cost(action.ability)
             self.minerals -= cost.minerals
             self.vespene -= cost.vespene
-
-        else:
-            logger.error(f"Error: {r} (action: {action})")
-
-        return r
+        if subtract_supply and action.ability in abilityid_to_unittypeid:
+            unit_type = abilityid_to_unittypeid[action.ability]
+            required_supply = self._game_data.units[unit_type.value]._proto.food_required
+            # Overlord has -8
+            if required_supply > 0:
+                self.supply_used += required_supply
+                self.supply_left -= required_supply
+        self.actions.append(action)
 
     async def do_actions(self, actions: List["UnitCommand"], prevent_double=True):
         """ Unlike 'self.do()', this function does not instantly subtract minerals and vespene. """
@@ -683,15 +683,18 @@ class BotAI:
             return None
         if prevent_double:
             actions = list(filter(self.prevent_double_actions, actions))
-        for action in actions:
-            cost = self._game_data.calculate_ability_cost(action.ability)
-            self.minerals -= cost.minerals
-            self.vespene -= cost.vespene
+        # Cost was already reduced in self.do()
+        # for action in actions:
+        #     cost = self._game_data.calculate_ability_cost(action.ability)
+        #     self.minerals -= cost.minerals
+        #     self.vespene -= cost.vespene
 
-        return await self._client.actions(actions)
+        result = await self._client.actions(actions)
+        actions.clear()
+        return result
 
     def prevent_double_actions(self, action):
-        # always add actions if queued
+        # Always add actions if queued
         if action.queue:
             return True
         if action.unit.orders:
@@ -789,13 +792,14 @@ class BotAI:
     def _prepare_step(self, state, proto_game_info):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
+        self._prepare_units()
         # update pathing grid
         self._game_info.pathing_grid: PixelMap = PixelMap(
             proto_game_info.game_info.start_raw.pathing_grid, in_bits=True, mirrored=False
         )
         # Required for events
         self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
-        self.units: Units = state.own_units
+        self.units: Units = self.own_units
         self.workers: Units = self.units(race_worker[self.race])
         self.townhalls: Units = self.units(race_townhalls[self.race])
         self.geysers: Units = self.units(race_gas[self.race])
@@ -816,9 +820,51 @@ class BotAI:
 
         self.idle_worker_count: int = state.common.idle_worker_count
         self.army_count: int = state.common.army_count
-        # reset cached values
-        self.cached_known_enemy_structures = None
-        self.cached_known_enemy_units = None
+
+
+    def _prepare_units(self):
+        self._blipUnits = []
+        self.own_units: Units = Units([], self)
+        self.enemy_units: Units = Units([], self)
+        self.mineral_field: Units = Units([], self)
+        self.vespene_geyser: Units = Units([], self)
+        self.resources: Units = Units([], self)
+        self.destructables: Units = Units([], self)
+        self.watchtowers: Units = Units([], self)
+        self.all_units: Units = Units([], self)
+
+        for unit in self.state.observation_raw.units:
+            if unit.is_blip:
+                self._blipUnits.append(unit)
+            else:
+                unit_obj = Unit(unit)
+                self.all_units.append(unit_obj)
+                alliance = unit.alliance
+                # Alliance.Neutral.value = 3
+                if alliance == 3:
+                    unit_type = unit.unit_type
+                    # XELNAGATOWER = 149
+                    if unit_type == 149:
+                        self.watchtowers.append(unit_obj)
+                    # mineral field enums
+                    elif unit_type in mineral_ids:
+                        self.mineral_field.append(unit_obj)
+                        self.resources.append(unit_obj)
+                    # geyser enums
+                    elif unit_type in geyser_ids:
+                        self.vespene_geyser.append(unit_obj)
+                        self.resources.append(unit_obj)
+                    # all destructable rocks
+                    else:
+                        self.destructables.append(unit_obj)
+                # Alliance.Self.value = 1
+                elif alliance == 1:
+                    self.own_units.append(unit_obj)
+                # Alliance.Enemy.value = 4
+                elif alliance == 4:
+                    self.enemy_units.append(unit_obj)
+        # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
+        self.blips: Set[Blip] = {Blip(unit) for unit in self._blipUnits}
 
     async def issue_events(self):
         """ This function will be automatically run from main.py and triggers the following functions:

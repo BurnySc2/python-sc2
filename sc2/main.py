@@ -93,9 +93,6 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         time_limit = float(step_time_limit.get("time_limit", None))
 
     game_data = await client.get_game_data()
-    # Used in PassengerUnit, Unit and Units
-    UnitGameData._game_data = game_data
-    UnitGameData._bot_object = ai
     game_info = await client.get_game_info()
 
     # This game_data will become self._game_data in botAI
@@ -119,6 +116,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         return Result.Defeat
 
     iteration = 0
+    realtime_game_loop = -1
     while True:
         if iteration != 0:
             state = await client.observation()
@@ -138,16 +136,29 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         logger.debug(f"Running AI step, it={iteration} {gs.game_loop * 0.725 * (1 / 16):.2f}s")
 
         try:
-            await ai.issue_events()
             if realtime:
-                await ai.on_step(iteration)
+                # Prevent bot from running multiple times in the same game_loop in realtime=True
+                if ai.state.game_loop != realtime_game_loop:
+                    # Issue event liks unit created or unit destroyed
+                    await ai.issue_events()
+                    await ai.on_step(iteration)
+                    realtime_game_loop = ai.state.game_loop
+                    # Commit bot actions
+                    await ai.do_actions(ai.actions)
+                    # Commit debug queries
+                    await ai._client.send_debug()
             else:
                 if time_penalty_cooldown > 0:
                     time_penalty_cooldown -= 1
                     logger.warning(f"Running AI step: penalty cooldown: {time_penalty_cooldown}")
                     iteration -= 1  # Do not increment the iteration on this round
                 elif time_limit is None:
+                    await ai.issue_events()
                     await ai.on_step(iteration)
+                    # Commit bot actions
+                    await ai.do_actions(ai.actions)
+                    # Commit debug queries
+                    await ai._client.send_debug()
                 else:
                     out_of_budget = False
                     budget = time_limit - time_window.available
@@ -163,6 +174,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                         step_start = time.monotonic()
                         try:
                             async with async_timeout.timeout(budget):
+                                await ai.issue_events()
                                 await ai.on_step(iteration)
                         except asyncio.TimeoutError:
                             step_time = time.monotonic() - step_start
@@ -182,6 +194,11 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                         else:
                             time_penalty_cooldown = int(time_penalty)
                             time_window.clear()
+
+                    # Commit bot actions
+                    await ai.do_actions(ai.actions)
+                    # Commit debug queries
+                    await ai._client.send_debug()
         except Exception as e:
             if isinstance(e, ProtocolError) and e.is_game_over_error:
                 if realtime:

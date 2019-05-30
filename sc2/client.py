@@ -466,24 +466,25 @@ class Client(Protocol):
 
     async def send_debug(self):
         """ Sends the debug draw execution. Put this after your debug creation functions. """
-        await self._execute(
-            debug=sc_pb.RequestDebug(
-                debug=[
-                    debug_pb.DebugCommand(
-                        draw=debug_pb.DebugDraw(
-                            text=self._debug_texts if self._debug_texts else None,
-                            lines=self._debug_lines if self._debug_lines else None,
-                            boxes=self._debug_boxes if self._debug_boxes else None,
-                            spheres=self._debug_spheres if self._debug_spheres else None,
+        if self._debug_texts or self._debug_lines or self._debug_boxes or self._debug_spheres:
+            await self._execute(
+                debug=sc_pb.RequestDebug(
+                    debug=[
+                        debug_pb.DebugCommand(
+                            draw=debug_pb.DebugDraw(
+                                text=self._debug_texts if self._debug_texts else None,
+                                lines=self._debug_lines if self._debug_lines else None,
+                                boxes=self._debug_boxes if self._debug_boxes else None,
+                                spheres=self._debug_spheres if self._debug_spheres else None,
+                            )
                         )
-                    )
-                ]
+                    ]
+                )
             )
-        )
-        self._debug_texts.clear()
-        self._debug_lines.clear()
-        self._debug_boxes.clear()
-        self._debug_spheres.clear()
+            self._debug_texts.clear()
+            self._debug_lines.clear()
+            self._debug_boxes.clear()
+            self._debug_spheres.clear()
 
     def to_debug_color(self, color):
         """ Helper function for color conversion """

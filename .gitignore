@@ -20,6 +20,8 @@ mini_games/
 
 *.SC2Replay
 
+.hypothesis/
+
 # Editors
 .idea/
 .vscode/
