@@ -85,18 +85,13 @@ class RampWallBot(sc2.BotAI):
     async def on_building_construction_complete(self, unit: Unit):
         print(f"Construction of building {unit} completed at {unit.position}.")
 
-    def terrain_to_z_height(self, h):
-        # Required for drawing ramp points
-        return round(16 * h / 255, 2)
-
     def draw_ramp_points(self):
         for ramp in self.game_info.map_ramps:
             for p in ramp.points:
-                h = self.get_terrain_height(p)
-                h2 = self.terrain_to_z_height(h)
+                h2 = self.get_terrain_z_height(p)
                 pos = Point3((p.x, p.y, h2))
-                p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z))
-                p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.5))
+                p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
+                p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
                 # print(f"Drawing {p0} to {p1}")
                 color = Point3((255, 0, 0))
                 if p in ramp.upper:
@@ -118,22 +113,20 @@ class RampWallBot(sc2.BotAI):
             if not (map_area.y <= b < map_area.y + map_area.height):
                 continue
             p = Point2((a, b))
-            h = self.get_terrain_height(p)
-            h2 = self.terrain_to_z_height(h)
+            h2 = self.get_terrain_z_height(p)
             pos = Point3((p.x, p.y, h2))
-            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z))
-            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.5))
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
             self._client.debug_box_out(p0, p1, color=color)
 
     def draw_vision_blockers(self):
         for p in self.game_info.vision_blockers:
-            h = self.get_terrain_height(p)
-            h2 = self.terrain_to_z_height(h)
+            h2 = self.get_terrain_z_height(p)
             pos = Point3((p.x, p.y, h2))
-            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z))
-            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.5))
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
             self._client.debug_box_out(p0, p1, color=color)
