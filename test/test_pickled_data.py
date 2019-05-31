@@ -50,6 +50,7 @@ def get_map_specific_bots() -> Iterable[BotAI]:
         game_data = GameData(raw_game_data.data)
         game_info = GameInfo(raw_game_info.game_info)
         game_state = GameState(raw_observation)
+        bot._initialize_variables()
         bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
         bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
 
@@ -85,7 +86,8 @@ class TestClass:
         assert isinstance(bot.enemy_race, Race)
 
         # Properties from _prepare_step
-        assert bot.units.amount == bot.townhalls.amount + bot.workers.amount
+        assert bot.units.amount == bot.workers.amount
+        assert bot.structures.amount == bot.townhalls.amount
         assert bot.workers.amount == 12
         assert bot.townhalls.amount == 1
         assert bot.gas_buildings.amount == 0
@@ -99,14 +101,19 @@ class TestClass:
         assert bot.idle_worker_count == 0
         assert bot.army_count == 0
 
+        # There may be maps without destructables
+        assert isinstance(bot.destructables, (list, set, dict))
+        assert bot.units
+        assert not bot.blips
+
         # Test bot_ai functions
         assert bot.time == 0
         assert bot.time_formatted in {"0:00", "00:00"}
         assert bot.start_location is None  # Is populated by main.py
         bot._game_info.player_start_location = bot.townhalls.random.position
         assert bot.townhalls.random.position not in bot.enemy_start_locations
-        assert bot.known_enemy_units == Units([], bot)
-        assert bot.known_enemy_structures == Units([], bot)
+        assert bot.enemy_units == Units([], bot)
+        assert bot.enemy_structures == Units([], bot)
         bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
         assert bot.main_base_ramp  # Test if any ramp was found
         # TODO: Cache all expansion positions for a map and check if it is the same
@@ -245,12 +252,8 @@ class TestClass:
         assert bot.mineral_field
         assert bot.vespene_geyser
         assert bot.resources
-        # There may be maps without destructables
-        assert isinstance(state.destructables, (list, set, dict))
-        assert state.units
         assert not state.upgrades
         assert not state.dead_units
-        assert not state.blips
         assert state.visibility
         assert state.creep
         assert not state.effects

@@ -41,8 +41,7 @@ class ExporterBot(sc2.BotAI):
         self.map_name: str = None
 
     async def on_step(self, iteration):
-        actions = []
-        self.do_actions(actions)
+        pass
 
     def get_pickle_file_path(self) -> str:
         folder_path = os.path.dirname(__file__)
@@ -52,7 +51,7 @@ class ExporterBot(sc2.BotAI):
         return file_path
 
 
-    async def on_start_async(self):
+    async def on_start(self):
         raw_game_data = await self._client._execute(
             data=sc_pb.RequestData(ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True)
         )
