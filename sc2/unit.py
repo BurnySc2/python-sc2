@@ -397,6 +397,15 @@ class Unit:
             <= (self.radius + target.radius + unit_attack_range + bonus_distance) ** 2
         )
 
+    def target_melee_in_range(self, target: "Unit", bonus_distance: Union[int, float] = 0) -> bool:
+        """ Checks if the target is in melee range.
+        Includes the target's radius when calculating distance to target.
+        This function is ideal for checking if an scv is in range to repair a target. """
+        return (
+            self._bot_object._distance_squared_unit_to_unit(self, target)
+            <= (self.radius + target.radius + bonus_distance) ** 2
+        )
+
     def in_ability_cast_range(
         self, ability_id: AbilityId, target: Union["Unit", Point2], bonus_distance: float = 0
     ) -> bool:
