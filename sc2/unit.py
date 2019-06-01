@@ -375,12 +375,11 @@ class Unit:
         """ Returns the 3d position of the unit. """
         return Point3.from_proto(self._proto.pos)
 
-    # TODO
     def distance_to(self, p: Union["Unit", Point2, Point3]) -> Union[int, float]:
         """ Using the 2d distance between self and p.
         To calculate the 3d distance, use unit.position3d.distance_to(p) """
         if isinstance(p, Unit):
-            return self._bot_object._distance_squared_unit_to_unit(self, p)
+            return self._bot_object._distance_squared_unit_to_unit(self, p)**0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
     def target_in_range(self, target: "Unit", bonus_distance: Union[int, float] = 0) -> bool:
