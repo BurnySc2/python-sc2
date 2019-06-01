@@ -118,7 +118,8 @@ class TestClass:
         assert bot.main_base_ramp  # Test if any ramp was found
         # TODO: Cache all expansion positions for a map and check if it is the same
         assert len(bot.expansion_locations) >= 10, f"Too few expansions found: {len(bot.expansion_locations)}"
-        assert len(bot.expansion_locations) <= 20, f"Too many expansions found: {len(bot.expansion_locations)}"
+        # Honorgrounds LE has 24
+        assert len(bot.expansion_locations) <= 24, f"Too many expansions found: {len(bot.expansion_locations)}"
         # On N player maps, it is expected that there are N*X bases because of symmetry, at least for 1vs1 maps
         assert (
             len(bot.expansion_locations) % (len(bot.enemy_start_locations) + 1) == 0
