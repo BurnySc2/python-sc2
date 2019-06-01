@@ -32,6 +32,7 @@ class Client(Protocol):
         self._debug_lines = []
         self._debug_boxes = []
         self._debug_spheres = []
+        self._debug_draw_last_frame = False
 
         self._renderer = None
 
@@ -449,10 +450,21 @@ class Client(Protocol):
                     ]
                 )
             )
+            self._debug_draw_last_frame = True
             self._debug_texts.clear()
             self._debug_lines.clear()
             self._debug_boxes.clear()
             self._debug_spheres.clear()
+        elif self._debug_draw_last_frame:
+            # Clear drawing if we drew last frame but nothing to draw this frame
+            await self._execute(
+                debug=sc_pb.RequestDebug(
+                    debug=[
+                        debug_pb.DebugCommand(draw=debug_pb.DebugDraw(text=None, lines=None, boxes=None, spheres=None))
+                    ]
+                )
+            )
+            self._debug_draw_last_frame = False
 
     def to_debug_color(self, color):
         """ Helper function for color conversion """

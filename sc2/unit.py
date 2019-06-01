@@ -379,7 +379,7 @@ class Unit:
         """ Using the 2d distance between self and p.
         To calculate the 3d distance, use unit.position3d.distance_to(p) """
         if isinstance(p, Unit):
-            return self._bot_object._distance_squared_unit_to_unit(self, p)**0.5
+            return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
     def target_in_range(self, target: "Unit", bonus_distance: Union[int, float] = 0) -> bool:
@@ -394,15 +394,6 @@ class Unit:
         return (
             self._bot_object._distance_squared_unit_to_unit(self, target)
             <= (self.radius + target.radius + unit_attack_range + bonus_distance) ** 2
-        )
-
-    def target_melee_in_range(self, target: "Unit", bonus_distance: Union[int, float] = 0) -> bool:
-        """ Checks if the target is in melee range.
-        Includes the target's radius when calculating distance to target.
-        This function is ideal for checking if an scv is in range to repair a target. """
-        return (
-            self._bot_object._distance_squared_unit_to_unit(self, target)
-            <= (self.radius + target.radius + bonus_distance) ** 2
         )
 
     def in_ability_cast_range(

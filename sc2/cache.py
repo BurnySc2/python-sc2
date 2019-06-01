@@ -1,4 +1,5 @@
 from collections import Counter
+import numpy as np
 from functools import wraps
 
 
@@ -31,7 +32,7 @@ def property_cache_once_per_frame(f):
             setattr(self, state_cache, self.state.game_loop)
 
         cache = getattr(self, property_cache)
-        should_copy = type(cache).__name__ == "Units" or isinstance(cache, (list, set, dict, Counter))
+        should_copy = type(cache).__name__ == "Units" or isinstance(cache, (list, set, dict, Counter, np.ndarray))
         if should_copy:
             return cache.copy()
         return cache
