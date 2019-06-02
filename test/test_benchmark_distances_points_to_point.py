@@ -13,7 +13,6 @@ import scipy as sp
 
 from scipy.spatial.distance import cdist
 from scipy.spatial import KDTree
-from sklearn.metrics.pairwise import euclidean_distances
 from numba import njit, jit
 
 import pytest

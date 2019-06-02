@@ -10,7 +10,6 @@ import numpy as np
 import scipy as sp
 
 from scipy.spatial.distance import cdist, pdist, squareform
-from sklearn.metrics.pairwise import euclidean_distances
 
 import pytest
 from hypothesis import strategies as st, given, settings
@@ -27,11 +26,6 @@ def distance_matrix_scipy_pdist(ps):
     return pdist(ps, "euclidean")
 
 
-def distance_matrix_sklearn(ps):
-    # Calculate distances between each of the points
-    return euclidean_distances(ps, ps)
-
-
 def distance_matrix_scipy_cdist_squared(ps):
     # Calculate squared distances between each of the points
     return cdist(ps, ps, "sqeuclidean")
@@ -40,11 +34,6 @@ def distance_matrix_scipy_cdist_squared(ps):
 def distance_matrix_scipy_pdist_squared(ps):
     # Calculate squared distances between each of the points
     return pdist(ps, "sqeuclidean")
-
-
-def distance_matrix_sklearn_squared(ps):
-    # Calculate squared distances between each of the points
-    return euclidean_distances(ps, ps, squared=True)
 
 
 # Points as numpy arrays
@@ -125,6 +114,7 @@ for i1 in range(amount):
 assert max(indices) == len(m2) - 1
 assert min(indices) == 0
 assert len(indices) == len(m2), f"{len(indices)} == {len(m2)}"
+
 
 def test_distance_matrix_scipy_cdist(benchmark):
     result = benchmark(distance_matrix_scipy_cdist, points)

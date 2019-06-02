@@ -11,8 +11,6 @@ aiohttp = "*"
 pyglet = "*"
 numpy = "*"
 scipy = "*"
-scikit-image = "*"
-scikit-learn = "*"
 
 [dev-packages]
 pytest = "*"

@@ -12,7 +12,6 @@ import scipy as sp
 # from scipy.spatial import distance as scipydistance
 from numba import jit, njit, vectorize, float64, int64
 from scipy.spatial.distance import cdist, pdist
-from sklearn.metrics.pairwise import euclidean_distances
 
 import pytest
 from hypothesis import strategies as st, given, settings
