@@ -305,7 +305,6 @@ class BotAI(DistanceCalculation):
         """
         if not self.mineral_field or not self.workers or not self.townhalls.ready:
             return
-        actions = []
         worker_pool = [worker for worker in self.workers.idle]
         bases = self.townhalls.ready
         gas_buildings = self.gas_buildings.ready
@@ -380,8 +379,10 @@ class BotAI(DistanceCalculation):
                     local_minerals = [
                         mineral for mineral in self.mineral_field if mineral.distance_to(current_place) <= 8
                     ]
-                    target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents)
-                    self.do(worker.gather(target_mineral))
+                    # Local_minerals can be empty if townhall is misplaced
+                    if local_minerals:
+                        target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents)
+                        self.do(worker.gather(target_mineral))
             # more workers to distribute than free mining spots
             # send to closest if worker is doing nothing
             elif worker.is_idle and all_minerals_near_base:
@@ -634,7 +635,7 @@ class BotAI(DistanceCalculation):
     async def build(
         self,
         building: UnitTypeId,
-        near: Union[Point2, Point3],
+        near: Union[Unit, Point2, Point3],
         max_distance: int = 20,
         unit: Optional[Unit] = None,
         random_alternative: bool = True,
@@ -643,32 +644,29 @@ class BotAI(DistanceCalculation):
         """ Not recommended as this function uses 'self.do' (reduces performance).
         Also if the position is not placeable, this function tries to find a nearby position to place the structure. Then uses 'self.do' to give the worker the order to start the construction. """
 
+        assert isinstance(near, (Unit, Point2, Point3))
         if isinstance(near, Unit):
-            near = near.position.to2
-        elif near is not None:
-            near = near.to2
-        else:
-            return
+            near = near.position
+        near = near.to2
 
         p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
         if p is None:
-            return ActionResult.CantFindPlacementLocation
+            return False
 
         unit = unit or self.select_build_worker(p)
         if unit is None or not self.can_afford(building):
-            return ActionResult.Error
-        return self.do(unit.build(building, p))
+            return False
+        self.do(unit.build(building, p), subtract_cost=True)
+        return True
 
     def do(self, action, subtract_cost=False, subtract_supply=False, can_afford_check=False):
         if subtract_cost:
             cost: "Cost" = self._game_data.calculate_ability_cost(action.ability)
-            if can_afford_check:
-                if self.minerals >= cost.minerals and self.vespene >= cost.vespene:
-                    self.minerals -= cost.minerals
-                    self.vespene -= cost.vespene
-                else:
-                    # Dont do action if can't afford
-                    return
+            if can_afford_check and not (self.minerals >= cost.minerals and self.vespene >= cost.vespene):
+                # Dont do action if can't afford
+                return False
+            self.minerals -= cost.minerals
+            self.vespene -= cost.vespene
         if subtract_supply and action.ability in abilityid_to_unittypeid:
             unit_type = abilityid_to_unittypeid[action.ability]
             required_supply = self._game_data.units[unit_type.value]._proto.food_required
@@ -678,6 +676,7 @@ class BotAI(DistanceCalculation):
                 self.supply_left -= required_supply
                 # TODO: if unit created from larva: reduce larva count by 1
         self.actions.append(action)
+        return True
 
     async def _do_actions(self, actions: List["UnitCommand"], prevent_double=True):
         """ Used internally by main.py automatically, use self.do() instead! """

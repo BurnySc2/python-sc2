@@ -26,7 +26,7 @@ class RampWallBot(sc2.BotAI):
 
         # Raise depos when enemies are nearby
         for depo in self.structures(SUPPLYDEPOT).ready:
-            for unit in self.known_enemy_units.not_structure:
+            for unit in self.enemy_units:
                 if unit.position.to2.distance_to(depo.position.to2) < 15:
                     break
             else:
@@ -34,7 +34,7 @@ class RampWallBot(sc2.BotAI):
 
         # Lower depos when no enemies are nearby
         for depo in self.structures(SUPPLYDEPOTLOWERED).ready:
-            for unit in self.known_enemy_units.not_structure:
+            for unit in self.enemy_units:
                 if unit.position.to2.distance_to(depo.position.to2) < 10:
                     self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
                     break
