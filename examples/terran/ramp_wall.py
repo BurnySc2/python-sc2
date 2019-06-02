@@ -15,19 +15,21 @@ from sc2.units import Units
 
 class RampWallBot(sc2.BotAI):
     async def on_step(self, iteration):
-        cc = self.townhalls(COMMANDCENTER)
-        if not cc.exists:
+        ccs = self.townhalls(COMMANDCENTER)
+        if not ccs:
             return
         else:
             cc = cc.first
 
+        await self.distribute_workers()
+
         if self.can_afford(SCV) and self.workers.amount < 16 and cc.is_idle:
-            self.do(cc.train(SCV))
+            self.do(cc.train(SCV), subtract_cost=True, subtract_supply=True)
 
         # Raise depos when enemies are nearby
         for depo in self.structures(SUPPLYDEPOT).ready:
             for unit in self.enemy_units:
-                if unit.position.to2.distance_to(depo.position.to2) < 15:
+                if unit.position.distance_to(depo) < 15:
                     break
             else:
                 self.do(depo(MORPH_SUPPLYDEPOT_LOWER))
@@ -35,7 +37,7 @@ class RampWallBot(sc2.BotAI):
         # Lower depos when no enemies are nearby
         for depo in self.structures(SUPPLYDEPOTLOWERED).ready:
             for unit in self.enemy_units:
-                if unit.position.to2.distance_to(depo.position.to2) < 10:
+                if unit.position.distance_to(depo) < 10:
                     self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
                     break
 
@@ -63,7 +65,7 @@ class RampWallBot(sc2.BotAI):
             depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
 
         # Build depots
-        if self.can_afford(SUPPLYDEPOT) and not self.already_pending(SUPPLYDEPOT):
+        if self.can_afford(SUPPLYDEPOT) and self.already_pending(SUPPLYDEPOT) == 0:
             if len(depot_placement_positions) == 0:
                 return
             # Choose any depot location
@@ -74,7 +76,7 @@ class RampWallBot(sc2.BotAI):
                 self.do(w.build(SUPPLYDEPOT, target_depot_location))
 
         # Build barracks
-        if depots.ready and self.can_afford(BARRACKS) and not self.already_pending(BARRACKS):
+        if depots.ready and self.can_afford(BARRACKS) and self.already_pending(BARRACKS) == 0:
             if self.structures(BARRACKS).amount + self.already_pending(BARRACKS) > 0:
                 return
             ws = self.workers.gathering
