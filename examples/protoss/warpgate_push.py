@@ -38,6 +38,7 @@ class WarpGateBot(sc2.BotAI):
 
         # Build pylon when on low supply
         if self.supply_left < 2 and self.already_pending(PYLON) == 0:
+            # Always check if you can afford something before you build it
             if self.can_afford(PYLON):
                 await self.build(PYLON, near=nexus)
             return
@@ -92,7 +93,7 @@ class WarpGateBot(sc2.BotAI):
         if self.proxy_built:
             await self.warp_new_units(proxy)
 
-        # Make stalkers attack
+        # Make stalkers attack either closest enemy unit or enemy spawn location
         if self.units(STALKER).amount > 3:
             for stalker in self.units(STALKER).ready.idle:
                 targets = (self.enemy_units | self.enemy_structures).filter(lambda unit: unit.can_be_attacked)
@@ -108,14 +109,14 @@ class WarpGateBot(sc2.BotAI):
             await self.build(PYLON, near=p)
             self.proxy_built = True
 
-        # Chrono nexus if cybercore is not ready
+        # Chrono nexus if cybercore is not ready, else chrono cybercore
         if not self.structures(CYBERNETICSCORE).ready:
-            if not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST):
+            if not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST) and not nexus.is_idle:
                 if nexus.energy >= 50:
                     self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus))
         else:
             ccore = self.structures(CYBERNETICSCORE).ready.first
-            if not ccore.has_buff(BuffId.CHRONOBOOSTENERGYCOST):
+            if not ccore.has_buff(BuffId.CHRONOBOOSTENERGYCOST) and not ccore.is_idle:
                 if nexus.energy >= 50:
                     self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, ccore))
 

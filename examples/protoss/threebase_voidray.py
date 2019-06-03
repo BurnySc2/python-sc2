@@ -22,16 +22,12 @@ class ThreebaseVoidrayBot(sc2.BotAI):
 
         # If this random nexus is not idle and has not chrono buff, chrono it with one of the nexuses we have
         if not nexus.is_idle and not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST):
-            for loop_nexus in self.structures(NEXUS):
-                abilities = (await self.get_available_abilities([loop_nexus]))[0]
-                if AbilityId.EFFECT_CHRONOBOOSTENERGYCOST in abilities:
+            nexuses = self.structures(NEXUS)
+            abilities = await self.get_available_abilities(nexuses)
+            for loop_nexus, abilities_nexus in zip(nexuses, abilities):
+                if AbilityId.EFFECT_CHRONOBOOSTENERGYCOST in abilities_nexus:
                     self.do(loop_nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus))
                     break
-
-        # Make idle workers mine
-        for idle_worker in self.workers.idle:
-            mf = self.mineral_field.closest_to(idle_worker)
-            self.do(idle_worker.gather(mf))
 
         # If we have at least 5 void rays, attack closes enemy unit/building, or if none is visible: attack move towards enemy spawn
         if self.units(VOIDRAY).amount > 5:
@@ -58,6 +54,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
             and self.supply_left < 4
             and self.already_pending(PYLON) < 2
         ):
+            # Always check if you can afford something before you build it
             if self.can_afford(PYLON):
                 await self.build(PYLON, near=nexus)
 
