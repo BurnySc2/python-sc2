@@ -19,7 +19,7 @@ class RampWallBot(sc2.BotAI):
         if not ccs:
             return
         else:
-            cc = cc.first
+            cc = ccs.first
 
         await self.distribute_workers()
 
