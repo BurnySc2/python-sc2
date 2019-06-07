@@ -179,7 +179,7 @@ class GameInfo:
         self.pathing_grid: PixelMap = PixelMap(self._proto.start_raw.pathing_grid, in_bits=True, mirrored=False)
         # self.terrain_height[point]: returns the height in range of 0 to 255 at that point
         self.terrain_height: PixelMap = PixelMap(self._proto.start_raw.terrain_height, mirrored=False)
-        # self.placement_grid[point]: if 0, point is not pathable, if 1, point is pathable
+        # self.placement_grid[point]: if 0, point is not placeable, if 1, point is pathable
         self.placement_grid: PixelMap = PixelMap(self._proto.start_raw.placement_grid, in_bits=True, mirrored=False)
         self.playable_area = Rect.from_proto(self._proto.start_raw.playable_area)
         self.map_center = self.playable_area.center
