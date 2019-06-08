@@ -876,6 +876,15 @@ class BotAI(DistanceCalculation):
                     else:
                         self.enemy_units.append(unit_obj)
 
+    async def _after_step(self) -> int:
+        """ Executed by main.py after each on_step function. """
+        # Commit and clear bot actions
+        await self._do_actions(self.actions)
+        self.actions.clear()
+        # Commit debug queries
+        await self._client._send_debug()
+        return self.state.game_loop
+
     async def issue_events(self):
         """ This function will be automatically run from main.py and triggers the following functions:
         - on_unit_created
@@ -938,8 +947,7 @@ class BotAI(DistanceCalculation):
 
     async def on_upgrade_complete(self, upgrade: UpgradeId):
         """
-        Override this in your bot class. This function is called with the upgrade id of an upgrade
-        that was not finished last step and is now.
+        Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.
         """
 
     async def on_start(self):
