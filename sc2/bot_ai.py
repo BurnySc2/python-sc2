@@ -6,13 +6,13 @@ from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
 
 from .cache import property_cache_forever, property_cache_once_per_frame
-from .constants import abilityid_to_unittypeid, geyser_ids, mineral_ids
+from .constants import FakeEffektID, abilityid_to_unittypeid, geyser_ids, mineral_ids
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
 
 # imports for mypy and pycharm autocomplete
-from .game_state import Blip, GameState
+from .game_state import Blip, EffectData, GameState
 from .ids.ability_id import AbilityId
 from .ids.unit_typeid import UnitTypeId
 from .ids.upgrade_id import UpgradeId
@@ -836,12 +836,16 @@ class BotAI(DistanceCalculation):
             if unit.is_blip:
                 self.blips.add(Blip(unit))
             else:
+                unit_type = unit.unit_type
+                # convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
+                if unit_type in FakeEffektID:
+                    self.state.effects.add(EffectData(unit, fake=True))
+                    continue
                 unit_obj = Unit(unit, self)
                 self.all_units.append(unit_obj)
                 alliance = unit.alliance
                 # Alliance.Neutral.value = 3
                 if alliance == 3:
-                    unit_type = unit.unit_type
                     # XELNAGATOWER = 149
                     if unit_type == 149:
                         self.watchtowers.append(unit_obj)

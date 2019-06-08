@@ -1,7 +1,9 @@
 from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
 
+from .constants import FakeEffektID, FakeEffektRadii
 from .data import Alliance, DisplayType
 from .ids.effect_id import EffectId
+from .ids.unit_typeid import UnitTypeId
 from .ids.upgrade_id import UpgradeId
 from .pixel_map import PixelMap
 from .position import Point2, Point3
@@ -73,16 +75,23 @@ class Common:
 
 
 class EffectData:
-    def __init__(self, proto):
+    def __init__(self, proto, fake=False):
         self._proto = proto
+        self.fake = fake
 
     @property
     def id(self) -> EffectId:
-        return EffectId(self._proto.effect_id)
+        if self.fake:
+            return FakeEffektID[self._proto.unit_type]
+        else:
+            return EffectId(self._proto.effect_id)
 
     @property
     def positions(self) -> Set[Point2]:
-        return {Point2.from_proto(p) for p in self._proto.pos}
+        if self.fake:
+            return {Point2.from_proto(self._proto.pos)}
+        else:
+            return {Point2.from_proto(p) for p in self._proto.pos}
 
     @property
     def alliance(self) -> Alliance:
@@ -94,7 +103,10 @@ class EffectData:
 
     @property
     def radius(self) -> float:
-        return self._proto.radius
+        if self.fake:
+            return FakeEffektRadii[self._proto.unit_type]
+        else:
+            return self._proto.radius
 
     def __repr__(self) -> str:
         return f"{self.id} with radius {self.radius} at {self.positions}"

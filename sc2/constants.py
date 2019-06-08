@@ -217,3 +217,13 @@ IS_DETECTOR = {
 }
 UNIT_PHOTONCANNON = UnitTypeId.PHOTONCANNON
 UNIT_COLOSSUS = UnitTypeId.COLOSSUS
+FakeEffektRadii = {
+    UnitTypeId.KD8CHARGE.value: 2,
+    UnitTypeId.PARASITICBOMBDUMMY.value: 3,
+    UnitTypeId.FORCEFIELD.value: 1.5,
+}
+FakeEffektID = {
+    UnitTypeId.KD8CHARGE.value: "KD8CHARGE",
+    UnitTypeId.PARASITICBOMBDUMMY.value: "PARASITICBOMB",
+    UnitTypeId.FORCEFIELD.value: "FORCEFIELD",
+}
