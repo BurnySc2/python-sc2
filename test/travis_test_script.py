@@ -44,7 +44,7 @@ if len(sys.argv) > 1:
         most_linebreaks_type = max(linebreaks, key=lambda x: x[1])
         linebreak_type, linebreak_count = most_linebreaks_type
         output_as_list = print_output.split(linebreak_type)
-        print("Travis test script, bot output:\r\n{}".format("\r\n".join(output_as_list)))
+        print("Travis test script, bot output:\r\n{}\r\nEnd of bot output".format("\r\n".join(output_as_list)))
 
     # Bot was not successfully run in time, returncode will be None
     if process.returncode is None or process.returncode != 0:

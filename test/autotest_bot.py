@@ -29,8 +29,6 @@ class TestBot(sc2.BotAI):
         self.tests_target = 4 + len(
             [True for index in range(1000) if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")]
         )
-        print(hasattr(self.test_botai_functions, "__call__"))
-        print(hasattr(0, "__call__"))
         self.tests_done_by_name = set()
         self.current_action_index = 1
 
@@ -241,6 +239,21 @@ class TestBot(sc2.BotAI):
 
     async def test_botai_actions5_successful(self):
         if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
+            return True
+
+    # Test if reaper grenade shows up in effects
+    async def test_botai_actions6(self):
+        center = self._game_info.map_center
+        if self.units(UnitTypeId.REAPER).amount < 50:
+            await self._client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
+        for reaper in self.units(UnitTypeId.REAPER):
+            self.do(reaper(AbilityId.KD8CHARGE_KD8CHARGE, center))
+
+    async def test_botai_actions6_successful(self):
+        if len(self.state.effects) > 2:
+            for effect in self.state.effects:
+                print(f"Effect: {effect}")
+            await self._client.debug_kill_unit(self.units(UnitTypeId.REAPER))
             return True
 
 
