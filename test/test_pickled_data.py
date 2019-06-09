@@ -101,6 +101,22 @@ class TestClass:
         assert bot.idle_worker_count == 0
         assert bot.army_count == 0
 
+        # Test properties updated by "_prepare_units" function
+        assert not bot.blips
+        assert bot.units
+        assert bot.structures
+        assert not bot.enemy_units
+        assert not bot.enemy_structures
+        assert bot.mineral_field
+        assert bot.vespene_geyser
+        assert bot.resources
+        assert len(bot.destructables) >= 0
+        assert len(bot.watchtowers) >= 0
+        assert bot.all_units
+        assert bot.workers
+        assert bot.townhalls
+        assert not bot.gas_buildings
+
         # There may be maps without destructables
         assert isinstance(bot.destructables, (list, set, dict))
         assert bot.units
@@ -133,10 +149,6 @@ class TestClass:
             assert location in set(bot.expansion_locations.keys()), f"{location}, {bot.expansion_locations.keys()}"
 
         # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
-        # get_available_abilities
-        # expand_now
-        # get_next_expansion
-        # distribute_workers
         assert bot.owned_expansions == {bot.townhalls.first.position: bot.townhalls.first}
         assert bot.can_feed(UnitTypeId.MARINE)
         assert bot.can_feed(UnitTypeId.SIEGETANK)
@@ -148,22 +160,15 @@ class TestClass:
         assert not bot.can_afford(UnitTypeId.SIEGETANK)
         assert not bot.can_afford(UnitTypeId.BATTLECRUISER)
         assert not bot.can_afford(UnitTypeId.MARAUDER)
-        # can_cast
         worker = bot.workers.random
         assert bot.select_build_worker(worker.position) == worker
         for w in bot.workers:
             if w == worker:
                 continue
             assert bot.select_build_worker(w.position) != worker
-        # can_place
-        # find_placement
         assert bot.already_pending_upgrade(UpgradeId.STIMPACK) == 0
         assert bot.already_pending(UpgradeId.STIMPACK) == 0
         assert bot.already_pending(UnitTypeId.SCV) == 0
-        # build
-        # do
-        # do_actions
-        # chat_send
         assert 0 < bot.get_terrain_height(worker)
         assert bot.in_placement_grid(worker)
         assert bot.in_pathing_grid(worker)
@@ -226,8 +231,9 @@ class TestClass:
             assert ramp.lower
             # Test if ramp was detected far away
             distance = ramp.top_center.distance_to(bot._game_info.player_start_location)
-            assert distance < 30, f"Distance from spawn to main ramp was detected as {distance:.2f}, which is too far. Spawn: {spawn}, Ramp: {ramp.top_center}"
-
+            assert (
+                distance < 30
+            ), f"Distance from spawn to main ramp was detected as {distance:.2f}, which is too far. Spawn: {spawn}, Ramp: {ramp.top_center}"
 
     def test_game_data(self, bot: BotAI):
         game_data = bot._game_data
@@ -249,11 +255,6 @@ class TestClass:
         assert state.psionic_matrix
         assert state.game_loop == 0
         assert state.score
-        assert bot.units == bot.units
-        assert not bot.enemy_units
-        assert bot.mineral_field
-        assert bot.vespene_geyser
-        assert bot.resources
         assert not state.upgrades
         assert not state.dead_units
         assert state.visibility
@@ -594,9 +595,13 @@ class TestClass:
             dist_furthest_point = pos1._distance_squared(furthest_point) ** 0.5
 
             # Distances between pos1-pos2 and pos1-pos3 might be the same, so the sorting might still be different, that's why I use a set here
-            assert pos1.closest(points) in {p for p in points2 if abs(pos1.distance_to(p) - dist_closest_point) < epsilon}
+            assert pos1.closest(points) in {
+                p for p in points2 if abs(pos1.distance_to(p) - dist_closest_point) < epsilon
+            }
             assert abs(pos1.distance_to_closest(points) - pos1._distance_squared(closest_point) ** 0.5) < epsilon
-            assert pos1.furthest(points) in {p for p in points2 if abs(pos1.distance_to(p) - dist_furthest_point) < epsilon}
+            assert pos1.furthest(points) in {
+                p for p in points2 if abs(pos1.distance_to(p) - dist_furthest_point) < epsilon
+            }
             assert abs(pos1.distance_to_furthest(points) - pos1._distance_squared(furthest_point) ** 0.5) < epsilon
             assert pos1.offset(pos2) == Point2((pos1.x + pos2.x, pos1.y + pos2.y))
             if pos1 != pos2:

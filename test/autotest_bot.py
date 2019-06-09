@@ -45,7 +45,7 @@ class TestBot(sc2.BotAI):
             assert len(self.state.chat) >= 1, self.state.chat
 
         # Tests at start
-        if iteration == 5:
+        if iteration == 3:
             # No need to use try except as the travis test script checks for "Traceback" in STDOUT
             await self.test_botai_properties()
             await self.test_botai_functions()
@@ -102,33 +102,12 @@ class TestBot(sc2.BotAI):
             assert loc.distance_to(self.start_location) > 20, (loc, self.start_location)
         assert self.main_base_ramp.top_center.distance_to(self.start_location) < 30, self.main_base_ramp.top_center
         assert self.can_afford(UnitTypeId.SCV)
-        assert self.minerals >= 50, self.minerals
-        assert self.vespene == 0, self.vespene
-        assert self.supply_used == 12, self.supply_used
-        assert self.supply_cap == 15, self.supply_cap
-        assert self.supply_left == 3, self.supply_left
         assert self.owned_expansions == {self.townhalls.first.position: self.townhalls.first}
         # Test if bot start location is in expansion locations
         assert self.townhalls.random.position in set(self.expansion_locations.keys())
         # Test if enemy start locations are in expansion locations
         for location in self.enemy_start_locations:
             assert location in set(self.expansion_locations.keys())
-
-        # Test properties updated by "_prepare_units" function
-        assert not self.blips
-        assert self.units
-        assert self.structures
-        assert not self.enemy_units
-        assert not self.enemy_structures
-        assert self.mineral_field
-        assert self.vespene_geyser
-        assert self.resources
-        assert len(self.destructables) >= 0
-        assert len(self.watchtowers) >= 0
-        assert self.all_units
-        assert self.workers
-        assert self.townhalls
-        assert not self.gas_buildings
 
         self.tests_done_by_name.add("test_botai_properties")
 
