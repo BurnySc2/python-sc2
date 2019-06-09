@@ -4,6 +4,7 @@ from .ids.buff_id import *
 from .ids.effect_id import *
 from .ids.unit_typeid import *
 from .ids.upgrade_id import *
+from typing import Dict
 
 mineral_ids = {
     RICHMINERALFIELD.value,
@@ -217,12 +218,12 @@ IS_DETECTOR = {
 }
 UNIT_PHOTONCANNON = UnitTypeId.PHOTONCANNON
 UNIT_COLOSSUS = UnitTypeId.COLOSSUS
-FakeEffectRadii = {
+FakeEffectRadii: Dict[int, float] = {
     UnitTypeId.KD8CHARGE.value: 2,
     UnitTypeId.PARASITICBOMBDUMMY.value: 3,
     UnitTypeId.FORCEFIELD.value: 1.5,
 }
-FakeEffectID = {
+FakeEffectID: Dict[int, str] = {
     UnitTypeId.KD8CHARGE.value: "KD8CHARGE",
     UnitTypeId.PARASITICBOMBDUMMY.value: "PARASITICBOMB",
     UnitTypeId.FORCEFIELD.value: "FORCEFIELD",

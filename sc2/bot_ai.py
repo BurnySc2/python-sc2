@@ -836,8 +836,8 @@ class BotAI(DistanceCalculation):
             if unit.is_blip:
                 self.blips.add(Blip(unit))
             else:
-                unit_type = unit.unit_type
-                # convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
+                unit_type: int = unit.unit_type
+                # Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
                 if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue

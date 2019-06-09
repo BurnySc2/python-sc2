@@ -628,7 +628,7 @@ class Unit:
     def is_moving(self) -> bool:
         """ Checks if the unit is moving.
         Only works for own units. """
-        return self.is_using_ability(AbilityId.MOVE_MOVE)
+        return self.is_using_ability(AbilityId.MOVE)
 
     @property_immutable_cache
     def is_attacking(self) -> bool:

@@ -80,8 +80,9 @@ class EffectData:
         self.fake = fake
 
     @property
-    def id(self) -> EffectId:
+    def id(self) -> Union[EffectId, str]:
         if self.fake:
+            # Returns the string from constants.py, e.g. "KD8CHARGE"
             return FakeEffectID[self._proto.unit_type]
         else:
             return EffectId(self._proto.effect_id)

@@ -1,3 +1,7 @@
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 import random
 
 import sc2
@@ -21,10 +25,18 @@ class TestBot(sc2.BotAI):
     def __init__(self):
         # Tests related
         self.game_time_timeout_limit = 2 * 60
-        self.tests_target = 8
+        # Check how many test action functions we have
+        self.tests_target = 4 + len(
+            [True for index in range(1000) if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")]
+        )
+        print(hasattr(self.test_botai_functions, "__call__"))
+        print(hasattr(0, "__call__"))
         self.tests_done_by_name = set()
+        self.current_action_index = 1
 
-    async def on_start_async(self):
+        self.scv_action_list = ["move", "patrol", "attack", "hold", "scan_move"]
+
+    async def on_start(self):
         await self.distribute_workers()
 
     async def on_step(self, iteration):
@@ -34,39 +46,30 @@ class TestBot(sc2.BotAI):
         if iteration == 1:
             assert len(self.state.chat) >= 1, self.state.chat
 
-        # Tests at start:
+        # Tests at start
         if iteration == 5:
             # No need to use try except as the travis test script checks for "Traceback" in STDOUT
             await self.test_botai_properties()
             await self.test_botai_functions()
-            await self.test_gamestate_static_variables()
+            await self.test_game_state_static_variables()
             await self.test_game_info_static_variables()
-            await self.test_unit()
-            await self.test_units()
 
-        # Test actions:
-        if "test_botai_actions1_successful" not in self.tests_done_by_name:
-            if iteration >= 6:
-                # Test actions
-                await self.test_botai_actions1()
-                # Test if actions were successful
-                await self.test_botai_actions1_successful()
-
-        elif "test_botai_actions2_successful" not in self.tests_done_by_name:
-            await self.test_botai_actions2()
-            await self.test_botai_actions2_successful()
-
-        elif "test_botai_actions3_successful" not in self.tests_done_by_name:
-            await self.test_botai_actions3()
-            await self.test_botai_actions3_successful()
-
-        elif "test_botai_actions4_successful" not in self.tests_done_by_name:
-            await self.test_botai_actions4()
-            await self.test_botai_actions4_successful()
-
-        # elif "test_botai_actions5_successful" not in self.tests_done_by_name:
-        #    await self.test_botai_actions5()
-        #    await self.test_botai_actions5_successful()
+        # Test actions
+        if iteration > 7:
+            # Execute actions on even iterations, test if actions were successful on uneven iterations
+            if iteration % 2 == 0:
+                action_execute_function_name = f"test_botai_actions{self.current_action_index}"
+                action_execute_function = getattr(self, action_execute_function_name, None)
+                if action_execute_function is not None:
+                    await action_execute_function()
+            else:
+                action_test_function_name = f"test_botai_actions{self.current_action_index}_successful"
+                action_test_function = getattr(self, action_test_function_name, None)
+                if action_test_function is not None:
+                    success = await action_test_function()
+                    if success:
+                        self.tests_done_by_name.add(f"test_botai_actions{self.current_action_index}_successful")
+                        self.current_action_index += 1
 
         # End when all tests successful
         if len(self.tests_done_by_name) >= self.tests_target:
@@ -80,19 +83,14 @@ class TestBot(sc2.BotAI):
         # End time reached, cancel testing and report error: took too long
         if self.time >= self.game_time_timeout_limit:
             print(
-                "{}/{} Tests completed: {}".format(
-                    len(self.tests_done_by_name), self.tests_target, self.tests_done_by_name
+                "{}/{} Tests completed: {}\nCurrent action index is at {}".format(
+                    len(self.tests_done_by_name), self.tests_target, self.tests_done_by_name, self.current_action_index
                 )
             )
             print("Not all tests were successful. Timeout reached. Testing was aborted")
             exit(1000)
 
-        """
-        TODO BotAI tests:
-        distribute workers, owned expansions, can cast, select build worker, can place, find placement, self build
-        """
-
-    # Test BotAI properties
+    # Test BotAI properties, starting conditions
     async def test_botai_properties(self):
         assert 1 <= self.player_id <= 2, self.player_id
         assert self.race == Race.Terran, self.race
@@ -104,9 +102,6 @@ class TestBot(sc2.BotAI):
         for loc in self.enemy_start_locations:
             assert isinstance(loc, Point2), loc
             assert loc.distance_to(self.start_location) > 20, (loc, self.start_location)
-        assert self.known_enemy_units.amount == 0, self.known_enemy_units
-        assert self.known_enemy_structures.amount == 0, self.known_enemy_structures
-        assert self.known_enemy_structures.amount <= self.known_enemy_units.amount
         assert self.main_base_ramp.top_center.distance_to(self.start_location) < 30, self.main_base_ramp.top_center
         assert self.can_afford(UnitTypeId.SCV)
         assert self.minerals >= 50, self.minerals
@@ -120,6 +115,23 @@ class TestBot(sc2.BotAI):
         # Test if enemy start locations are in expansion locations
         for location in self.enemy_start_locations:
             assert location in set(self.expansion_locations.keys())
+
+        # Test properties updated by "_prepare_units" function
+        assert not self.blips
+        assert self.units
+        assert self.structures
+        assert not self.enemy_units
+        assert not self.enemy_structures
+        assert self.mineral_field
+        assert self.vespene_geyser
+        assert self.resources
+        assert len(self.destructables) >= 0
+        assert len(self.watchtowers) >= 0
+        assert self.all_units
+        assert self.workers
+        assert self.townhalls
+        assert not self.gas_buildings
+
         self.tests_done_by_name.add("test_botai_properties")
 
     # Test BotAI functions
@@ -134,83 +146,15 @@ class TestBot(sc2.BotAI):
         # TODO: can_cast
         self.tests_done_by_name.add("test_botai_functions")
 
-    # Test BotAI action: train SCV
-    async def test_botai_actions1(self):
-        if self.can_afford(UnitTypeId.SCV):
-            self.do(self.townhalls.random.train(UnitTypeId.SCV))
-
-    # Test BotAI action: move all SCVs to center of map
-    async def test_botai_actions2(self):
-        combined_actions = []
-        center = self._game_info.map_center
-        for scv in self.workers:
-            combined_actions.append(scv.move(center))
-        self.do_actions(combined_actions)
-
-    # Test BotAI action: move some scvs to the center, some to minerals
-    async def test_botai_actions3(self):
-        combined_actions = []
-        center = self._game_info.map_center
-        scvs = self.workers
-        scvs1 = scvs[:6]
-        scvs2 = scvs[6:]
-        for scv in scvs1:
-            combined_actions.append(scv.move(center))
-        mf = self.state.mineral_field.closest_to(self.townhalls.random)
-        for scv in scvs2:
-            combined_actions.append(scv.gather(mf))
-        self.do_actions(combined_actions)
-
-    # Test BotAI action: move all SCVs to mine minerals near townhall
-    async def test_botai_actions4(self):
-        combined_actions = []
-        mf = self.state.mineral_field.closest_to(self.townhalls.random)
-        for scv in self.workers:
-            combined_actions.append(scv.gather(mf))
-        self.do_actions(combined_actions)
-
-    # Test BotAI action: self.expand_now()
-    async def test_botai_actions5(self):
-        if self.can_afford(UnitTypeId.COMMANDCENTER) and not self.already_pending(
-            UnitTypeId.COMMANDCENTER, all_units=True
-        ):
-            await self.get_next_expansion()
-            await self.expand_now()
-
-    # Test BotAI action results
-    async def test_botai_actions1_successful(self):
-        if self.already_pending(UnitTypeId.SCV, all_units=True) > 0:
-            self.tests_done_by_name.add("test_botai_actions1_successful")
-
-    async def test_botai_actions2_successful(self):
-        if self.units.filter(lambda x: x.is_moving).amount >= 12:
-            self.tests_done_by_name.add("test_botai_actions2_successful")
-
-    async def test_botai_actions3_successful(self):
-        if self.units.filter(lambda x: x.is_moving).amount >= 6:
-            if self.units.gathering.amount >= 6:
-                self.tests_done_by_name.add("test_botai_actions3_successful")
-
-    async def test_botai_actions4_successful(self):
-        if self.units.gathering.amount >= 12:
-            self.tests_done_by_name.add("test_botai_actions4_successful")
-
-    async def test_botai_actions5_successful(self):
-        if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
-            self.tests_done_by_name.add("test_botai_actions5_successful")
-
     # Test self.state variables
-    async def test_gamestate_static_variables(self):
+    async def test_game_state_static_variables(self):
         assert len(self.state.actions) == 0, self.state.actions
         assert len(self.state.action_errors) == 0, self.state.action_errors
         assert len(self.state.chat) == 0, self.state.chat
         assert self.state.game_loop > 0, self.state.game_loop
         assert self.state.score.collection_rate_minerals >= 0, self.state.score.collection_rate_minerals
-        assert len(self.state.destructables) > 0, self.state.destructables
-        assert self.state.units.amount > 0, self.state.units
-        assert len(self.state.blips) == 0, self.state.blips
         assert len(self.state.upgrades) == 0, self.state.upgrades
-        self.tests_done_by_name.add("test_gamestate_static_variables")
+        self.tests_done_by_name.add("test_game_state_static_variables")
 
     # Test self._game_info variables
     async def test_game_info_static_variables(self):
@@ -219,75 +163,85 @@ class TestBot(sc2.BotAI):
         assert len(self._game_info.player_races) == 2, self._game_info.player_races
         self.tests_done_by_name.add("test_game_info_static_variables")
 
-    # Test unit.py
-    async def test_unit(self):
-        scv1, scv2, scv3 = self.workers[:3]
-
-        assert scv1.type_id == UnitTypeId.SCV
-        assert scv1._type_data == self._game_data.units[UnitTypeId.SCV.value]
-        assert scv1.alliance == Alliance.Self.value
-        assert scv1.is_mine is True
-        assert isinstance(scv1.position, Point2)
-        assert isinstance(scv1.position3d, Point3)
-        assert scv1.health == 45
-        assert scv1.health_max == 45
-        assert scv1.health_percentage == 45 / 45
-        assert scv1.energy == 0
-        assert scv1.energy_max == 0
-        assert scv1.energy_percentage == 0
-        assert not scv1.target_in_range(self.workers.tags_not_in({scv1.tag}).furthest_to(scv1.position))
-        assert scv1.target_in_range(scv1)
-
-    # Test units.py
-    async def test_units(self):
-        scv1, scv2, scv3 = self.workers[:3]
-        scv_group = self.workers.tags_in({scv1.tag, scv2.tag, scv3.tag})
-        empty_group = self.workers & []
-
-        assert scv_group.amount == 3
-        assert empty_group.amount == 0
-
-        assert not scv_group.empty
-        assert empty_group.empty
-
-        assert scv_group.exists
-        assert not empty_group.exists
-
-        assert scv_group.find_by_tag(scv1.tag) == scv1
-        assert scv_group.find_by_tag(1337) is None
-
-        assert scv_group.random in [scv1, scv2, scv3]
-
-        # Test distances and closest/furthest filters
-        test_point = scv1.position.offset(Point2((0.01, 0.01)))
-        assert abs(scv_group.closest_distance_to(test_point) - (0.01 ** 2 + 0.01 ** 2) ** 0.5) < 0.01
-
-        assert scv_group.closest_to(test_point) == scv1
-        assert scv_group.furthest_to(test_point) != scv1
-        assert scv_group.furthest_to(test_point) in [scv2, scv3]
-
-        assert scv_group.closer_than(0.02, test_point) == self.workers.tags_in({scv1.tag})
-        assert scv_group.closer_than(30, test_point) == scv_group
-
-        assert scv_group.further_than(0.02, test_point) == self.workers.tags_in({scv2.tag, scv3.tag})
-
-        # Test chained filters
-        assert (
-            scv_group.closer_than(50, test_point).further_than(0.00001, test_point).of_type(UnitTypeId.SCV) == scv_group
-        )
-
-        assert scv_group.of_type({UnitTypeId.SCV}) == scv_group
-        assert scv_group.of_type({UnitTypeId.MARINE}) == empty_group
-
-        assert scv_group.tags == {u.tag for u in scv_group}
-
-        assert scv_group.owned == scv_group
-
-        assert scv_group.enemy == empty_group
-
     # TODO:
-    # Test ramp building placement position
     # Test client.py debug functions
+
+    # Test BotAI action: train SCV
+    async def test_botai_actions1(self):
+        if self.can_afford(UnitTypeId.SCV):
+            self.do(self.townhalls.random.train(UnitTypeId.SCV))
+
+    async def test_botai_actions1_successful(self):
+        if self.already_pending(UnitTypeId.SCV) > 0:
+            return True
+
+    # Test BotAI action: move all SCVs to center of map
+    async def test_botai_actions2(self):
+        center = self._game_info.map_center
+        scv: Unit
+        for index, scv in enumerate(self.workers):
+            if index > len(self.scv_action_list):
+                self.do(scv.stop())
+            action = self.scv_action_list[index % len(self.scv_action_list)]
+            if action == "move":
+                self.do(scv.move(center))
+            elif action == "patrol":
+                self.do(scv.patrol(center))
+            elif action == "attack":
+                self.do(scv.attack(center))
+            elif action == "hold":
+                self.do(scv.hold_position())
+            elif action == "scan_move":
+                self.do(scv.scan_move(center))
+
+    async def test_botai_actions2_successful(self):
+        def temp_filter(unit: Unit):
+            return (
+                unit.is_moving
+                or unit.is_patrolling
+                or unit.orders
+                and unit.orders[0] == AbilityId.HOLDPOSITION_HOLD
+                or unit.is_attacking
+            )
+
+        if self.units.filter(lambda x: temp_filter(x)).amount >= len(self.scv_action_list):
+            return True
+
+    # Test BotAI action: move some scvs to the center, some to minerals
+    async def test_botai_actions3(self):
+        center = self._game_info.map_center
+        scvs = self.workers
+        scvs1 = scvs[:6]
+        scvs2 = scvs[6:]
+        for scv in scvs1:
+            self.do(scv.move(center))
+        mf = self.mineral_field.closest_to(self.townhalls.random)
+        for scv in scvs2:
+            self.do(scv.gather(mf))
+
+    async def test_botai_actions3_successful(self):
+        if self.units.filter(lambda x: x.is_moving).amount >= 6 and self.units.gathering.amount >= 6:
+            return True
+
+    # Test BotAI action: move all SCVs to mine minerals near townhall
+    async def test_botai_actions4(self):
+        mf = self.mineral_field.closest_to(self.townhalls.random)
+        for scv in self.workers:
+            self.do(scv.gather(mf))
+
+    async def test_botai_actions4_successful(self):
+        if self.units.gathering.amount >= 12:
+            return True
+
+    # Test BotAI action: self.expand_now() which tests for get_next_expansion, select_build_worker, can_place, find_placement, build and can_afford
+    async def test_botai_actions5(self):
+        if self.can_afford(UnitTypeId.COMMANDCENTER) and not self.already_pending(UnitTypeId.COMMANDCENTER):
+            await self.get_next_expansion()
+            await self.expand_now()
+
+    async def test_botai_actions5_successful(self):
+        if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
+            return True
 
 
 def main():
