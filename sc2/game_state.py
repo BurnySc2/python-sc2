@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
 
-from .constants import FakeEffektID, FakeEffektRadii
+from .constants import FakeEffectID, FakeEffectRadii
 from .data import Alliance, DisplayType
 from .ids.effect_id import EffectId
 from .ids.unit_typeid import UnitTypeId
@@ -82,7 +82,7 @@ class EffectData:
     @property
     def id(self) -> EffectId:
         if self.fake:
-            return FakeEffektID[self._proto.unit_type]
+            return FakeEffectID[self._proto.unit_type]
         else:
             return EffectId(self._proto.effect_id)
 
@@ -104,7 +104,7 @@ class EffectData:
     @property
     def radius(self) -> float:
         if self.fake:
-            return FakeEffektRadii[self._proto.unit_type]
+            return FakeEffectRadii[self._proto.unit_type]
         else:
             return self._proto.radius
 

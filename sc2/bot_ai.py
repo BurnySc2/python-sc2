@@ -6,7 +6,7 @@ from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
 
 from .cache import property_cache_forever, property_cache_once_per_frame
-from .constants import FakeEffektID, abilityid_to_unittypeid, geyser_ids, mineral_ids
+from .constants import FakeEffectID, abilityid_to_unittypeid, geyser_ids, mineral_ids
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
@@ -838,7 +838,7 @@ class BotAI(DistanceCalculation):
             else:
                 unit_type = unit.unit_type
                 # convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
-                if unit_type in FakeEffektID:
+                if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue
                 unit_obj = Unit(unit, self)
