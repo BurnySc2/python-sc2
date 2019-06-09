@@ -223,16 +223,40 @@ class TestBot(sc2.BotAI):
     # Test if reaper grenade shows up in effects
     async def test_botai_actions6(self):
         center = self._game_info.map_center
-        if self.units(UnitTypeId.REAPER).amount < 50:
+        if self.units(UnitTypeId.REAPER).amount < 10:
             await self._client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
         for reaper in self.units(UnitTypeId.REAPER):
             self.do(reaper(AbilityId.KD8CHARGE_KD8CHARGE, center))
 
     async def test_botai_actions6_successful(self):
         if len(self.state.effects) > 2:
+            # print(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
-                print(f"Effect: {effect}")
+                # print(f"Effect: {effect}")
+                pass
+            # Cleanup
             await self._client.debug_kill_unit(self.units(UnitTypeId.REAPER))
+            return True
+
+    # Test ravager effects
+    async def test_botai_actions7(self):
+        center = self._game_info.map_center
+        if self.units(UnitTypeId.RAVAGER).amount < 10:
+            await self._client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
+        for reaper in self.units(UnitTypeId.RAVAGER):
+            self.do(reaper(AbilityId.EFFECT_CORROSIVEBILE, center))
+
+    async def test_botai_actions7_successful(self):
+        success = False
+        if len(self.state.effects) >= 1:
+            # print(f"Effects: {self.state.effects}")
+            for effect in self.state.effects:
+                # print(f"Effect: {effect}")
+                if effect.id == EffectId.RAVAGERCORROSIVEBILECP:
+                    success = True
+        if success:
+            # Cleanup
+            await self._client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
             return True
 
 
