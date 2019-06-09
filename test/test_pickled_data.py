@@ -111,16 +111,12 @@ class TestClass:
         assert bot.vespene_geyser
         assert bot.resources
         assert len(bot.destructables) >= 0
+        assert isinstance(bot.destructables, (list, set, dict))
         assert len(bot.watchtowers) >= 0
         assert bot.all_units
         assert bot.workers
         assert bot.townhalls
         assert not bot.gas_buildings
-
-        # There may be maps without destructables
-        assert isinstance(bot.destructables, (list, set, dict))
-        assert bot.units
-        assert not bot.blips
 
         # Test bot_ai functions
         assert bot.time == 0

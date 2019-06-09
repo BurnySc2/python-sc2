@@ -10,8 +10,7 @@ docker run test_image -c "python test/travis_test_script.py test/autotest_bot.py
 """
 
 retries = 2
-timeout_time = 3*60 # My maxout bot took 110 - 140 real seconds for 7 minutes in game time
-
+timeout_time = 3 * 60  # My maxout bot took 110 - 140 real seconds for 7 minutes in game time
 
 
 if len(sys.argv) > 1:
@@ -48,11 +47,12 @@ if len(sys.argv) > 1:
 
     # Bot was not successfully run in time, returncode will be None
     if process.returncode is None or process.returncode != 0:
-        print("Exiting with exit code 5, error: Attempted to launch script {} timed out after {} seconds. Retries completed: {}".format(sys.argv[1], timeout_time, retries))
+        print(
+            "Exiting with exit code 5, error: Attempted to launch script {} timed out after {} seconds. Retries completed: {}".format(
+                sys.argv[1], timeout_time, retries
+            )
+        )
         exit(5)
-
-
-
 
     # process.returncode will always return 0 if the game was run successfully or if there was a python error (in this case it returns as defeat)
     print("Returncode: {}".format(process.returncode))
