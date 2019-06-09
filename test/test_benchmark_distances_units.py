@@ -46,10 +46,8 @@ points = np.array(
 
 m1 = distance_matrix_scipy_cdist(points)
 m2 = distance_matrix_scipy_pdist(points)
-m3 = distance_matrix_sklearn(points)
 ms1 = distance_matrix_scipy_cdist_squared(points)
 ms2 = distance_matrix_scipy_pdist_squared(points)
-ms3 = distance_matrix_sklearn_squared(points)
 
 # print(points)
 

@@ -104,7 +104,6 @@ class RampWallBot(sc2.BotAI):
                     color = Point3((0, 0, 255))
                 self._client.debug_box_out(p0, p1, color=color)
 
-
     def draw_pathing_grid(self):
         map_area = self._game_info.playable_area
         for (b, a), value in np.ndenumerate(self._game_info.pathing_grid.data_numpy):
@@ -132,6 +131,7 @@ class RampWallBot(sc2.BotAI):
             # print(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
             self._client.debug_box_out(p0, p1, color=color)
+
 
 def main():
     map = random.choice(
