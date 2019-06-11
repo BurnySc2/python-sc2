@@ -376,12 +376,12 @@ class BotAI(DistanceCalculation):
                 # if current place is a gas extraction site,
                 # go to the mineral field that is near and has the most minerals left
                 else:
-                    local_minerals = [
+                    local_minerals = (
                         mineral for mineral in self.mineral_field if mineral.distance_to(current_place) <= 8
-                    ]
-                    # Local_minerals can be empty if townhall is misplaced
-                    if local_minerals:
-                        target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents)
+                    )
+                    # local_minerals can be empty if townhall is misplaced
+                    target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents, default=None)
+                    if target_mineral:
                         self.do(worker.gather(target_mineral))
             # more workers to distribute than free mining spots
             # send to closest if worker is doing nothing
@@ -721,7 +721,7 @@ class BotAI(DistanceCalculation):
 
     async def chat_send(self, message: str):
         """ Send a chat message. """
-        assert isinstance(message, str), f"{message} is no string"
+        assert isinstance(message, str), f"{message} is not a string"
         await self._client.chat_send(message, False)
 
     # For the functions below, make sure you are inside the boundries of the map size.
