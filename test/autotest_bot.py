@@ -120,7 +120,6 @@ class TestBot(sc2.BotAI):
             assert await self.can_place(UnitTypeId.COMMANDCENTER, location)
             await self.find_placement(UnitTypeId.COMMANDCENTER, location)
         assert len(await self.get_available_abilities(self.workers)) == self.workers.amount
-        # TODO: can_cast
         self.tests_done_by_name.add("test_botai_functions")
 
     # Test self.state variables
@@ -140,8 +139,6 @@ class TestBot(sc2.BotAI):
         assert len(self._game_info.player_races) == 2, self._game_info.player_races
         self.tests_done_by_name.add("test_game_info_static_variables")
 
-    # TODO:
-    # Test client.py debug functions
 
     # Test BotAI action: train SCV
     async def test_botai_actions1(self):
@@ -259,6 +256,12 @@ class TestBot(sc2.BotAI):
             await self._client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
             return True
 
+    # TODO:
+    # self.can_cast function
+    # Test client.py debug functions
+    # Test if events work (upgrade, unit, building complete, building started)
+    # Test if functions with various combinations works (e.g. already_pending)
+    # Test if all can_afford and upgrade researches work after tech tree is implemented
 
 def main():
     sc2.run_game(

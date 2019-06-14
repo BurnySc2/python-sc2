@@ -241,7 +241,7 @@ class Client(Protocol):
         return [float(d.distance) for d in results.query.pathing]
 
     async def query_building_placement(
-        self, ability: AbilityId, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
+        self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
         assert isinstance(ability, AbilityData)
         result = await self._execute(
@@ -470,6 +470,10 @@ class Client(Protocol):
         """ Helper function for color conversion """
         if color is None:
             return debug_pb.Color(r=255, g=255, b=255)
+        # Need to check if not of type Point3 because Point3 inherits from tuple
+        elif isinstance(color, (tuple, list)) and not isinstance(color, Point3) and len(color) == 3:
+            return debug_pb.Color(r=color[0], g=color[1], b=color[2])
+        # In case color is of type Point3
         else:
             r = getattr(color, "r", getattr(color, "x", 255))
             g = getattr(color, "g", getattr(color, "y", 255))

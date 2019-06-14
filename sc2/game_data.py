@@ -135,7 +135,7 @@ class UnitTypeData:
         return self._proto.name
 
     @property
-    def creation_ability(self) -> AbilityData:
+    def creation_ability(self) -> Optional[AbilityData]:
         if self._proto.ability_id == 0:
             return None
         if self._proto.ability_id not in self._game_data.abilities:
