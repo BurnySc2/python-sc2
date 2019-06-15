@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>position.py &#8212; python-sc2  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="protocol.py" href="../protocol/index.html" />
+    <link rel="prev" title="pixel_map.py" href="../pixel_map/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../protocol/index.html" title="protocol.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../pixel_map/index.html" title="pixel_map.py"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">python-sc2  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="toctree-wrapper compound">
+</div>
+<div class="section" id="position-py">
+<h1>position.py<a class="headerlink" href="#position-py" title="Permalink to this headline">¶</a></h1>
+<p>TODO: Replace this with info about this file</p>
+<dl class="class">
+<dt id="sc2.position.Pointlike">
+<em class="property">class </em><code class="sig-prename descclassname">sc2.position.</code><code class="sig-name descname">Pointlike</code><a class="headerlink" href="#sc2.position.Pointlike" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="sc2.position.Pointlike.closest">
+<code class="sig-name descname">closest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.closest" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function assumes the 2d distance is meant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.distance_to">
+<code class="sig-name descname">distance_to</code><span class="sig-paren">(</span><em class="sig-param">target</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a single distance from a point or unit to another point or unit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.distance_to_closest">
+<code class="sig-name descname">distance_to_closest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_closest" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function assumes the 2d distance is meant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.distance_to_furthest">
+<code class="sig-name descname">distance_to_furthest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_furthest" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function assumes the 2d distance is meant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.distance_to_point2">
+<code class="sig-name descname">distance_to_point2</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_point2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as the function above, but should be a bit faster because of the dropped asserts
+and conversion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.furthest">
+<code class="sig-name descname">furthest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.furthest" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function assumes the 2d distance is meant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.is_closer_than">
+<code class="sig-name descname">is_closer_than</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_closer_than" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if another point (or unit) is closer than the given distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.is_further_than">
+<code class="sig-name descname">is_further_than</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_further_than" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if another point (or unit) is further than the given distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.sort_by_distance">
+<code class="sig-name descname">sort_by_distance</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.sort_by_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>This returns the target points sorted as list.
+You should not pass a set or dict since those are not sortable.
+If you want to sort your units towards a point, use ‘units.sorted_by_distance_to(point)’ instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sc2.position.Point2">
+<em class="property">class </em><code class="sig-prename descclassname">sc2.position.</code><code class="sig-name descname">Point2</code><a class="headerlink" href="#sc2.position.Point2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="sc2.position.Point2.center">
+<em class="property">static </em><code class="sig-name descname">center</code><span class="sig-paren">(</span><em class="sig-param">a</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the central point for points in list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Point2.circle_intersection">
+<code class="sig-name descname">circle_intersection</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">r</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.circle_intersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>self is point1, p is point2, r is the radius for circles originating in both points
+Used in ramp finding</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Point2.direction_vector">
+<code class="sig-name descname">direction_vector</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.direction_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a vector to a direction that can face vertically, horizontally or diagonal or be zero, e.g. (0, 0), (1, -1), (1, 0)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Point2.distance2_to">
+<code class="sig-name descname">distance2_to</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.distance2_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squared distance to a point.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sc2.position.Point3">
+<em class="property">class </em><code class="sig-prename descclassname">sc2.position.</code><code class="sig-name descname">Point3</code><a class="headerlink" href="#sc2.position.Point3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="sc2.position.Size">
+<em class="property">class </em><code class="sig-prename descclassname">sc2.position.</code><code class="sig-name descname">Size</code><a class="headerlink" href="#sc2.position.Size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="sc2.position.Rect">
+<em class="property">class </em><code class="sig-prename descclassname">sc2.position.</code><code class="sig-name descname">Rect</code><a class="headerlink" href="#sc2.position.Rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../pixel_map/index.html"
+                        title="previous chapter">pixel_map.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../protocol/index.html"
+                        title="next chapter">protocol.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/position/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../protocol/index.html" title="protocol.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../pixel_map/index.html" title="pixel_map.py"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">python-sc2  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, tweakimp BurnySc2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+    </div>
+  </body>
+</html>
