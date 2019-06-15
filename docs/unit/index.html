@@ -16,8 +16,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="unit_command.py" href="../unit_command/index.html" />
-    <link rel="prev" title="score.py" href="../score/index.html" /> 
+    <link rel="next" title="units.py" href="../units/index.html" />
+    <link rel="prev" title="bot_ai.py" href="../bot_ai/index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -26,10 +26,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../unit_command/index.html" title="unit_command.py"
+          <a href="../units/index.html" title="units.py"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../score/index.html" title="score.py"
+          <a href="../bot_ai/index.html" title="bot_ai.py"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>
@@ -143,8 +143,14 @@ where a terran building has to land to connect to addon</p>
 <dd><p>Orders unit to attack. Target can be a Unit or Point2.
 Attacking a position will make the unit move there and attack everything on its way.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a><em>, </em><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>, </em><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><em>Point3</em></a><em>]</em>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -209,8 +215,15 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 <dd><p>Orders unit to build another ‘unit’ at ‘position’.
 Usage: self.actions.append(SCV.build(COMMANDCENTER, position))</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><em>UnitTypeId</em></a>) – </p></li>
+<li><p><strong>position</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>, </em><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><em>Point3</em></a><em>]</em>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -355,8 +368,11 @@ See <a class="reference external" href="https://github.com/Blizzard/s2client-api
 <dd><p>Using the 2d distance between self and p.
 To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -411,8 +427,14 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd><p>Orders a unit to gather minerals or gas.
 ‘Target’ must be a mineral patch or a gas extraction building.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -522,8 +544,11 @@ You can’t build extractors on empty geysers.</p>
 <code class="sig-name descname">hold_position</code><span class="sig-paren">(</span><em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.hold_position" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders a unit to stop moving. It will not move until it gets new orders.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>queue</strong> (<em>bool</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -545,8 +570,15 @@ You can’t build extractors on empty geysers.</p>
 <code class="sig-name descname">in_ability_cast_range</code><span class="sig-paren">(</span><em class="sig-param">ability_id</em>, <em class="sig-param">target</em>, <em class="sig-param">bonus_distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.in_ability_cast_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test if a unit is able to cast an ability on the target without checking ability cooldown (like stalker blink) or if ability is made available through research (like HT storm).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ability_id</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>) – </p></li>
+<li><p><strong>target</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
+<li><p><strong>bonus_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -705,6 +737,23 @@ in order to detect and Photoncannons also need to be powered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.is_facing_unit">
+<code class="sig-name descname">is_facing_unit</code><span class="sig-paren">(</span><em class="sig-param">other_unit</em>, <em class="sig-param">angle_error=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.is_facing_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function not completed yet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>) – </p></li>
+<li><p><strong>angle_error</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1012,8 +1061,14 @@ It does not give any information about the cloak status of the unit.</p>
 <dd><p>Orders the unit to move to ‘position’.
 Target can be a Unit (to follow that unit) or Point2.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>, </em><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><em>Point3</em></a><em>]</em>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1091,7 +1146,7 @@ from the first order, returns None if the unit is idle</p>
 <dd><p>Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1114,8 +1169,14 @@ from the first order, returns None if the unit is idle</p>
 Can be queued up to seven patrol points. If the last point is the same as the starting
 point, the unit will patrol in a circle.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>, </em><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><em>Point3</em></a><em>]</em>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1145,7 +1206,7 @@ point, the unit will patrol in a circle.</p>
 <dl class="method">
 <dt id="sc2.unit.Unit.position_tuple">
 <em class="property">property </em><code class="sig-name descname">position_tuple</code><a class="headerlink" href="#sc2.unit.Unit.position_tuple" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the 2d position of the unit.</p>
+<dd><p>Returns the 2d position of the unit as tuple without conversion to Point2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
@@ -1180,8 +1241,14 @@ point, the unit will patrol in a circle.</p>
 <code class="sig-name descname">repair</code><span class="sig-paren">(</span><em class="sig-param">repair_target</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.repair" title="Permalink to this definition">¶</a></dt>
 <dd><p>Order an SCV or MULE to repair.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repair_target</strong> (<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1192,8 +1259,14 @@ point, the unit will patrol in a circle.</p>
 <dd><p>Orders unit to research ‘upgrade’.
 Requires UpgradeId to be passed instead of AbilityId.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>upgrade</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><em>UpgradeId</em></a>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1203,8 +1276,14 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 <code class="sig-name descname">return_resource</code><span class="sig-paren">(</span><em class="sig-param">target=None</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.return_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders the unit to return resource. Does not need a ‘target’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1283,8 +1362,11 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 if it is attacked, enemy unit is in range or other friendly
 units need the space.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>queue</strong> (<em>bool</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1318,8 +1400,14 @@ a negative int if it has too few mining.</p>
 <dd><p>Checks if the target is in range.
 Includes the target’s radius when calculating distance to target.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>) – </p></li>
+<li><p><strong>bonus_distance</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1332,7 +1420,7 @@ For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]
 For SCV, this returns None</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code>]]</p>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1343,8 +1431,14 @@ For SCV, this returns None</p>
 <dd><p>Orders unit to train another ‘unit’.
 Usage: self.actions.append(COMMANDCENTER.train(SCV))</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><em>UnitTypeId</em></a>) – </p></li>
+<li><p><strong>queue</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1356,7 +1450,7 @@ Usage: self.actions.append(COMMANDCENTER.train(SCV))</p>
 Caches all type_ids of the same unit type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></p>
+<dd class="field-odd"><p><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1369,7 +1463,7 @@ For flying OrbitalCommand, this returns UnitTypeId.OrbitalCommand
 For SCV, this returns None</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1390,8 +1484,14 @@ For SCV, this returns None</p>
 <code class="sig-name descname">warp_in</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.warp_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders Warpgate to warp in ‘unit’ at ‘position’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><em>UnitTypeId</em></a>) – </p></li>
+<li><p><strong>queue</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand">UnitCommand</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1430,11 +1530,11 @@ if unit.weapon_cooldown == 0:</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../score/index.html"
-                        title="previous chapter">score.py</a></p>
+  <p class="topless"><a href="../bot_ai/index.html"
+                        title="previous chapter">bot_ai.py</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../unit_command/index.html"
-                        title="next chapter">unit_command.py</a></p>
+  <p class="topless"><a href="../units/index.html"
+                        title="next chapter">units.py</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1463,10 +1563,10 @@ if unit.weapon_cooldown == 0:</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../unit_command/index.html" title="unit_command.py"
+          <a href="../units/index.html" title="units.py"
              >next</a> |</li>
         <li class="right" >
-          <a href="../score/index.html" title="score.py"
+          <a href="../bot_ai/index.html" title="bot_ai.py"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>

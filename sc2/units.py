@@ -1,8 +1,9 @@
+from __future__ import annotations
 import random
 import warnings
 import math
 from itertools import chain
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from .ids.unit_typeid import UnitTypeId
 from .position import Point2, Point3
@@ -13,15 +14,18 @@ from .cache import property_immutable_cache
 
 warnings.simplefilter("once")
 
+if TYPE_CHECKING:
+    from .bot_ai import BotAI
+
 
 class Units(list):
     """A collection of Unit objects. Makes it easy to select units by selectors."""
 
     @classmethod
-    def from_proto(cls, units, bot_object: "BotAI"):
+    def from_proto(cls, units, bot_object: BotAI):
         return cls((Unit(u, bot_object=bot_object) for u in units))
 
-    def __init__(self, units, bot_object: "BotAI"):
+    def __init__(self, units, bot_object: BotAI):
         super().__init__(units)
         self._bot_object = bot_object
 
@@ -34,7 +38,7 @@ class Units(list):
     def copy(self):
         return self.subgroup(self)
 
-    def __or__(self, other: "Units") -> "Units":
+    def __or__(self, other: Units) -> Units:
         return Units(
             chain(
                 iter(self),
@@ -43,7 +47,7 @@ class Units(list):
             self._bot_object,
         )
 
-    def __add__(self, other: "Units") -> "Units":
+    def __add__(self, other: Units) -> Units:
         return Units(
             chain(
                 iter(self),
@@ -52,13 +56,13 @@ class Units(list):
             self._bot_object,
         )
 
-    def __and__(self, other: "Units") -> "Units":
+    def __and__(self, other: Units) -> Units:
         return Units(
             (other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self)),
             self._bot_object,
         )
 
-    def __sub__(self, other: "Units") -> "Units":
+    def __sub__(self, other: Units) -> Units:
         return Units(
             (self_unit for self_unit in self if self_unit.tag not in (other_unit.tag for other_unit in other)),
             self._bot_object,
@@ -96,7 +100,7 @@ class Units(list):
         assert self, "Units object is empty"
         return self[0]
 
-    def take(self, n: int) -> "Units":
+    def take(self, n: int) -> Units:
         if n >= self.amount:
             return self
         else:
@@ -110,7 +114,7 @@ class Units(list):
     def random_or(self, other: any) -> Unit:
         return random.choice(self) if self.exists else other
 
-    def random_group_of(self, n: int) -> "Units":
+    def random_group_of(self, n: int) -> Units:
         """ Returns self if n >= self.amount. """
         if n < 1:
             return Units([], self._bot_object)
@@ -126,7 +130,7 @@ class Units(list):
     #     unit_positions_np = np.fromiter(flat_units_positions, dtype=float, count=2 * len(self)).reshape((len(self), 2))
     #     return unit_positions_np
 
-    def in_attack_range_of(self, unit: Unit, bonus_distance: Union[int, float] = 0) -> "Units":
+    def in_attack_range_of(self, unit: Unit, bonus_distance: Union[int, float] = 0) -> Units:
         """ Filters units that are in attack range of the unit in parameter """
         return self.filter(lambda x: unit.target_in_range(x, bonus_distance=bonus_distance))
 
@@ -166,7 +170,7 @@ class Units(list):
         distances = self._bot_object._distance_units_to_pos(self, position)
         return max(((unit, dist) for unit, dist in zip(self, distances)), key=lambda my_tuple: my_tuple[1])[0]
 
-    def closer_than(self, distance: Union[int, float], position: Union[Unit, Point2, Point3]) -> "Units":
+    def closer_than(self, distance: Union[int, float], position: Union[Unit, Point2, Point3]) -> Units:
         assert self, "Units object is empty"
         if isinstance(position, Unit):
             distance_squared = distance ** 2
@@ -178,7 +182,7 @@ class Units(list):
         distances = self._bot_object._distance_units_to_pos(self, position)
         return self.subgroup(unit for unit, dist in zip(self, distances) if dist < distance)
 
-    def further_than(self, distance: Union[int, float], position: Union[Unit, Point2, Point3]) -> "Units":
+    def further_than(self, distance: Union[int, float], position: Union[Unit, Point2, Point3]) -> Units:
         assert self, "Units object is empty"
         if isinstance(position, Unit):
             distance_squared = distance ** 2
@@ -192,7 +196,7 @@ class Units(list):
 
     def in_distance_between(
         self, position: Union[Unit, Point2, Tuple[float, float]], distance1: float, distance2: float
-    ) -> "Units":
+    ) -> Units:
         """ Returns units that are further than distance1 and closer than distance2 to position """
         assert self, "Units object is empty"
         if isinstance(position, Unit):
@@ -208,17 +212,17 @@ class Units(list):
         distances = self._bot_object._distance_units_to_pos(self, position)
         return self.subgroup(unit for unit, dist in zip(self, distances) if distance1 < dist < distance2)
 
-    def closest_n_units(self, position: Union[Unit, Point2], n: int) -> "Units":
+    def closest_n_units(self, position: Union[Unit, Point2], n: int) -> Units:
         """ Returns the n closest units in distance to position """
         assert self, "Units object is empty"
         return self.subgroup(self._list_sorted_by_distance_to(position)[:n])
 
-    def furthest_n_units(self, position: Union[Unit, Point2, np.ndarray], n: int) -> "Units":
+    def furthest_n_units(self, position: Union[Unit, Point2, np.ndarray], n: int) -> Units:
         """ Returns the n furthest units in distance to position """
         assert self, "Units object is empty"
         return self.subgroup(self._list_sorted_by_distance_to(position)[-n:])
 
-    def in_distance_of_group(self, other_units: "Units", distance: float) -> "Units":
+    def in_distance_of_group(self, other_units: Units, distance: float) -> Units:
         """ Returns units that are closer than distance from any unit in the other units object """
         assert other_units, "Other units object is empty"
         # Return self because there are no enemies
@@ -243,7 +247,7 @@ class Units(list):
             )
         )
 
-    def in_closest_distance_to_group(self, other_units: "Units") -> Unit:
+    def in_closest_distance_to_group(self, other_units: Units) -> Unit:
         """ Returns unit in shortest distance from any unit in self to any unit in group. """
         assert self, "Units object is empty"
         assert other_units, "Given units object is empty"
@@ -266,28 +270,24 @@ class Units(list):
         unit_dist_dict = {unit.tag: dist for unit, dist in zip(self, distances)}
         return sorted(self, key=lambda unit2: abs(unit_dist_dict[unit2.tag] - distance), reverse=True)
 
-    def n_closest_to_distance(
-        self, position: Union[Point2, np.ndarray], distance: Union[int, float], n: int
-    ) -> "Units":
+    def n_closest_to_distance(self, position: Union[Point2, np.ndarray], distance: Union[int, float], n: int) -> Units:
         """ Returns n units that are the closest to distance away.
         For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7]
         the units with distacnce [4, 5, 6] will be selected """
         return self.subgroup(self._list_sorted_closest_to_distance(position=position, distance=distance)[:n])
 
-    def n_furthest_to_distance(
-        self, position: Union[Point2, np.ndarray], distance: Union[int, float], n: int
-    ) -> "Units":
+    def n_furthest_to_distance(self, position: Union[Point2, np.ndarray], distance: Union[int, float], n: int) -> Units:
         """ Inverse of the function above """
         return self.subgroup(self._list_sorted_closest_to_distance(position=position, distance=distance)[-n:])
 
     def subgroup(self, units):
         return Units(units, self._bot_object)
 
-    def filter(self, pred: callable) -> "Units":
+    def filter(self, pred: callable) -> Units:
         assert callable(pred), "Function is not callable"
         return self.subgroup(filter(pred, self))
 
-    def sorted(self, key: callable, reverse: bool = False) -> "Units":
+    def sorted(self, key: callable, reverse: bool = False) -> Units:
         return self.subgroup(sorted(self, key=key, reverse=reverse))
 
     def _list_sorted_by_distance_to(self, position: Union[Unit, Point2], reverse: bool = False) -> List[Unit]:
@@ -300,30 +300,28 @@ class Units(list):
         unit_dist_dict = {unit.tag: dist for unit, dist in zip(self, distances)}
         return sorted(self, key=lambda unit2: unit_dist_dict[unit2.tag], reverse=reverse)
 
-    def sorted_by_distance_to(self, position: Union[Unit, Point2], reverse: bool = False) -> "Units":
+    def sorted_by_distance_to(self, position: Union[Unit, Point2], reverse: bool = False) -> Units:
         """ This function should be a bit faster than using units.sorted(key=lambda u: u.distance_to(position)) """
         return self.subgroup(self._list_sorted_by_distance_to(position, reverse=reverse))
 
-    def tags_in(self, other: Union[Set[int], List[int], Dict[int, Any]]) -> "Units":
+    def tags_in(self, other: Union[Set[int], List[int], Dict[int, Any]]) -> Units:
         """ Filters all units that have their tags in the 'other' set/list/dict """
         # example: self.units(QUEEN).tags_in(self.queen_tags_assigned_to_do_injects)
         return self.filter(lambda unit: unit.tag in other)
 
-    def tags_not_in(self, other: Union[Set[int], List[int], Dict[int, Any]]) -> "Units":
+    def tags_not_in(self, other: Union[Set[int], List[int], Dict[int, Any]]) -> Units:
         """ Filters all units that have their tags not in the 'other' set/list/dict """
         # example: self.units(QUEEN).tags_not_in(self.queen_tags_assigned_to_do_injects)
         return self.filter(lambda unit: unit.tag not in other)
 
-    def of_type(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> "Units":
+    def of_type(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
         """ Filters all units that are of a specific type """
         # example: self.units.of_type([ZERGLING, ROACH, HYDRALISK, BROODLORD])
         if isinstance(other, UnitTypeId):
             other = {other}
         return self.filter(lambda unit: unit.type_id in other)
 
-    def exclude_type(
-        self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]
-    ) -> "Units":
+    def exclude_type(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
         """ Filters all units that are not of a specific type """
         # example: self.enemy_units.exclude_type([OVERLORD])
         if isinstance(other, UnitTypeId):
@@ -332,7 +330,7 @@ class Units(list):
             other = set(other)
         return self.filter(lambda unit: unit.type_id not in other)
 
-    def same_tech(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> "Units":
+    def same_tech(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
         """ Usage:
         'self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)' or 'self.townhalls.same_tech(UnitTypeId.ORBITALCOMMAND)'
         returns all CommandCenter, CommandCenterFlying, OrbitalCommand, OrbitalCommandFlying, PlanetaryFortress
@@ -354,7 +352,7 @@ class Units(list):
             and any(same in tech_alias_types for same in unit._type_data.tech_alias)
         )
 
-    def same_unit(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> "Units":
+    def same_unit(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
         """ Usage:
         'self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)'
         returns CommandCenter and CommandCenterFlying,
@@ -391,7 +389,7 @@ class Units(list):
         return pos
 
     @property
-    def selected(self) -> "Units":
+    def selected(self) -> Units:
         return self.filter(lambda unit: unit.is_selected)
 
     @property
@@ -399,67 +397,67 @@ class Units(list):
         return {unit.tag for unit in self}
 
     @property
-    def ready(self) -> "Units":
+    def ready(self) -> Units:
         return self.filter(lambda unit: unit.is_ready)
 
     @property
-    def not_ready(self) -> "Units":
+    def not_ready(self) -> Units:
         return self.filter(lambda unit: not unit.is_ready)
 
     @property
-    def idle(self) -> "Units":
+    def idle(self) -> Units:
         return self.filter(lambda unit: unit.is_idle)
 
     @property
-    def owned(self) -> "Units":
+    def owned(self) -> Units:
         return self.filter(lambda unit: unit.is_mine)
 
     @property
-    def enemy(self) -> "Units":
+    def enemy(self) -> Units:
         return self.filter(lambda unit: unit.is_enemy)
 
     @property
-    def flying(self) -> "Units":
+    def flying(self) -> Units:
         return self.filter(lambda unit: unit.is_flying)
 
     @property
-    def not_flying(self) -> "Units":
+    def not_flying(self) -> Units:
         return self.filter(lambda unit: not unit.is_flying)
 
     @property
-    def structure(self) -> "Units":
+    def structure(self) -> Units:
         return self.filter(lambda unit: unit.is_structure)
 
     @property
-    def not_structure(self) -> "Units":
+    def not_structure(self) -> Units:
         return self.filter(lambda unit: not unit.is_structure)
 
     @property
-    def gathering(self) -> "Units":
+    def gathering(self) -> Units:
         return self.filter(lambda unit: unit.is_gathering)
 
     @property
-    def returning(self) -> "Units":
+    def returning(self) -> Units:
         return self.filter(lambda unit: unit.is_returning)
 
     @property
-    def collecting(self) -> "Units":
+    def collecting(self) -> Units:
         return self.filter(lambda unit: unit.is_collecting)
 
     @property
-    def visible(self) -> "Units":
+    def visible(self) -> Units:
         return self.filter(lambda unit: unit.is_visible)
 
     @property
-    def mineral_field(self) -> "Units":
+    def mineral_field(self) -> Units:
         return self.filter(lambda unit: unit.is_mineral_field)
 
     @property
-    def vespene_geyser(self) -> "Units":
+    def vespene_geyser(self) -> Units:
         return self.filter(lambda unit: unit.is_vespene_geyser)
 
     @property
-    def prefer_idle(self) -> "Units":
+    def prefer_idle(self) -> Units:
         return self.sorted(lambda unit: unit.is_idle, reverse=True)
 
 

@@ -16,8 +16,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="distances.py" href="../distances/index.html" />
-    <link rel="prev" title="bot_ai.py" href="../bot_ai/index.html" /> 
+    <link rel="next" title="position.py" href="../position/index.html" />
+    <link rel="prev" title="game_state.py" href="../game_state/index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -26,10 +26,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../distances/index.html" title="distances.py"
+          <a href="../position/index.html" title="position.py"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../bot_ai/index.html" title="bot_ai.py"
+          <a href="../game_state/index.html" title="game_state.py"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>
@@ -83,6 +83,11 @@
 <em class="property">async </em><code class="sig-name descname">debug_create_unit</code><span class="sig-paren">(</span><em class="sig-param">unit_spawn_commands</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_create_unit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Usage example (will spawn 5 marines in the center of the map for player ID 1):
 await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit_spawn_commands</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]]]) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -119,6 +124,16 @@ await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map
 <dt id="sc2.client.Client.debug_hang">
 <em class="property">async </em><code class="sig-name descname">debug_hang</code><span class="sig-paren">(</span><em class="sig-param">delay_in_seconds</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_hang" title="Permalink to this definition">¶</a></dt>
 <dd><p>Freezes the SC2 client. Not recommended to be used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.client.Client.debug_kill_unit">
+<em class="property">async </em><code class="sig-name descname">debug_kill_unit</code><span class="sig-paren">(</span><em class="sig-param">unit_tags</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_kill_unit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit_tags</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -212,6 +227,11 @@ await self._client.dump_data()</p>
 <dt id="sc2.client.Client.move_camera_spatial">
 <em class="property">async </em><code class="sig-name descname">move_camera_spatial</code><span class="sig-paren">(</span><em class="sig-param">position</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.move_camera_spatial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moves camera to the target position using the spatial aciton interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -220,7 +240,7 @@ await self._client.dump_data()</p>
 <dd><p>Query abilities of multiple units</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code>]]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -231,8 +251,14 @@ await self._client.dump_data()</p>
 <dd><p>Caution: returns “None” when path not found
 Try to combine queries with the function below because the pathing query is generally slow.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
+<li><p><strong>end</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -244,8 +270,11 @@ Try to combine queries with the function below because the pathing query is gene
 -&gt; returns [distance1, distance2]
 Caution: returns 0 when path not found</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>zipped_list</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]]]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -309,6 +338,14 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
 <dt id="sc2.client.Client.toggle_autocast">
 <em class="property">async </em><code class="sig-name descname">toggle_autocast</code><span class="sig-paren">(</span><em class="sig-param">units</em>, <em class="sig-param">ability</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.toggle_autocast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Toggle autocast of all specified units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>units</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>], <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>]) – </p></li>
+<li><p><strong>ability</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -322,11 +359,11 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../bot_ai/index.html"
-                        title="previous chapter">bot_ai.py</a></p>
+  <p class="topless"><a href="../game_state/index.html"
+                        title="previous chapter">game_state.py</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../distances/index.html"
-                        title="next chapter">distances.py</a></p>
+  <p class="topless"><a href="../position/index.html"
+                        title="next chapter">position.py</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -355,10 +392,10 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../distances/index.html" title="distances.py"
+          <a href="../position/index.html" title="position.py"
              >next</a> |</li>
         <li class="right" >
-          <a href="../bot_ai/index.html" title="bot_ai.py"
+          <a href="../game_state/index.html" title="game_state.py"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>

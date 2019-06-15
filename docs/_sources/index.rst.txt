@@ -11,18 +11,19 @@ Welcome to python-sc2's documentation!
 
    example_text/index.rst
    bot_ai/index.rst
-   client/index.rst
-   distances/index.rst
+   unit/index.rst
+   units/index.rst
    game_data/index.rst
    game_info/index.rst
    game_state/index.rst
-   pixel_map/index.rst
+   client/index.rst
    position/index.rst
+   pixel_map/index.rst
+   distances/index.rst
    protocol/index.rst
    score/index.rst
-   unit/index.rst
    unit_command/index.rst
-   units/index.rst
+   ids/index.rst
 
 
 Indices and tables

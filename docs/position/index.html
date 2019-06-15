@@ -16,8 +16,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="protocol.py" href="../protocol/index.html" />
-    <link rel="prev" title="pixel_map.py" href="../pixel_map/index.html" /> 
+    <link rel="next" title="pixel_map.py" href="../pixel_map/index.html" />
+    <link rel="prev" title="client.py" href="../client/index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -26,10 +26,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../protocol/index.html" title="protocol.py"
+          <a href="../pixel_map/index.html" title="pixel_map.py"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../pixel_map/index.html" title="pixel_map.py"
+          <a href="../client/index.html" title="client.py"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>
@@ -53,8 +53,11 @@
 <code class="sig-name descname">closest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.closest" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>, </em><em>Set</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Union[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit">Unit</a>, <a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2">Point2</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -64,8 +67,11 @@
 <code class="sig-name descname">distance_to</code><span class="sig-paren">(</span><em class="sig-param">target</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate a single distance from a point or unit to another point or unit</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a><em>, </em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -73,10 +79,12 @@
 <dl class="method">
 <dt id="sc2.position.Pointlike.distance_to_closest">
 <code class="sig-name descname">distance_to_closest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_closest" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function assumes the 2d distance is meant</p>
+<dd><p>This function assumes the 2d distance is meant
+:type ps: Union[Units, List[Point2], Set[Point2]]
+:param ps:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p>Union[int, float]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -86,8 +94,11 @@
 <code class="sig-name descname">distance_to_furthest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_furthest" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>, </em><em>Set</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Union[int, float]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -98,8 +109,11 @@
 <dd><p>Same as the function above, but should be a bit faster because of the dropped asserts
 and conversion.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -109,8 +123,11 @@ and conversion.</p>
 <code class="sig-name descname">furthest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.furthest" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>, </em><em>Set</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – Units object, or iterable of Unit or Point2</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Union[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit">Unit</a>, <a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike">Pointlike</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -120,8 +137,14 @@ and conversion.</p>
 <code class="sig-name descname">is_closer_than</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_closer_than" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if another point (or unit) is closer than the given distance.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – </p></li>
+<li><p><strong>p</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a><em>, </em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -131,8 +154,27 @@ and conversion.</p>
 <code class="sig-name descname">is_further_than</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_further_than" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if another point (or unit) is further than the given distance.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – </p></li>
+<li><p><strong>p</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a><em>, </em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.offset">
+<code class="sig-name descname">offset</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.offset" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pointlike</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -144,8 +186,38 @@ and conversion.</p>
 You should not pass a set or dict since those are not sortable.
 If you want to sort your units towards a point, use ‘units.sorted_by_distance_to(point)’ instead.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2">Point2</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.towards">
+<code class="sig-name descname">towards</code><span class="sig-paren">(</span><em class="sig-param">p</em>, <em class="sig-param">distance=1</em>, <em class="sig-param">limit=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.towards" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><em>Unit</em></a><em>, </em><a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike"><em>Pointlike</em></a><em>]</em>) – </p></li>
+<li><p><strong>distance</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – </p></li>
+<li><p><strong>limit</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike">Pointlike</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Pointlike.unit_axes_towards">
+<code class="sig-name descname">unit_axes_towards</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.unit_axes_towards" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -172,8 +244,14 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 <dd><p>self is point1, p is point2, r is the radius for circles originating in both points
 Used in ramp finding</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p></li>
+<li><p><strong>r</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -192,7 +270,19 @@ Used in ramp finding</p>
 <dl class="method">
 <dt id="sc2.position.Point2.distance2_to">
 <code class="sig-name descname">distance2_to</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.distance2_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Squared distance to a point.</p>
+<dd><p>Squared distance to a point.
+:type other: <a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>
+:param other:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.position.Point2.offset">
+<code class="sig-name descname">offset</code><span class="sig-paren">(</span><em class="sig-param">off</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.offset" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -221,11 +311,11 @@ Used in ramp finding</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../pixel_map/index.html"
-                        title="previous chapter">pixel_map.py</a></p>
+  <p class="topless"><a href="../client/index.html"
+                        title="previous chapter">client.py</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../protocol/index.html"
-                        title="next chapter">protocol.py</a></p>
+  <p class="topless"><a href="../pixel_map/index.html"
+                        title="next chapter">pixel_map.py</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -254,10 +344,10 @@ Used in ramp finding</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../protocol/index.html" title="protocol.py"
+          <a href="../pixel_map/index.html" title="pixel_map.py"
              >next</a> |</li>
         <li class="right" >
-          <a href="../pixel_map/index.html" title="pixel_map.py"
+          <a href="../client/index.html" title="client.py"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>

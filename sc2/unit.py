@@ -1,5 +1,6 @@
+from __future__ import annotations
 import warnings
-from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from . import unit_command
 from .cache import property_immutable_cache, property_mutable_cache
@@ -41,15 +42,20 @@ from .constants import (
 from .data import Alliance, Attribute, CloakState, DisplayType, Race, TargetType, warpgate_abilities, TargetType, Target
 from .ids.ability_id import AbilityId
 from .ids.buff_id import BuffId
+from .ids.upgrade_id import UpgradeId
 from .ids.unit_typeid import UnitTypeId
 from .position import Point2, Point3
 
 warnings.simplefilter("once")
 
+if TYPE_CHECKING:
+    from .bot_ai import BotAI
+    from .unit_command import UnitCommand
+
 
 class UnitOrder:
     @classmethod
-    def from_proto(cls, proto, bot_object: "BotAI"):
+    def from_proto(cls, proto, bot_object: BotAI):
         return cls(
             bot_object._game_data.abilities[proto.ability_id],
             (proto.target_world_space_pos if proto.HasField("target_world_space_pos") else proto.target_unit_tag),
@@ -66,7 +72,7 @@ class UnitOrder:
 
 
 class Unit:
-    def __init__(self, proto_data, bot_object: "BotAI"):
+    def __init__(self, proto_data, bot_object: BotAI):
         self._proto = proto_data
         self._bot_object = bot_object
         # Used by property_immutable_cache
@@ -362,7 +368,7 @@ class Unit:
 
     @property
     def position_tuple(self) -> Tuple[float, float]:
-        """ Returns the 2d position of the unit. """
+        """ Returns the 2d position of the unit as tuple without conversion to Point2. """
         return self._proto.pos.x, self._proto.pos.y
 
     @property_immutable_cache
@@ -377,14 +383,19 @@ class Unit:
 
     def distance_to(self, p: Union["Unit", Point2, Point3]) -> Union[int, float]:
         """ Using the 2d distance between self and p.
-        To calculate the 3d distance, use unit.position3d.distance_to(p) """
+        To calculate the 3d distance, use unit.position3d.distance_to(p)
+
+        :param p: """
         if isinstance(p, Unit):
             return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
     def target_in_range(self, target: "Unit", bonus_distance: Union[int, float] = 0) -> bool:
         """ Checks if the target is in range.
-        Includes the target's radius when calculating distance to target. """
+        Includes the target's radius when calculating distance to target.
+
+        :param target:
+        :param bonus_distance: """
         if self.can_attack_ground and not target.is_flying:
             unit_attack_range = self.ground_range
         elif self.can_attack_air and (target.is_flying or target.type_id == UNIT_COLOSSUS):
@@ -399,7 +410,11 @@ class Unit:
     def in_ability_cast_range(
         self, ability_id: AbilityId, target: Union["Unit", Point2], bonus_distance: float = 0
     ) -> bool:
-        """ Test if a unit is able to cast an ability on the target without checking ability cooldown (like stalker blink) or if ability is made available through research (like HT storm). """
+        """ Test if a unit is able to cast an ability on the target without checking ability cooldown (like stalker blink) or if ability is made available through research (like HT storm).
+
+        :param ability_id:
+        :param target:
+        :param bonus_distance: """
         cast_range = self._bot_object._game_data.abilities[ability_id.value]._proto.cast_range
         assert cast_range > 0, f"Checking for an ability ({ability_id}) that has no cast range"
         ability_target_type = self._bot_object._game_data.abilities[ability_id.value]._proto.target
@@ -426,6 +441,12 @@ class Unit:
 
     # TODO: a function that checks if this unit is facing another unit
     def is_facing_unit(self, other_unit: "Unit", angle_error: float = 1e-3) -> bool:
+        """
+        Function not completed yet
+
+        :param other_unit:
+        :param angle_error:
+        """
         pass
 
     @property
@@ -775,67 +796,113 @@ class Unit:
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs
 
-    def train(self, unit, queue=False) -> "UnitCommand":
+    def train(self, unit: UnitTypeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to train another 'unit'.
-        Usage: self.actions.append(COMMANDCENTER.train(SCV)) """
+        Usage: self.actions.append(COMMANDCENTER.train(SCV))
+
+        :param unit:
+        :param queue: """
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, queue=queue)
 
-    def build(self, unit, position=None, queue=False) -> "UnitCommand":
+    def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
         """ Orders unit to build another 'unit' at 'position'.
-        Usage: self.actions.append(SCV.build(COMMANDCENTER, position)) """
+        Usage: self.actions.append(SCV.build(COMMANDCENTER, position))
+
+        :param unit:
+        :param position:
+        :param queue:
+        """
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
 
-    def research(self, upgrade, queue=False) -> "UnitCommand":
+    def research(self, upgrade: UpgradeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to research 'upgrade'.
-        Requires UpgradeId to be passed instead of AbilityId. """
+        Requires UpgradeId to be passed instead of AbilityId.
+
+        :param upgrade:
+        :param queue:
+        """
         return self(self._bot_object._game_data.upgrades[upgrade.value].research_ability.id, queue=queue)
 
-    def warp_in(self, unit, position) -> "UnitCommand":
-        """ Orders Warpgate to warp in 'unit' at 'position'. """
+    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3]) -> UnitCommand:
+        """ Orders Warpgate to warp in 'unit' at 'position'. 
+
+        :param unit:
+        :param queue:
+        """
         normal_creation_ability = self._bot_object._game_data.units[unit.value].creation_ability.id
         return self(warpgate_abilities[normal_creation_ability], target=position)
 
-    def attack(self, target, queue=False) -> "UnitCommand":
+    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders unit to attack. Target can be a Unit or Point2.
-        Attacking a position will make the unit move there and attack everything on its way. """
+        Attacking a position will make the unit move there and attack everything on its way. 
+
+        :param target:
+        :param queue:
+        """
         return self(AbilityId.ATTACK, target=target, queue=queue)
 
-    def gather(self, target, queue=False) -> "UnitCommand":
+    def gather(self, target: Unit, queue: bool = False) -> UnitCommand:
         """ Orders a unit to gather minerals or gas.
-        'Target' must be a mineral patch or a gas extraction building. """
+        'Target' must be a mineral patch or a gas extraction building. 
+
+        :param target:
+        :param queue:
+        """
         return self(AbilityId.HARVEST_GATHER, target=target, queue=queue)
 
-    def return_resource(self, target=None, queue=False) -> "UnitCommand":
-        """ Orders the unit to return resource. Does not need a 'target'. """
+    def return_resource(self, target: Unit = None, queue: bool = False) -> UnitCommand:
+        """ Orders the unit to return resource. Does not need a 'target'. 
+
+        :param target:
+        :param queue:
+        """
         return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position, queue=False) -> "UnitCommand":
+    def move(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders the unit to move to 'position'.
-        Target can be a Unit (to follow that unit) or Point2. """
+        Target can be a Unit (to follow that unit) or Point2. 
+
+        :param position:
+        :param queue:
+        """
         return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
 
-    def scan_move(self, *args, **kwargs) -> "UnitCommand":
+    def scan_move(self, *args, **kwargs) -> UnitCommand:
         """ TODO: What does this do? """
         return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
-    def hold_position(self, queue=False) -> "UnitCommand":
-        """ Orders a unit to stop moving. It will not move until it gets new orders. """
+    def hold_position(self, queue: bool = False) -> UnitCommand:
+        """ Orders a unit to stop moving. It will not move until it gets new orders. 
+
+        :param queue:
+        """
         return self(AbilityId.HOLDPOSITION_HOLD, queue=queue)
 
-    def stop(self, queue=False) -> "UnitCommand":
+    def stop(self, queue: bool = False) -> UnitCommand:
         """ Orders a unit to stop, but can start to move on its own
         if it is attacked, enemy unit is in range or other friendly
-        units need the space. """
+        units need the space. 
+
+        :param queue:
+        """
         return self(AbilityId.STOP, queue=queue)
 
-    def patrol(self, position, queue=False) -> "UnitCommand":
+    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders a unit to patrol between position it has when the command starts and the target position.
         Can be queued up to seven patrol points. If the last point is the same as the starting
-        point, the unit will patrol in a circle. """
+        point, the unit will patrol in a circle. 
+
+        :param position:
+        :param queue:
+        """
         return self(AbilityId.PATROL_PATROL, target=position, queue=queue)
 
-    def repair(self, repair_target, queue=False) -> "UnitCommand":
-        """ Order an SCV or MULE to repair. """
+    def repair(self, repair_target: Unit, queue: bool = False) -> UnitCommand:
+        """ Order an SCV or MULE to repair. 
+
+        :param repair_target:
+        :param queue:
+        """
         return self(AbilityId.EFFECT_REPAIR, target=repair_target, queue=queue)
 
     def __hash__(self):
@@ -847,5 +914,5 @@ class Unit:
         except:
             return False
 
-    def __call__(self, ability, target=None, queue=False):
+    def __call__(self, ability, target=None, queue: bool = False):
         return unit_command.UnitCommand(ability, self, target=target, queue=queue)
