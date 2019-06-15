@@ -7,6 +7,11 @@ from .position import Point2
 
 class PixelMap:
     def __init__(self, proto, in_bits=False, mirrored=False):
+        """
+        :param proto:
+        :param in_bits:
+        :param mirrored:
+        """
         self._proto = proto
         assert self.width * self.height == (8 if in_bits else 1) * len(
             self._proto.data

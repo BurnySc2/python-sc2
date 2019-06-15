@@ -12,7 +12,7 @@ from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_town
 from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
 
-# imports for mypy and pycharm autocomplete
+# Imports for mypy and pycharm autocomplete as well as sphinx autodocumentation
 from .game_state import Blip, EffectData, GameState
 from .ids.ability_id import AbilityId
 from .ids.unit_typeid import UnitTypeId

@@ -14,6 +14,9 @@ from .score import ScoreDetails
 
 class Blip:
     def __init__(self, proto):
+        """
+        :param proto:
+        """
         self._proto = proto
 
     @property
@@ -77,6 +80,10 @@ class Common:
 
 class EffectData:
     def __init__(self, proto, fake=False):
+        """
+        :param proto:
+        :param fake:
+        """
         self._proto = proto
         self.fake = fake
 
@@ -116,6 +123,9 @@ class EffectData:
 
 class GameState:
     def __init__(self, response_observation):
+        """
+        :param response_observation:
+        """
         self.response_observation = response_observation
         self.actions = response_observation.actions  # successful actions since last loop
         self.action_errors = response_observation.action_errors  # error actions since last loop

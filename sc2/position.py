@@ -151,6 +151,9 @@ class Pointlike(tuple):
 class Point2(Pointlike):
     @classmethod
     def from_proto(cls, data):
+        """
+        :param data:
+        """
         return cls((data.x, data.y))
 
     @property
@@ -302,6 +305,9 @@ class Point2(Pointlike):
 class Point3(Point2):
     @classmethod
     def from_proto(cls, data):
+        """
+        :param data:
+        """
         return cls((data.x, data.y, data.z))
 
     @property
@@ -330,6 +336,9 @@ class Size(Point2):
 class Rect(tuple):
     @classmethod
     def from_proto(cls, data):
+        """
+        :param data:
+        """
         assert data.p0.x < data.p1.x and data.p0.y < data.p1.y
         return cls((data.p0.x, data.p0.y, data.p1.x - data.p0.x, data.p1.y - data.p0.y))
 

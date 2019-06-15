@@ -25,6 +25,9 @@ logger = logging.getLogger(__name__)
 
 class Client(Protocol):
     def __init__(self, ws):
+        """
+        :param ws:
+        """
         super().__init__(ws)
         self.game_step = 8
         self._player_id = None

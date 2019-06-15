@@ -26,6 +26,10 @@ class Units(list):
         return cls((Unit(u, bot_object=bot_object) for u in units))
 
     def __init__(self, units, bot_object: BotAI):
+        """
+        :param units:
+        :param bot_object:
+        """
         super().__init__(units)
         self._bot_object = bot_object
 
