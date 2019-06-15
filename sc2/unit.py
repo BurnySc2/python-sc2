@@ -778,8 +778,7 @@ class Unit:
         elif unit.weapon_cooldown < 0:
             self.actions.append(unit.move(closest_allied_unit_because_cant_attack))
         else:
-            self.actions.append(unit.move(retreatPosition))
-        """
+            self.actions.append(unit.move(retreatPosition)) """
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1
