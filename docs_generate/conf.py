@@ -54,6 +54,7 @@ https://www.writethedocs.org/guide/tools/sphinx-themes/
 https://sphinx-themes.org/
 """
 html_theme = 'classic'
+html_theme = 'alabaster'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
