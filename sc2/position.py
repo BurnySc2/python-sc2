@@ -291,15 +291,20 @@ class Point2(Pointlike):
         return self.__class__((_sign(other.x - self.x), _sign(other.y - self.y)))
 
     def manhattan_distance(self, other: Point2) -> Union[int, float]:
+        """
+        :param other:
+        """
         return abs(other.x - self.x) + abs(other.y - self.y)
 
     @staticmethod
-    def center(a: Union[Set[Point2], List[Point2]]) -> Point2:
-        """ Returns the central point for points in list """
+    def center(units_or_points: Union[Set[Point2], List[Point2]]) -> Point2:
+        """ Returns the central point for points in list
+
+        :param units_or_points:"""
         s = Point2((0, 0))
-        for p in a:
+        for p in units_or_points:
             s += p
-        return s / len(a)
+        return s / len(units_or_points)
 
 
 class Point3(Point2):
