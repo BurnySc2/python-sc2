@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from .constants import FakeEffectID, FakeEffectRadii
 from .data import Alliance, DisplayType

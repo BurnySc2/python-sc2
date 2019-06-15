@@ -1,5 +1,6 @@
+from __future__ import annotations
 import logging
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from s2clientprotocol import common_pb2 as common_pb
 from s2clientprotocol import debug_pb2 as debug_pb
@@ -180,7 +181,10 @@ class Client(Protocol):
         self, start: Union[Unit, Point2, Point3], end: Union[Point2, Point3]
     ) -> Optional[Union[int, float]]:
         """ Caution: returns "None" when path not found
-        Try to combine queries with the function below because the pathing query is generally slow. """
+        Try to combine queries with the function below because the pathing query is generally slow.
+
+        :param start:
+        :param end: """
         assert isinstance(start, (Point2, Unit))
         assert isinstance(end, Point2)
         if isinstance(start, Point2):
@@ -211,6 +215,8 @@ class Client(Protocol):
         """ Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])
         -> returns [distance1, distance2]
         Caution: returns 0 when path not found
+
+        :param zipped_list:
         """
         assert zipped_list, "No zipped_list"
         assert isinstance(zipped_list, list), f"{type(zipped_list)}"
@@ -289,7 +295,10 @@ class Client(Protocol):
         )
 
     async def toggle_autocast(self, units: Union[List[Unit], Units], ability: AbilityId):
-        """ Toggle autocast of all specified units """
+        """ Toggle autocast of all specified units
+
+        :param units:
+        :param ability: """
         assert units
         assert isinstance(units, list)
         assert all(isinstance(u, Unit) for u in units)
@@ -311,7 +320,9 @@ class Client(Protocol):
 
     async def debug_create_unit(self, unit_spawn_commands: List[List[Union[UnitTypeId, int, Point2, Point3]]]):
         """ Usage example (will spawn 5 marines in the center of the map for player ID 1):
-        await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]]) """
+        await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])
+
+        :param unit_spawn_commands: """
         assert isinstance(unit_spawn_commands, list)
         assert unit_spawn_commands
         assert isinstance(unit_spawn_commands[0], list)
@@ -338,6 +349,9 @@ class Client(Protocol):
         )
 
     async def debug_kill_unit(self, unit_tags: Union[Unit, Units, List[int], Set[int]]):
+        """
+        :param unit_tags:
+        """
         if isinstance(unit_tags, Units):
             unit_tags = unit_tags.tags
         if isinstance(unit_tags, Unit):
@@ -370,7 +384,9 @@ class Client(Protocol):
         )
 
     async def move_camera_spatial(self, position: Union[Point2, Point3]):
-        """ Moves camera to the target position using the spatial aciton interface """
+        """ Moves camera to the target position using the spatial aciton interface
+
+        :param position: """
         from s2clientprotocol import spatial_pb2 as spatial_pb
 
         assert isinstance(position, (Point2, Point3))

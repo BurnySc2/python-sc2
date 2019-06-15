@@ -1,5 +1,6 @@
+from __future__ import annotations
 from collections import deque
-from typing import Any, Deque, Dict, FrozenSet, Generator, List, Optional, Sequence, Set, Tuple, Union
+from typing import Any, Deque, Dict, FrozenSet, Generator, List, Optional, Sequence, Set, Tuple, Union, TYPE_CHECKING
 
 import numpy as np
 
@@ -10,7 +11,7 @@ from .position import Point2, Rect, Size
 
 
 class Ramp:
-    def __init__(self, points: Set[Point2], game_info: "GameInfo"):
+    def __init__(self, points: Set[Point2], game_info: GameInfo):
         self._points: Set[Point2] = points
         self.__game_info = game_info
         # tested by printing actual building locations vs calculated depot positions

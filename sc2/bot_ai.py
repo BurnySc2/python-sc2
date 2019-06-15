@@ -1,9 +1,10 @@
+from __future__ import annotations
 import itertools
 import logging
 import math
 import random
 from collections import Counter
-from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from .cache import property_cache_forever, property_cache_once_per_frame
 from .constants import FakeEffectID, abilityid_to_unittypeid, geyser_ids, mineral_ids
@@ -22,6 +23,10 @@ from .unit import Unit
 from .units import Units
 
 logger = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from .game_info import GameInfo
+    from .client import Client
 
 
 class BotAI(DistanceCalculation):
@@ -76,7 +81,7 @@ class BotAI(DistanceCalculation):
         return f"{int(t // 60):02}:{int(t % 60):02}"
 
     @property
-    def game_info(self) -> "GameInfo":
+    def game_info(self) -> GameInfo:
         """ See game_info.py """
         return self._game_info
 
@@ -112,7 +117,9 @@ class BotAI(DistanceCalculation):
         UnitUnderAttack
         UpgradeComplete
         VespeneExhausted
-        WarpInComplete        
+        WarpInComplete
+
+        :param alert_code:
         """
         assert isinstance(alert_code, Alert), f"alert_code {alert_code} is no Alert"
         return alert_code.value in self.state.alerts
@@ -231,20 +238,27 @@ class BotAI(DistanceCalculation):
         self.supply_left -= correction
 
     async def get_available_abilities(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements=False
+        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool=False
     ) -> List[List[AbilityId]]:
         """ Returns available abilities of one or more units. Right know only checks cooldown, energy cost, and whether the ability has been researched.
         Example usage:
         units_abilities = await self.get_available_abilities(self.units)
         or
-        units_abilities = await self.get_available_abilities([self.units.random]) """
+        units_abilities = await self.get_available_abilities([self.units.random])
+
+        :param units:
+        :param ignore_resource_requirements: """
         return await self._client.query_available_abilities(units, ignore_resource_requirements)
 
     async def expand_now(
         self, building: UnitTypeId = None, max_distance: Union[int, float] = 10, location: Optional[Point2] = None
     ):
         """ Not recommended as this function uses 'self.do' (reduces performance).
-        Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion. """
+        Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.
+
+        :param building:
+        :param max_distance:
+        :param location: """
 
         if not building:
             # self.race is never Race.Random
@@ -302,7 +316,8 @@ class BotAI(DistanceCalculation):
         are not being handled.
 
         WARNING: This is quite slow when there are lots of workers or multiple bases.
-        """
+
+        :param resource_ratio: """
         if not self.mineral_field or not self.workers or not self.townhalls.ready:
             return
         worker_pool = [worker for worker in self.workers.idle]
@@ -410,14 +425,19 @@ class BotAI(DistanceCalculation):
         return owned
 
     def can_feed(self, unit_type: UnitTypeId) -> bool:
-        """ Checks if you have enough free supply to build the unit """
+        """ Checks if you have enough free supply to build the unit
+
+        :param unit_type: """
         required = self._game_data.units[unit_type.value]._proto.food_required
         return required == 0 or self.supply_left >= required
 
     def can_afford(
         self, item_id: Union[UnitTypeId, UpgradeId, AbilityId], check_supply_cost: bool = True
     ) -> "CanAffordWrapper":
-        """Tests if the player has enough resources to build a unit or cast an ability."""
+        """Tests if the player has enough resources to build a unit or cast an ability.
+
+        :param item_id:
+        :param check_supply_cost: """
         enough_supply = True
         if isinstance(item_id, UnitTypeId):
             unit = self._game_data.units[item_id.value]
@@ -440,7 +460,13 @@ class BotAI(DistanceCalculation):
         cached_abilities_of_unit: List[AbilityId] = None,
     ) -> bool:
         """Tests if a unit has an ability available and enough energy to cast it.
-        See data_pb2.py (line 161) for the numbers 1-5 to make sense"""
+        See data_pb2.py (line 161) for the numbers 1-5 to make sense
+
+        :param unit:
+        :param ability_id:
+        :param target:
+        :param only_check_energy_and_cooldown:
+        :param cached_abilities_of_unit: """
         assert isinstance(unit, Unit), f"{unit} is no Unit object"
         assert isinstance(ability_id, AbilityId), f"{ability_id} is no AbilityId"
         assert isinstance(target, (type(None), Unit, Point2, Point3))
@@ -480,7 +506,10 @@ class BotAI(DistanceCalculation):
         return False
 
     def select_build_worker(self, pos: Union[Unit, Point2, Point3], force: bool = False) -> Optional[Unit]:
-        """Select a worker to build a building with."""
+        """Select a worker to build a building with.
+
+        :param pos:
+        :param force: """
         workers = (
             self.workers.filter(lambda w: (w.is_gathering or w.is_idle) and w.distance_to(pos) < 20) or self.workers
         )
@@ -496,7 +525,10 @@ class BotAI(DistanceCalculation):
             return workers.random if force else None
 
     async def can_place(self, building: Union[AbilityData, AbilityId, UnitTypeId], position: Point2) -> bool:
-        """Tests if a building can be placed in the given location."""
+        """Tests if a building can be placed in the given location.
+
+        :param building:
+        :param position: """
         building_type = type(building)
         assert building_type in {AbilityData, AbilityId, UnitTypeId}
         if building_type == UnitTypeId:
@@ -515,7 +547,13 @@ class BotAI(DistanceCalculation):
         random_alternative: bool = True,
         placement_step: int = 2,
     ) -> Optional[Point2]:
-        """Finds a placement location for building."""
+        """Finds a placement location for building.
+
+        :param building:
+        :param near:
+        :param max_distance:
+        :param random_alternative:
+        :param placement_step: """
 
         assert isinstance(building, (AbilityId, UnitTypeId))
         assert isinstance(near, Point2), f"{near} is no Point2 object"
@@ -559,6 +597,8 @@ class BotAI(DistanceCalculation):
         0: not started
         0 < x < 1: researching
         1: finished
+
+        :param upgrade_type:
         """
         assert isinstance(upgrade_type, UpgradeId), f"{upgrade_type} is no UpgradeId"
         if upgrade_type in self.state.upgrades:
@@ -596,6 +636,8 @@ class BotAI(DistanceCalculation):
         Returns a number of buildings or units already in progress, or if a
         worker is en route to build it. This also includes queued orders for
         workers and build queues of buildings.
+
+        :param unit_type:
         """
 
         if isinstance(unit_type, UpgradeId):
@@ -615,7 +657,14 @@ class BotAI(DistanceCalculation):
         placement_step: int = 2,
     ):
         """ Not recommended as this function uses 'self.do' (reduces performance).
-        Also if the position is not placeable, this function tries to find a nearby position to place the structure. Then uses 'self.do' to give the worker the order to start the construction. """
+        Also if the position is not placeable, this function tries to find a nearby position to place the structure. Then uses 'self.do' to give the worker the order to start the construction.
+
+        :param building:
+        :param near:
+        :param max_distance:
+        :param unit:
+        :param random_alternative:
+        :param placement_step: """
 
         assert isinstance(near, (Unit, Point2, Point3))
         if isinstance(near, Unit):
@@ -633,6 +682,12 @@ class BotAI(DistanceCalculation):
         return True
 
     def do(self, action, subtract_cost=False, subtract_supply=False, can_afford_check=False):
+        """
+        :param action:
+        :param subtract_cost:
+        :param subtract_supply:
+        :param can_afford_check:
+        """
         if subtract_cost:
             cost: "Cost" = self._game_data.calculate_ability_cost(action.ability)
             if can_afford_check and not (self.minerals >= cost.minerals and self.vespene >= cost.vespene):
@@ -652,7 +707,10 @@ class BotAI(DistanceCalculation):
         return True
 
     async def _do_actions(self, actions: List["UnitCommand"], prevent_double=True):
-        """ Used internally by main.py automatically, use self.do() instead! """
+        """ Used internally by main.py automatically, use self.do() instead!
+
+        :param actions:
+        :param prevent_double: """
         if not actions:
             return None
         if prevent_double:
@@ -667,6 +725,9 @@ class BotAI(DistanceCalculation):
         return result
 
     def prevent_double_actions(self, action):
+        """
+        :param action:
+        """
         # Always add actions if queued
         if action.queue:
             return True
@@ -693,7 +754,9 @@ class BotAI(DistanceCalculation):
         return True
 
     async def chat_send(self, message: str):
-        """ Send a chat message. """
+        """ Send a chat message.
+
+        :param message: """
         assert isinstance(message, str), f"{message} is not a string"
         await self._client.chat_send(message, False)
 
@@ -701,13 +764,16 @@ class BotAI(DistanceCalculation):
     def get_terrain_height(self, pos: Union[Point2, Point3, Unit]) -> int:
         """ Returns terrain height at a position.
         Caution: terrain height is different from a unit's z-coordinate.
-        """
+
+        :param pos: """
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
         pos = pos.position.to2.rounded
         return self._game_info.terrain_height[pos]
 
     def get_terrain_z_height(self, pos: Union[Point2, Point3, Unit]) -> int:
-        """ Returns terrain z-height at a position. """
+        """ Returns terrain z-height at a position.
+
+        :param pos: """
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
         pos = pos.position.to2.rounded
         return -16 + 32 * self._game_info.terrain_height[pos] / 255
@@ -716,34 +782,42 @@ class BotAI(DistanceCalculation):
         """ Returns True if you can place something at a position.
         Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
         Caution: some x and y offset might be required, see ramp code:
-        https://github.com/Dentosal/python-sc2/blob/master/sc2/game_info.py#L17-L18 """
+        https://github.com/Dentosal/python-sc2/blob/master/sc2/game_info.py#L17-L18
+
+        :param pos: """
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
         pos = pos.position.to2.rounded
         return self._game_info.placement_grid[pos] == 1
 
     def in_pathing_grid(self, pos: Union[Point2, Point3, Unit]) -> bool:
-        """ Returns True if a unit can pass through a grid point. """
+        """ Returns True if a unit can pass through a grid point.
+
+        :param pos: """
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
         pos = pos.position.to2.rounded
         return self._game_info.pathing_grid[pos] == 1
 
     def is_visible(self, pos: Union[Point2, Point3, Unit]) -> bool:
-        """ Returns True if you have vision on a grid point. """
+        """ Returns True if you have vision on a grid point.
+
+        :param pos: """
         # more info: https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/spatial.proto#L19
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
         pos = pos.position.to2.rounded
         return self.state.visibility[pos] == 2
 
     def has_creep(self, pos: Union[Point2, Point3, Unit]) -> bool:
-        """ Returns True if there is creep on the grid point. """
+        """ Returns True if there is creep on the grid point.
+
+        :param pos: """
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
         pos = pos.position.to2.rounded
         return self.state.creep[pos] == 1
 
     def _prepare_start(self, client, player_id, game_info, game_data):
         """Ran until game start to set game and player data."""
-        self._client: "Client" = client
-        self._game_info: "GameInfo" = game_info
+        self._client: Client = client
+        self._game_info: GameInfo = game_info
         self._game_data: GameData = game_data
 
         self.player_id: int = player_id
