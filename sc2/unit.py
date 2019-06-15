@@ -1,5 +1,5 @@
 import warnings
-from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 from . import unit_command
 from .cache import property_immutable_cache, property_mutable_cache
@@ -757,8 +757,7 @@ class Unit:
         elif unit.weapon_cooldown < 0:
             self.actions.append(unit.move(closest_allied_unit_because_cant_attack))
         else:
-            self.actions.append(unit.move(retreatPosition))
-        """
+            self.actions.append(unit.move(retreatPosition)) """
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1

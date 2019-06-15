@@ -602,6 +602,5 @@ class Client(Protocol):
         Caution:
             - The SC2 Client will crash if the game wasn't quicksaved
             - The bot step iteration counter will not reset
-            - self.state.game_loop will be set to zero after the quickload, and self.time is dependant on it
-        """
+            - self.state.game_loop will be set to zero after the quickload, and self.time is dependant on it """
         await self._execute(quick_load=sc_pb.RequestQuickLoad())

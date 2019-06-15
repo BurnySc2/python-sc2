@@ -1,7 +1,7 @@
 import itertools
 import math
 import random
-from typing import Any, Dict, List, Optional, Set, Tuple, Union  # for mypy type checking
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 EPSILON = 10 ** -8
 
