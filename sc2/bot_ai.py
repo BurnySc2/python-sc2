@@ -246,9 +246,13 @@ class BotAI(DistanceCalculation):
         self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
         """ Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
+
         Examples::
+
             units_abilities = await self.get_available_abilities(self.units)
+
         or::
+
             units_abilities = await self.get_available_abilities([self.units.random])
 
         :param units:
