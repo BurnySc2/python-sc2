@@ -2,9 +2,17 @@ from . import unit as unit_module
 from .ids.ability_id import AbilityId
 from .position import Point2
 
+from typing import Union
+
 
 class UnitCommand:
-    def __init__(self, ability, unit, target=None, queue=False):
+    def __init__(self, ability: AbilityId, unit: "Unit", target: Union["Unit", Point2] = None, queue: bool = False):
+        """
+        :param ability:
+        :param unit:
+        :param target:
+        :param queue:
+        """
         assert ability in AbilityId, f"ability {ability} is not in AbilityId"
         assert isinstance(unit, unit_module.Unit), f"unit {unit} is of type {type(unit)}"
         assert target is None or isinstance(

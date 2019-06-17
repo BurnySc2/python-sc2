@@ -17,6 +17,9 @@ FREE_ABILITIES = {"Lower", "Raise", "Land", "Lift", "Hold", "Harvest"}
 
 class GameData:
     def __init__(self, data):
+        """
+        :param data:
+        """
         ids = set(a.value for a in AbilityId if a.value != 0)
         self.abilities = {a.ability_id: AbilityData(self, a) for a in data.abilities if a.ability_id in ids}
         self.units = {u.unit_id: UnitTypeData(self, u) for u in data.units if u.available}
@@ -114,7 +117,11 @@ class AbilityData:
 
 
 class UnitTypeData:
-    def __init__(self, game_data, proto):
+    def __init__(self, game_data: GameData, proto):
+        """
+        :param game_data:
+        :param proto:
+        """
         # The ability_id for lurkers is
         # LURKERASPECTMPFROMHYDRALISKBURROWED_LURKERMPFROMHYDRALISKBURROWED
         # instead of the correct MORPH_LURKER.
@@ -234,7 +241,11 @@ class UnitTypeData:
 
 
 class UpgradeData:
-    def __init__(self, game_data, proto):
+    def __init__(self, game_data: GameData, proto):
+        """
+        :param game_data:
+        :param proto:
+        """
         self._game_data = game_data
         self._proto = proto
 
@@ -259,7 +270,12 @@ class UpgradeData:
 
 
 class Cost:
-    def __init__(self, minerals, vespene, time=None):
+    def __init__(self, minerals: int, vespene: int, time: float = None):
+        """
+        :param minerals:
+        :param vespene:
+        :param time:
+        """
         self.minerals = minerals
         self.vespene = vespene
         self.time = time

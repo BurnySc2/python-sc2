@@ -20,6 +20,8 @@ pytest-asyncio = "*"
 hypothesis = "*"
 pytest-benchmark = "*"
 numba = "*"
+sphinx = "*"
+sphinx-autodoc-typehints = "*"
 
 [requires]
 python_version = "3.7"

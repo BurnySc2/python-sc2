@@ -2,7 +2,6 @@ from __future__ import annotations
 import warnings
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
-from . import unit_command
 from .cache import property_immutable_cache, property_mutable_cache
 from .constants import (
     transforming,
@@ -45,12 +44,13 @@ from .ids.buff_id import BuffId
 from .ids.upgrade_id import UpgradeId
 from .ids.unit_typeid import UnitTypeId
 from .position import Point2, Point3
+from .unit_command import UnitCommand
 
 warnings.simplefilter("once")
 
 if TYPE_CHECKING:
     from .bot_ai import BotAI
-    from .unit_command import UnitCommand
+    from .game_data import AbilityData
 
 
 class UnitOrder:
@@ -62,7 +62,12 @@ class UnitOrder:
             proto.progress,
         )
 
-    def __init__(self, ability, target, progress=None):
+    def __init__(self, ability: AbilityData, target, progress: float = None):
+        """
+        :param ability:
+        :param target:
+        :param progress:
+        """
         self.ability = ability
         self.target = target
         self.progress = progress
@@ -73,6 +78,10 @@ class UnitOrder:
 
 class Unit:
     def __init__(self, proto_data, bot_object: BotAI):
+        """
+        :param proto_data:
+        :param bot_object:
+        """
         self._proto = proto_data
         self._bot_object = bot_object
         # Used by property_immutable_cache
@@ -778,8 +787,7 @@ class Unit:
         elif unit.weapon_cooldown < 0:
             self.actions.append(unit.move(closest_allied_unit_because_cant_attack))
         else:
-            self.actions.append(unit.move(retreatPosition))
-        """
+            self.actions.append(unit.move(retreatPosition)) """
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1
@@ -915,4 +923,4 @@ class Unit:
             return False
 
     def __call__(self, ability, target=None, queue: bool = False):
-        return unit_command.UnitCommand(ability, self, target=target, queue=queue)
+        return UnitCommand(ability, self, target=target, queue=queue)

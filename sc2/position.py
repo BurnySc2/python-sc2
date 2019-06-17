@@ -38,7 +38,7 @@ class Pointlike(tuple):
         """ Function used to not take the square root as the distances will stay proportionally the same.
         This is to speed up the sorting process.
 
-        :param p2:"""
+        :param p2: """
         return (self[0] - p2[0]) ** 2 + (self[1] - p2[1]) ** 2
 
     def is_closer_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:
@@ -151,6 +151,9 @@ class Pointlike(tuple):
 class Point2(Pointlike):
     @classmethod
     def from_proto(cls, data):
+        """
+        :param data:
+        """
         return cls((data.x, data.y))
 
     @property
@@ -288,20 +291,28 @@ class Point2(Pointlike):
         return self.__class__((_sign(other.x - self.x), _sign(other.y - self.y)))
 
     def manhattan_distance(self, other: Point2) -> Union[int, float]:
+        """
+        :param other:
+        """
         return abs(other.x - self.x) + abs(other.y - self.y)
 
     @staticmethod
-    def center(a: Union[Set[Point2], List[Point2]]) -> Point2:
-        """ Returns the central point for points in list """
+    def center(units_or_points: Union[Set[Point2], List[Point2]]) -> Point2:
+        """ Returns the central point for points in list
+
+        :param units_or_points:"""
         s = Point2((0, 0))
-        for p in a:
+        for p in units_or_points:
             s += p
-        return s / len(a)
+        return s / len(units_or_points)
 
 
 class Point3(Point2):
     @classmethod
     def from_proto(cls, data):
+        """
+        :param data:
+        """
         return cls((data.x, data.y, data.z))
 
     @property
@@ -330,6 +341,9 @@ class Size(Point2):
 class Rect(tuple):
     @classmethod
     def from_proto(cls, data):
+        """
+        :param data:
+        """
         assert data.p0.x < data.p1.x and data.p0.y < data.p1.y
         return cls((data.p0.x, data.p0.y, data.p1.x - data.p0.x, data.p1.y - data.p0.y))
 

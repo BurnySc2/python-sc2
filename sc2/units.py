@@ -26,6 +26,10 @@ class Units(list):
         return cls((Unit(u, bot_object=bot_object) for u in units))
 
     def __init__(self, units, bot_object: BotAI):
+        """
+        :param units:
+        :param bot_object:
+        """
         super().__init__(units)
         self._bot_object = bot_object
 
@@ -112,7 +116,7 @@ class Units(list):
         return random.choice(self)
 
     def random_or(self, other: any) -> Unit:
-        return random.choice(self) if self.exists else other
+        return random.choice(self) if self else other
 
     def random_group_of(self, n: int) -> Units:
         """ Returns self if n >= self.amount. """
