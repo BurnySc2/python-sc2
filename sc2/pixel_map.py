@@ -6,7 +6,7 @@ from .position import Point2
 
 
 class PixelMap:
-    def __init__(self, proto, in_bits=False, mirrored=False):
+    def __init__(self, proto, in_bits: bool = False, mirrored: bool = False):
         """
         :param proto:
         :param in_bits:
@@ -109,5 +109,6 @@ class PixelMap:
 
     def plot(self):
         import matplotlib.pyplot as plt
+
         plt.imshow(self.data_numpy, origin="lower")
         plt.show()

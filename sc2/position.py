@@ -38,7 +38,7 @@ class Pointlike(tuple):
         """ Function used to not take the square root as the distances will stay proportionally the same.
         This is to speed up the sorting process.
 
-        :param p2:"""
+        :param p2: """
         return (self[0] - p2[0]) ** 2 + (self[1] - p2[1]) ** 2
 
     def is_closer_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:

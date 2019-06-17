@@ -27,6 +27,8 @@ logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from .game_info import GameInfo
     from .client import Client
+    from .unit_command import UnitCommand
+    from .game_data import Cost
 
 
 class BotAI(DistanceCalculation):
@@ -63,14 +65,14 @@ class BotAI(DistanceCalculation):
         self.army_count: int = None
         self.warp_gate_count: int = None
         self.larva_count: int = None
-        self.actions = []
+        self.actions: List[UnitCommand] = []
         self.blips: Set[Blip] = set()
         self._units_previous_map: dict = dict()
         self._structures_previous_map: dict = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
 
     @property
-    def time(self) -> Union[int, float]:
+    def time(self) -> float:
         """ Returns time in seconds, assumes the game is played on 'faster' """
         return self.state.game_loop / 22.4  # / (1/1.4) * (1/16)
 
@@ -136,7 +138,10 @@ class BotAI(DistanceCalculation):
     @property
     def main_base_ramp(self) -> "Ramp":
         """ Returns the Ramp instance of the closest main-ramp to start location.
-        Look in game_info.py for more information """
+        Look in game_info.py for more information
+
+        Example: See terran ramp wall bot
+        """
         if hasattr(self, "cached_main_base_ramp"):
             return self.cached_main_base_ramp
         # The reason for len(ramp.upper) in {2, 5} is:
@@ -238,13 +243,13 @@ class BotAI(DistanceCalculation):
         self.supply_left -= correction
 
     async def get_available_abilities(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool=False
+        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
-        """ Returns available abilities of one or more units. Right know only checks cooldown, energy cost, and whether the ability has been researched.
-        Example usage:
-        units_abilities = await self.get_available_abilities(self.units)
-        or
-        units_abilities = await self.get_available_abilities([self.units.random])
+        """ Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
+        Examples::
+            units_abilities = await self.get_available_abilities(self.units)
+        or::
+            units_abilities = await self.get_available_abilities([self.units.random])
 
         :param units:
         :param ignore_resource_requirements: """
@@ -253,8 +258,7 @@ class BotAI(DistanceCalculation):
     async def expand_now(
         self, building: UnitTypeId = None, max_distance: Union[int, float] = 10, location: Optional[Point2] = None
     ):
-        """ Not recommended as this function uses 'self.do' (reduces performance).
-        Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.
+        """ Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.
 
         :param building:
         :param max_distance:
@@ -427,14 +431,26 @@ class BotAI(DistanceCalculation):
     def can_feed(self, unit_type: UnitTypeId) -> bool:
         """ Checks if you have enough free supply to build the unit
 
+        Example::
+
+            cc = self.townhalls.idle.random_or(None)
+            # self.townhalls can be empty or there are no idle townhalls
+            if cc and self.can_feed(UnitTypeId.SCV):
+                self.do(cc.train(UnitTypeId.SCV))
+
         :param unit_type: """
         required = self._game_data.units[unit_type.value]._proto.food_required
         return required == 0 or self.supply_left >= required
 
-    def can_afford(
-        self, item_id: Union[UnitTypeId, UpgradeId, AbilityId], check_supply_cost: bool = True
-    ) -> "CanAffordWrapper":
-        """Tests if the player has enough resources to build a unit or cast an ability.
+    def can_afford(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId], check_supply_cost: bool = True) -> bool:
+        """ Tests if the player has enough resources to build a unit or structure.
+
+        Example::
+
+            cc = self.townhalls.idle.random_or(None)
+            # self.townhalls can be empty or there are no idle townhalls
+            if cc and self.can_afford(UnitTypeId.SCV):
+                self.do(cc.train(UnitTypeId.SCV))
 
         :param item_id:
         :param check_supply_cost: """
@@ -449,7 +465,7 @@ class BotAI(DistanceCalculation):
         else:
             cost = self._game_data.calculate_ability_cost(item_id)
 
-        return CanAffordWrapper(cost.minerals <= self.minerals, cost.vespene <= self.vespene, enough_supply)
+        return cost.minerals <= self.minerals and cost.vespene <= self.vespene and enough_supply
 
     async def can_cast(
         self,
@@ -459,7 +475,13 @@ class BotAI(DistanceCalculation):
         only_check_energy_and_cooldown: bool = False,
         cached_abilities_of_unit: List[AbilityId] = None,
     ) -> bool:
-        """Tests if a unit has an ability available and enough energy to cast it.
+        """ Tests if a unit has an ability available and enough energy to cast it.
+
+        Example::
+
+            stalkers = self.units(UnitTypeId.STALKER)
+            stalkers_that_can_blink = stalkers.filter(lambda unit: unit.type_id == UnitTypeId.STALKER and (await self.can_cast(unit, AbilityId.EFFECT_BLINK_STALKER, only_check_energy_and_cooldown=True)))
+
         See data_pb2.py (line 161) for the numbers 1-5 to make sense
 
         :param unit:
@@ -474,7 +496,7 @@ class BotAI(DistanceCalculation):
         if cached_abilities_of_unit:
             abilities = cached_abilities_of_unit
         else:
-            abilities = (await self.get_available_abilities([unit]))[0]
+            abilities = (await self.get_available_abilities([unit], ignore_resource_requirements=False))[0]
 
         if ability_id in abilities:
             if only_check_energy_and_cooldown:
@@ -486,27 +508,35 @@ class BotAI(DistanceCalculation):
                 ability_target == 1
                 or ability_target == Target.PointOrNone.value
                 and isinstance(target, (Point2, Point3))
-                and unit.distance_to(target) <= cast_range
+                and unit.distance_to(target) <= unit.radius + target.radius + cast_range
             ):  # cant replace 1 with "Target.None.value" because ".None" doesnt seem to be a valid enum name
                 return True
             # Check if able to use ability on a unit
             elif (
                 ability_target in {Target.Unit.value, Target.PointOrUnit.value}
                 and isinstance(target, Unit)
-                and unit.distance_to(target) <= cast_range
+                and unit.distance_to(target) <= unit.radius + target.radius + cast_range
             ):
                 return True
             # Check if able to use ability on a position
             elif (
                 ability_target in {Target.Point.value, Target.PointOrUnit.value}
                 and isinstance(target, (Point2, Point3))
-                and unit.distance_to(target) <= cast_range
+                and unit.distance_to(target) <= unit.radius + cast_range
             ):
                 return True
         return False
 
     def select_build_worker(self, pos: Union[Unit, Point2, Point3], force: bool = False) -> Optional[Unit]:
         """Select a worker to build a building with.
+        
+        Example::
+
+            barracks_placement_position = self.main_base_ramp.barracks_correct_placement
+            worker = self.select_build_worker(barracks_placement_position)
+            # Can return None
+            if worker:
+                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position))
 
         :param pos:
         :param force: """
@@ -525,7 +555,15 @@ class BotAI(DistanceCalculation):
             return workers.random if force else None
 
     async def can_place(self, building: Union[AbilityData, AbilityId, UnitTypeId], position: Point2) -> bool:
-        """Tests if a building can be placed in the given location.
+        """ Tests if a building can be placed in the given location.
+
+        Example::
+
+            barracks_placement_position = self.main_base_ramp.barracks_correct_placement
+            worker = self.select_build_worker(barracks_placement_position)
+            # Can return None
+            if worker and (await self.can_place(UnitTypeId.BARRACKS, barracks_placement_position):
+                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position))
 
         :param building:
         :param position: """
@@ -547,7 +585,13 @@ class BotAI(DistanceCalculation):
         random_alternative: bool = True,
         placement_step: int = 2,
     ) -> Optional[Point2]:
-        """Finds a placement location for building.
+        """ Finds a placement location for building.
+
+        Example::
+
+            if self.townahlls:
+                cc = self.townhalls[0]
+                depot_position = await self.find_placement(UnitTypeId.SUPPLYDEPOT, near=cc)
 
         :param building:
         :param near:
@@ -593,10 +637,12 @@ class BotAI(DistanceCalculation):
     # TODO: improve using cache per frame
     def already_pending_upgrade(self, upgrade_type: UpgradeId) -> Union[int, float]:
         """ Check if an upgrade is being researched
-        Return values:
-        0: not started
-        0 < x < 1: researching
-        1: finished
+
+        Returns values are::
+
+            0 # not started
+            0 < x < 1 # researching
+            1 # completed
 
         :param upgrade_type:
         """
@@ -655,9 +701,9 @@ class BotAI(DistanceCalculation):
         unit: Optional[Unit] = None,
         random_alternative: bool = True,
         placement_step: int = 2,
-    ):
-        """ Not recommended as this function uses 'self.do' (reduces performance).
-        Also if the position is not placeable, this function tries to find a nearby position to place the structure. Then uses 'self.do' to give the worker the order to start the construction.
+    ) -> bool:
+        """ Not recommended as this function checks many positions if it "can place" on them until it found a valid position.
+        Also if the given position is not placeable, this function tries to find a nearby position to place the structure. Then uses 'self.do' to give the worker the order to start the construction.
 
         :param building:
         :param near:
@@ -681,21 +727,54 @@ class BotAI(DistanceCalculation):
         self.do(unit.build(building, p), subtract_cost=True)
         return True
 
-    def do(self, action, subtract_cost=False, subtract_supply=False, can_afford_check=False):
-        """
+    def do(
+        self,
+        action: UnitCommand,
+        subtract_cost: bool = False,
+        subtract_supply: bool = False,
+        can_afford_check: bool = False,
+    ) -> bool:
+        """ Adds a unit action to the 'self.actions' list which is then executed at the end of the frame.
+
+        Training a unit::
+
+            # Train an SCV from a random idle command center
+            cc = self.townhalls.idle.random_or(None)
+            # self.townhalls can be empty or there are no idle townhalls
+            if cc and self.can_afford(UnitTypeId.SCV):
+                self.do(cc.train(UnitTypeId.SCV), subtract_cost=True, subtract_supply=True)
+
+        Building a building::
+
+            # Building a barracks at the main ramp, requires 150 minerals and a depot
+            worker = self.workers.random_or(None)
+            barracks_placement_position = self.main_base_ramp.barracks_correct_placement
+            if worker and self.can_afford(UnitTypeId.BARRACKS):
+                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position), subtract_cost=True)
+
+        Moving a unit::
+
+            # Move a random worker to the center of the map
+            worker = self.workers.random_or(None)
+            # worker can be None if all are dead
+            if worker:
+                self.do(worker.move(self.game_info.map_center))
+
+
         :param action:
         :param subtract_cost:
         :param subtract_supply:
         :param can_afford_check:
         """
         if subtract_cost:
-            cost: "Cost" = self._game_data.calculate_ability_cost(action.ability)
+            cost: Cost = self._game_data.calculate_ability_cost(action.ability)
             if can_afford_check and not (self.minerals >= cost.minerals and self.vespene >= cost.vespene):
                 # Dont do action if can't afford
                 return False
             self.minerals -= cost.minerals
             self.vespene -= cost.vespene
         if subtract_supply and action.ability in abilityid_to_unittypeid:
+            # TODO: fix for morphing units that increase supply cost, like ravager and broodlord
             unit_type = abilityid_to_unittypeid[action.ability]
             required_supply = self._game_data.units[unit_type.value]._proto.food_required
             # Overlord has -8
@@ -706,7 +785,7 @@ class BotAI(DistanceCalculation):
         self.actions.append(action)
         return True
 
-    async def _do_actions(self, actions: List["UnitCommand"], prevent_double=True):
+    async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
         """ Used internally by main.py automatically, use self.do() instead!
 
         :param actions:
@@ -724,7 +803,7 @@ class BotAI(DistanceCalculation):
         result = await self._client.actions(actions)
         return result
 
-    def prevent_double_actions(self, action):
+    def prevent_double_actions(self, action) -> bool:
         """
         :param action:
         """
@@ -754,7 +833,11 @@ class BotAI(DistanceCalculation):
         return True
 
     async def chat_send(self, message: str):
-        """ Send a chat message.
+        """ Send a chat message to the SC2 Client.
+
+        Example::
+
+            await self.chat_send("Hello, this is a message from my bot!")
 
         :param message: """
         assert isinstance(message, str), f"{message} is not a string"
@@ -790,7 +873,7 @@ class BotAI(DistanceCalculation):
         return self._game_info.placement_grid[pos] == 1
 
     def in_pathing_grid(self, pos: Union[Point2, Point3, Unit]) -> bool:
-        """ Returns True if a unit can pass through a grid point.
+        """ Returns True if a ground unit can pass through a grid point.
 
         :param pos: """
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
@@ -1017,24 +1100,3 @@ class BotAI(DistanceCalculation):
 
     async def on_end(self, game_result: Result):
         """ Override this in your bot class. This function is called at the end of a game. """
-
-
-class CanAffordWrapper:
-    def __init__(self, can_afford_minerals, can_afford_vespene, have_enough_supply):
-        self.can_afford_minerals = can_afford_minerals
-        self.can_afford_vespene = can_afford_vespene
-        self.have_enough_supply = have_enough_supply
-
-    def __bool__(self):
-        return self.can_afford_minerals and self.can_afford_vespene and self.have_enough_supply
-
-    @property
-    def action_result(self):
-        if not self.can_afford_vespene:
-            return ActionResult.NotEnoughVespene
-        elif not self.can_afford_minerals:
-            return ActionResult.NotEnoughMinerals
-        elif not self.have_enough_supply:
-            return ActionResult.NotEnoughFood
-        else:
-            return None
