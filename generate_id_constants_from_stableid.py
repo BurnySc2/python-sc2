@@ -128,6 +128,9 @@ def generate_python_code(enums):
         for key, value in sorted(body.items(), key=lambda p: p[1]):
             code.append(f"    {key} = {value}")
 
+        # Add repr function to more easily dump enums to dict
+        code += ["\n", "    def __repr__(self):", '        return f"' + class_name + '.{self.name}"']
+
         code += [
             "\n",
             f"for item in {class_name}:",

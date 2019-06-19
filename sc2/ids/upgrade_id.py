@@ -303,6 +303,10 @@ class UpgradeId(enum.Enum):
     CARRIERLEASHRANGEUPGRADE = 295
 
 
+    def __repr__(self):
+        return f"UpgradeId.{self.name}"
+
+
 for item in UpgradeId:
     assert not item.name in globals()
     globals()[item.name] = item
