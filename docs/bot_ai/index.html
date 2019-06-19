@@ -628,6 +628,30 @@ because the unit does not exist any more.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.research">
+<code class="sig-name descname">research</code><span class="sig-paren">(</span><em class="sig-param">upgrade_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.research" title="Permalink to this definition">¶</a></dt>
+<dd><p>Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Try to research zergling movement speed if we can afford it</span>
+<span class="c1"># and if at least one pool is at build_progress == 1</span>
+<span class="c1"># and we are not researching it yet</span>
+<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending_upgrade</span><span class="p">(</span><span class="n">UpgradeId</span><span class="o">.</span><span class="n">ZERGLINGMOVEMENTSPEED</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UpgradeId</span><span class="o">.</span><span class="n">ZERGLINGMOVEMENTSPEED</span><span class="p">):</span>
+    <span class="n">spawning_pools_ready</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPAWNINGPOOL</span><span class="p">)</span><span class="o">.</span><span class="n">ready</span>
+    <span class="k">if</span> <span class="n">spawning_pools_ready</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">research</span><span class="p">(</span><span class="n">UpgradeId</span><span class="o">.</span><span class="n">ZERGLINGMOVEMENTSPEED</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>upgrade_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.select_build_worker">
 <code class="sig-name descname">select_build_worker</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.select_build_worker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select a worker to build a building with.</p>
@@ -653,6 +677,53 @@ because the unit does not exist any more.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.structure_type_build_progress">
+<code class="sig-name descname">structure_type_build_progress</code><span class="sig-paren">(</span><em class="sig-param">structure_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.structure_type_build_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the build progress of a structure type</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming you have one barracks building at 0.5 build progress:</span>
+<span class="n">progress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">progress</span><span class="p">)</span>
+<span class="c1"># This should print out 0.5</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>structure_type</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.tech_requirement_progress">
+<code class="sig-name descname">tech_requirement_progress</code><span class="sig-paren">(</span><em class="sig-param">structure_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.tech_requirement_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the tech requirement progress for a specific building</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Current state: supply depot is at 50% completion</span>
+<span class="n">tech_requirement</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tech_requirement_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tech_requirement</span><span class="p">)</span> <span class="c1"># Prints 0.5 because supply depot is half way done</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Current state: One factory is flying and one is half way done</span>
+<span class="n">tech_requirement</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tech_requirement_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">STARPORT</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tech_requirement</span><span class="p">)</span> <span class="c1"># Prints 1 because even though the type id of the flying factory is different, it still has build progress of 1 and thus tech requirement is completed</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>structure_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.time">
 <em class="property">property </em><code class="sig-name descname">time</code><a class="headerlink" href="#sc2.bot_ai.BotAI.time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns time in seconds, assumes the game is played on ‘faster’</p>
@@ -670,6 +741,42 @@ because the unit does not exist any more.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">unit_type</em>, <em class="sig-param">amount=1</em>, <em class="sig-param">closest_to=None</em>, <em class="sig-param">train_only_idle_buildings=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trains a specified number of units. Trains only one if amount is not specified.
+Warning: currently has issues with warp gate warp ins</p>
+<p>Example Zerg:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">QUEEN</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1"># This should queue 5 queens in 5 different townhalls if you have enough townhalls, enough minerals and enough supply left</span>
+</pre></div>
+</div>
+<p>Example Terran:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming you have 2 idle barracks with reactors, one barracks without addon and one with techlab</span>
+<span class="c1"># It should only queue 4 marines in the 2 idle barracks with reactors</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Example distance to:</dt><dd><p># If you want to train based on distance to a certain point, you can use “closest_to”
+self.train(UnitTypeId.MARINE, 4, closest_to = self.game_info.map_center)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
+<li><p><strong>amount</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
+<li><p><strong>closest_to</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
+<li><p><strong>train_only_idle_buildings</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
 </dd></dl>
