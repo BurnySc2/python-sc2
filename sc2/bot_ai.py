@@ -73,6 +73,8 @@ class BotAI(DistanceCalculation):
         self._units_previous_map: dict = dict()
         self._structures_previous_map: dict = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
+        # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
+        self._unit_tags_received_action: Set[int] = set()
 
     @property
     def time(self) -> float:
@@ -553,7 +555,8 @@ class BotAI(DistanceCalculation):
         if workers:
             for worker in workers.sorted_by_distance_to(pos).prefer_idle:
                 if (
-                    not worker.orders
+                    worker not in self._unit_tags_received_action
+                    and not worker.orders
                     or len(worker.orders) == 1
                     and worker.orders[0].ability.id in {AbilityId.MOVE, AbilityId.HARVEST_GATHER}
                 ):
@@ -724,12 +727,15 @@ class BotAI(DistanceCalculation):
             near = near.position
         near = near.to2
 
+        if not self.can_afford(building):
+            return False
+
         p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
         if p is None:
             return False
 
         unit = unit or self.select_build_worker(p)
-        if unit is None or not self.can_afford(building):
+        if unit is None:
             return False
         self.do(unit.build(building, p), subtract_cost=True)
         return True
@@ -752,6 +758,7 @@ class BotAI(DistanceCalculation):
             self.train(UnitTypeId.MARINE, 4)
 
         Example distance to:
+
             # If you want to train based on distance to a certain point, you can use "closest_to"
             self.train(UnitTypeId.MARINE, 4, closest_to = self.game_info.map_center)
 
@@ -793,8 +800,10 @@ class BotAI(DistanceCalculation):
         structure: Unit
         for structure in train_structures:
             if (
+                # If structure hasn't received an action/order this frame
+                structure.tag not in self._unit_tags_received_action
                 # If structure can train this unit at all
-                structure.type_id in train_structure_type
+                and structure.type_id in train_structure_type
                 # Structure has to be completed to be able to train
                 and structure.build_progress == 1
                 # If structure is protoss, it needs to be powered to train
@@ -951,8 +960,13 @@ class BotAI(DistanceCalculation):
         structure: Unit
         for structure in self.structures:
             if (
-                structure.type_id in research_structure_types
+                # If structure hasn't received an action/order this frame
+                structure.tag not in self._unit_tags_received_action
+                # Structure can research this upgrade
+                and structure.type_id in research_structure_types
+                # Structure is idle
                 and structure.is_idle
+                # Structure belongs to protoss and is powered (near pylon)
                 and (not is_protoss or structure.is_powered)
             ):
                 successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
@@ -1013,6 +1027,7 @@ class BotAI(DistanceCalculation):
                 self.supply_left -= required_supply
                 # TODO: if unit created from larva: reduce larva count by 1
         self.actions.append(action)
+        self._unit_tags_received_action.add(action.unit.tag)
         return True
 
     async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
@@ -1024,12 +1039,6 @@ class BotAI(DistanceCalculation):
             return None
         if prevent_double:
             actions = list(filter(self.prevent_double_actions, actions))
-        # Cost was already reduced in self.do()
-        # for action in actions:
-        #     cost = self._game_data.calculate_ability_cost(action.ability)
-        #     self.minerals -= cost.minerals
-        #     self.vespene -= cost.vespene
-
         result = await self._client.actions(actions)
         return result
 
@@ -1128,7 +1137,14 @@ class BotAI(DistanceCalculation):
         return self.state.creep[pos] == 1
 
     def _prepare_start(self, client, player_id, game_info, game_data):
-        """Ran until game start to set game and player data."""
+        """
+        Ran until game start to set game and player data.
+
+        :param client:
+        :param player_id:
+        :param game_info:
+        :param game_data:
+        """
         self._client: Client = client
         self._game_info: GameInfo = game_info
         self._game_data: GameData = game_data
@@ -1146,6 +1162,10 @@ class BotAI(DistanceCalculation):
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
 
     def _prepare_step(self, state, proto_game_info):
+        """
+        :param state:
+        :param proto_game_info:
+        """
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # update pathing grid
@@ -1155,6 +1175,7 @@ class BotAI(DistanceCalculation):
         # Required for events, needs to be before self.units are initialized so the old units are stored
         self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
         self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
+        self._unit_tags_received_action: Set[int] = set()
 
         self._prepare_units()
         self.minerals: int = state.common.minerals
@@ -1273,6 +1294,7 @@ class BotAI(DistanceCalculation):
         """ This function will be automatically run from main.py and triggers the following functions:
         - on_unit_created
         - on_unit_destroyed
+        - on_building_construction_started
         - on_building_construction_complete
         - on_upgrade_complete
         """
@@ -1312,26 +1334,36 @@ class BotAI(DistanceCalculation):
         Override this in your bot class.
         Note that this function uses unit tags and not the unit objects
         because the unit does not exist any more.
+
+        :param unit_tag:
         """
 
     async def on_unit_created(self, unit: Unit):
-        """ Override this in your bot class. This function is called when a unit is created. """
+        """ Override this in your bot class. This function is called when a unit is created.
+
+        :param unit: """
 
     async def on_building_construction_started(self, unit: Unit):
         """
         Override this in your bot class.
         This function is called when a building construction has started.
+
+        :param unit:
         """
 
     async def on_building_construction_complete(self, unit: Unit):
         """
         Override this in your bot class. This function is called when a building
         construction is completed.
+
+        :param unit:
         """
 
     async def on_upgrade_complete(self, upgrade: UpgradeId):
         """
         Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.
+
+        :param upgrade:
         """
 
     async def on_start(self):
@@ -1345,8 +1377,12 @@ class BotAI(DistanceCalculation):
         You need to implement this function!
         Override this in your bot class.
         This function is called on every game step (looped in realtime mode).
+
+        :param iteration:
         """
         raise NotImplementedError
 
     async def on_end(self, game_result: Result):
-        """ Override this in your bot class. This function is called at the end of a game. """
+        """ Override this in your bot class. This function is called at the end of a game.
+
+        :param game_result: """
