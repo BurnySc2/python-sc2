@@ -1975,6 +1975,10 @@ class UnitTypeId(enum.Enum):
     COLLAPSIBLEROCKTOWERRAMPRIGHTGREEN = 1967
 
 
+    def __repr__(self):
+        return f"UnitTypeId.{self.name}"
+
+
 for item in UnitTypeId:
     assert not item.name in globals()
     globals()[item.name] = item

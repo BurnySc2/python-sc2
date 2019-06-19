@@ -54,6 +54,9 @@ class BotAI(DistanceCalculation):
         self.watchtowers: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
+        self.larva: Units = Units([], self)
+        self.techlab_tags: Set[int] = set()
+        self.reactor_tags: Set[int] = set()
         self.minerals: int = None
         self.vespene: int = None
         self.supply_army: Union[float, int] = None
@@ -246,9 +249,13 @@ class BotAI(DistanceCalculation):
         self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
         """ Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
+
         Examples::
+
             units_abilities = await self.get_available_abilities(self.units)
+
         or::
+
             units_abilities = await self.get_available_abilities([self.units.random])
 
         :param units:
@@ -727,6 +734,230 @@ class BotAI(DistanceCalculation):
         self.do(unit.build(building, p), subtract_cost=True)
         return True
 
+    def train(
+        self, unit_type: UnitTypeId, amount: int = 1, closest_to: Point2 = None, train_only_idle_buildings: bool = True
+    ) -> int:
+        """ Trains a specified number of units. Trains only one if amount is not specified.
+        Warning: currently has issues with warp gate warp ins
+
+        Example Zerg::
+
+            self.train(UnitTypeId.QUEEN, 5)
+            # This should queue 5 queens in 5 different townhalls if you have enough townhalls, enough minerals and enough supply left
+
+        Example Terran::
+
+            # Assuming you have 2 idle barracks with reactors, one barracks without addon and one with techlab
+            # It should only queue 4 marines in the 2 idle barracks with reactors
+            self.train(UnitTypeId.MARINE, 4)
+
+        Example distance to:
+            # If you want to train based on distance to a certain point, you can use "closest_to"
+            self.train(UnitTypeId.MARINE, 4, closest_to = self.game_info.map_center)
+
+
+        :param unit_type:
+        :param amount:
+        :param closest_to:
+        :param train_only_idle_buildings: """
+        from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
+        from sc2.dicts.unit_train_build_abilities import TRAIN_INFO
+
+        trained_amount = 0
+        # Tech requirement not met
+        if self.tech_requirement_progress(unit_type) < 1:
+            return trained_amount
+        # Not affordable
+        if not self.can_afford(unit_type):
+            return trained_amount
+        # All train structure types: queen can made from hatchery, lair, hive
+        train_structure_type: Set[UnitTypeId] = UNIT_TRAINED_FROM[unit_type]
+        train_structures = self.structures if self.race != Race.Zerg else self.structures | self.larva
+        requires_techlab = any(
+            TRAIN_INFO[structure_type][unit_type].get("requires_techlab", False)
+            for structure_type in train_structure_type
+        )
+        is_protoss = self.race == Race.Protoss
+        can_have_addons = any(
+            u in train_structure_type for u in {UnitTypeId.BARRACKS, UnitTypeId.FACTORY, UnitTypeId.STARPORT}
+        )
+        # Sort structures closest to a point
+        if closest_to is not None:
+            train_structures = train_structures.sorted_by_distance_to(closest_to)
+        elif can_have_addons:
+            # This should sort the structures in ascending order: first structures with reactor, then naked, then with techlab
+            train_structures = train_structures.sorted(
+                key=lambda structure: -1 * (structure.add_on_tag in self.reactor_tags)
+                + 1 * (structure.add_on_tag in self.techlab_tags)
+            )
+        structure: Unit
+        for structure in train_structures:
+            if (
+                # If structure can train this unit at all
+                structure.type_id in train_structure_type
+                # Structure has to be completed to be able to train
+                and structure.build_progress == 1
+                # If structure is protoss, it needs to be powered to train
+                and (not is_protoss or structure.is_powered)
+                # Either parameter "train_only_idle_buildings" is False or structure is idle or structure has less than 2 orders and has reactor
+                and (
+                    not train_only_idle_buildings
+                    or len(structure.orders) < 1 + int(structure.add_on_tag in self.reactor_tags)
+                )
+                # If structure type_id does not accept addons, it cant require a techlab
+                # Else we have to check if building has techlab as addon
+                and (not requires_techlab or structure.add_on_tag in self.techlab_tags)
+            ):
+                # Warp in at location
+                # TODO: find fast warp in locations either random location or closest to the given parameter "closest_to"
+                # TODO: find out which pylons have fast warp in by checking distance to nexus.ready and warp gates
+                if structure.type_id == UnitTypeId.WARPGATE:
+                    pylons = self.structures(UnitTypeId.PYLON)
+                    location = pylons.random.position.random_on_distance(4)
+                    successfully_trained = self.do(
+                        structure.warp_in(unit_type, location),
+                        subtract_cost=True,
+                        subtract_supply=True,
+                        can_afford_check=True,
+                    )
+                else:
+                    # Normal train a unit from larva or inside a structure
+                    successfully_trained = self.do(
+                        structure.train(unit_type), subtract_cost=True, subtract_supply=True, can_afford_check=True
+                    )
+                    # If it doesnt require techlab, and has reactor (this implicitly tells us that it doesnt require a techlab because of the if statement above) and we are at least 2 away from goal, and structure was idle: queue same unit again
+                    if (
+                        not structure.orders
+                        and trained_amount + 1 < amount
+                        and structure.add_on_tag in self.reactor_tags
+                    ):
+                        trained_amount += 1
+                        successfully_trained = self.do(
+                            structure.train(unit_type, queue=True),
+                            subtract_cost=True,
+                            subtract_supply=True,
+                            can_afford_check=True,
+                        )
+
+                if successfully_trained:
+                    trained_amount += 1
+                    if trained_amount == amount:
+                        return trained_amount
+                else:
+                    return trained_amount
+        return trained_amount
+
+    def structure_type_build_progress(self, structure_type: Union[UnitTypeId, int]) -> float:
+        """
+        Checks the build progress of a structure type
+
+        Example::
+
+            # Assuming you have one barracks building at 0.5 build progress:
+            progress = self.structure_type_build_progress(UnitTypeId.BARRACKS)
+            print(progress)
+            # This should print out 0.5
+
+        :param structure_type:
+        """
+        if isinstance(structure_type, int):
+            structure_type_value = structure_type
+        else:
+            structure_type_value = structure_type.value
+
+        return_value = 0
+        for structure in self.structures:
+            structure_data = self._game_data.units[structure._proto.unit_type]
+            for tech_alias in list(structure_data._proto.tech_alias) + [structure._proto.unit_type]:
+                if tech_alias == structure_type_value:
+                    if structure.build_progress == 1:
+                        return 1
+                    elif return_value < structure.build_progress:
+                        return_value = structure.build_progress
+        return return_value
+
+    def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:
+        """ Returns the tech requirement progress for a specific building
+
+        Example::
+
+            # Current state: supply depot is at 50% completion
+            tech_requirement = self.tech_requirement_progress(UnitTypeId.BARRACKS)
+            print(tech_requirement) # Prints 0.5 because supply depot is half way done
+
+        Example::
+
+            # Current state: One factory is flying and one is half way done
+            tech_requirement = self.tech_requirement_progress(UnitTypeId.STARPORT)
+            print(tech_requirement) # Prints 1 because even though the type id of the flying factory is different, it still has build progress of 1 and thus tech requirement is completed
+
+        :param structure_type: """
+        unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
+        if not unit_info_id_value:
+            return 1
+        return self.structure_type_build_progress(unit_info_id_value)
+
+    def research(self, upgrade_type: UpgradeId) -> bool:
+        """
+        Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).
+
+        Example::
+
+            # Try to research zergling movement speed if we can afford it
+            # and if at least one pool is at build_progress == 1
+            # and we are not researching it yet
+            if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(UpgradeId.ZERGLINGMOVEMENTSPEED):
+                spawning_pools_ready = self.structures(UnitTypeId.SPAWNINGPOOL).ready
+                if spawning_pools_ready:
+                    self.research(UpgradeId.ZERGLINGMOVEMENTSPEED)
+
+        :param upgrade_type:
+        """
+        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
+        from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+
+        assert (
+            upgrade_type in UPGRADE_RESEARCHED_FROM
+        ), f"Could not find upgrade {upgrade_type} in 'research from'-dictionary"
+
+        # Not affordable
+        if not self.can_afford(upgrade_type):
+            return False
+
+        research_structure_types: UnitTypeId = UPGRADE_RESEARCHED_FROM[upgrade_type]
+        # Convert to a set
+        # research_ability: AbilityId = RESEARCH_INFO[research_structure_types][upgrade_type]["ability"]
+        required_tech_building: Optional[UnitTypeId] = RESEARCH_INFO[research_structure_types][upgrade_type].get(
+            "required_building", None
+        )
+
+        requirement_met = (
+            required_tech_building is None or self.structure_type_build_progress(required_tech_building) == 1
+        )
+        # Requirement not met
+        if not requirement_met:
+            return False
+
+        is_protoss = self.race == Race.Protoss
+
+        equiv_structures = {
+            UnitTypeId.GREATERSPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
+            UnitTypeId.HIVE: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
+        }
+        research_structure_types: Set[UnitTypeId] = equiv_structures.get(
+            research_structure_types, {research_structure_types}
+        )
+
+        structure: Unit
+        for structure in self.structures:
+            if (
+                structure.type_id in research_structure_types
+                and structure.is_idle
+                and (not is_protoss or structure.is_powered)
+            ):
+                successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
+                return successful_action
+
     def do(
         self,
         action: UnitCommand,
@@ -759,7 +990,6 @@ class BotAI(DistanceCalculation):
             # worker can be None if all are dead
             if worker:
                 self.do(worker.move(self.game_info.map_center))
-
 
         :param action:
         :param subtract_cost:
@@ -936,6 +1166,7 @@ class BotAI(DistanceCalculation):
         self.supply_left: int = self.supply_cap - self.supply_used
 
         if self.race == Race.Zerg:
+            # Larva count does not seem to be reliable at all
             self.larva_count: int = state.common.larva_count
             # Workaround Zerg supply rounding bug
             self._correct_zerg_supply()
@@ -961,6 +1192,9 @@ class BotAI(DistanceCalculation):
         self.workers: Units = Units([], self)
         self.townhalls: Units = Units([], self)
         self.gas_buildings: Units = Units([], self)
+        self.larva: Units = Units([], self)
+        self.techlab_tags: Set[int] = set()
+        self.reactor_tags: Set[int] = set()
 
         for unit in self.state.observation_raw.units:
             if unit.is_blip:
@@ -999,10 +1233,26 @@ class BotAI(DistanceCalculation):
                             self.townhalls.append(unit_obj)
                         elif unit_id == race_gas[self.race]:
                             self.gas_buildings.append(unit_obj)
+                        elif unit_id in {
+                            UnitTypeId.TECHLAB,
+                            UnitTypeId.BARRACKSTECHLAB,
+                            UnitTypeId.FACTORYTECHLAB,
+                            UnitTypeId.STARPORTTECHLAB,
+                        }:
+                            self.techlab_tags.add(unit_obj.tag)
+                        elif unit_id in {
+                            UnitTypeId.REACTOR,
+                            UnitTypeId.BARRACKSREACTOR,
+                            UnitTypeId.FACTORYREACTOR,
+                            UnitTypeId.STARPORTREACTOR,
+                        }:
+                            self.reactor_tags.add(unit_obj.tag)
                     else:
                         self.units.append(unit_obj)
                         if unit_id == race_worker[self.race]:
                             self.workers.append(unit_obj)
+                        elif unit_id == UnitTypeId.LARVA:
+                            self.larva.append(unit_obj)
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
                     if unit_obj.is_structure:
