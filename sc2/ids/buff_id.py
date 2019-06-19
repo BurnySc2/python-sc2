@@ -297,6 +297,10 @@ class BuffId(enum.Enum):
     INHIBITORZONETEMPORALFIELD = 289
 
 
+    def __repr__(self):
+        return f"BuffId.{self.name}"
+
+
 for item in BuffId:
     assert not item.name in globals()
     globals()[item.name] = item
