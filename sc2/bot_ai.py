@@ -737,7 +737,8 @@ class BotAI(DistanceCalculation):
     def train(
         self, unit_type: UnitTypeId, amount: int = 1, closest_to: Point2 = None, train_only_idle_buildings: bool = True
     ) -> int:
-        """ Trains a specified number of units. Trains only one if not specified.
+        """ Trains a specified number of units. Trains only one if amount is not specified.
+        Warning: currently has issues with warp gate warp ins
 
         Example Zerg::
 
@@ -846,6 +847,35 @@ class BotAI(DistanceCalculation):
                     return trained_amount
         return trained_amount
 
+    def structure_type_build_progress(self, structure_type: Union[UnitTypeId, int]) -> float:
+        """
+        Checks the build progress of a structure type
+
+        Example::
+
+            # Assuming you have one barracks building at 0.5 build progress:
+            progress = self.structure_type_build_progress(UnitTypeId.BARRACKS)
+            print(progress)
+            # This should print out 0.5
+
+        :param structure_type:
+        """
+        if isinstance(structure_type, int):
+            structure_type_value = structure_type
+        else:
+            structure_type_value = structure_type.value
+
+        return_value = 0
+        for structure in self.structures:
+            structure_data = self._game_data.units[structure._proto.unit_type]
+            for tech_alias in list(structure_data._proto.tech_alias) + [structure._proto.unit_type]:
+                if tech_alias == structure_type_value:
+                    if structure.build_progress == 1:
+                        return 1
+                    elif return_value < structure.build_progress:
+                        return_value = structure.build_progress
+        return return_value
+
     def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:
         """ Returns the tech requirement progress for a specific building
 
@@ -865,17 +895,69 @@ class BotAI(DistanceCalculation):
         unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
         if not unit_info_id_value:
             return 1
-        return_value = 0
+        return self.structure_type_build_progress(unit_info_id_value)
+
+    def research(self, upgrade_type: UpgradeId) -> bool:
+        """
+        Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).
+
+        Example::
+
+            # Try to research zergling movement speed if we can afford it
+            # and if at least one pool is at build_progress == 1
+            # and we are not researching it yet
+            if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(UpgradeId.ZERGLINGMOVEMENTSPEED):
+                spawning_pools_ready = self.structures(UnitTypeId.SPAWNINGPOOL).ready
+                if spawning_pools_ready:
+                    self.research(UpgradeId.ZERGLINGMOVEMENTSPEED)
+
+        :param upgrade_type:
+        """
+        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
+        from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+
+        assert (
+            upgrade_type in UPGRADE_RESEARCHED_FROM
+        ), f"Could not find upgrade {upgrade_type} in 'research from'-dictionary"
+
+        # Not affordable
+        if not self.can_afford(upgrade_type):
+            return False
+
+        research_structure_types: UnitTypeId = UPGRADE_RESEARCHED_FROM[upgrade_type]
+        # Convert to a set
+        # research_ability: AbilityId = RESEARCH_INFO[research_structure_types][upgrade_type]["ability"]
+        required_tech_building: Optional[UnitTypeId] = RESEARCH_INFO[research_structure_types][upgrade_type].get(
+            "required_building", None
+        )
+
+        requirement_met = (
+            required_tech_building is None or self.structure_type_build_progress(required_tech_building) == 1
+        )
+        # Requirement not met
+        if not requirement_met:
+            return False
+
+        is_protoss = self.race == Race.Protoss
+
+        equiv_structures = {
+            UnitTypeId.GREATERSPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
+            UnitTypeId.HIVE: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
+        }
+        research_structure_types: Set[UnitTypeId] = equiv_structures.get(
+            research_structure_types, {research_structure_types}
+        )
+
+        structure: Unit
         for structure in self.structures:
-            structure_data = self._game_data.units[structure._proto.unit_type]
-            for tech_alias in list(structure_data._proto.tech_alias) + [structure._proto.unit_type]:
-                if tech_alias == unit_info_id_value:
-                    if structure.build_progress == 1:
-                        return 1
-                    elif return_value < structure.build_progress:
-                        return_value = structure.build_progress
-        return return_value
-      
+            if (
+                structure.type_id in research_structure_types
+                and structure.is_idle
+                and (not is_protoss or structure.is_powered)
+            ):
+                successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
+                return successful_action
+
     def do(
         self,
         action: UnitCommand,
