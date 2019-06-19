@@ -8,7 +8,7 @@ from ..ids.upgrade_id import UpgradeId
 # from ..ids.buff_id import BuffId
 # from ..ids.effect_id import EffectId
 
-from typing import Dict, List, Union
+from typing import Dict, List, Set, Union
 
 TRAIN_INFO: Dict[UnitTypeId, Dict[UnitTypeId, Union[AbilityId, bool, UnitTypeId]]] = {
     UnitTypeId.COMMANDCENTER: {

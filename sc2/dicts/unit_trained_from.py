@@ -8,7 +8,7 @@ from ..ids.upgrade_id import UpgradeId
 # from ..ids.buff_id import BuffId
 # from ..ids.effect_id import EffectId
 
-from typing import Dict, List, Union
+from typing import Dict, List, Set, Union
 
 UNIT_TRAINED_FROM: Dict[UnitTypeId, UnitTypeId] = {
     UnitTypeId.SCV: {
@@ -80,12 +80,12 @@ UNIT_TRAINED_FROM: Dict[UnitTypeId, UnitTypeId] = {
     UnitTypeId.CYBERNETICSCORE: {UnitTypeId.PROBE},
     UnitTypeId.SHIELDBATTERY: {UnitTypeId.PROBE},
     UnitTypeId.LAIR: {UnitTypeId.HATCHERY},
-    UnitTypeId.QUEEN: {UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY},
+    UnitTypeId.QUEEN: {UnitTypeId.HATCHERY, UnitTypeId.HIVE, UnitTypeId.LAIR},
     UnitTypeId.CREEPTUMOR: {
-        UnitTypeId.CREEPTUMOR,
-        UnitTypeId.QUEEN,
-        UnitTypeId.CREEPTUMORBURROWED,
         UnitTypeId.CREEPTUMORQUEEN,
+        UnitTypeId.CREEPTUMOR,
+        UnitTypeId.CREEPTUMORBURROWED,
+        UnitTypeId.QUEEN,
     },
     UnitTypeId.GREATERSPIRE: {UnitTypeId.SPIRE},
     UnitTypeId.NYDUSCANAL: {UnitTypeId.NYDUSNETWORK},
@@ -121,6 +121,6 @@ UNIT_TRAINED_FROM: Dict[UnitTypeId, UnitTypeId] = {
     UnitTypeId.CORRUPTOR: {UnitTypeId.LARVA},
     UnitTypeId.VIPER: {UnitTypeId.LARVA},
     UnitTypeId.SWARMHOSTMP: {UnitTypeId.LARVA},
-    UnitTypeId.LOCUSTMPFLYING: {UnitTypeId.SWARMHOSTBURROWEDMP, UnitTypeId.SWARMHOSTMP},
+    UnitTypeId.LOCUSTMPFLYING: {UnitTypeId.SWARMHOSTMP, UnitTypeId.SWARMHOSTBURROWEDMP},
     UnitTypeId.ORACLESTASISTRAP: {UnitTypeId.ORACLE},
 }
