@@ -52,6 +52,7 @@ class BotAI(DistanceCalculation):
         self.watchtowers: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
+        self.larva: Units = Units([], self)
         self.minerals: int = None
         self.vespene: int = None
         self.supply_army: Union[float, int] = None
@@ -238,7 +239,7 @@ class BotAI(DistanceCalculation):
         self.supply_left -= correction
 
     async def get_available_abilities(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool=False
+        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
         """ Returns available abilities of one or more units. Right know only checks cooldown, energy cost, and whether the ability has been researched.
         Example usage:
@@ -449,7 +450,7 @@ class BotAI(DistanceCalculation):
         else:
             cost = self._game_data.calculate_ability_cost(item_id)
 
-        return CanAffordWrapper(cost.minerals <= self.minerals, cost.vespene <= self.vespene, enough_supply)
+        return cost.minerals <= self.minerals and cost.vespene <= self.vespene and enough_supply
 
     async def can_cast(
         self,
@@ -681,6 +682,53 @@ class BotAI(DistanceCalculation):
         self.do(unit.build(building, p), subtract_cost=True)
         return True
 
+    def train(
+        self, unit_type: UnitTypeId, amount: int = 1, closest_to: Point2 = None, train_only_idle_buildings: bool = False
+    ) -> int:
+        from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
+        from sc2.dicts.unit_train_build_abilities import TRAIN_INFO
+
+        trained_amount = 0
+        # Tech requirement not met
+        if self.tech_requirement_progress(unit_type) < 0:
+            return trained_amount
+        # Not affordable
+        if not self.can_afford(unit_type):
+            return trained_amount
+        train_structure_type: Set[UnitTypeId] = UNIT_TRAINED_FROM[unit_type]
+        train_structures = self.structures if self.race != Race.Zerg else self.structures | self.larva
+        structure: Unit
+        # TODO: if unit has techlab requirement, only build from structures with techlab
+        # TODO: if unit is made from rax/fact/starport but doesnt require techlab: build first from reactor, then naked, then techlab
+        for structure in train_structures:
+            if structure.type_id in train_structure_type and structure.build_progress == 1:
+                successfully_trained = self.do(
+                    structure.train(unit_type), subtract_cost=True, subtract_supply=True, can_afford_check=True
+                )
+                if successfully_trained:
+                    trained_amount += 1
+                    if trained_amount == amount:
+                        return trained_amount
+                else:
+                    return trained_amount
+        return trained_amount
+
+    def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:
+        """ Returns the tech requirement progress for a specific building, e.g. if supply_depot is at build_progress 0.5, this function returns 0.5 if the argument is BARRACKS """
+        unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
+        if not unit_info_id_value:
+            return 1
+        return_value = 0
+        for structure in self.structures:
+            structure_data = self._game_data.units[structure._proto.unit_type]
+            for tech_alias in list(structure_data._proto.tech_alias) + [structure._proto.unit_type]:
+                if tech_alias == unit_info_id_value:
+                    if structure.build_progress == 1:
+                        return 1
+                    elif return_value < structure.build_progress:
+                        return_value = structure.build_progress
+        return return_value
+
     def do(self, action, subtract_cost=False, subtract_supply=False, can_afford_check=False):
         """
         :param action:
@@ -853,6 +901,7 @@ class BotAI(DistanceCalculation):
         self.supply_left: int = self.supply_cap - self.supply_used
 
         if self.race == Race.Zerg:
+            # Larva count does not seem to be reliable at all
             self.larva_count: int = state.common.larva_count
             # Workaround Zerg supply rounding bug
             self._correct_zerg_supply()
@@ -878,6 +927,7 @@ class BotAI(DistanceCalculation):
         self.workers: Units = Units([], self)
         self.townhalls: Units = Units([], self)
         self.gas_buildings: Units = Units([], self)
+        self.larva: Units = Units([], self)
 
         for unit in self.state.observation_raw.units:
             if unit.is_blip:
@@ -920,6 +970,8 @@ class BotAI(DistanceCalculation):
                         self.units.append(unit_obj)
                         if unit_id == race_worker[self.race]:
                             self.workers.append(unit_obj)
+                        elif unit_id == UnitTypeId.LARVA:
+                            self.larva.append(unit_obj)
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
                     if unit_obj.is_structure:
