@@ -50,6 +50,7 @@ warnings.simplefilter("once")
 
 if TYPE_CHECKING:
     from .bot_ai import BotAI
+    from .game_data import AbilityData
 
 
 class UnitOrder:
@@ -61,7 +62,7 @@ class UnitOrder:
             proto.progress,
         )
 
-    def __init__(self, ability, target, progress=None):
+    def __init__(self, ability: AbilityData, target, progress: float = None):
         """
         :param ability:
         :param target:

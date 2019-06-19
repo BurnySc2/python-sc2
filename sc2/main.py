@@ -121,10 +121,15 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
             state = await client.observation()
             # check game result every time we get the observation
             if client._game_result:
-                await ai.on_end(client._game_result[player_id])
+                try:
+                    await ai.on_end(client._game_result[player_id])
+                except TypeError as error:
+                    # print(f"caught type error {error}")
+                    # print(f"return {client._game_result[player_id]}")
+                    return client._game_result[player_id]
                 return client._game_result[player_id]
             gs = GameState(state.observation)
-            logger.debug(f"Score: {gs.score.summary}")
+            logger.debug(f"Score: {gs.score.score}")
 
             if game_time_limit and (gs.game_loop * 0.725 * (1 / 16)) > game_time_limit:
                 await ai.on_end(Result.Tie)
@@ -202,7 +207,12 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
             logger.exception(f"AI step threw an error")  # DO NOT EDIT!
             logger.error(f"Error: {e}")
             logger.error(f"Resigning due to previous error")
-            await ai.on_end(Result.Defeat)
+            try:
+                await ai.on_end(Result.Defeat)
+            except TypeError as error:
+                # print(f"caught type error {error}")
+                # print(f"return {Result.Defeat}")
+                return Result.Defeat
             return Result.Defeat
 
         logger.debug(f"Running AI step: done")

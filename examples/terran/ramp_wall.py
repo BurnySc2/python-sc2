@@ -49,7 +49,7 @@ class RampWallBot(sc2.BotAI):
         # If you prefer to have the barracks in the middle without room for addons, use the following instead
         # barracks_placement_position = self.main_base_ramp.barracks_in_middle
 
-        depots = self.structures(SUPPLYDEPOT) | self.structures(SUPPLYDEPOTLOWERED)
+        depots = self.structures.of_type({SUPPLYDEPOT, SUPPLYDEPOTLOWERED})
 
         # Draw ramp points
         self.draw_ramp_points()

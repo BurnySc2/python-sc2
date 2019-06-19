@@ -116,7 +116,7 @@ class Units(list):
         return random.choice(self)
 
     def random_or(self, other: any) -> Unit:
-        return random.choice(self) if self.exists else other
+        return random.choice(self) if self else other
 
     def random_group_of(self, n: int) -> Units:
         """ Returns self if n >= self.amount. """
