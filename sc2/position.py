@@ -179,12 +179,6 @@ class Point2(Pointlike):
     def offset(self, off):
         return Point2((self[0] + off[0], self[1] + off[1]))
 
-    def distance2_to(self, other: Point2):
-        """Squared distance to a point.
-        :param other: """
-        assert isinstance(other, Point2), f"other is not of type Point2"
-        return (self[0] - other[0]) ** 2 + (self[1] - other[1]) ** 2
-
     def random_on_distance(self, distance):
         if isinstance(distance, (tuple, list)):  # interval
             distance = distance[0] + random.random() * (distance[1] - distance[0])

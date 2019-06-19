@@ -330,30 +330,29 @@ class Units(list):
         # example: self.enemy_units.exclude_type([OVERLORD])
         if isinstance(other, UnitTypeId):
             other = {other}
-        if isinstance(other, list):
+        elif isinstance(other, list):
             other = set(other)
         return self.filter(lambda unit: unit.type_id not in other)
 
-    def same_tech(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
+    def same_tech(self, other: Set[UnitTypeId]) -> Units:
         """ Usage:
         'self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)' or 'self.townhalls.same_tech(UnitTypeId.ORBITALCOMMAND)'
         returns all CommandCenter, CommandCenterFlying, OrbitalCommand, OrbitalCommandFlying, PlanetaryFortress
         This also works with a set/list/dict parameter, e.g. 'self.structures.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})'
         Untested: This should return the equivalents for Hatchery, WarpPrism, Observer, Overseer, SupplyDepot and others
         """
-        if isinstance(other, UnitTypeId):
-            other = {other}
-        tech_alias_types = set(other)
+        assert isinstance(other, set), (
+            f"Please use a set as this filter function is already fairly slow. For example"
+            + " 'self.units.same_tech({UnitTypeId.LAIR})'"
+        )
+        tech_alias_types: Set[int] = {u.value for u in other}
         unit_data = self._bot_object._game_data.units
         for unitType in other:
-            tech_alias = unit_data[unitType.value].tech_alias
-            if tech_alias:
-                for same in tech_alias:
-                    tech_alias_types.add(same)
+            for same in unit_data[unitType.value]._proto.tech_alias:
+                tech_alias_types.add(same)
         return self.filter(
-            lambda unit: unit.type_id in tech_alias_types
-            or unit._type_data.tech_alias is not None
-            and any(same in tech_alias_types for same in unit._type_data.tech_alias)
+            lambda unit: unit._proto.unit_type in tech_alias_types
+            or any(same in tech_alias_types for same in unit._type_data._proto.tech_alias)
         )
 
     def same_unit(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
@@ -367,16 +366,14 @@ class Units(list):
         """
         if isinstance(other, UnitTypeId):
             other = {other}
-        unit_alias_types = set(other)
+        unit_alias_types: Set[int] = {u.value for u in other}
         unit_data = self._bot_object._game_data.units
         for unitType in other:
-            unit_alias = unit_data[unitType.value].unit_alias
-            if unit_alias:
-                unit_alias_types.add(unit_alias)
+            unit_alias_types.add(unit_data[unitType.value]._proto.unit_alias)
+        unit_alias_types.discard(0)
         return self.filter(
-            lambda unit: unit.type_id in unit_alias_types
-            or unit._type_data.unit_alias is not None
-            and unit._type_data.unit_alias in unit_alias_types
+            lambda unit: unit._proto.unit_type in unit_alias_types
+            or unit._type_data._proto.unit_alias in unit_alias_types
         )
 
     @property
@@ -384,13 +381,12 @@ class Units(list):
         """ Returns the central point of all units in this list """
         assert self, f"Units object is empty"
         amount = self.amount
-        pos = Point2(
+        return Point2(
             (
                 sum(unit.position_tuple[0] for unit in self) / amount,
                 sum(unit.position_tuple[1] for unit in self) / amount,
             )
         )
-        return pos
 
     @property
     def selected(self) -> Units:

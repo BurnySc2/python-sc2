@@ -70,6 +70,7 @@ class ZergRushBot(sc2.BotAI):
                     self.do(self.workers.random.build(UnitTypeId.HATCHERY, pos), subtract_cost=True)
                     break
 
+
         if self.can_afford(UnitTypeId.DRONE) and self.supply_workers < 16:
             self.train(UnitTypeId.DRONE)
 
