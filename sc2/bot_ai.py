@@ -101,6 +101,16 @@ class BotAI(DistanceCalculation):
         """ See game_info.py """
         return self._game_info
 
+    @property
+    def game_data(self) -> GameData:
+        """ See game_data.py """
+        return self._game_data
+
+    @property
+    def client(self) -> Client:
+        """ See client.py """
+        return self._client
+
     def alert(self, alert_code: Alert) -> bool:
         """
         Check if alert is triggered in the current step.
@@ -142,6 +152,10 @@ class BotAI(DistanceCalculation):
 
     @property
     def start_location(self) -> Point2:
+        """
+        Returns the spawn location of the bot, using the position of the first created townhall.
+        This will be None if the bot is run on an arcade or custom map that does not feature townhalls at game start.
+        """
         return self._game_info.player_start_location
 
     @property
