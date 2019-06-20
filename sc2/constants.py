@@ -230,9 +230,12 @@ FakeEffectID: Dict[int, str] = {
     UnitTypeId.FORCEFIELD.value: "FORCEFIELD",
 }
 
+def return_NOTAUNIT():
+    # NOTAUNIT = 0
+    return NOTAUNIT
 
 TERRAN_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
-    list,
+    return_NOTAUNIT,
     {
         MISSILETURRET: ENGINEERINGBAY,
         SENSORTOWER: ENGINEERINGBAY,
@@ -252,7 +255,7 @@ TERRAN_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
     },
 )
 PROTOSS_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
-    list,
+    return_NOTAUNIT,
     {
         PHOTONCANNON: FORGE,
         CYBERNETICSCORE: GATEWAY,
@@ -276,7 +279,7 @@ PROTOSS_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
     },
 )
 ZERG_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
-    list,
+    return_NOTAUNIT,
     {
         ZERGLING: SPAWNINGPOOL,
         QUEEN: SPAWNINGPOOL,
