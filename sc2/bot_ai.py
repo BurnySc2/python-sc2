@@ -7,7 +7,15 @@ from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from .cache import property_cache_forever, property_cache_once_per_frame
-from .constants import FakeEffectID, abilityid_to_unittypeid, geyser_ids, mineral_ids
+from .constants import (
+    FakeEffectID,
+    abilityid_to_unittypeid,
+    geyser_ids,
+    mineral_ids,
+    TERRAN_TECH_REQUIREMENT,
+    PROTOSS_TECH_REQUIREMENT,
+    ZERG_TECH_REQUIREMENT,
+)
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
@@ -869,10 +877,14 @@ class BotAI(DistanceCalculation):
 
         :param structure_type:
         """
+        assert isinstance(
+            structure_type, (int, UnitTypeId)
+        ), f"Needs to be int or UnitTypeId, but was: {type(structure_type)}"
         if isinstance(structure_type, int):
             structure_type_value = structure_type
         else:
             structure_type_value = structure_type.value
+        assert structure_type_value, f"structure_type can not be 0 or NOTAUNIT, but was: {structure_type_value}"
 
         return_value = 0
         for structure in self.structures:
@@ -901,8 +913,15 @@ class BotAI(DistanceCalculation):
             print(tech_requirement) # Prints 1 because even though the type id of the flying factory is different, it still has build progress of 1 and thus tech requirement is completed
 
         :param structure_type: """
-        unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
-        if not unit_info_id_value:
+        race_dict = {
+            Race.Protoss: PROTOSS_TECH_REQUIREMENT,
+            Race.Terran: TERRAN_TECH_REQUIREMENT,
+            Race.Zerg: ZERG_TECH_REQUIREMENT,
+        }
+        unit_info_id_value = race_dict[self.race][structure_type].value
+        # The following line is unrelaible for ghost / thor as they return 0 which is incorrect
+        # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
+        if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
         return self.structure_type_build_progress(unit_info_id_value)
 
@@ -934,7 +953,6 @@ class BotAI(DistanceCalculation):
             return False
 
         research_structure_types: UnitTypeId = UPGRADE_RESEARCHED_FROM[upgrade_type]
-        # Convert to a set
         # research_ability: AbilityId = RESEARCH_INFO[research_structure_types][upgrade_type]["ability"]
         required_tech_building: Optional[UnitTypeId] = RESEARCH_INFO[research_structure_types][upgrade_type].get(
             "required_building", None
@@ -953,6 +971,8 @@ class BotAI(DistanceCalculation):
             UnitTypeId.GREATERSPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
             UnitTypeId.HIVE: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
         }
+        # Convert to a set, or equivalent structures are chosen
+        # Overlord speed upgrade can be researched from hatchery, lair or hive
         research_structure_types: Set[UnitTypeId] = equiv_structures.get(
             research_structure_types, {research_structure_types}
         )
