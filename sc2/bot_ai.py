@@ -78,8 +78,9 @@ class BotAI(DistanceCalculation):
         self.larva_count: int = None
         self.actions: List[UnitCommand] = []
         self.blips: Set[Blip] = set()
-        self._units_previous_map: dict = dict()
-        self._structures_previous_map: dict = dict()
+        self._unit_tags_seen_this_game: Set[int] = set()
+        self._units_previous_map: Dict[int, Unit] = dict()
+        self._structures_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
         # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
         self._unit_tags_received_action: Set[int] = set()
@@ -1326,7 +1327,8 @@ class BotAI(DistanceCalculation):
 
     async def _issue_unit_added_events(self):
         for unit in self.units:
-            if unit.tag not in self._units_previous_map:
+            if unit.tag not in self._units_previous_map and unit.tag not in self._unit_tags_seen_this_game:
+                self._unit_tags_seen_this_game.add(unit.tag)
                 await self.on_unit_created(unit)
 
     async def _issue_upgrade_events(self):
