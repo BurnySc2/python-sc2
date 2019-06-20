@@ -991,6 +991,7 @@ class BotAI(DistanceCalculation):
             ):
                 successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
                 return successful_action
+        return False
 
     def do(
         self,

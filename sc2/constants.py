@@ -5,9 +5,9 @@ from .ids.effect_id import *
 from .ids.unit_typeid import *
 from .ids.upgrade_id import *
 from collections import defaultdict
-from typing import Dict, List
+from typing import Dict, Set
 
-mineral_ids = {
+mineral_ids: Set[int] = {
     RICHMINERALFIELD.value,
     RICHMINERALFIELD750.value,
     MINERALFIELD.value,
@@ -22,7 +22,7 @@ mineral_ids = {
     BATTLESTATIONMINERALFIELD.value,
     BATTLESTATIONMINERALFIELD750.value,
 }
-geyser_ids = {
+geyser_ids: Set[int] = {
     VESPENEGEYSER.value,
     SPACEPLATFORMGEYSER.value,
     RICHVESPENEGEYSER.value,
@@ -30,7 +30,7 @@ geyser_ids = {
     PURIFIERVESPENEGEYSER.value,
     SHAKURASVESPENEGEYSER.value,
 }
-transforming = {
+transforming: Dict[UnitTypeId, AbilityId] = {
     # terran structures
     BARRACKS: LAND_BARRACKS,
     BARRACKSFLYING: LAND_BARRACKS,
@@ -97,7 +97,7 @@ transforming = {
     ZERGLINGBURROWED: BURROWDOWN_ZERGLING,
 }
 # For now only contains units that cost supply, used in bot_ai.do()
-abilityid_to_unittypeid = {
+abilityid_to_unittypeid: Dict[AbilityId, UnitTypeId] = {
     # Protoss
     AbilityId.NEXUSTRAIN_PROBE: UnitTypeId.PROBE,
     AbilityId.GATEWAYTRAIN_ZEALOT: UnitTypeId.ZEALOT,
@@ -164,23 +164,23 @@ IS_MASSIVE = Attribute.Massive.value
 IS_PSIONIC = Attribute.Psionic.value
 UNIT_BATTLECRUISER = UnitTypeId.BATTLECRUISER
 UNIT_ORACLE = UnitTypeId.ORACLE
-TARGET_GROUND = {TargetType.Ground.value, TargetType.Any.value}
-TARGET_AIR = {TargetType.Air.value, TargetType.Any.value}
+TARGET_GROUND: Set[int] = {TargetType.Ground.value, TargetType.Any.value}
+TARGET_AIR: Set[int] = {TargetType.Air.value, TargetType.Any.value}
 TARGET_BOTH = TARGET_GROUND | TARGET_AIR
 IS_SNAPSHOT = DisplayType.Snapshot.value
 IS_VISIBLE = DisplayType.Visible.value
 IS_MINE = Alliance.Self.value
 IS_ENEMY = Alliance.Enemy.value
-IS_CLOAKED = {CloakState.Cloaked.value, CloakState.CloakedDetected.value, CloakState.CloakedAllied.value}
-IS_REVEALED = CloakState.CloakedDetected.value
-CAN_BE_ATTACKED = {CloakState.NotCloaked.value, CloakState.CloakedDetected.value}
-IS_CARRYING_MINERALS = {BuffId.CARRYMINERALFIELDMINERALS, BuffId.CARRYHIGHYIELDMINERALFIELDMINERALS}
-IS_CARRYING_VESPENE = {
+IS_CLOAKED: Set[int] = {CloakState.Cloaked.value, CloakState.CloakedDetected.value, CloakState.CloakedAllied.value}
+IS_REVEALED: Set[int] = CloakState.CloakedDetected.value
+CAN_BE_ATTACKED: Set[int] = {CloakState.NotCloaked.value, CloakState.CloakedDetected.value}
+IS_CARRYING_MINERALS: Set[BuffId] = {BuffId.CARRYMINERALFIELDMINERALS, BuffId.CARRYHIGHYIELDMINERALFIELDMINERALS}
+IS_CARRYING_VESPENE: Set[BuffId] = {
     BuffId.CARRYHARVESTABLEVESPENEGEYSERGAS,
     BuffId.CARRYHARVESTABLEVESPENEGEYSERGASPROTOSS,
     BuffId.CARRYHARVESTABLEVESPENEGEYSERGASZERG,
 }
-IS_CARRYING_RESOURCES = IS_CARRYING_MINERALS | IS_CARRYING_VESPENE
+IS_CARRYING_RESOURCES: Set[BuffId] = IS_CARRYING_MINERALS | IS_CARRYING_VESPENE
 IS_ATTACKING = {
     AbilityId.ATTACK,
     AbilityId.ATTACK_ATTACK,
@@ -192,7 +192,7 @@ IS_PATROLLING = AbilityId.PATROL_PATROL
 IS_GATHERING = AbilityId.HARVEST_GATHER
 IS_RETURNING = AbilityId.HARVEST_RETURN
 IS_COLLECTING = {IS_GATHERING, IS_RETURNING}
-IS_CONSTRUCTING_SCV = {
+IS_CONSTRUCTING_SCV: Set[AbilityId] = {
     AbilityId.TERRANBUILD_ARMORY,
     AbilityId.TERRANBUILD_BARRACKS,
     AbilityId.TERRANBUILD_BUNKER,
@@ -207,8 +207,8 @@ IS_CONSTRUCTING_SCV = {
     AbilityId.TERRANBUILD_STARPORT,
     AbilityId.TERRANBUILD_SUPPLYDEPOT,
 }
-IS_REPAIRING = {AbilityId.EFFECT_REPAIR, AbilityId.EFFECT_REPAIR_MULE, AbilityId.EFFECT_REPAIR_SCV}
-IS_DETECTOR = {
+IS_REPAIRING: Set[AbilityId] = {AbilityId.EFFECT_REPAIR, AbilityId.EFFECT_REPAIR_MULE, AbilityId.EFFECT_REPAIR_SCV}
+IS_DETECTOR: Set[UnitTypeId] = {
     UnitTypeId.OBSERVER,
     UnitTypeId.OBSERVERSIEGEMODE,
     UnitTypeId.RAVEN,
@@ -230,9 +230,11 @@ FakeEffectID: Dict[int, str] = {
     UnitTypeId.FORCEFIELD.value: "FORCEFIELD",
 }
 
+
 def return_NOTAUNIT():
     # NOTAUNIT = 0
     return NOTAUNIT
+
 
 TERRAN_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
     return_NOTAUNIT,
