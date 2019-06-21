@@ -1,4 +1,5 @@
 import json, os, subprocess
+import lzma, pickle
 from typing import Dict, Set, List, Union, Optional
 
 from sc2.ids.unit_typeid import UnitTypeId
@@ -6,6 +7,7 @@ from sc2.ids.ability_id import AbilityId
 from sc2.ids.buff_id import BuffId
 from sc2.ids.upgrade_id import UpgradeId
 from sc2.ids.effect_id import EffectId
+from sc2.game_data import GameData
 
 from collections import OrderedDict
 # from ordered_set import OrderedSet
@@ -390,6 +392,51 @@ def get_unit_abilities(data: dict):
     return all_unit_abilities
 
 
+def generate_unit_alias_dict(data: dict):
+    ability_data = data["Ability"]
+    unit_data = data["Unit"]
+    upgrade_data = data["Upgrade"]
+
+    path = os.path.dirname(__file__)
+    pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
+    pickled_files = os.listdir(pickled_files_folder_path)
+    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz"))
+    with lzma.open(os.path.join(pickled_files_folder_path, random_pickled_file), "rb") as f:
+        raw_game_data, raw_game_info, raw_observation = pickle.load(f)
+        game_data = GameData(raw_game_data.data)
+
+    all_unit_aliases: Dict[UnitTypeId, UnitTypeId] = OrderedDict2()
+    all_tech_aliases: Dict[UnitTypeId, Set[UnitTypeId]] = OrderedDict2()
+
+    entry: dict
+    for entry in unit_data:
+        unit_type_value = entry["id"]
+        unit_type = UnitTypeId(entry["id"])
+
+        current_unit_tech_aliases: Set[UnitTypeId] = OrderedSet2()
+
+        unit_alias: int = game_data.units[unit_type_value]._proto.unit_alias
+        if unit_alias:
+            # Might be 0 if it has no alias
+            unit_alias_unit_type_id = UnitTypeId(unit_alias)
+            all_unit_aliases[unit_type] = unit_alias_unit_type_id
+
+        tech_aliases: List[int] = game_data.units[unit_type_value]._proto.tech_alias
+
+        for tech_alias in tech_aliases:
+            # Might be 0 if it has no alias
+            unit_alias_unit_type_id = UnitTypeId(tech_alias)
+            current_unit_tech_aliases.add(unit_alias_unit_type_id)
+
+        if current_unit_tech_aliases:
+            all_tech_aliases[unit_type] = current_unit_tech_aliases
+
+    return all_unit_aliases, all_tech_aliases
+
+
+
+
+
 def main():
     path = os.path.dirname(__file__)
 
@@ -419,6 +466,11 @@ def main():
     # All unit abilities without requirements
     unit_abilities = get_unit_abilities(data=data)
     unit_abilities_dict_path = os.path.join(dicts_path, "unit_abilities.py")
+
+    # All unit abilities without requirements
+    unit_unit_alias, unit_tech_alias = generate_unit_alias_dict(data=data)
+    unit_unit_alias_dict_path = os.path.join(dicts_path, "unit_unit_alias.py")
+    unit_tech_alias_dict_path = os.path.join(dicts_path, "unit_tech_alias.py")
 
     file_name = os.path.basename(__file__)
     file_header = f"""
@@ -468,6 +520,20 @@ from typing import Dict, Set, Union
         dict_name="UNIT_ABILITIES",
         file_header=file_header,
         dict_type_annotation=": Dict[UnitTypeId, Set[AbilityId]]",
+    )
+    dump_dict_to_file(
+        unit_unit_alias,
+        unit_unit_alias_dict_path,
+        dict_name="UNIT_ABILITIES",
+        file_header=file_header,
+        dict_type_annotation=": Dict[UnitTypeId, UnitTypeId]",
+    )
+    dump_dict_to_file(
+        unit_tech_alias,
+        unit_tech_alias_dict_path,
+        dict_name="UNIT_ABILITIES",
+        file_header=file_header,
+        dict_type_annotation=": Dict[UnitTypeId, Set[UnitTypeId]]",
     )
 
     # print(unit_train_abilities)
