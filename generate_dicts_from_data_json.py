@@ -524,14 +524,14 @@ from typing import Dict, Set, Union
     dump_dict_to_file(
         unit_unit_alias,
         unit_unit_alias_dict_path,
-        dict_name="UNIT_ABILITIES",
+        dict_name="UNIT_UNIT_ALIAS",
         file_header=file_header,
         dict_type_annotation=": Dict[UnitTypeId, UnitTypeId]",
     )
     dump_dict_to_file(
         unit_tech_alias,
         unit_tech_alias_dict_path,
-        dict_name="UNIT_ABILITIES",
+        dict_name="UNIT_TECH_ALIAS",
         file_header=file_header,
         dict_type_annotation=": Dict[UnitTypeId, Set[UnitTypeId]]",
     )

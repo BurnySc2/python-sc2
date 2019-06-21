@@ -10,7 +10,7 @@ from ..ids.upgrade_id import UpgradeId
 
 from typing import Dict, Set, Union
 
-UNIT_ABILITIES: Dict[UnitTypeId, Set[UnitTypeId]] = {
+UNIT_TECH_ALIAS: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.BARRACKSFLYING: {UnitTypeId.BARRACKS},
     UnitTypeId.BARRACKSREACTOR: {UnitTypeId.REACTOR},
     UnitTypeId.BARRACKSTECHLAB: {UnitTypeId.TECHLAB},
