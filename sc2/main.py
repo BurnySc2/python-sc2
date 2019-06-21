@@ -91,11 +91,13 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         time_window = SlidingTimeWindow(int(step_time_limit.get("window_size", 1)))
         time_limit = float(step_time_limit.get("time_limit", None))
 
+    ai._initialize_variables()
+
     game_data = await client.get_game_data()
     game_info = await client.get_game_info()
 
     # This game_data will become self._game_data in botAI
-    ai._prepare_start(client, player_id, game_info, game_data)
+    ai._prepare_start(client, player_id, game_info, game_data, realtime=realtime)
     state = await client.observation()
     # check game result every time we get the observation
     if client._game_result:
@@ -103,7 +105,6 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         return client._game_result[player_id]
     gs = GameState(state.observation)
     proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
-    ai._initialize_variables()
     ai._prepare_step(gs, proto_game_info)
     ai._prepare_first_step()
     try:
