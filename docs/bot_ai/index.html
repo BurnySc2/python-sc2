@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="unit.py" href="../unit/index.html" />
-    <link rel="prev" title="Example documentation chapter.." href="../example_text/index.html" /> 
+    <link rel="prev" title="Introduction" href="../text_files/introduction.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,7 +29,7 @@
           <a href="../unit/index.html" title="unit.py"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../example_text/index.html" title="Example documentation chapter.."
+          <a href="../text_files/introduction.html" title="Introduction"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>
@@ -53,36 +53,41 @@
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.alert">
 <code class="sig-name descname">alert</code><span class="sig-paren">(</span><em class="sig-param">alert_code</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.alert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if alert is triggered in the current step.</p>
-<p>Example use:
-from sc2.data import Alert
+<dd><p>Check if alert is triggered in the current step.
+Possible alerts are listed here <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702">https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702</a></p>
+<p>Example use:</p>
+<blockquote>
+<div><p>from sc2.data import Alert
 if self.alert(Alert.AddOnComplete):</p>
 <blockquote>
 <div><p>print(“Addon Complete”)</p>
 </div></blockquote>
+</div></blockquote>
 <p>Alert codes:</p>
-<p>AlertError
-AddOnComplete
-BuildingComplete
-BuildingUnderAttack
-LarvaHatched
-MergeComplete
-MineralsExhausted
-MorphComplete
-MothershipComplete
-MULEExpired
-NuclearLaunchDetected
-NukeComplete
-NydusWormDetected
-ResearchComplete
-TrainError
-TrainUnitComplete
-TrainWorkerComplete
-TransformationComplete
-UnitUnderAttack
-UpgradeComplete
-VespeneExhausted
-WarpInComplete</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AlertError</span>
+<span class="n">AddOnComplete</span>
+<span class="n">BuildingComplete</span>
+<span class="n">BuildingUnderAttack</span>
+<span class="n">LarvaHatched</span>
+<span class="n">MergeComplete</span>
+<span class="n">MineralsExhausted</span>
+<span class="n">MorphComplete</span>
+<span class="n">MothershipComplete</span>
+<span class="n">MULEExpired</span>
+<span class="n">NuclearLaunchDetected</span>
+<span class="n">NukeComplete</span>
+<span class="n">NydusWormDetected</span>
+<span class="n">ResearchComplete</span>
+<span class="n">TrainError</span>
+<span class="n">TrainUnitComplete</span>
+<span class="n">TrainWorkerComplete</span>
+<span class="n">TransformationComplete</span>
+<span class="n">UnitUnderAttack</span>
+<span class="n">UpgradeComplete</span>
+<span class="n">VespeneExhausted</span>
+<span class="n">WarpInComplete</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>alert_code</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code>) – </p>
@@ -99,6 +104,12 @@ WarpInComplete</p>
 <dd><p>Returns a number of buildings or units already in progress, or if a
 worker is en route to build it. This also includes queued orders for
 workers and build queues of buildings.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amount_of_scv_in_production</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">)</span>
+<span class="n">amount_of_CCs_in_queue_and_production</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
+<span class="n">amount_of_lairs_morphing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">LAIR</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>unit_type</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p>
@@ -119,6 +130,10 @@ workers and build queues of buildings.</p>
 <span class="mi">1</span> <span class="c1"># completed</span>
 </pre></div>
 </div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stim_completion_percentage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending_upgrade</span><span class="p">(</span><span class="n">UpgradeId</span><span class="o">.</span><span class="n">STIMPACK</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>upgrade_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>) – </p>
@@ -131,7 +146,7 @@ workers and build queues of buildings.</p>
 
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.build">
-<em class="property">async </em><code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">building</em>, <em class="sig-param">near</em>, <em class="sig-param">max_distance=20</em>, <em class="sig-param">unit=None</em>, <em class="sig-param">random_alternative=True</em>, <em class="sig-param">placement_step=2</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.build" title="Permalink to this definition">¶</a></dt>
+<em class="property">async </em><code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">building</em>, <em class="sig-param">near</em>, <em class="sig-param">max_distance=20</em>, <em class="sig-param">build_worker=None</em>, <em class="sig-param">random_alternative=True</em>, <em class="sig-param">placement_step=2</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Not recommended as this function checks many positions if it “can place” on them until it found a valid position.
 Also if the given position is not placeable, this function tries to find a nearby position to place the structure. Then uses ‘self.do’ to give the worker the order to start the construction.</p>
 <dl class="field-list simple">
@@ -140,7 +155,7 @@ Also if the given position is not placeable, this function tries to find a nearb
 <li><p><strong>building</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
 <li><p><strong>near</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
-<li><p><strong>unit</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p></li>
+<li><p><strong>unit</strong> – </p></li>
 <li><p><strong>random_alternative</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 <li><p><strong>placement_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 </ul>
@@ -160,6 +175,12 @@ Also if the given position is not placeable, this function tries to find a nearb
 <span class="c1"># self.townhalls can be empty or there are no idle townhalls</span>
 <span class="k">if</span> <span class="n">cc</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Current state: we have 150 minerals and one command center and a barracks</span>
+<span class="n">can_afford_morph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span>
+<span class="c1"># contains &#39;True&#39; although the API reports that an orbital is worth 550 minerals, but the morph cost is only 150 minerals</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -258,6 +279,17 @@ Also if the given position is not placeable, this function tries to find a nearb
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.client">
+<em class="property">property </em><code class="sig-name descname">client</code><a class="headerlink" href="#sc2.bot_ai.BotAI.client" title="Permalink to this definition">¶</a></dt>
+<dd><p>See client.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../client/index.html#sc2.client.Client" title="sc2.client.Client">Client</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -386,6 +418,17 @@ resources (mineral field and vespene geyser) as value.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.game_data">
+<em class="property">property </em><code class="sig-name descname">game_data</code><a class="headerlink" href="#sc2.bot_ai.BotAI.game_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>See game_data.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../game_data/index.html#sc2.game_data.GameData" title="sc2.game_data.GameData"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameData</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -531,6 +574,7 @@ Caution: some x and y offset might be required, see ramp code:
 <dd><p>This function will be automatically run from main.py and triggers the following functions:
 - on_unit_created
 - on_unit_destroyed
+- on_building_construction_started
 - on_building_construction_complete
 - on_upgrade_complete</p>
 </dd></dl>
@@ -539,11 +583,11 @@ Caution: some x and y offset might be required, see ramp code:
 <dt id="sc2.bot_ai.BotAI.main_base_ramp">
 <em class="property">property </em><code class="sig-name descname">main_base_ramp</code><a class="headerlink" href="#sc2.bot_ai.BotAI.main_base_ramp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the Ramp instance of the closest main-ramp to start location.
-Look in game_info.py for more information</p>
+Look in game_info.py for more information about the Ramp class</p>
 <p>Example: See terran ramp wall bot</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Forwardref</span></code></p>
+<dd class="field-odd"><p><a class="reference internal" href="../game_info/index.html#sc2.game_info.Ramp" title="sc2.game_info.Ramp">Ramp</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -553,6 +597,11 @@ Look in game_info.py for more information</p>
 <em class="property">async </em><code class="sig-name descname">on_building_construction_complete</code><span class="sig-paren">(</span><em class="sig-param">unit</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_building_construction_complete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called when a building
 construction is completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -560,12 +609,22 @@ construction is completed.</p>
 <em class="property">async </em><code class="sig-name descname">on_building_construction_started</code><span class="sig-paren">(</span><em class="sig-param">unit</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_building_construction_started" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class.
 This function is called when a building construction has started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_end">
 <em class="property">async </em><code class="sig-name descname">on_end</code><span class="sig-paren">(</span><em class="sig-param">game_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_end" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called at the end of a game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game_result</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -581,12 +640,22 @@ At this point, game_data, game_info and the first iteration of game_state (self.
 <dd><p>You need to implement this function!
 Override this in your bot class.
 This function is called on every game step (looped in realtime mode).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>iteration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_unit_created">
 <em class="property">async </em><code class="sig-name descname">on_unit_created</code><span class="sig-paren">(</span><em class="sig-param">unit</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_created" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called when a unit is created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -595,12 +664,22 @@ This function is called on every game step (looped in realtime mode).</p>
 <dd><p>Override this in your bot class.
 Note that this function uses unit tags and not the unit objects
 because the unit does not exist any more.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit_tag</strong> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_upgrade_complete">
 <em class="property">async </em><code class="sig-name descname">on_upgrade_complete</code><span class="sig-paren">(</span><em class="sig-param">upgrade</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_upgrade_complete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>upgrade</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -677,6 +756,18 @@ because the unit does not exist any more.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.start_location">
+<em class="property">property </em><code class="sig-name descname">start_location</code><a class="headerlink" href="#sc2.bot_ai.BotAI.start_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the spawn location of the bot, using the position of the first created townhall.
+This will be None if the bot is run on an arcade or custom map that does not feature townhalls at game start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.structure_type_build_progress">
 <code class="sig-name descname">structure_type_build_progress</code><span class="sig-paren">(</span><em class="sig-param">structure_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.structure_type_build_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the build progress of a structure type</p>
@@ -705,6 +796,12 @@ because the unit does not exist any more.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Current state: supply depot is at 50% completion</span>
 <span class="n">tech_requirement</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tech_requirement_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tech_requirement</span><span class="p">)</span> <span class="c1"># Prints 0.5 because supply depot is half way done</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Current state: your bot has one hive, no lair</span>
+<span class="n">tech_requirement</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tech_requirement_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">HYDRALISKDEN</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tech_requirement</span><span class="p">)</span> <span class="c1"># Prints 1 because a hive exists even though only a lair is required</span>
 </pre></div>
 </div>
 <p>Example:</p>
@@ -761,11 +858,11 @@ Warning: currently has issues with warp gate warp ins</p>
 <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>Example distance to:</dt><dd><p># If you want to train based on distance to a certain point, you can use “closest_to”
-self.train(UnitTypeId.MARINE, 4, closest_to = self.game_info.map_center)</p>
-</dd>
-</dl>
+<p>Example distance to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you want to train based on distance to a certain point, you can use &quot;closest_to&quot;</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">closest_to</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">map_center</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -792,8 +889,8 @@ self.train(UnitTypeId.MARINE, 4, closest_to = self.game_info.map_center)</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../example_text/index.html"
-                        title="previous chapter">Example documentation chapter..</a></p>
+  <p class="topless"><a href="../text_files/introduction.html"
+                        title="previous chapter">Introduction</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../unit/index.html"
                         title="next chapter">unit.py</a></p>
@@ -828,7 +925,7 @@ self.train(UnitTypeId.MARINE, 4, closest_to = self.game_info.map_center)</p>
           <a href="../unit/index.html" title="unit.py"
              >next</a> |</li>
         <li class="right" >
-          <a href="../example_text/index.html" title="Example documentation chapter.."
+          <a href="../text_files/introduction.html" title="Introduction"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li> 
       </ul>
