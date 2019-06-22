@@ -95,6 +95,15 @@ Other information::
     # Locations of possible expansions
     self.expansion_locations: Dict[Point2, Units]
 
+    # Game data about units, abilities and upgrades (see game_data.py)
+    self.game_data: GameData
+
+    # Information about the map: pathing grid, building placement, terrain height, vision and creep are found here (see game_info.py)
+    self.game_info: GameInfo
+
+    # Other information that gets updated every step (see game_state.py)
+    self.state: GameState
+
     # Extra information
     self.realtime: bool # Displays if the game was started in realtime or not. In realtime, your bot only has limited time to execute on_step()
     self.time: float # The current game time in seconds
@@ -108,9 +117,9 @@ The game has started and now you want to build stuff with your mined resources. 
 Training a unit
 ^^^^^^^^^^^^^^^^
 
-Let's say you picked zerg for your bot and want to build a drone. Your larva is available in ``self.larva``. Your bot starts with 3 larva. To choose which of the larva you want to issue the command to train a drone, you need to pick one. The simples you can do is ``my_larva = self.larva.random``. Now you have to issue a command to the larva: morph to drone.
+Assuming you picked zerg for your bot and want to build a drone. Your larva is available in ``self.larva``. Your bot starts with 3 larva. To choose which of the larva you want to issue the command to train a drone, you need to pick one. The simplest you can do is ``my_larva = self.larva.random``. Now you have to issue a command to the larva: morph to drone.
 
-You can issue commands using the function ``self.do(action)``. You have to import ability ids before you can use them. ``from sc2.ids.ability_id import AbilityId``. Here, the action can be ``action = my_larva(AbilityId.LARVATRAIN_DRONE)``. In total, this results in::
+You can issue commands using the function ``self.do(action)``. You have to import ability ids before you can use them. ``from sc2.ids.ability_id import AbilityId``. Here, the action can be ``my_action = my_larva(AbilityId.LARVATRAIN_DRONE)``. In total, this results in::
 
     from sc2.ids.ability_id import AbilityId
 
@@ -154,7 +163,7 @@ So a more performant way to train as many drones as possible is::
 
 ``self.can_afford`` checks if you have enough resources and enough free supply to train the unit. ``self.do`` then automatically increases supply count and subtracts resource cost.
 
-Warning: You need to prevent issueing multiple commands to the same larva in the same frame (or iteration). The ``self.do`` function automatically adds the unit's tag to ``self.unit_tags_received_action``. This is a set with integers and it will be emptied every frame. So the final proper way to do it is::
+Warning: You need to prevent issuing multiple commands to the same larva in the same frame (or iteration). The ``self.do`` function automatically adds the unit's tag to ``self.unit_tags_received_action``. This is a set with integers and it will be emptied every frame. So the final proper way to do it is::
 
     for loop_larva in self.larva:
         if loop_larva.tag in self.unit_tags_received_action:
@@ -170,6 +179,7 @@ Building a structure
 ^^^^^^^^^^^^^^^^^^^^^
 
 Nearly the same procedure is when you want to build a structure. All that is needed is
+
 - Which building type should be built
 - Can you afford building it
 - Which worker should be used
@@ -184,7 +194,7 @@ Lastly, figuring out where to place the spawning pool. This can be as easy as::
     map_center = self.game_info.map_center
     placement_position = self.start_location.towards(map_center, distance=5)
 
-But then the question is, can you actually place it there? Is there creep, is it not blocked by a structure or enemy units? Building placement can be very difficult, if you don't want to place your buildings in your mineral line or want to leave enough place so that addons fit on the right (terran problems), or that your always leave 2x2 space so that your archons can walk won't get stuck (protoss and terran problems).
+But then the question is, can you actually place it there? Is there creep, is it not blocked by a structure or enemy units? Building placement can be very difficult, if you don't want to place your buildings in your mineral line or want to leave enough space so that addons fit on the right of the structure (terran problems), or that you always leave 2x2 space between your structures so that your archons won't get stuck (protoss and terran problems).
 
 A function that can test which position is valid for a spawning pool is ``self.find_placement``, which finds a position near the given position. This function can be slow::
 
@@ -203,12 +213,12 @@ So in total: To build a spawning pool in direction of the map center, it is reco
 
     if self.can_afford(UnitTypeId.SPAWNINGPOOL) and self.already_pending(UnitTypeId.SPAWNINGPOOL) + self.units.filter(lambda structure: structure.type_id == UnitTypeId.SPAWNINGPOOL and structure.is_ready).amount == 0:
         worker_candidates = self.workers.filter(lambda worker: (worker.is_collecting or worker.is_idle) and worker.tag not in self.unit_tags_received_action)
-        # worker_candidates can be empty
+        # Worker_candidates can be empty
         if worker_candidates:
             map_center = self.game_info.map_center
             position_towards_map_center = self.start_location.towards(map_center, distance=5)
             placement_position = await self.find_placement(UnitTypeId.SPAWNINGPOOL, near=position_towards_map_center, placement_step=1)
-            # placement_position can be None
+            # Placement_position can be None
             if placement_position:
                 build_worker = worker_candidates.closest_to(placement_position)
                 self.do(build_worker.build(UnitTypeId.SPAWNINGPOOL, placement_position, subtract_cost=True)
