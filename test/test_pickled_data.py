@@ -512,7 +512,7 @@ class TestClass:
         assert townhalls.of_type({UnitTypeId.COMMANDCENTER, UnitTypeId.COMMANDCENTERFLYING})
         assert not scvs.exclude_type(UnitTypeId.SCV)
         assert townhalls.exclude_type({UnitTypeId.COMMANDCENTERFLYING})
-        assert not scvs.same_tech(UnitTypeId.PROBE)
+        assert not scvs.same_tech({UnitTypeId.PROBE})
         assert townhalls.same_tech({UnitTypeId.ORBITALCOMMAND})
         assert scvs.same_unit(UnitTypeId.SCV)
         assert townhalls.same_unit({UnitTypeId.COMMANDCENTERFLYING})

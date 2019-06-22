@@ -7,7 +7,15 @@ from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from .cache import property_cache_forever, property_cache_once_per_frame
-from .constants import FakeEffectID, abilityid_to_unittypeid, geyser_ids, mineral_ids
+from .constants import (
+    FakeEffectID,
+    abilityid_to_unittypeid,
+    geyser_ids,
+    mineral_ids,
+    TERRAN_TECH_REQUIREMENT,
+    PROTOSS_TECH_REQUIREMENT,
+    ZERG_TECH_REQUIREMENT,
+)
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
@@ -25,7 +33,7 @@ from .units import Units
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from .game_info import GameInfo
+    from .game_info import GameInfo, Ramp
     from .client import Client
     from .unit_command import UnitCommand
     from .game_data import Cost
@@ -37,10 +45,12 @@ class BotAI(DistanceCalculation):
     EXPANSION_GAP_THRESHOLD = 15
 
     def _initialize_variables(self):
+        DistanceCalculation.__init__(self)
         # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/
         # The bot ID will stay the same each game so your bot can "adapt" to the opponent
-        DistanceCalculation.__init__(self)
         self.opponent_id: int = None
+        # This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)
+        self.realtime: bool = False
         self.all_units: Units = Units([], self)
         self.units: Units = Units([], self)
         self.workers: Units = Units([], self)
@@ -70,9 +80,12 @@ class BotAI(DistanceCalculation):
         self.larva_count: int = None
         self.actions: List[UnitCommand] = []
         self.blips: Set[Blip] = set()
-        self._units_previous_map: dict = dict()
-        self._structures_previous_map: dict = dict()
+        self._unit_tags_seen_this_game: Set[int] = set()
+        self._units_previous_map: Dict[int, Unit] = dict()
+        self._structures_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
+        # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
+        self.unit_tags_received_action: Set[int] = set()
 
     @property
     def time(self) -> float:
@@ -90,39 +103,51 @@ class BotAI(DistanceCalculation):
         """ See game_info.py """
         return self._game_info
 
+    @property
+    def game_data(self) -> GameData:
+        """ See game_data.py """
+        return self._game_data
+
+    @property
+    def client(self) -> Client:
+        """ See client.py """
+        return self._client
+
     def alert(self, alert_code: Alert) -> bool:
         """
         Check if alert is triggered in the current step.
+        Possible alerts are listed here https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702
 
         Example use:
-        from sc2.data import Alert
-        if self.alert(Alert.AddOnComplete):
-            print("Addon Complete")
 
-        Alert codes:
+            from sc2.data import Alert
+            if self.alert(Alert.AddOnComplete):
+                print("Addon Complete")
 
-        AlertError
-        AddOnComplete
-        BuildingComplete
-        BuildingUnderAttack
-        LarvaHatched
-        MergeComplete
-        MineralsExhausted
-        MorphComplete
-        MothershipComplete
-        MULEExpired
-        NuclearLaunchDetected
-        NukeComplete
-        NydusWormDetected
-        ResearchComplete
-        TrainError
-        TrainUnitComplete
-        TrainWorkerComplete
-        TransformationComplete
-        UnitUnderAttack
-        UpgradeComplete
-        VespeneExhausted
-        WarpInComplete
+        Alert codes::
+
+            AlertError
+            AddOnComplete
+            BuildingComplete
+            BuildingUnderAttack
+            LarvaHatched
+            MergeComplete
+            MineralsExhausted
+            MorphComplete
+            MothershipComplete
+            MULEExpired
+            NuclearLaunchDetected
+            NukeComplete
+            NydusWormDetected
+            ResearchComplete
+            TrainError
+            TrainUnitComplete
+            TrainWorkerComplete
+            TransformationComplete
+            UnitUnderAttack
+            UpgradeComplete
+            VespeneExhausted
+            WarpInComplete
 
         :param alert_code:
         """
@@ -131,6 +156,10 @@ class BotAI(DistanceCalculation):
 
     @property
     def start_location(self) -> Point2:
+        """
+        Returns the spawn location of the bot, using the position of the first created townhall.
+        This will be None if the bot is run on an arcade or custom map that does not feature townhalls at game start.
+        """
         return self._game_info.player_start_location
 
     @property
@@ -139,9 +168,9 @@ class BotAI(DistanceCalculation):
         return self._game_info.start_locations
 
     @property
-    def main_base_ramp(self) -> "Ramp":
+    def main_base_ramp(self) -> Ramp:
         """ Returns the Ramp instance of the closest main-ramp to start location.
-        Look in game_info.py for more information
+        Look in game_info.py for more information about the Ramp class
 
         Example: See terran ramp wall bot
         """
@@ -459,9 +488,17 @@ class BotAI(DistanceCalculation):
             if cc and self.can_afford(UnitTypeId.SCV):
                 self.do(cc.train(UnitTypeId.SCV))
 
+        Example::
+
+            # Current state: we have 150 minerals and one command center and a barracks
+            can_afford_morph = self.can_afford(UnitTypeId.ORBITALCOMMAND)
+            # contains 'True' although the API reports that an orbital is worth 550 minerals, but the morph cost is only 150 minerals
+
         :param item_id:
         :param check_supply_cost: """
         enough_supply = True
+        # TODO: check for morphing units (ravager, lurker, broodlord) that take up some supply
+        # TODO: check for upgrade levels that not the redirect ability is used
         if isinstance(item_id, UnitTypeId):
             unit = self._game_data.units[item_id.value]
             cost = self._game_data.calculate_ability_cost(unit.creation_ability)
@@ -470,6 +507,7 @@ class BotAI(DistanceCalculation):
         elif isinstance(item_id, UpgradeId):
             cost = self._game_data.upgrades[item_id.value].cost
         else:
+            # Is already AbilityId
             cost = self._game_data.calculate_ability_cost(item_id)
 
         return cost.minerals <= self.minerals and cost.vespene <= self.vespene and enough_supply
@@ -553,7 +591,8 @@ class BotAI(DistanceCalculation):
         if workers:
             for worker in workers.sorted_by_distance_to(pos).prefer_idle:
                 if (
-                    not worker.orders
+                    worker not in self.unit_tags_received_action
+                    and not worker.orders
                     or len(worker.orders) == 1
                     and worker.orders[0].ability.id in {AbilityId.MOVE, AbilityId.HARVEST_GATHER}
                 ):
@@ -651,6 +690,10 @@ class BotAI(DistanceCalculation):
             0 < x < 1 # researching
             1 # completed
 
+        Example::
+
+            stim_completion_percentage = self.already_pending_upgrade(UpgradeId.STIMPACK)
+
         :param upgrade_type:
         """
         assert isinstance(upgrade_type, UpgradeId), f"{upgrade_type} is no UpgradeId"
@@ -690,6 +733,12 @@ class BotAI(DistanceCalculation):
         worker is en route to build it. This also includes queued orders for
         workers and build queues of buildings.
 
+        Example::
+
+            amount_of_scv_in_production = self.already_pending(UnitTypeId.SCV)
+            amount_of_CCs_in_queue_and_production = self.already_pending(UnitTypeId.COMMANDCENTER)
+            amount_of_lairs_morphing = self.already_pending(UnitTypeId.LAIR)
+
         :param unit_type:
         """
 
@@ -705,7 +754,7 @@ class BotAI(DistanceCalculation):
         building: UnitTypeId,
         near: Union[Unit, Point2, Point3],
         max_distance: int = 20,
-        unit: Optional[Unit] = None,
+        build_worker: Optional[Unit] = None,
         random_alternative: bool = True,
         placement_step: int = 2,
     ) -> bool:
@@ -724,14 +773,17 @@ class BotAI(DistanceCalculation):
             near = near.position
         near = near.to2
 
+        if not self.can_afford(building):
+            return False
+
         p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
         if p is None:
             return False
 
-        unit = unit or self.select_build_worker(p)
-        if unit is None or not self.can_afford(building):
+        builder = build_worker or self.select_build_worker(p)
+        if builder is None:
             return False
-        self.do(unit.build(building, p), subtract_cost=True)
+        self.do(builder.build(building, p), subtract_cost=True)
         return True
 
     def train(
@@ -751,7 +803,8 @@ class BotAI(DistanceCalculation):
             # It should only queue 4 marines in the 2 idle barracks with reactors
             self.train(UnitTypeId.MARINE, 4)
 
-        Example distance to:
+        Example distance to::
+
             # If you want to train based on distance to a certain point, you can use "closest_to"
             self.train(UnitTypeId.MARINE, 4, closest_to = self.game_info.map_center)
 
@@ -793,8 +846,10 @@ class BotAI(DistanceCalculation):
         structure: Unit
         for structure in train_structures:
             if (
+                # If structure hasn't received an action/order this frame
+                structure.tag not in self.unit_tags_received_action
                 # If structure can train this unit at all
-                structure.type_id in train_structure_type
+                and structure.type_id in train_structure_type
                 # Structure has to be completed to be able to train
                 and structure.build_progress == 1
                 # If structure is protoss, it needs to be powered to train
@@ -860,10 +915,14 @@ class BotAI(DistanceCalculation):
 
         :param structure_type:
         """
+        assert isinstance(
+            structure_type, (int, UnitTypeId)
+        ), f"Needs to be int or UnitTypeId, but was: {type(structure_type)}"
         if isinstance(structure_type, int):
             structure_type_value = structure_type
         else:
             structure_type_value = structure_type.value
+        assert structure_type_value, f"structure_type can not be 0 or NOTAUNIT, but was: {structure_type_value}"
 
         return_value = 0
         for structure in self.structures:
@@ -887,13 +946,26 @@ class BotAI(DistanceCalculation):
 
         Example::
 
+            # Current state: your bot has one hive, no lair
+            tech_requirement = self.tech_requirement_progress(UnitTypeId.HYDRALISKDEN)
+            print(tech_requirement) # Prints 1 because a hive exists even though only a lair is required
+
+        Example::
+
             # Current state: One factory is flying and one is half way done
             tech_requirement = self.tech_requirement_progress(UnitTypeId.STARPORT)
             print(tech_requirement) # Prints 1 because even though the type id of the flying factory is different, it still has build progress of 1 and thus tech requirement is completed
 
         :param structure_type: """
-        unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
-        if not unit_info_id_value:
+        race_dict = {
+            Race.Protoss: PROTOSS_TECH_REQUIREMENT,
+            Race.Terran: TERRAN_TECH_REQUIREMENT,
+            Race.Zerg: ZERG_TECH_REQUIREMENT,
+        }
+        unit_info_id_value = race_dict[self.race][structure_type].value
+        # The following line is unrelaible for ghost / thor as they return 0 which is incorrect
+        # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
+        if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
         return self.structure_type_build_progress(unit_info_id_value)
 
@@ -925,7 +997,6 @@ class BotAI(DistanceCalculation):
             return False
 
         research_structure_types: UnitTypeId = UPGRADE_RESEARCHED_FROM[upgrade_type]
-        # Convert to a set
         # research_ability: AbilityId = RESEARCH_INFO[research_structure_types][upgrade_type]["ability"]
         required_tech_building: Optional[UnitTypeId] = RESEARCH_INFO[research_structure_types][upgrade_type].get(
             "required_building", None
@@ -944,6 +1015,8 @@ class BotAI(DistanceCalculation):
             UnitTypeId.GREATERSPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
             UnitTypeId.HIVE: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
         }
+        # Convert to a set, or equivalent structures are chosen
+        # Overlord speed upgrade can be researched from hatchery, lair or hive
         research_structure_types: Set[UnitTypeId] = equiv_structures.get(
             research_structure_types, {research_structure_types}
         )
@@ -951,12 +1024,18 @@ class BotAI(DistanceCalculation):
         structure: Unit
         for structure in self.structures:
             if (
-                structure.type_id in research_structure_types
+                # If structure hasn't received an action/order this frame
+                structure.tag not in self.unit_tags_received_action
+                # Structure can research this upgrade
+                and structure.type_id in research_structure_types
+                # Structure is idle
                 and structure.is_idle
+                # Structure belongs to protoss and is powered (near pylon)
                 and (not is_protoss or structure.is_powered)
             ):
                 successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
                 return successful_action
+        return False
 
     def do(
         self,
@@ -1013,6 +1092,7 @@ class BotAI(DistanceCalculation):
                 self.supply_left -= required_supply
                 # TODO: if unit created from larva: reduce larva count by 1
         self.actions.append(action)
+        self.unit_tags_received_action.add(action.unit.tag)
         return True
 
     async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
@@ -1024,12 +1104,6 @@ class BotAI(DistanceCalculation):
             return None
         if prevent_double:
             actions = list(filter(self.prevent_double_actions, actions))
-        # Cost was already reduced in self.do()
-        # for action in actions:
-        #     cost = self._game_data.calculate_ability_cost(action.ability)
-        #     self.minerals -= cost.minerals
-        #     self.vespene -= cost.vespene
-
         result = await self._client.actions(actions)
         return result
 
@@ -1127,13 +1201,22 @@ class BotAI(DistanceCalculation):
         pos = pos.position.to2.rounded
         return self.state.creep[pos] == 1
 
-    def _prepare_start(self, client, player_id, game_info, game_data):
-        """Ran until game start to set game and player data."""
+    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False):
+        """
+        Ran until game start to set game and player data.
+
+        :param client:
+        :param player_id:
+        :param game_info:
+        :param game_data:
+        :param realtime:
+        """
         self._client: Client = client
+        self.player_id: int = player_id
         self._game_info: GameInfo = game_info
         self._game_data: GameData = game_data
+        self.realtime: bool = realtime
 
-        self.player_id: int = player_id
         self.race: Race = Race(self._game_info.player_races[self.player_id])
 
         if len(self._game_info.player_races) == 2:
@@ -1146,6 +1229,10 @@ class BotAI(DistanceCalculation):
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
 
     def _prepare_step(self, state, proto_game_info):
+        """
+        :param state:
+        :param proto_game_info:
+        """
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # update pathing grid
@@ -1265,6 +1352,8 @@ class BotAI(DistanceCalculation):
         # Commit and clear bot actions
         await self._do_actions(self.actions)
         self.actions.clear()
+        # Clear set of unit tags that were given an order this frame
+        self.unit_tags_received_action.clear()
         # Commit debug queries
         await self._client._send_debug()
         return self.state.game_loop
@@ -1273,6 +1362,7 @@ class BotAI(DistanceCalculation):
         """ This function will be automatically run from main.py and triggers the following functions:
         - on_unit_created
         - on_unit_destroyed
+        - on_building_construction_started
         - on_building_construction_complete
         - on_upgrade_complete
         """
@@ -1283,7 +1373,8 @@ class BotAI(DistanceCalculation):
 
     async def _issue_unit_added_events(self):
         for unit in self.units:
-            if unit.tag not in self._units_previous_map:
+            if unit.tag not in self._units_previous_map and unit.tag not in self._unit_tags_seen_this_game:
+                self._unit_tags_seen_this_game.add(unit.tag)
                 await self.on_unit_created(unit)
 
     async def _issue_upgrade_events(self):
@@ -1312,26 +1403,36 @@ class BotAI(DistanceCalculation):
         Override this in your bot class.
         Note that this function uses unit tags and not the unit objects
         because the unit does not exist any more.
+
+        :param unit_tag:
         """
 
     async def on_unit_created(self, unit: Unit):
-        """ Override this in your bot class. This function is called when a unit is created. """
+        """ Override this in your bot class. This function is called when a unit is created.
+
+        :param unit: """
 
     async def on_building_construction_started(self, unit: Unit):
         """
         Override this in your bot class.
         This function is called when a building construction has started.
+
+        :param unit:
         """
 
     async def on_building_construction_complete(self, unit: Unit):
         """
         Override this in your bot class. This function is called when a building
         construction is completed.
+
+        :param unit:
         """
 
     async def on_upgrade_complete(self, upgrade: UpgradeId):
         """
         Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.
+
+        :param upgrade:
         """
 
     async def on_start(self):
@@ -1345,8 +1446,12 @@ class BotAI(DistanceCalculation):
         You need to implement this function!
         Override this in your bot class.
         This function is called on every game step (looped in realtime mode).
+
+        :param iteration:
         """
         raise NotImplementedError
 
     async def on_end(self, game_result: Result):
-        """ Override this in your bot class. This function is called at the end of a game. """
+        """ Override this in your bot class. This function is called at the end of a game.
+
+        :param game_result: """
