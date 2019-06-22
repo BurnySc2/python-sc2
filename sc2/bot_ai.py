@@ -85,7 +85,7 @@ class BotAI(DistanceCalculation):
         self._structures_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
         # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
-        self._unit_tags_received_action: Set[int] = set()
+        self.unit_tags_received_action: Set[int] = set()
 
     @property
     def time(self) -> float:
@@ -497,6 +497,8 @@ class BotAI(DistanceCalculation):
         :param item_id:
         :param check_supply_cost: """
         enough_supply = True
+        # TODO: check for morphing units (ravager, lurker, broodlord) that take up some supply
+        # TODO: check for upgrade levels that not the redirect ability is used
         if isinstance(item_id, UnitTypeId):
             unit = self._game_data.units[item_id.value]
             cost = self._game_data.calculate_ability_cost(unit.creation_ability)
@@ -589,7 +591,7 @@ class BotAI(DistanceCalculation):
         if workers:
             for worker in workers.sorted_by_distance_to(pos).prefer_idle:
                 if (
-                    worker not in self._unit_tags_received_action
+                    worker not in self.unit_tags_received_action
                     and not worker.orders
                     or len(worker.orders) == 1
                     and worker.orders[0].ability.id in {AbilityId.MOVE, AbilityId.HARVEST_GATHER}
@@ -845,7 +847,7 @@ class BotAI(DistanceCalculation):
         for structure in train_structures:
             if (
                 # If structure hasn't received an action/order this frame
-                structure.tag not in self._unit_tags_received_action
+                structure.tag not in self.unit_tags_received_action
                 # If structure can train this unit at all
                 and structure.type_id in train_structure_type
                 # Structure has to be completed to be able to train
@@ -1023,7 +1025,7 @@ class BotAI(DistanceCalculation):
         for structure in self.structures:
             if (
                 # If structure hasn't received an action/order this frame
-                structure.tag not in self._unit_tags_received_action
+                structure.tag not in self.unit_tags_received_action
                 # Structure can research this upgrade
                 and structure.type_id in research_structure_types
                 # Structure is idle
@@ -1090,7 +1092,7 @@ class BotAI(DistanceCalculation):
                 self.supply_left -= required_supply
                 # TODO: if unit created from larva: reduce larva count by 1
         self.actions.append(action)
-        self._unit_tags_received_action.add(action.unit.tag)
+        self.unit_tags_received_action.add(action.unit.tag)
         return True
 
     async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
@@ -1240,7 +1242,6 @@ class BotAI(DistanceCalculation):
         # Required for events, needs to be before self.units are initialized so the old units are stored
         self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
         self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
-        self._unit_tags_received_action: Set[int] = set()
 
         self._prepare_units()
         self.minerals: int = state.common.minerals
@@ -1351,6 +1352,8 @@ class BotAI(DistanceCalculation):
         # Commit and clear bot actions
         await self._do_actions(self.actions)
         self.actions.clear()
+        # Clear set of unit tags that were given an order this frame
+        self.unit_tags_received_action.clear()
         # Commit debug queries
         await self._client._send_debug()
         return self.state.game_loop
