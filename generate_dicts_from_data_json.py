@@ -10,6 +10,7 @@ from sc2.ids.effect_id import EffectId
 from sc2.game_data import GameData
 
 from collections import OrderedDict
+
 # from ordered_set import OrderedSet
 
 """
@@ -18,6 +19,14 @@ This script does the following:
 - Loop over all abilities, checking what unit they create and if it requires a placement position
 - Loop over all units, checking what abilities they have and which of those create units, and what tech requirements they have
 - Loop over all all upgrades and get their creation ability, which unit can research it and what building requirements there are
+- Loop over all units and get their unit and tech aliases
+
+Dentosals data.json
+https://github.com/Dentosal/sc2-techtree/blob/master/data/data.json
+
+json viewers:
+http://jsonviewer.stack.hu/
+https://jsonformatter.org/json-viewer
 """
 
 # Custom repr function so that the output is always the same and only changes when there were changes in the data.json tech tree file
@@ -397,6 +406,7 @@ def generate_unit_alias_dict(data: dict):
     unit_data = data["Unit"]
     upgrade_data = data["Upgrade"]
 
+    # Load pickled game data files
     path = os.path.dirname(__file__)
     pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
     pickled_files = os.listdir(pickled_files_folder_path)
@@ -434,7 +444,37 @@ def generate_unit_alias_dict(data: dict):
     return all_unit_aliases, all_tech_aliases
 
 
+def generate_redirect_abilities_dict(data: dict):
+    ability_data = data["Ability"]
+    unit_data = data["Unit"]
+    upgrade_data = data["Upgrade"]
 
+    # Load pickled game data files
+    path = os.path.dirname(__file__)
+    pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
+    pickled_files = os.listdir(pickled_files_folder_path)
+    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz"))
+    with lzma.open(os.path.join(pickled_files_folder_path, random_pickled_file), "rb") as f:
+        raw_game_data, raw_game_info, raw_observation = pickle.load(f)
+        game_data = GameData(raw_game_data.data)
+
+    all_redirect_abilities: Dict[AbilityId, AbilityId] = OrderedDict2()
+
+    entry: dict
+    for entry in ability_data:
+        ability_id_value: int = entry["id"]
+        try:
+            ability_id: AbilityId = AbilityId(ability_id_value)
+        except Exception as e:
+            print(f"Error with ability id value {ability_id_value}")
+            continue
+
+        generic_redirect_ability_value: int = game_data.abilities[ability_id_value]._proto.remaps_to_ability_id
+        if generic_redirect_ability_value:
+            # Might be 0 if it has no redirect ability
+            all_redirect_abilities[ability_id] = AbilityId(generic_redirect_ability_value)
+
+    return all_redirect_abilities
 
 
 def main():
@@ -467,10 +507,14 @@ def main():
     unit_abilities = get_unit_abilities(data=data)
     unit_abilities_dict_path = os.path.join(dicts_path, "unit_abilities.py")
 
-    # All unit abilities without requirements
+    # All unit_alias and tech_alias of a unit type
     unit_unit_alias, unit_tech_alias = generate_unit_alias_dict(data=data)
     unit_unit_alias_dict_path = os.path.join(dicts_path, "unit_unit_alias.py")
     unit_tech_alias_dict_path = os.path.join(dicts_path, "unit_tech_alias.py")
+
+    # All redirect (generic) abilities of abilities
+    all_redirect_abilities = generate_redirect_abilities_dict(data=data)
+    all_redirect_abilities_path = os.path.join(dicts_path, "generic_redirect_abilities.py")
 
     file_name = os.path.basename(__file__)
     file_header = f"""
@@ -534,6 +578,13 @@ from typing import Dict, Set, Union
         dict_name="UNIT_TECH_ALIAS",
         file_header=file_header,
         dict_type_annotation=": Dict[UnitTypeId, Set[UnitTypeId]]",
+    )
+    dump_dict_to_file(
+        all_redirect_abilities,
+        all_redirect_abilities_path,
+        dict_name="GENERIC_REDIRECT_ABILITIES",
+        file_header=file_header,
+        dict_type_annotation=": Dict[AbilityId, AbilityId]",
     )
 
     # print(unit_train_abilities)
