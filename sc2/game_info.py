@@ -18,9 +18,10 @@ class Ramp:
         """
         self._points: Set[Point2] = points
         self.__game_info = game_info
-        # tested by printing actual building locations vs calculated depot positions
+        # Tested by printing actual building locations vs calculated depot positions
         self.x_offset = 0.5
         self.y_offset = 0.5
+        # Can this be removed?
         self.cache = {}
 
     @property_immutable_cache

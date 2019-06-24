@@ -9,7 +9,7 @@ Welcome to python-sc2's documentation!
 .. toctree::
    :maxdepth: 2
 
-   example_text/index.rst
+   text_files/introduction.rst
    bot_ai/index.rst
    unit/index.rst
    units/index.rst

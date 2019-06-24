@@ -1258,6 +1258,10 @@ class AbilityId(enum.Enum):
     MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPRIGHTGREEN_CANCEL = 3800
 
 
+    def __repr__(self):
+        return f"AbilityId.{self.name}"
+
+
 for item in AbilityId:
     assert not item.name in globals()
     globals()[item.name] = item

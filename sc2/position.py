@@ -38,7 +38,7 @@ class Pointlike(tuple):
         """ Function used to not take the square root as the distances will stay proportionally the same.
         This is to speed up the sorting process.
 
-        :param p2:"""
+        :param p2: """
         return (self[0] - p2[0]) ** 2 + (self[1] - p2[1]) ** 2
 
     def is_closer_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:
@@ -178,12 +178,6 @@ class Point2(Pointlike):
 
     def offset(self, off):
         return Point2((self[0] + off[0], self[1] + off[1]))
-
-    def distance2_to(self, other: Point2):
-        """Squared distance to a point.
-        :param other: """
-        assert isinstance(other, Point2), f"other is not of type Point2"
-        return (self[0] - other[0]) ** 2 + (self[1] - other[1]) ** 2
 
     def random_on_distance(self, distance):
         if isinstance(distance, (tuple, list)):  # interval

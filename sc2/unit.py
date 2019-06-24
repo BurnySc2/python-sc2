@@ -50,6 +50,7 @@ warnings.simplefilter("once")
 
 if TYPE_CHECKING:
     from .bot_ai import BotAI
+    from .game_data import AbilityData
 
 
 class UnitOrder:
@@ -61,7 +62,7 @@ class UnitOrder:
             proto.progress,
         )
 
-    def __init__(self, ability, target, progress=None):
+    def __init__(self, ability: AbilityData, target, progress: float = None):
         """
         :param ability:
         :param target:
@@ -87,8 +88,8 @@ class Unit:
         self.cache = {}
 
     def __repr__(self) -> str:
-        """ Returns string of this form: PassengerUnit(name='SCV', tag=4396941328). """
-        return f"{self.__class__.__name__}(name={self.name !r}, tag={self.tag})"
+        """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
+        return f"Unit(name={self.name !r}, tag={self.tag})"
 
     @property_immutable_cache
     def type_id(self) -> UnitTypeId:
@@ -255,7 +256,7 @@ class Unit:
     def bonus_damage(self):
         """ Returns a tuple of form '(bonus damage, armor type)' if unit does 'bonus damage' against 'armor type'.
         Possible armor typs are: 'Light', 'Armored', 'Biological', 'Mechanical', 'Psionic', 'Massive', 'Structure'. """
-        # TODO Consider unit with ability attacks like Oracle, Thor, Baneling.
+        # TODO: Consider units with ability attacks (Oracle, Baneling) or multiple attacks (Thor).
         if self._weapons:
             for weapon in self._weapons:
                 if weapon.damage_bonus:
@@ -371,7 +372,7 @@ class Unit:
 
     @property
     def owner_id(self) -> int:
-        """ Returns the owner of the unit. """
+        """ Returns the owner of the unit. This is a value of 1 or 2 in a two player game. """
         return self._proto.owner
 
     @property
@@ -389,7 +390,7 @@ class Unit:
         """ Returns the 3d position of the unit. """
         return Point3.from_proto(self._proto.pos)
 
-    def distance_to(self, p: Union["Unit", Point2, Point3]) -> Union[int, float]:
+    def distance_to(self, p: Union[Unit, Point2, Point3]) -> Union[int, float]:
         """ Using the 2d distance between self and p.
         To calculate the 3d distance, use unit.position3d.distance_to(p)
 
@@ -398,7 +399,7 @@ class Unit:
             return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
-    def target_in_range(self, target: "Unit", bonus_distance: Union[int, float] = 0) -> bool:
+    def target_in_range(self, target: Unit, bonus_distance: Union[int, float] = 0) -> bool:
         """ Checks if the target is in range.
         Includes the target's radius when calculating distance to target.
 
@@ -416,7 +417,7 @@ class Unit:
         )
 
     def in_ability_cast_range(
-        self, ability_id: AbilityId, target: Union["Unit", Point2], bonus_distance: float = 0
+        self, ability_id: AbilityId, target: Union[Unit, Point2], bonus_distance: float = 0
     ) -> bool:
         """ Test if a unit is able to cast an ability on the target without checking ability cooldown (like stalker blink) or if ability is made available through research (like HT storm).
 
@@ -448,7 +449,7 @@ class Unit:
         return self._proto.facing
 
     # TODO: a function that checks if this unit is facing another unit
-    def is_facing_unit(self, other_unit: "Unit", angle_error: float = 1e-3) -> bool:
+    def is_facing_unit(self, other_unit: Unit, angle_error: float = 1e-3) -> bool:
         """
         Function not completed yet
 
@@ -724,7 +725,7 @@ class Unit:
         return self.position.offset(Point2((-2.5, 0.5)))
 
     @property_mutable_cache
-    def passengers(self) -> Set["Unit"]:
+    def passengers(self) -> Set[Unit]:
         """ Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism. """
         return {Unit(unit, self._bot_object) for unit in self._proto.passengers}
 
