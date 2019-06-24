@@ -168,12 +168,57 @@ class Ramp:
                 return self.barracks_in_middle.offset((-2, 0))
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
+    @property_immutable_cache
+    def protoss_wall_pylon(self) -> Optional[Point2]:
+        """
+        Pylon position that powers the two wall buildings and the warpin position.
+        """
+        if len(self.upper2_for_ramp_wall) != 2:
+            raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
+        middle = self.depot_in_middle
+        # direction up the ramp
+        direction = self.barracks_in_middle.negative_offset(middle)
+        return middle + 6 * direction
+
+    @property_mutable_cache
+    def protoss_wall_buildings(self) -> List[Point2]:
+        """
+        List of two positions for 3x3 buildings that form a wall with a spot for a one unit block.
+        These buildings can be powered by a pylon on the protoss_wall_pylon position.
+        """
+        if len(self.upper) not in {2, 5}:
+            return []
+        if len(self.upper2_for_ramp_wall) == 2:
+            middle = self.depot_in_middle
+            # direction up the ramp
+            direction = self.barracks_in_middle.negative_offset(middle)
+            # sort depots based on distance to start to get wallin orientation
+            sorted_depots = sorted(
+                self.corner_depots, key=lambda depot: depot.distance_to(self.__game_info.player_start_location)
+            )
+            wall1 = sorted_depots[1].offset(direction)
+            wall2 = middle + direction + (middle - wall1) / 1.5
+            return [wall1, wall2]
+        raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
+
+    @property_immutable_cache
+    def protoss_wall_warpin(self) -> Optional[Point2]:
+        """
+        Position for a unit to block the wall created by protoss_wall_buildings.
+        Powered by protoss_wall_pylon.
+        """
+        if len(self.upper2_for_ramp_wall) != 2:
+            raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
+        middle = self.depot_in_middle
+        # direction up the ramp
+        direction = self.barracks_in_middle.negative_offset(middle)
+        # sort depots based on distance to start to get wallin orientation
+        sorted_depots = sorted(self.corner_depots, key=lambda x: x.distance_to(self.__game_info.player_start_location))
+        return sorted_depots[0].negative_offset(direction)
+
 
 class GameInfo:
     def __init__(self, proto):
-        # TODO: this might require an update during the game because placement grid and
-        # playable grid are greyed out on minerals, start locations and ramps (debris)
-        # but we do not want to call information in the fog of war
         self._proto = proto
         self.players: List[Player] = [Player.from_proto(p) for p in self._proto.player_info]
         self.map_name: str = self._proto.map_name

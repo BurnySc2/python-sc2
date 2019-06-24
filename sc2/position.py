@@ -272,7 +272,7 @@ class Point2(Pointlike):
     def __mul__(self, other: Union[int, float, Point2]) -> Point2:
         try:
             return self.__class__((self.x * other.x, self.y * other.y))
-        except:
+        except AttributeError:
             return self.__class__((self.x * other, self.y * other))
 
     def __rmul__(self, other: Union[int, float, Point2]) -> Point2:
