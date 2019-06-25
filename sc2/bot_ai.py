@@ -20,6 +20,11 @@ from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_town
 from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
 
+from .dicts.unit_trained_from import UNIT_TRAINED_FROM
+from .dicts.unit_train_build_abilities import TRAIN_INFO
+from .dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
+from .dicts.unit_research_abilities import RESEARCH_INFO
+
 # Imports for mypy and pycharm autocomplete as well as sphinx autodocumentation
 from .game_state import Blip, EffectData, GameState
 from .ids.ability_id import AbilityId
@@ -478,7 +483,6 @@ class BotAI(DistanceCalculation):
             baneling_supply_cost = self.calculate_supply_cost(UnitTypeId.BANELING) # Is 0
 
         :param unit_type: """
-        from .dicts.unit_trained_from import UNIT_TRAINED_FROM
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
         unit_supply_cost = self._game_data.units[unit_type.value]._proto.food_required
@@ -518,7 +522,7 @@ class BotAI(DistanceCalculation):
 
             self.calculate_cost(UnitTypeId.ORBITALCOMMAND)
 
-        More exxamples::
+        More examples::
 
             from sc2.game_data import Cost
 
@@ -535,8 +539,6 @@ class BotAI(DistanceCalculation):
 
         :param item_id:
         """
-        from .dicts.unit_trained_from import UNIT_TRAINED_FROM
-
         if isinstance(item_id, UnitTypeId):
             # Fix cost for reactor and techlab where the API returns 0 for both
             if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB}:
@@ -890,17 +892,14 @@ class BotAI(DistanceCalculation):
         :param amount:
         :param closest_to:
         :param train_only_idle_buildings: """
-        from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
-        from sc2.dicts.unit_train_build_abilities import TRAIN_INFO
-
-        trained_amount = 0
         # Tech requirement not met
         if self.tech_requirement_progress(unit_type) < 1:
-            return trained_amount
+            return 0
         # Not affordable
         if not self.can_afford(unit_type):
-            return trained_amount
+            return 0
         # All train structure types: queen can made from hatchery, lair, hive
+        trained_amount = 0
         train_structure_type: Set[UnitTypeId] = UNIT_TRAINED_FROM[unit_type]
         train_structures = self.structures if self.race != Race.Zerg else self.structures | self.larva
         requires_techlab = any(
@@ -1062,9 +1061,6 @@ class BotAI(DistanceCalculation):
 
         :param upgrade_type:
         """
-        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
-        from sc2.dicts.unit_research_abilities import RESEARCH_INFO
-
         assert (
             upgrade_type in UPGRADE_RESEARCHED_FROM
         ), f"Could not find upgrade {upgrade_type} in 'research from'-dictionary"
@@ -1160,14 +1156,18 @@ class BotAI(DistanceCalculation):
             self.minerals -= cost.minerals
             self.vespene -= cost.vespene
         if subtract_supply and action.ability in abilityid_to_unittypeid:
-            # TODO: fix for morphing units that increase supply cost, like ravager and broodlord
             unit_type = abilityid_to_unittypeid[action.ability]
-            required_supply = self._game_data.units[unit_type.value]._proto.food_required
+            required_supply = self.calculate_supply_cost(unit_type)
             # Overlord has -8
             if required_supply > 0:
                 self.supply_used += required_supply
                 self.supply_left -= required_supply
-                # TODO: if unit created from larva: reduce larva count by 1
+            if (
+                self.race == Race.Zerg
+                and unit_type in UNIT_TRAINED_FROM
+                and UNIT_TRAINED_FROM[unit_type] == {UnitTypeId.LARVA}
+            ):
+                self.larva_count -= 1
         self.actions.append(action)
         self.unit_tags_received_action.add(action.unit.tag)
         return True
