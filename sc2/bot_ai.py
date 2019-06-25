@@ -63,7 +63,6 @@ class BotAI(DistanceCalculation):
         self.destructables: Units = Units([], self)
         self.watchtowers: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
-        self.vespene_geysers: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
         self.larva: Units = Units([], self)
         self.techlab_tags: Set[int] = set()
@@ -205,7 +204,7 @@ class BotAI(DistanceCalculation):
 
         # Distance we group resources by
         RESOURCE_SPREAD_THRESHOLD = 8.5
-        geysers = self.vespene_geysers
+        geysers = self.vespene_geyser
         # Create a group for every resource
         resource_groups = [[resource] for resource in self.resources]
         # Loop the merging process as long as we change something
@@ -342,7 +341,7 @@ class BotAI(DistanceCalculation):
 
         return closest
 
-    def distribute_workers(self, resource_ratio: float = 2):
+    async def distribute_workers(self, resource_ratio: float = 2):
         """
         Distributes workers across all the bases taken.
         Keyword `resource_ratio` takes a float. If the current minerals to gas
@@ -1272,7 +1271,7 @@ class BotAI(DistanceCalculation):
         self.enemy_units: Units = Units([], self)
         self.enemy_structures: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
-        self.vespene_geysers: Units = Units([], self)
+        self.vespene_geyser: Units = Units([], self)
         self.resources: Units = Units([], self)
         self.destructables: Units = Units([], self)
         self.watchtowers: Units = Units([], self)
@@ -1307,7 +1306,7 @@ class BotAI(DistanceCalculation):
                         self.resources.append(unit_obj)
                     # geyser enums
                     elif unit_type in geyser_ids:
-                        self.vespene_geysers.append(unit_obj)
+                        self.vespene_geyser.append(unit_obj)
                         self.resources.append(unit_obj)
                     # all destructable rocks
                     else:
