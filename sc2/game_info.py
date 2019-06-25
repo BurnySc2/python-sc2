@@ -174,6 +174,8 @@ class Ramp:
         """
         Pylon position that powers the two wall buildings and the warpin position.
         """
+        # if len(self.upper) not in {2, 5}:
+        #     return None
         if len(self.upper2_for_ramp_wall) != 2:
             raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
         middle = self.depot_in_middle
@@ -208,6 +210,8 @@ class Ramp:
         Position for a unit to block the wall created by protoss_wall_buildings.
         Powered by protoss_wall_pylon.
         """
+        # if len(self.upper) not in {2, 5}:
+        #     return None
         if len(self.upper2_for_ramp_wall) != 2:
             raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
         middle = self.depot_in_middle

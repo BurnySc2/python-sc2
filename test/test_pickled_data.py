@@ -174,6 +174,7 @@ class TestClass:
         assert not bot.has_creep(worker)
 
     def test_game_info(self, bot: BotAI):
+        bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
         # Test if main base ramp works
         game_info: GameInfo = bot._game_info
 
@@ -195,7 +196,7 @@ class TestClass:
         assert game_info.player_start_location
 
     def test_main_base_ramp(self, bot: BotAI):
-        # Test if main ramp works for one of the opponent
+        # Test if main ramp works for all spawns
         game_info: GameInfo = bot._game_info
 
         for spawn in bot._game_info.start_locations + [bot.townhalls.random.position]:
@@ -208,17 +209,25 @@ class TestClass:
             ramp: Ramp = bot.main_base_ramp
             # On the map HonorgroundsLE, the main base is large and it would take a bit of effort to fix, so it returns None or empty set
             if len(ramp.upper) in {2, 5}:
+                assert ramp.upper2_for_ramp_wall
+                # Check if terran wall was found
                 assert ramp.barracks_correct_placement
                 assert ramp.barracks_in_middle
                 assert ramp.depot_in_middle
                 assert len(ramp.corner_depots) == 2
-                assert ramp.upper2_for_ramp_wall
+                # Check if protoss wall was found
+                assert ramp.protoss_wall_pylon
+                assert len(ramp.protoss_wall_buildings) == 2
+                assert ramp.protoss_wall_warpin
             else:
-                # On maps it is unable to find valid wall positions (Honorgrounds LE) it should return None
+                # On maps it is unable to find valid wall positions (Honorgrounds LE) it should return None, empty sets or empty lists
                 assert ramp.barracks_correct_placement is None
                 assert ramp.barracks_in_middle is None
                 assert ramp.depot_in_middle is None
                 assert ramp.corner_depots == set()
+                assert ramp.protoss_wall_pylon is None
+                assert ramp.protoss_wall_buildings == []
+                assert ramp.protoss_wall_warpin is None
             assert ramp.top_center
             assert ramp.bottom_center
             assert ramp.size
