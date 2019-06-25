@@ -305,3 +305,13 @@ class Cost:
         else:
             time = self.time + other.time
         return self.__class__(self.minerals + other.minerals, self.vespene + other.vespene, time=time)
+
+    def __sub__(self, other) -> Cost:
+        assert isinstance(other, Cost)
+        if self.time is None:
+            time = other.time
+        elif other.time is None:
+            time = self.time
+        else:
+            time = self.time - other.time
+        return self.__class__(self.minerals - other.minerals, self.vespene - other.vespene, time=time)

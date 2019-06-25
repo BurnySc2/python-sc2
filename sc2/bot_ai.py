@@ -29,6 +29,7 @@ from .pixel_map import PixelMap
 from .position import Point2, Point3
 from .unit import Unit
 from .units import Units
+from .game_data import Cost
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,6 @@ if TYPE_CHECKING:
     from .game_info import GameInfo, Ramp
     from .client import Client
     from .unit_command import UnitCommand
-    from .game_data import Cost
 
 
 class BotAI(DistanceCalculation):
@@ -464,6 +464,32 @@ class BotAI(DistanceCalculation):
 
         return owned
 
+    def calculate_supply_cost(self, unit_type: UnitTypeId) -> float:
+        """
+        This function calculates the required supply to train or morph a unit.
+        The total supply of a baneling is 0.5, but a zergling already uses up 0.5 supply, so the morph supply cost is 0.
+        The total supply of a ravager is 3, but a roach already uses up 2 supply, so the morph supply cost is 1.
+        The required supply to build zerglings is 1 because they pop in pairs, so this function returns 1 because the larva morph command requires 1 free supply.
+
+        Example::
+
+            roach_supply_cost = self.calculate_supply_cost(UnitTypeId.ROACH) # Is 2
+            ravager_supply_cost = self.calculate_supply_cost(UnitTypeId.RAVAGER) # Is 1
+            baneling_supply_cost = self.calculate_supply_cost(UnitTypeId.BANELING) # Is 0
+
+        :param unit_type: """
+        from .dicts.unit_trained_from import UNIT_TRAINED_FROM
+        if unit_type in {UnitTypeId.ZERGLING}:
+            return 1
+        unit_supply_cost = self._game_data.units[unit_type.value]._proto.food_required
+        if unit_supply_cost > 0 and unit_type in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[unit_type]) == 1:
+            for producer in UNIT_TRAINED_FROM[unit_type]:  # type: UnitTypeId
+                producer_unit_data = self.game_data.units[producer.value]
+                if producer_unit_data._proto.food_required <= unit_supply_cost:
+                    producer_supply_cost = producer_unit_data._proto.food_required
+                    unit_supply_cost -= producer_supply_cost
+        return unit_supply_cost
+
     def can_feed(self, unit_type: UnitTypeId) -> bool:
         """ Checks if you have enough free supply to build the unit
 
@@ -475,8 +501,69 @@ class BotAI(DistanceCalculation):
                 self.do(cc.train(UnitTypeId.SCV))
 
         :param unit_type: """
-        required = self._game_data.units[unit_type.value]._proto.food_required
-        return required == 0 or self.supply_left >= required
+        required = self.calculate_supply_cost(unit_type)
+        # "required <= 0" in case self.supply_left is negative
+        return required <= 0 or self.supply_left >= required
+
+    def calculate_cost(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId]) -> Cost:
+        """
+        Calculate the required build, train or morph cost of a unit. It is recommended to use the UnitTypeId instead of the ability to create the unit.
+        The total cost to create a ravager is 100/100, but the actual morph cost from roach to ravager is only 25/75, so this function returns 25/75.
+
+        It is adviced to use the UnitTypeId instead of the AbilityId. Instead of::
+
+            self.calculate_cost(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)
+
+        use::
+
+            self.calculate_cost(UnitTypeId.ORBITALCOMMAND)
+
+        More exxamples::
+
+            from sc2.game_data import Cost
+
+            self.calculate_cost(UnitTypeId.BROODLORD) == Cost(150, 150)
+            self.calculate_cost(UnitTypeId.RAVAGER) == Cost(25, 75)
+            self.calculate_cost(UnitTypeId.BANELING) == Cost(25, 25)
+            self.calculate_cost(UnitTypeId.ORBITALCOMMAND) == Cost(150, 0)
+            self.calculate_cost(UnitTypeId.REACTOR) == Cost(50, 50)
+            self.calculate_cost(UnitTypeId.TECHLAB) == Cost(50, 25)
+            self.calculate_cost(UnitTypeId.QUEEN) == Cost(150, 0)
+            self.calculate_cost(UnitTypeId.HATCHERY) == Cost(300, 0)
+            self.calculate_cost(UnitTypeId.LAIR) == Cost(150, 100)
+            self.calculate_cost(UnitTypeId.HIVE) == Cost(200, 150)
+
+        :param item_id:
+        """
+        from .dicts.unit_trained_from import UNIT_TRAINED_FROM
+
+        if isinstance(item_id, UnitTypeId):
+            # Fix cost for reactor and techlab where the API returns 0 for both
+            if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB}:
+                if item_id == UnitTypeId.REACTOR:
+                    return Cost(50, 50)
+                elif item_id == UnitTypeId.TECHLAB:
+                    return Cost(50, 25)
+            unit_data = self._game_data.units[item_id.value]
+            cost = self._game_data.calculate_ability_cost(unit_data.creation_ability)
+            # Fix unit morph cost: check if is morph, then subtract the original cost
+            unit_supply_cost = unit_data._proto.food_required
+            if unit_supply_cost > 0 and item_id in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[item_id]) == 1:
+                for producer in UNIT_TRAINED_FROM[item_id]:  # type: UnitTypeId
+                    producer_unit_data = self.game_data.units[producer.value]
+                    if producer_unit_data._proto.food_required <= unit_supply_cost:
+                        if producer == UnitTypeId.ZERGLING:
+                            producer_cost = Cost(25, 0)
+                        else:
+                            producer_cost = self.game_data.calculate_ability_cost(producer_unit_data.creation_ability)
+                        cost = cost - producer_cost
+
+        elif isinstance(item_id, UpgradeId):
+            cost = self._game_data.upgrades[item_id.value].cost
+        else:
+            # Is already AbilityId
+            cost = self._game_data.calculate_ability_cost(item_id)
+        return cost
 
     def can_afford(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId], check_supply_cost: bool = True) -> bool:
         """ Tests if the player has enough resources to build a unit or structure.
@@ -491,25 +578,15 @@ class BotAI(DistanceCalculation):
         Example::
 
             # Current state: we have 150 minerals and one command center and a barracks
-            can_afford_morph = self.can_afford(UnitTypeId.ORBITALCOMMAND)
-            # contains 'True' although the API reports that an orbital is worth 550 minerals, but the morph cost is only 150 minerals
+            can_afford_morph = self.can_afford(UnitTypeId.ORBITALCOMMAND, check_supply_cost=False)
+            # Will be 'True' although the API reports that an orbital is worth 550 minerals, but the morph cost is only 150 minerals
 
         :param item_id:
         :param check_supply_cost: """
         enough_supply = True
-        # TODO: check for morphing units (ravager, lurker, broodlord) that take up some supply
-        # TODO: check for upgrade levels that not the redirect ability is used
-        if isinstance(item_id, UnitTypeId):
-            unit = self._game_data.units[item_id.value]
-            cost = self._game_data.calculate_ability_cost(unit.creation_ability)
-            if check_supply_cost:
-                enough_supply = self.can_feed(item_id)
-        elif isinstance(item_id, UpgradeId):
-            cost = self._game_data.upgrades[item_id.value].cost
-        else:
-            # Is already AbilityId
-            cost = self._game_data.calculate_ability_cost(item_id)
-
+        cost = self.calculate_cost(item_id)
+        if check_supply_cost:
+            enough_supply = self.supply_left >= self.calculate_supply_cost(item_id)
         return cost.minerals <= self.minerals and cost.vespene <= self.vespene and enough_supply
 
     async def can_cast(

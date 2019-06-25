@@ -295,6 +295,7 @@ def test_bot_ai():
         real_cost2: Cost = Cost(cost, cost)
         for item in items:
             assert_cost(item, real_cost2)
+            assert bot.calculate_cost(item) == real_cost2, f"Cost of {item} should be {real_cost2} but is {calc_cost(item)}"
 
     # Somehow this is 0, returned by the API
     assert_cost(AbilityId.BUILD_REACTOR, Cost(0, 0))
@@ -305,11 +306,37 @@ def test_bot_ai():
     assert_cost(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND, Cost(150, 0))
     assert_cost(UnitTypeId.ORBITALCOMMAND, Cost(150, 0))
     assert_cost(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND, Cost(150, 0))
-    # TODO: Fix me
+
+    assert bot.calculate_cost(UnitTypeId.BROODLORD) == Cost(150, 150)
+    assert bot.calculate_cost(UnitTypeId.RAVAGER) == Cost(25, 75)
+    assert bot.calculate_cost(UnitTypeId.BANELING) == Cost(25, 25)
+    assert bot.calculate_cost(UnitTypeId.ORBITALCOMMAND) == Cost(150, 0)
+    assert bot.calculate_cost(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND) == Cost(150, 0)
+    assert bot.calculate_cost(UnitTypeId.REACTOR) == Cost(50, 50)
+    assert bot.calculate_cost(UnitTypeId.TECHLAB) == Cost(50, 25)
+    assert bot.calculate_cost(UnitTypeId.QUEEN) == Cost(150, 0)
+    assert bot.calculate_cost(UnitTypeId.HATCHERY) == Cost(300, 0)
+    assert bot.calculate_cost(UnitTypeId.LAIR) == Cost(150, 100)
+    assert bot.calculate_cost(UnitTypeId.HIVE) == Cost(200, 150)
     # assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(150, 150))
     # assert_cost(UnitTypeId.BROODLORD, Cost(150, 150))
     # assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(25, 75))
-    # assert_cost(UnitTypeId.RAVAGER, Cost(25, 75))
+    # assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(150, 150))
+    # assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(25, 25))
+
+    assert bot.calculate_supply_cost(UnitTypeId.BARRACKS) == 0
+    assert bot.calculate_supply_cost(UnitTypeId.HATCHERY) == 0
+    assert bot.calculate_supply_cost(UnitTypeId.OVERLORD) == 0
+    assert bot.calculate_supply_cost(UnitTypeId.ZERGLING) == 1
+    assert bot.calculate_supply_cost(UnitTypeId.MARINE) == 1
+    assert bot.calculate_supply_cost(UnitTypeId.BANELING) == 0
+    assert bot.calculate_supply_cost(UnitTypeId.QUEEN) == 2
+    assert bot.calculate_supply_cost(UnitTypeId.ROACH) == 2
+    assert bot.calculate_supply_cost(UnitTypeId.RAVAGER) == 1
+    assert bot.calculate_supply_cost(UnitTypeId.CORRUPTOR) == 2
+    assert bot.calculate_supply_cost(UnitTypeId.BROODLORD) == 2
+    assert bot.calculate_supply_cost(UnitTypeId.HYDRALISK) == 2
+    assert bot.calculate_supply_cost(UnitTypeId.LURKERMP) == 1
 
 
 def test_game_info():
