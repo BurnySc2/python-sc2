@@ -297,10 +297,25 @@ def test_bot_ai():
             assert_cost(item, real_cost2)
             assert bot.calculate_cost(item) == real_cost2, f"Cost of {item} should be {real_cost2} but is {calc_cost(item)}"
 
+    # Do not use the generic research abilities in the bot when testing if you can afford it as these are wrong
+    assert_cost(AbilityId.RESEARCH_ZERGFLYERARMOR, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_ZERGFLYERATTACK, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_ZERGGROUNDARMOR, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_ZERGMELEEWEAPONS, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_ZERGMISSILEWEAPONS, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_TERRANINFANTRYARMOR, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_TERRANINFANTRYWEAPONS, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_PROTOSSGROUNDARMOR, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_PROTOSSGROUNDWEAPONS, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_PROTOSSSHIELDS, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_TERRANSHIPWEAPONS, Cost(0, 0))
+    assert_cost(AbilityId.RESEARCH_TERRANVEHICLEWEAPONS, Cost(0, 0))
+
     # Somehow this is 0, returned by the API
     assert_cost(AbilityId.BUILD_REACTOR, Cost(0, 0))
     # UnitTypeId.REACTOR has no creation ability (None)
     # assert_cost(UnitTypeId.REACTOR, Cost(50, 50))
+
     assert_cost(AbilityId.BUILD_REACTOR_BARRACKS, Cost(50, 50))
     assert_cost(UnitTypeId.BARRACKSREACTOR, Cost(50, 50))
     assert_cost(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND, Cost(150, 0))
@@ -318,11 +333,13 @@ def test_bot_ai():
     assert bot.calculate_cost(UnitTypeId.HATCHERY) == Cost(300, 0)
     assert bot.calculate_cost(UnitTypeId.LAIR) == Cost(150, 100)
     assert bot.calculate_cost(UnitTypeId.HIVE) == Cost(200, 150)
-    # assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(150, 150))
-    # assert_cost(UnitTypeId.BROODLORD, Cost(150, 150))
-    # assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(25, 75))
-    # assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(150, 150))
-    # assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(25, 25))
+
+    # The following are morph abilities that may need a fix
+    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
+    assert_cost(UnitTypeId.BROODLORD, Cost(300, 250))
+    assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(100, 100))
+    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
+    assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(50, 25))
 
     assert bot.calculate_supply_cost(UnitTypeId.BARRACKS) == 0
     assert bot.calculate_supply_cost(UnitTypeId.HATCHERY) == 0

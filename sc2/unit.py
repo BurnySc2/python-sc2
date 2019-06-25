@@ -405,6 +405,7 @@ class Unit:
 
         :param target:
         :param bonus_distance: """
+        # TODO: Fix this because immovable units (sieged tank, planetary fortress etc.) have a little lower range than this formula
         if self.can_attack_ground and not target.is_flying:
             unit_attack_range = self.ground_range
         elif self.can_attack_air and (target.is_flying or target.type_id == UNIT_COLOSSUS):
@@ -876,7 +877,7 @@ class Unit:
         return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
 
     def scan_move(self, *args, **kwargs) -> UnitCommand:
-        """ TODO: What does this do? """
+        """ Deprecated: This ability redirects to 'AbilityId.ATTACK' """
         return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
     def hold_position(self, queue: bool = False) -> UnitCommand:
@@ -884,7 +885,7 @@ class Unit:
 
         :param queue:
         """
-        return self(AbilityId.HOLDPOSITION_HOLD, queue=queue)
+        return self(AbilityId.HOLDPOSITION, queue=queue)
 
     def stop(self, queue: bool = False) -> UnitCommand:
         """ Orders a unit to stop, but can start to move on its own
@@ -903,7 +904,7 @@ class Unit:
         :param position:
         :param queue:
         """
-        return self(AbilityId.PATROL_PATROL, target=position, queue=queue)
+        return self(AbilityId.PATROL, target=position, queue=queue)
 
     def repair(self, repair_target: Unit, queue: bool = False) -> UnitCommand:
         """ Order an SCV or MULE to repair. 
