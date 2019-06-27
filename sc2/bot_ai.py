@@ -553,13 +553,9 @@ class BotAI(DistanceCalculation):
             if unit_supply_cost > 0 and item_id in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[item_id]) == 1:
                 for producer in UNIT_TRAINED_FROM[item_id]:  # type: UnitTypeId
                     producer_unit_data = self.game_data.units[producer.value]
-                    if producer_unit_data._proto.food_required <= unit_supply_cost:
-                        producer_creation_ability_id_value = producer_unit_data._proto.ability_id
+                    if 0 < producer_unit_data._proto.food_required <= unit_supply_cost:
                         if producer == UnitTypeId.ZERGLING:
                             producer_cost = Cost(25, 0)
-                        elif producer_creation_ability_id_value == 0:
-                            # Has no creation ability so producer must be free (like larva)
-                            continue
                         else:
                             producer_cost = self.game_data.calculate_ability_cost(producer_unit_data.creation_ability)
                         cost = cost - producer_cost

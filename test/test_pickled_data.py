@@ -147,14 +147,6 @@ def test_bot_ai():
     assert not bot.can_afford(UnitTypeId.SIEGETANK)
     assert not bot.can_afford(UnitTypeId.BATTLECRUISER)
     assert not bot.can_afford(UnitTypeId.MARAUDER)
-    bot.minerals = 200
-    bot.vespene = 200
-    assert bot.can_afford(UnitTypeId.ROACH)
-    assert bot.can_afford(UnitTypeId.RAVAGER)
-    assert bot.can_afford(UnitTypeId.HYDRALISK)
-    assert bot.can_afford(UnitTypeId.LURKERMP)
-    bot.minerals = 50
-    bot.vespene = 0
     worker = bot.workers.random
     assert bot.select_build_worker(worker.position) == worker
     for w in bot.workers:
@@ -346,6 +338,9 @@ def test_bot_ai():
     assert bot.calculate_cost(UnitTypeId.HATCHERY) == Cost(300, 0)
     assert bot.calculate_cost(UnitTypeId.LAIR) == Cost(150, 100)
     assert bot.calculate_cost(UnitTypeId.HIVE) == Cost(200, 150)
+    assert bot.calculate_cost(UnitTypeId.DRONE) == Cost(50, 0)
+    assert bot.calculate_cost(UnitTypeId.SCV) == Cost(50, 0)
+    assert bot.calculate_cost(UnitTypeId.PROBE) == Cost(50, 0)
 
     # The following are morph abilities that may need a fix
     assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
