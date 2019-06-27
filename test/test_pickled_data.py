@@ -137,11 +137,24 @@ def test_bot_ai():
     assert not bot.can_feed(UnitTypeId.THOR)
     assert not bot.can_feed(UnitTypeId.BATTLECRUISER)
     assert not bot.can_feed(UnitTypeId.IMMORTAL)
+    assert bot.can_afford(UnitTypeId.ZERGLING)
+    assert bot.can_afford(UnitTypeId.MARINE)
     assert bot.can_afford(UnitTypeId.SCV)
+    assert bot.can_afford(UnitTypeId.DRONE)
+    assert bot.can_afford(UnitTypeId.PROBE)
+    assert bot.can_afford(AbilityId.COMMANDCENTERTRAIN_SCV)
     assert bot.can_afford(UnitTypeId.MARINE)
     assert not bot.can_afford(UnitTypeId.SIEGETANK)
     assert not bot.can_afford(UnitTypeId.BATTLECRUISER)
     assert not bot.can_afford(UnitTypeId.MARAUDER)
+    bot.minerals = 200
+    bot.vespene = 200
+    assert bot.can_afford(UnitTypeId.ROACH)
+    assert bot.can_afford(UnitTypeId.RAVAGER)
+    assert bot.can_afford(UnitTypeId.HYDRALISK)
+    assert bot.can_afford(UnitTypeId.LURKERMP)
+    bot.minerals = 50
+    bot.vespene = 0
     worker = bot.workers.random
     assert bot.select_build_worker(worker.position) == worker
     for w in bot.workers:
