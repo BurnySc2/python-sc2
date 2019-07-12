@@ -19,7 +19,7 @@ class ProxyRaxBot(sc2.BotAI):
         if min([u.position.distance_to(self.enemy_start_locations[0]) for u in self.units]) < 5:
             return self.enemy_start_locations[0].position
 
-        return self.state.mineral_field.random.position
+        return self.mineral_field.random.position
 
     async def on_step(self, iteration):
         cc = (self.townhalls(COMMANDCENTER) | self.townhalls(ORBITALCOMMAND))
@@ -63,9 +63,9 @@ class ProxyRaxBot(sc2.BotAI):
 
             elif self.structures(BARRACKS).exists and self.gas_buildings.amount < 2:
                 if self.can_afford(REFINERY):
-                    vgs = self.state.vespene_geyser.closer_than(20.0, cc)
+                    vgs = self.vespene_geyser.closer_than(20.0, cc)
                     for vg in vgs:
-                        if self.gas_buildings.closer_than(1.0, vg).exists:
+                        if self.gas_buildings.filter(lambda unit: unit.distance_to(vg) < 1):
                             break
 
                         worker = self.select_build_worker(vg.position)
@@ -99,7 +99,7 @@ class ProxyRaxBot(sc2.BotAI):
                     self.do(w.random.gather(a))
 
         for scv in self.workers.idle:
-            self.do(scv.gather(self.state.mineral_field.closest_to(cc)))
+            self.do(scv.gather(self.mineral_field.closest_to(cc)))
 
 def main():
     sc2.run_game(sc2.maps.get("(2)CatalystLE"), [

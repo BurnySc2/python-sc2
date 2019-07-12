@@ -800,7 +800,7 @@ class Unit:
 
     # Unit functions
 
-    def has_buff(self, buff) -> bool:
+    def has_buff(self, buff: BuffId) -> bool:
         """ Checks if unit has buff 'buff'. """
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs

@@ -6,7 +6,7 @@ from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.player import Human
 
-class ProxyRaxBot(sc2.BotAI):
+class CyclonePush(sc2.BotAI):
     def select_target(self):
         target = self.known_enemy_structures
         if target.exists:
@@ -56,9 +56,9 @@ class ProxyRaxBot(sc2.BotAI):
 
             elif self.structures(BARRACKS).exists and self.gas_buildings.amount < 2:
                 if self.can_afford(REFINERY):
-                    vgs = self.state.vespene_geyser.closer_than(20.0, cc)
+                    vgs = self.vespene_geyser.closer_than(20.0, cc)
                     for vg in vgs:
-                        if self.gas_buildings.closer_than(1.0, vg).exists:
+                        if self.gas_buildings.filter(lambda unit: unit.distance_to(vg) < 1):
                             break
 
                         worker = self.select_build_worker(vg.position)
@@ -87,12 +87,12 @@ class ProxyRaxBot(sc2.BotAI):
                     self.do(w.random.gather(a))
 
         for scv in self.workers.idle:
-            self.do(scv.gather(self.state.mineral_field.closest_to(cc)))
+            self.do(scv.gather(self.mineral_field.closest_to(cc)))
 
 def main():
     sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
         # Human(Race.Terran),
-        Bot(Race.Terran, ProxyRaxBot()),
+        Bot(Race.Terran, CyclonePush()),
         Computer(Race.Zerg, Difficulty.Easy)
     ], realtime=False)
 

@@ -147,6 +147,12 @@ def test_bot_ai():
     assert not bot.can_afford(UnitTypeId.SIEGETANK)
     assert not bot.can_afford(UnitTypeId.BATTLECRUISER)
     assert not bot.can_afford(UnitTypeId.MARAUDER)
+    assert not bot.can_afford(UpgradeId.WARPGATERESEARCH)
+    assert not bot.can_afford(AbilityId.RESEARCH_WARPGATE)
+    bot.vespene = 50
+    assert bot.can_afford(UpgradeId.WARPGATERESEARCH)
+    assert bot.can_afford(AbilityId.RESEARCH_WARPGATE)
+    bot.vespene = 0
     worker = bot.workers.random
     assert bot.select_build_worker(worker.position) == worker
     for w in bot.workers:

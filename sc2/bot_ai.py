@@ -547,8 +547,9 @@ class BotAI(DistanceCalculation):
                 elif item_id == UnitTypeId.TECHLAB:
                     return Cost(50, 25)
             unit_data = self._game_data.units[item_id.value]
+            # Cost of structure morphs is automatically correctly calculated by 'calculate_ability_cost'
             cost = self._game_data.calculate_ability_cost(unit_data.creation_ability)
-            # Fix unit morph cost: check if is morph, then subtract the original cost
+            # Fix non-structure morph cost: check if is morph, then subtract the original cost
             unit_supply_cost = unit_data._proto.food_required
             if unit_supply_cost > 0 and item_id in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[item_id]) == 1:
                 for producer in UNIT_TRAINED_FROM[item_id]:  # type: UnitTypeId
@@ -587,7 +588,7 @@ class BotAI(DistanceCalculation):
         :param check_supply_cost: """
         enough_supply = True
         cost = self.calculate_cost(item_id)
-        if check_supply_cost:
+        if check_supply_cost and isinstance(item_id, UnitTypeId):
             enough_supply = self.supply_left >= self.calculate_supply_cost(item_id)
         return cost.minerals <= self.minerals and cost.vespene <= self.vespene and enough_supply
 
