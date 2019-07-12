@@ -6,7 +6,8 @@ from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.player import Human
 
-class ProxyRaxBot(sc2.BotAI):
+
+class BCRushBot(sc2.BotAI):
     def select_target(self):
         target = self.known_enemy_structures
         if target.exists:
@@ -22,7 +23,7 @@ class ProxyRaxBot(sc2.BotAI):
         return self.mineral_field.random.position
 
     async def on_step(self, iteration):
-        cc = (self.townhalls(COMMANDCENTER) | self.townhalls(ORBITALCOMMAND))
+        cc = self.townhalls(COMMANDCENTER) | self.townhalls(ORBITALCOMMAND)
         if not cc.exists:
             target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
             for unit in self.workers | self.units(BATTLECRUISER):
@@ -31,11 +32,10 @@ class ProxyRaxBot(sc2.BotAI):
         else:
             cc = cc.first
 
-
         if iteration % 50 == 0 and self.units(BATTLECRUISER).amount > 2:
             target = self.select_target()
             forces = self.units(BATTLECRUISER)
-            if (iteration//50) % 10 == 0:
+            if (iteration // 50) % 10 == 0:
                 for unit in forces:
                     self.do(unit.attack(target))
             else:
@@ -82,7 +82,9 @@ class ProxyRaxBot(sc2.BotAI):
                         await self.build(FACTORY, near=cc.position.towards(self.game_info.map_center, 8))
                 elif f.ready.exists and self.structures(STARPORT).amount < 2:
                     if self.can_afford(STARPORT):
-                        await self.build(STARPORT, near=cc.position.towards(self.game_info.map_center, 30).random_on_distance(8))
+                        await self.build(
+                            STARPORT, near=cc.position.towards(self.game_info.map_center, 30).random_on_distance(8)
+                        )
 
         for sp in self.structures(STARPORT).ready:
             if sp.add_on_tag == 0:
@@ -101,12 +103,18 @@ class ProxyRaxBot(sc2.BotAI):
         for scv in self.workers.idle:
             self.do(scv.gather(self.mineral_field.closest_to(cc)))
 
-def main():
-    sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
-        # Human(Race.Terran),
-        Bot(Race.Terran, ProxyRaxBot()),
-        Computer(Race.Zerg, Difficulty.Hard)
-    ], realtime=False)
 
-if __name__ == '__main__':
+def main():
+    sc2.run_game(
+        sc2.maps.get("(2)CatalystLE"),
+        [
+            # Human(Race.Terran),
+            Bot(Race.Terran, BCRushBot()),
+            Computer(Race.Zerg, Difficulty.Hard),
+        ],
+        realtime=False,
+    )
+
+
+if __name__ == "__main__":
     main()

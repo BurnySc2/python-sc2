@@ -6,6 +6,7 @@ from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.helpers import ControlGroup
 
+
 class ProxyRaxBot(sc2.BotAI):
     def __init__(self):
         self.attack_groups = set()
@@ -53,11 +54,14 @@ class ProxyRaxBot(sc2.BotAI):
             else:
                 self.attack_groups.remove(ac)
 
-def main():
-    sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
-        Bot(Race.Terran, ProxyRaxBot()),
-        Computer(Race.Zerg, Difficulty.Hard)
-    ], realtime=False)
 
-if __name__ == '__main__':
+def main():
+    sc2.run_game(
+        sc2.maps.get("(2)CatalystLE"),
+        [Bot(Race.Terran, ProxyRaxBot()), Computer(Race.Zerg, Difficulty.Hard)],
+        realtime=False,
+    )
+
+
+if __name__ == "__main__":
     main()

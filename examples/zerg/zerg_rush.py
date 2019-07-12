@@ -51,7 +51,9 @@ class ZergRushBot(sc2.BotAI):
                     self.do(drone.gather(mineral, queue=True))
 
         # If we have 100 vespene, this will try to research zergling speed once the spawning pool is at 100% completion
-        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(UpgradeId.ZERGLINGMOVEMENTSPEED):
+        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(
+            UpgradeId.ZERGLINGMOVEMENTSPEED
+        ):
             spawning_pools_ready = self.structures(UnitTypeId.SPAWNINGPOOL).ready
             if spawning_pools_ready:
                 self.research(UpgradeId.ZERGLINGMOVEMENTSPEED)

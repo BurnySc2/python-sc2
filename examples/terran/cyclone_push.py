@@ -6,6 +6,7 @@ from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.player import Human
 
+
 class CyclonePush(sc2.BotAI):
     def select_target(self):
         target = self.known_enemy_structures
@@ -31,11 +32,10 @@ class CyclonePush(sc2.BotAI):
         else:
             cc = cc.first
 
-
         if iteration % 50 == 0 and self.units(CYCLONE).amount > 2:
             target = self.select_target()
             forces = self.units(CYCLONE)
-            if (iteration//50) % 10 == 0:
+            if (iteration // 50) % 10 == 0:
                 for unit in forces:
                     self.do(unit.attack(target))
             else:
@@ -79,7 +79,6 @@ class CyclonePush(sc2.BotAI):
             if self.can_afford(CYCLONE):
                 self.do(factory.train(CYCLONE))
 
-
         for a in self.gas_buildings:
             if a.assigned_harvesters < a.ideal_harvesters:
                 w = self.workers.closer_than(20, a)
@@ -89,12 +88,18 @@ class CyclonePush(sc2.BotAI):
         for scv in self.workers.idle:
             self.do(scv.gather(self.mineral_field.closest_to(cc)))
 
-def main():
-    sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
-        # Human(Race.Terran),
-        Bot(Race.Terran, CyclonePush()),
-        Computer(Race.Zerg, Difficulty.Easy)
-    ], realtime=False)
 
-if __name__ == '__main__':
+def main():
+    sc2.run_game(
+        sc2.maps.get("(2)CatalystLE"),
+        [
+            # Human(Race.Terran),
+            Bot(Race.Terran, CyclonePush()),
+            Computer(Race.Zerg, Difficulty.Easy),
+        ],
+        realtime=False,
+    )
+
+
+if __name__ == "__main__":
     main()
