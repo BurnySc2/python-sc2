@@ -25,7 +25,7 @@ class BroodlordBot(sc2.BotAI):
             for unit in forces:
                 self.do(unit.attack(self.select_target()))
 
-        if self.supply_left < 2:11
+        if self.supply_left < 2:
             if self.can_afford(OVERLORD) and larvae.exists:
                 self.do(larvae.random.train(OVERLORD))
                 return
