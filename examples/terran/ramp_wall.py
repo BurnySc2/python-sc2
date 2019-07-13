@@ -84,6 +84,9 @@ class RampWallBot(sc2.BotAI):
                 w = ws.random
                 self.do(w.build(BARRACKS, barracks_placement_position))
 
+    async def on_building_construction_started(self, unit: Unit):
+        print(f"Construction of building {unit} started at {unit.position}.")
+
     async def on_building_construction_complete(self, unit: Unit):
         print(f"Construction of building {unit} completed at {unit.position}.")
 
