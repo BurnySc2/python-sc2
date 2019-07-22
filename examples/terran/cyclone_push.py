@@ -98,6 +98,7 @@ def main():
             Computer(Race.Zerg, Difficulty.Easy),
         ],
         realtime=False,
+        sc2_version="4.7",
     )
 
 
