@@ -17,6 +17,8 @@ import portpicker
 from .controller import Controller
 from .paths import Paths
 
+from sc2.versions import VERSIONS
+
 logger = logging.getLogger(__name__)
 
 
@@ -92,11 +94,7 @@ class SC2Process:
     def versions(self):
         """ Opens the versions.json file which origins from
         https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json """
-        file_path = __file__
-        versions_json_path = os.path.join(os.path.dirname(file_path), "dicts", "versions.json")
-        with open(versions_json_path, "r") as f:
-            versions = json.load(f)
-        return versions
+        return VERSIONS
 
     def find_data_hash(self, target_sc2_version: str):
         """ Returns the data hash from the matching version string. """
@@ -120,16 +118,22 @@ class SC2Process:
             self._tmp_dir,
         ]
         if self._sc2_version is not None:
-            def special_match(strg: str, search=re.compile(r'([0-9]+\.[0-9]+?\.?[0-9]+)').search):
+
+            def special_match(strg: str, search=re.compile(r"([0-9]+\.[0-9]+?\.?[0-9]+)").search):
                 """ Test if string contains only numbers and dots, which is a valid version string. """
                 return not bool(search(strg))
+
             valid_version_string = special_match(self._sc2_version)
             if valid_version_string:
                 data_hash = self.find_data_hash(self._sc2_version)
-                assert data_hash is not None, f"StarCraft 2 Client version ({self._sc2_version}) was not found inside sc2/dicts/versions.json file. Please check your spelling or check the versions.json file."
+                assert (
+                    data_hash is not None
+                ), f"StarCraft 2 Client version ({self._sc2_version}) was not found inside sc2/versions.py file. Please check your spelling or check the versions.py file."
                 args.extend(["-dataVersion", data_hash])
             else:
-                logger.warning(f"The submitted version string in sc2.rungame() function call (sc2_version=\"{self._sc2_version}\") does not match a normal version string. Running latest version instead.")
+                logger.warning(
+                    f'The submitted version string in sc2.rungame() function call (sc2_version="{self._sc2_version}") does not match a normal version string. Running latest version instead.'
+                )
 
         if self._render:
             args.extend(["-eglpath", "libEGL.so"])
