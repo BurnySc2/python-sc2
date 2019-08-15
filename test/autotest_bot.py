@@ -3,6 +3,7 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import random
+import logging
 
 import sc2
 from sc2 import Race, Difficulty
@@ -20,6 +21,7 @@ from sc2.ids.buff_id import BuffId
 from sc2.ids.upgrade_id import UpgradeId
 from sc2.ids.effect_id import EffectId
 
+logger = logging.getLogger(__name__)
 
 class TestBot(sc2.BotAI):
     def __init__(self):
@@ -206,6 +208,7 @@ class TestBot(sc2.BotAI):
 
     async def test_botai_actions4_successful(self):
         if self.units.gathering.amount >= 12:
+            logger.warn("Action test 044 successful.")
             return True
 
     # Test BotAI action: self.expand_now() which tests for get_next_expansion, select_build_worker, can_place, find_placement, build and can_afford
@@ -216,6 +219,7 @@ class TestBot(sc2.BotAI):
 
     async def test_botai_actions5_successful(self):
         if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
+            logger.warning("Action test 05 successful.")
             return True
 
     # Test if reaper grenade shows up in effects
@@ -233,6 +237,7 @@ class TestBot(sc2.BotAI):
                 # print(f"Effect: {effect}")
                 pass
             # Cleanup
+            logger.warning("Action test 06 successful.")
             await self._client.debug_kill_unit(self.units(UnitTypeId.REAPER))
             return True
 
@@ -254,6 +259,7 @@ class TestBot(sc2.BotAI):
                     success = True
         if success:
             # Cleanup
+            logger.warning("Action test 07 successful.")
             await self._client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
             return True
 

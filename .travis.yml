@@ -47,7 +47,7 @@ jobs:
         - docker run -it -d --name app python:3.8-rc-slim
         - docker cp . app:/root/template
         - docker exec app pip install --upgrade pipenv
-        - docker exec -i app bash -c "cd /root/template && pipenv --python python install --dev --python 3.8"
+        - docker exec -i app bash -c "cd /root/template && pipenv install --dev --python 3.8"
         - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
         - docker rm -f app
 
@@ -62,7 +62,7 @@ jobs:
         - docker build -t test_image -f test/Dockerfile .
         # Run the docker image
         - docker run -it -d --name app test_image
-        # Uninstall installed python-sc2 version to make it use the one from this repository
+        # Uninstall installed python-sc2 version if it exists, to make it use the one from this repository
         - docker exec -i app bash -c "pip uninstall sc2 --y"
         # Can be run from windows using command "pipenv run python test/travis_test_script.py test/autotest_bot.py"
         - docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
