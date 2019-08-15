@@ -265,7 +265,7 @@ class TestBot(sc2.BotAI):
 
 def main():
     sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+        sc2.maps.get("Acropolis"),
         [Bot(Race.Terran, TestBot()), Computer(Race.Zerg, Difficulty.Easy)],
         realtime=False,
     )
