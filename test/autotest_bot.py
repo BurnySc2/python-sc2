@@ -23,6 +23,7 @@ from sc2.ids.effect_id import EffectId
 
 class TestBot(sc2.BotAI):
     def __init__(self):
+        sc2.BotAI.__init__(self)
         # Tests related
         self.game_time_timeout_limit = 2 * 60
         # Check how many test action functions we have
