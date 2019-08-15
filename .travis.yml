@@ -51,19 +51,18 @@ jobs:
         - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
         - docker rm -f app
 
-# Disabled until linux client is at version 4.8.5 or newer - issues with pixelmap that are working on the windows client
-#    - stage: run autotest bot
-#      script:
-#        # Debugging
-#        - echo Current path
-#        - pwd
-#        - echo Project dir contents
-#        - ls
-#        # Build the docker image
-#        - docker build -t test_image -f test/Dockerfile .
-#        # Run the docker image
-#        - docker run -it -d --name app test_image
-#        # Can be run from windows using command "pipenv run python test/travis_test_script.py test/autotest_bot.py"
-#        - docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
-#        # Shut down and remove container after finishing
-#        - docker rm -f app
+    - stage: run autotest bot
+      script:
+        # Debugging
+        - echo Current path
+        - pwd
+        - echo Project dir contents
+        - ls
+        # Build the docker image
+        - docker build -t test_image -f test/Dockerfile .
+        # Run the docker image
+        - docker run -it -d --name app test_image
+        # Can be run from windows using command "pipenv run python test/travis_test_script.py test/autotest_bot.py"
+        - docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
+        # Shut down and remove container after finishing
+        - docker rm -f app

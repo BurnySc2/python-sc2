@@ -85,8 +85,8 @@ class DistanceCalculation:
         return self._cached_pdist
 
     def _get_index_of_two_units(self, unit1: Unit, unit2: Unit) -> int:
-        assert unit1.tag in self._unit_index_dict, f"Unit1 {unit1} is not in index dict"
-        assert unit2.tag in self._unit_index_dict, f"Unit2 {unit2} is not in index dict"
+        assert unit1.tag in self._unit_index_dict, f"Unit1 {unit1} is not in index dict for distance calculation. Make sure the unit is alive in the current frame. Ideally take units from 'self.units' or 'self.structures' as these contain unit data from the current frame. Do not try to save 'Units' objects over several iterations."
+        assert unit2.tag in self._unit_index_dict, f"Unit2 {unit2} is not in index dict for distance calculation. Make sure the unit is alive in the current frame. Ideally take units from 'self.units' or 'self.structures' as these contain unit data from the current frame. Do not try to save 'Units' objects over several iterations."
         index1 = self._unit_index_dict[unit1.tag]
         index2 = self._unit_index_dict[unit2.tag]
         condensed_index = self.square_to_condensed(index1, index2)
