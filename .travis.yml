@@ -62,8 +62,6 @@ jobs:
         - docker build -t test_image -f test/Dockerfile .
         # Run the docker image
         - docker run -it -d --name app test_image
-#        # Uninstall installed python-sc2 version if it exists, to make it use the one from this repository
-#        - docker exec -i app bash -c "pip uninstall sc2 --y"
         # Can be run from windows using command "pipenv run python test/travis_test_script.py test/autotest_bot.py"
         - docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
         # Shut down and remove container after finishing
