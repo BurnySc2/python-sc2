@@ -208,7 +208,7 @@ class TestBot(sc2.BotAI):
 
     async def test_botai_actions4_successful(self):
         if self.units.gathering.amount >= 12:
-            logger.warn("Action test 044 successful.")
+            logger.warning("Action test 044 successful.")
             return True
 
     # Test BotAI action: self.expand_now() which tests for get_next_expansion, select_build_worker, can_place, find_placement, build and can_afford

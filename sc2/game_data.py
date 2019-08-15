@@ -81,7 +81,7 @@ class AbilityData:
         self._proto = proto
 
         # What happens if we comment this out? Should this not be commented out? What is its purpose?
-        # assert self.id != 0
+        assert self.id != 0
 
     def __repr__(self) -> str:
         return f"AbilityData(name={self._proto.button_name})"

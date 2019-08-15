@@ -73,7 +73,7 @@ def parse_data(data):
         if key in abilities and v["index"] == 0:
             print(f"{key} has value 0 and id {v['id']}, overwriting {key}: {abilities[key]}")
             # Commented out to try to fix: 3670 is not a valid AbilityId
-            # abilities[key] = v["id"]
+            abilities[key] = v["id"]
             pass
         else:
             abilities[key] = v["id"]
