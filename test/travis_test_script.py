@@ -34,6 +34,7 @@ if len(sys.argv) > 1:
         result = out.decode("utf-8")
         if process.returncode is not None and process.returncode != 0:
             # Bot has thrown an error, try again
+            print(f"Bot has thrown an error with error code {process.returncode}. This was try {i+1} out of {retries}.")
             continue
 
         # Break as the bot run was successful

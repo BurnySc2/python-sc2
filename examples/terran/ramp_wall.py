@@ -60,6 +60,9 @@ class RampWallBot(sc2.BotAI):
         # Draw vision blockers
         # self.draw_vision_blockers()
 
+        # Draw visibility
+        self.draw_visibility_pixelmap()
+
         # Filter locations close to finished supply depots
         if depots:
             depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
@@ -133,6 +136,20 @@ class RampWallBot(sc2.BotAI):
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
+            self._client.debug_box_out(p0, p1, color=color)
+
+    def draw_visibility_pixelmap(self):
+        for (y, x), value in np.ndenumerate(self.state.visibility.data_numpy):
+            p = Point2((x, y))
+            h2 = self.get_terrain_z_height(p)
+            pos = Point3((p.x, p.y, h2))
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+            # Red
+            color = Point3((255, 0, 0))
+            # If value == 2: show green (= we have vision on that point)
+            if value == 2:
+                color = Point3((0, 255, 0))
             self._client.debug_box_out(p0, p1, color=color)
 
 

@@ -168,7 +168,7 @@ def test_bot_ai():
     # The pickle data was created by a terran bot, so there is no creep under any worker
     assert not bot.has_creep(worker)
     # Why did this stop working, not visible on first frame?
-    # assert bot.is_visible(worker), f"Visibility value at worker is {bot.state.visibility[worker.position.rounded]}"
+    assert bot.is_visible(worker), f"Visibility value at worker is {bot.state.visibility[worker.position.rounded]}"
 
     # Check price for morphing units and upgrades
     cost_100 = [

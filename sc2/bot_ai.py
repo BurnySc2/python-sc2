@@ -875,7 +875,7 @@ class BotAI(DistanceCalculation):
         Example Zerg::
 
             self.train(UnitTypeId.QUEEN, 5)
-            # This should queue 5 queens in 5 different townhalls if you have enough townhalls, enough minerals and enough supply left
+            # This should queue 5 queens in 5 different townhalls if you have enough townhalls, enough minerals and enough free supply left
 
         Example Terran::
 
@@ -899,8 +899,8 @@ class BotAI(DistanceCalculation):
         # Not affordable
         if not self.can_afford(unit_type):
             return 0
-        # All train structure types: queen can made from hatchery, lair, hive
         trained_amount = 0
+        # All train structure types: queen can made from hatchery, lair, hive
         train_structure_type: Set[UnitTypeId] = UNIT_TRAINED_FROM[unit_type]
         train_structures = self.structures if self.race != Race.Zerg else self.structures | self.larva
         requires_techlab = any(
@@ -908,6 +908,7 @@ class BotAI(DistanceCalculation):
             for structure_type in train_structure_type
         )
         is_protoss = self.race == Race.Protoss
+        is_terran = self.race == Race.Terran
         can_have_addons = any(
             u in train_structure_type for u in {UnitTypeId.BARRACKS, UnitTypeId.FACTORY, UnitTypeId.STARPORT}
         )
@@ -922,6 +923,9 @@ class BotAI(DistanceCalculation):
             )
         structure: Unit
         for structure in train_structures:
+            # Exit early if we can't afford
+            if not self.can_afford(unit_type):
+                return trained_amount
             if (
                 # If structure hasn't received an action/order this frame
                 structure.tag not in self.unit_tags_received_action
@@ -947,35 +951,39 @@ class BotAI(DistanceCalculation):
                     pylons = self.structures(UnitTypeId.PYLON)
                     location = pylons.random.position.random_on_distance(4)
                     successfully_trained = self.do(
-                        structure.warp_in(unit_type, location),
-                        subtract_cost=True,
-                        subtract_supply=True,
-                        can_afford_check=True,
+                        structure.warp_in(unit_type, location), subtract_cost=True, subtract_supply=True
                     )
                 else:
                     # Normal train a unit from larva or inside a structure
-                    successfully_trained = self.do(
-                        structure.train(unit_type), subtract_cost=True, subtract_supply=True, can_afford_check=True
-                    )
-                    # If it doesnt require techlab, and has reactor (this implicitly tells us that it doesnt require a techlab because of the if statement above) and we are at least 2 away from goal, and structure was idle: queue same unit again
+                    successfully_trained = self.do(structure.train(unit_type), subtract_cost=True, subtract_supply=True)
+                    # Check if structure has reactor: queue same unit again
                     if (
-                        not structure.orders
+                        # Only terran can have reactors
+                        is_terran
+                        # Check if we have enough cost or supply for this unit type
+                        and self.can_afford(unit_type)
+                        # Structure needs to be idle in the current frame
+                        and not structure.orders
+                        # We are at least 2 away from goal
                         and trained_amount + 1 < amount
+                        # Unit type does not require techlab
+                        and not requires_techlab
+                        # Train structure has reactor
                         and structure.add_on_tag in self.reactor_tags
                     ):
                         trained_amount += 1
+                        # With one command queue=False and one queue=True, you can queue 2 marines in a reactored barracks in one frame
                         successfully_trained = self.do(
-                            structure.train(unit_type, queue=True),
-                            subtract_cost=True,
-                            subtract_supply=True,
-                            can_afford_check=True,
+                            structure.train(unit_type, queue=True), subtract_cost=True, subtract_supply=True
                         )
 
                 if successfully_trained:
                     trained_amount += 1
                     if trained_amount == amount:
+                        # Target unit train amount reached
                         return trained_amount
                 else:
+                    # Some error occured and we couldn't train the unit
                     return trained_amount
         return trained_amount
 
@@ -1004,6 +1012,8 @@ class BotAI(DistanceCalculation):
         return_value = 0
         for structure in self.structures:
             structure_data = self._game_data.units[structure._proto.unit_type]
+            # Check the aliases of the structure, e.g. progress of barracks_flying should be same as progress of barracks
+            # TODO: change to unit alias instead of tech alias, since techalias has commandcenter=commandcenterflying=orbitalcommand=orbitalcommandflying=planetaryfortess, while it should only be commandcenter=commandcenterflying
             for tech_alias in list(structure_data._proto.tech_alias) + [structure._proto.unit_type]:
                 if tech_alias == structure_type_value:
                     if structure.build_progress == 1:
@@ -1040,7 +1050,7 @@ class BotAI(DistanceCalculation):
             Race.Zerg: ZERG_TECH_REQUIREMENT,
         }
         unit_info_id_value = race_dict[self.race][structure_type].value
-        # The following line is unrelaible for ghost / thor as they return 0 which is incorrect
+        # The following commented out line is unrelaible for ghost / thor as they return 0 which is incorrect
         # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
         if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
@@ -1071,7 +1081,6 @@ class BotAI(DistanceCalculation):
             return False
 
         research_structure_types: UnitTypeId = UPGRADE_RESEARCHED_FROM[upgrade_type]
-        # research_ability: AbilityId = RESEARCH_INFO[research_structure_types][upgrade_type]["ability"]
         required_tech_building: Optional[UnitTypeId] = RESEARCH_INFO[research_structure_types][upgrade_type].get(
             "required_building", None
         )
@@ -1107,6 +1116,7 @@ class BotAI(DistanceCalculation):
                 # Structure belongs to protoss and is powered (near pylon)
                 and (not is_protoss or structure.is_powered)
             ):
+                # Can_afford check was already done earlier in this function
                 successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
                 return successful_action
         return False
@@ -1197,17 +1207,17 @@ class BotAI(DistanceCalculation):
             # current_action: UnitOrder
             current_action = action.unit.orders[0]
             if current_action.ability.id != action.ability:
-                # different action, return true
+                # Different action, return True
                 return True
             try:
                 if current_action.target == action.target.tag:
-                    # same action, remove action if same target unit
+                    # Same action, remove action if same target unit
                     return False
             except AttributeError:
                 pass
             try:
                 if action.target.x == current_action.target.x and action.target.y == current_action.target.y:
-                    # same action, remove action if same target position
+                    # Same action, remove action if same target position
                     return False
             except AttributeError:
                 pass
@@ -1430,7 +1440,7 @@ class BotAI(DistanceCalculation):
         # Commit and clear bot actions
         await self._do_actions(self.actions)
         self.actions.clear()
-        # Clear set of unit tags that were given an order this frame
+        # Clear set of unit tags that were given an order this frame by self.do()
         self.unit_tags_received_action.clear()
         # Commit debug queries
         await self._client._send_debug()
