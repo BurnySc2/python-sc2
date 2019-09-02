@@ -14,6 +14,9 @@ from collections import OrderedDict
 # from ordered_set import OrderedSet
 
 """
+Script requirements:
+pip install black
+
 This script does the following:
 
 - Loop over all abilities, checking what unit they create and if it requires a placement position
@@ -24,7 +27,7 @@ This script does the following:
 Dentosals data.json
 https://github.com/Dentosal/sc2-techtree/blob/master/data/data.json
 
-json viewers:
+json viewers to inspect the data.json manually:
 http://jsonviewer.stack.hu/
 https://jsonformatter.org/json-viewer
 """

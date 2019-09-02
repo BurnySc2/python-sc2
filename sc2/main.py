@@ -119,7 +119,10 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
     realtime_game_loop = -1
     while True:
         if iteration != 0:
-            state = await client.observation()
+            if realtime:
+                state = await client.observation(realtime_game_loop + client.game_step)
+            else:
+                state = await client.observation()
             # check game result every time we get the observation
             if client._game_result:
                 try:
@@ -142,18 +145,17 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
         try:
             if realtime:
-                # Prevent bot from running multiple times in the same game_loop in realtime=True
-                if ai.state.game_loop != realtime_game_loop:
-                    # Issue event liks unit created or unit destroyed
-                    await ai.issue_events()
-                    await ai.on_step(iteration)
-                    realtime_game_loop = await ai._after_step()
+                # Issue event like unit created or unit destroyed
+                await ai.issue_events()
+                await ai.on_step(iteration)
+                realtime_game_loop = await ai._after_step()
             else:
                 if time_penalty_cooldown > 0:
                     time_penalty_cooldown -= 1
                     logger.warning(f"Running AI step: penalty cooldown: {time_penalty_cooldown}")
                     iteration -= 1  # Do not increment the iteration on this round
                 elif time_limit is None:
+                    # Issue event like unit created or unit destroyed
                     await ai.issue_events()
                     await ai.on_step(iteration)
                     await ai._after_step()

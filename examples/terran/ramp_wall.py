@@ -60,8 +60,8 @@ class RampWallBot(sc2.BotAI):
         # Draw vision blockers
         # self.draw_vision_blockers()
 
-        # Draw visibility
-        self.draw_visibility_pixelmap()
+        # Draw visibility pixelmap for debugging purposes
+        # self.draw_visibility_pixelmap()
 
         # Filter locations close to finished supply depots
         if depots:
