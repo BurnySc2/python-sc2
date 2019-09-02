@@ -116,11 +116,11 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         return Result.Defeat
 
     iteration = 0
-    realtime_game_loop = -1
     while True:
         if iteration != 0:
             if realtime:
-                state = await client.observation(realtime_game_loop + client.game_step)
+                # TODO: check what happens if a bot takes too long to respond, so that the requested game_loop might already be in the past
+                state = await client.observation(gs.game_loop + client.game_step)
             else:
                 state = await client.observation()
             # check game result every time we get the observation
@@ -148,7 +148,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                 # Issue event like unit created or unit destroyed
                 await ai.issue_events()
                 await ai.on_step(iteration)
-                realtime_game_loop = await ai._after_step()
+                await ai._after_step()
             else:
                 if time_penalty_cooldown > 0:
                     time_penalty_cooldown -= 1
