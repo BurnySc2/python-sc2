@@ -205,29 +205,33 @@ class BotAI(DistanceCalculation):
         """
 
         # Idea: create a group for every resource, then merge these groups if
-        # any resource in a group is closer than 6 to any resource of another group
+        # any resource in a group is closer than a threshold to any resource of another group
 
         # Distance we group resources by
-        RESOURCE_SPREAD_THRESHOLD = 8.5
+        resource_spread_threshold = 8.5
         geysers = self.vespene_geyser
         # Create a group for every resource
-        resource_groups = [[resource] for resource in self.resources]
+        resource_groups = [
+            [resource]
+            for resource in self.resources
+            if resource.name != "MineralField450" # dont use low mineral count patches
+        ]
         # Loop the merging process as long as we change something
-        found_something = True
-        while found_something:
-            found_something = False
+        merged_group = True
+        while merged_group:
+            merged_group = False
             # Check every combination of two groups
             for group_a, group_b in itertools.combinations(resource_groups, 2):
                 # Check if any pair of resource of these groups is closer than threshold together
                 if any(
-                    resource_a.distance_to(resource_b) <= RESOURCE_SPREAD_THRESHOLD
+                    resource_a.distance_to(resource_b) <= resource_spread_threshold
                     for resource_a, resource_b in itertools.product(group_a, group_b)
                 ):
                     # Remove the single groups and add the merged group
                     resource_groups.remove(group_a)
                     resource_groups.remove(group_b)
                     resource_groups.append(group_a + group_b)
-                    found_something = True
+                    merged_group = True
                     break
         # Distance offsets we apply to center of each resource group to find expansion position
         offset_range = 7

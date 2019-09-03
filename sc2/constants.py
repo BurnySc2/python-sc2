@@ -21,6 +21,8 @@ mineral_ids: Set[int] = {
     PURIFIERMINERALFIELD750.value,
     BATTLESTATIONMINERALFIELD.value,
     BATTLESTATIONMINERALFIELD750.value,
+    MINERALFIELDOPAQUE.value,
+    MINERALFIELDOPAQUE900.value,
 }
 geyser_ids: Set[int] = {
     VESPENEGEYSER.value,
