@@ -83,6 +83,7 @@ def main():
         "AcidPlantLE",
         "AcolyteLE",
         "Acropolis",
+        "AcropolisLE",
         "Artana",
         "AscensiontoAiurLE",
         "AutomatonLE",
@@ -101,9 +102,11 @@ def main():
         "DarknessSanctuaryLE",
         "DefendersLandingLE",
         "DigitalFrontier",
+        "DiscoBloodbathLE",
         "DreamcatcherLE",
         "EastwatchLE",
         "Ephemeron",
+        "EphemeronLE",
         "FractureLE",
         "FrostLE",
         "HonorgroundsLE",
@@ -128,9 +131,12 @@ def main():
         "SequencerLE",
         # "StasisLE", Commented out because it has uneven number of expansions
         "TheTimelessVoid",
+        "ThunderbirdLE",
         "Treachery",
         "Triton",
         "Urzagol",
+        "WintersGateLE",
+        "WorldofSleepersLE",
         "YearZeroLE",
     ]
 
