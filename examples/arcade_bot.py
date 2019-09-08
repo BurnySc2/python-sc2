@@ -38,9 +38,6 @@ Improvements that could be made:
 
 class MarineSplitChallenge(sc2.BotAI):
     async def on_step(self, iteration):
-        if iteration == 0:
-            await self.on_first_iteration()
-
         # do marine micro vs zerglings
         for unit in self.units(UnitTypeId.MARINE):
 
@@ -94,7 +91,7 @@ class MarineSplitChallenge(sc2.BotAI):
                     else:
                         print("No retreat positions detected for unit {} at {}.".format(unit, unit.position.rounded))
 
-    async def on_first_iteration(self):
+    async def on_start(self):
         await self.chat_send("Edit this message for automatic chat commands.")
         self._client.game_step = 4  # do actions every X frames instead of every 8th
 
