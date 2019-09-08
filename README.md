@@ -18,8 +18,10 @@ By installing this library you agree to be bound by the terms of the [AI and Mac
 For this fork, you'll need Python 3.7 or newer.
 
 ```
-pip3 install --user --upgrade sc2
+pip install pipenv
+pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/archive/develop.zip
 ```
+
 You'll need an StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
 
 You probably want some maps too. Official map downloads are available from [Blizzard/s2client-proto](https://github.com/Blizzard/s2client-proto#downloads). Notice: the map files are to be extracted into *subdirectories* of the `install-dir/Maps` directory.
