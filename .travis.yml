@@ -66,3 +66,14 @@ jobs:
         - docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
         # Shut down and remove container after finishing
         - docker rm -f app
+
+
+before_deploy:
+  - pip install pipenv
+deploy:
+  provider: pypi
+  user: "BurnySc2"
+  # Password needs to be set in travis environment variables: https://travis-ci.com/BurnySc2/python-sc2/settings
+  password: "$PYPI_PASSWORD"
+  on:
+    branch: pypi-release

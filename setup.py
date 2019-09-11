@@ -8,14 +8,14 @@ requirements = convert_deps_to_pip(pfile['packages'], r=False)
 test_requirements = convert_deps_to_pip(pfile['dev-packages'], r=False)
 
 setup(
-    name = "sc2",
+    name = "burnysc2",
     packages = find_packages(),
-    version = "0.11.0",
+    version = "0.12.1",
     description = "A StarCraft II API Client for Python 3",
     license="MIT",
-    author = "Hannes Karppila",
-    author_email = "hannes.karppila@gmail.com",
-    url = "https://github.com/Dentosal/python-sc2",
+    author = "BurnySc2",
+    author_email = "gamingburny@gmail.com",
+    url = "https://github.com/Burnysc2/python-sc2",
     keywords = ["StarCraft", "StarCraft 2", "StarCraft II", "AI", "Bot"],
     setup_requires=["pipenv"],
     install_requires=requirements,
