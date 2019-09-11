@@ -19,8 +19,7 @@ For this fork, you'll need Python 3.7 or newer.
 
 Install the pypi package:
 ```
-pip install pipenv
-pip install --ugprade burnysc2
+pip install --ugprade pipenv burnysc2
 ```
 or directly from develop branch:
 ```
