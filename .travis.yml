@@ -72,8 +72,8 @@ before_deploy:
   - pip install pipenv
 deploy:
   provider: pypi
-  user: BurnySc2
+  user: "BurnySc2"
   password:
-    secure: $PYPI_PASSWORD
+    secure: "$PYPI_PASSWORD"
   on:
     branch: pypi-release
