@@ -73,6 +73,7 @@ before_deploy:
 deploy:
   provider: pypi
   user: "BurnySc2"
+  # Password needs to be set in travis environment variables: https://travis-ci.com/BurnySc2/python-sc2/settings
   password: "$PYPI_PASSWORD"
   on:
     branch: pypi-release
