@@ -21,19 +21,29 @@ from sc2.ids.buff_id import BuffId
 from sc2.ids.upgrade_id import UpgradeId
 from sc2.ids.effect_id import EffectId
 
+from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
+
 logger = logging.getLogger(__name__)
+
 
 class TestBot(sc2.BotAI):
     def __init__(self):
         sc2.BotAI.__init__(self)
-        # Tests related
-        self.game_time_timeout_limit = 2 * 60
+        # The time the bot has to complete all tests, here: the number of game seconds
+        self.game_time_timeout_limit = 2 * 60  # 2 minutes
+
         # Check how many test action functions we have
+        # At least 4 tests because we test properties and variables
         self.tests_target = 4 + len(
             [True for index in range(1000) if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")]
         )
         self.tests_done_by_name = set()
+
+        # Keep track of the action index and when the last action was started
         self.current_action_index = 1
+        self.iteration_last_action_started = 8
+        # There will be 20 iterations of the bot doing nothing between tests
+        self.iteration_wait_time_between_actions = 20
 
         self.scv_action_list = ["move", "patrol", "attack", "hold", "scan_move"]
 
@@ -57,20 +67,24 @@ class TestBot(sc2.BotAI):
 
         # Test actions
         if iteration > 7:
-            # Execute actions on even iterations, test if actions were successful on uneven iterations
-            if iteration % 2 == 0:
-                action_execute_function_name = f"test_botai_actions{self.current_action_index}"
-                action_execute_function = getattr(self, action_execute_function_name, None)
-                if action_execute_function is not None:
-                    await action_execute_function()
-            else:
-                action_test_function_name = f"test_botai_actions{self.current_action_index}_successful"
-                action_test_function = getattr(self, action_test_function_name, None)
-                if action_test_function is not None:
-                    success = await action_test_function()
-                    if success:
-                        self.tests_done_by_name.add(f"test_botai_actions{self.current_action_index}_successful")
-                        self.current_action_index += 1
+            # Skip and wait because some effects from last action might still be active, e.g. reaper grenade
+            if iteration - self.iteration_last_action_started > self.iteration_wait_time_between_actions:
+
+                # Execute actions on even iterations, test if actions were successful on uneven iterations
+                if iteration % 2 == 0:
+                    action_execute_function_name = f"test_botai_actions{self.current_action_index}"
+                    action_execute_function = getattr(self, action_execute_function_name, None)
+                    if action_execute_function is not None:
+                        await action_execute_function()
+                else:
+                    action_test_function_name = f"test_botai_actions{self.current_action_index}_successful"
+                    action_test_function = getattr(self, action_test_function_name, None)
+                    if action_test_function is not None:
+                        success = await action_test_function()
+                        if success:
+                            self.tests_done_by_name.add(f"test_botai_actions{self.current_action_index}_successful")
+                            self.current_action_index += 1
+                            self.iteration_last_action_started = iteration
 
         # End when all tests successful
         if len(self.tests_done_by_name) >= self.tests_target:
@@ -142,7 +156,6 @@ class TestBot(sc2.BotAI):
         assert len(self._game_info.player_races) == 2, self._game_info.player_races
         self.tests_done_by_name.add("test_game_info_static_variables")
 
-
     # Test BotAI action: train SCV
     async def test_botai_actions1(self):
         if self.can_afford(UnitTypeId.SCV):
@@ -181,7 +194,7 @@ class TestBot(sc2.BotAI):
                 or unit.is_attacking
             )
 
-        if self.units.filter(lambda x: temp_filter(x)).amount >= len(self.scv_action_list):
+        if self.units.filter(lambda unit: temp_filter(unit)).amount >= len(self.scv_action_list):
             return True
 
     # Test BotAI action: move some scvs to the center, some to minerals
@@ -208,7 +221,7 @@ class TestBot(sc2.BotAI):
 
     async def test_botai_actions4_successful(self):
         if self.units.gathering.amount >= 12:
-            logger.warning("Action test 044 successful.")
+            logger.warning("Action test 04 successful.")
             return True
 
     # Test BotAI action: self.expand_now() which tests for get_next_expansion, select_build_worker, can_place, find_placement, build and can_afford
@@ -231,10 +244,10 @@ class TestBot(sc2.BotAI):
             self.do(reaper(AbilityId.KD8CHARGE_KD8CHARGE, center))
 
     async def test_botai_actions6_successful(self):
-        if len(self.state.effects) > 2:
-            # print(f"Effects: {self.state.effects}")
+        if len(self.state.effects) > 0:
+            print(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
-                # print(f"Effect: {effect}")
+                print(f"Effect: {effect}")
                 pass
             # Cleanup
             logger.warning("Action test 06 successful.")
@@ -263,18 +276,51 @@ class TestBot(sc2.BotAI):
             await self._client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
             return True
 
+    # Test if train function works on hatchery, lair, hive
+    async def test_botai_actions8(self):
+        center = self._game_info.map_center
+        if not self.structures(UnitTypeId.HIVE):
+            await self._client.debug_create_unit([[UnitTypeId.HIVE, 1, center, 1]])
+        if not self.structures(UnitTypeId.LAIR):
+            await self._client.debug_create_unit([[UnitTypeId.LAIR, 1, center, 1]])
+        if not self.structures(UnitTypeId.HATCHERY):
+            await self._client.debug_create_unit([[UnitTypeId.HATCHERY, 1, center, 1]])
+        if not self.structures(UnitTypeId.SPAWNINGPOOL):
+            await self._client.debug_create_unit([[UnitTypeId.SPAWNINGPOOL, 1, center, 1]])
+
+        townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
+        if townhalls.amount == 3 and self.minerals >= 450 and not self.already_pending(UnitTypeId.QUEEN):
+            # self.train(UnitTypeId.QUEEN, amount=3)
+            for townhall in townhalls:
+                self.do(townhall.train(UnitTypeId.QUEEN), subtract_cost=True, subtract_supply=True)
+
+    async def test_botai_actions8_successful(self):
+        success = False
+        if self.already_pending(UnitTypeId.QUEEN) == 3:
+            success = True
+
+        if success:
+            # Cleanup
+            logger.warning("Action test 08 successful.")
+            townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
+            queens = self.units(UnitTypeId.QUEEN)
+            pool = self.structures(UnitTypeId.SPAWNINGPOOL)
+            await self._client.debug_kill_unit(townhalls | queens | pool)
+            return True
+
+
     # TODO:
     # self.can_cast function
     # Test client.py debug functions
-    # Test if events work (upgrade, unit, building complete, building started)
+    # Test if events work (upgrade complete, unit complete, building complete, building started)
     # Test if functions with various combinations works (e.g. already_pending)
-    # Test if all can_afford and upgrade researches work after tech tree is implemented
+    # Test self.train function on: larva, hatchery + lair (queens), 2 barracks (2 marines), 2 nexus (probes)
+    # Test self.research function on: ebay, hatchery, forge, evo chamber
+
 
 def main():
     sc2.run_game(
-        sc2.maps.get("Acropolis"),
-        [Bot(Race.Terran, TestBot()), Computer(Race.Zerg, Difficulty.Easy)],
-        realtime=False,
+        sc2.maps.get("Acropolis"), [Bot(Race.Terran, TestBot()), Computer(Race.Zerg, Difficulty.Easy)], realtime=False
     )
 
 

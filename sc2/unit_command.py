@@ -1,12 +1,18 @@
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+
 from . import unit as unit_module
 from .ids.ability_id import AbilityId
 from .position import Point2
 
 from typing import Union
 
+if TYPE_CHECKING:
+    from .unit import Unit
+
 
 class UnitCommand:
-    def __init__(self, ability: AbilityId, unit: "Unit", target: Union["Unit", Point2] = None, queue: bool = False):
+    def __init__(self, ability: AbilityId, unit: Unit, target: Union[Unit, Point2] = None, queue: bool = False):
         """
         :param ability:
         :param unit:

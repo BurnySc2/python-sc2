@@ -6,7 +6,17 @@ from s2clientprotocol import raw_pb2 as raw_pb
 from .position import Point2
 from .unit import Unit
 
+
 def combine_actions(action_iter):
+    """
+    Example input:
+    [
+        # Each entry in the list is a unit command, with an ability, unit, target, and queue=boolean
+        UnitCommand(AbilityId.TRAINQUEEN_QUEEN, Unit(name='Hive', tag=4353687554), None, False),
+        UnitCommand(AbilityId.TRAINQUEEN_QUEEN, Unit(name='Lair', tag=4359979012), None, False),
+        UnitCommand(AbilityId.TRAINQUEEN_QUEEN, Unit(name='Hatchery', tag=4359454723), None, False),
+    ]
+    """
     for key, items in groupby(action_iter, key=lambda a: a.combining_tuple):
         ability, target, queue = key
 

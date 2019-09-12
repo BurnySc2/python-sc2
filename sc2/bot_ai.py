@@ -899,10 +899,19 @@ class BotAI(DistanceCalculation):
         :param train_only_idle_buildings: """
         # Tech requirement not met
         if self.tech_requirement_progress(unit_type) < 1:
+            race_dict = {
+                Race.Protoss: PROTOSS_TECH_REQUIREMENT,
+                Race.Terran: TERRAN_TECH_REQUIREMENT,
+                Race.Zerg: ZERG_TECH_REQUIREMENT,
+            }
+            unit_info_id = race_dict[self.race][unit_type]
+            logger.warning(f"Trying to produce unit {unit_type} but tech requirement is not met: {unit_info_id}")
             return 0
+
         # Not affordable
         if not self.can_afford(unit_type):
             return 0
+
         trained_amount = 0
         # All train structure types: queen can made from hatchery, lair, hive
         train_structure_type: Set[UnitTypeId] = UNIT_TRAINED_FROM[unit_type]
@@ -925,6 +934,7 @@ class BotAI(DistanceCalculation):
                 key=lambda structure: -1 * (structure.add_on_tag in self.reactor_tags)
                 + 1 * (structure.add_on_tag in self.techlab_tags)
             )
+
         structure: Unit
         for structure in train_structures:
             # Exit early if we can't afford
