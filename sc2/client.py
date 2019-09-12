@@ -595,7 +595,7 @@ class Client(Protocol):
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=7)]))
 
     async def debug_gas(self):
-        """ Gives 5000 vespene to the bot. """
+        """ Gives 5000 vespene to the bot. This does not seem to be working. """
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=8)]))
 
     async def debug_cooldown(self):

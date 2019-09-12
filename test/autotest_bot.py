@@ -30,7 +30,7 @@ class TestBot(sc2.BotAI):
     def __init__(self):
         sc2.BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
-        self.game_time_timeout_limit = 2 * 60  # 2 minutes
+        self.game_time_timeout_limit = 3 * 60  # 3 minutes
 
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
@@ -245,9 +245,9 @@ class TestBot(sc2.BotAI):
 
     async def test_botai_actions6_successful(self):
         if len(self.state.effects) > 0:
-            print(f"Effects: {self.state.effects}")
+            # print(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
-                print(f"Effect: {effect}")
+                # print(f"Effect: {effect}")
                 pass
             # Cleanup
             logger.warning("Action test 06 successful.")
@@ -309,6 +309,71 @@ class TestBot(sc2.BotAI):
             await self._client.debug_kill_unit(townhalls | queens | pool)
             return True
 
+    # Morph an archon from 2 high templars
+    async def test_botai_actions9(self):
+        center = self._game_info.map_center
+        target_amount = 2
+        HTs = self.units(UnitTypeId.HIGHTEMPLAR)
+        if HTs.amount < target_amount:
+            await self._client.debug_create_unit([[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]])
+
+        else:
+            for ht in HTs:
+                self.do(ht(AbilityId.MORPH_ARCHON))
+
+    async def test_botai_actions9_successful(self):
+        success = False
+        archons = self.units(UnitTypeId.ARCHON)
+        if archons.amount == 1:
+            success = True
+
+        if success:
+            # Cleanup
+            logger.warning("Action test 09 successful.")
+            await self._client.debug_kill_unit(archons)
+            return True
+
+    # Morph 400 banelings from 400 lings in the same frame
+    async def test_botai_actions10(self):
+        center = self._game_info.map_center
+        target_amount = 400
+        bane_nests = self.structures(UnitTypeId.BANELINGNEST)
+        lings = self.units(UnitTypeId.ZERGLING)
+        banes = self.units(UnitTypeId.BANELING)
+        bane_cocoons = self.units(UnitTypeId.BANELINGCOCOON)
+
+        # Cheat money, need 10k/10k to morph 400 lings to 400 banes
+        if not banes and not bane_cocoons:
+            if self.minerals < 10_000:
+                await self.client.debug_all_resources()
+            elif self.vespene < 10_000:
+                await self.client.debug_all_resources()
+
+        # Spawn units
+        if not bane_nests:
+            await self._client.debug_create_unit([[UnitTypeId.BANELINGNEST, 1, center, 1]])
+        if banes.amount + bane_cocoons.amount + lings.amount < target_amount:
+            await self._client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]])
+
+        if lings.amount >= target_amount and self.minerals >= 10_000 and self.vespene >= 10_000:
+            for ling in lings:
+                self.do(ling(AbilityId.MORPHZERGLINGTOBANELING_BANELING), subtract_cost=True)
+
+    async def test_botai_actions10_successful(self):
+        success = False
+        target_amount = 400
+        bane_nests = self.structures(UnitTypeId.BANELINGNEST)
+        lings = self.units(UnitTypeId.ZERGLING)
+        banes = self.units(UnitTypeId.BANELING)
+        bane_cocoons = self.units(UnitTypeId.BANELINGCOCOON)
+        if banes.amount >= target_amount:
+            success = True
+
+        if success:
+            # Cleanup
+            logger.warning("Action test 10 successful.")
+            await self._client.debug_kill_unit(lings | banes | bane_nests | bane_cocoons)
+            return True
 
     # TODO:
     # self.can_cast function
