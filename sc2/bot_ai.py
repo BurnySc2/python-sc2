@@ -1249,6 +1249,11 @@ class BotAI(DistanceCalculation):
         assert isinstance(message, str), f"{message} is not a string"
         await self._client.chat_send(message, False)
 
+    def in_map_bounds(self, pos: Union[Point2, tuple]) -> bool:
+        """ Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
+        :param pos: """
+        return 0 <= pos[0] < self.game_info.placement_grid.width and 0 <= pos[1] < self.game_info.placement_grid.height
+
     # For the functions below, make sure you are inside the boundries of the map size.
     def get_terrain_height(self, pos: Union[Point2, Point3, Unit]) -> int:
         """ Returns terrain height at a position.

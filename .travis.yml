@@ -71,6 +71,7 @@ jobs:
 
     - stage: release to pypi
       script:
+        # Necessary random output in this stage
         - echo Some script output
       before_deploy:
         - pip install pipenv
