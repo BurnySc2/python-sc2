@@ -70,6 +70,8 @@ jobs:
         - docker rm -f app
 
     - stage: release to pypi
+      script:
+        - echo Some script output
       before_deploy:
         - pip install pipenv
       deploy:
