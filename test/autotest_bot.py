@@ -290,9 +290,10 @@ class TestBot(sc2.BotAI):
 
         townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
         if townhalls.amount == 3 and self.minerals >= 450 and not self.already_pending(UnitTypeId.QUEEN):
-            # self.train(UnitTypeId.QUEEN, amount=3)
-            for townhall in townhalls:
-                self.do(townhall.train(UnitTypeId.QUEEN), subtract_cost=True, subtract_supply=True)
+            self.train(UnitTypeId.QUEEN, amount=3)
+            # Equivalent to:
+            # for townhall in townhalls:
+            #     self.do(townhall.train(UnitTypeId.QUEEN), subtract_cost=True, subtract_supply=True)
 
     async def test_botai_actions8_successful(self):
         success = False
