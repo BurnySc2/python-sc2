@@ -10,7 +10,7 @@ test_requirements = convert_deps_to_pip(pfile['dev-packages'], r=False)
 setup(
     name = "burnysc2",
     packages = find_packages(),
-    version = "0.12.1",
+    version = "0.12.2",
     description = "A StarCraft II API Client for Python 3",
     license="MIT",
     author = "BurnySc2",
