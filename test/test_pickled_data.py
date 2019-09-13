@@ -306,7 +306,9 @@ def test_bot_ai():
         real_cost2: Cost = Cost(cost, cost)
         for item in items:
             assert_cost(item, real_cost2)
-            assert bot.calculate_cost(item) == real_cost2, f"Cost of {item} should be {real_cost2} but is {calc_cost(item)}"
+            assert (
+                bot.calculate_cost(item) == real_cost2
+            ), f"Cost of {item} should be {real_cost2} but is {calc_cost(item)}"
 
     # Do not use the generic research abilities in the bot when testing if you can afford it as these are wrong
     assert_cost(AbilityId.RESEARCH_ZERGFLYERARMOR, Cost(0, 0))
@@ -815,7 +817,8 @@ def test_position_point2(x1, y1, x2, y2):
     assert pos1.y == y1
     assert pos1.to2 == pos1
     assert pos1.to3 == Point3((x1, y1, 0))
-    assert pos1.distance2_to(pos2) == pos1._distance_squared(pos2)
+    assert isinstance(pos1.distance_to(pos2), float)
+    assert isinstance(pos1.distance_to_point2(pos2), float)
     if 0 < x2:
         assert pos1.random_on_distance(x2) != pos1
         assert pos1.towards_with_random_angle(pos2, x2) != pos1
@@ -850,7 +853,7 @@ def test_position_point2(x1, y1, x2, y2):
     st.integers(min_value=-1e5, max_value=1e5),
 )
 @settings(max_examples=10)
-def test_position_point2(x1, y1, z1):
+def test_position_point3(x1, y1, z1):
     pos1 = Point3((x1, y1, z1))
     assert pos1.z == z1
     assert pos1.to3 == pos1
