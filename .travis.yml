@@ -42,6 +42,7 @@ jobs:
         # Shut down and remove container
         - docker rm -f app
 
+
     - stage: test python 3.8
       script:
         # TODO: Change to normal python 3.8 version once 3.8 is released
@@ -52,6 +53,18 @@ jobs:
         - docker exec -i app bash -c "cd /root/template && pipenv install --dev --python 3.8"
         - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
         - docker rm -f app
+
+
+    - stage: run code coverage
+      python:
+        - 3.7
+      script:
+        - pip install pipenv
+        - pipenv install --dev
+        - pipenv run pytest --cov=./
+      after_success:
+        - codecov
+
 
     - stage: run autotest bot
       script:
@@ -69,6 +82,7 @@ jobs:
         # Shut down and remove container after finishing
         - docker rm -f app
 
+
     - stage: release to pypi
       script:
         # Necessary random output in this stage
@@ -82,11 +96,3 @@ jobs:
         password: "$PYPI_PASSWORD"
         on:
           branch: pypi-release
-
-    - stage: run code coverage
-      script:
-        - pip install pipenv
-        - pipenv install --dev
-        - pipenv run pytest --cov=./
-      after_success:
-        - codecov
