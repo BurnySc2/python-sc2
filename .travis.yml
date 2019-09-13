@@ -43,16 +43,35 @@ jobs:
         - docker rm -f app
 
 
+#    # TODO enable when python 3.7 is officially released
 #    - stage: test python 3.8
 #      script:
-#        # TODO: Change to normal python 3.8 version once 3.8 is released
-#        - docker pull python:3.8-rc-slim
-#        - docker run -it -d --name app python:3.8-rc-slim
+#        - docker pull python:3.8-slim
+#        - docker run -it -d --name app python:3.8-slim
 #        - docker cp . app:/root/template
 #        - docker exec app pip install --upgrade pipenv
 #        - docker exec -i app bash -c "cd /root/template && pipenv install --dev --python 3.8"
 #        - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
 #        - docker rm -f app
+
+
+#    # TODO enable when python 3.7 on travis is working
+#    #
+#    # For now, you can run it manually with:
+#    # pipenv install --dev
+#    # pipenv run pytest --cov=./
+#    # pipenv run coverage html
+#    # Open file /htmlcov/index.html
+#
+#    - stage: run code coverage
+#      python:
+#        - 3.7
+#      script:
+#        - pip install pipenv
+#        - pipenv install --dev
+#        - pipenv run pytest --cov=./
+#      after_success:
+#        - codecov
 
 
     - stage: run autotest bot

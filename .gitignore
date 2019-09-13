@@ -25,3 +25,7 @@ mini_games/
 # Editors
 .idea/
 .vscode/
+
+# Code coverage
+.coverage
+/htmlcov
