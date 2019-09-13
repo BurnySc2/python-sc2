@@ -82,3 +82,11 @@ jobs:
         password: "$PYPI_PASSWORD"
         on:
           branch: pypi-release
+
+    - stage: run code coverage
+      script:
+        - pip install pipenv
+        - pipenv install --dev
+        - pipenv run pytest --cov=./
+      after_success:
+        - codecov

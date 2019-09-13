@@ -22,6 +22,9 @@ pytest-benchmark = "*"
 numba = "*"
 sphinx = "*"
 sphinx-autodoc-typehints = "*"
+pytest-cov = "*"
+coverage = "*"
+codecov = "*"
 
 [requires]
 python_version = "3.7"

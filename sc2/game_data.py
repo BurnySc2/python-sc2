@@ -285,10 +285,10 @@ class Cost:
     def __repr__(self) -> str:
         return f"Cost({self.minerals}, {self.vespene})"
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Cost) -> bool:
         return self.minerals == other.minerals and self.vespene == other.vespene
 
-    def __ne__(self, other) -> bool:
+    def __ne__(self, other: Cost) -> bool:
         return self.minerals != other.minerals or self.vespene != other.vespene
 
     def __bool__(self) -> bool:

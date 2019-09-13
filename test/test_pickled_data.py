@@ -347,6 +347,7 @@ def test_bot_ai():
     assert bot.calculate_cost(UnitTypeId.DRONE) == Cost(50, 0)
     assert bot.calculate_cost(UnitTypeId.SCV) == Cost(50, 0)
     assert bot.calculate_cost(UnitTypeId.PROBE) == Cost(50, 0)
+    assert bot.calculate_cost(UnitTypeId.SPIRE) == Cost(200, 200)
 
     # The following are morph abilities that may need a fix
     assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
