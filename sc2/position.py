@@ -2,7 +2,7 @@ from __future__ import annotations
 import itertools
 import math
 import random
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, Iterable, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .unit import Unit
@@ -57,7 +57,7 @@ class Pointlike(tuple):
         p = p.position
         return self.distance_to_point2(p) > distance
 
-    def sort_by_distance(self, ps: Union[Units, List[Point2]]) -> List[Point2]:
+    def sort_by_distance(self, ps: Union[Units, Iterable[Point2]]) -> List[Point2]:
         """ This returns the target points sorted as list.
         You should not pass a set or dict since those are not sortable.
         If you want to sort your units towards a point, use 'units.sorted_by_distance_to(point)' instead.
@@ -65,14 +65,14 @@ class Pointlike(tuple):
         :param ps: """
         return sorted(ps, key=lambda p: self.distance_to_point2(p.position))
 
-    def closest(self, ps: Union[Units, List[Point2], Set[Point2]]) -> Union[Unit, Point2]:
+    def closest(self, ps: Union[Units, Iterable[Point2]]) -> Union[Unit, Point2]:
         """ This function assumes the 2d distance is meant
 
         :param ps: """
         assert ps, f"ps is empty"
         return min(ps, key=lambda p: self.distance_to(p))
 
-    def distance_to_closest(self, ps: Union[Units, List[Point2], Set[Point2]]) -> Union[int, float]:
+    def distance_to_closest(self, ps: Union[Units, Iterable[Point2]]) -> Union[int, float]:
         """ This function assumes the 2d distance is meant
         :param ps: """
         assert ps, f"ps is empty"
@@ -84,14 +84,14 @@ class Pointlike(tuple):
                 closest_distance = distance
         return closest_distance
 
-    def furthest(self, ps: Union[Units, List[Point2], Set[Point2]]) -> Union[Unit, Pointlike]:
+    def furthest(self, ps: Union[Units, Iterable[Point2]]) -> Union[Unit, Pointlike]:
         """ This function assumes the 2d distance is meant
 
         :param ps: Units object, or iterable of Unit or Point2 """
         assert ps, f"ps is empty"
         return max(ps, key=lambda p: self.distance_to(p))
 
-    def distance_to_furthest(self, ps: Union[Units, List[Point2], Set[Point2]]) -> Union[int, float]:
+    def distance_to_furthest(self, ps: Union[Units, Iterable[Point2]]) -> Union[int, float]:
         """ This function assumes the 2d distance is meant
 
         :param ps: """
@@ -291,7 +291,7 @@ class Point2(Pointlike):
         return abs(other.x - self.x) + abs(other.y - self.y)
 
     @staticmethod
-    def center(units_or_points: Union[Set[Point2], List[Point2]]) -> Point2:
+    def center(units_or_points: Iterable[Point2]) -> Point2:
         """ Returns the central point for points in list
 
         :param units_or_points:"""
