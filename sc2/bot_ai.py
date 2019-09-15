@@ -215,11 +215,11 @@ class BotAI(DistanceCalculation):
         geysers = self.vespene_geyser
         resource_graph = networkx.Graph()
         resources = [ resource for resource in self.resources if resource.name != 'MineralField450']
-        for resource_a in self.resources:
+        for resource_a in resources:
             resource_graph.add_node(resource_a)
             resource_graph.add_edges_from([
                 (resource_a, resource_b)
-                for resource_b in self.resources
+                for resource_b in resources
                 if resource_a.distance_to(resource_b) <= resource_spread_threshold
                 # checking z-position separates adjacent bases on different levels
                 and abs(resource_a.position3d.z - resource_b.position3d.z) <= 0.1
