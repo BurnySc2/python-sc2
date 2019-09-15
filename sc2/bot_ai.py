@@ -222,7 +222,7 @@ class BotAI(DistanceCalculation):
                 for resource_b in resources
                 if resource_a.distance_to(resource_b) <= resource_spread_threshold
                 # checking z-position separates adjacent bases on different levels
-                and abs(resource_a.position3d.z - resource_b.position3d.z) <= 0.1
+                and abs(resource_a.position3d.z - resource_b.position3d.z) <= 0.5
             ])
 
         # separate into groups based on which nodes are "connected" (within the threshold)
