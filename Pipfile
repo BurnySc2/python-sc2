@@ -11,6 +11,7 @@ aiohttp = "*"
 pyglet = "*"
 numpy = "*"
 scipy = "*"
+networkx = "*"
 
 [dev-packages]
 pytest = "*"

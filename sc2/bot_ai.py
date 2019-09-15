@@ -2,6 +2,7 @@ from __future__ import annotations
 import itertools
 import logging
 import math
+import networkx
 import random
 from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
@@ -207,35 +208,26 @@ class BotAI(DistanceCalculation):
         resources (mineral field and vespene geyser) as value.
         """
 
-        # Idea: create a group for every resource, then merge these groups if
-        # any resource in a group is closer than a threshold to any resource of another group
+        # - Create a graph of resource nodes, connect nearby nodes on the graph
 
         # Distance we group resources by
         resource_spread_threshold = 8.5
         geysers = self.vespene_geyser
-        # Create a group for every resource
-        resource_groups = [
-            [resource]
-            for resource in self.resources
-            if resource.name != "MineralField450"  # dont use low mineral count patches
-        ]
-        # Loop the merging process as long as we change something
-        merged_group = True
-        while merged_group:
-            merged_group = False
-            # Check every combination of two groups
-            for group_a, group_b in itertools.combinations(resource_groups, 2):
-                # Check if any pair of resource of these groups is closer than threshold together
-                if any(
-                    resource_a.distance_to(resource_b) <= resource_spread_threshold
-                    for resource_a, resource_b in itertools.product(group_a, group_b)
-                ):
-                    # Remove the single groups and add the merged group
-                    resource_groups.remove(group_a)
-                    resource_groups.remove(group_b)
-                    resource_groups.append(group_a + group_b)
-                    merged_group = True
-                    break
+        resource_graph = networkx.Graph()
+        resources = [ resource for resource in self.resources if resource.name != 'MineralField450']
+        for resource_a in self.resources:
+            resource_graph.add_node(resource_a)
+            resource_graph.add_edges_from([
+                (resource_a, resource_b)
+                for resource_b in self.resources
+                if resource_a.distance_to(resource_b) <= resource_spread_threshold
+                # checking z-position separates adjacent bases on different levels
+                and abs(resource_a.position3d.z - resource_b.position3d.z) <= 0.1
+            ])
+
+        # separate into groups based on which nodes are "connected" (within the threshold)
+        resource_groups = networkx.connected_components(resource_graph)
+
         # Distance offsets we apply to center of each resource group to find expansion position
         offset_range = 7
         offsets = [
@@ -664,7 +656,7 @@ class BotAI(DistanceCalculation):
 
     def select_build_worker(self, pos: Union[Unit, Point2, Point3], force: bool = False) -> Optional[Unit]:
         """Select a worker to build a building with.
-        
+
         Example::
 
             barracks_placement_position = self.main_base_ramp.barracks_correct_placement
@@ -1555,7 +1547,7 @@ class BotAI(DistanceCalculation):
 
     async def on_start(self):
         """
-        Override this in your bot class. This function is called after "on_start". 
+        Override this in your bot class. This function is called after "on_start".
         At this point, game_data, game_info and the first iteration of game_state (self.state) are available.
         """
 
