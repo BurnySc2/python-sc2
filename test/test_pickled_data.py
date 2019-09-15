@@ -24,6 +24,7 @@ import pickle, pytest, random, math, lzma
 from hypothesis import given, event, settings, strategies as st
 
 from typing import Iterable
+import time
 
 
 """
@@ -59,7 +60,11 @@ def get_map_specific_bots() -> Iterable[BotAI]:
 
 
 # Global bot object that is used in TestClass.test_position_*
-random_bot_object = next(get_map_specific_bots())
+bot_object_generator = get_map_specific_bots()
+random_bot_object: BotAI = next(bot_object_generator)
+# Always pick acropolis to get same test results
+# while random_bot_object.game_info.map_name != "Acropolis LE":
+#     random_bot_object = next(bot_object_generator)
 
 
 def test_bot_ai():
@@ -114,6 +119,15 @@ def test_bot_ai():
     assert bot.enemy_structures == Units([], bot)
     bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
     assert bot.main_base_ramp  # Test if any ramp was found
+
+    # Clear cache for expansion locations, recalculate and time it
+    if hasattr(bot, "_cache_expansion_locations"):
+        delattr(bot, "_cache_expansion_locations")
+    t0 = time.perf_counter()
+    bot.expansion_locations
+    t1 = time.perf_counter()
+    print(f"Time to calculate expansion locations: {t1-t0} s")
+
     # TODO: Cache all expansion positions for a map and check if it is the same
     assert len(bot.expansion_locations) >= 10, f"Too few expansions found: {len(bot.expansion_locations)}"
     # Honorgrounds LE has 24

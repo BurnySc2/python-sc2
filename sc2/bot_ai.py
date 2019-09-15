@@ -217,7 +217,7 @@ class BotAI(DistanceCalculation):
         resource_groups = [
             [resource]
             for resource in self.resources
-            if resource.name != "MineralField450" # dont use low mineral count patches
+            if resource.name != "MineralField450"  # dont use low mineral count patches
         ]
         # Loop the merging process as long as we change something
         merged_group = True
@@ -1339,6 +1339,8 @@ class BotAI(DistanceCalculation):
         """First step extra preparations. Must not be called before _prepare_step."""
         if self.townhalls:
             self._game_info.player_start_location = self.townhalls.first.position
+            # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations'
+            self.expansion_locations
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
 
     def _prepare_step(self, state, proto_game_info):
