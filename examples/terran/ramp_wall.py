@@ -63,6 +63,9 @@ class RampWallBot(sc2.BotAI):
         # Draw visibility pixelmap for debugging purposes
         # self.draw_visibility_pixelmap()
 
+        # Draw some example boxes around units, lines towards command center, text on the screen and barracks
+        # self.draw_example()
+
         # Filter locations close to finished supply depots
         if depots:
             depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
@@ -98,9 +101,6 @@ class RampWallBot(sc2.BotAI):
             for p in ramp.points:
                 h2 = self.get_terrain_z_height(p)
                 pos = Point3((p.x, p.y, h2))
-                p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
-                p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
-                # print(f"Drawing {p0} to {p1}")
                 color = Point3((255, 0, 0))
                 if p in ramp.upper:
                     color = Point3((0, 255, 0))
@@ -108,13 +108,19 @@ class RampWallBot(sc2.BotAI):
                     color = Point3((0, 255, 255))
                 if p in ramp.lower:
                     color = Point3((0, 0, 255))
-                self._client.debug_box_out(p0, p1, color=color)
+                self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
+                # Identical to above:
+                # p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
+                # p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+                # print(f"Drawing {p0} to {p1}")
+                # self._client.debug_box_out(p0, p1, color=color)
 
     def draw_pathing_grid(self):
         map_area = self._game_info.playable_area
         for (b, a), value in np.ndenumerate(self._game_info.pathing_grid.data_numpy):
             if value == 0:
                 continue
+            # Skip values outside of playable map area
             if not (map_area.x <= a < map_area.x + map_area.width):
                 continue
             if not (map_area.y <= b < map_area.y + map_area.height):
@@ -122,8 +128,8 @@ class RampWallBot(sc2.BotAI):
             p = Point2((a, b))
             h2 = self.get_terrain_z_height(p)
             pos = Point3((p.x, p.y, h2))
-            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
-            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
             self._client.debug_box_out(p0, p1, color=color)
@@ -132,8 +138,8 @@ class RampWallBot(sc2.BotAI):
         for p in self.game_info.vision_blockers:
             h2 = self.get_terrain_z_height(p)
             pos = Point3((p.x, p.y, h2))
-            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
-            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
             self._client.debug_box_out(p0, p1, color=color)
@@ -143,14 +149,54 @@ class RampWallBot(sc2.BotAI):
             p = Point2((x, y))
             h2 = self.get_terrain_z_height(p)
             pos = Point3((p.x, p.y, h2))
-            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
-            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
             # Red
             color = Point3((255, 0, 0))
             # If value == 2: show green (= we have vision on that point)
             if value == 2:
                 color = Point3((0, 255, 0))
             self._client.debug_box_out(p0, p1, color=color)
+
+    def draw_example(self):
+        # Draw green boxes around SCVs if they are gathering, yellow if they are returning cargo, red the rest
+        scv: Unit
+        for scv in self.workers:
+            pos = scv.position3d
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+            # Red
+            color = Point3((255, 0, 0))
+            if scv.is_gathering:
+                color = Point3((0, 255, 0))
+            elif scv.is_returning:
+                color = Point3((255, 255, 0))
+            self._client.debug_box_out(p0, p1, color=color)
+
+        # Draw lines from structures to command center
+        if self.townhalls:
+            cc = self.townhalls[0]
+            p0 = cc.position3d
+            structure: Unit
+            for structure in self.structures:
+                if structure == cc:
+                    continue
+                p1 = structure.position3d
+                # Red
+                color = Point3((255, 0, 0))
+                self._client.debug_line_out(p0, p1, color=color)
+
+            # Draw text on barracks
+            if structure.type_id == UnitTypeId.BARRACKS:
+                # Blue
+                color = Point3((0, 0, 255))
+                pos = structure.position3d + Point3((0, 0, 0.5))
+                # TODO: Why is this text flickering
+                self._client.debug_text_world(text="MY RAX", pos=pos, color=color, size=16)
+
+        # Draw text in top left of screen
+        self._client.debug_text_screen(text="Hello world!", pos=Point2((0, 0)), color=None, size=16)
+        self._client.debug_text_simple(text="Hello world2!")
 
 
 def main():

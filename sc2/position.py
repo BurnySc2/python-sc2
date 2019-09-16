@@ -321,6 +321,11 @@ class Point3(Point2):
     def to3(self) -> Point3:
         return Point3(self)
 
+    def __add__(self, other: Union[Point2, Point3]) -> Point3:
+        if not isinstance(other, Point3) and isinstance(other, Point2):
+            return Point3((self.x + other.x, self.y + other.y, self.z))
+        return Point3((self.x + other.x, self.y + other.y, self.z + other.z))
+
 
 class Size(Point2):
     @property
