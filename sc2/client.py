@@ -489,7 +489,7 @@ class Client(Protocol):
 
     async def _send_debug(self):
         """ Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.
-        Check examples/terran/ramp_wall.py for example drawing. Each draw request needs to be send again every single on_step iteration.
+        Check examples/terran/ramp_wall.py for example drawing. Each draw request needs to be sent again in every single on_step iteration.
         """
         debug_hash = (
             sum(hash(item) for item in self._debug_texts),
