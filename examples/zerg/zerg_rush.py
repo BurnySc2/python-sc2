@@ -2,6 +2,9 @@ import sys, os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
+import numpy as np
+from sc2.position import Point2, Point3
+
 import sc2
 from sc2 import Race, Difficulty
 from sc2.constants import *
@@ -112,6 +115,21 @@ class ZergRushBot(sc2.BotAI):
         ):
             if self.can_afford(UnitTypeId.QUEEN):
                 self.train(UnitTypeId.QUEEN)
+
+        # Draw creep pixelmap for debugging
+        # self.draw_creep_pixelmap()
+
+    def draw_creep_pixelmap(self):
+        for (y, x), value in np.ndenumerate(self.state.creep.data_numpy):
+            p = Point2((x, y))
+            h2 = self.get_terrain_z_height(p)
+            pos = Point3((p.x, p.y, h2))
+            # Red if there is no creep
+            color = Point3((255, 0, 0))
+            if value == 1:
+                # Green if there is creep
+                color = Point3((0, 255, 0))
+            self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
 
 def main():
