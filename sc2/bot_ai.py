@@ -599,7 +599,8 @@ class BotAI(DistanceCalculation):
         enough_supply = True
         cost = self.calculate_cost(item_id)
         if check_supply_cost and isinstance(item_id, UnitTypeId):
-            enough_supply = self.supply_left >= self.calculate_supply_cost(item_id)
+            calculated_supply_cost = self.calculate_supply_cost(item_id)
+            enough_supply = not calculated_supply_cost or self.supply_left >= calculated_supply_cost
         return cost.minerals <= self.minerals and cost.vespene <= self.vespene and enough_supply
 
     async def can_cast(

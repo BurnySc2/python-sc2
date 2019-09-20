@@ -163,10 +163,26 @@ def test_bot_ai():
     assert not bot.can_afford(UnitTypeId.MARAUDER)
     assert not bot.can_afford(UpgradeId.WARPGATERESEARCH)
     assert not bot.can_afford(AbilityId.RESEARCH_WARPGATE)
+
+    # Store old values for minerals, vespene
+    old_values = bot.minerals, bot.vespene, bot.supply_cap, bot.supply_left, bot.supply_used
     bot.vespene = 50
     assert bot.can_afford(UpgradeId.WARPGATERESEARCH)
     assert bot.can_afford(AbilityId.RESEARCH_WARPGATE)
-    bot.vespene = 0
+    bot.minerals = 150
+    bot.vespene = 100
+    bot.supply_cap = 15
+    bot.supply_left = -1
+    bot.supply_used = 16
+    # Confirm that units that don't cost supply can be built while at negative supply using can_afford function
+    assert bot.can_afford(UnitTypeId.GATEWAY)
+    assert bot.can_afford(UnitTypeId.PYLON)
+    assert bot.can_afford(UnitTypeId.OVERLORD)
+    assert bot.can_afford(UnitTypeId.BANELING)
+    assert not bot.can_afford(UnitTypeId.ZERGLING)
+    assert not bot.can_afford(UnitTypeId.MARINE)
+    bot.minerals, bot.vespene, bot.supply_cap, bot.supply_left, bot.supply_used = old_values
+
     worker = bot.workers.random
     assert bot.select_build_worker(worker.position) == worker
     for w in bot.workers:
