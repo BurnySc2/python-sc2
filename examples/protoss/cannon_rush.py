@@ -20,7 +20,7 @@ class CannonRushBot(sc2.BotAI):
             nexus = self.townhalls.random
 
         # Make probes until we have 16 total
-        if self.workers.amount < 16 and nexus.is_idle:
+        if self.supply_workers < 16 and nexus.is_idle:
             if self.can_afford(PROBE):
                 self.do(nexus.train(PROBE), subtract_cost=True, subtract_supply=True)
 
