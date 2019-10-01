@@ -742,9 +742,9 @@ in order to detect and Photoncannons also need to be powered.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="sc2.unit.Unit.is_facing_unit">
-<code class="sig-name descname">is_facing_unit</code><span class="sig-paren">(</span><em class="sig-param">other_unit</em>, <em class="sig-param">angle_error=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.is_facing_unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function not completed yet</p>
+<dt id="sc2.unit.Unit.is_facing">
+<code class="sig-name descname">is_facing</code><span class="sig-paren">(</span><em class="sig-param">other_unit</em>, <em class="sig-param">angle_error=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.is_facing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if this unit is facing the target unit. If you make angle_error too small, there might be rounding errors. If you make angle_error too big, this function might return false positives.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1209,7 +1209,7 @@ point, the unit will patrol in a circle.</p>
 <dd><p>Returns the 2d position of the unit as tuple without conversion to Point2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1291,7 +1291,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 <dl class="method">
 <dt id="sc2.unit.Unit.scan_move">
 <code class="sig-name descname">scan_move</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.scan_move" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO: What does this do?</p>
+<dd><p>Deprecated: This ability redirects to ‘AbilityId.ATTACK’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
@@ -1573,7 +1573,7 @@ if unit.weapon_cooldown == 0:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

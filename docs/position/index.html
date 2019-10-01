@@ -54,7 +54,7 @@
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>, </em><em>Set</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>Iterable</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>Union[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit">Unit</a>, <a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2">Point2</a>]</p>
@@ -80,7 +80,7 @@
 <dt id="sc2.position.Pointlike.distance_to_closest">
 <code class="sig-name descname">distance_to_closest</code><span class="sig-paren">(</span><em class="sig-param">ps</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_closest" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function assumes the 2d distance is meant
-:type ps: Union[Units, List[Point2], Set[Point2]]
+:type ps: Union[Units, Iterable[Point2]]
 :param ps:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -95,7 +95,7 @@
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>, </em><em>Set</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>Iterable</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>Union[int, float]</p>
@@ -124,7 +124,7 @@ and conversion.</p>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>, </em><em>Set</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – Units object, or iterable of Unit or Point2</p>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>Iterable</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – Units object, or iterable of Unit or Point2</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>Union[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit">Unit</a>, <a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike">Pointlike</a>]</p>
@@ -187,7 +187,7 @@ You should not pass a set or dict since those are not sortable.
 If you want to sort your units towards a point, use ‘units.sorted_by_distance_to(point)’ instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
+<dd class="field-odd"><p><strong>ps</strong> (<em>Union</em><em>[</em><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><em>Units</em></a><em>, </em><em>Iterable</em><em>[</em><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><em>Point2</em></a><em>]</em><em>]</em>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>List[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2">Point2</a>]</p>
@@ -233,7 +233,7 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 <dd><p>Returns the central point for points in list</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>units_or_points</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]]) – </p>
+<dd class="field-odd"><p><strong>units_or_points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
@@ -392,7 +392,7 @@ Used in ramp finding</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

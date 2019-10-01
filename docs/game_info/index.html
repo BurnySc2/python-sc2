@@ -104,6 +104,41 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.game_info.Ramp.protoss_wall_buildings">
+<em class="property">property </em><code class="sig-name descname">protoss_wall_buildings</code><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_buildings" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of two positions for 3x3 buildings that form a wall with a spot for a one unit block.
+These buildings can be powered by a pylon on the protoss_wall_pylon position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.game_info.Ramp.protoss_wall_pylon">
+<em class="property">property </em><code class="sig-name descname">protoss_wall_pylon</code><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_pylon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pylon position that powers the two wall buildings and the warpin position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.game_info.Ramp.protoss_wall_warpin">
+<em class="property">property </em><code class="sig-name descname">protoss_wall_warpin</code><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_warpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position for a unit to block the wall created by protoss_wall_buildings.
+Powered by protoss_wall_pylon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.game_info.Ramp.upper">
 <em class="property">property </em><code class="sig-name descname">upper</code><a class="headerlink" href="#sc2.game_info.Ramp.upper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upper points of a ramp.</p>
@@ -184,7 +219,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

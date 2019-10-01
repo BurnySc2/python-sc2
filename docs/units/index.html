@@ -52,7 +52,7 @@
 <dl class="method">
 <dt id="sc2.units.Units.center">
 <em class="property">property </em><code class="sig-name descname">center</code><a class="headerlink" href="#sc2.units.Units.center" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the central point of all units in this list</p>
+<dd><p>Returns the central position of all units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
@@ -156,15 +156,84 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.units.Units.collecting">
+<em class="property">property </em><code class="sig-name descname">collecting</code><a class="headerlink" href="#sc2.units.Units.collecting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all workers that are mining or returning resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.units.Units.copy">
 <code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a shallow copy of the list.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.units.Units.enemy">
+<em class="property">property </em><code class="sig-name descname">enemy</code><a class="headerlink" href="#sc2.units.Units.enemy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated: All enemy units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.units.Units.exclude_type">
 <code class="sig-name descname">exclude_type</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.exclude_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters all units that are not of a specific type</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a set instead of lists in the argument</span>
+<span class="n">ignore_units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="o">.</span><span class="n">exclude_type</span><span class="p">({</span><span class="n">LARVA</span><span class="p">,</span> <span class="n">EGG</span><span class="p">,</span> <span class="n">OVERLORD</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.filter">
+<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">pred</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters the current Units object and returns a new Units object.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="k">import</span> <span class="n">UnitTypeId</span>
+<span class="n">my_marines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">)</span>
+
+<span class="n">completed_structures</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">structure</span><span class="p">:</span> <span class="n">structure</span><span class="o">.</span><span class="n">is_ready</span><span class="p">)</span>
+
+<span class="n">queens_with_energy_to_inject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">QUEEN</span> <span class="ow">and</span> <span class="n">unit</span><span class="o">.</span><span class="n">energy</span> <span class="o">&gt;=</span> <span class="mi">25</span><span class="p">)</span>
+
+<span class="n">orbitals_with_energy_to_mule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">structure</span><span class="p">:</span> <span class="n">structure</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span> <span class="ow">and</span> <span class="n">structure</span><span class="o">.</span><span class="n">energy</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="n">my_units_that_can_shoot_up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">can_attack_air</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See more unit properties in unit.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pred</strong> (<em>&lt;built-in function callable&gt;</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.flying">
+<em class="property">property </em><code class="sig-name descname">flying</code><a class="headerlink" href="#sc2.units.Units.flying" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all units that are flying.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -267,6 +336,28 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.units.Units.gathering">
+<em class="property">property </em><code class="sig-name descname">gathering</code><a class="headerlink" href="#sc2.units.Units.gathering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all workers that are mining minerals or vespene (gather command).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.idle">
+<em class="property">property </em><code class="sig-name descname">idle</code><a class="headerlink" href="#sc2.units.Units.idle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all units or structures that are doing nothing (unit is standing still, structure is doing nothing).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.units.Units.in_attack_range_of">
 <code class="sig-name descname">in_attack_range_of</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">bonus_distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_attack_range_of" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters units that are in attack range of the given unit.
@@ -304,9 +395,13 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 <dt id="sc2.units.Units.in_closest_distance_to_group">
 <code class="sig-name descname">in_closest_distance_to_group</code><span class="sig-paren">(</span><em class="sig-param">other_units</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_closest_distance_to_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns unit in shortest distance from any unit in self to any unit in group.</p>
+<p>Loops over all units in self, then loops over all units in other_units and calculates the shortest distance. Returns the units that is closest to any unit of ‘other_units’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other_units</strong> (<a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -326,7 +421,7 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – </p></li>
+<li><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – </p></li>
 <li><p><strong>distance1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
 <li><p><strong>distance2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
 </ul>
@@ -355,11 +450,22 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.units.Units.mineral_field">
+<em class="property">property </em><code class="sig-name descname">mineral_field</code><a class="headerlink" href="#sc2.units.Units.mineral_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all units that are mineral fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.units.Units.n_closest_to_distance">
 <code class="sig-name descname">n_closest_to_distance</code><span class="sig-paren">(</span><em class="sig-param">position</em>, <em class="sig-param">distance</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.n_closest_to_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns n units that are the closest to distance away.
-For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7]
-the units with distacnce [4, 5, 6] will be selected</p>
+For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7] to position,
+the units with distance [4, 5, 6] will be returned</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -370,7 +476,40 @@ the units with distacnce [4, 5, 6] will be selected</p>
 <dl class="method">
 <dt id="sc2.units.Units.n_furthest_to_distance">
 <code class="sig-name descname">n_furthest_to_distance</code><span class="sig-paren">(</span><em class="sig-param">position</em>, <em class="sig-param">distance</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.n_furthest_to_distance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inverse of the function above</p>
+<dd><p>Inverse of the function ‘n_closest_to_distance’, returns the furthest units instead</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.not_flying">
+<em class="property">property </em><code class="sig-name descname">not_flying</code><a class="headerlink" href="#sc2.units.Units.not_flying" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all units that not are flying.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.not_ready">
+<em class="property">property </em><code class="sig-name descname">not_ready</code><a class="headerlink" href="#sc2.units.Units.not_ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all structures that are not ready (construction not complete).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.not_structure">
+<em class="property">property </em><code class="sig-name descname">not_structure</code><a class="headerlink" href="#sc2.units.Units.not_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated: All units that are not structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -382,6 +521,36 @@ the units with distacnce [4, 5, 6] will be selected</p>
 <dt id="sc2.units.Units.of_type">
 <code class="sig-name descname">of_type</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.of_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters all units that are of a specific type</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a set instead of lists in the argument</span>
+<span class="n">some_attack_units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">of_type</span><span class="p">({</span><span class="n">ZERGLING</span><span class="p">,</span> <span class="n">ROACH</span><span class="p">,</span> <span class="n">HYDRALISK</span><span class="p">,</span> <span class="n">BROODLORD</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.owned">
+<em class="property">property </em><code class="sig-name descname">owned</code><a class="headerlink" href="#sc2.units.Units.owned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated: All your units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.prefer_idle">
+<em class="property">property </em><code class="sig-name descname">prefer_idle</code><a class="headerlink" href="#sc2.units.Units.prefer_idle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts units based on if they are idle. Idle units come first.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -401,13 +570,9 @@ the units with distacnce [4, 5, 6] will be selected</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="sc2.units.Units.same_tech">
-<code class="sig-name descname">same_tech</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.same_tech" title="Permalink to this definition">¶</a></dt>
-<dd><p>Usage:
-‘self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)’ or ‘self.townhalls.same_tech(UnitTypeId.ORBITALCOMMAND)’
-returns all CommandCenter, CommandCenterFlying, OrbitalCommand, OrbitalCommandFlying, PlanetaryFortress
-This also works with a set/list/dict parameter, e.g. ‘self.structures.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})’
-Untested: This should return the equivalents for Hatchery, WarpPrism, Observer, Overseer, SupplyDepot and others</p>
+<dt id="sc2.units.Units.ready">
+<em class="property">property </em><code class="sig-name descname">ready</code><a class="headerlink" href="#sc2.units.Units.ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all structures that are ready (construction complete).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -416,15 +581,79 @@ Untested: This should return the equivalents for Hatchery, WarpPrism, Observer, 
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.units.Units.returning">
+<em class="property">property </em><code class="sig-name descname">returning</code><a class="headerlink" href="#sc2.units.Units.returning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all workers that are carrying minerals or vespene and are returning to a townhall.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.same_tech">
+<code class="sig-name descname">same_tech</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.same_tech" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all structures that have the same base structure.</p>
+<p>Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and others</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># All command centers, flying command centers, orbital commands, flying orbital commands, planetary fortress</span>
+<span class="n">terran_townhalls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
+
+<span class="c1"># All hatcheries, lairs and hives</span>
+<span class="n">zerg_townhalls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">HATCHERY</span><span class="p">})</span>
+
+<span class="c1"># All spires and greater spires</span>
+<span class="n">spires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">})</span>
+<span class="c1"># The following returns the same</span>
+<span class="n">spires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">GREATERSPIRE</span><span class="p">})</span>
+
+<span class="c1"># This also works with multiple unit types</span>
+<span class="n">zerg_townhalls_and_spires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">HATCHERY</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.units.Units.same_unit">
 <code class="sig-name descname">same_unit</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.same_unit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Usage:
-‘self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)’
-returns CommandCenter and CommandCenterFlying,
-‘self.townhalls.same_tech(UnitTypeId.ORBITALCOMMAND)’
-returns OrbitalCommand and OrbitalCommandFlying
-This also works with a set/list/dict parameter, e.g. ‘self.structures.same_tech({UnitTypeId.COMMANDCENTER, UnitTypeId.SUPPLYDEPOT})’
-Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit</p>
+<dd><p>Returns all units that have the same base unit while being in different modes.</p>
+<p>Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># All command centers on the ground and flying</span>
+<span class="n">ccs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_unit</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
+
+<span class="c1"># All orbital commands on the ground and flying</span>
+<span class="n">ocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_unit</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span>
+
+<span class="c1"># All roaches and burrowed roaches</span>
+<span class="n">roaches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">same_unit</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ROACH</span><span class="p">)</span>
+<span class="c1"># This is useful because roach has a different type id when burrowed</span>
+<span class="n">burrowed_roaches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ROACHBURROWED</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.selected">
+<em class="property">property </em><code class="sig-name descname">selected</code><a class="headerlink" href="#sc2.units.Units.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all units that are selected by the human player.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -444,9 +673,9 @@ Untested: This should return the equivalents for WarpPrism, Observer, Overseer, 
 </dd></dl>
 
 <dl class="method">
-<dt id="sc2.units.Units.tags_in">
-<code class="sig-name descname">tags_in</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.tags_in" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filters all units that have their tags in the ‘other’ set/list/dict</p>
+<dt id="sc2.units.Units.structure">
+<em class="property">property </em><code class="sig-name descname">structure</code><a class="headerlink" href="#sc2.units.Units.structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated: All structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -455,9 +684,85 @@ Untested: This should return the equivalents for WarpPrism, Observer, Overseer, 
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.units.Units.subgroup">
+<code class="sig-name descname">subgroup</code><span class="sig-paren">(</span><em class="sig-param">units</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.subgroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new mutable Units object from Units or list object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>units</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.tags">
+<em class="property">property </em><code class="sig-name descname">tags</code><a class="headerlink" href="#sc2.units.Units.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all unit tags as a set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.tags_in">
+<code class="sig-name descname">tags_in</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.tags_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters all units that have their tags in the ‘other’ set/list/dict</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_inject_queens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">tags_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+
+<span class="c1"># Do not use the following as it is slower because it first loops over all units to filter out if they are queens and loops over those again to check if their tags are in the list/set</span>
+<span class="n">my_inject_queens_slow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">QUEEN</span><span class="p">)</span><span class="o">.</span><span class="n">tags_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.units.Units.tags_not_in">
 <code class="sig-name descname">tags_not_in</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.tags_not_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters all units that have their tags not in the ‘other’ set/list/dict</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_non_inject_queens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">tags_not_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+
+<span class="c1"># Do not use the following as it is slower because it first loops over all units to filter out if they are queens and loops over those again to check if their tags are in the list/set</span>
+<span class="n">my_non_inject_queens_slow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">QUEEN</span><span class="p">)</span><span class="o">.</span><span class="n">tags_not_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.vespene_geyser">
+<em class="property">property </em><code class="sig-name descname">vespene_geyser</code><a class="headerlink" href="#sc2.units.Units.vespene_geyser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all units that are vespene geysers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.units.Units.visible">
+<em class="property">property </em><code class="sig-name descname">visible</code><a class="headerlink" href="#sc2.units.Units.visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all units or structures that are visible.
+TODO: add proper description on which units are exactly visible (not snapshots?)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
@@ -519,7 +824,7 @@ Untested: This should return the equivalents for WarpPrism, Observer, Overseer, 
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
