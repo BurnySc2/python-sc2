@@ -71,8 +71,10 @@ def parse_data(data):
             key = "_" + key
 
         if key in abilities and v["index"] == 0:
-            print(f"{key} has value 0")
-            # raise ValueError
+            print(f"{key} has value 0 and id {v['id']}, overwriting {key}: {abilities[key]}")
+            # Commented out to try to fix: 3670 is not a valid AbilityId
+            abilities[key] = v["id"]
+            pass
         else:
             abilities[key] = v["id"]
 
@@ -126,6 +128,9 @@ def generate_python_code(enums):
 
         for key, value in sorted(body.items(), key=lambda p: p[1]):
             code.append(f"    {key} = {value}")
+
+        # Add repr function to more easily dump enums to dict
+        code += ["\n", "    def __repr__(self):", '        return f"' + class_name + '.{self.name}"']
 
         code += [
             "\n",

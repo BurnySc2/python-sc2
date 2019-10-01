@@ -22,6 +22,9 @@ class ConnectionAlreadyClosed(ProtocolError):
 
 class Protocol:
     def __init__(self, ws):
+        """
+        :param ws:
+        """
         assert ws
         self._ws = ws
         self._status = None

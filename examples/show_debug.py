@@ -4,14 +4,14 @@ from sc2.player import Bot, Computer
 
 class MyBot(sc2.BotAI):
     async def on_step(self, iteration):
-        for unit in self.units:
+        for structure in self.structures:
             self._client.debug_text_world(
                 "\n".join([
-                    f"{unit.type_id.name}:{unit.type_id.value}",
-                    f"({unit.position.x:.2f},{unit.position.y:.2f})",
-                    f"{unit.build_progress:.2f}",
-                ] + [repr(x) for x in unit.orders]),
-                unit.position3d,
+                    f"{structure.type_id.name}:{structure.type_id.value}",
+                    f"({structure.position.x:.2f},{structure.position.y:.2f})",
+                    f"{structure.build_progress:.2f}",
+                ] + [repr(x) for x in structure.orders]),
+                structure.position3d,
                 color=(0, 255, 0),
                 size=12,
             )

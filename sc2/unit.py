@@ -1,7 +1,8 @@
+from __future__ import annotations
 import warnings
-from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
+import math
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
-from . import unit_command
 from .cache import property_immutable_cache, property_mutable_cache
 from .constants import (
     transforming,
@@ -13,6 +14,7 @@ from .constants import (
     IS_MASSIVE,
     IS_PSIONIC,
     UNIT_BATTLECRUISER,
+    UNIT_ORACLE,
     TARGET_GROUND,
     TARGET_AIR,
     TARGET_BOTH,
@@ -37,37 +39,36 @@ from .constants import (
     UNIT_PHOTONCANNON,
     UNIT_COLOSSUS,
 )
-from .data import Alliance, Attribute, CloakState, Race, warpgate_abilities
+from .data import Alliance, Attribute, CloakState, DisplayType, Race, TargetType, warpgate_abilities, TargetType, Target
 from .ids.ability_id import AbilityId
 from .ids.buff_id import BuffId
+from .ids.upgrade_id import UpgradeId
 from .ids.unit_typeid import UnitTypeId
 from .position import Point2, Point3
+from .unit_command import UnitCommand
 
 warnings.simplefilter("once")
 
-
-class UnitGameData:
-    """ Populated by sc2/main.py on game launch.
-    Used in PassengerUnit, Unit, Units and UnitOrder. """
-
-    # TODO: When doing bot vs bot, the same _game_data is currently accessed if the laddermanager
-    # is not being used and the bots access the same sc2 library
-    # Could use inspect for that: Loop over i for "calframe[i].frame.f_locals["self"]"
-    # until an instance of BotAi is found
-    _game_data = None
-    _bot_object = None
+if TYPE_CHECKING:
+    from .bot_ai import BotAI
+    from .game_data import AbilityData
 
 
 class UnitOrder:
     @classmethod
-    def from_proto(cls, proto):
+    def from_proto(cls, proto, bot_object: BotAI):
         return cls(
-            UnitGameData._game_data.abilities[proto.ability_id],
+            bot_object._game_data.abilities[proto.ability_id],
             (proto.target_world_space_pos if proto.HasField("target_world_space_pos") else proto.target_unit_tag),
             proto.progress,
         )
 
-    def __init__(self, ability, target, progress=None):
+    def __init__(self, ability: AbilityData, target, progress: float = None):
+        """
+        :param ability:
+        :param target:
+        :param progress:
+        """
         self.ability = ability
         self.target = target
         self.progress = progress
@@ -77,30 +78,33 @@ class UnitOrder:
 
 
 class Unit:
-    def __init__(self, proto_data):
+    def __init__(self, proto_data, bot_object: BotAI):
+        """
+        :param proto_data:
+        :param bot_object:
+        """
         self._proto = proto_data
+        self._bot_object = bot_object
+        # Used by property_immutable_cache
         self.cache = {}
 
     def __repr__(self) -> str:
-        """ Returns string of this form: PassengerUnit(name='SCV', tag=4396941328). """
-        return f"{self.__class__.__name__}(name={self.name !r}, tag={self.tag})"
+        """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
+        return f"Unit(name={self.name !r}, tag={self.tag})"
 
     @property_immutable_cache
     def type_id(self) -> UnitTypeId:
         """ UnitTypeId found in sc2/ids/unit_typeid.
         Caches all type_ids of the same unit type. """
         unit_type = self._proto.unit_type
-        try:
-            return UnitGameData._game_data.unit_types[unit_type]
-        except KeyError:
-            UnitGameData._game_data.unit_types[unit_type] = UnitTypeId(unit_type)
-            return UnitGameData._game_data.unit_types[unit_type]
-        
+        if unit_type not in self._bot_object._game_data.unit_types:
+            self._bot_object._game_data.unit_types[unit_type] = UnitTypeId(unit_type)
+        return self._bot_object._game_data.unit_types[unit_type]
 
     @property_immutable_cache
     def _type_data(self) -> "UnitTypeData":
         """ Provides the unit type data. """
-        return UnitGameData._game_data.units[self._proto.unit_type]
+        return self._bot_object._game_data.units[self._proto.unit_type]
 
     @property
     def name(self) -> str:
@@ -169,17 +173,22 @@ class Unit:
     @property_immutable_cache
     def _weapons(self):
         """ Returns the weapons of the unit. """
-        return self._type_data._proto.weapons
+        try:
+            return self._type_data._proto.weapons
+        except:
+            return None
 
     @property_immutable_cache
     def can_attack(self) -> bool:
         """ Checks if the unit can attack at all. """
         # TODO BATTLECRUISER doesnt have weapons in proto?!
-        return bool(self._weapons) or self.type_id == UNIT_BATTLECRUISER
+        return bool(self._weapons) or self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}
 
     @property_immutable_cache
     def can_attack_both(self) -> bool:
         """ Checks if the unit can attack both ground and air units. """
+        if self.type_id == UNIT_BATTLECRUISER:
+            return True
         if self._weapons:
             return any(weapon.type in TARGET_BOTH for weapon in self._weapons)
         return False
@@ -187,6 +196,8 @@ class Unit:
     @property_immutable_cache
     def can_attack_ground(self) -> bool:
         """ Checks if the unit can attack ground units. """
+        if self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}:
+            return True
         if self._weapons:
             return any(weapon.type in TARGET_GROUND for weapon in self._weapons)
         return False
@@ -203,6 +214,10 @@ class Unit:
     @property_immutable_cache
     def ground_range(self) -> Union[int, float]:
         """ Returns the range against ground units. Does not include upgrades. """
+        if self.type_id == UNIT_ORACLE:
+            return 4
+        if self.type_id == UNIT_BATTLECRUISER:
+            return 6
         if self.can_attack_ground:
             weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
             if weapon:
@@ -212,6 +227,8 @@ class Unit:
     @property_immutable_cache
     def can_attack_air(self) -> bool:
         """ Checks if the unit can air attack at all. Does not include upgrades. """
+        if self.type_id == UNIT_BATTLECRUISER:
+            return True
         if self._weapons:
             return any(weapon.type in TARGET_AIR for weapon in self._weapons)
         return False
@@ -228,6 +245,8 @@ class Unit:
     @property_immutable_cache
     def air_range(self) -> Union[int, float]:
         """ Returns the range against air units. Does not include upgrades. """
+        if self.type_id == UNIT_BATTLECRUISER:
+            return 6
         if self.can_attack_air:
             weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_AIR), None)
             if weapon:
@@ -238,7 +257,7 @@ class Unit:
     def bonus_damage(self):
         """ Returns a tuple of form '(bonus damage, armor type)' if unit does 'bonus damage' against 'armor type'.
         Possible armor typs are: 'Light', 'Armored', 'Biological', 'Mechanical', 'Psionic', 'Massive', 'Structure'. """
-        # TODO Consider unit with ability attacks like Oracle, Thor, Baneling.
+        # TODO: Consider units with ability attacks (Oracle, Baneling) or multiple attacks (Thor).
         if self._weapons:
             for weapon in self._weapons:
                 if weapon.damage_bonus:
@@ -269,7 +288,7 @@ class Unit:
 
     @property
     def is_vespene_geyser(self) -> bool:
-        """ Checks if the unit is a non-empty vespene geyser. """
+        """ Checks if the unit is a non-empty vespene geyser or gas extraction building. """
         return self._type_data.has_vespene
 
     @property
@@ -354,8 +373,13 @@ class Unit:
 
     @property
     def owner_id(self) -> int:
-        """ Returns the owner of the unit. """
+        """ Returns the owner of the unit. This is a value of 1 or 2 in a two player game. """
         return self._proto.owner
+
+    @property
+    def position_tuple(self) -> Tuple[float, float]:
+        """ Returns the 2d position of the unit as tuple without conversion to Point2. """
+        return self._proto.pos.x, self._proto.pos.y
 
     @property_immutable_cache
     def position(self) -> Point2:
@@ -367,15 +391,77 @@ class Unit:
         """ Returns the 3d position of the unit. """
         return Point3.from_proto(self._proto.pos)
 
-    def distance_to(self, p: Union["Unit", Point2, Point3]) -> Union[int, float]:
+    def distance_to(self, p: Union[Unit, Point2, Point3]) -> Union[int, float]:
         """ Using the 2d distance between self and p.
-        To calculate the 3d distance, use unit.position3d.distance_to(p) """
-        return self.position.distance_to_point2(p.position)
+        To calculate the 3d distance, use unit.position3d.distance_to(p)
+
+        :param p: """
+        if isinstance(p, Unit):
+            return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
+        return self._bot_object.distance_math_hypot(self.position_tuple, p)
+
+    def target_in_range(self, target: Unit, bonus_distance: Union[int, float] = 0) -> bool:
+        """ Checks if the target is in range.
+        Includes the target's radius when calculating distance to target.
+
+        :param target:
+        :param bonus_distance: """
+        # TODO: Fix this because immovable units (sieged tank, planetary fortress etc.) have a little lower range than this formula
+        if self.can_attack_ground and not target.is_flying:
+            unit_attack_range = self.ground_range
+        elif self.can_attack_air and (target.is_flying or target.type_id == UNIT_COLOSSUS):
+            unit_attack_range = self.air_range
+        else:
+            return False
+        return (
+            self._bot_object._distance_squared_unit_to_unit(self, target)
+            <= (self.radius + target.radius + unit_attack_range + bonus_distance) ** 2
+        )
+
+    def in_ability_cast_range(
+        self, ability_id: AbilityId, target: Union[Unit, Point2], bonus_distance: float = 0
+    ) -> bool:
+        """ Test if a unit is able to cast an ability on the target without checking ability cooldown (like stalker blink) or if ability is made available through research (like HT storm).
+
+        :param ability_id:
+        :param target:
+        :param bonus_distance: """
+        cast_range = self._bot_object._game_data.abilities[ability_id.value]._proto.cast_range
+        assert cast_range > 0, f"Checking for an ability ({ability_id}) that has no cast range"
+        ability_target_type = self._bot_object._game_data.abilities[ability_id.value]._proto.target
+        # For casting abilities that target other units, like transfuse, feedback, snipe, yamato
+        if ability_target_type in {Target.Unit.value, Target.PointOrUnit.value} and isinstance(target, Unit):
+            return (
+                self._bot_object._distance_squared_unit_to_unit(self, target)
+                <= (cast_range + self.radius + target.radius + bonus_distance) ** 2
+            )
+        # For casting abilities on the ground, like queen creep tumor, ravager bile, HT storm
+        if ability_target_type in {Target.Point.value, Target.PointOrUnit.value} and isinstance(
+            target, (Point2, tuple)
+        ):
+            return (
+                self._bot_object._distance_pos_to_pos(self.position_tuple, target)
+                <= cast_range + self.radius + bonus_distance
+            )
+        return False
 
     @property
     def facing(self) -> Union[int, float]:
         """ Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
         return self._proto.facing
+
+    def is_facing(self, other_unit: Unit, angle_error: float = 0.05) -> bool:
+        """ Check if this unit is facing the target unit. If you make angle_error too small, there might be rounding errors. If you make angle_error too big, this function might return false positives.
+
+        :param other_unit:
+        :param angle_error: """
+        angle = math.atan2(
+            other_unit.position_tuple[1] - self.position_tuple[1], other_unit.position_tuple[0] - self.position_tuple[0]
+        )
+        if angle < 0:
+            angle += math.pi * 2
+        angle_difference = math.fabs(angle - self.facing)
+        return angle_difference < angle_error
 
     @property
     def radius(self) -> Union[int, float]:
@@ -438,6 +524,12 @@ class Unit:
         """ Returns the detection distance of the unit. """
         return self._proto.detect_range
 
+    @property_immutable_cache
+    def is_detector(self) -> bool:
+        """ Checks if the unit is a detector. Has to be completed
+        in order to detect and Photoncannons also need to be powered. """
+        return self.is_ready and (self.type_id in IS_DETECTOR or self.type_id == UNIT_PHOTONCANNON and self.is_powered)
+
     @property
     def radar_range(self) -> Union[int, float]:
         return self._proto.radar_range
@@ -471,7 +563,7 @@ class Unit:
 
     @property
     def mineral_contents(self) -> int:
-        """ Returns the amount of minerals rmaining in a mineral field. """
+        """ Returns the amount of minerals remaining in a mineral field. """
         return self._proto.mineral_contents
 
     @property
@@ -488,7 +580,7 @@ class Unit:
     @property
     def is_flying(self) -> bool:
         """ Checks if the unit is flying. """
-        return self._proto.is_flying
+        return self._proto.is_flying or self.has_buff(BuffId.GRAVITONBEAM)
 
     @property
     def is_burrowed(self) -> bool:
@@ -534,7 +626,7 @@ class Unit:
     @property_mutable_cache
     def orders(self) -> List[UnitOrder]:
         """ Returns the a list of the current orders. """
-        return [UnitOrder.from_proto(order) for order in self._proto.orders]
+        return [UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders]
 
     @property_immutable_cache
     def order_target(self) -> Optional[Union[int, Point2]]:
@@ -638,9 +730,9 @@ class Unit:
         return self.position.offset(Point2((-2.5, 0.5)))
 
     @property_mutable_cache
-    def passengers(self) -> Set["Unit"]:
+    def passengers(self) -> Set[Unit]:
         """ Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism. """
-        return {Unit(unit) for unit in self._proto.passengers}
+        return {Unit(unit, self._bot_object) for unit in self._proto.passengers}
 
     @property_mutable_cache
     def passengers_tags(self) -> Set[int]:
@@ -681,7 +773,7 @@ class Unit:
     @property
     def ideal_harvesters(self) -> int:
         """ Returns the ideal harverster count for unit.
-        3 for geysers, 2*n for n mineral patches on that base."""
+        3 for gas buildings, 2*n for n mineral patches on that base."""
         return self._proto.ideal_harvesters
 
     @property
@@ -700,8 +792,7 @@ class Unit:
         elif unit.weapon_cooldown < 0:
             self.actions.append(unit.move(closest_allied_unit_because_cant_attack))
         else:
-            self.actions.append(unit.move(retreatPosition))
-        """
+            self.actions.append(unit.move(retreatPosition)) """
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1
@@ -711,91 +802,120 @@ class Unit:
         # TODO What does this do?
         return self._proto.engaged_target_tag
 
-    @property_immutable_cache
-    def is_detector(self) -> bool:
-        """ Checks if the unit is a detector. Has to be completed
-        in order to detect and Photoncannons also need to be powered. """
-        return self.is_ready and (self.type_id in IS_DETECTOR or self.type_id == UNIT_PHOTONCANNON and self.is_powered)
-
     # Unit functions
 
-    def target_in_range(self, target: "Unit", bonus_distance: Union[int, float] = 0) -> bool:
-        """ Checks if the target is in range.
-        Includes the target's radius when calculating distance to target. """
-        if self.can_attack_ground and not target.is_flying:
-            unit_attack_range = self.ground_range
-        elif self.can_attack_air and (target.is_flying or target.type_id == UNIT_COLOSSUS):
-            unit_attack_range = self.air_range
-        else:
-            return False
-        return self.distance_to(target) <= self.radius + target.radius + unit_attack_range + bonus_distance
-
-    def has_buff(self, buff) -> bool:
+    def has_buff(self, buff: BuffId) -> bool:
         """ Checks if unit has buff 'buff'. """
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs
 
-    def train(self, unit, queue=False) -> UnitOrder:
+    def train(self, unit: UnitTypeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to train another 'unit'.
-        Usage: self.actions.append(COMMANDCENTER.train(SCV)) """
-        return self(UnitGameData._game_data.units[unit.value].creation_ability.id, queue=queue)
+        Usage: self.actions.append(COMMANDCENTER.train(SCV))
 
-    def build(self, unit, position=None, queue=False) -> UnitOrder:
+        :param unit:
+        :param queue: """
+        return self(self._bot_object._game_data.units[unit.value].creation_ability.id, queue=queue)
+
+    def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
         """ Orders unit to build another 'unit' at 'position'.
-        Usage: self.actions.append(SCV.build(COMMANDCENTER, position)) """
-        return self(UnitGameData._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
+        Usage: self.actions.append(SCV.build(COMMANDCENTER, position))
 
-    def research(self, upgrade, queue=False) -> UnitOrder:
+        :param unit:
+        :param position:
+        :param queue:
+        """
+        return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
+
+    def research(self, upgrade: UpgradeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to research 'upgrade'.
-        Requires UpgradeId to be passed instead of AbilityId. """
-        return self(UnitGameData._game_data.upgrades[upgrade.value].research_ability.id, queue=queue)
+        Requires UpgradeId to be passed instead of AbilityId.
 
-    def warp_in(self, unit, position) -> UnitOrder:
-        """ Orders Warpgate to warp in 'unit' at 'position'. """
-        normal_creation_ability = UnitGameData._game_data.units[unit.value].creation_ability.id
+        :param upgrade:
+        :param queue:
+        """
+        return self(self._bot_object._game_data.upgrades[upgrade.value].research_ability.id, queue=queue)
+
+    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3]) -> UnitCommand:
+        """ Orders Warpgate to warp in 'unit' at 'position'. 
+
+        :param unit:
+        :param queue:
+        """
+        normal_creation_ability = self._bot_object._game_data.units[unit.value].creation_ability.id
         return self(warpgate_abilities[normal_creation_ability], target=position)
 
-    def attack(self, target, queue=False) -> UnitOrder:
+    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders unit to attack. Target can be a Unit or Point2.
-        Attacking a position will make the unit move there and attack everything on its way. """
+        Attacking a position will make the unit move there and attack everything on its way. 
+
+        :param target:
+        :param queue:
+        """
         return self(AbilityId.ATTACK, target=target, queue=queue)
 
-    def gather(self, target, queue=False) -> UnitOrder:
+    def gather(self, target: Unit, queue: bool = False) -> UnitCommand:
         """ Orders a unit to gather minerals or gas.
-        'Target' must be a mineral patch or a gas extraction building. """
+        'Target' must be a mineral patch or a gas extraction building. 
+
+        :param target:
+        :param queue:
+        """
         return self(AbilityId.HARVEST_GATHER, target=target, queue=queue)
 
-    def return_resource(self, target=None, queue=False) -> UnitOrder:
-        """ Orders the unit to return resource. Does not need a 'target'. """
+    def return_resource(self, target: Unit = None, queue: bool = False) -> UnitCommand:
+        """ Orders the unit to return resource. Does not need a 'target'. 
+
+        :param target:
+        :param queue:
+        """
         return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position, queue=False) -> UnitOrder:
+    def move(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders the unit to move to 'position'.
-        Target can be a Unit (to follow that unit) or Point2. """
-        return self(AbilityId.MOVE, target=position, queue=queue)
+        Target can be a Unit (to follow that unit) or Point2. 
 
-    def scan_move(self, *args, **kwargs) -> UnitOrder:
-        """ TODO: What does this do? """
+        :param position:
+        :param queue:
+        """
+        return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
+
+    def scan_move(self, *args, **kwargs) -> UnitCommand:
+        """ Deprecated: This ability redirects to 'AbilityId.ATTACK' """
         return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
-    def hold_position(self, queue=False) -> UnitOrder:
-        """ Orders a unit to stop moving. It will not move until it gets new orders. """
+    def hold_position(self, queue: bool = False) -> UnitCommand:
+        """ Orders a unit to stop moving. It will not move until it gets new orders. 
+
+        :param queue:
+        """
         return self(AbilityId.HOLDPOSITION, queue=queue)
 
-    def stop(self, queue=False) -> UnitOrder:
+    def stop(self, queue: bool = False) -> UnitCommand:
         """ Orders a unit to stop, but can start to move on its own
         if it is attacked, enemy unit is in range or other friendly
-        units need the space. """
+        units need the space. 
+
+        :param queue:
+        """
         return self(AbilityId.STOP, queue=queue)
 
-    def patrol(self, position, queue=False) -> UnitOrder:
+    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders a unit to patrol between position it has when the command starts and the target position.
         Can be queued up to seven patrol points. If the last point is the same as the starting
-        point, the unit will patrol in a circle. """
+        point, the unit will patrol in a circle. 
+
+        :param position:
+        :param queue:
+        """
         return self(AbilityId.PATROL, target=position, queue=queue)
 
-    def repair(self, repair_target, queue=False) -> UnitOrder:
-        """ Order an SCV or MULE to repair. """
+    def repair(self, repair_target: Unit, queue: bool = False) -> UnitCommand:
+        """ Order an SCV or MULE to repair. 
+
+        :param repair_target:
+        :param queue:
+        """
         return self(AbilityId.EFFECT_REPAIR, target=repair_target, queue=queue)
 
     def __hash__(self):
@@ -807,5 +927,5 @@ class Unit:
         except:
             return False
 
-    def __call__(self, ability, target=None, queue=False):
-        return unit_command.UnitCommand(ability, self, target=target, queue=queue)
+    def __call__(self, ability, target=None, queue: bool = False):
+        return UnitCommand(ability, self, target=target, queue=queue)

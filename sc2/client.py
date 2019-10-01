@@ -1,5 +1,6 @@
+from __future__ import annotations
 import logging
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from s2clientprotocol import common_pb2 as common_pb
 from s2clientprotocol import debug_pb2 as debug_pb
@@ -24,10 +25,17 @@ logger = logging.getLogger(__name__)
 
 class Client(Protocol):
     def __init__(self, ws):
+        """
+        :param ws:
+        """
         super().__init__(ws)
+        # How many frames will be waited between iterations before the next one is called
         self.game_step = 8
         self._player_id = None
         self._game_result = None
+        # Store a hash value of all the debug requests to prevent sending the same ones again if they haven't changed last frame
+        self._debug_hash_tuple_last_iteration: Tuple[int, int, int, int] = (0, 0, 0, 0)
+        self._debug_draw_last_frame = False
         self._debug_texts = []
         self._debug_lines = []
         self._debug_boxes = []
@@ -107,8 +115,11 @@ class Client(Protocol):
             f.write(result.save_replay.data)
         logger.info(f"Saved replay to {path}")
 
-    async def observation(self):
-        result = await self._execute(observation=sc_pb.RequestObservation())
+    async def observation(self, game_loop=None):
+        if game_loop is not None:
+            result = await self._execute(observation=sc_pb.RequestObservation(game_loop=game_loop))
+        else:
+            result = await self._execute(observation=sc_pb.RequestObservation())
         assert result.HasField("observation")
 
         if not self.in_game or result.observation.player_result:
@@ -179,7 +190,10 @@ class Client(Protocol):
         self, start: Union[Unit, Point2, Point3], end: Union[Point2, Point3]
     ) -> Optional[Union[int, float]]:
         """ Caution: returns "None" when path not found
-        Try to combine queries with the function below because the pathing query is generally slow. """
+        Try to combine queries with the function below because the pathing query is generally slow.
+
+        :param start:
+        :param end: """
         assert isinstance(start, (Point2, Unit))
         assert isinstance(end, Point2)
         if isinstance(start, Point2):
@@ -210,6 +224,8 @@ class Client(Protocol):
         """ Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])
         -> returns [distance1, distance2]
         Caution: returns 0 when path not found
+
+        :param zipped_list:
         """
         assert zipped_list, "No zipped_list"
         assert isinstance(zipped_list, list), f"{type(zipped_list)}"
@@ -240,7 +256,7 @@ class Client(Protocol):
         return [float(d.distance) for d in results.query.pathing]
 
     async def query_building_placement(
-        self, ability: AbilityId, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
+        self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
         assert isinstance(ability, AbilityData)
         result = await self._execute(
@@ -288,7 +304,10 @@ class Client(Protocol):
         )
 
     async def toggle_autocast(self, units: Union[List[Unit], Units], ability: AbilityId):
-        """ Toggle autocast of all specified units """
+        """ Toggle autocast of all specified units
+
+        :param units:
+        :param ability: """
         assert units
         assert isinstance(units, list)
         assert all(isinstance(u, Unit) for u in units)
@@ -309,8 +328,10 @@ class Client(Protocol):
         )
 
     async def debug_create_unit(self, unit_spawn_commands: List[List[Union[UnitTypeId, int, Point2, Point3]]]):
-        """ Usage example (will spawn 1 marine in the center of the map for player ID 1):
-        await self._client.debug_create_unit([[UnitTypeId.MARINE, 1, self._game_info.map_center, 1]]) """
+        """ Usage example (will spawn 5 marines in the center of the map for player ID 1):
+        await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])
+
+        :param unit_spawn_commands: """
         assert isinstance(unit_spawn_commands, list)
         assert unit_spawn_commands
         assert isinstance(unit_spawn_commands[0], list)
@@ -337,6 +358,9 @@ class Client(Protocol):
         )
 
     async def debug_kill_unit(self, unit_tags: Union[Unit, Units, List[int], Set[int]]):
+        """
+        :param unit_tags:
+        """
         if isinstance(unit_tags, Units):
             unit_tags = unit_tags.tags
         if isinstance(unit_tags, Unit):
@@ -369,7 +393,9 @@ class Client(Protocol):
         )
 
     async def move_camera_spatial(self, position: Union[Point2, Point3]):
-        """ Moves camera to the target position using the spatial aciton interface """
+        """ Moves camera to the target position using the spatial aciton interface
+
+        :param position: """
         from s2clientprotocol import spatial_pb2 as spatial_pb
 
         assert isinstance(position, (Point2, Point3))
@@ -382,139 +408,133 @@ class Client(Protocol):
         )
         await self._execute(action=sc_pb.RequestAction(actions=[action]))
 
-    async def debug_text(self, texts: Union[str, list], positions: Union[list, set], color=(0, 255, 0), size_px=16):
-        """ Deprecated, may be removed soon. Use combination of "debug_text_simple", "debug_text_screen" or "debug_text_world" together with "send_debug" instead. """
-        if isinstance(positions, (set, list)):
-            if not positions:
-                return
-
-            if isinstance(texts, str):
-                texts = [texts] * len(positions)
-            assert len(texts) == len(positions)
-
-            await self._execute(
-                debug=sc_pb.RequestDebug(
-                    debug=[
-                        debug_pb.DebugCommand(
-                            draw=debug_pb.DebugDraw(
-                                text=(
-                                    debug_pb.DebugText(
-                                        text=t,
-                                        color=debug_pb.Color(r=color[0], g=color[1], b=color[2]),
-                                        world_pos=common_pb.Point(x=p.x, y=p.y, z=getattr(p, "z", 10)),
-                                        size=size_px,
-                                    )
-                                    for t, p in zip(texts, positions)
-                                )
-                            )
-                        )
-                    ]
-                )
-            )
-        else:
-            await self.debug_text([texts], [positions], color)
-
     def debug_text_simple(self, text: str):
-        """ Draws a text in the top left corner of the screen (up to a max of 6 messages it seems). Don't forget to add 'await self._client.send_debug'. """
-        self._debug_texts.append(self.to_debug_message(text))
+        """ Draws a text in the top left corner of the screen (up to a max of 6 messages fit there). """
+        self._debug_texts.append(DrawItemScreenText(text=text, color=None, start_point=Point2((0, 0)), font_size=8))
 
-    def debug_text_screen(self, text: str, pos: Union[Point2, Point3, tuple, list], color=None, size: int = 8):
-        """ Draws a text on the screen with coordinates 0 <= x, y <= 1. Don't forget to add 'await self._client.send_debug'. """
+    def debug_text_screen(
+        self,
+        text: str,
+        pos: Union[Point2, Point3, tuple, list],
+        color: Union[tuple, list, Point3] = None,
+        size: int = 8,
+    ):
+        """ Draws a text on the screen (monitor / game window) with coordinates 0 <= x, y <= 1. """
         assert len(pos) >= 2
         assert 0 <= pos[0] <= 1
         assert 0 <= pos[1] <= 1
         pos = Point2((pos[0], pos[1]))
-        self._debug_texts.append(self.to_debug_message(text, color, pos, size))
+        self._debug_texts.append(DrawItemScreenText(text=text, color=color, start_point=pos, font_size=size))
 
-    def debug_text_2d(self, text: str, pos: Union[Point2, Point3, tuple, list], color=None, size: int = 8):
+    def debug_text_2d(
+        self,
+        text: str,
+        pos: Union[Point2, Point3, tuple, list],
+        color: Union[tuple, list, Point3] = None,
+        size: int = 8,
+    ):
         return self.debug_text_screen(text, pos, color, size)
 
-    def debug_text_world(self, text: str, pos: Union[Unit, Point2, Point3], color=None, size: int = 8):
-        """ Draws a text at Point3 position. Don't forget to add 'await self._client.send_debug'.
+    def debug_text_world(
+        self, text: str, pos: Union[Unit, Point2, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
+    ):
+        """ Draws a text at Point3 position in the game world.
         To grab a unit's 3d position, use unit.position3d
-        Usually the Z value of a Point3 is between 8 and 14 (except for flying units)
+        Usually the Z value of a Point3 is between 8 and 14 (except for flying units). Use self.get_terrain_z_height() from bot_ai.py to get the Z value (height) of the terrain at a 2D position.
         """
         if isinstance(pos, Point2) and not isinstance(pos, Point3):  # a Point3 is also a Point2
             pos = Point3((pos.x, pos.y, 0))
-        self._debug_texts.append(self.to_debug_message(text, color, pos, size))
+        self._debug_texts.append(DrawItemWorldText(text=text, color=color, start_point=pos, font_size=size))
 
-    def debug_text_3d(self, text: str, pos: Union[Unit, Point2, Point3], color=None, size: int = 8):
+    def debug_text_3d(
+        self, text: str, pos: Union[Unit, Point2, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
+    ):
         return self.debug_text_world(text, pos, color, size)
 
-    def debug_line_out(self, p0: Union[Unit, Point2, Point3], p1: Union[Unit, Point2, Point3], color=None):
-        """ Draws a line from p0 to p1. Don't forget to add 'await self._client.send_debug'. """
-        self._debug_lines.append(
-            debug_pb.DebugLine(
-                line=debug_pb.Line(p0=self.to_debug_point(p0), p1=self.to_debug_point(p1)),
-                color=self.to_debug_color(color),
-            )
-        )
+    def debug_line_out(
+        self, p0: Union[Unit, Point2, Point3], p1: Union[Unit, Point2, Point3], color: Union[tuple, list, Point3] = None
+    ):
+        """ Draws a line from p0 to p1. """
+        self._debug_lines.append(DrawItemLine(color=color, start_point=p0, end_point=p1))
 
-    def debug_box_out(self, p_min: Union[Unit, Point2, Point3], p_max: Union[Unit, Point2, Point3], color=None):
-        """ Draws a box with p_min and p_max as corners. Don't forget to add 'await self._client.send_debug'. """
-        self._debug_boxes.append(
-            debug_pb.DebugBox(
-                min=self.to_debug_point(p_min), max=self.to_debug_point(p_max), color=self.to_debug_color(color)
-            )
-        )
+    def debug_box_out(
+        self,
+        p_min: Union[Unit, Point2, Point3],
+        p_max: Union[Unit, Point2, Point3],
+        color: Union[tuple, list, Point3] = None,
+    ):
+        """ Draws a box with p_min and p_max as corners of the box. """
+        self._debug_boxes.append(DrawItemBox(start_point=p_min, end_point=p_max, color=color))
 
-    def debug_sphere_out(self, p: Union[Unit, Point2, Point3], r: Union[int, float], color=None):
-        """ Draws a sphere at point p with radius r. Don't forget to add 'await self._client.send_debug'. """
-        self._debug_spheres.append(
-            debug_pb.DebugSphere(p=self.to_debug_point(p), r=r, color=self.to_debug_color(color))
-        )
+    def debug_box2_out(
+        self,
+        pos: Union[Unit, Point2, Point3],
+        half_vertex_length: float = 0.25,
+        color: Union[tuple, list, Point3] = None,
+    ):
+        """ Draws a box center at a position 'pos', with box side lengths (vertices) of two times 'half_vertex_length'. """
+        if isinstance(pos, Unit):
+            pos = pos.position3d
+        elif not isinstance(pos, Point3):
+            pos = Point3((pos.x, pos.y, 0))
+        p0 = pos + Point3((-half_vertex_length, -half_vertex_length, -half_vertex_length))
+        p1 = pos + Point3((half_vertex_length, half_vertex_length, half_vertex_length))
+        self._debug_boxes.append(DrawItemBox(start_point=p0, end_point=p1, color=color))
 
-    async def send_debug(self):
-        """ Sends the debug draw execution. Put this after your debug creation functions. """
-        await self._execute(
-            debug=sc_pb.RequestDebug(
-                debug=[
-                    debug_pb.DebugCommand(
-                        draw=debug_pb.DebugDraw(
-                            text=self._debug_texts if self._debug_texts else None,
-                            lines=self._debug_lines if self._debug_lines else None,
-                            boxes=self._debug_boxes if self._debug_boxes else None,
-                            spheres=self._debug_spheres if self._debug_spheres else None,
-                        )
+    def debug_sphere_out(
+        self, p: Union[Unit, Point2, Point3], r: Union[int, float], color: Union[tuple, list, Point3] = None
+    ):
+        """ Draws a sphere at point p with radius r. """
+        self._debug_boxes.append(DrawItemSphere(start_point=p, radius=r, color=color))
+
+    async def _send_debug(self):
+        """ Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.
+        Check examples/terran/ramp_wall.py for example drawing. Each draw request needs to be sent again in every single on_step iteration.
+        """
+        debug_hash = (
+            sum(hash(item) for item in self._debug_texts),
+            sum(hash(item) for item in self._debug_lines),
+            sum(hash(item) for item in self._debug_boxes),
+            sum(hash(item) for item in self._debug_spheres),
+        )
+        if debug_hash != (0, 0, 0, 0):
+            if debug_hash != self._debug_hash_tuple_last_iteration:
+                # Something has changed, either more or less is to be drawn, or a position of a drawing changed (e.g. when drawing on a moving unit)
+                self._debug_hash_tuple_last_iteration = debug_hash
+                await self._execute(
+                    debug=sc_pb.RequestDebug(
+                        debug=[
+                            debug_pb.DebugCommand(
+                                draw=debug_pb.DebugDraw(
+                                    text=[text.to_proto() for text in self._debug_texts] if self._debug_texts else None,
+                                    lines=[line.to_proto() for line in self._debug_lines]
+                                    if self._debug_lines
+                                    else None,
+                                    boxes=[box.to_proto() for box in self._debug_boxes] if self._debug_boxes else None,
+                                    spheres=[sphere.to_proto() for sphere in self._debug_spheres]
+                                    if self._debug_spheres
+                                    else None,
+                                )
+                            )
+                        ]
                     )
-                ]
+                )
+            self._debug_draw_last_frame = True
+            self._debug_texts.clear()
+            self._debug_lines.clear()
+            self._debug_boxes.clear()
+            self._debug_spheres.clear()
+        elif self._debug_draw_last_frame:
+            # Clear drawing if we drew last frame but nothing to draw this frame
+            self._debug_hash_tuple_last_iteration = (0, 0, 0, 0)
+            await self._execute(
+                debug=sc_pb.RequestDebug(
+                    debug=[
+                        debug_pb.DebugCommand(draw=debug_pb.DebugDraw(text=None, lines=None, boxes=None, spheres=None))
+                    ]
+                )
             )
-        )
-        self._debug_texts.clear()
-        self._debug_lines.clear()
-        self._debug_boxes.clear()
-        self._debug_spheres.clear()
-
-    def to_debug_color(self, color):
-        """ Helper function for color conversion """
-        if color is None:
-            return debug_pb.Color(r=255, g=255, b=255)
-        else:
-            r = getattr(color, "r", getattr(color, "x", 255))
-            g = getattr(color, "g", getattr(color, "y", 255))
-            b = getattr(color, "b", getattr(color, "z", 255))
-            if max(r, g, b) <= 1:
-                r *= 255
-                g *= 255
-                b *= 255
-
-            return debug_pb.Color(r=int(r), g=int(g), b=int(b))
-
-    def to_debug_point(self, point: Union[Unit, Point2, Point3]) -> common_pb.Point:
-        """ Helper function for point conversion """
-        if isinstance(point, Unit):
-            point = point.position3d
-        return common_pb.Point(x=point.x, y=point.y, z=getattr(point, "z", 0))
-
-    def to_debug_message(
-        self, text: str, color=None, pos: Optional[Union[Point2, Point3]] = None, size: int = 8
-    ) -> debug_pb.DebugText:
-        """ Helper function to create debug texts """
-        color = self.to_debug_color(color)
-        pt3d = self.to_debug_point(pos) if isinstance(pos, Point3) else None
-        virtual_pos = self.to_debug_point(pos) if pos is not None and not isinstance(pos, Point3) else None
-
-        return debug_pb.DebugText(color=color, text=text, virtual_pos=virtual_pos, world_pos=pt3d, size=size)
+            self._debug_draw_last_frame = False
 
     async def debug_leave(self):
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(end_game=debug_pb.DebugEndGame())]))
@@ -588,7 +608,7 @@ class Client(Protocol):
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=7)]))
 
     async def debug_gas(self):
-        """ Gives 5000 vespene to the bot. """
+        """ Gives 5000 vespene to the bot. This does not seem to be working. """
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=8)]))
 
     async def debug_cooldown(self):
@@ -617,6 +637,120 @@ class Client(Protocol):
         Caution:
             - The SC2 Client will crash if the game wasn't quicksaved
             - The bot step iteration counter will not reset
-            - self.state.game_loop will be set to zero after the quickload, and self.time is dependant on it
-        """
+            - self.state.game_loop will be set to zero after the quickload, and self.time is dependant on it """
         await self._execute(quick_load=sc_pb.RequestQuickLoad())
+
+
+class DrawItem:
+    def to_debug_point(self, point: Union[Unit, Point2, Point3]) -> common_pb.Point:
+        """ Helper function for point conversion """
+        if isinstance(point, Unit):
+            point = point.position3d
+        return common_pb.Point(x=point.x, y=point.y, z=getattr(point, "z", 0))
+
+    def to_debug_color(self, color: Union[tuple, Point3]):
+        """ Helper function for color conversion """
+        if color is None:
+            return debug_pb.Color(r=255, g=255, b=255)
+        # Need to check if not of type Point3 because Point3 inherits from tuple
+        elif isinstance(color, (tuple, list)) and not isinstance(color, Point3) and len(color) == 3:
+            return debug_pb.Color(r=color[0], g=color[1], b=color[2])
+        # In case color is of type Point3
+        else:
+            r = getattr(color, "r", getattr(color, "x", 255))
+            g = getattr(color, "g", getattr(color, "y", 255))
+            b = getattr(color, "b", getattr(color, "z", 255))
+            if max(r, g, b) <= 1:
+                r *= 255
+                g *= 255
+                b *= 255
+
+            return debug_pb.Color(r=int(r), g=int(g), b=int(b))
+
+
+class DrawItemScreenText(DrawItem):
+    def __init__(self, start_point: Point2 = None, color: Point3 = None, text: str = "", font_size: int = 8):
+        self._start_point: Point2 = start_point
+        self._color: Point3 = color
+        self._text: str = text
+        self._font_size: int = font_size
+
+    def to_proto(self):
+        return debug_pb.DebugText(
+            color=self.to_debug_color(self._color),
+            text=self._text,
+            virtual_pos=self.to_debug_point(self._start_point),
+            world_pos=None,
+            size=self._font_size,
+        )
+
+    def __hash__(self):
+        return hash((self._start_point, self._color, self._text, self._font_size))
+
+
+class DrawItemWorldText(DrawItem):
+    def __init__(self, start_point: Point3 = None, color: Point3 = None, text: str = "", font_size: int = 8):
+        self._start_point: Point3 = start_point
+        self._color: Point3 = color
+        self._text: str = text
+        self._font_size: int = font_size
+
+    def to_proto(self):
+        return debug_pb.DebugText(
+            color=self.to_debug_color(self._color),
+            text=self._text,
+            virtual_pos=None,
+            world_pos=self.to_debug_point(self._start_point),
+            size=self._font_size,
+        )
+
+    def __hash__(self):
+        return hash((self._start_point, self._text, self._font_size, self._color))
+
+
+class DrawItemLine(DrawItem):
+    def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None):
+        self._start_point: Point3 = start_point
+        self._end_point: Point3 = end_point
+        self._color: Point3 = color
+
+    def to_proto(self):
+        return debug_pb.DebugLine(
+            line=debug_pb.Line(p0=self.to_debug_point(self._start_point), p1=self.to_debug_point(self._end_point)),
+            color=self.to_debug_color(self._color),
+        )
+
+    def __hash__(self):
+        return hash((self._start_point, self._end_point, self._color))
+
+
+class DrawItemBox(DrawItem):
+    def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None):
+        self._start_point: Point3 = start_point
+        self._end_point: Point3 = end_point
+        self._color: Point3 = color
+
+    def to_proto(self):
+        return debug_pb.DebugBox(
+            min=self.to_debug_point(self._start_point),
+            max=self.to_debug_point(self._end_point),
+            color=self.to_debug_color(self._color),
+        )
+
+    def __hash__(self):
+        return hash((self._start_point, self._end_point, self._color))
+
+
+class DrawItemSphere(DrawItem):
+    def __init__(self, start_point: Point3 = None, radius: float = None, color: Point3 = None):
+        self._start_point: Point3 = start_point
+        self._radius: float = radius
+        self._color: Point3 = color
+
+    def to_proto(self):
+        return debug_pb.DebugSphere(
+            p=self.to_debug_point(self._start_point), r=self._radius, color=self.to_debug_color(self._color)
+        )
+
+    def __hash__(self):
+        return hash((self._start_point, self._radius, self._color))

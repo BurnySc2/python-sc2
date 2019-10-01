@@ -17,7 +17,7 @@ class ControlGroup(set):
 
     @property
     def empty(self) -> bool:
-        return self.amount == 0
+        return not self
 
     def add_unit(self, unit):
         self.add(unit.tag)
@@ -27,8 +27,8 @@ class ControlGroup(set):
             self.add_unit(unit)
 
     def remove_unit(self, unit):
-        self.remove(unit.tag)
+        self.discard(unit.tag)
 
     def remove_units(self, units):
         for unit in units:
-            self.remove(unit.tag)
+            self.discard(unit.tag)

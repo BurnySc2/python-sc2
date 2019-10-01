@@ -20,6 +20,10 @@ class EffectId(enum.Enum):
     LURKERMP = 12
 
 
+    def __repr__(self):
+        return f"EffectId.{self.name}"
+
+
 for item in EffectId:
     assert not item.name in globals()
     globals()[item.name] = item

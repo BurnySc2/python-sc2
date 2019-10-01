@@ -12,7 +12,6 @@ from .player import Bot, Human
 from .portconfig import Portconfig
 from .protocol import ConnectionAlreadyClosed, ProtocolError
 from .sc2process import SC2Process
-from .unit import UnitGameData
 
 logger = logging.getLogger(__name__)
 
@@ -92,45 +91,52 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         time_window = SlidingTimeWindow(int(step_time_limit.get("window_size", 1)))
         time_limit = float(step_time_limit.get("time_limit", None))
 
+    ai._initialize_variables()
+
     game_data = await client.get_game_data()
-    # Used in PassengerUnit, Unit and Units
-    UnitGameData._game_data = game_data
-    UnitGameData._bot_object = ai
     game_info = await client.get_game_info()
 
     # This game_data will become self._game_data in botAI
-    ai._prepare_start(client, player_id, game_info, game_data)
+    ai._prepare_start(client, player_id, game_info, game_data, realtime=realtime)
     state = await client.observation()
     # check game result every time we get the observation
     if client._game_result:
-        ai.on_end(client._game_result[player_id])
+        await ai.on_end(client._game_result[player_id])
         return client._game_result[player_id]
     gs = GameState(state.observation)
     proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
     ai._prepare_step(gs, proto_game_info)
     ai._prepare_first_step()
     try:
-        ai.on_start()
-        await ai.on_start_async()
+        await ai.on_start()
     except Exception as e:
         logger.exception(f"AI on_start threw an error")
         logger.error(f"resigning due to previous error")
-        ai.on_end(Result.Defeat)
+        await ai.on_end(Result.Defeat)
         return Result.Defeat
 
     iteration = 0
     while True:
         if iteration != 0:
-            state = await client.observation()
+            if realtime:
+                # TODO: check what happens if a bot takes too long to respond, so that the requested game_loop might already be in the past
+                state = await client.observation(gs.game_loop + client.game_step)
+            else:
+                state = await client.observation()
             # check game result every time we get the observation
             if client._game_result:
-                ai.on_end(client._game_result[player_id])
+                try:
+                    await ai.on_end(client._game_result[player_id])
+                except TypeError as error:
+                    # print(f"caught type error {error}")
+                    # print(f"return {client._game_result[player_id]}")
+                    return client._game_result[player_id]
                 return client._game_result[player_id]
             gs = GameState(state.observation)
-            logger.debug(f"Score: {gs.score.summary}")
+            logger.debug(f"Score: {gs.score.score}")
 
             if game_time_limit and (gs.game_loop * 0.725 * (1 / 16)) > game_time_limit:
-                ai.on_end(Result.Tie)
+                await ai.on_end(Result.Tie)
                 return Result.Tie
             proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
             ai._prepare_step(gs, proto_game_info)
@@ -138,16 +144,21 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         logger.debug(f"Running AI step, it={iteration} {gs.game_loop * 0.725 * (1 / 16):.2f}s")
 
         try:
-            await ai.issue_events()
             if realtime:
+                # Issue event like unit created or unit destroyed
+                await ai.issue_events()
                 await ai.on_step(iteration)
+                await ai._after_step()
             else:
                 if time_penalty_cooldown > 0:
                     time_penalty_cooldown -= 1
                     logger.warning(f"Running AI step: penalty cooldown: {time_penalty_cooldown}")
                     iteration -= 1  # Do not increment the iteration on this round
                 elif time_limit is None:
+                    # Issue event like unit created or unit destroyed
+                    await ai.issue_events()
                     await ai.on_step(iteration)
+                    await ai._after_step()
                 else:
                     out_of_budget = False
                     budget = time_limit - time_window.available
@@ -163,6 +174,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                         step_start = time.monotonic()
                         try:
                             async with async_timeout.timeout(budget):
+                                await ai.issue_events()
                                 await ai.on_step(iteration)
                         except asyncio.TimeoutError:
                             step_time = time.monotonic() - step_start
@@ -182,6 +194,8 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                         else:
                             time_penalty_cooldown = int(time_penalty)
                             time_window.clear()
+
+                    await ai._after_step()
         except Exception as e:
             if isinstance(e, ProtocolError) and e.is_game_over_error:
                 if realtime:
@@ -190,20 +204,25 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                 if result is None:
                     logger.error("Game over, but no results gathered")
                     raise
-                ai.on_end(result)
+                await ai.on_end(result)
                 return result
             # NOTE: this message is caught by pytest suite
             logger.exception(f"AI step threw an error")  # DO NOT EDIT!
             logger.error(f"Error: {e}")
             logger.error(f"Resigning due to previous error")
-            ai.on_end(Result.Defeat)
+            try:
+                await ai.on_end(Result.Defeat)
+            except TypeError as error:
+                # print(f"caught type error {error}")
+                # print(f"return {Result.Defeat}")
+                return Result.Defeat
             return Result.Defeat
 
         logger.debug(f"Running AI step: done")
 
         if not realtime:
             if not client.in_game:  # Client left (resigned) the game
-                ai.on_end(client._game_result[player_id])
+                await ai.on_end(client._game_result[player_id])
                 return client._game_result[player_id]
 
             await client.step()
@@ -253,13 +272,16 @@ async def _host_game(
     game_time_limit=None,
     rgb_render_config=None,
     random_seed=None,
+    sc2_version=None,
 ):
 
     assert players, "Can't create a game without players"
 
     assert any(isinstance(p, (Human, Bot)) for p in players)
 
-    async with SC2Process(fullscreen=players[0].fullscreen, render=rgb_render_config is not None) as server:
+    async with SC2Process(
+        fullscreen=players[0].fullscreen, render=rgb_render_config is not None, sc2_version=sc2_version
+    ) as server:
         await server.ping()
 
         client = await _setup_host_game(server, map_settings, players, realtime, random_seed)
@@ -335,7 +357,7 @@ async def _join_game(players, realtime, portconfig, save_replay_as=None, step_ti
 
 def run_game(map_settings, players, **kwargs):
     if sum(isinstance(p, (Human, Bot)) for p in players) > 1:
-        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed"]
+        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version"]
         join_kwargs = {k: v for k, v in kwargs.items() if k not in host_only_args}
 
         portconfig = Portconfig()

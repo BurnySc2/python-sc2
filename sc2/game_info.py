@@ -1,5 +1,6 @@
+from __future__ import annotations
 from collections import deque
-from typing import Any, Deque, Dict, FrozenSet, Generator, List, Optional, Sequence, Set, Tuple, Union
+from typing import Any, Deque, Dict, FrozenSet, Generator, List, Optional, Sequence, Set, Tuple, Union, TYPE_CHECKING
 
 import numpy as np
 
@@ -10,12 +11,17 @@ from .position import Point2, Rect, Size
 
 
 class Ramp:
-    def __init__(self, points: Set[Point2], game_info: "GameInfo"):
+    def __init__(self, points: Set[Point2], game_info: GameInfo):
+        """
+        :param points:
+        :param game_info:
+        """
         self._points: Set[Point2] = points
         self.__game_info = game_info
-        # tested by printing actual building locations vs calculated depot positions
+        # Tested by printing actual building locations vs calculated depot positions
         self.x_offset = 0.5
         self.y_offset = 0.5
+        # Can this be removed?
         self.cache = {}
 
     @property_immutable_cache
@@ -109,6 +115,8 @@ class Ramp:
     @property_immutable_cache
     def depot_in_middle(self) -> Optional[Point2]:
         """ Depot in the middle of the 3 depots """
+        if len(self.upper) not in {2, 5}:
+            return None
         if len(self.upper2_for_ramp_wall) == 2:
             points = self.upper2_for_ramp_wall
             p1 = points.pop().offset((self.x_offset, self.y_offset))
@@ -161,12 +169,61 @@ class Ramp:
                 return self.barracks_in_middle.offset((-2, 0))
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
+    @property_immutable_cache
+    def protoss_wall_pylon(self) -> Optional[Point2]:
+        """
+        Pylon position that powers the two wall buildings and the warpin position.
+        """
+        if len(self.upper) not in {2, 5}:
+            return None
+        if len(self.upper2_for_ramp_wall) != 2:
+            raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
+        middle = self.depot_in_middle
+        # direction up the ramp
+        direction = self.barracks_in_middle.negative_offset(middle)
+        return middle + 6 * direction
+
+    @property_mutable_cache
+    def protoss_wall_buildings(self) -> List[Point2]:
+        """
+        List of two positions for 3x3 buildings that form a wall with a spot for a one unit block.
+        These buildings can be powered by a pylon on the protoss_wall_pylon position.
+        """
+        if len(self.upper) not in {2, 5}:
+            return []
+        if len(self.upper2_for_ramp_wall) == 2:
+            middle = self.depot_in_middle
+            # direction up the ramp
+            direction = self.barracks_in_middle.negative_offset(middle)
+            # sort depots based on distance to start to get wallin orientation
+            sorted_depots = sorted(
+                self.corner_depots, key=lambda depot: depot.distance_to(self.__game_info.player_start_location)
+            )
+            wall1 = sorted_depots[1].offset(direction)
+            wall2 = middle + direction + (middle - wall1) / 1.5
+            return [wall1, wall2]
+        raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
+
+    @property_immutable_cache
+    def protoss_wall_warpin(self) -> Optional[Point2]:
+        """
+        Position for a unit to block the wall created by protoss_wall_buildings.
+        Powered by protoss_wall_pylon.
+        """
+        if len(self.upper) not in {2, 5}:
+            return None
+        if len(self.upper2_for_ramp_wall) != 2:
+            raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
+        middle = self.depot_in_middle
+        # direction up the ramp
+        direction = self.barracks_in_middle.negative_offset(middle)
+        # sort depots based on distance to start to get wallin orientation
+        sorted_depots = sorted(self.corner_depots, key=lambda x: x.distance_to(self.__game_info.player_start_location))
+        return sorted_depots[0].negative_offset(direction)
+
 
 class GameInfo:
     def __init__(self, proto):
-        # TODO: this might require an update during the game because placement grid and
-        # playable grid are greyed out on minerals, start locations and ramps (debris)
-        # but we do not want to call information in the fog of war
         self._proto = proto
         self.players: List[Player] = [Player.from_proto(p) for p in self._proto.player_info]
         self.map_name: str = self._proto.map_name
@@ -177,7 +234,7 @@ class GameInfo:
         self.pathing_grid: PixelMap = PixelMap(self._proto.start_raw.pathing_grid, in_bits=True, mirrored=False)
         # self.terrain_height[point]: returns the height in range of 0 to 255 at that point
         self.terrain_height: PixelMap = PixelMap(self._proto.start_raw.terrain_height, mirrored=False)
-        # self.placement_grid[point]: if 0, point is not pathable, if 1, point is pathable
+        # self.placement_grid[point]: if 0, point is not placeable, if 1, point is pathable
         self.placement_grid: PixelMap = PixelMap(self._proto.start_raw.placement_grid, in_bits=True, mirrored=False)
         self.playable_area = Rect.from_proto(self._proto.start_raw.playable_area)
         self.map_center = self.playable_area.center
@@ -202,14 +259,14 @@ class GameInfo:
         map_area = self.playable_area
         # all points in the playable area that are pathable but not placable
         points = [
-            Point2((b, a))
-            for (a, b), value in np.ndenumerate(self.pathing_grid.data_numpy)
+            Point2((a, b))
+            for (b, a), value in np.ndenumerate(self.pathing_grid.data_numpy)
             if value == 1
             and map_area.x <= a < map_area.x + map_area.width
             and map_area.y <= b < map_area.y + map_area.height
-            and self.placement_grid[(b, a)] == 0
+            and self.placement_grid[(a, b)] == 0
         ]
-        # devide points into ramp points and vision blockers
+        # divide points into ramp points and vision blockers
         rampPoints = [point for point in points if not equal_height_around(point)]
         visionBlockers = set(point for point in points if equal_height_around(point))
         ramps = [Ramp(group, self) for group in self._find_groups(rampPoints)]

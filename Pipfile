@@ -10,6 +10,7 @@ async-timeout = "<4.0,>=3.0"
 aiohttp = "*"
 pyglet = "*"
 numpy = "*"
+scipy = "*"
 
 [dev-packages]
 pytest = "*"
@@ -17,6 +18,13 @@ mypy = "*"
 pillow = "*"
 pytest-asyncio = "*"
 hypothesis = "*"
+pytest-benchmark = "*"
+numba = "*"
+sphinx = "*"
+sphinx-autodoc-typehints = "*"
+pytest-cov = "*"
+coverage = "*"
+codecov = "*"
 
 [requires]
 python_version = "3.7"
