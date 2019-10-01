@@ -6,7 +6,8 @@ from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.player import Human
 
-class ProxyRaxBot(sc2.BotAI):
+
+class BCRushBot(sc2.BotAI):
     def select_target(self):
         target = self.known_enemy_structures
         if target.exists:
@@ -19,10 +20,10 @@ class ProxyRaxBot(sc2.BotAI):
         if min([u.position.distance_to(self.enemy_start_locations[0]) for u in self.units]) < 5:
             return self.enemy_start_locations[0].position
 
-        return self.state.mineral_field.random.position
+        return self.mineral_field.random.position
 
     async def on_step(self, iteration):
-        cc = (self.townhalls(COMMANDCENTER) | self.townhalls(ORBITALCOMMAND))
+        cc = self.townhalls(COMMANDCENTER) | self.townhalls(ORBITALCOMMAND)
         if not cc.exists:
             target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
             for unit in self.workers | self.units(BATTLECRUISER):
@@ -31,11 +32,10 @@ class ProxyRaxBot(sc2.BotAI):
         else:
             cc = cc.first
 
-
         if iteration % 50 == 0 and self.units(BATTLECRUISER).amount > 2:
             target = self.select_target()
             forces = self.units(BATTLECRUISER)
-            if (iteration//50) % 10 == 0:
+            if (iteration // 50) % 10 == 0:
                 for unit in forces:
                     self.do(unit.attack(target))
             else:
@@ -63,9 +63,9 @@ class ProxyRaxBot(sc2.BotAI):
 
             elif self.structures(BARRACKS).exists and self.gas_buildings.amount < 2:
                 if self.can_afford(REFINERY):
-                    vgs = self.state.vespene_geyser.closer_than(20.0, cc)
+                    vgs = self.vespene_geyser.closer_than(20.0, cc)
                     for vg in vgs:
-                        if self.gas_buildings.closer_than(1.0, vg).exists:
+                        if self.gas_buildings.filter(lambda unit: unit.distance_to(vg) < 1):
                             break
 
                         worker = self.select_build_worker(vg.position)
@@ -82,7 +82,9 @@ class ProxyRaxBot(sc2.BotAI):
                         await self.build(FACTORY, near=cc.position.towards(self.game_info.map_center, 8))
                 elif f.ready.exists and self.structures(STARPORT).amount < 2:
                     if self.can_afford(STARPORT):
-                        await self.build(STARPORT, near=cc.position.towards(self.game_info.map_center, 30).random_on_distance(8))
+                        await self.build(
+                            STARPORT, near=cc.position.towards(self.game_info.map_center, 30).random_on_distance(8)
+                        )
 
         for sp in self.structures(STARPORT).ready:
             if sp.add_on_tag == 0:
@@ -99,14 +101,20 @@ class ProxyRaxBot(sc2.BotAI):
                     self.do(w.random.gather(a))
 
         for scv in self.workers.idle:
-            self.do(scv.gather(self.state.mineral_field.closest_to(cc)))
+            self.do(scv.gather(self.mineral_field.closest_to(cc)))
+
 
 def main():
-    sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
-        # Human(Race.Terran),
-        Bot(Race.Terran, ProxyRaxBot()),
-        Computer(Race.Zerg, Difficulty.Hard)
-    ], realtime=False)
+    sc2.run_game(
+        sc2.maps.get("(2)CatalystLE"),
+        [
+            # Human(Race.Terran),
+            Bot(Race.Terran, BCRushBot()),
+            Computer(Race.Zerg, Difficulty.Hard),
+        ],
+        realtime=False,
+    )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

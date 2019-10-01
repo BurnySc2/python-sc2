@@ -1,5 +1,6 @@
 from __future__ import annotations
 import warnings
+import math
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from .cache import property_immutable_cache, property_mutable_cache
@@ -405,6 +406,7 @@ class Unit:
 
         :param target:
         :param bonus_distance: """
+        # TODO: Fix this because immovable units (sieged tank, planetary fortress etc.) have a little lower range than this formula
         if self.can_attack_ground and not target.is_flying:
             unit_attack_range = self.ground_range
         elif self.can_attack_air and (target.is_flying or target.type_id == UNIT_COLOSSUS):
@@ -448,15 +450,18 @@ class Unit:
         """ Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
         return self._proto.facing
 
-    # TODO: a function that checks if this unit is facing another unit
-    def is_facing_unit(self, other_unit: Unit, angle_error: float = 1e-3) -> bool:
-        """
-        Function not completed yet
+    def is_facing(self, other_unit: Unit, angle_error: float = 0.05) -> bool:
+        """ Check if this unit is facing the target unit. If you make angle_error too small, there might be rounding errors. If you make angle_error too big, this function might return false positives.
 
         :param other_unit:
-        :param angle_error:
-        """
-        pass
+        :param angle_error: """
+        angle = math.atan2(
+            other_unit.position_tuple[1] - self.position_tuple[1], other_unit.position_tuple[0] - self.position_tuple[0]
+        )
+        if angle < 0:
+            angle += math.pi * 2
+        angle_difference = math.fabs(angle - self.facing)
+        return angle_difference < angle_error
 
     @property
     def radius(self) -> Union[int, float]:
@@ -799,7 +804,7 @@ class Unit:
 
     # Unit functions
 
-    def has_buff(self, buff) -> bool:
+    def has_buff(self, buff: BuffId) -> bool:
         """ Checks if unit has buff 'buff'. """
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs
@@ -876,7 +881,7 @@ class Unit:
         return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
 
     def scan_move(self, *args, **kwargs) -> UnitCommand:
-        """ TODO: What does this do? """
+        """ Deprecated: This ability redirects to 'AbilityId.ATTACK' """
         return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
     def hold_position(self, queue: bool = False) -> UnitCommand:
@@ -884,7 +889,7 @@ class Unit:
 
         :param queue:
         """
-        return self(AbilityId.HOLDPOSITION_HOLD, queue=queue)
+        return self(AbilityId.HOLDPOSITION, queue=queue)
 
     def stop(self, queue: bool = False) -> UnitCommand:
         """ Orders a unit to stop, but can start to move on its own
@@ -903,7 +908,7 @@ class Unit:
         :param position:
         :param queue:
         """
-        return self(AbilityId.PATROL_PATROL, target=position, queue=queue)
+        return self(AbilityId.PATROL, target=position, queue=queue)
 
     def repair(self, repair_target: Unit, queue: bool = False) -> UnitCommand:
         """ Order an SCV or MULE to repair. 

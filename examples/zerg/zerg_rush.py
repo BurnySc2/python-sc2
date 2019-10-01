@@ -2,6 +2,9 @@ import sys, os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
+import numpy as np
+from sc2.position import Point2, Point3
+
 import sc2
 from sc2 import Race, Difficulty
 from sc2.constants import *
@@ -17,6 +20,8 @@ class ZergRushBot(sc2.BotAI):
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(glhf)")
+
+        await self.distribute_workers()
 
         # If townhall no longer exists: attack move with all units to enemy start location
         if not self.townhalls:
@@ -49,7 +54,9 @@ class ZergRushBot(sc2.BotAI):
                     self.do(drone.gather(mineral, queue=True))
 
         # If we have 100 vespene, this will try to research zergling speed once the spawning pool is at 100% completion
-        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(UpgradeId.ZERGLINGMOVEMENTSPEED):
+        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(
+            UpgradeId.ZERGLINGMOVEMENTSPEED
+        ):
             spawning_pools_ready = self.structures(UnitTypeId.SPAWNINGPOOL).ready
             if spawning_pools_ready:
                 self.research(UpgradeId.ZERGLINGMOVEMENTSPEED)
@@ -108,6 +115,21 @@ class ZergRushBot(sc2.BotAI):
         ):
             if self.can_afford(UnitTypeId.QUEEN):
                 self.train(UnitTypeId.QUEEN)
+
+        # Draw creep pixelmap for debugging
+        # self.draw_creep_pixelmap()
+
+    def draw_creep_pixelmap(self):
+        for (y, x), value in np.ndenumerate(self.state.creep.data_numpy):
+            p = Point2((x, y))
+            h2 = self.get_terrain_z_height(p)
+            pos = Point3((p.x, p.y, h2))
+            # Red if there is no creep
+            color = Point3((255, 0, 0))
+            if value == 1:
+                # Green if there is creep
+                color = Point3((0, 255, 0))
+            self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
 
 def main():

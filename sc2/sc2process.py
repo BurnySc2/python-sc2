@@ -7,6 +7,8 @@ import subprocess
 import sys
 import tempfile
 import time
+import json
+import re
 from typing import Any, List, Optional
 
 import aiohttp
@@ -14,6 +16,8 @@ import portpicker
 
 from .controller import Controller
 from .paths import Paths
+
+from sc2.versions import VERSIONS
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +36,15 @@ class kill_switch:
         for p in cls._to_kill:
             p._clean()
 
+
 class SC2Process:
     def __init__(
-        self, host: str = "127.0.0.1", port: Optional[int] = None, fullscreen: bool = False, render: bool = False
+        self,
+        host: str = "127.0.0.1",
+        port: Optional[int] = None,
+        fullscreen: bool = False,
+        render: bool = False,
+        sc2_version: str = None,
     ) -> None:
         assert isinstance(host, str)
         assert isinstance(port, int) or port is None
@@ -50,6 +60,7 @@ class SC2Process:
         self._process = None
         self._session = None
         self._ws = None
+        self._sc2_version = sc2_version
 
     async def __aenter__(self):
         kill_switch.add(self)
@@ -79,6 +90,19 @@ class SC2Process:
     def ws_url(self):
         return f"ws://{self._host}:{self._port}/sc2api"
 
+    @property
+    def versions(self):
+        """ Opens the versions.json file which origins from
+        https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json """
+        return VERSIONS
+
+    def find_data_hash(self, target_sc2_version: str):
+        """ Returns the data hash from the matching version string. """
+        version: dict
+        for version in self.versions:
+            if version["label"] == target_sc2_version:
+                return version["data-hash"]
+
     def _launch(self):
         args = [
             str(Paths.EXECUTABLE),
@@ -93,6 +117,24 @@ class SC2Process:
             "-tempDir",
             self._tmp_dir,
         ]
+        if self._sc2_version is not None:
+
+            def special_match(strg: str, search=re.compile(r"([0-9]+\.[0-9]+?\.?[0-9]+)").search):
+                """ Test if string contains only numbers and dots, which is a valid version string. """
+                return not bool(search(strg))
+
+            valid_version_string = special_match(self._sc2_version)
+            if valid_version_string:
+                data_hash = self.find_data_hash(self._sc2_version)
+                assert (
+                    data_hash is not None
+                ), f"StarCraft 2 Client version ({self._sc2_version}) was not found inside sc2/versions.py file. Please check your spelling or check the versions.py file."
+                args.extend(["-dataVersion", data_hash])
+            else:
+                logger.warning(
+                    f'The submitted version string in sc2.rungame() function call (sc2_version="{self._sc2_version}") does not match a normal version string. Running latest version instead.'
+                )
+
         if self._render:
             args.extend(["-eglpath", "libEGL.so"])
 
@@ -143,7 +185,7 @@ class SC2Process:
                 for _ in range(3):
                     self._process.terminate()
                     time.sleep(0.5)
-                    if self._process.poll() is not None:
+                    if not self._process or self._process.poll() is not None:
                         break
                 else:
                     self._process.kill()

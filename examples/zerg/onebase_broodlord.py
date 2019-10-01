@@ -12,8 +12,8 @@ import enum
 
 class BroodlordBot(sc2.BotAI):
     def select_target(self):
-        if self.known_enemy_structures.exists:
-            return random.choice(self.known_enemy_structures).position
+        if self.enemy_structures:
+            return random.choice(self.enemy_structures).position
 
         return self.enemy_start_locations[0]
 
@@ -84,7 +84,7 @@ class BroodlordBot(sc2.BotAI):
         if self.gas_buildings.amount < 2 and not self.already_pending(EXTRACTOR):
             if self.can_afford(EXTRACTOR):
                 drone = self.workers.random
-                target = self.state.vespene_geyser.closest_to(drone.position)
+                target = self.vespene_geyser.closest_to(drone.position)
                 err = self.do(drone.build(EXTRACTOR, target))
 
         if hq.assigned_harvesters < hq.ideal_harvesters:

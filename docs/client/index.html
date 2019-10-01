@@ -61,9 +61,15 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.client.Client.debug_box2_out">
+<code class="sig-name descname">debug_box2_out</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">half_vertex_length=0.25</em>, <em class="sig-param">color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_box2_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws a box center at a position ‘pos’, with box side lengths (vertices) of two times ‘half_vertex_length’.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.client.Client.debug_box_out">
 <code class="sig-name descname">debug_box_out</code><span class="sig-paren">(</span><em class="sig-param">p_min</em>, <em class="sig-param">p_max</em>, <em class="sig-param">color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_box_out" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draws a box with p_min and p_max as corners.</p>
+<dd><p>Draws a box with p_min and p_max as corners of the box.</p>
 </dd></dl>
 
 <dl class="method">
@@ -111,7 +117,7 @@ await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map
 <dl class="method">
 <dt id="sc2.client.Client.debug_gas">
 <em class="property">async </em><code class="sig-name descname">debug_gas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_gas" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gives 5000 vespene to the bot.</p>
+<dd><p>Gives 5000 vespene to the bot. This does not seem to be working.</p>
 </dd></dl>
 
 <dl class="method">
@@ -178,21 +184,21 @@ await self.debug_set_unit_value(self.workers, 2, value=1)</p>
 <dl class="method">
 <dt id="sc2.client.Client.debug_text_screen">
 <code class="sig-name descname">debug_text_screen</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">pos</em>, <em class="sig-param">color=None</em>, <em class="sig-param">size=8</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_text_screen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draws a text on the screen with coordinates 0 &lt;= x, y &lt;= 1.</p>
+<dd><p>Draws a text on the screen (monitor / game window) with coordinates 0 &lt;= x, y &lt;= 1.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="sc2.client.Client.debug_text_simple">
 <code class="sig-name descname">debug_text_simple</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_text_simple" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draws a text in the top left corner of the screen (up to a max of 6 messages it seems).</p>
+<dd><p>Draws a text in the top left corner of the screen (up to a max of 6 messages fit there).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="sc2.client.Client.debug_text_world">
 <code class="sig-name descname">debug_text_world</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">pos</em>, <em class="sig-param">color=None</em>, <em class="sig-param">size=8</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_text_world" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draws a text at Point3 position. Don’t forget to add ‘await self._client.send_debug’.
+<dd><p>Draws a text at Point3 position in the game world.
 To grab a unit’s 3d position, use unit.position3d
-Usually the Z value of a Point3 is between 8 and 14 (except for flying units)</p>
+Usually the Z value of a Point3 is between 8 and 14 (except for flying units). Use self.get_terrain_z_height() from bot_ai.py to get the Z value (height) of the terrain at a 2D position.</p>
 </dd></dl>
 
 <dl class="method">
@@ -307,34 +313,6 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
 </dd></dl>
 
 <dl class="method">
-<dt id="sc2.client.Client.to_debug_color">
-<code class="sig-name descname">to_debug_color</code><span class="sig-paren">(</span><em class="sig-param">color</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.to_debug_color" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper function for color conversion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="sc2.client.Client.to_debug_message">
-<code class="sig-name descname">to_debug_message</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">color=None</em>, <em class="sig-param">pos=None</em>, <em class="sig-param">size=8</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.to_debug_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper function to create debug texts</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DebugText</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="sc2.client.Client.to_debug_point">
-<code class="sig-name descname">to_debug_point</code><span class="sig-paren">(</span><em class="sig-param">point</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.to_debug_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper function for point conversion</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="sc2.client.Client.toggle_autocast">
 <em class="property">async </em><code class="sig-name descname">toggle_autocast</code><span class="sig-paren">(</span><em class="sig-param">units</em>, <em class="sig-param">ability</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.toggle_autocast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Toggle autocast of all specified units</p>
@@ -402,7 +380,7 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

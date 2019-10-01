@@ -21,6 +21,8 @@ mineral_ids: Set[int] = {
     PURIFIERMINERALFIELD750.value,
     BATTLESTATIONMINERALFIELD.value,
     BATTLESTATIONMINERALFIELD750.value,
+    MINERALFIELDOPAQUE.value,
+    MINERALFIELDOPAQUE900.value,
 }
 geyser_ids: Set[int] = {
     VESPENEGEYSER.value,
@@ -219,6 +221,33 @@ IS_DETECTOR: Set[UnitTypeId] = {
 }
 UNIT_PHOTONCANNON = UnitTypeId.PHOTONCANNON
 UNIT_COLOSSUS = UnitTypeId.COLOSSUS
+# Used in unit_command.py and action.py to combine only certain abilities
+COMBINEABLE_ABILITIES = {
+    AbilityId.MOVE,
+    AbilityId.ATTACK,
+    AbilityId.SCAN_MOVE,
+    AbilityId.SMART,
+    AbilityId.STOP,
+    AbilityId.HOLDPOSITION,
+    AbilityId.PATROL,
+    AbilityId.HARVEST_GATHER,
+    AbilityId.HARVEST_RETURN,
+    AbilityId.EFFECT_REPAIR,
+    AbilityId.RALLY_BUILDING,
+    AbilityId.RALLY_UNITS,
+    AbilityId.RALLY_WORKERS,
+    AbilityId.RALLY_MORPHING_UNIT,
+    AbilityId.LIFT,
+    AbilityId.BURROWDOWN,
+    AbilityId.BURROWUP,
+    AbilityId.SIEGEMODE_SIEGEMODE,
+    AbilityId.UNSIEGE_UNSIEGE,
+    AbilityId.MORPH_LIBERATORAAMODE,
+    AbilityId.EFFECT_STIM,
+    AbilityId.MORPH_UPROOT,
+    AbilityId.EFFECT_BLINK,
+    AbilityId.MORPH_ARCHON,
+}
 FakeEffectRadii: Dict[int, float] = {
     UnitTypeId.KD8CHARGE.value: 2,
     UnitTypeId.PARASITICBOMBDUMMY.value: 3,

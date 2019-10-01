@@ -6,6 +6,7 @@ from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.helpers import ControlGroup
 
+
 class ProxyRaxBot(sc2.BotAI):
     def __init__(self):
         self.attack_groups = set()
@@ -13,7 +14,7 @@ class ProxyRaxBot(sc2.BotAI):
     async def on_step(self, iteration):
         cc = self.townhalls(COMMANDCENTER)
         if not cc.exists:
-            target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
+            target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
             for unit in self.workers | self.units(MARINE):
                 self.do(unit.attack(target))
             return
@@ -42,22 +43,25 @@ class ProxyRaxBot(sc2.BotAI):
             self.do(rax.train(MARINE))
 
         for scv in self.workers.idle:
-            self.do(scv.gather(self.state.mineral_field.closest_to(cc)))
+            self.do(scv.gather(self.mineral_field.closest_to(cc)))
 
         for ac in list(self.attack_groups):
             alive_units = ac.select_units(self.units)
             if alive_units.exists and alive_units.idle.exists:
-                target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
+                target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
                 for marine in ac.select_units(self.units):
                     self.do(marine.attack(target))
             else:
                 self.attack_groups.remove(ac)
 
-def main():
-    sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
-        Bot(Race.Terran, ProxyRaxBot()),
-        Computer(Race.Zerg, Difficulty.Hard)
-    ], realtime=False)
 
-if __name__ == '__main__':
+def main():
+    sc2.run_game(
+        sc2.maps.get("(2)CatalystLE"),
+        [Bot(Race.Terran, ProxyRaxBot()), Computer(Race.Zerg, Difficulty.Hard)],
+        realtime=False,
+    )
+
+
+if __name__ == "__main__":
     main()

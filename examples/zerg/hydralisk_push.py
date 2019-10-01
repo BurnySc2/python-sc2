@@ -10,10 +10,11 @@ from sc2.data import race_townhalls
 
 import enum
 
+
 class Hydralisk(sc2.BotAI):
     def select_target(self):
-        if self.known_enemy_structures.exists:
-            return random.choice(self.known_enemy_structures).position
+        if self.enemy_structures.exists:
+            return random.choice(self.enemy_structures).position
 
         return self.enemy_start_locations[0]
 
@@ -64,7 +65,7 @@ class Hydralisk(sc2.BotAI):
         if self.gas_buildings.amount < 2 and not self.already_pending(EXTRACTOR):
             if self.can_afford(EXTRACTOR):
                 drone = self.workers.random
-                target = self.state.vespene_geyser.closest_to(drone.position)
+                target = self.vespene_geyser.closest_to(drone.position)
                 err = self.do(drone.build(EXTRACTOR, target))
 
         if hq.assigned_harvesters < hq.ideal_harvesters:
@@ -88,11 +89,15 @@ class Hydralisk(sc2.BotAI):
             if larvae.exists and self.can_afford(ZERGLING):
                 self.do(larvae.random.train(ZERGLING))
 
-def main():
-    sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
-        Bot(Race.Zerg, Hydralisk()),
-        Computer(Race.Terran, Difficulty.Medium)
-    ], realtime=False, save_replay_as="ZvT.SC2Replay")
 
-if __name__ == '__main__':
+def main():
+    sc2.run_game(
+        sc2.maps.get("(2)CatalystLE"),
+        [Bot(Race.Zerg, Hydralisk()), Computer(Race.Terran, Difficulty.Medium)],
+        realtime=False,
+        save_replay_as="ZvT.SC2Replay",
+    )
+
+
+if __name__ == "__main__":
     main()

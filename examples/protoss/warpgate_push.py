@@ -79,7 +79,7 @@ class WarpGateBot(sc2.BotAI):
         # Research warp gate if cybercore is completed
         if (
             self.structures(CYBERNETICSCORE).ready
-            and self.can_afford(RESEARCH_WARPGATE)
+            and self.can_afford(AbilityId.RESEARCH_WARPGATE)
             and self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 0
         ):
             ccore = self.structures(CYBERNETICSCORE).ready.first

@@ -116,10 +116,13 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         return Result.Defeat
 
     iteration = 0
-    realtime_game_loop = -1
     while True:
         if iteration != 0:
-            state = await client.observation()
+            if realtime:
+                # TODO: check what happens if a bot takes too long to respond, so that the requested game_loop might already be in the past
+                state = await client.observation(gs.game_loop + client.game_step)
+            else:
+                state = await client.observation()
             # check game result every time we get the observation
             if client._game_result:
                 try:
@@ -142,18 +145,17 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
         try:
             if realtime:
-                # Prevent bot from running multiple times in the same game_loop in realtime=True
-                if ai.state.game_loop != realtime_game_loop:
-                    # Issue event liks unit created or unit destroyed
-                    await ai.issue_events()
-                    await ai.on_step(iteration)
-                    realtime_game_loop = await ai._after_step()
+                # Issue event like unit created or unit destroyed
+                await ai.issue_events()
+                await ai.on_step(iteration)
+                await ai._after_step()
             else:
                 if time_penalty_cooldown > 0:
                     time_penalty_cooldown -= 1
                     logger.warning(f"Running AI step: penalty cooldown: {time_penalty_cooldown}")
                     iteration -= 1  # Do not increment the iteration on this round
                 elif time_limit is None:
+                    # Issue event like unit created or unit destroyed
                     await ai.issue_events()
                     await ai.on_step(iteration)
                     await ai._after_step()
@@ -270,13 +272,16 @@ async def _host_game(
     game_time_limit=None,
     rgb_render_config=None,
     random_seed=None,
+    sc2_version=None,
 ):
 
     assert players, "Can't create a game without players"
 
     assert any(isinstance(p, (Human, Bot)) for p in players)
 
-    async with SC2Process(fullscreen=players[0].fullscreen, render=rgb_render_config is not None) as server:
+    async with SC2Process(
+        fullscreen=players[0].fullscreen, render=rgb_render_config is not None, sc2_version=sc2_version
+    ) as server:
         await server.ping()
 
         client = await _setup_host_game(server, map_settings, players, realtime, random_seed)
@@ -352,7 +357,7 @@ async def _join_game(players, realtime, portconfig, save_replay_as=None, step_ti
 
 def run_game(map_settings, players, **kwargs):
     if sum(isinstance(p, (Human, Bot)) for p in players) > 1:
-        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed"]
+        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version"]
         join_kwargs = {k: v for k, v in kwargs.items() if k not in host_only_args}
 
         portconfig = Portconfig()

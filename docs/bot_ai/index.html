@@ -167,6 +167,67 @@ Also if the given position is not placeable, this function tries to find a nearb
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.calculate_cost">
+<code class="sig-name descname">calculate_cost</code><span class="sig-paren">(</span><em class="sig-param">item_id</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the required build, train or morph cost of a unit. It is recommended to use the UnitTypeId instead of the ability to create the unit.
+The total cost to create a ravager is 100/100, but the actual morph cost from roach to ravager is only 25/75, so this function returns 25/75.</p>
+<p>It is adviced to use the UnitTypeId instead of the AbilityId. Instead of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">AbilityId</span><span class="o">.</span><span class="n">UPGRADETOORBITAL_ORBITALCOMMAND</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>More examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.game_data</span> <span class="k">import</span> <span class="n">Cost</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BROODLORD</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">RAVAGER</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BANELING</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">REACTOR</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">TECHLAB</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">QUEEN</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">HATCHERY</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">LAIR</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">HIVE</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../game_data/index.html#sc2.game_data.Cost" title="sc2.game_data.Cost"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cost</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.calculate_supply_cost">
+<code class="sig-name descname">calculate_supply_cost</code><span class="sig-paren">(</span><em class="sig-param">unit_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_supply_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the required supply to train or morph a unit.
+The total supply of a baneling is 0.5, but a zergling already uses up 0.5 supply, so the morph supply cost is 0.
+The total supply of a ravager is 3, but a roach already uses up 2 supply, so the morph supply cost is 1.
+The required supply to build zerglings is 1 because they pop in pairs, so this function returns 1 because the larva morph command requires 1 free supply.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">roach_supply_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_supply_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ROACH</span><span class="p">)</span> <span class="c1"># Is 2</span>
+<span class="n">ravager_supply_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_supply_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">RAVAGER</span><span class="p">)</span> <span class="c1"># Is 1</span>
+<span class="n">baneling_supply_cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_supply_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BANELING</span><span class="p">)</span> <span class="c1"># Is 0</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.can_afford">
 <code class="sig-name descname">can_afford</code><span class="sig-paren">(</span><em class="sig-param">item_id</em>, <em class="sig-param">check_supply_cost=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_afford" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests if the player has enough resources to build a unit or structure.</p>
@@ -179,8 +240,8 @@ Also if the given position is not placeable, this function tries to find a nearb
 </div>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Current state: we have 150 minerals and one command center and a barracks</span>
-<span class="n">can_afford_morph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span>
-<span class="c1"># contains &#39;True&#39; although the API reports that an orbital is worth 550 minerals, but the morph cost is only 150 minerals</span>
+<span class="n">can_afford_morph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">,</span> <span class="n">check_supply_cost</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># Will be &#39;True&#39; although the API reports that an orbital is worth 550 minerals, but the morph cost is only 150 minerals</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -524,6 +585,19 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.in_map_bounds">
+<code class="sig-name descname">in_map_bounds</code><span class="sig-paren">(</span><em class="sig-param">pos</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_map_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
+:type pos: <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>]
+:param pos:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.in_pathing_grid">
 <code class="sig-name descname">in_pathing_grid</code><span class="sig-paren">(</span><em class="sig-param">pos</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_pathing_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if a ground unit can pass through a grid point.</p>
@@ -768,6 +842,22 @@ This will be None if the bot is run on an arcade or custom map that does not fea
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.step_time">
+<em class="property">property </em><code class="sig-name descname">step_time</code><a class="headerlink" href="#sc2.bot_ai.BotAI.step_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of step duration in milliseconds.
+First value is the minimum step duration - the shortest the bot ever took
+Second value is the average step duration
+Third value is the maximum step duration - the longest the bot ever took (including on_start())
+Fourth value is the step duration the bot took last iteration
+If called in the first iteration, it returns (inf, 0, 0, 0)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.structure_type_build_progress">
 <code class="sig-name descname">structure_type_build_progress</code><span class="sig-paren">(</span><em class="sig-param">structure_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.structure_type_build_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the build progress of a structure type</p>
@@ -849,7 +939,7 @@ This will be None if the bot is run on an arcade or custom map that does not fea
 Warning: currently has issues with warp gate warp ins</p>
 <p>Example Zerg:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">QUEEN</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="c1"># This should queue 5 queens in 5 different townhalls if you have enough townhalls, enough minerals and enough supply left</span>
+<span class="c1"># This should queue 5 queens in 5 different townhalls if you have enough townhalls, enough minerals and enough free supply left</span>
 </pre></div>
 </div>
 <p>Example Terran:</p>
@@ -932,7 +1022,7 @@ Warning: currently has issues with warp gate warp ins</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
