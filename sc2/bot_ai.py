@@ -3,6 +3,7 @@ import itertools
 import logging
 import math
 import random
+import time
 from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
@@ -92,6 +93,12 @@ class BotAI(DistanceCalculation):
         self._units_previous_map: Dict[int, Unit] = dict()
         self._structures_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
+        self._time_before_step: float = None
+        self._time_after_step: float = None
+        self._min_step_time: float = math.inf
+        self._max_step_time: float = 0
+        self._total_time_in_on_step: float = 0
+        self._total_steps_iterations: int = 0
         # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
         self.unit_tags_received_action: Set[int] = set()
 
@@ -105,6 +112,18 @@ class BotAI(DistanceCalculation):
         """ Returns time as string in min:sec format """
         t = self.time
         return f"{int(t // 60):02}:{int(t % 60):02}"
+
+    @property
+    def step_time(self) -> Tuple[float, float, float]:
+        """ Returns a tuple of step duration in milliseconds.
+        First value is the minimum step duration - the shortest the bot ever took
+        Second value is the average step duration
+        Third value is the maximum step duration - the longest the bot ever took (including on_start())
+        If called in the first iteration, it returns (inf, 0, 0) """
+        avg_step_duration = (
+            (self._total_time_in_on_step / self._total_steps_iterations) if self._total_steps_iterations else 0
+        )
+        return self._min_step_time * 1000, avg_step_duration * 1000, self._max_step_time * 1000
 
     @property
     def game_info(self) -> GameInfo:
@@ -1343,6 +1362,7 @@ class BotAI(DistanceCalculation):
             # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations'
             self.expansion_locations
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
+        self._time_before_step: float = time.perf_counter()
 
     def _prepare_step(self, state, proto_game_info):
         """
@@ -1378,6 +1398,7 @@ class BotAI(DistanceCalculation):
 
         self.idle_worker_count: int = state.common.idle_worker_count
         self.army_count: int = state.common.army_count
+        self._time_before_step: float = time.perf_counter()
 
     def _prepare_units(self):
         # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
@@ -1465,6 +1486,13 @@ class BotAI(DistanceCalculation):
 
     async def _after_step(self) -> int:
         """ Executed by main.py after each on_step function. """
+        # Keep track of the bot on_step duration
+        self._time_after_step: float = time.perf_counter()
+        step_duration = self._time_after_step - self._time_before_step
+        self._min_step_time = min(step_duration, self._min_step_time)
+        self._max_step_time = max(step_duration, self._max_step_time)
+        self._total_time_in_on_step += step_duration
+        self._total_steps_iterations += 1
         # Commit and clear bot actions
         await self._do_actions(self.actions)
         self.actions.clear()
@@ -1472,6 +1500,7 @@ class BotAI(DistanceCalculation):
         self.unit_tags_received_action.clear()
         # Commit debug queries
         await self._client._send_debug()
+
         return self.state.game_loop
 
     async def issue_events(self):

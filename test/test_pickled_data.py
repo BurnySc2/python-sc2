@@ -170,7 +170,6 @@ def test_bot_ai():
     assert bot.can_afford(UpgradeId.WARPGATERESEARCH)
     assert bot.can_afford(AbilityId.RESEARCH_WARPGATE)
     bot.minerals = 150
-    bot.vespene = 100
     bot.supply_cap = 15
     bot.supply_left = -1
     bot.supply_used = 16

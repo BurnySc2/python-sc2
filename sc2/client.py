@@ -499,6 +499,7 @@ class Client(Protocol):
         )
         if debug_hash != (0, 0, 0, 0):
             if debug_hash != self._debug_hash_tuple_last_iteration:
+                # Something has changed, either more or less is to be drawn, or a position of a drawing changed (e.g. when drawing on a moving unit)
                 self._debug_hash_tuple_last_iteration = debug_hash
                 await self._execute(
                     debug=sc_pb.RequestDebug(
