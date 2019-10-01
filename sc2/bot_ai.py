@@ -58,6 +58,9 @@ class BotAI(DistanceCalculation):
             # Prevent overwriting the opponent_id which is set here https://github.com/Hannessa/python-sc2-ladderbot/blob/master/__init__.py#L40
             # otherwise set it to None
             self.opponent_id: str = None
+        # Select distance calculation method, see distances.py: _distances_override_functions function
+        if not hasattr(self, "distance_calculation_method"):
+            self.distance_calculation_method: int = 2
         # This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)
         self.realtime: bool = False
         self.all_units: Units = Units([], self)
@@ -97,6 +100,7 @@ class BotAI(DistanceCalculation):
         self._time_after_step: float = None
         self._min_step_time: float = math.inf
         self._max_step_time: float = 0
+        self._last_step_step_time: float = 0
         self._total_time_in_on_step: float = 0
         self._total_steps_iterations: int = 0
         # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
@@ -114,16 +118,22 @@ class BotAI(DistanceCalculation):
         return f"{int(t // 60):02}:{int(t % 60):02}"
 
     @property
-    def step_time(self) -> Tuple[float, float, float]:
+    def step_time(self) -> Tuple[float, float, float, float]:
         """ Returns a tuple of step duration in milliseconds.
         First value is the minimum step duration - the shortest the bot ever took
         Second value is the average step duration
         Third value is the maximum step duration - the longest the bot ever took (including on_start())
-        If called in the first iteration, it returns (inf, 0, 0) """
+        Fourth value is the step duration the bot took last iteration
+        If called in the first iteration, it returns (inf, 0, 0, 0) """
         avg_step_duration = (
             (self._total_time_in_on_step / self._total_steps_iterations) if self._total_steps_iterations else 0
         )
-        return self._min_step_time * 1000, avg_step_duration * 1000, self._max_step_time * 1000
+        return (
+            self._min_step_time * 1000,
+            avg_step_duration * 1000,
+            self._max_step_time * 1000,
+            self._last_step_step_time * 1000,
+        )
 
     @property
     def game_info(self) -> GameInfo:
@@ -1355,12 +1365,14 @@ class BotAI(DistanceCalculation):
         if len(self._game_info.player_races) == 2:
             self.enemy_race: Race = Race(self._game_info.player_races[3 - self.player_id])
 
+        self._distances_override_functions(self.distance_calculation_method)
+
     def _prepare_first_step(self):
         """First step extra preparations. Must not be called before _prepare_step."""
         if self.townhalls:
             self._game_info.player_start_location = self.townhalls.first.position
-            # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations'
-            self.expansion_locations
+            # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
+            _ = self.expansion_locations
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
         self._time_before_step: float = time.perf_counter()
 
@@ -1484,6 +1496,14 @@ class BotAI(DistanceCalculation):
                     else:
                         self.enemy_units.append(unit_obj)
 
+        # Force distance calculation and caching on all units using scipy pdist or cdist
+        if self.distance_calculation_method == 1:
+            _ = self._unit_index_dict
+            _ = self._pdist
+        elif self.distance_calculation_method == 2:
+            _ = self._unit_index_dict
+            _ = self._cdist
+
     async def _after_step(self) -> int:
         """ Executed by main.py after each on_step function. """
         # Keep track of the bot on_step duration
@@ -1491,6 +1511,7 @@ class BotAI(DistanceCalculation):
         step_duration = self._time_after_step - self._time_before_step
         self._min_step_time = min(step_duration, self._min_step_time)
         self._max_step_time = max(step_duration, self._max_step_time)
+        self._last_step_step_time = step_duration
         self._total_time_in_on_step += step_duration
         self._total_steps_iterations += 1
         # Commit and clear bot actions

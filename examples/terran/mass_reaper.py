@@ -22,10 +22,12 @@ from sc2.units import Units
 
 class MassReaperBot(sc2.BotAI):
     def __init__(self):
-        self.combinedActions = []
+        # Select distance calculation method 0, which is the pure python distance calculation without caching or indexing, using math.hypot(), for more info see distances.py _distances_override_functions() function
+        self.distance_calculation_method = 0
 
     async def on_step(self, iteration):
-        self.combinedActions = []
+        # Benchmark and print duration time of the on_step method based on "self.distance_calculation_method" value
+        # print(self.time_formatted, self.supply_used, self.step_time[1])
 
         """
         -  depots when low on remaining supply
@@ -367,7 +369,7 @@ class MassReaperBot(sc2.BotAI):
                 for i in range(thInfo["deficit"]):
                     if workerPool.amount > 0:
                         w = workerPool.pop()
-                        mf = self.state.mineral_field.closer_than(10, thInfo["unit"]).closest_to(w)
+                        mf = self.mineral_field.closer_than(10, thInfo["unit"]).closest_to(w)
                         if len(w.orders) == 1 and w.orders[0].ability.id in [AbilityId.HARVEST_RETURN]:
                             self.do(w.gather(mf, queue=True))
                         else:
