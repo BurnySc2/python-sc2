@@ -63,9 +63,6 @@ class PixelMap:
     def is_empty(self, p):
         return not self.is_set(p)
 
-    def invert(self):
-        raise NotImplementedError
-
     def copy(self):
         return PixelMap(self._proto, in_bits=self._in_bits, mirrored=self._mirrored)
 

@@ -18,7 +18,7 @@ class BroodlordBot(sc2.BotAI):
         return self.enemy_start_locations[0]
 
     async def on_step(self, iteration):
-        larvae = self.units(LARVA)
+        larvae = self.larva
         forces = self.units(ZERGLING) | self.units(CORRUPTOR) | self.units(BROODLORD)
 
         if self.units(BROODLORD).amount > 2 and iteration % 50 == 0:
