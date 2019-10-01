@@ -29,7 +29,7 @@ class RampWallBot(sc2.BotAI):
         # Raise depos when enemies are nearby
         for depo in self.structures(SUPPLYDEPOT).ready:
             for unit in self.enemy_units:
-                if unit.position.distance_to(depo) < 15:
+                if unit.distance_to(depo) < 15:
                     break
             else:
                 self.do(depo(MORPH_SUPPLYDEPOT_LOWER))
@@ -37,7 +37,7 @@ class RampWallBot(sc2.BotAI):
         # Lower depos when no enemies are nearby
         for depo in self.structures(SUPPLYDEPOTLOWERED).ready:
             for unit in self.enemy_units:
-                if unit.position.distance_to(depo) < 10:
+                if unit.distance_to(depo) < 10:
                     self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
                     break
 
@@ -65,6 +65,9 @@ class RampWallBot(sc2.BotAI):
 
         # Draw some example boxes around units, lines towards command center, text on the screen and barracks
         # self.draw_example()
+
+        # Draw if two selected units are facing each other - green if this guy is facing the other, red if he is not
+        # self.draw_facing_units()
 
         # Filter locations close to finished supply depots
         if depots:
@@ -198,6 +201,21 @@ class RampWallBot(sc2.BotAI):
         self._client.debug_text_screen(text="Hello world!", pos=Point2((0, 0)), color=None, size=16)
         self._client.debug_text_simple(text="Hello world2!")
 
+    def draw_facing_units(self):
+        """ Draws green box on top of selected_unit2, if selected_unit2 is facing selected_unit1 """
+        selected_unit1: Unit
+        selected_unit2: Unit
+        red = Point3((255, 0, 0))
+        green = Point3((0, 255, 0))
+        for selected_unit1 in (self.units | self.structures).selected:
+            for selected_unit2 in self.units.selected:
+                if selected_unit1 == selected_unit2:
+                    continue
+                if selected_unit2.is_facing_unit(selected_unit1):
+                    self._client.debug_box2_out(selected_unit2, half_vertex_length=0.25, color=green)
+                else:
+                    self._client.debug_box2_out(selected_unit2, half_vertex_length=0.25, color=red)
+
 
 def main():
     map = random.choice(
@@ -217,7 +235,7 @@ def main():
         ]
     )
     sc2.run_game(
-        sc2.maps.get(map), [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)], realtime=False
+        sc2.maps.get(map), [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)], realtime=True
     )
 
 
