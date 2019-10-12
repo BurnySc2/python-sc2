@@ -4,7 +4,10 @@ import sc2
 from sc2 import Race, Difficulty
 from sc2.constants import *
 from sc2.player import Bot, Computer
-from sc2.helpers import ControlGroup
+from sc2.unit import Unit
+from sc2.units import Units
+from sc2.position import Point2
+from sc2.ids.unit_typeid import UnitTypeId
 
 
 class ProxyRaxBot(sc2.BotAI):
@@ -12,47 +15,51 @@ class ProxyRaxBot(sc2.BotAI):
         self.attack_groups = set()
 
     async def on_step(self, iteration):
-        cc = self.townhalls(COMMANDCENTER)
-        if not cc.exists:
+
+        # If we don't have a townhall anymore, send all units to attack
+        ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
+        if not ccs:
             target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
-            for unit in self.workers | self.units(MARINE):
+            for unit in self.workers | self.units(UnitTypeId.MARINE):
                 self.do(unit.attack(target))
             return
         else:
-            cc = cc.first
+            cc: Unit = ccs.first
 
-        if self.units(MARINE).idle.amount > 15 and iteration % 50 == 1:
-            cg = ControlGroup(self.units(MARINE).idle)
-            self.attack_groups.add(cg)
+        # Send marines in waves of 15, each time 15 are idle, send them to their death
+        marines: Units = self.units(UnitTypeId.MARINE).idle
+        if marines.amount > 15:
+            target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
+            for marine in marines:
+                self.do(marine.attack(target))
 
-        if self.can_afford(SCV) and self.workers.amount < 16 and cc.is_idle:
-            self.do(cc.train(SCV))
+        # Train more SCVs
+        if self.can_afford(UnitTypeId.SCV) and self.supply_workers < 16 and cc.is_idle:
+            self.do(cc.train(UnitTypeId.SCV), subtract_supply=True, subtract_cost=True)
 
-        elif self.supply_left < (2 if self.structures(BARRACKS).amount < 3 else 4):
-            if self.can_afford(SUPPLYDEPOT) and self.already_pending(SUPPLYDEPOT) < 2:
-                await self.build(SUPPLYDEPOT, near=cc.position.towards(self.game_info.map_center, 5))
+        # Build more depots
+        elif (
+            self.supply_left < (2 if self.structures(UnitTypeId.BARRACKS).amount < 3 else 4) and self.supply_used >= 14
+        ):
+            if self.can_afford(UnitTypeId.SUPPLYDEPOT) and self.already_pending(UnitTypeId.SUPPLYDEPOT) < 2:
+                await self.build(UnitTypeId.SUPPLYDEPOT, near=cc.position.towards(self.game_info.map_center, 5))
 
-        elif self.structures(BARRACKS).amount < 3 or (self.minerals > 400 and self.structures(BARRACKS).amount < 5):
-            if self.can_afford(BARRACKS):
+        # Build proxy barracks
+        elif self.structures(UnitTypeId.BARRACKS).amount < 3 or (
+            self.minerals > 400 and self.structures(UnitTypeId.BARRACKS).amount < 5
+        ):
+            if self.can_afford(UnitTypeId.BARRACKS):
                 p = self.game_info.map_center.towards(self.enemy_start_locations[0], 25)
-                await self.build(BARRACKS, near=p)
+                await self.build(UnitTypeId.BARRACKS, near=p)
 
-        for rax in self.structures(BARRACKS).ready.idle:
-            if not self.can_afford(MARINE):
-                break
-            self.do(rax.train(MARINE))
+        # Train marines
+        for rax in self.structures(UnitTypeId.BARRACKS).ready.idle:
+            if self.can_afford(UnitTypeId.MARINE):
+                self.do(rax.train(UnitTypeId.MARINE), subtract_supply=True, subtract_cost=True)
 
+        # Send idle workers to gather minerals near command center
         for scv in self.workers.idle:
             self.do(scv.gather(self.mineral_field.closest_to(cc)))
-
-        for ac in list(self.attack_groups):
-            alive_units = ac.select_units(self.units)
-            if alive_units.exists and alive_units.idle.exists:
-                target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
-                for marine in ac.select_units(self.units):
-                    self.do(marine.attack(target))
-            else:
-                self.attack_groups.remove(ac)
 
 
 def main():
