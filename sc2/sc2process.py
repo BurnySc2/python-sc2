@@ -157,7 +157,9 @@ class SC2Process:
             await asyncio.sleep(1)
             try:
                 self._session = aiohttp.ClientSession()
-                ws = await self._session.ws_connect(self.ws_url, timeout=120)
+                ws = await self._session.ws_connect(
+                    self.ws_url, timeout=aiohttp.client_ws.ClientWSTimeout(ws_close=120)
+                )
                 logger.debug("Websocket connection ready")
                 return ws
             except aiohttp.client_exceptions.ClientConnectorError:
