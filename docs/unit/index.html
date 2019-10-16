@@ -213,7 +213,7 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 <dt id="sc2.unit.Unit.build">
 <code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position=None</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to build another ‘unit’ at ‘position’.
-Usage: self.actions.append(SCV.build(COMMANDCENTER, position))</p>
+Usage: self.do(SCV.build(COMMANDCENTER, position))</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1429,7 +1429,7 @@ For SCV, this returns None</p>
 <dt id="sc2.unit.Unit.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to train another ‘unit’.
-Usage: self.actions.append(COMMANDCENTER.train(SCV))</p>
+Usage: self.do(COMMANDCENTER.train(SCV))</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1504,12 +1504,12 @@ returns -1 for units that can’t attack.
 Usage:
 if unit.weapon_cooldown == 0:</p>
 <blockquote>
-<div><p>self.actions.append(unit.attack(target))</p>
+<div><p>self.do(unit.attack(target))</p>
 </div></blockquote>
 <dl class="simple">
-<dt>elif unit.weapon_cooldown &lt; 0:</dt><dd><p>self.actions.append(unit.move(closest_allied_unit_because_cant_attack))</p>
+<dt>elif unit.weapon_cooldown &lt; 0:</dt><dd><p>self.do(unit.move(closest_allied_unit_because_cant_attack))</p>
 </dd>
-<dt>else:</dt><dd><p>self.actions.append(unit.move(retreatPosition))</p>
+<dt>else:</dt><dd><p>self.do(unit.move(retreatPosition))</p>
 </dd>
 </dl>
 <dl class="field-list simple">

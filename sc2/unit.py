@@ -633,10 +633,11 @@ class Unit:
         """ Returns the target tag (if it is a Unit) or Point2 (if it is a Position)
         from the first order, returns None if the unit is idle """
         if self.orders:
-            if isinstance(self.orders[0].target, int):
-                return self.orders[0].target
+            target = self.orders[0].target
+            if isinstance(target, int):
+                return target
             else:
-                return Point2.from_proto(self.orders[0].target)
+                return Point2.from_proto(target)
         return None
 
     @property
@@ -788,11 +789,11 @@ class Unit:
         returns -1 for units that can't attack.
         Usage:
         if unit.weapon_cooldown == 0:
-            self.actions.append(unit.attack(target))
+            self.do(unit.attack(target))
         elif unit.weapon_cooldown < 0:
-            self.actions.append(unit.move(closest_allied_unit_because_cant_attack))
+            self.do(unit.move(closest_allied_unit_because_cant_attack))
         else:
-            self.actions.append(unit.move(retreatPosition)) """
+            self.do(unit.move(retreatPosition)) """
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1
@@ -811,7 +812,7 @@ class Unit:
 
     def train(self, unit: UnitTypeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to train another 'unit'.
-        Usage: self.actions.append(COMMANDCENTER.train(SCV))
+        Usage: self.do(COMMANDCENTER.train(SCV))
 
         :param unit:
         :param queue: """
@@ -819,7 +820,7 @@ class Unit:
 
     def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
         """ Orders unit to build another 'unit' at 'position'.
-        Usage: self.actions.append(SCV.build(COMMANDCENTER, position))
+        Usage: self.do(SCV.build(COMMANDCENTER, position))
 
         :param unit:
         :param position:

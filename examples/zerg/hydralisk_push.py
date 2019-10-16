@@ -19,7 +19,7 @@ class Hydralisk(sc2.BotAI):
         return self.enemy_start_locations[0]
 
     async def on_step(self, iteration):
-        larvae = self.units(LARVA)
+        larvae = self.larva
         forces = self.units(ZERGLING) | self.units(HYDRALISK)
 
         if self.units(HYDRALISK).amount > 10 and iteration % 50 == 0:
@@ -37,7 +37,7 @@ class Hydralisk(sc2.BotAI):
                 return
 
         if not self.townhalls.exists:
-            for unit in self.units(DRONE) | self.units(QUEEN) | forces:
+            for unit in self.workers | self.units(QUEEN) | forces:
                 self.do(unit.attack(self.enemy_start_locations[0]))
             return
         else:

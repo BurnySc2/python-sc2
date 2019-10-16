@@ -43,16 +43,15 @@ jobs:
         - docker rm -f app
 
 
-#    # TODO enable when python 3.7 is officially released
-#    - stage: test python 3.8
-#      script:
-#        - docker pull python:3.8-slim
-#        - docker run -it -d --name app python:3.8-slim
-#        - docker cp . app:/root/template
-#        - docker exec app pip install --upgrade pipenv
-#        - docker exec -i app bash -c "cd /root/template && pipenv install --dev --python 3.8"
-#        - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
-#        - docker rm -f app
+    - stage: test python 3.8
+      script:
+        - docker pull python:3.8-slim
+        - docker run -it -d --name app python:3.8-slim
+        - docker cp . app:/root/template
+        - docker exec app pip install --upgrade pipenv
+        - docker exec -i app bash -c "cd /root/template && pipenv install --dev --python 3.8"
+        - docker exec -i app bash -c "cd /root/template && pipenv run pytest test/"
+        - docker rm -f app
 
 
 #    # TODO enable when python 3.7 on travis is working

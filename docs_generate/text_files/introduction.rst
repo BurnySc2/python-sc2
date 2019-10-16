@@ -9,10 +9,11 @@ Requirements
 
 Installation
 -------------
-Install through pip using ``pip install sc2`` if Python is in your environment path, or go into your python installation folder and run through console ``python -m pip install sc2``.
+Install through pip using ``pip install burnysc2`` if Python is in your environment path, or go into your python installation folder and run through console ``python -m pip install burnysc2``.
 
-Alternatively you can install a specific branch directly from github::
+Alternatively (of if the command above doesn't work) you can install a specific branch directly from github, here the develop branch::
 
+    pip install pipenv
     pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/archive/develop.zip
 
 Creating a bot

@@ -5,9 +5,9 @@ from s2clientprotocol import score_pb2 as score_pb
 from .position import Point2
 
 
-class Renderer(object):
+class Renderer:
 
-    def __init__(self, client, map_size, minimap_size) -> None:
+    def __init__(self, client, map_size, minimap_size):
         self._client = client
 
         self._window = None
