@@ -45,7 +45,7 @@ class Client(Protocol):
 
     @property
     def in_game(self):
-        return self._status == Status.in_game
+        return self._status in {Status.in_game, Status.in_replay}
 
     async def join_game(self, name=None, race=None, observed_player_id=None, portconfig=None, rgb_render_config=None):
         ifopts = sc_pb.InterfaceOptions(
@@ -386,6 +386,28 @@ class Client(Protocol):
                             camera_move=raw_pb.ActionRawCameraMove(
                                 center_world_space=common_pb.Point(x=position.x, y=position.y)
                             )
+                        )
+                    )
+                ]
+            )
+        )
+
+    async def obs_move_camera(self, position: Union[Unit, Units, Point2, Point3]):
+        """ Moves observer camera to the target position """
+        assert isinstance(position, (Unit, Units, Point2, Point3))
+        if isinstance(position, Units):
+            position = position.center
+        if isinstance(position, Unit):
+            position = position.position
+        await self._execute(
+            obs_action=sc_pb.RequestObserverAction(
+                actions=[
+                    sc_pb.ObserverAction(
+
+                        camera_move=sc_pb.ActionObserverCameraMove(
+                            world_pos=common_pb.Point2D(
+                                x=position.x, y=position.y)
+
                         )
                     )
                 ]
