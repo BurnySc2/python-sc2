@@ -341,3 +341,11 @@ ZERG_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
         BROODLORD: GREATERSPIRE,
     },
 )
+ALL_GAS: UnitTypeId = {
+    UnitTypeId.ASSIMILATOR,
+    UnitTypeId.ASSIMILATORRICH,
+    UnitTypeId.REFINERY,
+    UnitTypeId.REFINERYRICH,
+    UnitTypeId.EXTRACTOR,
+    UnitTypeId.EXTRACTORRICH,
+}

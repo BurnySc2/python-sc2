@@ -16,6 +16,7 @@ from .constants import (
     TERRAN_TECH_REQUIREMENT,
     PROTOSS_TECH_REQUIREMENT,
     ZERG_TECH_REQUIREMENT,
+    ALL_GAS,
 )
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
@@ -1467,7 +1468,7 @@ class BotAI(DistanceCalculation):
                         self.structures.append(unit_obj)
                         if unit_id in race_townhalls[self.race]:
                             self.townhalls.append(unit_obj)
-                        elif unit_id == race_gas[self.race]:
+                        elif unit_id in ALL_GAS:
                             self.gas_buildings.append(unit_obj)
                         elif unit_id in {
                             UnitTypeId.TECHLAB,
