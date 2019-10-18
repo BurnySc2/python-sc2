@@ -255,7 +255,8 @@ class Units(list):
         :param distance:
         :param position:
         """
-        assert self, "Units object is empty"
+        if not self: return Units([], self._bot_object)
+
         if isinstance(position, Unit):
             distance_squared = distance ** 2
             return self.subgroup(
@@ -281,7 +282,8 @@ class Units(list):
         :param distance:
         :param position:
         """
-        assert self, "Units object is empty"
+        if not self: return Units([], self._bot_object)
+
         if isinstance(position, Unit):
             distance_squared = distance ** 2
             return self.subgroup(
@@ -310,7 +312,8 @@ class Units(list):
         :param distance1:
         :param distance2:
         """
-        assert self, "Units object is empty"
+        if not self: return Units([], self._bot_object)
+
         if isinstance(position, Unit):
             distance1_squared = distance1 ** 2
             distance2_squared = distance2 ** 2
