@@ -1234,6 +1234,28 @@ class BotAI(DistanceCalculation):
         self.unit_tags_received_action.add(action.unit.tag)
         return True
 
+    async def synchronous_do(self, action):
+        """ Not recommended. Use self.do nstead to reduce lag:
+        self.actions = []
+        cc = self.units(COMMANDCENTER).random
+        self.actions.append(cc.train(SCV))
+        await self.do_action(self.actions) """
+        if not self.can_afford(action):
+            logger.warning(f"Cannot afford action {action}")
+            return ActionResult.Error
+
+        r = await self._client.actions(action)
+
+        if not r:  # success
+            cost = self._game_data.calculate_ability_cost(action.ability)
+            self.minerals -= cost.minerals
+            self.vespene -= cost.vespene
+
+        else:
+            logger.error(f"Error: {r} (action: {action})")
+
+        return r
+
     async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
         """ Used internally by main.py automatically, use self.do() instead!
 
