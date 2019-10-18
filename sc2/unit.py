@@ -326,6 +326,14 @@ class Unit:
         return self._proto.shield / self._proto.shield_max
 
     @property
+    def shield_health_percentage(self) -> Union[int, float]:
+        """ Returns the percentage of combined shield + hp points the unit has. Also takes build progress into account """
+        max = (self._proto.shield_max + self._proto.health_max) * self.build_progress
+        if max == 0:
+            return 0
+        return (self._proto.shield + self._proto.health) / max
+
+    @property
     def energy(self) -> Union[int, float]:
         """ Returns the amount of energy the unit has. Returns 0 for units without energy. """
         return self._proto.energy
