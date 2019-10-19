@@ -838,11 +838,10 @@ class Unit:
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
 
     def build_gas(self, target_unit: Unit, queue: bool = False) -> UnitCommand:
-        """ Orders unit to build another 'unit' at 'position'.
-        Usage: self.do(SCV.build(COMMANDCENTER, position))
+        """ Orders unit to build 'gas_building' at 'geyser'.
+        Usage: self.do(SCV.build_gas(gas))
 
-        :param unit:
-        :param position:
+        :param target_unit:
         :param queue:
         """
         gas_type = race_gas.get(self._bot_object.race)
