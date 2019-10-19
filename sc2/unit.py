@@ -876,7 +876,7 @@ class Unit:
         """
         return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
+    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders the unit to move to 'position'.
         Target can be a Unit (to follow that unit) or Point2. 
 
