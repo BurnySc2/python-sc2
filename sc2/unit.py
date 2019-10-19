@@ -39,7 +39,18 @@ from .constants import (
     UNIT_PHOTONCANNON,
     UNIT_COLOSSUS,
 )
-from .data import Alliance, Attribute, CloakState, DisplayType, Race, TargetType, warpgate_abilities, TargetType, Target
+from .data import (
+    Alliance,
+    Attribute,
+    CloakState,
+    DisplayType,
+    Race,
+    TargetType,
+    warpgate_abilities,
+    TargetType,
+    Target,
+    race_gas,
+)
 from .ids.ability_id import AbilityId
 from .ids.buff_id import BuffId
 from .ids.upgrade_id import UpgradeId
@@ -818,7 +829,7 @@ class Unit:
         :param queue: """
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, queue=queue)
 
-    def build(self, unit: UnitTypeId, position: Union[Unit, Point2, Point3] = None, queue: bool = False) -> UnitCommand:
+    def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
@@ -830,7 +841,26 @@ class Unit:
         :param position:
         :param queue:
         """
+        # TODO: add asserts to make sure "position" is not a Point2 or Point3 if "unit" is extractor / refinery / assimilator
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
+
+    def build_gas(self, target_geysir: Unit, queue: bool = False) -> UnitCommand:
+        """ Orders unit to build another 'unit' at 'position'.
+        Usage::
+
+            # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
+            self.do(SCV.build_gas(target_vespene_geysir))
+
+        :param target_geysir:
+        :param queue:
+        """
+        # TODO: add asserts to make sure "target_geysir" is not a Point2 or Point3
+        gas_structure_type_id: UnitTypeId = race_gas[self._bot_object.race]
+        return self(
+            self._bot_object._game_data.units[gas_structure_type_id.value].creation_ability.id,
+            target=target_geysir,
+            queue=queue,
+        )
 
     def research(self, upgrade: UpgradeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to research 'upgrade'.
