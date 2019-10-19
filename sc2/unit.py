@@ -818,9 +818,13 @@ class Unit:
         :param queue: """
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, queue=queue)
 
-    def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
+    def build(self, unit: UnitTypeId, position: Union[Unit, Point2, Point3] = None, queue: bool = False) -> UnitCommand:
         """ Orders unit to build another 'unit' at 'position'.
-        Usage: self.do(SCV.build(COMMANDCENTER, position))
+        Usage::
+
+            self.do(SCV.build(COMMANDCENTER, position))
+            # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
+            self.do(SCV.build(REFINERY, target_vespene_geysir))
 
         :param unit:
         :param position:
