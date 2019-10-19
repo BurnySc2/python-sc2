@@ -39,7 +39,8 @@ from .constants import (
     UNIT_PHOTONCANNON,
     UNIT_COLOSSUS,
 )
-from .data import Alliance, Attribute, CloakState, DisplayType, Race, TargetType, warpgate_abilities, TargetType, Target
+from .data import Alliance, Attribute, CloakState, DisplayType, Race, TargetType, warpgate_abilities, TargetType, \
+    Target, race_gas
 from .ids.ability_id import AbilityId
 from .ids.buff_id import BuffId
 from .ids.upgrade_id import UpgradeId
@@ -835,6 +836,18 @@ class Unit:
         :param queue:
         """
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
+
+    def build_gas(self, target_unit: Unit, queue: bool = False) -> UnitCommand:
+        """ Orders unit to build another 'unit' at 'position'.
+        Usage: self.do(SCV.build(COMMANDCENTER, position))
+
+        :param unit:
+        :param position:
+        :param queue:
+        """
+        gas_type = race_gas.get(self._bot_object.race)
+
+        return self(self._bot_object._game_data.units[gas_type.value].creation_ability.id, target=target_unit, queue=queue)
 
     def research(self, upgrade: UpgradeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to research 'upgrade'.
