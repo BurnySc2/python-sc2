@@ -626,7 +626,6 @@ class BotAI(DistanceCalculation):
 
         :param item_id:
         :param check_supply_cost: """
-        enough_supply = True
         cost = self.calculate_cost(item_id)
         if cost.minerals > self.minerals or cost.vespene > self.vespene:
             return False
