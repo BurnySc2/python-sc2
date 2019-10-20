@@ -295,7 +295,7 @@ class BotAI(DistanceCalculation):
             )
             # Choose best fitting point
             result = min(possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources))
-            centers[result] = resources
+            centers[result] = Units(resources, self)
         return centers
 
     def _correct_zerg_supply(self):
