@@ -1250,7 +1250,7 @@ class BotAI(DistanceCalculation):
             cost = self._game_data.calculate_ability_cost(action.ability)
             self.minerals -= cost.minerals
             self.vespene -= cost.vespene
-
+            self.unit_tags_received_action.add(action.unit.tag)
         else:
             logger.error(f"Error: {r} (action: {action})")
 
