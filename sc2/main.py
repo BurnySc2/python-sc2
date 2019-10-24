@@ -1,7 +1,10 @@
 import asyncio
 import logging
 import time
-
+import six
+import json
+import os
+import mpyq
 import async_timeout
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
@@ -250,6 +253,104 @@ async def _play_game(
     return result
 
 
+async def _play_replay(client, ai, realtime=False, player_id=0):
+    ai._initialize_variables()
+
+    game_data = await client.get_game_data()
+    game_info = await client.get_game_info()
+    client.game_step = 1
+    # This game_data will become self._game_data in botAI
+    ai._prepare_start(client, player_id, game_info, game_data, realtime=realtime)
+    state = await client.observation()
+    # Check game result every time we get the observation
+    if client._game_result:
+        await ai.on_end(client._game_result[player_id])
+        return client._game_result[player_id]
+    gs = GameState(state.observation)
+    proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
+    ai._prepare_step(gs, proto_game_info)
+    ai._prepare_first_step()
+    try:
+        await ai.on_start()
+    except Exception as e:
+        logger.exception(f"AI on_start threw an error")
+        logger.error(f"resigning due to previous error")
+        await ai.on_end(Result.Defeat)
+        return Result.Defeat
+
+    iteration = 0
+    while True:
+        if iteration != 0:
+            if realtime:
+                # TODO: check what happens if a bot takes too long to respond, so that the requested
+                #  game_loop might already be in the past
+                state = await client.observation(gs.game_loop + client.game_step)
+            else:
+                state = await client.observation()
+            # check game result every time we get the observation
+            if client._game_result:
+                try:
+                    await ai.on_end(client._game_result[player_id])
+                except TypeError as error:
+                    # print(f"caught type error {error}")
+                    # print(f"return {client._game_result[player_id]}")
+                    return client._game_result[player_id]
+                return client._game_result[player_id]
+            gs = GameState(state.observation)
+            logger.debug(f"Score: {gs.score.score}")
+
+            proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
+            ai._prepare_step(gs, proto_game_info)
+
+        logger.debug(f"Running AI step, it={iteration} {gs.game_loop * 0.725 * (1 / 16):.2f}s")
+
+        try:
+            if realtime:
+                # Issue event like unit created or unit destroyed
+                await ai.issue_events()
+                await ai.on_step(iteration)
+                await ai._after_step()
+            else:
+
+                # Issue event like unit created or unit destroyed
+                await ai.issue_events()
+                await ai.on_step(iteration)
+                await ai._after_step()
+
+        except Exception as e:
+            if isinstance(e, ProtocolError) and e.is_game_over_error:
+                if realtime:
+                    return None
+                # result = client._game_result[player_id]
+                # if result is None:
+                #     logger.error("Game over, but no results gathered")
+                #     raise
+                await ai.on_end(Result.Victory)
+                return None
+            # NOTE: this message is caught by pytest suite
+            logger.exception(f"AI step threw an error")  # DO NOT EDIT!
+            logger.error(f"Error: {e}")
+            logger.error(f"Resigning due to previous error")
+            try:
+                await ai.on_end(Result.Defeat)
+            except TypeError as error:
+                # print(f"caught type error {error}")
+                # print(f"return {Result.Defeat}")
+                return Result.Defeat
+            return Result.Defeat
+
+        logger.debug(f"Running AI step: done")
+
+        if not realtime:
+            if not client.in_game:  # Client left (resigned) the game
+                await ai.on_end(Result.Victory)
+                return Result.Victory
+
+        await client.step()  # unindent one line to work in realtime
+
+        iteration += 1
+
+
 async def _setup_host_game(server, map_settings, players, realtime, random_seed=None):
     r = await server.create_game(map_settings, players, realtime, random_seed)
     if r.create_game.HasField("error"):
@@ -355,6 +456,31 @@ async def _join_game(players, realtime, portconfig, save_replay_as=None, step_ti
         return result
 
 
+async def _setup_replay(server, replay_path, realtime, observed_id):
+    await server.start_replay(replay_path, realtime, observed_id)
+    return Client(server._ws)
+
+
+async def _host_replay(replay_path, ai, realtime, portconfig, base_build, data_version, observed_id):
+    async with SC2Process(fullscreen=False, base_build=base_build, data_hash=data_version) as server:
+        response = await server.ping()
+
+        client = await _setup_replay(server, replay_path, realtime, observed_id)
+        result = await _play_replay(client, ai, realtime)
+        return result
+
+
+def get_replay_version(replay_path):
+    with open(replay_path, "rb") as f:
+        replay_data = f.read()
+        replay_io = six.BytesIO()
+        replay_io.write(replay_data)
+        replay_io.seek(0)
+        archive = mpyq.MPQArchive(replay_io).extract()
+        metadata = json.loads(archive[b"replay.gamemetadata.json"].decode("utf-8"))
+        return metadata["BaseBuild"], metadata["DataVersion"]
+
+
 def run_game(map_settings, players, **kwargs):
     if sum(isinstance(p, (Human, Bot)) for p in players) > 1:
         host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version"]
@@ -369,4 +495,17 @@ def run_game(map_settings, players, **kwargs):
         )
     else:
         result = asyncio.get_event_loop().run_until_complete(_host_game(map_settings, players, **kwargs))
+    return result
+
+
+def run_replay(ai, replay_path, realtime=False, observed_id=0):
+    portconfig = Portconfig()
+    assert os.path.isfile(replay_path), f"Replay does not exist at the given path: {replay_path}"
+    assert os.path.isabs(
+        replay_path
+    ), f'Replay path has to be an absolute path, e.g. "C:/replays/my_replay.SC2Replay" but given path was "{replay_path}"'
+    base_build, data_version = get_replay_version(replay_path)
+    result = asyncio.get_event_loop().run_until_complete(
+        _host_replay(replay_path, ai, realtime, portconfig, base_build, data_version, observed_id)
+    )
     return result

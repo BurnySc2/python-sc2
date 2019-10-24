@@ -16,6 +16,7 @@ import portpicker
 
 from .controller import Controller
 from .paths import Paths
+from sc2 import paths
 
 from sc2.versions import VERSIONS
 
@@ -45,6 +46,8 @@ class SC2Process:
         fullscreen: bool = False,
         render: bool = False,
         sc2_version: str = None,
+        base_build: str = None,
+        data_hash: str = None
     ) -> None:
         assert isinstance(host, str)
         assert isinstance(port, int) or port is None
@@ -61,6 +64,9 @@ class SC2Process:
         self._session = None
         self._ws = None
         self._sc2_version = sc2_version
+        self._base_build = base_build
+        self._data_hash = data_hash
+
 
     async def __aenter__(self):
         kill_switch.add(self)
@@ -104,8 +110,12 @@ class SC2Process:
                 return version["data-hash"]
 
     def _launch(self):
+        if self._base_build:
+            executable = str(paths.latest_executeble(Paths.BASE / "Versions", self._base_build))
+        else:
+            executable = str(Paths.EXECUTABLE)
         args = [
-            str(Paths.EXECUTABLE),
+            executable,
             "-listen",
             self._host,
             "-port",
@@ -117,7 +127,7 @@ class SC2Process:
             "-tempDir",
             self._tmp_dir,
         ]
-        if self._sc2_version is not None:
+        if self._sc2_version:
 
             def special_match(strg: str, search=re.compile(r"([0-9]+\.[0-9]+?\.?[0-9]+)").search):
                 """ Test if string contains only numbers and dots, which is a valid version string. """
@@ -125,15 +135,18 @@ class SC2Process:
 
             valid_version_string = special_match(self._sc2_version)
             if valid_version_string:
-                data_hash = self.find_data_hash(self._sc2_version)
+                self._data_hash = self.find_data_hash(self._sc2_version)
                 assert (
-                    data_hash is not None
+                    self._data_hash is not None
                 ), f"StarCraft 2 Client version ({self._sc2_version}) was not found inside sc2/versions.py file. Please check your spelling or check the versions.py file."
-                args.extend(["-dataVersion", data_hash])
+
             else:
                 logger.warning(
                     f'The submitted version string in sc2.rungame() function call (sc2_version="{self._sc2_version}") does not match a normal version string. Running latest version instead.'
                 )
+
+        if self._data_hash:
+            args.extend(["-dataVersion", self._data_hash])
 
         if self._render:
             args.extend(["-eglpath", "libEGL.so"])

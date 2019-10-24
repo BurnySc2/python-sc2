@@ -39,8 +39,18 @@ from .constants import (
     UNIT_PHOTONCANNON,
     UNIT_COLOSSUS,
 )
-from .data import Alliance, Attribute, CloakState, DisplayType, Race, TargetType, warpgate_abilities, TargetType, \
-    Target, race_gas
+from .data import (
+    Alliance,
+    Attribute,
+    CloakState,
+    DisplayType,
+    Race,
+    TargetType,
+    warpgate_abilities,
+    TargetType,
+    Target,
+    race_gas,
+)
 from .ids.ability_id import AbilityId
 from .ids.buff_id import BuffId
 from .ids.upgrade_id import UpgradeId
@@ -829,24 +839,36 @@ class Unit:
 
     def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
         """ Orders unit to build another 'unit' at 'position'.
-        Usage: self.do(SCV.build(COMMANDCENTER, position))
+        Usage::
+
+            self.do(SCV.build(COMMANDCENTER, position))
+            # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
+            self.do(SCV.build(REFINERY, target_vespene_geysir))
 
         :param unit:
         :param position:
         :param queue:
         """
+        # TODO: add asserts to make sure "position" is not a Point2 or Point3 if "unit" is extractor / refinery / assimilator
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
 
-    def build_gas(self, target_unit: Unit, queue: bool = False) -> UnitCommand:
-        """ Orders unit to build 'gas_building' at 'geyser'.
-        Usage: self.do(SCV.build_gas(gas))
+    def build_gas(self, target_geysir: Unit, queue: bool = False) -> UnitCommand:
+        """ Orders unit to build another 'unit' at 'position'.
+        Usage::
 
-        :param target_unit:
+            # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
+            self.do(SCV.build_gas(target_vespene_geysir))
+
+        :param target_geysir:
         :param queue:
         """
-        gas_type = race_gas.get(self._bot_object.race)
-
-        return self(self._bot_object._game_data.units[gas_type.value].creation_ability.id, target=target_unit, queue=queue)
+        # TODO: add asserts to make sure "target_geysir" is not a Point2 or Point3
+        gas_structure_type_id: UnitTypeId = race_gas[self._bot_object.race]
+        return self(
+            self._bot_object._game_data.units[gas_structure_type_id.value].creation_ability.id,
+            target=target_geysir,
+            queue=queue,
+        )
 
     def research(self, upgrade: UpgradeId, queue: bool = False) -> UnitCommand:
         """ Orders unit to research 'upgrade'.
@@ -892,7 +914,7 @@ class Unit:
         """
         return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
+    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
         """ Orders the unit to move to 'position'.
         Target can be a Unit (to follow that unit) or Point2. 
 
