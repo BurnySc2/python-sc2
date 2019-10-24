@@ -29,4 +29,4 @@ if __name__ == "__main__":
     assert os.path.isfile(
         replay_path
     ), f"Run worker_rush.py in the same folder first to generate a replay. Then run watch_replay.py again."
-    run_replay(my_observer_ai, replay_path=replay_name)
+    run_replay(my_observer_ai, replay_path=replay_path)
