@@ -25,6 +25,7 @@ sphinx-autodoc-typehints = "*"
 pytest-cov = "*"
 coverage = "*"
 codecov = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.7"
