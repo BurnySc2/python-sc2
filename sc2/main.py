@@ -3,6 +3,7 @@ import logging
 import time
 import six
 import json
+import os
 import mpyq
 import async_timeout
 from s2clientprotocol import sc2api_pb2 as sc_pb
@@ -259,10 +260,9 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
     game_info = await client.get_game_info()
     client.game_step = 1
     # This game_data will become self._game_data in botAI
-    ai._prepare_start(client, player_id, game_info,
-                      game_data, realtime=realtime)
+    ai._prepare_start(client, player_id, game_info, game_data, realtime=realtime)
     state = await client.observation()
-    # check game result every time we get the observation
+    # Check game result every time we get the observation
     if client._game_result:
         await ai.on_end(client._game_result[player_id])
         return client._game_result[player_id]
@@ -302,8 +302,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
             proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
             ai._prepare_step(gs, proto_game_info)
 
-        logger.debug(
-            f"Running AI step, it={iteration} {gs.game_loop * 0.725 * (1 / 16):.2f}s")
+        logger.debug(f"Running AI step, it={iteration} {gs.game_loop * 0.725 * (1 / 16):.2f}s")
 
         try:
             if realtime:
@@ -350,6 +349,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
         await client.step()  # unindent one line to work in realtime
 
         iteration += 1
+
 
 async def _setup_host_game(server, map_settings, players, realtime, random_seed=None):
     r = await server.create_game(map_settings, players, realtime, random_seed)
@@ -463,9 +463,9 @@ async def _setup_replay(server, replay_path, realtime, observed_id):
 
 async def _host_replay(replay_path, ai, realtime, portconfig, base_build, data_version, observed_id):
     async with SC2Process(fullscreen=False, base_build=base_build, data_hash=data_version) as server:
-        await server.ping()
+        response = await server.ping()
 
-        client = await _setup_replay(server, replay_path, realtime,observed_id)
+        client = await _setup_replay(server, replay_path, realtime, observed_id)
         result = await _play_replay(client, ai, realtime)
         return result
 
@@ -478,7 +478,7 @@ def get_replay_version(replay_path):
         replay_io.seek(0)
         archive = mpyq.MPQArchive(replay_io).extract()
         metadata = json.loads(archive[b"replay.gamemetadata.json"].decode("utf-8"))
-        return metadata['BaseBuild'], metadata['DataVersion']
+        return metadata["BaseBuild"], metadata["DataVersion"]
 
 
 def run_game(map_settings, players, **kwargs):
@@ -500,6 +500,12 @@ def run_game(map_settings, players, **kwargs):
 
 def run_replay(ai, replay_path, realtime=False, observed_id=0):
     portconfig = Portconfig()
+    assert os.path.isfile(replay_path), f"Replay does not exist at the given path: {replay_path}"
+    assert os.path.isabs(
+        replay_path
+    ), f'Replay path has to be an absolute path, e.g. "C:/replays/my_replay.SC2Replay" but given path was "{replay_path}"'
     base_build, data_version = get_replay_version(replay_path)
-    result = asyncio.get_event_loop().run_until_complete(_host_replay(replay_path, ai, realtime, portconfig,
-                                                                      base_build, data_version, observed_id))
+    result = asyncio.get_event_loop().run_until_complete(
+        _host_replay(replay_path, ai, realtime, portconfig, base_build, data_version, observed_id)
+    )
+    return result
