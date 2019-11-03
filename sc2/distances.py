@@ -173,6 +173,9 @@ class DistanceCalculation:
         # index1, index2 = self._get_index_of_two_units(unit1, unit2)
         # distance = self._cdist[index1, index2]
         # return distance
+        if unit1.is_memory or unit2.is_memory:
+            return self.distance_math_hypot_squared(unit1.position, unit2.position)
+
         return self._cdist[self._get_index_of_two_units(unit1, unit2)]
 
     # Distance calculation using the fastest distance calculation functions
