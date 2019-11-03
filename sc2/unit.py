@@ -89,6 +89,8 @@ class UnitOrder:
 
 
 class Unit:
+    is_memory: bool
+
     def __init__(self, proto_data, bot_object: BotAI):
         """
         :param proto_data:
@@ -98,10 +100,16 @@ class Unit:
         self._bot_object = bot_object
         # Used by property_immutable_cache
         self.cache = {}
+        self.is_memory = False
 
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
         return f"Unit(name={self.name !r}, tag={self.tag})"
+
+    @property
+    def is_target(self) -> bool:
+        """ Returns true when unit is a valid target for focus fire. """
+        return not self.is_memory and self.can_be_attacked and not self.is_hallucination and self.is_snapshot
 
     @property_immutable_cache
     def type_id(self) -> UnitTypeId:
@@ -416,7 +424,9 @@ class Unit:
 
         :param p: """
         if isinstance(p, Unit):
-            return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
+            if not p.is_memory and not self.is_memory:
+                return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
+            return self._bot_object.distance_math_hypot(self.position_tuple, p.position)
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
     def target_in_range(self, target: Unit, bonus_distance: Union[int, float] = 0) -> bool:
