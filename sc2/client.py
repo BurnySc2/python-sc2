@@ -42,6 +42,7 @@ class Client(Protocol):
         self._debug_spheres = []
 
         self._renderer = None
+        self.raw_affects_selection=True
 
     @property
     def in_game(self):
@@ -49,7 +50,8 @@ class Client(Protocol):
 
     async def join_game(self, name=None, race=None, observed_player_id=None, portconfig=None, rgb_render_config=None):
         ifopts = sc_pb.InterfaceOptions(
-            raw=True, score=True, show_cloaked=True, raw_affects_selection=False, raw_crop_to_playable_area=False
+            raw=True, score=True, show_cloaked=True, raw_affects_selection=self.raw_affects_selection,
+            raw_crop_to_playable_area=False
         )
 
         if rgb_render_config:
@@ -507,7 +509,7 @@ class Client(Protocol):
         self, p: Union[Unit, Point2, Point3], r: Union[int, float], color: Union[tuple, list, Point3] = None
     ):
         """ Draws a sphere at point p with radius r. """
-        self._debug_boxes.append(DrawItemSphere(start_point=p, radius=r, color=color))
+        self._debug_spheres.append(DrawItemSphere(start_point=p, radius=r, color=color))
 
     async def _send_debug(self):
         """ Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.

@@ -374,6 +374,7 @@ async def _host_game(
     rgb_render_config=None,
     random_seed=None,
     sc2_version=None,
+    raw_affects_selection=None
 ):
 
     assert players, "Can't create a game without players"
@@ -386,7 +387,8 @@ async def _host_game(
         await server.ping()
 
         client = await _setup_host_game(server, map_settings, players, realtime, random_seed)
-
+        if raw_affects_selection is not None:
+            client.raw_affects_selection = raw_affects_selection
         try:
             result = await _play_game(
                 players[0], client, realtime, portconfig, step_time_limit, game_time_limit, rgb_render_config
@@ -437,11 +439,17 @@ def _host_game_iter(*args, **kwargs):
         new_playerconfig = yield asyncio.get_event_loop().run_until_complete(game.asend(new_playerconfig))
 
 
-async def _join_game(players, realtime, portconfig, save_replay_as=None, step_time_limit=None, game_time_limit=None):
+async def _join_game(players, realtime, portconfig, save_replay_as=None, step_time_limit=None, game_time_limit=None,
+        raw_affects_selection=None
+     ):
+
     async with SC2Process(fullscreen=players[1].fullscreen) as server:
         await server.ping()
 
         client = Client(server._ws)
+
+        if raw_affects_selection is not None:
+            client.raw_affects_selection = raw_affects_selection
 
         try:
             result = await _play_game(players[1], client, realtime, portconfig, step_time_limit, game_time_limit)
