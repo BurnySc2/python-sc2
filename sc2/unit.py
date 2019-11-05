@@ -727,7 +727,7 @@ class Unit:
 
     @property
     def add_on_tag(self) -> int:
-        """ Returns the tag of the addon of unit. """
+        """ Returns the tag of the addon of unit. If the unit has no addon, returns 0. """
         return self._proto.add_on_tag
 
     @property
@@ -736,10 +736,26 @@ class Unit:
         return bool(self._proto.add_on_tag)
 
     @property_immutable_cache
+    def has_techlab(self) -> bool:
+        """ Check if a structure is connected to a techlab addon. This should only ever return True for BARRACKS, FACTORY, STARPORT. """
+        return self.add_on_tag in self._bot_object.techlab_tags
+
+    @property_immutable_cache
+    def has_reactor(self) -> bool:
+        """ Check if a structure is connected to a reactor addon. This should only ever return True for BARRACKS, FACTORY, STARPORT. """
+        return self.add_on_tag in self._bot_object.reactor_tags
+
+    @property_immutable_cache
     def add_on_land_position(self) -> Point2:
-        """ If unit is addon (techlab or reactor), returns the position
-        where a terran building has to land to connect to addon """
+        """ If this unit is an addon (techlab, reactor), returns the position
+        where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to this addon. """
         return self.position.offset(Point2((-2.5, 0.5)))
+
+    @property_immutable_cache
+    def add_on_position(self) -> Point2:
+        """ If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
+        this property returns the position of where the addon should be, if it should build one or has one attached. """
+        return self.position.offset(Point2((2.5, -0.5)))
 
     @property_mutable_cache
     def passengers(self) -> Set[Unit]:
