@@ -1,14 +1,10 @@
-from functools import reduce
-from operator import or_
 import random
 
 import sc2
 from sc2 import Race, Difficulty
 from sc2.constants import *
 from sc2.player import Bot, Computer
-from sc2.data import race_townhalls
 
-import enum
 
 class BroodlordBot(sc2.BotAI):
     def select_target(self):

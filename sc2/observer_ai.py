@@ -1,45 +1,25 @@
 from __future__ import annotations
-import itertools
+
 import logging
-import math
-import random
 from collections import Counter
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from typing import Dict, List, Set, Union, TYPE_CHECKING
 
-from sc2.cache import property_cache_forever, property_cache_once_per_frame
-from sc2.constants import (
-    FakeEffectID,
-    abilityid_to_unittypeid,
-    geyser_ids,
-    mineral_ids,
-    TERRAN_TECH_REQUIREMENT,
-    PROTOSS_TECH_REQUIREMENT,
-    ZERG_TECH_REQUIREMENT,
-)
-from sc2.data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
+from sc2.cache import property_cache_once_per_frame
+from sc2.data import Alert, Race, Result
 from sc2.distances import DistanceCalculation
-from sc2.game_data import AbilityData, GameData
-
-from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
-from sc2.dicts.unit_train_build_abilities import TRAIN_INFO
-from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
-from sc2.dicts.unit_research_abilities import RESEARCH_INFO
-
+from sc2.game_data import GameData
 # Imports for mypy and pycharm autocomplete as well as sphinx autodocumentation
-from sc2.game_state import Blip, EffectData, GameState
+from sc2.game_state import Blip, GameState
 from sc2.ids.ability_id import AbilityId
-from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
-from sc2.pixel_map import PixelMap
-from sc2.position import Point2, Point3
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.game_data import Cost
 
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from sc2.game_info import GameInfo, Ramp
+    from sc2.game_info import GameInfo
     from sc2.client import Client
     from sc2.unit_command import UnitCommand
 
