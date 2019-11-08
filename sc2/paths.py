@@ -2,6 +2,7 @@ import logging
 import os
 import platform
 import re
+import subprocess
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -34,6 +35,25 @@ PF = os.environ.get("SC2PF", platform.system())
 def get_env():
     # TODO: Linux env conf from: https://github.com/deepmind/pysc2/blob/master/pysc2/run_configs/platforms.py
     return None
+
+def get_runner_args(cwd):
+    if "WINE" in os.environ:
+        runner_dir = os.path.dirname(os.environ.get("WINE"))
+        # translate cwd from Unix to Windows path
+        win_cwd = subprocess.run(
+            [os.path.join(runner_dir, "winepath"), "-w", cwd],
+            capture_output=True,
+            text=True
+        ).stdout.rstrip()
+        return [
+            os.environ.get("WINE"),
+            "start",
+            "/d",
+            win_cwd,
+            "/unix"
+        ]
+
+    return []
 
 def latest_executeble(versions_dir, base_build=None):
 
