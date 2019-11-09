@@ -114,7 +114,7 @@ class SC2Process:
             executable = str(paths.latest_executeble(Paths.BASE / "Versions", self._base_build))
         else:
             executable = str(Paths.EXECUTABLE)
-        args = [
+        args = paths.get_runner_args(Paths.CWD) + [
             executable,
             "-listen",
             self._host,
