@@ -76,7 +76,9 @@ def test_class():
     assert new_key == "my_new_value"
 
     # Show the expiring dict
-    print(test)
+    # print(test)
+    assert repr(test) == "ExpiringDict('another_test': ('yep this one also worked', 0), 'setitem': ('test', 1))"
+    assert str(test) == "ExpiringDict('another_test': ('yep this one also worked', 0), 'setitem': ('test', 1))"
 
     # Advance the frames by 10, this means all entries should now be invalid
     bot.increment(10)
@@ -92,8 +94,10 @@ def test_class():
 
     assert "new_key" not in test
     assert "setitem" not in test
-    # len doesn't work at the moment
-    # assert len(test) == 0
+    # len doesn't work at the moment how it should - all items in the dict are expired, so len should return 0
+    # assert len(test) == 0, len(test)
+
+
 
 if __name__ == '__main__':
     test_class()

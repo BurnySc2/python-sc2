@@ -7,9 +7,28 @@ if TYPE_CHECKING:
 
 
 class ExpiringDict(OrderedDict):
-    def __init__(self, bot, max_len=1, max_age_frames=1):
-        assert max_age_frames
-        assert max_len
+    """
+    An expiring dict that uses the bot.state.game_loop to only return items that are valid for a specific amount of time.
+
+    Example usages::
+
+        async def on_step(iteration: int):
+            # This dict will hold up to 10 items and only return values that have been added up to 20 frames ago
+            my_dict = ExpiringDict(self, max_len=10, max_age_frames=20)
+            if iteration == 0:
+                # Add item
+                my_dict["test"] = "something"
+            if iteration == 2:
+                # On default, one iteration is called every 8 frames
+                if "test" in my_dict:
+                    print("test is in dict")
+            if iteration == 20:
+                if "test" not in my_dict:
+                    print("test is not anymore in dict")
+    """
+    def __init__(self, bot: BotAI, max_len: int = 1, max_age_frames: int = 1):
+        assert max_age_frames > 0
+        assert max_len > 0
         assert bot
 
         OrderedDict.__init__(self)
@@ -55,6 +74,7 @@ class ExpiringDict(OrderedDict):
         with self.lock:
             if len(self) == self.max_len:
                 try:
+                    # Remove the first element as this is going to be the oldest
                     OrderedDict.popitem(self, last=False)
                 except KeyError:
                     pass
@@ -84,16 +104,11 @@ class ExpiringDict(OrderedDict):
         with self.lock:
             return self.keys()
 
-    # Doesnt seem to work as expected - don't use len() !
+    # TODO: removed expired entries before returning len(self)
     # def __len__(self):
     #     """ Override len method as key value pairs aren't instantly being deleted """
     #     with self.lock:
-    #         for key, value in OrderedDict.items(self):
-    #             if self.frame - value[1] < self.max_age:
-    #                 pass
-    #             else:
-    #                 del self[key]
-    #     return OrderedDict.__len__(self)
+    #         return self.length
 
     def pop(self, key, default=None, with_age=False):
         """ Return the item and remove it """
@@ -142,15 +157,13 @@ class ExpiringDict(OrderedDict):
     def keys(self) -> Iterable:
         """ Return iterator of keys """
         with self.lock:
-            for key in OrderedDict.keys(self):
-                item = OrderedDict.__getitem__(self, key)
-                if self.frame - item[1] < self.max_age:
+            for key, value in OrderedDict.items(self):
+                if self.frame - value[1] < self.max_age:
                     yield key
 
     def values(self) -> Iterable:
         """ Return iterator of values """
         with self.lock:
-            for key in OrderedDict.keys(self):
-                item = OrderedDict.__getitem__(self, key)
-                if self.frame - item[1] < self.max_age:
-                    yield item[0]
+            for value in OrderedDict.values(self):
+                if self.frame - value[1] < self.max_age:
+                    yield value[0]
