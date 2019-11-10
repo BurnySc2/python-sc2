@@ -316,3 +316,9 @@ class Cost:
         else:
             time = self.time - other.time
         return self.__class__(self.minerals - other.minerals, self.vespene - other.vespene, time=time)
+
+    def __mul__(self, other: int) -> Cost:
+        return self.__class__(self.minerals * other, self.vespene * other, time=self.time)
+
+    def __rmul__(self, other: int) -> Cost:
+        return self.__class__(self.minerals * other, self.vespene * other, time=self.time)
