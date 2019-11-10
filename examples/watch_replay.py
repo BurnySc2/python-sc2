@@ -8,6 +8,7 @@ class ObserverBot(ObserverAI):
     A replay bot that can run replays.
     Check sc2/observer_ai.py for more available functions
     """
+
     async def on_start(self):
         print("Replay on_start() was called")
 

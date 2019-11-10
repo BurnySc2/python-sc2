@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 portpicker = "*"
 async-timeout = "<4.0,>=3.0"
-"s2clientprotocol" = "*"
+s2clientprotocol = "*"
 aiohttp = "*"
 pyglet = "*"
 numpy = "*"
