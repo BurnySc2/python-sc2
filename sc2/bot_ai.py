@@ -96,6 +96,8 @@ class BotAI(DistanceCalculation):
         self._unit_tags_seen_this_game: Set[int] = set()
         self._units_previous_map: Dict[int, Unit] = dict()
         self._structures_previous_map: Dict[int, Unit] = dict()
+        self._enemy_units_previous_map: Dict[int, Unit] = dict()
+        self._enemy_structures_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
         self._time_before_step: float = None
         self._time_after_step: float = None
@@ -1112,6 +1114,9 @@ class BotAI(DistanceCalculation):
     def research(self, upgrade_type: UpgradeId) -> bool:
         """
         Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).
+        Returns True if the research was started.
+        Return False if the requirement was not met, or the bot did not have enough resources to start the upgrade,
+        or the building to research the upgrade was missing or not idle.
 
         Example::
 
@@ -1415,6 +1420,8 @@ class BotAI(DistanceCalculation):
         # Required for events, needs to be before self.units are initialized so the old units are stored
         self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
         self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
+        self._enemy_units_previous_map: Dict = {unit.tag: unit for unit in self.enemy_units}
+        self._enemy_structures_previous_map: Dict = {structure.tag: structure for structure in self.enemy_structures}
 
         self._prepare_units()
         self.minerals: int = state.common.minerals
@@ -1492,7 +1499,8 @@ class BotAI(DistanceCalculation):
                         self.structures.append(unit_obj)
                         if unit_id in race_townhalls[self.race]:
                             self.townhalls.append(unit_obj)
-                        elif unit_id in ALL_GAS or unit_obj.vespene_contents > 0:
+                        elif unit_id in ALL_GAS or unit_obj.vespene_contents:
+                            # TODO: remove "or unit_obj.vespene_contents" when a new linux client newer than version 4.10.0 is released
                             self.gas_buildings.append(unit_obj)
                         elif unit_id in {
                             UnitTypeId.TECHLAB,
@@ -1561,12 +1569,18 @@ class BotAI(DistanceCalculation):
         await self._issue_unit_added_events()
         await self._issue_building_events()
         await self._issue_upgrade_events()
+        await self._issue_vision_events()
 
     async def _issue_unit_added_events(self):
         for unit in self.units:
             if unit.tag not in self._units_previous_map and unit.tag not in self._unit_tags_seen_this_game:
                 self._unit_tags_seen_this_game.add(unit.tag)
                 await self.on_unit_created(unit)
+            elif unit.tag in self._units_previous_map:
+                # Check if a unit took damage this frame and then trigger event
+                previous_frame_unit: Unit = self._units_previous_map[unit.tag]
+                if unit.health < previous_frame_unit.health or unit.shield < previous_frame_unit.shield:
+                    await self.on_unit_took_damage(unit)
 
     async def _issue_upgrade_events(self):
         difference = self.state.upgrades - self._previous_upgrades
@@ -1580,6 +1594,14 @@ class BotAI(DistanceCalculation):
             if structure.tag not in self._structures_previous_map and structure.build_progress < 1:
                 await self.on_building_construction_started(structure)
                 continue
+            elif structure.tag in self._structures_previous_map:
+                # Check if a structure took damage this frame and then trigger event
+                previous_frame_structure: Unit = self._structures_previous_map[structure.tag]
+                if (
+                    structure.health < previous_frame_structure.health
+                    or structure.shield < previous_frame_structure.shield
+                ):
+                    await self.on_unit_took_damage(structure)
             # From here on, only check completed structure, so we ignore structures with build_progress < 1
             if structure.build_progress < 1:
                 continue
@@ -1588,11 +1610,32 @@ class BotAI(DistanceCalculation):
             if structure_prev and structure_prev.build_progress < 1:
                 await self.on_building_construction_complete(structure)
 
+    async def _issue_vision_events(self):
+        # Call events for enemy unit entered vision
+        for enemy_unit in self.enemy_units:
+            if enemy_unit.tag not in self._enemy_units_previous_map:
+                await self.on_enemy_unit_entered_vision(enemy_unit)
+        for enemy_structure in self.enemy_structures:
+            if enemy_structure.tag not in self._enemy_structures_previous_map:
+                await self.on_enemy_unit_entered_vision(enemy_structure)
+
+        # Call events for enemy unit left vision
+        if self.enemy_units:
+            visible_enemy_units = self.enemy_units.tags
+            for enemy_unit_tag in self._enemy_units_previous_map.keys():
+                if enemy_unit_tag not in visible_enemy_units:
+                    await self.on_enemy_unit_left_vision(enemy_unit_tag)
+        if self.enemy_structures:
+            visible_enemy_structures = self.enemy_structures.tags
+            for enemy_structure_tag in self._enemy_units_previous_map.keys():
+                if enemy_structure_tag not in visible_enemy_structures:
+                    await self.on_enemy_unit_left_vision(enemy_structure_tag)
+
     async def _issue_unit_dead_events(self):
         for unit_tag in self.state.dead_units:
             await self.on_unit_destroyed(unit_tag)
 
-    async def on_unit_destroyed(self, unit_tag):
+    async def on_unit_destroyed(self, unit_tag: int):
         """
         Override this in your bot class.
         Note that this function uses unit tags and not the unit objects
@@ -1627,6 +1670,29 @@ class BotAI(DistanceCalculation):
         Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.
 
         :param upgrade:
+        """
+
+    async def on_unit_took_damage(self, unit: Unit):
+        """
+        Override this in your bot class. This function is called when a unit (unit or structure) took damage. It will not be called if the unit died this frame.
+        This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep, or terran bio units that just used stimpack ability.
+
+        :param unit:
+        """
+
+    async def on_enemy_unit_entered_vision(self, unit: Unit):
+        """
+        Override this in your bot class. This function is called when an enemy unit (unit or structure) entered vision (which was not visible last frame).
+
+        :param unit:
+        """
+
+    async def on_enemy_unit_left_vision(self, unit_tag: int):
+        """
+        Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
+        Same as the self.on_unit_destroyed event, this function is called with the unit's tag because the unit is no longer visible anymore. If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.
+
+        :param unit_tag:
         """
 
     async def on_start(self):

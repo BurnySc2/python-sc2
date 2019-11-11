@@ -6,6 +6,7 @@ ADD . /root/python-sc2
 
 # Install the python-sc2 library and its requirements (s2clientprotocol etc.) to python
 WORKDIR /root/python-sc2
+RUN python -m pip install --upgrade pip
 RUN python -m pip install .
 
 # This will be executed during the container run instead:
