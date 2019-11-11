@@ -1477,7 +1477,8 @@ class BotAI(DistanceCalculation):
                         self.structures.append(unit_obj)
                         if unit_id in race_townhalls[self.race]:
                             self.townhalls.append(unit_obj)
-                        elif unit_id in ALL_GAS:
+                        elif unit_id in ALL_GAS or unit_obj.vespene_contents:
+                            # TODO: remove "or unit_obj.vespene_contents" when a new linux client newer than version 4.10.0 is released
                             self.gas_buildings.append(unit_obj)
                         elif unit_id in {
                             UnitTypeId.TECHLAB,
