@@ -385,8 +385,7 @@ def test_bot_ai():
     assert_cost(UnitTypeId.BROODLORD, Cost(300, 250))
     assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(100, 100))
     assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
-    assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(50, 25)
-    )
+    assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(50, 25))
 
     assert Cost(100, 50, 2 * Cost(50, 25))
     assert Cost(100, 50, Cost(50, 25) * 2)
@@ -850,6 +849,20 @@ def test_position_point2(x1, y1, x2, y2):
     assert pos1.y == y1
     assert pos1.to2 == pos1
     assert pos1.to3 == Point3((x1, y1, 0))
+
+    length1 = (pos1.x ** 2 + pos1.y ** 2) ** 0.5
+    assert abs(pos1.length - length1) < 0.001
+    if length1:
+        normalized1 = pos1 / length1
+        assert abs(pos1.normalized.is_same_as(pos1 / length1))
+        assert abs(normalized1.length - 1) < 0.001
+    length2 = (pos2.x ** 2 + pos2.y ** 2) ** 0.5
+    assert abs(pos2.length - length2) < 0.001
+    if length2:
+        normalized2 = pos2 / length2
+        assert abs(pos2.normalized.is_same_as(normalized2))
+        assert abs(normalized2.length - 1) < 0.001
+
     assert isinstance(pos1.distance_to(pos2), float)
     assert isinstance(pos1.distance_to_point2(pos2), float)
     if 0 < x2:

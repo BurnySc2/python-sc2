@@ -126,7 +126,7 @@ class DistanceCalculation:
             unit2.tag in self._unit_index_dict
         ), f"Unit2 {unit2} is not in index dict for distance calculation. Make sure the unit is alive in the current frame. Ideally take units from 'self.units' or 'self.structures' as these contain unit data from the current frame. Do not try to save 'Units' objects over several iterations."
         # index1 = self._unit_index_dict[unit1.tag]
-        # idnex2 = self._unit_index_dict[unit2.tag]
+        # index2 = self._unit_index_dict[unit2.tag]
         return self._unit_index_dict[unit1.tag], self._unit_index_dict[unit2.tag]
 
     # Helper functions
