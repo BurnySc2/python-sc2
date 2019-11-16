@@ -552,12 +552,15 @@ class BotAI(DistanceCalculation):
         return required <= 0 or self.supply_left >= required
 
     def calculate_unit_value(self, unit_type: UnitTypeId) -> Cost:
-        """ Unlike the function below, this function returns the value of a unit given by the API (e.g. the resources lost value on kill).
+        """
+        Unlike the function below, this function returns the value of a unit given by the API (e.g. the resources lost value on kill).
 
         Examples::
 
             self.calculate_value(UnitTypeId.ORBITALCOMMAND) == Cost(550, 0)
             self.calculate_value(UnitTypeId.RAVAGER) == Cost(100, 100)
+
+        :param unit_type:
         """
         unit_data = self.game_data.units[unit_type.value]
         return Cost(unit_data._proto.mineral_cost, unit_data._proto.vespene_cost)
