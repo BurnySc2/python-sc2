@@ -551,6 +551,17 @@ class BotAI(DistanceCalculation):
         # "required <= 0" in case self.supply_left is negative
         return required <= 0 or self.supply_left >= required
 
+    def calculate_unit_value(self, unit_type: UnitTypeId) -> Cost:
+        """ Unlike the function below, this function returns the value of a unit given by the API (e.g. the resources lost value on kill).
+
+        Examples::
+
+            self.calculate_value(UnitTypeId.ORBITALCOMMAND) == Cost(550, 0)
+            self.calculate_value(UnitTypeId.RAVAGER) == Cost(100, 100)
+        """
+        unit_data = self.game_data.units[unit_type.value]
+        return Cost(unit_data._proto.mineral_cost, unit_data._proto.vespene_cost)
+
     def calculate_cost(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId]) -> Cost:
         """
         Calculate the required build, train or morph cost of a unit. It is recommended to use the UnitTypeId instead of the ability to create the unit.

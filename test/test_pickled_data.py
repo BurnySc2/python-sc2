@@ -364,6 +364,10 @@ def test_bot_ai():
     assert_cost(UnitTypeId.ORBITALCOMMAND, Cost(150, 0))
     assert_cost(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND, Cost(150, 0))
 
+    assert bot.calculate_unit_value(UnitTypeId.ORBITALCOMMAND) == Cost(550, 0)
+    assert bot.calculate_unit_value(UnitTypeId.RAVAGER) == Cost(100, 100)
+    assert bot.calculate_unit_value(UnitTypeId.ARCHON) == Cost(175, 275)
+
     assert bot.calculate_cost(UnitTypeId.BROODLORD) == Cost(150, 150)
     assert bot.calculate_cost(UnitTypeId.RAVAGER) == Cost(25, 75)
     assert bot.calculate_cost(UnitTypeId.BANELING) == Cost(25, 25)
