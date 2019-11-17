@@ -1695,6 +1695,13 @@ class BotAI(DistanceCalculation):
         :param unit_tag:
         """
 
+    async def on_before_start(self):
+        """
+        Override this in your bot class. This function is called before "on_start"
+        and before "prepare_first_step" that calculates expansion locations.
+        Not all data is available yet.
+        """
+
     async def on_start(self):
         """
         Override this in your bot class. This function is called after "on_start". 
