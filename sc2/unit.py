@@ -353,19 +353,23 @@ class Unit:
             return 0
         return self._proto.energy / self._proto.energy_max
 
-    @property
+    @property_immutable_cache
     def is_snapshot(self) -> bool:
         """ Checks if the unit is only available as a snapshot for the bot.
         Enemy buildings that have been scouted and are in the fog of war or
         attacking enemy units on higher, not visible ground appear this way. """
-        return self._proto.display_type == IS_SNAPSHOT
+        # TODO: remove usage of bot.state.visibility when display_type is fixed by blizzard: https://github.com/Blizzard/s2client-proto/issues/167
+        if self._proto.display_type == IS_SNAPSHOT:
+            return True
+        position = self.position.rounded
+        return self._bot_object.state.visibility.data_numpy[position[1], position[0]] != 2
 
-    @property
+    @property_immutable_cache
     def is_visible(self) -> bool:
         """ Checks if the unit is visible for the bot.
         NOTE: This means the bot has vision of the position of the unit!
         It does not give any information about the cloak status of the unit."""
-        return self._proto.display_type == IS_VISIBLE
+        return self._proto.display_type == IS_VISIBLE and not self.is_snapshot
 
     @property
     def alliance(self) -> Alliance:
@@ -829,6 +833,8 @@ class Unit:
     def engaged_target_tag(self) -> int:
         # TODO What does this do?
         return self._proto.engaged_target_tag
+
+    # TODO: Add rally targets https://github.com/Blizzard/s2client-proto/commit/80484692fa9e0ea6e7be04e728e4f5995c64daa3#diff-3b331650a4f7c9271a579b31cf771ed5R88-R92
 
     # Unit functions
 
