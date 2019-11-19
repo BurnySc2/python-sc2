@@ -52,6 +52,7 @@ class BotAI(DistanceCalculation):
     EXPANSION_GAP_THRESHOLD = 15
 
     def _initialize_variables(self):
+        """ Called from main.py internally """
         DistanceCalculation.__init__(self)
         # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://ai-arena.net
         # The bot ID will stay the same each game so your bot can "adapt" to the opponent
@@ -82,17 +83,18 @@ class BotAI(DistanceCalculation):
         self.reactor_tags: Set[int] = set()
         self.minerals: int = None
         self.vespene: int = None
-        self.supply_army: Union[float, int] = None
-        self.supply_workers: Union[float, int] = None  # Doesn't include workers in production
-        self.supply_cap: Union[float, int] = None
-        self.supply_used: Union[float, int] = None
-        self.supply_left: Union[float, int] = None
+        self.supply_army: float = None
+        self.supply_workers: float = None  # Doesn't include workers in production
+        self.supply_cap: float = None
+        self.supply_used: float = None
+        self.supply_left: float = None
         self.idle_worker_count: int = None
         self.army_count: int = None
         self.warp_gate_count: int = None
         self.larva_count: int = None
         self.actions: List[UnitCommand] = []
         self.blips: Set[Blip] = set()
+        self._units_created: Counter = Counter()
         self._unit_tags_seen_this_game: Set[int] = set()
         self._units_previous_map: Dict[int, Unit] = dict()
         self._structures_previous_map: Dict[int, Unit] = dict()
@@ -299,6 +301,26 @@ class BotAI(DistanceCalculation):
             result = min(possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources))
             centers[result] = resources
         return centers
+
+    @property
+    def units_created(self) -> Counter:
+        """ Returns a Counter for all your units and buildings you have created so far.
+
+        This may be used for statistics (at the end of the game) or for strategic decision making.
+
+        CAUTION: This does not properly work at the moment for morphing units and structures. Please use the 'on_unit_type_changed' event to add these morphing unit types manually to 'self._units_created'.
+        Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphing back (suddenly the counter counts 2 tanks have been created).
+
+        Examples::
+
+            # Give attack command to enemy base every time 10 marines have been trained
+            async def on_unit_created(self, unit: Unit):
+                if unit.type_id == UnitTypeId.MARINE:
+                    if self.units_created[MARINE] % 10 == 0:
+                        for marine in self.units(UnitTypeId.MARINE):
+                            self.do(marine.attack(self.enemy_start_locations[0]))
+        """
+        return self._units_created
 
     def _correct_zerg_supply(self):
         """ The client incorrectly rounds zerg supply down instead of up (see
@@ -1567,6 +1589,7 @@ class BotAI(DistanceCalculation):
         for unit in self.units:
             if unit.tag not in self._units_previous_map and unit.tag not in self._unit_tags_seen_this_game:
                 self._unit_tags_seen_this_game.add(unit.tag)
+                self._units_created[unit.type_id] += 1
                 await self.on_unit_created(unit)
             elif unit.tag in self._units_previous_map:
                 previous_frame_unit: Unit = self._units_previous_map[unit.tag]
@@ -1587,10 +1610,13 @@ class BotAI(DistanceCalculation):
 
     async def _issue_building_events(self):
         for structure in self.structures:
-            # Check build_progress < 1 to exclude starting townhall
-            if structure.tag not in self._structures_previous_map and structure.build_progress < 1:
-                await self.on_building_construction_started(structure)
-                continue
+            if structure.tag not in self._structures_previous_map:
+                if structure.build_progress < 1:
+                    await self.on_building_construction_started(structure)
+                else:
+                    # Include starting townhall
+                    self._units_created[structure.type_id] += 1
+                    await self.on_building_construction_complete(structure)
             elif structure.tag in self._structures_previous_map:
                 # Check if a structure took damage this frame and then trigger event
                 previous_frame_structure: Unit = self._structures_previous_map[structure.tag]
@@ -1603,13 +1629,10 @@ class BotAI(DistanceCalculation):
                 # Check if a structure changed its type
                 if previous_frame_structure.type_id != structure.type_id:
                     await self.on_unit_type_changed(structure, previous_frame_structure.type_id)
-            # From here on, only check completed structure, so we ignore structures with build_progress < 1
-            if structure.build_progress < 1:
-                continue
-            # Using get function in case somehow the previous structure map (from last frame) does not contain this structure
-            structure_prev = self._structures_previous_map.get(structure.tag, None)
-            if structure_prev and structure_prev.build_progress < 1:
-                await self.on_building_construction_complete(structure)
+                # Check if structure completed
+                if structure.build_progress == 1 and previous_frame_structure.build_progress < 1:
+                    self._units_created[structure.type_id] += 1
+                    await self.on_building_construction_complete(structure)
 
     async def _issue_vision_events(self):
         # Call events for enemy unit entered vision
