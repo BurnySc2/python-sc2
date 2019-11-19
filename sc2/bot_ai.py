@@ -1569,11 +1569,15 @@ class BotAI(DistanceCalculation):
                 self._unit_tags_seen_this_game.add(unit.tag)
                 await self.on_unit_created(unit)
             elif unit.tag in self._units_previous_map:
-                # Check if a unit took damage this frame and then trigger event
                 previous_frame_unit: Unit = self._units_previous_map[unit.tag]
+                # Check if a unit took damage this frame and then trigger event
                 if unit.health < previous_frame_unit.health or unit.shield < previous_frame_unit.shield:
                     damage_amount = previous_frame_unit.health - unit.health + previous_frame_unit.shield - unit.shield
                     await self.on_unit_took_damage(unit, damage_amount)
+                # Check if a unit type has changed
+                if previous_frame_unit.type_id != unit.type_id:
+                    await self.on_unit_type_changed(unit, previous_frame_unit.type_id)
+
 
     async def _issue_upgrade_events(self):
         difference = self.state.upgrades - self._previous_upgrades
@@ -1596,6 +1600,9 @@ class BotAI(DistanceCalculation):
                 ):
                     damage_amount = previous_frame_structure.health - structure.health + previous_frame_structure.shield - structure.shield
                     await self.on_unit_took_damage(structure, damage_amount)
+                # Check if a structure changed its type
+                if previous_frame_structure.type_id != structure.type_id:
+                    await self.on_unit_type_changed(structure, previous_frame_structure.type_id)
             # From here on, only check completed structure, so we ignore structures with build_progress < 1
             if structure.build_progress < 1:
                 continue
@@ -1643,6 +1650,19 @@ class BotAI(DistanceCalculation):
 
         :param unit: """
 
+    async def on_unit_type_changed(self, unit: Unit, previous_type: UnitTypeId):
+        """ Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use 'unit.type_id'
+
+        This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair, a corruptor morphed to broodlordcocoon, etc..
+
+        Examples::
+
+            print(f"My unit changed type: {unit} from {previous_type} to {unit.type_id}")
+
+        :param unit:
+        :param previous_type:
+        """
+
     async def on_building_construction_started(self, unit: Unit):
         """
         Override this in your bot class.
@@ -1668,8 +1688,14 @@ class BotAI(DistanceCalculation):
 
     async def on_unit_took_damage(self, unit: Unit, amount_damage_taken: float):
         """
-        Override this in your bot class. This function is called when a unit (unit or structure) took damage. It will not be called if the unit died this frame.
+        Override this in your bot class. This function is called when your own unit (unit or structure) took damage. It will not be called if the unit died this frame.
+
         This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep, or terran bio units that just used stimpack ability.
+        TODO: If there is a demand for it, then I can add a similar event for when enemy units took damage
+
+        Examples::
+
+            print(f"My unit took damage: {unit} took {amount_damage_taken} damage")
 
         :param unit:
         """
@@ -1685,6 +1711,11 @@ class BotAI(DistanceCalculation):
         """
         Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
         Same as the self.on_unit_destroyed event, this function is called with the unit's tag because the unit is no longer visible anymore. If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.
+
+        Examples::
+
+            last_known_unit = self._enemy_units_previous_map.get(unit_tag, None) or self._enemy_structures_previous_map[unit_tag]
+            print(f"Enemy unit left vision, last known location: {last_known_unit.position}")
 
         :param unit_tag:
         """
