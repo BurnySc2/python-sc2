@@ -567,7 +567,7 @@ class Unit:
 
     @property
     def is_active(self) -> bool:
-        """ Checks if the unit is currently training or researching. """
+        """ Checks if the unit has an order (e.g. unit is currently moving or attacking, structure is currently training or researching). """
         return self._proto.is_active
 
     # PROPERTIES BELOW THIS COMMENT ARE NOT POPULATED FOR SNAPSHOTS

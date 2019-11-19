@@ -1601,7 +1601,6 @@ class BotAI(DistanceCalculation):
                 if previous_frame_unit.type_id != unit.type_id:
                     await self.on_unit_type_changed(unit, previous_frame_unit.type_id)
 
-
     async def _issue_upgrade_events(self):
         difference = self.state.upgrades - self._previous_upgrades
         for upgrade_completed in difference:
@@ -1624,7 +1623,12 @@ class BotAI(DistanceCalculation):
                     structure.health < previous_frame_structure.health
                     or structure.shield < previous_frame_structure.shield
                 ):
-                    damage_amount = previous_frame_structure.health - structure.health + previous_frame_structure.shield - structure.shield
+                    damage_amount = (
+                        previous_frame_structure.health
+                        - structure.health
+                        + previous_frame_structure.shield
+                        - structure.shield
+                    )
                     await self.on_unit_took_damage(structure, damage_amount)
                 # Check if a structure changed its type
                 if previous_frame_structure.type_id != structure.type_id:
@@ -1745,7 +1749,7 @@ class BotAI(DistanceCalculation):
 
     async def on_start(self):
         """
-        Override this in your bot class. This function is called after "on_start". 
+        Override this in your bot class.
         At this point, game_data, game_info and the first iteration of game_state (self.state) are available.
         """
 
@@ -1760,6 +1764,6 @@ class BotAI(DistanceCalculation):
         raise NotImplementedError
 
     async def on_end(self, game_result: Result):
-        """ Override this in your bot class. This function is called at the end of a game.
+        """ Override this in your bot class. This function is called at the end of a game. Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.
 
         :param game_result: """
