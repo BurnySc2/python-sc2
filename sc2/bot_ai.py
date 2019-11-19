@@ -1572,7 +1572,8 @@ class BotAI(DistanceCalculation):
                 # Check if a unit took damage this frame and then trigger event
                 previous_frame_unit: Unit = self._units_previous_map[unit.tag]
                 if unit.health < previous_frame_unit.health or unit.shield < previous_frame_unit.shield:
-                    await self.on_unit_took_damage(unit)
+                    damage_amount = previous_frame_unit.health - unit.health + previous_frame_unit.shield - unit.shield
+                    await self.on_unit_took_damage(unit, damage_amount)
 
     async def _issue_upgrade_events(self):
         difference = self.state.upgrades - self._previous_upgrades
@@ -1593,7 +1594,8 @@ class BotAI(DistanceCalculation):
                     structure.health < previous_frame_structure.health
                     or structure.shield < previous_frame_structure.shield
                 ):
-                    await self.on_unit_took_damage(structure)
+                    damage_amount = previous_frame_structure.health - structure.health + previous_frame_structure.shield - structure.shield
+                    await self.on_unit_took_damage(structure, damage_amount)
             # From here on, only check completed structure, so we ignore structures with build_progress < 1
             if structure.build_progress < 1:
                 continue
@@ -1664,7 +1666,7 @@ class BotAI(DistanceCalculation):
         :param upgrade:
         """
 
-    async def on_unit_took_damage(self, unit: Unit):
+    async def on_unit_took_damage(self, unit: Unit, amount_damage_taken: float):
         """
         Override this in your bot class. This function is called when a unit (unit or structure) took damage. It will not be called if the unit died this frame.
         This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep, or terran bio units that just used stimpack ability.
