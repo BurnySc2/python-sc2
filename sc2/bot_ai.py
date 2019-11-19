@@ -1464,6 +1464,9 @@ class BotAI(DistanceCalculation):
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
 
+        # as short reference as possible
+        visibility = self.state.visibility.data_numpy
+
         for unit in self.state.observation_raw.units:
             if unit.is_blip:
                 self.blips.add(Blip(unit))
@@ -1527,6 +1530,8 @@ class BotAI(DistanceCalculation):
                     if unit_obj.is_structure:
                         self.enemy_structures.append(unit_obj)
                     else:
+                        point: Point2 = unit_obj.position.rounded
+                        unit_obj.is_calculated_snapshot = visibility[point.y, point.x] != 2
                         self.enemy_units.append(unit_obj)
 
         # Force distance calculation and caching on all units using scipy pdist or cdist
