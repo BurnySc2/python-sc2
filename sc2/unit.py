@@ -101,6 +101,7 @@ class Unit:
         # Used by property_immutable_cache
         self.cache = {}
         self.is_memory = False
+        self.is_calculated_snapshot = False
 
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
@@ -374,7 +375,7 @@ class Unit:
         """ Checks if the unit is only available as a snapshot for the bot.
         Enemy buildings that have been scouted and are in the fog of war or
         attacking enemy units on higher, not visible ground appear this way. """
-        return self._proto.display_type == IS_SNAPSHOT
+        return self.is_calculated_snapshot or self._proto.display_type == IS_SNAPSHOT
 
     @property
     def is_visible(self) -> bool:
