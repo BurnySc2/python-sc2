@@ -109,7 +109,7 @@ class Unit:
     @property
     def is_target(self) -> bool:
         """ Returns true when unit is a valid target for focus fire. """
-        return not self.is_memory and self.can_be_attacked and not self.is_hallucination and self.is_snapshot
+        return not self.is_memory and self.can_be_attacked and not self.is_hallucination and not self.is_snapshot
 
     @property_immutable_cache
     def type_id(self) -> UnitTypeId:
