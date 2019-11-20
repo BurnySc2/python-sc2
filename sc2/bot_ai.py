@@ -358,7 +358,7 @@ class BotAI(DistanceCalculation):
         return await self._client.query_available_abilities(units, ignore_resource_requirements)
 
     async def expand_now(
-        self, building: UnitTypeId = None, max_distance: Union[int, float] = 10, location: Optional[Point2] = None
+        self, building: UnitTypeId = None, max_distance: float = 10, location: Optional[Point2] = None
     ):
         """ Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.
 
@@ -842,7 +842,7 @@ class BotAI(DistanceCalculation):
         return None
 
     # TODO: improve using cache per frame
-    def already_pending_upgrade(self, upgrade_type: UpgradeId) -> Union[int, float]:
+    def already_pending_upgrade(self, upgrade_type: UpgradeId) -> float:
         """ Check if an upgrade is being researched
 
         Returns values are::
@@ -888,7 +888,7 @@ class BotAI(DistanceCalculation):
 
         return abilities_amount
 
-    def already_pending(self, unit_type: Union[UpgradeId, UnitTypeId]) -> int:
+    def already_pending(self, unit_type: Union[UpgradeId, UnitTypeId]) -> float:
         """
         Returns a number of buildings or units already in progress, or if a
         worker is en route to build it. This also includes queued orders for

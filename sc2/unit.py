@@ -80,9 +80,10 @@ class UnitOrder:
         :param target:
         :param progress:
         """
-        self.ability = ability
+        self.ability: AbilityData = ability
+        # This can be an int (if target is unit) or proto Point2 object, which needs to be converted using 'Point2.from_proto(target)'
         self.target = target
-        self.progress = progress
+        self.progress: float = progress
 
     def __repr__(self) -> str:
         return f"UnitOrder({self.ability}, {self.target}, {self.progress})"
@@ -95,7 +96,7 @@ class Unit:
         :param bot_object:
         """
         self._proto = proto_data
-        self._bot_object = bot_object
+        self._bot_object: BotAI = bot_object
         # Used by property_immutable_cache
         self.cache = {}
 
@@ -214,7 +215,7 @@ class Unit:
         return False
 
     @property_immutable_cache
-    def ground_dps(self) -> Union[int, float]:
+    def ground_dps(self) -> float:
         """ Returns the dps against ground units. Does not include upgrades. """
         if self.can_attack_ground:
             weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
@@ -223,7 +224,7 @@ class Unit:
         return 0
 
     @property_immutable_cache
-    def ground_range(self) -> Union[int, float]:
+    def ground_range(self) -> float:
         """ Returns the range against ground units. Does not include upgrades. """
         if self.type_id == UNIT_ORACLE:
             return 4
@@ -245,7 +246,7 @@ class Unit:
         return False
 
     @property_immutable_cache
-    def air_dps(self) -> Union[int, float]:
+    def air_dps(self) -> float:
         """ Returns the dps against air units. Does not include upgrades. """
         if self.can_attack_air:
             weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_AIR), None)
@@ -254,7 +255,7 @@ class Unit:
         return 0
 
     @property_immutable_cache
-    def air_range(self) -> Union[int, float]:
+    def air_range(self) -> float:
         """ Returns the range against air units. Does not include upgrades. """
         if self.type_id == UNIT_BATTLECRUISER:
             return 6
@@ -278,17 +279,17 @@ class Unit:
             return None
 
     @property
-    def armor(self) -> Union[int, float]:
+    def armor(self) -> float:
         """ Returns the armor of the unit. Does not include upgrades """
         return self._type_data._proto.armor
 
     @property
-    def sight_range(self) -> Union[int, float]:
+    def sight_range(self) -> float:
         """ Returns the sight range of the unit. """
         return self._type_data._proto.sight_range
 
     @property
-    def movement_speed(self) -> Union[int, float]:
+    def movement_speed(self) -> float:
         """ Returns the movement speed of the unit. Does not include upgrades or buffs. """
         return self._type_data._proto.movement_speed
 
@@ -303,51 +304,51 @@ class Unit:
         return self._type_data.has_vespene
 
     @property
-    def health(self) -> Union[int, float]:
+    def health(self) -> float:
         """ Returns the health of the unit. Does not include shields. """
         return self._proto.health
 
     @property
-    def health_max(self) -> Union[int, float]:
+    def health_max(self) -> float:
         """ Returns the maximum health of the unit. Does not include shields. """
         return self._proto.health_max
 
     @property
-    def health_percentage(self) -> Union[int, float]:
+    def health_percentage(self) -> float:
         """ Returns the percentage of health the unit has. Does not include shields. """
         if self._proto.health_max == 0:
             return 0
         return self._proto.health / self._proto.health_max
 
     @property
-    def shield(self) -> Union[int, float]:
+    def shield(self) -> float:
         """ Returns the shield points the unit has. Returns 0 for non-protoss units. """
         return self._proto.shield
 
     @property
-    def shield_max(self) -> Union[int, float]:
+    def shield_max(self) -> float:
         """ Returns the maximum shield points the unit can have. Returns 0 for non-protoss units. """
         return self._proto.shield_max
 
     @property
-    def shield_percentage(self) -> Union[int, float]:
+    def shield_percentage(self) -> float:
         """ Returns the percentage of shield points the unit has. Returns 0 for non-protoss units. """
         if self._proto.shield_max == 0:
             return 0
         return self._proto.shield / self._proto.shield_max
 
     @property
-    def energy(self) -> Union[int, float]:
+    def energy(self) -> float:
         """ Returns the amount of energy the unit has. Returns 0 for units without energy. """
         return self._proto.energy
 
     @property
-    def energy_max(self) -> Union[int, float]:
+    def energy_max(self) -> float:
         """ Returns the maximum amount of energy the unit can have. Returns 0 for units without energy. """
         return self._proto.energy_max
 
     @property
-    def energy_percentage(self) -> Union[int, float]:
+    def energy_percentage(self) -> float:
         """ Returns the percentage of amount of energy the unit has. Returns 0 for units without energy. """
         if self._proto.energy_max == 0:
             return 0
@@ -406,7 +407,7 @@ class Unit:
         """ Returns the 3d position of the unit. """
         return Point3.from_proto(self._proto.pos)
 
-    def distance_to(self, p: Union[Unit, Point2, Point3]) -> Union[int, float]:
+    def distance_to(self, p: Union[Unit, Point2, Point3]) -> float:
         """ Using the 2d distance between self and p.
         To calculate the 3d distance, use unit.position3d.distance_to(p)
 
@@ -415,7 +416,7 @@ class Unit:
             return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
-    def target_in_range(self, target: Unit, bonus_distance: Union[int, float] = 0) -> bool:
+    def target_in_range(self, target: Unit, bonus_distance: float = 0) -> bool:
         """ Checks if the target is in range.
         Includes the target's radius when calculating distance to target.
 
@@ -461,7 +462,7 @@ class Unit:
         return False
 
     @property
-    def facing(self) -> Union[int, float]:
+    def facing(self) -> float:
         """ Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
         return self._proto.facing
 
@@ -479,12 +480,12 @@ class Unit:
         return angle_difference < angle_error
 
     @property
-    def radius(self) -> Union[int, float]:
+    def radius(self) -> float:
         """ Half of unit size. See https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void) """
         return self._proto.radius
 
     @property
-    def build_progress(self) -> Union[int, float]:
+    def build_progress(self) -> float:
         """ Returns completion in range [0,1]."""
         return self._proto.build_progress
 
@@ -535,7 +536,7 @@ class Unit:
         return not IS_CARRYING_RESOURCES.isdisjoint(self.buffs)
 
     @property
-    def detect_range(self) -> Union[int, float]:
+    def detect_range(self) -> float:
         """ Returns the detection distance of the unit. """
         return self._proto.detect_range
 
@@ -546,7 +547,7 @@ class Unit:
         return self.is_ready and (self.type_id in IS_DETECTOR or self.type_id == UNIT_PHOTONCANNON and self.is_powered)
 
     @property
-    def radar_range(self) -> Union[int, float]:
+    def radar_range(self) -> float:
         return self._proto.radar_range
 
     @property
@@ -815,7 +816,7 @@ class Unit:
         return self._proto.assigned_harvesters - self._proto.ideal_harvesters
 
     @property_immutable_cache
-    def weapon_cooldown(self) -> Union[int, float]:
+    def weapon_cooldown(self) -> float:
         """ Returns the time until the unit can fire again,
         returns -1 for units that can't attack.
         Usage:
