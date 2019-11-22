@@ -404,8 +404,8 @@ def test_bot_ai():
     assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
     assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(50, 25))
 
-    assert Cost(100, 50, 2 * Cost(50, 25))
-    assert Cost(100, 50, Cost(50, 25) * 2)
+    assert Cost(100, 50) == 2 * Cost(50, 25)
+    assert Cost(100, 50) == Cost(50, 25) * 2
 
     assert bot.calculate_supply_cost(UnitTypeId.BARRACKS) == 0
     assert bot.calculate_supply_cost(UnitTypeId.HATCHERY) == 0
