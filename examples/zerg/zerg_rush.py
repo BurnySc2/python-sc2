@@ -21,8 +21,6 @@ class ZergRushBot(sc2.BotAI):
         if iteration == 0:
             await self.chat_send("(glhf)")
 
-        await self.distribute_workers()
-
         # If townhall no longer exists: attack move with all units to enemy start location
         if not self.townhalls:
             for unit in self.units.exclude_type({UnitTypeId.EGG, UnitTypeId.LARVA}):

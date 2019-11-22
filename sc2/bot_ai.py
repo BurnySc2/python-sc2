@@ -416,8 +416,6 @@ class BotAI(DistanceCalculation):
         Keyword `resource_ratio` takes a float. If the current minerals to gas
         ratio is bigger than `resource_ratio`, this function prefer filling gas_buildings
         first, if it is lower, it will prefer sending workers to minerals first.
-        This is only for workers that need to be moved anyways, it will NOT fill
-        gas_buildings on its own.
 
         NOTE: This function is far from optimal, if you really want to have
         refined worker control, you should write your own distribution function.
@@ -520,7 +518,6 @@ class BotAI(DistanceCalculation):
     @property
     def owned_expansions(self) -> Dict[Point2, Unit]:
         """List of expansions owned by the player."""
-
         owned = {}
         for el in self.expansion_locations:
 
@@ -530,7 +527,6 @@ class BotAI(DistanceCalculation):
             th = next((x for x in self.townhalls if is_near_to_expansion(x)), None)
             if th:
                 owned[el] = th
-
         return owned
 
     def calculate_supply_cost(self, unit_type: UnitTypeId) -> float:
@@ -1355,8 +1351,7 @@ class BotAI(DistanceCalculation):
     def in_placement_grid(self, pos: Union[Point2, Point3, Unit]) -> bool:
         """ Returns True if you can place something at a position.
         Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
-        Caution: some x and y offset might be required, see ramp code:
-        https://github.com/Dentosal/python-sc2/blob/master/sc2/game_info.py#L17-L18
+        Caution: some x and y offset might be required, see ramp code in game_info.py
 
         :param pos: """
         assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
