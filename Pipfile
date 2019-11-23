@@ -27,6 +27,7 @@ pytest-cov = "*"
 coverage = "*"
 codecov = "*"
 matplotlib = "*"
+MonkeyType = "*"
 
 [requires]
 python_version = "3.7"

@@ -577,6 +577,7 @@ class BotAI(DistanceCalculation):
 
             self.calculate_value(UnitTypeId.ORBITALCOMMAND) == Cost(550, 0)
             self.calculate_value(UnitTypeId.RAVAGER) == Cost(100, 100)
+            self.calculate_value(UnitTypeId.ARCHON) == Cost(175, 275)
 
         :param unit_type:
         """
@@ -615,11 +616,13 @@ class BotAI(DistanceCalculation):
         """
         if isinstance(item_id, UnitTypeId):
             # Fix cost for reactor and techlab where the API returns 0 for both
-            if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB}:
+            if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB, UnitTypeId.ARCHON}:
                 if item_id == UnitTypeId.REACTOR:
                     return Cost(50, 50)
                 elif item_id == UnitTypeId.TECHLAB:
                     return Cost(50, 25)
+                elif item_id == UnitTypeId.ARCHON:
+                    return self.calculate_unit_value(UnitTypeId.ARCHON)
             unit_data = self._game_data.units[item_id.value]
             # Cost of structure morphs is automatically correctly calculated by 'calculate_ability_cost'
             cost = self._game_data.calculate_ability_cost(unit_data.creation_ability)
