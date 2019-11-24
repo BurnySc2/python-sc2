@@ -479,11 +479,10 @@ class Unit:
         """
         if not self.can_attack:
             return 0
-        # Early return recommended?
-        # if not self.can_attack_ground and not target.is_flying:
-        #     return 0
-        # if not self.can_attack_air and target.is_flying:
-        #     return 0
+        if not self.can_attack_ground and not target.is_flying:
+            return 0
+        if not self.can_attack_air and target.is_flying:
+            return 0
         # Inaccurate for enemy ultralisks with armor upgrade:
         enemy_armor: float = target.armor + target.armor_upgrade_level
         enemy_shield_armor: float = target.shield_upgrade_level
@@ -501,7 +500,7 @@ class Unit:
             enemy_shield: float = target.shield
             total_attacks: int = weapon.attacks
             # TODO: if unit has weapon upgrades, add to damage per attack
-            damage_per_attack: float = weapon.damage
+            damage_per_attack: float = weapon.damage + self.attack_upgrade_level
             # Remaining damage after all damage is dealt to shield
             remaining_damage: float = 0
 
