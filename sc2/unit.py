@@ -461,6 +461,103 @@ class Unit:
             )
         return False
 
+    def calculate_damage_vs_target(
+        self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
+    ) -> float:
+        """
+        Returns the properly calculated damage against the target unit. Returns 0 if this unit can't attack the target unit.
+
+        If 'include_overkill_damage=True' and the unit deals 10 damage, the target unit has 5 hp and 0 armor, the target unit would result in -5hp, so the returning damage would be 10.
+        For 'include_overkill_damage=False' this function would return 5.
+
+        If 'ignore_armor=False' and the unit deals 10 damage, the target unit has 20 hp and 5 armor, the target unit would result in 15hp, so the returning damage would be 5.
+        For 'ignore_armor=True' this function would return 10.
+
+        :param target:
+        :param ignore_armor:
+        :param include_overkill_damage:
+        """
+        if not self.can_attack:
+            return 0
+        # Early return recommended?
+        # if not self.can_attack_ground and not target.is_flying:
+        #     return 0
+        # if not self.can_attack_air and target.is_flying:
+        #     return 0
+        # Inaccurate for enemy ultralisks with armor upgrade:
+        enemy_armor: float = target.armor + target.armor_upgrade_level
+        enemy_shield_armor: float = target.shield_upgrade_level
+        if ignore_armor:
+            enemy_armor = 0
+            enemy_shield_armor = 0
+
+        required_target_type: Set[int] = TARGET_GROUND if not target.is_flying else TARGET_AIR
+
+        damages: List[int] = []
+        for weapon in self._weapons:
+            if weapon.type not in required_target_type:
+                continue
+            enemy_health: float = target.health
+            enemy_shield: float = target.shield
+            total_attacks: int = weapon.attacks
+            # TODO: if unit has weapon upgrades, add to damage per attack
+            damage_per_attack: float = weapon.damage
+            # Remaining damage after all damage is dealt to shield
+            remaining_damage: float = 0
+
+            # Calculate bonus damage against target
+            boni: List[float] = []
+            for bonus in weapon.damage_bonus:
+                # TODO: if unit has weapon upgrades, add to bonus per attack
+                if bonus.attribute in target._type_data.attributes:
+                    boni.append(bonus.bonus)
+            if boni:
+                damage_per_attack += max(boni)
+
+            # Subtract enemy unit's shield
+            if target.shield > 0:
+                # Shield-armor has to be applied
+                while total_attacks > 0 and enemy_shield > 0:
+                    # TODO: subtract if unit's attack is projctile and enemy unit is under influence of guardian shield
+                    # TODO: enemy is under influence of anti armor missile
+                    enemy_shield -= damage_per_attack - enemy_shield_armor
+                    total_attacks -= 1
+                if enemy_shield < 0:
+                    remaining_damage = -enemy_shield
+                    enemy_shield = 0
+
+            # Subtract enemy unit's HP
+            if remaining_damage > 0:
+                enemy_health -= max(0.5, remaining_damage - enemy_armor)
+            while total_attacks > 0 and (include_overkill_damage or enemy_health > 0):
+                # TODO: subtract if unit's attack is projctile and enemy unit is under influence of guardian shield
+                # TODO: enemy is under influence of anti armor missile
+                enemy_health -= max(0.5, damage_per_attack - enemy_armor)
+                total_attacks -= 1
+
+            # Calculate the final damage
+            if not include_overkill_damage:
+                enemy_health = max(0, enemy_health)
+                enemy_shield = max(0, enemy_shield)
+            total_damage_dealt = target.health + target.shield - enemy_health - enemy_shield
+            # Append it to the list of damages, e.g. both thor and queen attacks work on colossus
+            damages.append(total_damage_dealt)
+
+        # If no attack was found, return 0
+        if not damages:
+            return 0
+        return max(damages)
+
+    def _calculate_dps_vs_target(
+        self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
+    ) -> float:
+        # if self.unit is marine: check if stim buff is active
+        # if self.unit is zergling: check if upgrade is active
+        # next patch: if self.unit is adept: check if attackspeed buff is active
+        # if enemy is under influence of guardian shield: subtract damage by 2 if attack is projectile
+        # TODO other units that have upgrade or buff that influences damage
+        return 0
+
     @property
     def facing(self) -> float:
         """ Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
