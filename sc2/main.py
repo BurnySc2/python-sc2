@@ -122,7 +122,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
     while True:
         if iteration != 0:
             if realtime:
-                # TODO: check what happens if a bot takes too long to respond, so that the requested game_loop might already be in the past
+                # TODO: check what happens if a bot takes too long to respond for realtime=True, so that the requested game_loop might already be in the past
                 state = await client.observation(gs.game_loop + client.game_step)
             else:
                 state = await client.observation()

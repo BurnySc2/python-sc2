@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 from .cache import property_immutable_cache, property_mutable_cache
 from .constants import (
     transforming,
+    DAMAGE_BONUS_PER_UPGRADE,
     IS_STRUCTURE,
     IS_LIGHT,
     IS_ARMORED,
@@ -291,6 +292,7 @@ class Unit:
     @property
     def movement_speed(self) -> float:
         """ Returns the movement speed of the unit. Does not include upgrades or buffs. """
+        # TODO: use bot object to calculate if unit is zerg unit and if it is on creep, and if it your own unit: check for movement speed upgrades (e.g. zergling, hydra, ultralisk) or buffs (stimpack, time warp slow, fungal), perhaps write a second property function for this
         return self._type_data._proto.movement_speed
 
     @property
@@ -483,7 +485,8 @@ class Unit:
             return 0
         if not self.can_attack_air and target.is_flying:
             return 0
-        # Inaccurate for enemy ultralisks with armor upgrade:
+        # Inaccurate for enemy ultralisks with armor upgrade
+        # TODO add armor upgrade if target is target._proto.alliance == IS_MINE
         enemy_armor: float = target.armor + target.armor_upgrade_level
         enemy_shield_armor: float = target.shield_upgrade_level
         if ignore_armor:
@@ -499,17 +502,35 @@ class Unit:
             enemy_health: float = target.health
             enemy_shield: float = target.shield
             total_attacks: int = weapon.attacks
-            # TODO: if unit has weapon upgrades, add to damage per attack
-            damage_per_attack: float = weapon.damage + self.attack_upgrade_level
+            bonus_damage_per_upgrade = (
+                0
+                if not self.attack_upgrade_level
+                else DAMAGE_BONUS_PER_UPGRADE.get(self.type_id, {}).get(weapon.type, {}).get(None, 1)
+            )
+            damage_per_attack: float = weapon.damage + self.attack_upgrade_level * bonus_damage_per_upgrade
             # Remaining damage after all damage is dealt to shield
             remaining_damage: float = 0
 
             # Calculate bonus damage against target
             boni: List[float] = []
+            # TODO: hardcode hellbats when they have blueflame or attack upgrades
             for bonus in weapon.damage_bonus:
-                # TODO: if unit has weapon upgrades, add to bonus per attack
+                # More about damage bonus https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L55
                 if bonus.attribute in target._type_data.attributes:
-                    boni.append(bonus.bonus)
+                    bonus_damage_per_upgrade = (
+                        0
+                        if not self.attack_upgrade_level
+                        else DAMAGE_BONUS_PER_UPGRADE.get(self.type_id, {}).get(weapon.type, {}).get(bonus.attribute, 0)
+                    )
+                    # Hardcode blueflame damage bonus from hellions
+                    if (
+                        bonus.attribute == IS_LIGHT
+                        and self.type_id == UnitTypeId.HELLION
+                        and UpgradeId.HIGHCAPACITYBARRELS in self._bot_object.state.upgrades
+                    ):
+                        bonus_damage_per_upgrade += 5
+                    # TODO buffs e.g. void ray charge beam vs armored
+                    boni.append(bonus.bonus + self.attack_upgrade_level * bonus_damage_per_upgrade)
             if boni:
                 damage_per_attack += max(boni)
 

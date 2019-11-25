@@ -792,10 +792,20 @@ def test_unit():
     marauder1 = Unit(marauder_proto, random_bot_object)
     marauder_15_hp = Unit(marauder_proto, random_bot_object)
     marauder_15_hp._proto.health = 15
+    # Marauder1 should deal now 10+10vs_armored = 20 damage, but other marauder has 1 armor, so resulting damage should be 19
     assert marauder1.calculate_damage_vs_target(marauder_15_hp) == 19
     assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True) == 20
     assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False) == 15
     assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False) == 15
+
+    marauder1._proto.attack_upgrade_level = 2
+    marauder_15_hp._proto.armor_upgrade_level = 1
+    # Marauder1 should deal now 12+12vs_armored = 24 damage, but other marauder has 2 armor, so resulting damage should be 22
+    assert marauder1.calculate_damage_vs_target(marauder_15_hp) == 22
+    assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True) == 24
+    assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False) == 15
+    assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False) == 15
+
 
 
 def test_units():

@@ -6,6 +6,7 @@ import random
 import time
 from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from .cache import property_cache_forever, property_cache_once_per_frame
 from .constants import (
@@ -1568,6 +1569,21 @@ class BotAI(DistanceCalculation):
         await self._client._send_debug()
 
         return self.state.game_loop
+
+    async def _advance_steps(self, steps: int):
+        """ Advances the game loop by amount of 'steps'. This function is meant to be used as a debugging and testing tool only.
+        If you are using this, please be aware of the consequences, e.g. 'self.units' will be filled with completely new data. """
+        old_game_loop = self.state.game_loop
+        await self._after_step()
+        # Advance simulation by exactly "steps" frames
+        await self.client.step(steps)
+        state = await self.client.observation()
+        gs = GameState(state.observation)
+        proto_game_info = await self.client._execute(game_info=sc_pb.RequestGameInfo())
+        self._prepare_step(gs, proto_game_info)
+        # print(f"Advanced from game loop ({old_game_loop}) to ({self.state.game_loop})")
+        # await self.issue_events()
+        # await self.on_step(-1)
 
     async def issue_events(self):
         """ This function will be automatically run from main.py and triggers the following functions:

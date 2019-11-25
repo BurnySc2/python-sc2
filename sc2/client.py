@@ -139,9 +139,10 @@ class Client(Protocol):
 
         return result
 
-    async def step(self):
+    async def step(self, step_size: int = None):
         """ EXPERIMENTAL: Change self._client.game_step during the step function to increase or decrease steps per second """
-        return await self._execute(step=sc_pb.RequestStep(count=self.game_step))
+        step_size = step_size or self.game_step
+        return await self._execute(step=sc_pb.RequestStep(count=step_size))
 
     async def get_game_data(self) -> GameData:
         result = await self._execute(

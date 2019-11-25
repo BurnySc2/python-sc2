@@ -8,11 +8,15 @@ Usage:
 cd into python-sc2/ directory
 docker build -t test_image -f test/Dockerfile .
 docker run test_image -c "python test/travis_test_script.py test/autotest_bot.py"
+
+Or if you want to run from windows:
+pipenv run python test/travis_test_script.py test/autotest_bot.py
 """
 
 retries = 10
 # My maxout bot (reaching 200 supply in sc2) took 110 - 140 real seconds for 7 minutes in game time
-timeout_time = 3 * 60
+# How long the script should run before it will be killed:
+timeout_time = 5 * 60  # 5 minutes real time
 
 
 if len(sys.argv) > 1:
