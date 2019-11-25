@@ -100,6 +100,7 @@ class Unit:
         self._bot_object: BotAI = bot_object
         # Used by property_immutable_cache
         self.cache = {}
+        self.game_loop: int = bot_object.state.game_loop
 
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
@@ -364,6 +365,21 @@ class Unit:
         if self._proto.energy_max == 0:
             return 0
         return self._proto.energy / self._proto.energy_max
+
+    @property
+    def age_in_frames(self) -> int:
+        """ Returns how old the unit object data is (in game frames). This age does not reflect the unit was created / trained / morphed! """
+        return self._bot_object.state.game_loop - self.game_loop
+
+    @property
+    def age(self) -> float:
+        """ Returns how old the unit object data is (in game seconds). This age does not reflect when the unit was created / trained / morphed! """
+        return (self._bot_object.state.game_loop - self.game_loop) / 22.4
+
+    @property
+    def is_memory(self) -> bool:
+        """ Returns True if this Unit object is referenced from the future and is outdated. """
+        return self.game_loop != self._bot_object.state.game_loop
 
     @property_immutable_cache
     def is_snapshot(self) -> bool:
