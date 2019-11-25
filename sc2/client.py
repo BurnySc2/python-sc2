@@ -508,7 +508,7 @@ class Client(Protocol):
         self, p: Union[Unit, Point2, Point3], r: Union[int, float], color: Union[tuple, list, Point3] = None
     ):
         """ Draws a sphere at point p with radius r. """
-        self._debug_boxes.append(DrawItemSphere(start_point=p, radius=r, color=color))
+        self._debug_spheres.append(DrawItemSphere(start_point=p, radius=r, color=color))
 
     async def _send_debug(self):
         """ Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.

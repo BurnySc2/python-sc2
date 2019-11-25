@@ -38,13 +38,13 @@ from .position import Point2, Point3
 from .unit import Unit
 from .units import Units
 from .game_data import Cost
+from .unit_command import UnitCommand
 
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from .game_info import GameInfo, Ramp
     from .client import Client
-    from .unit_command import UnitCommand
 
 
 class BotAI(DistanceCalculation):
@@ -1253,6 +1253,7 @@ class BotAI(DistanceCalculation):
         :param subtract_supply:
         :param can_afford_check:
         """
+        assert isinstance(action, UnitCommand), f"Given unit command is not a command, but instead of type {type(action)}"
         if subtract_cost:
             cost: Cost = self._game_data.calculate_ability_cost(action.ability)
             if can_afford_check and not (self.minerals >= cost.minerals and self.vespene >= cost.vespene):
@@ -1276,6 +1277,26 @@ class BotAI(DistanceCalculation):
         self.actions.append(action)
         self.unit_tags_received_action.add(action.unit.tag)
         return True
+
+    async def synchronous_do(self, action: UnitCommand):
+        """
+        Not recommended. Use self.do instead to reduce lag.
+        This function is only useful for realtime=True in the first frame of the game to instantly produce a worker
+        and split workers on the mineral patches.
+        """
+        assert isinstance(action, UnitCommand), f"Given unit command is not a command, but instead of type {type(action)}"
+        if not self.can_afford(action.ability):
+            logger.warning(f"Cannot afford action {action}")
+            return ActionResult.Error
+        r = await self._client.actions(action)
+        if not r:  # success
+            cost = self._game_data.calculate_ability_cost(action.ability)
+            self.minerals -= cost.minerals
+            self.vespene -= cost.vespene
+            self.unit_tags_received_action.add(action.unit.tag)
+        else:
+            logger.error(f"Error: {r} (action: {action})")
+        return r
 
     async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
         """ Used internally by main.py automatically, use self.do() instead!
@@ -1759,6 +1780,14 @@ class BotAI(DistanceCalculation):
             print(f"Enemy unit left vision, last known location: {last_known_unit.position}")
 
         :param unit_tag:
+        """
+
+    async def on_before_start(self):
+        """
+        Override this in your bot class. This function is called before "on_start"
+        and before "prepare_first_step" that calculates expansion locations.
+        Not all data is available yet.
+        This function is useful in realtime=True mode to split your workers or start producing the first worker.
         """
 
     async def on_start(self):

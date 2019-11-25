@@ -339,6 +339,15 @@ class Unit:
             return 0
         return self._proto.shield / self._proto.shield_max
 
+    @property_immutable_cache
+    def shield_health_percentage(self) -> float:
+        """ Returns the percentage of combined shield + hp points the unit has.
+        Also takes build progress into account. """
+        max_ = (self._proto.shield_max + self._proto.health_max) * self.build_progress
+        if max_ == 0:
+            return 0
+        return (self._proto.shield + self._proto.health) / max_
+
     @property
     def energy(self) -> float:
         """ Returns the amount of energy the unit has. Returns 0 for units without energy. """
@@ -467,12 +476,15 @@ class Unit:
         self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
     ) -> float:
         """
-        Returns the properly calculated damage against the target unit. Returns 0 if this unit can't attack the target unit.
+        Returns the properly calculated damage per full-attack against the target unit.
+        Returns 0 if this unit can't attack the target unit.
 
-        If 'include_overkill_damage=True' and the unit deals 10 damage, the target unit has 5 hp and 0 armor, the target unit would result in -5hp, so the returning damage would be 10.
+        If 'include_overkill_damage=True' and the unit deals 10 damage, the target unit has 5 hp and 0 armor,
+        the target unit would result in -5hp, so the returning damage would be 10.
         For 'include_overkill_damage=False' this function would return 5.
 
-        If 'ignore_armor=False' and the unit deals 10 damage, the target unit has 20 hp and 5 armor, the target unit would result in 15hp, so the returning damage would be 5.
+        If 'ignore_armor=False' and the unit deals 10 damage, the target unit has 20 hp and 5 armor,
+        the target unit would result in 15hp, so the returning damage would be 5.
         For 'ignore_armor=True' this function would return 10.
 
         :param target:
