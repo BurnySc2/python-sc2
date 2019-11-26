@@ -712,7 +712,6 @@ def test_unit():
     # assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False)[0] == 15
 
 
-
 def test_units():
     bot: BotAI = random_bot_object
     scvs = bot.workers

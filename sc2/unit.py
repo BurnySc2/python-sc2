@@ -490,10 +490,11 @@ class Unit:
 
     def calculate_damage_vs_target(
         self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
-    ) -> float:
+    ) -> Tuple[float, float, float]:
         """
+        Returns a tuple of: [potential damage against target, attack speed, attack range]
         Returns the properly calculated damage per full-attack against the target unit.
-        Returns 0 if this unit can't attack the target unit.
+        Returns (0, 0, 0) if this unit can't attack the target unit.
 
         If 'include_overkill_damage=True' and the unit deals 10 damage, the target unit has 5 hp and 0 armor,
         the target unit would result in -5hp, so the returning damage would be 10.
@@ -508,22 +509,32 @@ class Unit:
         :param include_overkill_damage:
         """
         if not self.can_attack:
-            return 0
+            return 0, 0, 0
         if not self.can_attack_ground and not target.is_flying:
-            return 0
+            return 0, 0, 0
         if not self.can_attack_air and target.is_flying:
-            return 0
-        # Inaccurate for enemy ultralisks with armor upgrade
-        # TODO add armor upgrade if target is target._proto.alliance == IS_MINE
-        enemy_armor: float = target.armor + target.armor_upgrade_level
-        enemy_shield_armor: float = target.shield_upgrade_level
+            return 0, 0, 0
         if ignore_armor:
-            enemy_armor = 0
-            enemy_shield_armor = 0
+            enemy_armor: float = 0
+            enemy_shield_armor: float = 0
+        else:
+            # TODO: enemy is under influence of anti armor missile -> reduce armor and shield armor
+            enemy_armor: float = target.armor + target.armor_upgrade_level
+            enemy_shield_armor: float = target.shield_upgrade_level
+            # Check if target is ultralisk and target belongs to the bot, only then we can check if the bot has the armor upgrade researched, does not work if the enemy researched the upgrade
+            if (
+                target.type_id in {UnitTypeId.ULTRALISK, UnitTypeId.ULTRALISKBURROWED}
+                and target.is_mine
+                and UpgradeId.CHITINOUSPLATING in target._bot_object.state.upgrades
+            ):
+                enemy_armor += 2
 
-        required_target_type: Set[int] = TARGET_GROUND if not target.is_flying else TARGET_AIR
+        required_target_type: Set[
+            int
+        ] = TARGET_BOTH if target.type_id == UnitTypeId.COLOSSUS else TARGET_GROUND if not target.is_flying else TARGET_AIR
 
-        damages: List[int] = []
+        # Contains total damage, attack speed and attack range
+        damages: List[Tuple[float, float, float]] = []
         for weapon in self._weapons:
             if weapon.type not in required_target_type:
                 continue
@@ -567,7 +578,6 @@ class Unit:
                 # Shield-armor has to be applied
                 while total_attacks > 0 and enemy_shield > 0:
                     # TODO: subtract if unit's attack is projctile and enemy unit is under influence of guardian shield
-                    # TODO: enemy is under influence of anti armor missile
                     enemy_shield -= damage_per_attack - enemy_shield_armor
                     total_attacks -= 1
                 if enemy_shield < 0:
@@ -579,7 +589,6 @@ class Unit:
                 enemy_health -= max(0.5, remaining_damage - enemy_armor)
             while total_attacks > 0 and (include_overkill_damage or enemy_health > 0):
                 # TODO: subtract if unit's attack is projctile and enemy unit is under influence of guardian shield
-                # TODO: enemy is under influence of anti armor missile
                 enemy_health -= max(0.5, damage_per_attack - enemy_armor)
                 total_attacks -= 1
 
@@ -589,22 +598,89 @@ class Unit:
                 enemy_shield = max(0, enemy_shield)
             total_damage_dealt = target.health + target.shield - enemy_health - enemy_shield
             # Append it to the list of damages, e.g. both thor and queen attacks work on colossus
-            damages.append(total_damage_dealt)
+            weapon_speed: float = weapon.speed
+            weapon_range: float = weapon.range
+            # Unit modifiers: buffs and upgrades that affect weapon speed and weapon range
+            if self.type_id in {
+                UnitTypeId.ZERGLING,
+                UnitTypeId.MARINE,
+                UnitTypeId.MARAUDER,
+                UnitTypeId.ADEPT,
+                UnitTypeId.HYDRALISK,
+                UnitTypeId.PHOENIX,
+                UnitTypeId.PLANETARYFORTRESS,
+                UnitTypeId.MISSILETURRET,
+                UnitTypeId.AUTOTURRET,
+            }:
+                if (
+                    self.type_id == UnitTypeId.ZERGLING
+                    # Attack speed calculation only works for our unit
+                    and self.is_mine
+                    and UpgradeId.ZERGLINGATTACKSPEED in self._bot_object.state.upgrades
+                ):
+                    # 0.696044921875 for zerglings divided through 1.4 equals (+40% attack speed bonus from the upgrade):
+                    weapon_speed /= 1.4
+                elif (
+                    # Adept ereceive 45% attack speed bonus from glaives
+                    self.type_id == UnitTypeId.ADEPT
+                    and self.is_mine
+                    and UpgradeId.ADEPTPIERCINGATTACK in self._bot_object.state.upgrades
+                ):
+                    # TODO next patch: if self.type_id is adept: check if attackspeed buff is active, instead of upgrade
+                    weapon_speed /= 1.45
+                elif self.type_id == UnitTypeId.MARINE and BuffId.STIMPACK in self.buffs:
+                    # Marine and marauder receive 50% attack speed bonus from stim
+                    weapon_speed /= 1.5
+                elif self.type_id == UnitTypeId.MARAUDER and BuffId.STIMPACKMARAUDER in self.buffs:
+                    weapon_speed /= 1.5
+                elif (
+                    self.type_id == UnitTypeId.HYDRALISK
+                    and self.is_mine
+                    and UpgradeId.EVOLVEGROOVEDSPINES in self._bot_object.state.upgrades
+                ):
+                    weapon_range += 1
+                elif (
+                    self.type_id == UnitTypeId.PHOENIX
+                    and self.is_mine
+                    and UpgradeId.PHOENIXRANGEUPGRADE in self._bot_object.state.upgrades
+                ):
+                    weapon_range += 2
+                elif (
+                    self.type_id == UnitTypeId.PLANETARYFORTRESS
+                    and self.is_mine
+                    and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
+                ):
+                    weapon_range += 1
+                elif (
+                    self.type_id == UnitTypeId.MISSILETURRET
+                    and self.is_mine
+                    and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
+                ):
+                    weapon_range += 1
+                elif (
+                    self.type_id == UnitTypeId.AUTOTURRET
+                    and self.is_mine
+                    and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
+                ):
+                    weapon_range += 1
 
-        # If no attack was found, return 0
+            damages.append((total_damage_dealt, weapon_speed, weapon_range))
+
+        # If no attack was found, return (0, 0, 0)
         if not damages:
-            return 0
-        return max(damages)
+            return 0, 0, 0
+        # Returns: total potential damage, attack speed, attack range
+        return max(damages, key=lambda damage_tuple: damage_tuple[0])
 
-    def _calculate_dps_vs_target(
+    def calculate_dps_vs_target(
         self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
     ) -> float:
-        # if self.unit is marine: check if stim buff is active
-        # if self.unit is zergling: check if upgrade is active
-        # next patch: if self.unit is adept: check if attackspeed buff is active
-        # if enemy is under influence of guardian shield: subtract damage by 2 if attack is projectile
-        # TODO other units that have upgrade or buff that influences damage
-        return 0
+        """ Returns the DPS against the given target. """
+        calc_tuple: Tuple[float, float, float] = self.calculate_damage_vs_target(
+            target, ignore_armor, include_overkill_damage
+        )
+        # TODO fix for real time? The result may have to be multiplied by 1.4 because of game_speed=normal
+        return calc_tuple[0] / calc_tuple[1]
 
     @property
     def facing(self) -> float:
