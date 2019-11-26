@@ -42,103 +42,6 @@ from sc2.data import TargetType
 from sc2.data import Attribute
 
 
-class FakeClass:
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self.__dict__})"
-
-
-# class FakePoint(FakeClass):
-#     def __init__(self, attributes_dict: dict):
-#         self.__dict__.update(attributes_dict)
-
-# https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L53
-class FakeDamageBonus(FakeClass):
-    def __init__(self, attributes_dict: dict):
-        self.__dict__.update(attributes_dict)
-
-
-# Marauder weapon example:
-marauder_damage_bonus = FakeDamageBonus(
-    {
-        # https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L39
-        "attribute": Attribute.Armored.value,
-        "bonus": 10,
-    }
-)
-
-# https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L58
-class FakeWeapon(FakeClass):
-    def __init__(self, attributes_dict: dict):
-        self.__dict__.update(attributes_dict)
-
-
-# Marauder example:
-marauder_weapon = FakeWeapon(
-    {
-        "type": TargetType.Ground.value,  # TargetType.Air.value, TargetType.Any.value}
-        "damage": 10.0,
-        "damage_bonus": [marauder_damage_bonus],
-        "attacks": 1,
-        "range": 6.0,
-        "speed": 1.5,
-    }
-)
-
-
-class FakeProto(FakeClass):
-    def __init__(self, attributes_dict: dict):
-        self.__dict__.update(attributes_dict)
-
-
-# Marauder proto example
-marauder_proto = FakeProto(
-    {
-        "health": 125,
-        "health_max": 125,
-        "shield": 0,
-        "shield_max": 0,
-        "energy": 0,
-        "energy_max": 0,
-        "is_flying": False,
-        "unit_type": UnitTypeId.MARAUDER.value,
-        "buff_ids": [],
-        "attack_upgrade_level": 0,
-        "armor_upgrade_level": 0,
-        "shield_upgrade_level": 0,
-    }
-)
-
-# https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L72
-class FakeTypeData(FakeClass):
-    def __init__(self, attributes_dict: dict):
-        self.__dict__.update(attributes_dict)
-
-
-# Marauder type data example
-marauder_type_data = FakeProto(
-    {
-        "unit_id": UnitTypeId.MARAUDER.value,
-        "mineral_cost": 100,
-        "vespene_cost": 25,
-        "food_required": 2,
-        "movement_speed": 2.25,
-        "armor": 1,
-        "weapons": [marauder_weapon],
-        "attributes": [Attribute.Armored.value],
-    }
-)
-
-
-# https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/raw.proto#L99
-class FakeUnit(FakeClass):
-    def __init__(self, attributes_dict: dict):
-        self.__dict__.update(attributes_dict)
-
-
-# Marauder example
-marauder = Unit(marauder_proto, None)
-
-
 def get_map_specific_bots() -> Iterable[BotAI]:
     folder = os.path.dirname(__file__)
     subfolder_name = "pickle_data"
@@ -784,27 +687,29 @@ def test_unit():
     # assert not scv.has_buff(buff ID)
     # assert not townhall.has_buff(buff ID)
 
-    # assert scv.calculate_damage_vs_target(townhall) == 3
-    # assert scv.calculate_damage_vs_target(townhall, ignore_armor=True) == 5
-    # assert townhall.calculate_damage_vs_target(scv) == 0
-    # assert townhall.calculate_damage_vs_target(scv, ignore_armor=True) == 0
+    assert scv.calculate_damage_vs_target(townhall)[0] == 4
+    assert scv.calculate_damage_vs_target(townhall, ignore_armor=True)[0] == 5
+    assert townhall.calculate_damage_vs_target(scv) == (0, 0, 0)
+    assert townhall.calculate_damage_vs_target(scv, ignore_armor=True) == (0, 0, 0)
 
-    marauder1 = Unit(marauder_proto, random_bot_object)
-    marauder_15_hp = Unit(marauder_proto, random_bot_object)
-    marauder_15_hp._proto.health = 15
-    # Marauder1 should deal now 10+10vs_armored = 20 damage, but other marauder has 1 armor, so resulting damage should be 19
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp) == 19
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True) == 20
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False) == 15
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False) == 15
+    # TODO create one of each unit in the pickle tests to do damage calculations without having to create a mock class for each unit
 
-    marauder1._proto.attack_upgrade_level = 2
-    marauder_15_hp._proto.armor_upgrade_level = 1
-    # Marauder1 should deal now 12+12vs_armored = 24 damage, but other marauder has 2 armor, so resulting damage should be 22
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp) == 22
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True) == 24
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False) == 15
-    assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False) == 15
+    # marauder1 = Unit(marauder_proto, random_bot_object)
+    # marauder_15_hp = Unit(marauder_proto, random_bot_object)
+    # marauder_15_hp._proto.health = 15
+    # # Marauder1 should deal now 10+10vs_armored = 20 damage, but other marauder has 1 armor, so resulting damage should be 19
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp)[0] == 19
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True)[0] == 20
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False)[0] == 15
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False)[0] == 15
+    #
+    # marauder1._proto.attack_upgrade_level = 2
+    # marauder_15_hp._proto.armor_upgrade_level = 1
+    # # Marauder1 should deal now 12+12vs_armored = 24 damage, but other marauder has 2 armor, so resulting damage should be 22
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp)[0] == 22
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True)[0] == 24
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False)[0] == 15
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False)[0] == 15
 
 
 
