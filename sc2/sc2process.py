@@ -129,10 +129,12 @@ class SC2Process:
         ]
         if self._sc2_version:
 
-            def special_match(strg: str, search=re.compile(r"([0-9]+\.[0-9]+?\.?[0-9]+)").search):
+            def special_match(strg: str):
                 """ Test if string contains only numbers and dots, which is a valid version string. """
-                return not bool(search(strg))
-
+                for version in self.versions:
+                    if version["label"] == strg:
+                        return True
+                return False
             valid_version_string = special_match(self._sc2_version)
             if valid_version_string:
                 self._data_hash = self.find_data_hash(self._sc2_version)
@@ -142,7 +144,7 @@ class SC2Process:
 
             else:
                 logger.warning(
-                    f'The submitted version string in sc2.rungame() function call (sc2_version="{self._sc2_version}") does not match a normal version string. Running latest version instead.'
+                    f'The submitted version string in sc2.rungame() function call (sc2_version="{self._sc2_version}") was not found in versions.py. Running latest version instead.'
                 )
 
         if self._data_hash:
