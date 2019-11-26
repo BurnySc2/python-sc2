@@ -309,18 +309,9 @@ def get_upgrade_abilities(data):
                 if ability_id not in ability_to_upgrade_dict:
                     continue
 
-                greater_spire_as_requirement: Set[AbilityId] = {
-                    AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
-                    AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL3,
-                    AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
-                    AbilityId.RESEARCH_ZERGFLYERARMORLEVEL3,
-                }
-
                 required_building = None
                 requirements = ability_info.get("requirements", [])
-                if ability_id in greater_spire_as_requirement:
-                    required_building = UnitTypeId.GREATERSPIRE
-                elif requirements:
+                if requirements:
                     req_building_id_value = next(
                         (req["building"] for req in requirements if req.get("building", 0)), None
                     )

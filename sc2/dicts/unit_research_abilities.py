@@ -233,22 +233,22 @@ RESEARCH_INFO: Dict[
         },
         UpgradeId.ZERGFLYERARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.LAIR,
         },
         UpgradeId.ZERGFLYERARMORSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL3,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.HIVE,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL1: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.LAIR,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL3,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.HIVE,
         },
     },
     UnitTypeId.HATCHERY: {
@@ -309,22 +309,22 @@ RESEARCH_INFO: Dict[
         },
         UpgradeId.ZERGFLYERARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.LAIR,
         },
         UpgradeId.ZERGFLYERARMORSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL3,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.HIVE,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL1: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.LAIR,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL3,
-            "required_building": UnitTypeId.GREATERSPIRE,
+            "required_building": UnitTypeId.HIVE,
         },
     },
     UnitTypeId.STARPORTTECHLAB: {
