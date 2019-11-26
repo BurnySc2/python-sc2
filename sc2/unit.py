@@ -510,10 +510,12 @@ class Unit:
         """
         if not self.can_attack:
             return 0, 0, 0
-        if not self.can_attack_ground and not target.is_flying:
-            return 0, 0, 0
-        if not self.can_attack_air and target.is_flying:
-            return 0, 0, 0
+        if target.type_id != UnitTypeId.COLOSSUS:
+            if not self.can_attack_ground and not target.is_flying:
+                return 0, 0, 0
+            if not self.can_attack_air and target.is_flying:
+                return 0, 0, 0
+        target_has_guardian_shield: bool = False
         if ignore_armor:
             enemy_armor: float = 0
             enemy_shield_armor: float = 0
@@ -521,13 +523,29 @@ class Unit:
             # TODO: enemy is under influence of anti armor missile -> reduce armor and shield armor
             enemy_armor: float = target.armor + target.armor_upgrade_level
             enemy_shield_armor: float = target.shield_upgrade_level
-            # Check if target is ultralisk and target belongs to the bot, only then we can check if the bot has the armor upgrade researched, does not work if the enemy researched the upgrade
+            # Ultralisk armor upgrade, only works if target belongs to the bot calling this function
             if (
                 target.type_id in {UnitTypeId.ULTRALISK, UnitTypeId.ULTRALISKBURROWED}
                 and target.is_mine
                 and UpgradeId.CHITINOUSPLATING in target._bot_object.state.upgrades
             ):
                 enemy_armor += 2
+            # Guardian shield adds 2 armor
+            if BuffId.GUARDIANSHIELD in target.buffs:
+                target_has_guardian_shield = True
+            # Anti armor missile of raven
+            if BuffId.RAVENSHREDDERMISSILETINT in target.buffs:
+                enemy_armor -= 2
+                enemy_shield_armor -= 2
+
+        # Fast return for battlecruiser because they have no weapon in the API
+        if self.type_id == UnitTypeId.BATTLECRUISER:
+            if target_has_guardian_shield:
+                enemy_armor += 2
+                enemy_shield_armor += 2
+            weapon_damage = 8 + self.attack_upgrade_level if not target.is_flying else 5 + self.attack_upgrade_level
+            weapon_damage = weapon_damage - enemy_shield_armor if target.shield else weapon_damage - enemy_armor
+            return weapon_damage, 0.224, 6
 
         required_target_type: Set[
             int
@@ -541,6 +559,8 @@ class Unit:
             enemy_health: float = target.health
             enemy_shield: float = target.shield
             total_attacks: int = weapon.attacks
+            weapon_speed: float = weapon.speed
+            weapon_range: float = weapon.range
             bonus_damage_per_upgrade = (
                 0
                 if not self.attack_upgrade_level
@@ -575,21 +595,28 @@ class Unit:
 
             # Subtract enemy unit's shield
             if target.shield > 0:
+                # Fix for ranged units + guardian shield
+                enemy_shield_armor_temp = (
+                    enemy_shield_armor + 2 if target_has_guardian_shield and weapon_range >= 2 else enemy_shield_armor
+                )
                 # Shield-armor has to be applied
                 while total_attacks > 0 and enemy_shield > 0:
-                    # TODO: subtract if unit's attack is projctile and enemy unit is under influence of guardian shield
-                    enemy_shield -= damage_per_attack - enemy_shield_armor
+                    # Guardian shield correction
+                    enemy_shield -= max(0.5, damage_per_attack - enemy_shield_armor_temp)
                     total_attacks -= 1
                 if enemy_shield < 0:
                     remaining_damage = -enemy_shield
                     enemy_shield = 0
 
+            # TODO roach and hydra in melee range are not affected by guardian shield
+            # Fix for ranged units if enemy has guardian shield buff
+            enemy_armor_temp = enemy_armor + 2 if target_has_guardian_shield and weapon_range >= 2 else enemy_armor
             # Subtract enemy unit's HP
             if remaining_damage > 0:
-                enemy_health -= max(0.5, remaining_damage - enemy_armor)
+                enemy_health -= max(0.5, remaining_damage - enemy_armor_temp)
             while total_attacks > 0 and (include_overkill_damage or enemy_health > 0):
-                # TODO: subtract if unit's attack is projctile and enemy unit is under influence of guardian shield
-                enemy_health -= max(0.5, damage_per_attack - enemy_armor)
+                # Guardian shield correction
+                enemy_health -= max(0.5, damage_per_attack - enemy_armor_temp)
                 total_attacks -= 1
 
             # Calculate the final damage
@@ -597,9 +624,6 @@ class Unit:
                 enemy_health = max(0, enemy_health)
                 enemy_shield = max(0, enemy_shield)
             total_damage_dealt = target.health + target.shield - enemy_health - enemy_shield
-            # Append it to the list of damages, e.g. both thor and queen attacks work on colossus
-            weapon_speed: float = weapon.speed
-            weapon_range: float = weapon.range
             # Unit modifiers: buffs and upgrades that affect weapon speed and weapon range
             if self.type_id in {
                 UnitTypeId.ZERGLING,
@@ -626,7 +650,7 @@ class Unit:
                     and self.is_mine
                     and UpgradeId.ADEPTPIERCINGATTACK in self._bot_object.state.upgrades
                 ):
-                    # TODO next patch: if self.type_id is adept: check if attackspeed buff is active, instead of upgrade
+                    # TODO next patch: if self.type_id is adept: check if attack speed buff is active, instead of upgrade
                     weapon_speed /= 1.45
                 elif self.type_id == UnitTypeId.MARINE and BuffId.STIMPACK in self.buffs:
                     # Marine and marauder receive 50% attack speed bonus from stim
@@ -646,24 +670,13 @@ class Unit:
                 ):
                     weapon_range += 2
                 elif (
-                    self.type_id == UnitTypeId.PLANETARYFORTRESS
-                    and self.is_mine
-                    and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
-                ):
-                    weapon_range += 1
-                elif (
-                    self.type_id == UnitTypeId.MISSILETURRET
-                    and self.is_mine
-                    and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
-                ):
-                    weapon_range += 1
-                elif (
-                    self.type_id == UnitTypeId.AUTOTURRET
+                    self.type_id in {UnitTypeId.PLANETARYFORTRESS, UnitTypeId.MISSILETURRET, UnitTypeId.AUTOTURRET}
                     and self.is_mine
                     and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
                 ):
                     weapon_range += 1
 
+            # Append it to the list of damages, e.g. both thor and queen attacks work on colossus
             damages.append((total_damage_dealt, weapon_speed, weapon_range))
 
         # If no attack was found, return (0, 0, 0)

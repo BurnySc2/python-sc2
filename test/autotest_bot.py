@@ -83,6 +83,20 @@ class TestBot(sc2.BotAI):
             print("Tests completed after {} seconds".format(round(self.time, 1)))
             exit(0)
 
+    async def clean_up_center(self):
+        map_center = self.game_info.map_center
+        # Remove everything close to map center
+        my_units = self.units | self.structures
+        if my_units:
+            my_units = my_units.closer_than(20, map_center)
+        if my_units:
+            await self.client.debug_kill_unit(my_units)
+        enemy_units = self.enemy_units | self.enemy_structures
+        if enemy_units:
+            enemy_units = enemy_units.closer_than(20, map_center)
+        if enemy_units:
+            await self.client.debug_kill_unit(enemy_units)
+
     # Test BotAI properties, starting conditions
     async def test_botai_properties(self):
         assert 1 <= self.player_id <= 2, self.player_id
@@ -388,8 +402,43 @@ class TestBot(sc2.BotAI):
         logger.warning("Action test 10 successful.")
         return
 
-    # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
+    # Trigger anti armor missile of raven against enemy unit and check if buff was received
     async def test_botai_actions11(self):
+        await self.clean_up_center()
+        await self._advance_steps(10)
+        await self.clean_up_center()
+        await self._advance_steps(10)
+
+        map_center = self.game_info.map_center
+
+        while not self.units(UnitTypeId.RAVEN):
+            await self.client.debug_create_unit([[UnitTypeId.RAVEN, 1, map_center, 1]])
+            await self._advance_steps(2)
+
+        while not self.enemy_units(UnitTypeId.INFESTOR):
+            await self.client.debug_create_unit([[UnitTypeId.INFESTOR, 1, map_center, 2]])
+            await self._advance_steps(2)
+
+        raven = self.units(UnitTypeId.RAVEN)[0]
+        # Set raven energy to max
+        await self.client.debug_set_unit_value(raven, 1, 200)
+        await self._advance_steps(4)
+
+        enemy = self.enemy_units(UnitTypeId.INFESTOR)[0]
+        while 1:
+            raven = self.units(UnitTypeId.RAVEN)[0]
+            self.do(raven(AbilityId.EFFECT_ANTIARMORMISSILE, enemy))
+            await self._advance_steps(2)
+            enemy = self.enemy_units(UnitTypeId.INFESTOR)[0]
+            if enemy.buffs:
+                # print(enemy.buffs, enemy.buff_duration_remain, enemy.buff_duration_max)
+                break
+
+        await self.clean_up_center()
+        await self._advance_steps(2)
+
+    # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
+    async def test_botai_actions12(self):
         upgrade_levels = [0, 1]
         attacker_units = [
             #
@@ -500,20 +549,7 @@ class TestBot(sc2.BotAI):
             defender: Unit = enemy_units.closest_to(map_center)
             return attacker, defender
 
-        async def clean_up():
-            # Remove everything close to map center
-            my_units = self.units | self.structures
-            if my_units:
-                my_units = my_units.closer_than(20, map_center)
-            if my_units:
-                await self.client.debug_kill_unit(my_units)
-            enemy_units = self.enemy_units | self.enemy_structures
-            if enemy_units:
-                enemy_units = enemy_units.closer_than(20, map_center)
-            if enemy_units:
-                await self.client.debug_kill_unit(enemy_units)
-
-        await clean_up()
+        await self.clean_up_center()
         await self._advance_steps(2)
 
         attacker: Unit
@@ -559,11 +595,11 @@ class TestBot(sc2.BotAI):
                     expected_damage: float = attacker.calculate_damage_vs_target(defender)[0]
                     # If expected damage is zero, it means that the attacker cannot attack the defender: skip test
                     if expected_damage == 0:
-                        await clean_up()
+                        await self.clean_up_center()
                         continue
                     # Thor antiground seems buggy sometimes and not reliable in tests, skip it
                     if attacker_type in {UnitTypeId.THOR, UnitTypeId.THORAP} and not defender.is_flying:
-                        await clean_up()
+                        await self.clean_up_center()
                         continue
 
                     real_damage = 0
@@ -593,7 +629,7 @@ class TestBot(sc2.BotAI):
                     ), f"Expected damage does not match real damage: Unit type {attacker_type} (attack upgrade: {attacker.attack_upgrade_level}) deals {real_damage} damage against {defender_type} (armor upgrade: {defender.armor_upgrade_level} and shield upgrade: {defender.shield_upgrade_level}) but calculated damage was {expected_damage}, attacker weapons: \n{attacker._weapons}"
 
                     # Cleanup
-                    await clean_up()
+                    await self.clean_up_center()
                     await self._advance_steps(1)
 
         # Hide map again
