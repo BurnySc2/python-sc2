@@ -4,25 +4,34 @@ An easy-to-use library for writing AI Bots for StarCraft II in Python 3. The ult
 
 **This library (currently) covers only the raw scripted interface.** At this time I don't intend to add support for graphics-based interfaces.
 
-Documentation is in [the Wiki](https://github.com/Dentosal/python-sc2/wiki).
+Documentation is in [the Wiki](https://github.com/Dentosal/python-sc2/wiki) and on [the documentation page](https://burnysc2.github.io/python-sc2/docs/index.html).
+For bot authors, looking directly at the files in the [sc2 folder](/sc2) can also be of benefit: bot_ai.py, unit.py, units.py, client.py, game_info.py and game_state.py. Most functions in those files have docstrings, example usages and type hinting.
 
-For automatically running multiple matches, check out [Dentosal/sc2-bot-match-runner](https://github.com/Dentosal/sc2-bot-match-runner).
+I am planning to change this fork more radically than the main repository, for bot performance benefits and to add functions to help new bot authors. This may break older bots in the future.
+
+For a list of ongoing changes and differences to the main repository of Dentosal, [check here](https://github.com/BurnySc2/python-sc2/issues/4).
 
 ## Installation
 
 By installing this library you agree to be bound by the terms of the [AI and Machine Learning License](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html).
 
-You'll need Python 3.6 or newer.
+For this fork, you'll need Python 3.7 or newer.
 
+Install the pypi package:
 ```
-pip3 install --user --upgrade sc2
+pip install --ugprade pipenv burnysc2
 ```
+or directly from develop branch:
+```
+pip install pipenv
+pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/archive/develop.zip
+```
+Both commands will override the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments.
 
-Please note that not all commits are released to PyPI. Releases are tagged with version number. You can see latest released versions from [tags page](https://github.com/Dentosal/python-sc2/tags).
-
-You'll also need an StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
+You'll need an StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
 
 You probably want some maps too. Official map downloads are available from [Blizzard/s2client-proto](https://github.com/Blizzard/s2client-proto#downloads). Notice: the map files are to be extracted into *subdirectories* of the `install-dir/Maps` directory.
+Maps that are run on the [SC2 AI Ladder](http://sc2ai.net/) and [SC2 AI Arena](https://ai-arena.net/) can be downloaded [here](http://wiki.sc2ai.net/Ladder_Maps) and [here](https://ai-arena.net/wiki/getting-started/#wiki-toc-maps).
 
 ### Running
 
@@ -48,10 +57,10 @@ from sc2 import run_game, maps, Race, Difficulty
 from sc2.player import Bot, Computer
 
 class WorkerRushBot(sc2.BotAI):
-    async def on_step(self, iteration):
+    async def on_step(self, iteration: int):
         if iteration == 0:
             for worker in self.workers:
-                await self.do(worker.attack(self.enemy_start_locations[0]))
+                self.do(worker.attack(self.enemy_start_locations[0]))
 
 run_game(maps.get("Abyssal Reef LE"), [
     Bot(Race.Zerg, WorkerRushBot()),
@@ -65,11 +74,11 @@ You can find more examples in the [`examples/`](/examples) folder.
 
 ## Help and support
 
-You have questions but don't want to create an issue? Join the [Starcraft 2 AI Discord](https://discordapp.com/invite/zXHU4wM). Questions about this repository can be asked in channel #python-sc2.
+You have questions but don't want to create an issue? Join the [Starcraft 2 AI Discord](https://discordapp.com/invite/zXHU4wM). Questions about this repository can be asked in text channel #python.
 
 ## Bug reports, feature requests and ideas
 
-If you have any issues, ideas or feedback, please create [a new issue](https://github.com/Dentosal/python-sc2/issues/new). Pull requests are also welcome!
+If you have any issues, ideas or feedback, please create [a new issue](https://github.com/BurnySc2/python-sc2/issues/new). Pull requests are also welcome!
 
 
 ## Contributing & style guidelines

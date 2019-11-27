@@ -12,11 +12,7 @@ class Portconfig:
 
     @property
     def as_json(self):
-        return json.dumps({
-            "shared": self.shared,
-            "server": self.server,
-            "players": self.players
-        })
+        return json.dumps({"shared": self.shared, "server": self.server, "players": self.players})
 
     @classmethod
     def from_json(cls, json_data):

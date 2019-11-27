@@ -1,3 +1,7 @@
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 from math import pi, sqrt, sin, cos, atan2
 import random
 from sc2.position import Point2, EPSILON

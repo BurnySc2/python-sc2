@@ -1,19 +1,22 @@
-from typing import Any, Dict, List, Optional, Set, Tuple, Union  # mypy type checking
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
+from .constants import FakeEffectID, FakeEffectRadii
 from .data import Alliance, DisplayType
 from .ids.effect_id import EffectId
-from .ids.upgrade_id import UpgradeId
 from .ids.unit_typeid import UnitTypeId
+from .ids.upgrade_id import UpgradeId
 from .pixel_map import PixelMap
 from .position import Point2, Point3
 from .power_source import PsionicMatrix
 from .score import ScoreDetails
-from .units import Units
-from .constants import geyser_ids, mineral_ids
 
 
 class Blip:
     def __init__(self, proto):
+        """
+        :param proto:
+        """
         self._proto = proto
 
     @property
@@ -44,7 +47,7 @@ class Blip:
     @property
     def position(self) -> Point2:
         """2d position of the blip."""
-        return self.position3d.to2
+        return Point2.from_proto(self._proto.pos)
 
     @property
     def position3d(self) -> Point3:
@@ -55,11 +58,16 @@ class Blip:
 class Common:
     ATTRIBUTES = [
         "player_id",
-        "minerals", "vespene",
-        "food_cap", "food_used",
-        "food_army", "food_workers",
-        "idle_worker_count", "army_count",
-        "warp_gate_count", "larva_count"
+        "minerals",
+        "vespene",
+        "food_cap",
+        "food_used",
+        "food_army",
+        "food_workers",
+        "idle_worker_count",
+        "army_count",
+        "warp_gate_count",
+        "larva_count",
     ]
 
     def __init__(self, proto):
@@ -71,85 +79,86 @@ class Common:
 
 
 class EffectData:
-    def __init__(self, proto):
+    def __init__(self, proto, fake=False):
+        """
+        :param proto:
+        :param fake:
+        """
         self._proto = proto
+        self.fake = fake
 
     @property
-    def id(self) -> EffectId:
-        return EffectId(self._proto.effect_id)
+    def id(self) -> Union[EffectId, str]:
+        if self.fake:
+            # Returns the string from constants.py, e.g. "KD8CHARGE"
+            return FakeEffectID[self._proto.unit_type]
+        else:
+            return EffectId(self._proto.effect_id)
 
     @property
-    def positions(self) -> List[Point2]:
-        return [Point2.from_proto(p) for p in self._proto.pos]
+    def positions(self) -> Set[Point2]:
+        if self.fake:
+            return {Point2.from_proto(self._proto.pos)}
+        else:
+            return {Point2.from_proto(p) for p in self._proto.pos}
+
+    @property
+    def alliance(self) -> Alliance:
+        return self._proto.alliance
+
+    @property
+    def owner(self) -> int:
+        return self._proto.owner
+
+    @property
+    def radius(self) -> float:
+        if self.fake:
+            return FakeEffectRadii[self._proto.unit_type]
+        else:
+            return self._proto.radius
+
+    def __repr__(self) -> str:
+        return f"{self.id} with radius {self.radius} at {self.positions}"
 
 
 class GameState:
-    def __init__(self, response_observation, game_data):
+    def __init__(self, response_observation):
+        """
+        :param response_observation:
+        """
+        self.response_observation = response_observation
         self.actions = response_observation.actions  # successful actions since last loop
         self.action_errors = response_observation.action_errors  # error actions since last loop
+
         # https://github.com/Blizzard/s2client-proto/blob/51662231c0965eba47d5183ed0a6336d5ae6b640/s2clientprotocol/sc2api.proto#L575
-        # TODO: implement alerts https://github.com/Blizzard/s2client-proto/blob/51662231c0965eba47d5183ed0a6336d5ae6b640/s2clientprotocol/sc2api.proto#L640
         self.observation = response_observation.observation
         self.observation_raw = self.observation.raw_data
+        self.alerts = self.observation.alerts
         self.player_result = response_observation.player_result
         self.chat = response_observation.chat
         self.common: Common = Common(self.observation.player_common)
-        self.psionic_matrix: PsionicMatrix = PsionicMatrix.from_proto(
-            self.observation.raw_data.player.power_sources
-        )  # what area pylon covers
-        self.game_loop: int = self.observation.game_loop  # game loop, 22.4 per second on faster game speed
 
-        self.score: ScoreDetails = ScoreDetails(
-            self.observation.score
-        )  # https://github.com/Blizzard/s2client-proto/blob/33f0ecf615aa06ca845ffe4739ef3133f37265a9/s2clientprotocol/score.proto#L31
+        # Area covered by Pylons and Warpprisms
+        self.psionic_matrix: PsionicMatrix = PsionicMatrix.from_proto(self.observation_raw.player.power_sources)
+        self.game_loop: int = self.observation.game_loop  # 22.4 per second on faster game speed
+
+        # https://github.com/Blizzard/s2client-proto/blob/33f0ecf615aa06ca845ffe4739ef3133f37265a9/s2clientprotocol/score.proto#L31
+        self.score: ScoreDetails = ScoreDetails(self.observation.score)
         self.abilities = self.observation.abilities  # abilities of selected units
-
-        # Fix for enemy units detected by my sensor tower, as blips have less unit information than normal visible units
-        visibleUnits, hiddenUnits, minerals, geysers, destructables, enemy, own = ([] for _ in range(7))
-
-        for unit in self.observation.raw_data.units:
-            if unit.is_blip:
-                hiddenUnits.append(unit)
-            else:
-                visibleUnits.append(unit)
-                # all destructable rocks except the one below the main base ramps
-                if unit.alliance == Alliance.Neutral.value and unit.radius > 1.5:
-                    destructables.append(unit)
-                elif unit.alliance == Alliance.Neutral.value:
-                    # mineral field enums
-                    if unit.unit_type in mineral_ids:
-                        minerals.append(unit)
-                    # geyser enums
-                    elif unit.unit_type in geyser_ids:
-                        geysers.append(unit)
-                elif unit.alliance == Alliance.Self.value:
-                    own.append(unit)
-                elif unit.alliance == Alliance.Enemy.value:
-                    enemy.append(unit)
-
-        self.own_units: Units = Units.from_proto(own, game_data)
-        self.enemy_units: Units = Units.from_proto(enemy, game_data)
-        self.mineral_field: Units = Units.from_proto(minerals, game_data)
-        self.vespene_geyser: Units = Units.from_proto(geysers, game_data)
-        self.resources: Units = Units.from_proto(minerals + geysers, game_data)
-        self.destructables: Units = Units.from_proto(destructables, game_data)
-        self.units: Units = Units.from_proto(visibleUnits, game_data)
         self.upgrades: Set[UpgradeId] = {UpgradeId(upgrade) for upgrade in self.observation_raw.player.upgrade_ids}
-        self.dead_units: Set[int] = {
-            dead_unit_tag for dead_unit_tag in self.observation_raw.event.dead_units
-        }  # set of unit tags that died this step - sometimes has multiple entries
 
-        self.blips: Set[Blip] = {Blip(unit) for unit in hiddenUnits}
-        self.visibility: PixelMap = PixelMap(self.observation_raw.map_state.visibility)
-        self.creep: PixelMap = PixelMap(self.observation_raw.map_state.creep)
+        # Set of unit tags that died this step
+        self.dead_units: Set[int] = {dead_unit_tag for dead_unit_tag in self.observation_raw.event.dead_units}
+        # self.visibility[point]: 0=Hidden, 1=Fogged, 2=Visible
+        self.visibility: PixelMap = PixelMap(self.observation_raw.map_state.visibility, mirrored=False)
+        # self.creep[point]: 0=No creep, 1=creep
+        self.creep: PixelMap = PixelMap(self.observation_raw.map_state.creep, in_bits=True, mirrored=False)
 
-        self.effects: Set[EffectData] = {
-            EffectData(effect) for effect in self.observation_raw.effects
-        }  # effects like ravager bile shot, lurker attack, everything in effect_id.py
+        # Effects like ravager bile shot, lurker attack, everything in effect_id.py
+        self.effects: Set[EffectData] = {EffectData(effect) for effect in self.observation_raw.effects}
         """ Usage:
         for effect in self.state.effects:
             if effect.id == EffectId.RAVAGERCORROSIVEBILECP:
                 positions = effect.positions
                 # dodge the ravager biles
         """
-

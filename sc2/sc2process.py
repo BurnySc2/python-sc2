@@ -1,21 +1,27 @@
-from typing import Any, Optional, List
-
-import sys
-import signal
-import time
 import asyncio
+import logging
 import os.path
 import shutil
-import tempfile
+import signal
 import subprocess
-import portpicker
-import aiohttp
+import sys
+import tempfile
+import time
+import json
+import re
+from typing import Any, List, Optional
 
-import logging
+import aiohttp
+import portpicker
+
+from .controller import Controller
+from .paths import Paths
+from sc2 import paths
+
+from sc2.versions import VERSIONS
+
 logger = logging.getLogger(__name__)
 
-from .paths import Paths
-from .controller import Controller
 
 class kill_switch:
     _to_kill: List[Any] = []
@@ -31,9 +37,18 @@ class kill_switch:
         for p in cls._to_kill:
             p._clean()
 
+
 class SC2Process:
-    def __init__(self, host: str = "127.0.0.1", port: Optional[int] = None, fullscreen: bool = False,
-                 render: bool = False) -> None:
+    def __init__(
+        self,
+        host: str = "127.0.0.1",
+        port: Optional[int] = None,
+        fullscreen: bool = False,
+        render: bool = False,
+        sc2_version: str = None,
+        base_build: str = None,
+        data_hash: str = None
+    ) -> None:
         assert isinstance(host, str)
         assert isinstance(port, int) or port is None
 
@@ -48,11 +63,17 @@ class SC2Process:
         self._process = None
         self._session = None
         self._ws = None
+        self._sc2_version = sc2_version
+        self._base_build = base_build
+        self._data_hash = data_hash
+
 
     async def __aenter__(self):
         kill_switch.add(self)
 
         def signal_handler(*args):
+            # unused arguments: signal handling library expects all signal
+            # callback handlers to accept two positional arguments
             kill_switch.kill_all()
 
         signal.signal(signal.SIGINT, signal_handler)
@@ -75,24 +96,70 @@ class SC2Process:
     def ws_url(self):
         return f"ws://{self._host}:{self._port}/sc2api"
 
+    @property
+    def versions(self):
+        """ Opens the versions.json file which origins from
+        https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json """
+        return VERSIONS
+
+    def find_data_hash(self, target_sc2_version: str):
+        """ Returns the data hash from the matching version string. """
+        version: dict
+        for version in self.versions:
+            if version["label"] == target_sc2_version:
+                return version["data-hash"]
+
     def _launch(self):
-        args = [
-            str(Paths.EXECUTABLE),
-            "-listen", self._host,
-            "-port", str(self._port),
-            "-displayMode", "1" if self._fullscreen else "0",
-            "-dataDir", str(Paths.BASE),
-            "-tempDir", self._tmp_dir,
+        if self._base_build:
+            executable = str(paths.latest_executeble(Paths.BASE / "Versions", self._base_build))
+        else:
+            executable = str(Paths.EXECUTABLE)
+        args = paths.get_runner_args(Paths.CWD) + [
+            executable,
+            "-listen",
+            self._host,
+            "-port",
+            str(self._port),
+            "-displayMode",
+            "1" if self._fullscreen else "0",
+            "-dataDir",
+            str(Paths.BASE),
+            "-tempDir",
+            self._tmp_dir,
         ]
+        if self._sc2_version:
+
+            def special_match(strg: str):
+                """ Test if string contains only numbers and dots, which is a valid version string. """
+                for version in self.versions:
+                    if version["label"] == strg:
+                        return True
+                return False
+            valid_version_string = special_match(self._sc2_version)
+            if valid_version_string:
+                self._data_hash = self.find_data_hash(self._sc2_version)
+                assert (
+                    self._data_hash is not None
+                ), f"StarCraft 2 Client version ({self._sc2_version}) was not found inside sc2/versions.py file. Please check your spelling or check the versions.py file."
+
+            else:
+                logger.warning(
+                    f'The submitted version string in sc2.rungame() function call (sc2_version="{self._sc2_version}") was not found in versions.py. Running latest version instead.'
+                )
+
+        if self._data_hash:
+            args.extend(["-dataVersion", self._data_hash])
+
         if self._render:
             args.extend(["-eglpath", "libEGL.so"])
 
         if logger.getEffectiveLevel() <= logging.DEBUG:
             args.append("-verbose")
 
-        return subprocess.Popen(args,
+        return subprocess.Popen(
+            args,
             cwd=(str(Paths.CWD) if Paths.CWD else None),
-            #, env=run_config.env
+            # , env=run_config.env
         )
 
     async def _connect(self):
@@ -106,6 +173,10 @@ class SC2Process:
             try:
                 self._session = aiohttp.ClientSession()
                 ws = await self._session.ws_connect(self.ws_url, timeout=120)
+                # FIXME fix deprecation warning in for future aiohttp version
+                # ws = await self._session.ws_connect(
+                #     self.ws_url, timeout=aiohttp.client_ws.ClientWSTimeout(ws_close=120)
+                # )
                 logger.debug("Websocket connection ready")
                 return ws
             except aiohttp.client_exceptions.ClientConnectorError:
@@ -133,7 +204,7 @@ class SC2Process:
                 for _ in range(3):
                     self._process.terminate()
                     time.sleep(0.5)
-                    if self._process.poll() is not None:
+                    if not self._process or self._process.poll() is not None:
                         break
                 else:
                     self._process.kill()

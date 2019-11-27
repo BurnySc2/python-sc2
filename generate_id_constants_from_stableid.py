@@ -62,7 +62,7 @@ def parse_data(data):
         key = key.upper().replace(" ", "_")
 
         if "name" in v:
-            key = "{}_{}".format(v["name"].upper().replace(" ", "_"), key)
+            key = f'{v["name"].upper().replace(" ", "_")}_{key}'
 
         if "friendlyname" in v:
             key = v["friendlyname"].upper().replace(" ", "_")
@@ -71,9 +71,13 @@ def parse_data(data):
             key = "_" + key
 
         if key in abilities and v["index"] == 0:
-            print(key)
-            raise ValueError
-        abilities[key] = v["id"]
+            print(f"{key} has value 0 and id {v['id']}, overwriting {key}: {abilities[key]}")
+            # Commented out to try to fix: 3670 is not a valid AbilityId
+            abilities[key] = v["id"]
+        elif key in abilities:
+            print(f"{key} has appeared a second time with id={v['id']}")
+        else:
+            abilities[key] = v["id"]
 
     abilities["SMART"] = 1
 
@@ -115,18 +119,22 @@ def generate_python_code(enums):
     idsdir.mkdir(exist_ok=True)
 
     with (idsdir / "__init__.py").open("w") as f:
-        f.write("\n".join([HEADER, f"__all__ = {[n.lower() for n in FILE_TRANSLATE.values()] !r}\n"]))
+        initstring = f"__all__ = {[n.lower() for n in FILE_TRANSLATE.values()] !r}\n".replace("'", '"')
+        f.write("\n".join([HEADER, initstring]))
 
     for name, body in enums.items():
         class_name = ENUM_TRANSLATE[name]
 
-        code = [HEADER, "import enum", "", f"class {class_name}(enum.Enum):"]
+        code = [HEADER, "import enum", "\n", f"class {class_name}(enum.Enum):"]
 
         for key, value in sorted(body.items(), key=lambda p: p[1]):
             code.append(f"    {key} = {value}")
 
+        # Add repr function to more easily dump enums to dict
+        code += ["\n", "    def __repr__(self):", '        return f"' + class_name + '.{self.name}"']
+
         code += [
-            "",
+            "\n",
             f"for item in {class_name}:",
             f"    assert not item.name in globals()",
             f"    globals()[item.name] = item",

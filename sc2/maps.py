@@ -1,6 +1,7 @@
+import logging
+
 from .paths import Paths
 
-import logging
 logger = logging.getLogger(__name__)
 
 def get(name=None):
@@ -30,7 +31,7 @@ class Map:
         if self.path.is_absolute():
             try:
                 self.relative_path = self.path.relative_to(Paths.MAPS)
-            except ValueError: # path not relative to basedir
+            except ValueError:  # path not relative to basedir
                 logging.warning(f"Using absolute path: {self.path}")
                 self.relative_path = self.path
         else:

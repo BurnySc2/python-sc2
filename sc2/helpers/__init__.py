@@ -1,4 +1,6 @@
 from pathlib import Path
+from .control_group import ControlGroup
+
 
 def is_submodule(path):
     if path.is_file():
@@ -7,6 +9,5 @@ def is_submodule(path):
         return (path / "__init__.py").exists()
     return False
 
-__all__ = [p.stem for p in Path(__file__).parent.iterdir() if is_submodule(p)]
 
-from .control_group import ControlGroup
+__all__ = [p.stem for p in Path(__file__).parent.iterdir() if is_submodule(p)]

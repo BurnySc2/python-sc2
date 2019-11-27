@@ -1,4 +1,6 @@
-import pytest
+import pytest, sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import sc2
 from sc2 import Race, Difficulty

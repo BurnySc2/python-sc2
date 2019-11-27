@@ -17,4 +17,4 @@ from . import maps
 from . import helpers
 from .data import *
 from .bot_ai import BotAI
-from .main import run_game
+from .main import run_game, run_replay

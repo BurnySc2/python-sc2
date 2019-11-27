@@ -3,6 +3,7 @@
 
 import enum
 
+
 class EffectId(enum.Enum):
     NULL = 0
     PSISTORMPERSISTENT = 1
@@ -17,6 +18,11 @@ class EffectId(enum.Enum):
     BLINDINGCLOUDCP = 10
     RAVAGERCORROSIVEBILECP = 11
     LURKERMP = 12
+
+
+    def __repr__(self):
+        return f"EffectId.{self.name}"
+
 
 for item in EffectId:
     assert not item.name in globals()
