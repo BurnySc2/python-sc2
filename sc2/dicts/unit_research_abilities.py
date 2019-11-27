@@ -170,7 +170,11 @@ RESEARCH_INFO: Dict[
         UpgradeId.PHOENIXRANGEUPGRADE: {
             "ability": AbilityId.RESEARCH_PHOENIXANIONPULSECRYSTALS,
             "requires_power": True,
-        }
+        },
+        UpgradeId.VOIDRAYSPEEDUPGRADE: {
+            "ability": AbilityId.FLEETBEACONRESEARCH_RESEARCHVOIDRAYSPEEDUPGRADE,
+            "requires_power": True,
+        },
     },
     UnitTypeId.FORGE: {
         UpgradeId.PROTOSSGROUNDARMORSLEVEL1: {
@@ -219,7 +223,13 @@ RESEARCH_INFO: Dict[
     UnitTypeId.FUSIONCORE: {
         UpgradeId.BATTLECRUISERENABLESPECIALIZATIONS: {
             "ability": AbilityId.RESEARCH_BATTLECRUISERWEAPONREFIT
-        }
+        },
+        UpgradeId.LIBERATORAGRANGEUPGRADE: {
+            "ability": AbilityId.FUSIONCORERESEARCH_RESEARCHBALLISTICRANGE
+        },
+        UpgradeId.MEDIVACINCREASESPEEDBOOST: {
+            "ability": AbilityId.FUSIONCORERESEARCH_RESEARCHRAPIDREIGNITIONSYSTEM
+        },
     },
     UnitTypeId.GHOSTACADEMY: {
         UpgradeId.ENHANCEDSHOCKWAVES: {
@@ -267,6 +277,10 @@ RESEARCH_INFO: Dict[
     },
     UnitTypeId.INFESTATIONPIT: {
         UpgradeId.INFESTORENERGYUPGRADE: {"ability": AbilityId.RESEARCH_PATHOGENGLANDS},
+        UpgradeId.MICROBIALSHROUD: {
+            "ability": AbilityId.INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD,
+            "required_building": UnitTypeId.HIVE,
+        },
         UpgradeId.NEURALPARASITE: {"ability": AbilityId.RESEARCH_NEURALPARASITE},
     },
     UnitTypeId.LAIR: {
@@ -336,9 +350,6 @@ RESEARCH_INFO: Dict[
             "upgrade": UpgradeId.LIBERATORMORPH,
             "ability": AbilityId.STARPORTTECHLABRESEARCH_RESEARCHLIBERATORAGMODE,
             "requires_tech_building": UnitTypeId.FUSIONCORE,
-        },
-        UpgradeId.MEDIVACINCREASESPEEDBOOST: {
-            "ability": AbilityId.RESEARCH_HIGHCAPACITYFUELTANKS
         },
         UpgradeId.RAVENCORVIDREACTOR: {
             "ability": AbilityId.RESEARCH_RAVENCORVIDREACTOR

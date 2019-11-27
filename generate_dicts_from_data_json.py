@@ -25,7 +25,7 @@ This script does the following:
 - Loop over all units and get their unit and tech aliases
 
 Dentosals data.json
-https://github.com/Dentosal/sc2-techtree/blob/master/data/data.json
+https://github.com/BurnySc2/sc2-techtree/tree/develop/data
 
 json viewers to inspect the data.json manually:
 http://jsonviewer.stack.hu/
@@ -419,6 +419,7 @@ def generate_unit_alias_dict(data: dict):
 
         current_unit_tech_aliases: Set[UnitTypeId] = OrderedSet2()
 
+        assert unit_type_value in game_data.units, f"Unit {unit_type} not listed in game_data.units"
         unit_alias: int = game_data.units[unit_type_value]._proto.unit_alias
         if unit_alias:
             # Might be 0 if it has no alias

@@ -35,6 +35,7 @@ This "bot" will loop over several available ladder maps and generate the pickle 
 These will then be used to run tests from the test script "test_pickled_data.py"
 """
 
+
 class ExporterBot(sc2.BotAI):
     def __init__(self):
         sc2.BotAI.__init__(self)
@@ -49,7 +50,6 @@ class ExporterBot(sc2.BotAI):
         file_name = f"{self.map_name}.xz"
         file_path = os.path.join(folder_path, subfolder_name, file_name)
         return file_path
-
 
     async def on_start(self):
         raw_game_data = await self._client._execute(
@@ -147,18 +147,20 @@ def main():
             bot.map_name = map_
             file_path = bot.get_pickle_file_path()
             if os.path.isfile(file_path):
-                logger.warning(f"Pickle file for map {map_} was already generated. Skipping. If you wish to re-generate files, please remove them first.")
+                logger.warning(
+                    f"Pickle file for map {map_} was already generated. Skipping. If you wish to re-generate files, please remove them first."
+                )
                 continue
             sc2.run_game(
-                sc2.maps.get(map_),
-                [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)],
-                realtime=False,
+                sc2.maps.get(map_), [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)], realtime=False
             )
         except ProtocolError:
             # ProtocolError appears after a leave game request
             pass
         except Exception as e:
-            logger.warning(f"Map {map_} could not be found, so pickle files for that map could not be generated. Error: {e}")
+            logger.warning(
+                f"Map {map_} could not be found, so pickle files for that map could not be generated. Error: {e}"
+            )
             # traceback.print_exc()
 
 
