@@ -6,7 +6,7 @@ services: docker
 
 jobs:
   # Now, the build result will be determined as soon as all the required jobs finish, based on these results, while the rest of the allow_failures jobs continue to run.
-  fast_finish: true
+#  fast_finish: true
 
   # Jobs that are allowed to fail
   allow_failures:
