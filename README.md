@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/BurnySc2/python-sc2.svg?branch=develop)](https://travis-ci.com/BurnySc2/python-sc2)
+
 # A StarCraft II API Client for Python 3
 
 An easy-to-use library for writing AI Bots for StarCraft II in Python 3. The ultimate goal is simplicity and ease of use, while still preserving all functionality. A really simple worker rush bot should be no more than twenty lines of code, not two hundred. However, this library intends to provide both high and low level abstractions.
