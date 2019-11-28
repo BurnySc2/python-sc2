@@ -515,6 +515,8 @@ class TestBot(sc2.BotAI):
             # Ground, structure
             # UnitTypeId.PYLON, # Pylon seems to regenerate 1 shield for no reason
             UnitTypeId.SUPPLYDEPOT,
+            UnitTypeId.BUNKER,
+            UnitTypeId.MISSILETURRET,
             # Air, light
             UnitTypeId.PHOENIX,
             # Air, armored
@@ -548,6 +550,55 @@ class TestBot(sc2.BotAI):
             attacker: Unit = my_units.closest_to(map_center)
             defender: Unit = enemy_units.closest_to(map_center)
             return attacker, defender
+
+        def do_some_unit_property_tests(attacker: Unit, defender: Unit):
+            """ Some tests that are not covered by test_pickled_data.py """
+            # TODO move unit unrelated tests elsewhere
+            self.step_time
+            self.main_base_ramp
+            self.units_created
+            for alert_code in self.state.alerts:
+                self.alert(alert_code)
+
+            self.structure_type_build_progress(attacker.type_id)
+            self.structure_type_build_progress(defender.type_id)
+            self.tech_requirement_progress(attacker.type_id)
+            self.tech_requirement_progress(defender.type_id)
+            self.in_map_bounds(attacker.position)
+            self.in_map_bounds(defender.position)
+            self.get_terrain_z_height(attacker.position)
+            self.get_terrain_z_height(defender.position)
+
+            for unit in [attacker, defender]:
+                unit.shield_percentage
+                unit.shield_health_percentage
+                unit.energy_percentage
+                unit.age_in_frames
+                unit.age
+                unit.is_memory
+                unit.is_snapshot
+                unit.cloak
+                unit.is_revealed
+                unit.can_be_attacked
+                unit.buff_duration_remain
+                unit.buff_duration_max
+                unit.order_target
+                unit.is_transforming
+                unit.has_techlab
+                unit.has_reactor
+                unit.add_on_position
+                unit.health_percentage
+                unit.bonus_damage
+                unit.air_dps
+
+            attacker.target_in_range(defender)
+            defender.target_in_range(attacker)
+            attacker.calculate_dps_vs_target(defender)
+            defender.calculate_dps_vs_target(attacker)
+            attacker.is_facing(defender)
+            defender.is_facing(attacker)
+            attacker == defender
+            defender == attacker
 
         await self.clean_up_center()
         await self._advance_steps(2)
@@ -590,6 +641,7 @@ class TestBot(sc2.BotAI):
                         attacker, defender = get_attacker_and_defender()
                         # TODO check if shield calculation is correct by setting shield of enemy unit
                     # print(f"Attacker: {attacker}, defender: {defender}")
+                    do_some_unit_property_tests(attacker, defender)
 
                     # Units have spawned, calculate expected damage
                     expected_damage: float = attacker.calculate_damage_vs_target(defender)[0]

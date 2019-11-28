@@ -52,6 +52,32 @@ class ExporterBot(sc2.BotAI):
         return file_path
 
     async def on_start(self):
+        # Make map visible
+        await self.client.debug_show_map()
+        await self.client.debug_control_enemy()
+        await self.client.debug_god()
+
+        # Spawn one of each unit
+        # await self.client.debug_create_unit([[unit_id, 1, self.game_info.map_center, 1] for unit_id in self.game_data.units])
+        valid_units: Set[UnitTypeId] = {
+            UnitTypeId(unit_id)
+            for unit_id, data in self.game_data.units.items()
+            if data._proto.race != Race.NoRace and data._proto.race != Race.Random and data._proto.available
+            # Dont cloak units
+            and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP
+            and (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
+        }
+
+        # Create units for self
+        await self.client.debug_create_unit([[valid_unit, 1, self.start_location, 1] for valid_unit in valid_units])
+        # Create units for enemy
+        await self.client.debug_create_unit(
+            [[valid_unit, 1, self.enemy_start_locations[0], 2] for valid_unit in valid_units]
+        )
+
+        await self._advance_steps(2)
+
+        # Grab all raw data from observation
         raw_game_data = await self._client._execute(
             data=sc_pb.RequestData(ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True)
         )
@@ -72,6 +98,7 @@ class ExporterBot(sc2.BotAI):
             pickle.dump([raw_game_data, raw_game_info, raw_observation], f)
 
         await self._client.leave()
+        return
 
 
 def main():
