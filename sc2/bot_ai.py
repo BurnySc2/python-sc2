@@ -8,7 +8,7 @@ from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-from .cache import property_cache_forever, property_cache_once_per_frame
+from .cache import property_cache_forever, property_cache_once_per_frame, property_cache_once_per_frame_no_copy
 from .constants import (
     FakeEffectID,
     abilityid_to_unittypeid,
@@ -18,6 +18,7 @@ from .constants import (
     PROTOSS_TECH_REQUIREMENT,
     ZERG_TECH_REQUIREMENT,
     ALL_GAS,
+    TERRAN_STRUCTURES_REQUIRE_SCV,
 )
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
@@ -860,23 +861,19 @@ class BotAI(DistanceCalculation):
         assert isinstance(upgrade_type, UpgradeId), f"{upgrade_type} is no UpgradeId"
         if upgrade_type in self.state.upgrades:
             return 1
-        level = None
-        if "LEVEL" in upgrade_type.name:
-            level = upgrade_type.name[-1]
-        creationAbilityID = self._game_data.upgrades[upgrade_type.value].research_ability.id
+        creationAbilityID = self._game_data.upgrades[upgrade_type.value].research_ability.exact_id
         for structure in self.structures.filter(lambda unit: unit.is_ready):
             for order in structure.orders:
-                if order.ability.id is creationAbilityID:
-                    if level and order.ability.button_name[-1] != level:
-                        return 0
+                if order.ability.exact_id == creationAbilityID:
                     return order.progress
         return 0
 
-    @property_cache_once_per_frame
-    def _abilities_all_units(self) -> Counter:
+    @property_cache_once_per_frame_no_copy
+    def _abilities_all_units(self) -> Tuple[Counter, Dict[UnitTypeId, float]]:
         """ Cache for the already_pending function, includes protoss units warping in,
         all units in production and all structures, and all morphs """
         abilities_amount = Counter()
+        max_build_progress: Dict[UnitTypeId, float] = {}
         for unit in self.units + self.structures:  # type: Unit
             for order in unit.orders:
                 abilities_amount[order.ability] += 1
@@ -884,9 +881,79 @@ class BotAI(DistanceCalculation):
                 if self.race != Race.Terran or not unit.is_structure:
                     # If an SCV is constructing a building, already_pending would count this structure twice
                     # (once from the SCV order, and once from "not structure.is_ready")
-                    abilities_amount[self._game_data.units[unit.type_id.value].creation_ability] += 1
+                    creation_ability: AbilityData = self._game_data.units[unit.type_id.value].creation_ability
+                    abilities_amount[creation_ability] += 1
+                    max_build_progress[creation_ability] = max(
+                        max_build_progress.get(creation_ability, 0), unit.build_progress
+                    )
 
-        return abilities_amount
+        return abilities_amount, max_build_progress
+
+    # TODO rename to unit_type_progress?
+    def structure_type_build_progress(self, structure_type: Union[UnitTypeId, int]) -> float:
+        """
+        Returns the build progress of a structure type.
+
+        Example::
+
+            # Assuming you have one barracks building at 0.5 build progress:
+            progress = self.structure_type_build_progress(UnitTypeId.BARRACKS)
+            print(progress)
+            # This prints out 0.5
+
+            # If you want to save up money for mutalisks, you can now save up once the spire is nearly completed:
+            spire_almost_completed: bool = self.already_pending(UnitTypeId.SPIRE, return_highest_build_progress=True) > 0.75
+            # Assume you have 2 command centers in production, one has 0.5 build_progress and the other 0.2, the following returns 0.5
+            highest_progress_of_command_center: float = self.already_pending(UnitTypeId.COMMANDCENTER, return_highest_build_progress=True)
+            # Assume you have 3 mutalisks in production, one has 0.7 build_progress, one has 0.5 and the other 0.2, the following returns 0.7
+            mutalisks_highest_build_progress: float = self.already_pending(UnitTypeId.MUTALISK, return_highest_build_progress=True)
+
+        :param structure_type:
+        """
+        assert isinstance(
+            structure_type, (int, UnitTypeId)
+        ), f"Needs to be int or UnitTypeId, but was: {type(structure_type)}"
+        if isinstance(structure_type, int):
+            structure_type_value = structure_type
+        else:
+            structure_type_value = structure_type.value
+        assert structure_type_value, f"structure_type can not be 0 or NOTAUNIT, but was: {structure_type_value}"
+        ability = self._game_data.units[structure_type_value].creation_ability
+        return self._abilities_all_units[1].get(ability, 0)
+
+    def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:
+        """ Returns the tech requirement progress for a specific building
+
+        Example::
+
+            # Current state: supply depot is at 50% completion
+            tech_requirement = self.tech_requirement_progress(UnitTypeId.BARRACKS)
+            print(tech_requirement) # Prints 0.5 because supply depot is half way done
+
+        Example::
+
+            # Current state: your bot has one hive, no lair
+            tech_requirement = self.tech_requirement_progress(UnitTypeId.HYDRALISKDEN)
+            print(tech_requirement) # Prints 1 because a hive exists even though only a lair is required
+
+        Example::
+
+            # Current state: One factory is flying and one is half way done
+            tech_requirement = self.tech_requirement_progress(UnitTypeId.STARPORT)
+            print(tech_requirement) # Prints 1 because even though the type id of the flying factory is different, it still has build progress of 1 and thus tech requirement is completed
+
+        :param structure_type: """
+        race_dict = {
+            Race.Protoss: PROTOSS_TECH_REQUIREMENT,
+            Race.Terran: TERRAN_TECH_REQUIREMENT,
+            Race.Zerg: ZERG_TECH_REQUIREMENT,
+        }
+        unit_info_id_value = race_dict[self.race][structure_type].value
+        # The following commented out line is unreliable for ghost / thor as they return 0 which is incorrect
+        # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
+        if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
+            return 1
+        return self.structure_type_build_progress(unit_info_id_value)
 
     def already_pending(self, unit_type: Union[UpgradeId, UnitTypeId]) -> float:
         """
@@ -896,19 +963,74 @@ class BotAI(DistanceCalculation):
 
         Example::
 
-            amount_of_scv_in_production = self.already_pending(UnitTypeId.SCV)
-            amount_of_CCs_in_queue_and_production = self.already_pending(UnitTypeId.COMMANDCENTER)
-            amount_of_lairs_morphing = self.already_pending(UnitTypeId.LAIR)
+            amount_of_scv_in_production: int = self.already_pending(UnitTypeId.SCV)
+            amount_of_CCs_in_queue_and_production: int = self.already_pending(UnitTypeId.COMMANDCENTER)
+            amount_of_lairs_morphing: int = self.already_pending(UnitTypeId.LAIR)
+
 
         :param unit_type:
         """
-
         if isinstance(unit_type, UpgradeId):
             return self.already_pending_upgrade(unit_type)
-
         ability = self._game_data.units[unit_type.value].creation_ability
+        return self._abilities_all_units[0][ability]
 
-        return self._abilities_all_units[ability]
+    @property_cache_once_per_frame_no_copy
+    def _worker_orders(self) -> Counter:
+        """ This function is used internally, do not use! It is to store all worker abilities. """
+        abilities_amount = Counter()
+        structures_in_production: Set[Union[Point2, int]] = set()
+        for structure in self.structures:
+            if structure.type_id in TERRAN_STRUCTURES_REQUIRE_SCV:
+                structures_in_production.add(structure.position)
+                structures_in_production.add(structure.tag)
+        for worker in self.workers:
+            for order in worker.orders:
+                # Skip if the SCV is constructing (not isinstance(order.target, int))
+                # or resuming construction (isinstance(order.target, int))
+                is_int = isinstance(order.target, int)
+                if (
+                    is_int
+                    and order.target in structures_in_production
+                    or not is_int
+                    and Point2.from_proto(order.target) in structures_in_production
+                ):
+                    continue
+                abilities_amount[order.ability] += 1
+        return abilities_amount
+
+    def worker_en_route_to_build(self, unit_type: UnitTypeId) -> float:
+        """ This function counts how many workers are on the way to start the construction a building.
+        Warning: this function may change its name in the future!
+        New function. Please report any bugs!
+
+        :param unit_type: """
+        ability = self._game_data.units[unit_type.value].creation_ability
+        return self._worker_orders[ability]
+
+    @property_cache_once_per_frame
+    def structures_without_construction_SCVs(self) -> Units:
+        """ Returns all structures that do not have an SCV constructing it.
+        Warning: this function may move to become a Units filter.
+        New function. Please report any bugs! """
+        worker_targets: Set[Union[int, Point2]] = set()
+        for worker in self.workers:
+            if not worker.is_constructing_scv:
+                continue
+            for order in worker.orders:
+                # When a construction is resumed, the worker.orders[0].target is the tag of the structure, else it is a Point2
+                target = order.target
+                if isinstance(target, int):
+                    worker_targets.add(target)
+                else:
+                    worker_targets.add(Point2.from_proto(target))
+        return self.structures.filter(
+            lambda structure: structure.build_progress < 1
+            and structure.position not in worker_targets
+            and structure.tag not in worker_targets
+            # Redundant check?
+            and structure.type_id in TERRAN_STRUCTURES_REQUIRE_SCV
+        )
 
     async def build(
         self,
@@ -952,6 +1074,8 @@ class BotAI(DistanceCalculation):
     ) -> int:
         """ Trains a specified number of units. Trains only one if amount is not specified.
         Warning: currently has issues with warp gate warp ins
+
+        New function. Please report any bugs!
 
         Example Zerg::
 
@@ -1078,81 +1202,14 @@ class BotAI(DistanceCalculation):
                     return trained_amount
         return trained_amount
 
-    def structure_type_build_progress(self, structure_type: Union[UnitTypeId, int]) -> float:
-        """
-        Checks the build progress of a structure type
-
-        Example::
-
-            # Assuming you have one barracks building at 0.5 build progress:
-            progress = self.structure_type_build_progress(UnitTypeId.BARRACKS)
-            print(progress)
-            # This should print out 0.5
-
-        :param structure_type:
-        """
-        assert isinstance(
-            structure_type, (int, UnitTypeId)
-        ), f"Needs to be int or UnitTypeId, but was: {type(structure_type)}"
-        if isinstance(structure_type, int):
-            structure_type_value = structure_type
-        else:
-            structure_type_value = structure_type.value
-        assert structure_type_value, f"structure_type can not be 0 or NOTAUNIT, but was: {structure_type_value}"
-
-        return_value = 0
-        for structure in self.structures:
-            structure_data = self._game_data.units[structure._proto.unit_type]
-            # Check the aliases of the structure, e.g. progress of barracks_flying should be same as progress of barracks
-            # TODO: change to unit alias instead of tech alias, since techalias has commandcenter=commandcenterflying=orbitalcommand=orbitalcommandflying=planetaryfortess, while it should only be commandcenter=commandcenterflying
-            for tech_alias in list(structure_data._proto.tech_alias) + [structure._proto.unit_type]:
-                if tech_alias == structure_type_value:
-                    if structure.build_progress == 1:
-                        return 1
-                    elif return_value < structure.build_progress:
-                        return_value = structure.build_progress
-        return return_value
-
-    def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:
-        """ Returns the tech requirement progress for a specific building
-
-        Example::
-
-            # Current state: supply depot is at 50% completion
-            tech_requirement = self.tech_requirement_progress(UnitTypeId.BARRACKS)
-            print(tech_requirement) # Prints 0.5 because supply depot is half way done
-
-        Example::
-
-            # Current state: your bot has one hive, no lair
-            tech_requirement = self.tech_requirement_progress(UnitTypeId.HYDRALISKDEN)
-            print(tech_requirement) # Prints 1 because a hive exists even though only a lair is required
-
-        Example::
-
-            # Current state: One factory is flying and one is half way done
-            tech_requirement = self.tech_requirement_progress(UnitTypeId.STARPORT)
-            print(tech_requirement) # Prints 1 because even though the type id of the flying factory is different, it still has build progress of 1 and thus tech requirement is completed
-
-        :param structure_type: """
-        race_dict = {
-            Race.Protoss: PROTOSS_TECH_REQUIREMENT,
-            Race.Terran: TERRAN_TECH_REQUIREMENT,
-            Race.Zerg: ZERG_TECH_REQUIREMENT,
-        }
-        unit_info_id_value = race_dict[self.race][structure_type].value
-        # The following commented out line is unrelaible for ghost / thor as they return 0 which is incorrect
-        # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
-        if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
-            return 1
-        return self.structure_type_build_progress(unit_info_id_value)
-
     def research(self, upgrade_type: UpgradeId) -> bool:
         """
         Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).
         Returns True if the research was started.
         Return False if the requirement was not met, or the bot did not have enough resources to start the upgrade,
         or the building to research the upgrade was missing or not idle.
+
+        New function. Please report any bugs!
 
         Example::
 
@@ -1253,7 +1310,9 @@ class BotAI(DistanceCalculation):
         :param subtract_supply:
         :param can_afford_check:
         """
-        assert isinstance(action, UnitCommand), f"Given unit command is not a command, but instead of type {type(action)}"
+        assert isinstance(
+            action, UnitCommand
+        ), f"Given unit command is not a command, but instead of type {type(action)}"
         if subtract_cost:
             cost: Cost = self._game_data.calculate_ability_cost(action.ability)
             if can_afford_check and not (self.minerals >= cost.minerals and self.vespene >= cost.vespene):
@@ -1284,7 +1343,9 @@ class BotAI(DistanceCalculation):
         This function is only useful for realtime=True in the first frame of the game to instantly produce a worker
         and split workers on the mineral patches.
         """
-        assert isinstance(action, UnitCommand), f"Given unit command is not a command, but instead of type {type(action)}"
+        assert isinstance(
+            action, UnitCommand
+        ), f"Given unit command is not a command, but instead of type {type(action)}"
         if not self.can_afford(action.ability):
             logger.warning(f"Cannot afford action {action}")
             return ActionResult.Error

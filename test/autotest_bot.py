@@ -548,6 +548,8 @@ class TestBot(sc2.BotAI):
 
         # Show whole map
         await self.client.debug_show_map()
+        # Make own units invincible so that tests dont fail
+        await self.client.debug_god()
 
         def get_attacker_and_defender():
             my_units = self.units | self.structures
@@ -693,6 +695,7 @@ class TestBot(sc2.BotAI):
 
         # Hide map again
         await self.client.debug_show_map()
+        await self.client.debug_god()
         await self._advance_steps(2)
         logger.warning("Action test 1001 successful.")
 

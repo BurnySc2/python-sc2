@@ -1139,7 +1139,7 @@ class Unit:
         :param upgrade:
         :param queue:
         """
-        return self(self._bot_object._game_data.upgrades[upgrade.value].research_ability.id, queue=queue)
+        return self(self._bot_object._game_data.upgrades[upgrade.value].research_ability.exact_id, queue=queue)
 
     def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3]) -> UnitCommand:
         """ Orders Warpgate to warp in 'unit' at 'position'. 
