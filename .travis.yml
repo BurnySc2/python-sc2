@@ -11,7 +11,9 @@ jobs:
   # Jobs that are allowed to fail
   allow_failures:
     - stage: test python 3.8
-    - stage: release to pypi
+    # TODO disable once linux client has same balance patch as windows client
+    - stage: run autotest bot
+#    - stage: release to pypi
 
   # Jobs that are being run
   include:

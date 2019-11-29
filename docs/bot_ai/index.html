@@ -955,6 +955,12 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 <dt id="sc2.bot_ai.BotAI.structure_type_build_progress">
 <code class="sig-name descname">structure_type_build_progress</code><span class="sig-paren">(</span><em class="sig-param">structure_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.structure_type_build_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the build progress of a structure type.</p>
+<dl class="simple">
+<dt>Return range: 0 &lt;= x &lt;= 1 where</dt><dd><p>0: no such structure exists
+0 &lt; x &lt; 1: at least one structure is under construction, returns the progress of the one with the highest progress
+1: we have at least one such structure complete</p>
+</dd>
+</dl>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming you have one barracks building at 0.5 build progress:</span>
 <span class="n">progress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">)</span>
@@ -962,11 +968,10 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 <span class="c1"># This prints out 0.5</span>
 
 <span class="c1"># If you want to save up money for mutalisks, you can now save up once the spire is nearly completed:</span>
-<span class="n">spire_almost_completed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">,</span> <span class="n">return_highest_build_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.75</span>
+<span class="n">spire_almost_completed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.75</span>
+
 <span class="c1"># Assume you have 2 command centers in production, one has 0.5 build_progress and the other 0.2, the following returns 0.5</span>
-<span class="n">highest_progress_of_command_center</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">,</span> <span class="n">return_highest_build_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="c1"># Assume you have 3 mutalisks in production, one has 0.7 build_progress, one has 0.5 and the other 0.2, the following returns 0.7</span>
-<span class="n">mutalisks_highest_build_progress</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MUTALISK</span><span class="p">,</span> <span class="n">return_highest_build_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">highest_progress_of_command_center</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
