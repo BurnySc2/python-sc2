@@ -37,7 +37,7 @@ class TestBot(sc2.BotAI):
         # At least 4 tests because we test properties and variables
         self.action_tests = [
             getattr(self, f"test_botai_actions{index}")
-            for index in range(1000)
+            for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_target = 4
@@ -234,9 +234,18 @@ class TestBot(sc2.BotAI):
                 await self.get_next_expansion()
                 await self.expand_now()
 
-            await self._advance_steps(100)
+            await self._advance_steps(10)
+
+            assert self.structures_without_construction_SCVs(UnitTypeId.COMMANDCENTER).amount == 0
+
             if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
+                assert self.townhalls(UnitTypeId.COMMANDCENTER).not_ready.amount == 1
+                assert self.already_pending(UnitTypeId.COMMANDCENTER) == 1
+                # The CC construction has started, 'worker_en_route_to_build' should show 0
+                assert self.worker_en_route_to_build(UnitTypeId.COMMANDCENTER) == 0
                 break
+            elif self.already_pending(UnitTypeId.COMMANDCENTER) == 1:
+                assert self.worker_en_route_to_build(UnitTypeId.COMMANDCENTER) == 1
 
         await self._advance_steps(2)
         logger.warning("Action test 05 successful.")
@@ -438,7 +447,7 @@ class TestBot(sc2.BotAI):
         await self._advance_steps(2)
 
     # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
-    async def test_botai_actions12(self):
+    async def test_botai_actions1001(self):
         upgrade_levels = [0, 1]
         attacker_units = [
             #
@@ -557,8 +566,6 @@ class TestBot(sc2.BotAI):
             self.step_time
             self.main_base_ramp
             self.units_created
-            for alert_code in self.state.alerts:
-                self.alert(alert_code)
 
             self.structure_type_build_progress(attacker.type_id)
             self.structure_type_build_progress(defender.type_id)
@@ -687,15 +694,18 @@ class TestBot(sc2.BotAI):
         # Hide map again
         await self.client.debug_show_map()
         await self._advance_steps(2)
-        logger.warning("Action test 11 successful.")
+        logger.warning("Action test 1001 successful.")
 
     # TODO:
     # self.can_cast function
     # Test client.py debug functions
     # Test if events work (upgrade complete, unit complete, building complete, building started)
     # Test if functions with various combinations works (e.g. already_pending)
-    # Test self.train function on: larva, hatchery + lair (queens), 2 barracks (2 marines), 2 nexus (probes)
-    # Test self.research function on: ebay, hatchery, forge, evo chamber
+    # Test self.train function on: larva, hatchery + lair (queens), 2 barracks (2 marines), 2 nexus (probes) (best: every building)
+    # Test self.research function on: ebay, hatchery, forge, evo chamber (best: every building)
+    # Test unit range and base attack damage
+    # Test if structures_without_construction_SCVs works after killing the scv
+    # Test if all upgrades are correctly listed
 
 
 class EmptyBot(sc2.BotAI):

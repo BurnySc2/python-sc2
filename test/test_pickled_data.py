@@ -809,6 +809,25 @@ def test_units():
     assert scvs.prefer_idle
     assert townhalls.prefer_idle
 
+def test_dicts():
+    # May be missing but that should not fail the tests
+    try:
+        from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+    except:
+        print(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
+
+    bot: BotAI = random_bot_object
+
+    unit_id: UnitTypeId
+    data: dict
+    for unit_id, data in RESEARCH_INFO.items():
+        upgrade_id: UpgradeId
+        for upgrade_id, upgrade_data in data.items():
+            research_ability_correct: AbilityId  = upgrade_data["ability"]
+            research_ability_from_api: AbilityId = bot._game_data.upgrades[upgrade_id.value].research_ability.exact_id
+            assert research_ability_correct == research_ability_from_api, f"Research abilities do not match: Correct one is {research_ability_correct} but API returned {research_ability_from_api}"
+
+
 
 @given(
     st.integers(min_value=-1e5, max_value=1e5),

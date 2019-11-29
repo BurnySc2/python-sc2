@@ -51,7 +51,38 @@ class ExporterBot(sc2.BotAI):
         file_path = os.path.join(folder_path, subfolder_name, file_name)
         return file_path
 
+    def get_combat_file_path(self) -> str:
+        folder_path = os.path.dirname(__file__)
+        subfolder_name = "combat_data"
+        file_name = f"{self.map_name}.xz"
+        file_path = os.path.join(folder_path, subfolder_name, file_name)
+        return file_path
+
+    async def store_data_to_file(self, file_path: str):
+        # Grab all raw data from observation
+        raw_game_data = await self._client._execute(
+            data=sc_pb.RequestData(ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True)
+        )
+
+        raw_game_info = await self._client._execute(game_info=sc_pb.RequestGameInfo())
+
+        raw_observation = self.state.response_observation
+
+        # To test if this data is convertable in the first place
+        game_data = GameData(raw_game_data.data)
+        game_info = GameInfo(raw_game_info.game_info)
+        game_state = GameState(raw_observation)
+
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with lzma.open(file_path, "wb") as f:
+            pickle.dump([raw_game_data, raw_game_info, raw_observation], f)
+
+
     async def on_start(self):
+        file_path = self.get_pickle_file_path()
+        print(f"Saving file to {self.map_name}.xz")
+        await self.store_data_to_file(file_path)
+
         # Make map visible
         await self.client.debug_show_map()
         await self.client.debug_control_enemy()
@@ -77,25 +108,8 @@ class ExporterBot(sc2.BotAI):
 
         await self._advance_steps(2)
 
-        # Grab all raw data from observation
-        raw_game_data = await self._client._execute(
-            data=sc_pb.RequestData(ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True)
-        )
-
-        raw_game_info = await self._client._execute(game_info=sc_pb.RequestGameInfo())
-
-        raw_observation = self.state.response_observation
-
-        # To test if this data is convertable in the first place
-        game_data = GameData(raw_game_data.data)
-        game_info = GameInfo(raw_game_info.game_info)
-        game_state = GameState(raw_observation)
-
-        print(f"Saving file to {self.map_name}.xz")
-        file_path = self.get_pickle_file_path()
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        with lzma.open(file_path, "wb") as f:
-            pickle.dump([raw_game_data, raw_game_info, raw_observation], f)
+        file_path = self.get_combat_file_path()
+        await self.store_data_to_file(file_path)
 
         await self._client.leave()
         return
