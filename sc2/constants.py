@@ -259,6 +259,22 @@ FakeEffectID: Dict[int, str] = {
     UnitTypeId.FORCEFIELD.value: "FORCEFIELD",
 }
 
+TERRAN_STRUCTURES_REQUIRE_SCV: Set[UnitTypeId] = {
+    UnitTypeId.ARMORY,
+    UnitTypeId.BARRACKS,
+    UnitTypeId.BUNKER,
+    UnitTypeId.COMMANDCENTER,
+    UnitTypeId.ENGINEERINGBAY,
+    UnitTypeId.FACTORY,
+    UnitTypeId.FUSIONCORE,
+    UnitTypeId.GHOSTACADEMY,
+    UnitTypeId.MISSILETURRET,
+    UnitTypeId.REFINERY,
+    UnitTypeId.REFINERYRICH,
+    UnitTypeId.STARPORT,
+    UnitTypeId.SUPPLYDEPOT,
+}
+
 
 def return_NOTAUNIT():
     # NOTAUNIT = 0
