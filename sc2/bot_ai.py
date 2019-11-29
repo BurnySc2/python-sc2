@@ -18,6 +18,7 @@ from .constants import (
     PROTOSS_TECH_REQUIREMENT,
     ZERG_TECH_REQUIREMENT,
     ALL_GAS,
+    EQUIVALENTS_FOR_TECH_PROGRESS,
     TERRAN_STRUCTURES_REQUIRE_SCV,
 )
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
@@ -889,10 +890,14 @@ class BotAI(DistanceCalculation):
 
         return abilities_amount, max_build_progress
 
-    # TODO rename to unit_type_progress?
     def structure_type_build_progress(self, structure_type: Union[UnitTypeId, int]) -> float:
         """
         Returns the build progress of a structure type.
+
+        Return range: 0 <= x <= 1 where
+            0: no such structure exists
+            0 < x < 1: at least one structure is under construction, returns the progress of the one with the highest progress
+            1: we have at least one such structure complete
 
         Example::
 
@@ -902,11 +907,10 @@ class BotAI(DistanceCalculation):
             # This prints out 0.5
 
             # If you want to save up money for mutalisks, you can now save up once the spire is nearly completed:
-            spire_almost_completed: bool = self.already_pending(UnitTypeId.SPIRE, return_highest_build_progress=True) > 0.75
+            spire_almost_completed: bool = self.structure_type_build_progress(UnitTypeId.SPIRE) > 0.75
+
             # Assume you have 2 command centers in production, one has 0.5 build_progress and the other 0.2, the following returns 0.5
-            highest_progress_of_command_center: float = self.already_pending(UnitTypeId.COMMANDCENTER, return_highest_build_progress=True)
-            # Assume you have 3 mutalisks in production, one has 0.7 build_progress, one has 0.5 and the other 0.2, the following returns 0.7
-            mutalisks_highest_build_progress: float = self.already_pending(UnitTypeId.MUTALISK, return_highest_build_progress=True)
+            highest_progress_of_command_center: float = self.structure_type_build_progress(UnitTypeId.COMMANDCENTER)
 
         :param structure_type:
         """
@@ -918,6 +922,9 @@ class BotAI(DistanceCalculation):
         else:
             structure_type_value = structure_type.value
         assert structure_type_value, f"structure_type can not be 0 or NOTAUNIT, but was: {structure_type_value}"
+        requirement_structure_ready: bool = next((structure for structure in self.structures if structure._proto.unit_type == structure_type_value and structure.is_ready), False)
+        if requirement_structure_ready:
+            return 1
         ability = self._game_data.units[structure_type_value].creation_ability
         return self._abilities_all_units[1].get(ability, 0)
 
@@ -953,7 +960,10 @@ class BotAI(DistanceCalculation):
         # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
         if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
-        return self.structure_type_build_progress(unit_info_id_value)
+        progresses: List[int] = [self.structure_type_build_progress(unit_info_id_value)]
+        for equiv_structure in EQUIVALENTS_FOR_TECH_PROGRESS.get(structure_type, []):
+            progresses.append(self.structure_type_build_progress(equiv_structure))
+        return max(progresses)
 
     def already_pending(self, unit_type: Union[UpgradeId, UnitTypeId]) -> float:
         """

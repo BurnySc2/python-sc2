@@ -358,6 +358,21 @@ ZERG_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
         BROODLORD: GREATERSPIRE,
     },
 )
+# Required in 'tech_requirement_progress' bot_ai.py function
+EQUIVALENTS_FOR_TECH_PROGRESS: Dict[UnitTypeId, Set[UnitTypeId]] = {
+    UnitTypeId.LAIR: {UnitTypeId.HIVE},
+    UnitTypeId.HATCHERY: {UnitTypeId.LAIR, UnitTypeId.HIVE},
+    UnitTypeId.SPIRE: {UnitTypeId.GREATERSPIRE},
+    UnitTypeId.BARRACKS: {UnitTypeId.BARRACKSFLYING},
+    UnitTypeId.FACTORY: {UnitTypeId.FACTORYFLYING},
+    UnitTypeId.STARPORT: {UnitTypeId.STARPORTFLYING},
+    UnitTypeId.COMMANDCENTER: {
+        UnitTypeId.COMMANDCENTERFLYING,
+        UnitTypeId.PLANETARYFORTRESS,
+        UnitTypeId.ORBITALCOMMAND,
+        UnitTypeId.ORBITALCOMMANDFLYING,
+    },
+}
 ALL_GAS: Set[UnitTypeId] = {
     UnitTypeId.ASSIMILATOR,
     UnitTypeId.ASSIMILATORRICH,
