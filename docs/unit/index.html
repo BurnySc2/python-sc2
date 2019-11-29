@@ -51,8 +51,20 @@
 <dd><dl class="method">
 <dt id="sc2.unit.Unit.add_on_land_position">
 <em class="property">property </em><code class="sig-name descname">add_on_land_position</code><a class="headerlink" href="#sc2.unit.Unit.add_on_land_position" title="Permalink to this definition">¶</a></dt>
-<dd><p>If unit is addon (techlab or reactor), returns the position
-where a terran building has to land to connect to addon</p>
+<dd><p>If this unit is an addon (techlab, reactor), returns the position
+where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to this addon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.add_on_position">
+<em class="property">property </em><code class="sig-name descname">add_on_position</code><a class="headerlink" href="#sc2.unit.Unit.add_on_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
+this property returns the position of where the addon should be, if it should build one or has one attached.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
@@ -63,7 +75,29 @@ where a terran building has to land to connect to addon</p>
 <dl class="method">
 <dt id="sc2.unit.Unit.add_on_tag">
 <em class="property">property </em><code class="sig-name descname">add_on_tag</code><a class="headerlink" href="#sc2.unit.Unit.add_on_tag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the tag of the addon of unit.</p>
+<dd><p>Returns the tag of the addon of unit. If the unit has no addon, returns 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.age">
+<em class="property">property </em><code class="sig-name descname">age</code><a class="headerlink" href="#sc2.unit.Unit.age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns how old the unit object data is (in game seconds). This age does not reflect when the unit was created / trained / morphed!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.age_in_frames">
+<em class="property">property </em><code class="sig-name descname">age_in_frames</code><a class="headerlink" href="#sc2.unit.Unit.age_in_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns how old the unit object data is (in game frames). This age does not reflect the unit was created / trained / morphed!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
@@ -77,7 +111,7 @@ where a terran building has to land to connect to addon</p>
 <dd><p>Returns the dps against air units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -88,7 +122,7 @@ where a terran building has to land to connect to addon</p>
 <dd><p>Returns the range against air units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -110,7 +144,7 @@ where a terran building has to land to connect to addon</p>
 <dd><p>Returns the armor of the unit. Does not include upgrades</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -204,7 +238,7 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 <dd><p>Returns the set of current buffs the unit has.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[~T]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,7 +247,12 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 <dt id="sc2.unit.Unit.build">
 <code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position=None</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to build another ‘unit’ at ‘position’.
-Usage: self.do(SCV.build(COMMANDCENTER, position))</p>
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">SCV</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">COMMANDCENTER</span><span class="p">,</span> <span class="n">position</span><span class="p">))</span>
+<span class="c1"># Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">SCV</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">REFINERY</span><span class="p">,</span> <span class="n">target_vespene_geysir</span><span class="p">))</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -229,12 +268,71 @@ Usage: self.do(SCV.build(COMMANDCENTER, position))</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.unit.Unit.build_gas">
+<code class="sig-name descname">build_gas</code><span class="sig-paren">(</span><em class="sig-param">target_geysir</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build_gas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Orders unit to build another ‘unit’ at ‘position’.
+Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">SCV</span><span class="o">.</span><span class="n">build_gas</span><span class="p">(</span><span class="n">target_vespene_geysir</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_geysir</strong> (<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
+<li><p><strong>queue</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.unit.Unit.build_progress">
 <em class="property">property </em><code class="sig-name descname">build_progress</code><a class="headerlink" href="#sc2.unit.Unit.build_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns completion in range [0,1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.calculate_damage_vs_target">
+<code class="sig-name descname">calculate_damage_vs_target</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">ignore_armor=False</em>, <em class="sig-param">include_overkill_damage=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_damage_vs_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of: [potential damage against target, attack speed, attack range]
+Returns the properly calculated damage per full-attack against the target unit.
+Returns (0, 0, 0) if this unit can’t attack the target unit.</p>
+<p>If ‘include_overkill_damage=True’ and the unit deals 10 damage, the target unit has 5 hp and 0 armor,
+the target unit would result in -5hp, so the returning damage would be 10.
+For ‘include_overkill_damage=False’ this function would return 5.</p>
+<p>If ‘ignore_armor=False’ and the unit deals 10 damage, the target unit has 20 hp and 5 armor,
+the target unit would result in 15hp, so the returning damage would be 5.
+For ‘ignore_armor=True’ this function would return 10.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
+<li><p><strong>ignore_armor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+<li><p><strong>include_overkill_damage</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.calculate_dps_vs_target">
+<code class="sig-name descname">calculate_dps_vs_target</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">ignore_armor=False</em>, <em class="sig-param">include_overkill_damage=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_dps_vs_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the DPS against the given target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -357,7 +455,7 @@ See <a class="reference external" href="https://github.com/Blizzard/s2client-api
 <dd><p>Returns the detection distance of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -372,7 +470,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd class="field-odd"><p><strong>p</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -383,7 +481,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd><p>Returns the amount of energy the unit has. Returns 0 for units without energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -394,7 +492,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd><p>Returns the maximum amount of energy the unit can have. Returns 0 for units without energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -405,7 +503,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd><p>Returns the percentage of amount of energy the unit has. Returns 0 for units without energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -416,7 +514,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd><p>Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -445,7 +543,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd><p>Returns the dps against ground units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -456,7 +554,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dd><p>Returns the range against ground units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -495,6 +593,28 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.unit.Unit.has_reactor">
+<em class="property">property </em><code class="sig-name descname">has_reactor</code><a class="headerlink" href="#sc2.unit.Unit.has_reactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a structure is connected to a reactor addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.has_techlab">
+<em class="property">property </em><code class="sig-name descname">has_techlab</code><a class="headerlink" href="#sc2.unit.Unit.has_techlab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a structure is connected to a techlab addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.unit.Unit.has_vespene">
 <em class="property">property </em><code class="sig-name descname">has_vespene</code><a class="headerlink" href="#sc2.unit.Unit.has_vespene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a geyser has any gas remaining.
@@ -512,7 +632,7 @@ You can’t build extractors on empty geysers.</p>
 <dd><p>Returns the health of the unit. Does not include shields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -523,7 +643,7 @@ You can’t build extractors on empty geysers.</p>
 <dd><p>Returns the maximum health of the unit. Does not include shields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -534,7 +654,7 @@ You can’t build extractors on empty geysers.</p>
 <dd><p>Returns the percentage of health the unit has. Does not include shields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -586,7 +706,7 @@ You can’t build extractors on empty geysers.</p>
 <dl class="method">
 <dt id="sc2.unit.Unit.is_active">
 <em class="property">property </em><code class="sig-name descname">is_active</code><a class="headerlink" href="#sc2.unit.Unit.is_active" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if the unit is currently training or researching.</p>
+<dd><p>Checks if the unit has an order (e.g. unit is currently moving or attacking, structure is currently training or researching).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
@@ -837,6 +957,17 @@ Only works for own units.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.unit.Unit.is_memory">
+<em class="property">property </em><code class="sig-name descname">is_memory</code><a class="headerlink" href="#sc2.unit.Unit.is_memory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if this Unit object is referenced from the future and is outdated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.unit.Unit.is_mine">
 <em class="property">property </em><code class="sig-name descname">is_mine</code><a class="headerlink" href="#sc2.unit.Unit.is_mine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is controlled by the bot.</p>
@@ -1063,7 +1194,7 @@ Target can be a Unit (to follow that unit) or Point2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
+<li><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>queue</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
@@ -1079,7 +1210,7 @@ Target can be a Unit (to follow that unit) or Point2.</p>
 <dd><p>Returns the movement speed of the unit. Does not include upgrades or buffs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1231,7 +1362,7 @@ point, the unit will patrol in a circle.</p>
 <dd><p>Half of unit size. See <a class="reference external" href="https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void">https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1305,7 +1436,19 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 <dd><p>Returns the shield points the unit has. Returns 0 for non-protoss units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.shield_health_percentage">
+<em class="property">property </em><code class="sig-name descname">shield_health_percentage</code><a class="headerlink" href="#sc2.unit.Unit.shield_health_percentage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the percentage of combined shield + hp points the unit has.
+Also takes build progress into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1316,7 +1459,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 <dd><p>Returns the maximum shield points the unit can have. Returns 0 for non-protoss units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1327,7 +1470,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 <dd><p>Returns the percentage of shield points the unit has. Returns 0 for non-protoss units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1350,7 +1493,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 <dd><p>Returns the sight range of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1403,7 +1546,7 @@ Includes the target’s radius when calculating distance to target.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>target</strong> (<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
-<li><p><strong>bonus_distance</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – </p></li>
+<li><p><strong>bonus_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -1514,7 +1657,7 @@ if unit.weapon_cooldown == 0:</p>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1573,7 +1716,7 @@ if unit.weapon_cooldown == 0:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
     </div>
   </body>
 </html>
