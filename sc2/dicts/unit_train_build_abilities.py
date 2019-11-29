@@ -27,7 +27,15 @@ TRAIN_INFO: Dict[
         UnitTypeId.REAPER: {"ability": AbilityId.BARRACKSTRAIN_REAPER},
     },
     UnitTypeId.COMMANDCENTER: {
-        UnitTypeId.SCV: {"ability": AbilityId.COMMANDCENTERTRAIN_SCV}
+        UnitTypeId.ORBITALCOMMAND: {
+            "ability": AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND,
+            "requires_tech_building": UnitTypeId.BARRACKS,
+        },
+        UnitTypeId.PLANETARYFORTRESS: {
+            "ability": AbilityId.UPGRADETOPLANETARYFORTRESS_PLANETARYFORTRESS,
+            "requires_tech_building": UnitTypeId.ENGINEERINGBAY,
+        },
+        UnitTypeId.SCV: {"ability": AbilityId.COMMANDCENTERTRAIN_SCV},
     },
     UnitTypeId.CORRUPTOR: {
         UnitTypeId.BROODLORD: {

@@ -132,6 +132,8 @@ def get_unit_train_build_abilities(data):
                 AbilityId.UPGRADETOLAIR_LAIR,
                 AbilityId.UPGRADETOHIVE_HIVE,
                 AbilityId.UPGRADETOGREATERSPIRE_GREATERSPIRE,
+                AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND,
+                AbilityId.UPGRADETOPLANETARYFORTRESS_PLANETARYFORTRESS,
                 AbilityId.MORPH_OVERLORDTRANSPORT,
                 AbilityId.MORPH_OVERSEER,
             }
