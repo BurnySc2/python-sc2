@@ -81,7 +81,7 @@ jobs:
         - echo Project dir contents
         - ls
         # Build the docker image
-        - docker build -t test_image -f test/Dockerfile .
+        - docker build -t test_image -f test/Dockerfile_3.7 .
         # Run the docker image
         - docker run -it -d --name app test_image
         # Can be run from windows using command "pipenv run python test/travis_test_script.py test/autotest_bot.py"
