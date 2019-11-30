@@ -42,7 +42,6 @@ class TestBot(sc2.BotAI):
             for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
-        self.tests_target = 4
         self.tests_done_by_name = set()
 
         # Keep track of the action index and when the last action was started
@@ -444,345 +443,44 @@ class TestBot(sc2.BotAI):
                 # print(enemy.buffs, enemy.buff_duration_remain, enemy.buff_duration_max)
                 break
 
+        logger.warning("Action test 11 successful.")
         await self.clean_up_center()
 
-    # Create all upgrade research structures and research each possible upgrade
+    # Test if structures_without_construction_SCVs works after killing the scv
     async def test_botai_actions12(self):
         map_center: Point2 = self._game_info.map_center
 
-        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
-        from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+        # Wait till can afford depot
+        while not self.can_afford(UnitTypeId.SUPPLYDEPOT):
+            await self.client.debug_all_resources()
+            await self._advance_steps(2)
 
-        structure_types: List[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
-        upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM.keys())
+        while 1:
+            # Once depot is under construction: debug kill scv -> advance simulation: should now match the test case
+            if self.structures(UnitTypeId.SUPPLYDEPOT).not_ready.amount == 1:
+                construction_scvs: Units = self.workers.filter(lambda worker: worker.is_constructing_scv)
+                if construction_scvs:
+                    await self.client.debug_kill_unit(construction_scvs)
+                    await self._advance_steps(8)
 
-        # TODO if *techlab in name -> spawn rax/ fact / starport next to it
-        addon_structures: Dict[str, UnitTypeId] = {
-            "BARRACKS": UnitTypeId.BARRACKS,
-            "FACTORY": UnitTypeId.FACTORY,
-            "STARPORT": UnitTypeId.STARPORT,
-        }
+                    # Test case
+                    assert not self.workers.filter(lambda worker: worker.is_constructing_scv)
+                    assert self.structures_without_construction_SCVs.amount >= 1
+                    break
 
-        await self.client.debug_fast_build()
+            if not self.already_pending(UnitTypeId.SUPPLYDEPOT):
+                # Pick scv
+                scv: Unit = self.workers.random
+                # Pick location to build depot on
+                placement_position: Point2 = await self.find_placement(
+                    UnitTypeId.SUPPLYDEPOT, near=self.townhalls.random.position
+                )
+                if placement_position:
+                    self.do(scv.build(UnitTypeId.SUPPLYDEPOT, placement_position))
+            await self._advance_steps(2)
 
-        structure_type: UnitTypeId
-        for structure_type in structure_types:
-            # TODO: techlabs
-            if "TECHLAB" in structure_type.name:
-                continue
-
-            structure_upgrade_types: Dict[UpgradeId, Dict[str, AbilityId]] = RESEARCH_INFO[structure_type]
-            data: Dict[str, AbilityId]
-            for upgrade_id, data in structure_upgrade_types.items():
-
-                # Collect data to spawn
-                research_ability: AbilityId = data.get("ability", None)
-                requires_power: bool = data.get("requires_power", False)
-                required_building: UnitTypeId = data.get("required_building", None)
-
-                # Prevent linux crash
-                if research_ability.value not in self.game_data.abilities or upgrade_id.value not in self.game_data.upgrades:
-                    print(f"Could not find upgrade {upgrade_id} or research ability {research_ability} in self.game_data - potential version mismatch (balance upgrade - windows vs linux SC2 client")
-                    continue
-
-                # Spawn structure and requirements
-                spawn_structures: List[UnitTypeId] = []
-                if requires_power:
-                    spawn_structures.append(UnitTypeId.PYLON)
-                spawn_structures.append(structure_type)
-                if required_building:
-                    spawn_structures.append(required_building)
-
-                await self.client.debug_create_unit([[structure, 1, map_center, 1] for structure in spawn_structures])
-                print(f"Spawning {structure_type} to research upgrade {upgrade_id} via research ability {research_ability}")
-                await self._advance_steps(2)
-
-                # Wait for the structure to spawn
-                while not self.structures(structure_type):
-                    # print(f"Waiting for structure {structure_type} to spawn, structures close to center so far: {self.structures.closer_than(20, map_center)}")
-                    await self._advance_steps(2)
-
-                # If cannot afford to research: cheat money
-                while not self.can_afford(upgrade_id):
-                    # print(f"Cheating money to be able to afford {upgrade_id}, cost: {self.calculate_cost(upgrade_id)}")
-                    await self.client.debug_all_resources()
-                    await self._advance_steps(2)
-
-                # Research upgrade
-                assert upgrade_id in upgrade_types, f"Given upgrade is not in the list of upgrade types"
-                api_research_ability = self.game_data.upgrades[upgrade_id.value].research_ability.exact_id
-                assert (
-                    research_ability == api_research_ability
-                ), f"Given research upgrade {research_ability} does not match the research ability from the API {api_research_ability}"
-
-                assert self.structures(structure_type), f"Structure {structure_type} has not been spawned in time"
-
-                # Try to research the upgrade
-                while 1:
-                    upgrader_structures: Units = self.structures(structure_type)
-                    # Upgrade has been researched, break
-                    # Hi atira monkaBirthday
-                    if upgrader_structures:
-                        upgrader_structure: Unit = upgrader_structures.closest_to(map_center)
-                        if upgrader_structure.is_idle:
-                            # print(f"Making {upgrader_structure} research upgrade {upgrade_id}")
-                            self.do(upgrader_structure.research(upgrade_id))
-                        await self._advance_steps(2)
-                        if upgrade_id in self.state.upgrades:
-                            break
-
-                await self.clean_up_center()
-        logger.warning("Action test 11 successful.")
-
-    # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
-    async def test_botai_actions1001(self):
-        # Turn off damage calculation test for now
-        # TODO: move to seperate test bot file
-        return
-        upgrade_levels = [0, 1]
-        attacker_units = [
-            #
-            # Protoss
-            #
-            UnitTypeId.PROBE,
-            # UnitTypeId.ZEALOT,
-            UnitTypeId.ADEPT,
-            UnitTypeId.STALKER,
-            UnitTypeId.HIGHTEMPLAR,
-            UnitTypeId.DARKTEMPLAR,
-            UnitTypeId.ARCHON,  # Doesnt work vs workers when attacklevel > 1
-            UnitTypeId.IMMORTAL,
-            UnitTypeId.COLOSSUS,
-            UnitTypeId.PHOENIX,
-            UnitTypeId.VOIDRAY,
-            # UnitTypeId.CARRIER, # TODO
-            UnitTypeId.MOTHERSHIP,
-            UnitTypeId.TEMPEST,
-            #
-            # Terran
-            #
-            UnitTypeId.SCV,
-            UnitTypeId.MARINE,
-            UnitTypeId.MARAUDER,
-            UnitTypeId.GHOST,
-            UnitTypeId.HELLION,
-            # UnitTypeId.HELLIONTANK, # Incorrect for light targets because hellbat does not seem to have another weapon vs light specifically in the API
-            # UnitTypeId.CYCLONE, # Seems to lock on as soon as it spawns
-            UnitTypeId.SIEGETANK,
-            UnitTypeId.THOR,
-            UnitTypeId.THORAP,
-            UnitTypeId.BANSHEE,
-            UnitTypeId.VIKINGFIGHTER,
-            UnitTypeId.VIKINGASSAULT,
-            # UnitTypeId.BATTLECRUISER, # TODO
-            #
-            # Zerg
-            #
-            UnitTypeId.DRONE,
-            UnitTypeId.ZERGLING,
-            # UnitTypeId.BANELING, # TODO
-            UnitTypeId.QUEEN,
-            # UnitTypeId.ROACH, # Has bugs that I don't know how to fix
-            UnitTypeId.RAVAGER,
-            # UnitTypeId.HYDRALISK, # TODO
-            # UnitTypeId.LURKERMPBURROWED, # Somehow fails the test
-            # UnitTypeId.MUTALISK, # Mutalisk is supposed to deal 9-3-1 damage, but it seems it deals 12 damage if there is no nearby 2nd target
-            UnitTypeId.CORRUPTOR,
-            # UnitTypeId.BROODLORD, # Was unreliable because the broodlings would also attack
-            UnitTypeId.ULTRALISK,
-            # Buildings
-            UnitTypeId.MISSILETURRET,
-            UnitTypeId.SPINECRAWLER,
-            UnitTypeId.SPORECRAWLER,
-            UnitTypeId.PLANETARYFORTRESS,
-        ]
-        defender_units = [
-            # Ideally one of each type: ground and air unit with each armor tage
-            # Ground, no tag
-            UnitTypeId.RAVAGER,
-            # Ground, light
-            UnitTypeId.MULE,
-            # Ground, armored
-            UnitTypeId.MARAUDER,
-            # Ground, biological
-            UnitTypeId.ROACH,
-            # Ground, psionic
-            UnitTypeId.HIGHTEMPLAR,
-            # Ground, mechanical
-            UnitTypeId.STALKER,
-            # Ground, massive
-            # UnitTypeId.ULTRALISK, # Fails vs our zergling
-            # Ground, structure
-            # UnitTypeId.PYLON, # Pylon seems to regenerate 1 shield for no reason
-            UnitTypeId.SUPPLYDEPOT,
-            UnitTypeId.BUNKER,
-            UnitTypeId.MISSILETURRET,
-            # Air, light
-            UnitTypeId.PHOENIX,
-            # Air, armored
-            UnitTypeId.VOIDRAY,
-            # Air, biological
-            UnitTypeId.CORRUPTOR,
-            # Air, psionic
-            UnitTypeId.VIPER,
-            # Air, mechanical
-            UnitTypeId.MEDIVAC,
-            # Air, massive
-            UnitTypeId.BATTLECRUISER,
-            # Air, structure
-            UnitTypeId.BARRACKSFLYING,
-            # Ground and air
-            UnitTypeId.COLOSSUS,
-        ]
-        await self._advance_steps(20)
-        map_center = self.game_info.map_center
-
-        # Show whole map
-        await self.client.debug_show_map()
-
-        def get_attacker_and_defender():
-            my_units = self.units | self.structures
-            enemy_units = self.enemy_units | self.enemy_structures
-            if not my_units or not enemy_units:
-                # print("my units:", my_units)
-                # print("enemy units:",enemy_units)
-                return None, None
-            attacker: Unit = my_units.closest_to(map_center)
-            defender: Unit = enemy_units.closest_to(map_center)
-            return attacker, defender
-
-        def do_some_unit_property_tests(attacker: Unit, defender: Unit):
-            """ Some tests that are not covered by test_pickled_data.py """
-            # TODO move unit unrelated tests elsewhere
-            self.step_time
-            self.main_base_ramp
-            self.units_created
-
-            self.structure_type_build_progress(attacker.type_id)
-            self.structure_type_build_progress(defender.type_id)
-            self.tech_requirement_progress(attacker.type_id)
-            self.tech_requirement_progress(defender.type_id)
-            self.in_map_bounds(attacker.position)
-            self.in_map_bounds(defender.position)
-            self.get_terrain_z_height(attacker.position)
-            self.get_terrain_z_height(defender.position)
-
-            for unit in [attacker, defender]:
-                unit.shield_percentage
-                unit.shield_health_percentage
-                unit.energy_percentage
-                unit.age_in_frames
-                unit.age
-                unit.is_memory
-                unit.is_snapshot
-                unit.cloak
-                unit.is_revealed
-                unit.can_be_attacked
-                unit.buff_duration_remain
-                unit.buff_duration_max
-                unit.order_target
-                unit.is_transforming
-                unit.has_techlab
-                unit.has_reactor
-                unit.add_on_position
-                unit.health_percentage
-                unit.bonus_damage
-                unit.air_dps
-
-            attacker.target_in_range(defender)
-            defender.target_in_range(attacker)
-            attacker.calculate_dps_vs_target(defender)
-            defender.calculate_dps_vs_target(attacker)
-            attacker.is_facing(defender)
-            defender.is_facing(attacker)
-            attacker == defender
-            defender == attacker
-
+        logger.warning("Action test 12 successful.")
         await self.clean_up_center()
-
-        attacker: Unit
-        defender: Unit
-        for upgrade_level in upgrade_levels:
-            if upgrade_level != 0:
-                await self.client.debug_upgrade()
-                # await self._advance_steps(5)
-            for attacker_type in attacker_units:
-                for defender_type in defender_units:
-                    # DT, Thor, Tempest one-shots workers, so skip test
-                    if attacker_type in {
-                        UnitTypeId.DARKTEMPLAR,
-                        UnitTypeId.TEMPEST,
-                        UnitTypeId.THOR,
-                        UnitTypeId.THORAP,
-                        UnitTypeId.LIBERATORAG,
-                        UnitTypeId.PLANETARYFORTRESS,
-                        UnitTypeId.ARCHON,
-                    } and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}:
-                        continue
-
-                    # Spawn units
-                    await self.client.debug_create_unit(
-                        [[attacker_type, 1, map_center, 1], [defender_type, 1, map_center, 2]]
-                    )
-                    await self._advance_steps(1)
-
-                    # Wait for units to spawn
-                    attacker, defender = get_attacker_and_defender()
-                    while (
-                        attacker is None
-                        or defender is None
-                        or attacker.type_id != attacker_type
-                        or defender.type_id != defender_type
-                    ):
-                        await self._advance_steps(1)
-                        attacker, defender = get_attacker_and_defender()
-                        # TODO check if shield calculation is correct by setting shield of enemy unit
-                    # print(f"Attacker: {attacker}, defender: {defender}")
-                    do_some_unit_property_tests(attacker, defender)
-
-                    # Units have spawned, calculate expected damage
-                    expected_damage: float = attacker.calculate_damage_vs_target(defender)[0]
-                    # If expected damage is zero, it means that the attacker cannot attack the defender: skip test
-                    if expected_damage == 0:
-                        await self.clean_up_center()
-                        continue
-                    # Thor antiground seems buggy sometimes and not reliable in tests, skip it
-                    if attacker_type in {UnitTypeId.THOR, UnitTypeId.THORAP} and not defender.is_flying:
-                        await self.clean_up_center()
-                        continue
-
-                    real_damage = 0
-                    # Limit the while loop
-                    max_steps = 100
-                    while (
-                        attacker.weapon_cooldown == 0 or attacker.weapon_cooldown > 3
-                    ) and real_damage < expected_damage:
-                        if attacker_type in {UnitTypeId.PROBE, UnitTypeId.SCV, UnitTypeId.DRONE}:
-                            self.do(attacker.attack(defender))
-                        await self._advance_steps(1)
-                        # Unsure why I have to recalculate this here again but it prevents a bug
-                        attacker, defender = get_attacker_and_defender()
-                        expected_damage: float = max(expected_damage, attacker.calculate_damage_vs_target(defender)[0])
-                        real_damage = math.ceil(
-                            defender.health_max + defender.shield_max - defender.health - defender.shield
-                        )
-                        # print(
-                        #     f"Attacker type: {attacker_type}, defender health: {defender.health} / {defender.health_max}, defender shield: {defender.shield} / {defender.shield_max}, expected damage: {expected_damage}, real damage so far: {real_damage}, attacker weapon cooldown: {attacker.weapon_cooldown}"
-                        # )
-                        max_steps -= 1
-                        assert (
-                            max_steps > 0
-                        ), f"Step limit reached. Test timed out for attacker {attacker_type} and defender {defender_type}"
-                    assert (
-                        expected_damage == real_damage
-                    ), f"Expected damage does not match real damage: Unit type {attacker_type} (attack upgrade: {attacker.attack_upgrade_level}) deals {real_damage} damage against {defender_type} (armor upgrade: {defender.armor_upgrade_level} and shield upgrade: {defender.shield_upgrade_level}) but calculated damage was {expected_damage}, attacker weapons: \n{attacker._weapons}"
-
-                    await self.clean_up_center()
-
-        # Hide map again
-        await self.client.debug_show_map()
-        await self._advance_steps(2)
-        logger.warning("Action test 1001 successful.")
 
     # TODO:
     # self.can_cast function
@@ -790,16 +488,14 @@ class TestBot(sc2.BotAI):
     # Test if events work (upgrade complete, unit complete, building complete, building started)
     # Test if functions with various combinations works (e.g. already_pending)
     # Test self.train function on: larva, hatchery + lair (queens), 2 barracks (2 marines), 2 nexus (probes) (best: every building)
-    # Test self.research function on: ebay, hatchery, forge, evo chamber (best: every building)
-    # Test unit range and base attack damage
-    # Test if structures_without_construction_SCVs works after killing the scv
-    # Test if all upgrades are correctly listed in API and in dicts upgrade_researched_from -> research all upgrades once
+    # Test unit range and (base attack damage) and other unit stats (e.g. acceleration, deceleration, movement speed (on, off creep), turn speed
     # Test if dicts are correct for unit_trained_from.py -> train all units once
 
 
 class EmptyBot(sc2.BotAI):
     async def on_start(self):
-        await self.client.debug_kill_unit(self.units)
+        if self.units:
+            await self.client.debug_kill_unit(self.units)
 
     async def on_step(self, iteration: int):
         map_center = self.game_info.map_center

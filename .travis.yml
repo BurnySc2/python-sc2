@@ -86,6 +86,8 @@ jobs:
         - docker run -it -d --name app test_image
         # Can be run from windows using command "pipenv run python test/travis_test_script.py test/autotest_bot.py"
         - docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
+        - docker exec -i app bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+        - docker exec -i app bash -c "python test/travis_test_script.py test/damagetest_bot.py"
         # Shut down and remove container after finishing
         - docker rm -f app
 

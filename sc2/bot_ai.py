@@ -1025,6 +1025,7 @@ class BotAI(DistanceCalculation):
         New function. Please report any bugs! """
         worker_targets: Set[Union[int, Point2]] = set()
         for worker in self.workers:
+            # Ignore repairing workers
             if not worker.is_constructing_scv:
                 continue
             for order in worker.orders:
@@ -1347,6 +1348,7 @@ class BotAI(DistanceCalculation):
         self.unit_tags_received_action.add(action.unit.tag)
         return True
 
+    # TODO remove again, because you can just use 'self.do()' and execute '_do_actions' and 'self.actions.clear()' afterwards?
     async def synchronous_do(self, action: UnitCommand):
         """
         Not recommended. Use self.do instead to reduce lag.
