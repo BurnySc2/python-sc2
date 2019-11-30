@@ -280,9 +280,8 @@ RESEARCH_INFO: Dict[
     },
     UnitTypeId.LURKERDENMP: {
         UpgradeId.DIGGINGCLAWS: {
-            "upgrade": UpgradeId.DIGGINGCLAWS,
             "ability": AbilityId.RESEARCH_ADAPTIVETALONS,
-            "requires_tech_building": UnitTypeId.HIVE,
+            "required_building": UnitTypeId.HIVE,
         }
     },
     UnitTypeId.ROBOTICSBAY: {
@@ -338,9 +337,8 @@ RESEARCH_INFO: Dict[
             "ability": AbilityId.RESEARCH_BANSHEEHYPERFLIGHTROTORS
         },
         UpgradeId.LIBERATORMORPH: {
-            "upgrade": UpgradeId.LIBERATORMORPH,
             "ability": AbilityId.STARPORTTECHLABRESEARCH_RESEARCHLIBERATORAGMODE,
-            "requires_tech_building": UnitTypeId.FUSIONCORE,
+            "required_building": UnitTypeId.FUSIONCORE,
         },
         UpgradeId.RAVENCORVIDREACTOR: {
             "ability": AbilityId.RESEARCH_RAVENCORVIDREACTOR
@@ -354,10 +352,17 @@ RESEARCH_INFO: Dict[
     },
     UnitTypeId.TWILIGHTCOUNCIL: {
         UpgradeId.ADEPTPIERCINGATTACK: {
-            "ability": AbilityId.RESEARCH_ADEPTRESONATINGGLAIVES
+            "ability": AbilityId.RESEARCH_ADEPTRESONATINGGLAIVES,
+            "requires_power": True,
         },
-        UpgradeId.BLINKTECH: {"ability": AbilityId.RESEARCH_BLINK},
-        UpgradeId.CHARGE: {"ability": AbilityId.RESEARCH_CHARGE},
+        UpgradeId.BLINKTECH: {
+            "ability": AbilityId.RESEARCH_BLINK,
+            "requires_power": True,
+        },
+        UpgradeId.CHARGE: {
+            "ability": AbilityId.RESEARCH_CHARGE,
+            "requires_power": True,
+        },
     },
     UnitTypeId.ULTRALISKCAVERN: {
         UpgradeId.ANABOLICSYNTHESIS: {"ability": AbilityId.RESEARCH_ANABOLICSYNTHESIS},

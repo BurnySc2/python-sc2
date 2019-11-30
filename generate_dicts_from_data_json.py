@@ -172,7 +172,7 @@ def get_unit_train_build_abilities(data):
             UnitTypeId.ADEPT: {
                 "ability": AbilityId.TRAIN_ADEPT,
                 "requires_techlab": False,
-                "requires_tech_building": UnitTypeId.CYBERNETICSCORE, # Or None
+                "required_building": UnitTypeId.CYBERNETICSCORE, # Or None
                 "requires_placement_position": False, # True for warp gate
                 "requires_power": True, # If a pylon nearby is required
             },
@@ -197,7 +197,7 @@ def get_unit_train_build_abilities(data):
                     continue
 
                 requires_techlab: bool = False
-                requires_tech_building: Optional[UnitTypeId] = None
+                required_building: Optional[UnitTypeId] = None
                 requires_placement_position: bool = False
                 requires_power: bool = False
 
@@ -223,7 +223,7 @@ def get_unit_train_build_abilities(data):
                         (req["building"] for req in requirements if req.get("building", 0)), 0
                     )
                     if requires_tech_builing_id_value:
-                        requires_tech_building = UnitTypeId(requires_tech_builing_id_value)
+                        required_building = UnitTypeId(requires_tech_builing_id_value)
 
                 if ability_id in ability_requires_placement:
                     requires_placement_position = True
@@ -236,8 +236,8 @@ def get_unit_train_build_abilities(data):
                 # Only add boolean values and tech requirement if they actually exist, to make the resulting dict file smaller
                 if requires_techlab:
                     ability_dict["requires_techlab"] = requires_techlab
-                if requires_tech_building:
-                    ability_dict["requires_tech_building"] = requires_tech_building
+                if required_building:
+                    ability_dict["required_building"] = required_building
                 if requires_placement_position:
                     ability_dict["requires_placement_position"] = requires_placement_position
                 if requires_power:
@@ -283,12 +283,12 @@ def get_upgrade_abilities(data):
             UpgradeId.TERRANINFANTRYWEAPONSLEVEL1:
             {
                 "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL1,
-                "requires_tech_building": None,
+                "required_building": None,
                 "requires_power": False, # If a pylon nearby is required
             },
             UpgradeId.TERRANINFANTRYWEAPONSLEVEL2: {
                 "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL2,
-                "requires_tech_building": UnitTypeId.ARMORY,
+                "required_building": UnitTypeId.ARMORY,
                 "requires_power": False, # If a pylon nearby is required
             },
         }
@@ -331,20 +331,6 @@ def get_upgrade_abilities(data):
                 if requires_power:
                     research_info["requires_power"] = requires_power
                 current_unit_research_abilities[resulting_upgrade] = research_info
-
-        if unit_type == UnitTypeId.STARPORTTECHLAB:
-            current_unit_research_abilities[UpgradeId.LIBERATORMORPH] = {
-                "upgrade": UpgradeId.LIBERATORMORPH,
-                "ability": AbilityId.STARPORTTECHLABRESEARCH_RESEARCHLIBERATORAGMODE,
-                "requires_tech_building": UnitTypeId.FUSIONCORE,
-            }
-
-        if unit_type == UnitTypeId.LURKERDENMP:
-            current_unit_research_abilities[UpgradeId.DIGGINGCLAWS] = {
-                "upgrade": UpgradeId.DIGGINGCLAWS,
-                "ability": AbilityId.RESEARCH_ADAPTIVETALONS,
-                "requires_tech_building": UnitTypeId.HIVE,
-            }
 
         if current_unit_research_abilities:
             unit_research_abilities[unit_type] = current_unit_research_abilities

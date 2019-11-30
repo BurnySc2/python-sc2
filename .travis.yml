@@ -9,8 +9,8 @@ jobs:
   fast_finish: true
 
   # Jobs that are allowed to fail
-  allow_failures:
-    - stage: test python 3.8
+#  allow_failures:
+#    - stage: test python 3.8
 #    - stage: release to pypi
 
   # Jobs that are being run

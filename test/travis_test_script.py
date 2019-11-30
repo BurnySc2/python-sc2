@@ -13,7 +13,7 @@ Or if you want to run from windows:
 pipenv run python test/travis_test_script.py test/autotest_bot.py
 """
 
-retries = 10
+retries = 5
 # My maxout bot (reaching 200 supply in sc2) took 110 - 140 real seconds for 7 minutes in game time
 # How long the script should run before it will be killed:
 timeout_time = 5 * 60  # 5 minutes real time

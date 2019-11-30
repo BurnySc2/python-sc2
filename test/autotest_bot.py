@@ -24,6 +24,8 @@ from sc2.ids.effect_id import EffectId
 
 from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 
+from typing import List, Set, Dict, Optional, Union
+
 logger = logging.getLogger(__name__)
 
 
@@ -96,6 +98,7 @@ class TestBot(sc2.BotAI):
             enemy_units = enemy_units.closer_than(20, map_center)
         if enemy_units:
             await self.client.debug_kill_unit(enemy_units)
+        await self._advance_steps(2)
 
     # Test BotAI properties, starting conditions
     async def test_botai_properties(self):
@@ -414,9 +417,7 @@ class TestBot(sc2.BotAI):
     # Trigger anti armor missile of raven against enemy unit and check if buff was received
     async def test_botai_actions11(self):
         await self.clean_up_center()
-        await self._advance_steps(10)
         await self.clean_up_center()
-        await self._advance_steps(10)
 
         map_center = self.game_info.map_center
 
@@ -444,7 +445,94 @@ class TestBot(sc2.BotAI):
                 break
 
         await self.clean_up_center()
-        await self._advance_steps(2)
+
+    # Create all upgrade research structures and research each possible upgrade
+    async def test_botai_actions12(self):
+        map_center: Point2 = self._game_info.map_center
+
+        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
+        from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+
+        structure_types: List[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
+        upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM.keys())
+
+        # TODO if *techlab in name -> spawn rax/ fact / starport next to it
+        addon_structures: Dict[str, UnitTypeId] = {
+            "BARRACKS": UnitTypeId.BARRACKS,
+            "FACTORY": UnitTypeId.FACTORY,
+            "STARPORT": UnitTypeId.STARPORT,
+        }
+
+        await self.client.debug_fast_build()
+
+        structure_type: UnitTypeId
+        for structure_type in structure_types:
+            # TODO: techlabs
+            if "TECHLAB" in structure_type.name:
+                continue
+
+            structure_upgrade_types: Dict[UpgradeId, Dict[str, AbilityId]] = RESEARCH_INFO[structure_type]
+            data: Dict[str, AbilityId]
+            for upgrade_id, data in structure_upgrade_types.items():
+
+                # Collect data to spawn
+                research_ability: AbilityId = data.get("ability", None)
+                requires_power: bool = data.get("requires_power", False)
+                required_building: UnitTypeId = data.get("required_building", None)
+
+                # Prevent linux crash
+                if research_ability.value not in self.game_data.abilities or upgrade_id.value not in self.game_data.upgrades:
+                    print(f"Could not find upgrade {upgrade_id} or research ability {research_ability} in self.game_data - potential version mismatch (balance upgrade - windows vs linux SC2 client")
+                    continue
+
+                # Spawn structure and requirements
+                spawn_structures: List[UnitTypeId] = []
+                if requires_power:
+                    spawn_structures.append(UnitTypeId.PYLON)
+                spawn_structures.append(structure_type)
+                if required_building:
+                    spawn_structures.append(required_building)
+
+                await self.client.debug_create_unit([[structure, 1, map_center, 1] for structure in spawn_structures])
+                print(f"Spawning {structure_type} to research upgrade {upgrade_id} via research ability {research_ability}")
+                await self._advance_steps(2)
+
+                # Wait for the structure to spawn
+                while not self.structures(structure_type):
+                    # print(f"Waiting for structure {structure_type} to spawn, structures close to center so far: {self.structures.closer_than(20, map_center)}")
+                    await self._advance_steps(2)
+
+                # If cannot afford to research: cheat money
+                while not self.can_afford(upgrade_id):
+                    # print(f"Cheating money to be able to afford {upgrade_id}, cost: {self.calculate_cost(upgrade_id)}")
+                    await self.client.debug_all_resources()
+                    await self._advance_steps(2)
+
+                # Research upgrade
+                assert upgrade_id in upgrade_types, f"Given upgrade is not in the list of upgrade types"
+                api_research_ability = self.game_data.upgrades[upgrade_id.value].research_ability.exact_id
+                assert (
+                    research_ability == api_research_ability
+                ), f"Given research upgrade {research_ability} does not match the research ability from the API {api_research_ability}"
+
+                assert self.structures(structure_type), f"Structure {structure_type} has not been spawned in time"
+
+                # Try to research the upgrade
+                while 1:
+                    upgrader_structures: Units = self.structures(structure_type)
+                    # Upgrade has been researched, break
+                    # Hi atira monkaBirthday
+                    if upgrader_structures:
+                        upgrader_structure: Unit = upgrader_structures.closest_to(map_center)
+                        if upgrader_structure.is_idle:
+                            # print(f"Making {upgrader_structure} research upgrade {upgrade_id}")
+                            self.do(upgrader_structure.research(upgrade_id))
+                        await self._advance_steps(2)
+                        if upgrade_id in self.state.upgrades:
+                            break
+
+                await self.clean_up_center()
+        logger.warning("Action test 11 successful.")
 
     # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
     async def test_botai_actions1001(self):
@@ -608,7 +696,6 @@ class TestBot(sc2.BotAI):
             defender == attacker
 
         await self.clean_up_center()
-        await self._advance_steps(2)
 
         attacker: Unit
         defender: Unit
@@ -687,9 +774,7 @@ class TestBot(sc2.BotAI):
                         expected_damage == real_damage
                     ), f"Expected damage does not match real damage: Unit type {attacker_type} (attack upgrade: {attacker.attack_upgrade_level}) deals {real_damage} damage against {defender_type} (armor upgrade: {defender.armor_upgrade_level} and shield upgrade: {defender.shield_upgrade_level}) but calculated damage was {expected_damage}, attacker weapons: \n{attacker._weapons}"
 
-                    # Cleanup
                     await self.clean_up_center()
-                    await self._advance_steps(1)
 
         # Hide map again
         await self.client.debug_show_map()
