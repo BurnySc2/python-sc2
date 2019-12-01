@@ -6,7 +6,7 @@ on: [push, pull_request]
 
 jobs:
   run_pytest_tests:
-    - name: Run pytest on pickle files
+    name: Run pytest on pickle files
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,7 +31,7 @@ jobs:
 
 
   run_autotest_bot:
-    - name: Run various tester bots on linux
+    name: Run various tester bots on linux
     runs-on: ubuntu-latest
     steps:
     # Copy data from repository
