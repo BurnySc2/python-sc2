@@ -515,6 +515,9 @@ class Unit:
                 return 0, 0, 0
             if not self.can_attack_air and target.is_flying:
                 return 0, 0, 0
+        # Enemy structures that are not completed can't attack
+        if not target.is_ready:
+            return 0, 0, 0
         target_has_guardian_shield: bool = False
         if ignore_armor:
             enemy_armor: float = 0
@@ -669,6 +672,7 @@ class Unit:
                 elif self.type_id == UnitTypeId.MARAUDER and BuffId.STIMPACKMARAUDER in self.buffs:
                     weapon_speed /= 1.5
                 elif (
+                    # TODO always assume that the enemy has the range upgrade researched
                     self.type_id == UnitTypeId.HYDRALISK
                     and self.is_mine
                     and UpgradeId.EVOLVEGROOVEDSPINES in self._bot_object.state.upgrades
@@ -718,6 +722,7 @@ class Unit:
 
         :param other_unit:
         :param angle_error: """
+        # TODO perhaps return default True for units that cannot 'face' another unit? e.g. structures (planetary fortress, bunker, missile turret, photon cannon, spine, spore) or sieged tanks
         angle = math.atan2(
             other_unit.position_tuple[1] - self.position_tuple[1], other_unit.position_tuple[0] - self.position_tuple[0]
         )

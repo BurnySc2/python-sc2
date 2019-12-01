@@ -1426,7 +1426,7 @@ class BotAI(DistanceCalculation):
     def in_map_bounds(self, pos: Union[Point2, tuple]) -> bool:
         """ Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
         :param pos: """
-        return 0 <= pos[0] < self.game_info.placement_grid.width and 0 <= pos[1] < self.game_info.placement_grid.height
+        return self._game_info.playable_area.x <= pos[0] < self._game_info.playable_area.x + self.game_info.playable_area.width and self._game_info.playable_area.y <= pos[1] < self._game_info.playable_area.y + self.game_info.playable_area.height
 
     # For the functions below, make sure you are inside the boundries of the map size.
     def get_terrain_height(self, pos: Union[Point2, Point3, Unit]) -> int:
