@@ -31,6 +31,7 @@ jobs:
     steps:
     - name: build image
       run: |
+        sudo apt-get install tree
         tree
         docker build -t test_image -f test/Dockerfile_3.7 .
     - name: run container
