@@ -25,3 +25,14 @@ jobs:
     - name: Test with pipenv run pytest
       run: |
         pipenv run pytest test/
+
+  run_autotest_bot:
+    runs-on: ubuntu-latest
+    steps:
+    - name: build image
+      run: |
+        docker build -t test_image -f test/Dockerfile_3.7 .
+    - name: run container
+      run: |
+        docker run -it -d --name app test_image
+        docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
