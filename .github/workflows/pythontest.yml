@@ -29,10 +29,14 @@ jobs:
   run_autotest_bot:
     runs-on: ubuntu-latest
     steps:
+    # Copy data from repository
+    - uses: actions/checkout@v1
     - name: build image
       run: |
+      # Print directory
         sudo apt-get install tree
-        tree ../
+        tree
+      # Build docker image from Dockerfile
         docker build -t test_image -f test/Dockerfile_3.7 .
     - name: run container
       run: |
