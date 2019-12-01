@@ -32,7 +32,7 @@ jobs:
     - name: build image
       run: |
         sudo apt-get install tree
-        tree
+        tree ../
         docker build -t test_image -f test/Dockerfile_3.7 .
     - name: run container
       run: |
