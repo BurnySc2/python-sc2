@@ -32,6 +32,7 @@ jobs:
           pipenv run pytest test/
 
 
+
   run_coverage:
     # Run and upload coverage report using python 3.7
     name: Run coverage
@@ -97,21 +98,21 @@ jobs:
       run: |
         docker run -it -d --name app1 test_image
         docker exec -i app1 bash -c "python test/travis_test_script.py test/autotest_bot.py"
-        docker exec -i app1 bash -c "tree"
+        docker exec -i app1 bash -c "tree /"
         docker rm -f app1
 
     - name: Run upgradestest_bot.py
       run: |
         docker run -it -d --name app2 test_image
         docker exec -i app2 bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
-        docker exec -i app2 bash -c "tree"
+        docker exec -i app2 bash -c "tree /"
         docker rm -f app2
 
     - name: Run damagetest_bot.py
       run: |
         docker run -it -d --name app3 test_image
         docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
-        docker exec -i app3 bash -c "tree"
+        docker exec -i app3 bash -c "tree /"
         docker rm -f app3
 
 
@@ -191,6 +192,7 @@ jobs:
           python setup.py sdist bdist_wheel
 
       - name: Publish package
+        continue-on-error: true
         # Upload files in dist/* directory
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/convert-to-github-actions'
         env:
