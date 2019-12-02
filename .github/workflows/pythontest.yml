@@ -97,7 +97,8 @@ jobs:
     needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
     steps:
       - uses: actions/checkout@v1
-        run: echo ${{github.ref}}
+
+      - run: echo ${{github.ref}}
 
       - name: Publish to Github Pages
         if: github.ref == 'develop' || github.ref == 'convert-to-github-actions'
