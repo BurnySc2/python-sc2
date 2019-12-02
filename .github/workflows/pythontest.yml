@@ -6,7 +6,7 @@ on: [push, pull_request]
 
 jobs:
   run_pytest_tests:
-    name: Run pytest on pickle files
+    name: Run pytest
     runs-on: ubuntu-latest
     timeout-minutes: 3
     strategy:
@@ -33,7 +33,7 @@ jobs:
 
 
 #  run_autotest_bot:
-#    name: Run various tester bots on linux
+#    name: Run testbots linux
 #    runs-on: ubuntu-latest
 #    timeout-minutes: 15
 #    strategy:
@@ -101,6 +101,11 @@ jobs:
     needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
     steps:
       - uses: actions/checkout@v1
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: Remove docs and prepare to build
         run: |
