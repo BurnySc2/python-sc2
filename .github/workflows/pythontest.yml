@@ -97,7 +97,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7]
-    # Required job to succeed before this job is run
+    # Required jobs to succeed before this job is run
     needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
     steps:
       - uses: actions/checkout@v1
@@ -108,6 +108,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Remove docs and prepare to build
+        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
         run: |
           echo ${{github.ref}}
           python -m pip install pipenv
@@ -129,3 +130,20 @@ jobs:
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: . # The folder the action should deploy.
 
+
+  release_to_pypi:
+    name: Pypi
+    runs-on: ubuntu-latest
+    # Required jobs to succeed before this job is run
+    # needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Publish package
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/convert-to-github-actions'
+        uses: mariamrf/py-package-publish-action@v1.0.0
+        with:
+          python_version: '3.7.0'
+        env:
+          TWINE_PASSWORD: ${{ secrets.pypi_password }}
+          TWINE_USERNAME: ${{ secrets.pypi_username }}
