@@ -101,7 +101,7 @@ jobs:
       - run: echo ${{github.ref}}
 
       - name: Publish to Github Pages
-        if: github.ref == 'develop' || github.ref == 'convert-to-github-actions'
+        # if: github.ref == 'develop' || github.ref == 'convert-to-github-actions'
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
