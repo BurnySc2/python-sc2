@@ -104,10 +104,10 @@ jobs:
 
       - name: Remove docs and prepare to build
         run: |
-        echo ${{github.ref}}
-        python -m pip install pipenv
-        pipenv install --dev --python ${{ matrix.python-version }}
-        rm -r docs
+          echo ${{github.ref}}
+          python -m pip install pipenv
+          pipenv install --dev --python ${{ matrix.python-version }}
+          rm -r docs
 
       - name: Build docs from scratch
         run: |
