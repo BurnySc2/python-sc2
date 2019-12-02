@@ -89,23 +89,25 @@ jobs:
 
   release_to_github_pages:
     name: GitHub Pages
-    uses: crazy-max/ghaction-github-pages@v1.2.5
-    with:
-      # GitHub repository where assets will be deployed (default current)
-      repo: # optional
-      # Git branch where assets will be deployed
-      target_branch: # optional, default is gh-pages
-      # Create incremental commit instead of doing push force
-      keep_history: # optional, default is false
-      # Allow an empty commit to be created
-      allow_empty_commit: # optional, default is true
-      # Build directory to deploy
-      build_dir: .
-      # Commit author's name
-      committer_name: # optional
-      # Commit author's email
-      committer_email: # optional
-      # Commit message
-      commit_message: # optional
-      # Write the given domain name to the CNAME file
-      fqdn: # optional
+    steps:
+      - name: Publish to Github Pages
+        uses: crazy-max/ghaction-github-pages@v1.2.5
+        with:
+          # GitHub repository where assets will be deployed (default current)
+          repo: # optional
+          # Git branch where assets will be deployed
+          target_branch: # optional, default is gh-pages
+          # Create incremental commit instead of doing push force
+          keep_history: # optional, default is false
+          # Allow an empty commit to be created
+          allow_empty_commit: # optional, default is true
+          # Build directory to deploy
+          build_dir: .
+          # Commit author's name
+          committer_name: # optional
+          # Commit author's email
+          committer_email: # optional
+          # Commit message
+          commit_message: # optional
+          # Write the given domain name to the CNAME file
+          fqdn: # optional
