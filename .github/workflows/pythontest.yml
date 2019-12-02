@@ -94,14 +94,14 @@ jobs:
     name: GitHub Pages
     runs-on: ubuntu-latest
     # Required job to succeed before this job is run
-    # needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
+    needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
     steps:
       - uses: actions/checkout@v1
 
       - run: echo ${{github.ref}}
 
       - name: Publish to Github Pages
-        # if: github.ref == 'develop' || github.ref == 'convert-to-github-actions'
+        if: github.ref == 'refs/heads/develop' || github.ref == 'crefs/heads/convert-to-github-actions'
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
