@@ -8,6 +8,7 @@ jobs:
   run_pytest_tests:
     name: Run pytest on pickle files
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     strategy:
       matrix:
         python-version: [3.7, 3.8]
@@ -34,6 +35,7 @@ jobs:
 #  run_autotest_bot:
 #    name: Run various tester bots on linux
 #    runs-on: ubuntu-latest
+#    timeout-minutes: 15
 #    strategy:
 #      # Do not allow this test to cancel. Finish all jobs regardless of error
 #      fail-fast: false
@@ -91,6 +93,9 @@ jobs:
   release_to_github_pages:
     name: GitHub Pages
     runs-on: ubuntu-latest
+    # Required job to succeed before this job is run
+    needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
+    if: github.ref == 'develop' || github.ref == 'convert-to-github-actions'
     steps:
       - uses: actions/checkout@v1
 
@@ -98,7 +103,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          # BASE_BRANCH: master # The branch the action should deploy from.
+          BASE_BRANCH: develop # The branch the action should deploy from.
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: . # The folder the action should deploy.
 
