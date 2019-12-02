@@ -1,4 +1,4 @@
-name: Python pipenv run pytest
+name: Python
 
 # Help: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
 
@@ -9,7 +9,6 @@ jobs:
     name: Run pytest on pickle files
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         python-version: [3.7, 3.8]
 
@@ -23,7 +22,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip pipenv
+#        python -m pip install --upgrade pip pipenv
+        python -m pip install pipenv
         pipenv install --dev --python ${{ matrix.python-version }}
 
     - name: Run pipenv pytest tests on pickle files
@@ -31,57 +31,81 @@ jobs:
         pipenv run pytest test/
 
 
-  run_autotest_bot:
-    name: Run various tester bots on linux
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    steps:
-    # Copy data from repository
-    - uses: actions/checkout@v1
+#  run_autotest_bot:
+#    name: Run various tester bots on linux
+#    runs-on: ubuntu-latest
+#    strategy:
+#      # Do not allow this test to cancel. Finish all jobs regardless of error
+#      fail-fast: false
+#    steps:
+#    # Copy data from repository
+#    - uses: actions/checkout@v1
+#
+#    - name: Print directories and files
+#      run: |
+#        # Print directory
+#        sudo apt-get install tree
+#        tree
+#
+#    - name: Load and build docker image
+#      run: |
+#        # Build docker image from Dockerfile
+#        docker build -t test_image -f test/Dockerfile_3.7 .
+#
+#    - name: Run autotest_bot.py
+#      run: |
+#        docker run -it -d --name app1 test_image
+#        docker exec -i app1 bash -c "python test/travis_test_script.py test/autotest_bot.py"
+#        docker rm -f app1
+#
+#    - name: Run upgradestest_bot.py
+#      run: |
+#        docker run -it -d --name app2 test_image
+#        docker exec -i app2 bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+#        docker rm -f app2
+#
+#    - name: Run damagetest_bot.py
+#      run: |
+#        docker run -it -d --name app3 test_image
+#        docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
+#        docker rm -f app3
 
-    - name: Print directories and files
-      run: |
-        # Print directory
-        sudo apt-get install tree
-        tree
 
-    - name: Load and build docker image
-      run: |
-        # Build docker image from Dockerfile
-        docker build -t test_image -f test/Dockerfile_3.7 .
+# # Upload example file
+#  artifact_upload_test:
+#    name: Upload world.txt
+#    runs-on: ubuntu-latest
+#    steps:
+#    - uses: actions/checkout@v1
+#
+#    - run: mkdir -p path/to/artifact
+#
+#    - run: echo hello > path/to/artifact/world.txt
+#
+#    - uses: actions/upload-artifact@v1
+#      with:
+#        name: my-artifact
+#        path: path/to/artifact
 
-    - name: Run autotest_bot.py
-      run: |
-        docker run -it -d --name app1 test_image
-        docker exec -i app1 bash -c "python test/travis_test_script.py test/autotest_bot.py"
-        docker rm -f app1
-
-    - name: Run upgradestest_bot.py
-      run: |
-        docker run -it -d --name app2 test_image
-        docker exec -i app2 bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
-        docker rm -f app2
-
-    - name: Run damagetest_bot.py
-      run: |
-        docker run -it -d --name app3 test_image
-        docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
-        docker rm -f app3
-
-
-  artifact_upload_test:
-    name: Upload world.txt
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-
-    - run: mkdir -p path/to/artifact
-
-    - run: echo hello > path/to/artifact/world.txt
-
-    - uses: actions/upload-artifact@v1
-      with:
-        name: my-artifact
-        path: path/to/artifact
-
+  release_to_github_pages
+    name: GitHub Pages
+    uses: crazy-max/ghaction-github-pages@v1.2.5
+    with:
+      # GitHub repository where assets will be deployed (default current)
+      repo: # optional
+      # Git branch where assets will be deployed
+      target_branch: # optional, default is gh-pages
+      # Create incremental commit instead of doing push force
+      keep_history: # optional, default is false
+      # Allow an empty commit to be created
+      allow_empty_commit: # optional, default is true
+      # Build directory to deploy
+      build_dir: .
+      # Commit author's name
+      committer_name: # optional
+      # Commit author's email
+      committer_email: # optional
+      # Commit message
+      commit_message: # optional
+      # Write the given domain name to the CNAME file
+      fqdn: # optional
