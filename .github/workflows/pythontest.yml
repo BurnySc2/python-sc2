@@ -13,22 +13,22 @@ jobs:
         python-version: [3.7, 3.8]
 
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        # python -m pip install --upgrade pip pipenv
-        python -m pip install pipenv
-        pipenv install --dev --python ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          # python -m pip install --upgrade pip pipenv
+          python -m pip install pipenv
+          pipenv install --dev --python ${{ matrix.python-version }}
 
-    - name: Run pipenv pytest tests on pickle files
-      run: |
-        pipenv run pytest test/
+      - name: Run pipenv pytest tests on pickle files
+        run: |
+          pipenv run pytest test/
 
 
 #  run_autotest_bot:
@@ -87,6 +87,7 @@ jobs:
 #        name: my-artifact
 #        path: path/to/artifact
 
+  # https://github.com/JamesIves/github-pages-deploy-action
   release_to_github_pages:
     name: GitHub Pages
     runs-on: ubuntu-latest
@@ -94,23 +95,10 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Publish to Github Pages
-        uses: crazy-max/ghaction-github-pages@v1.2.5
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          # GitHub repository where assets will be deployed (default current)
-          repo: # optional
-          # Git branch where assets will be deployed
-          target_branch: # optional, default is gh-pages
-          # Create incremental commit instead of doing push force
-          keep_history: # optional, default is false
-          # Allow an empty commit to be created
-          allow_empty_commit: # optional, default is true
-          # Build directory to deploy
-          build_dir: .
-          # Commit author's name
-          committer_name: # optional
-          # Commit author's email
-          committer_email: # optional
-          # Commit message
-          commit_message: # optional
-          # Write the given domain name to the CNAME file
-          fqdn: # optional
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          # BASE_BRANCH: master # The branch the action should deploy from.
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs # The folder the action should deploy.
+
