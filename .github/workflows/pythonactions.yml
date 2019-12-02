@@ -40,6 +40,7 @@ jobs:
 
   run_coverage:
     # Run and upload coverage report using python 3.7
+    # This coverage test does not cover the whole testing range, check /bat_files/rune_code_coverage.bat
     name: Run coverage
     runs-on: ubuntu-latest
     timeout-minutes: 3
@@ -198,14 +199,15 @@ jobs:
           python setup.py sdist bdist_wheel
 
       - name: Publish package
-        continue-on-error: true
+        # continue-on-error: true
         # Upload files in dist/* directory
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/convert-to-github-actions'
         env:
           # Set env variables, 'twine' then uses these to upload to pypi
           TWINE_PASSWORD: ${{ secrets.pypi_password }}
           TWINE_USERNAME: ${{ secrets.pypi_username }}
+        # --skip-existing will not make twine error when package version already exists
         run: |
-          twine upload dist/* --verbose
+          twine upload dist/* --verbose --skip-existing
 
 
