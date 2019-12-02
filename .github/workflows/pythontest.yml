@@ -87,7 +87,7 @@ jobs:
 #        name: my-artifact
 #        path: path/to/artifact
 
-  release_to_github_pages
+  release_to_github_pages:
     name: GitHub Pages
     uses: crazy-max/ghaction-github-pages@v1.2.5
     with:
