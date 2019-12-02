@@ -93,12 +93,27 @@ jobs:
   release_to_github_pages:
     name: GitHub Pages
     runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: [3.7]
     # Required job to succeed before this job is run
     needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
     steps:
       - uses: actions/checkout@v1
 
-      - run: echo ${{github.ref}}
+      - name: Remove docs and prepare to build
+        run: |
+        echo ${{github.ref}}
+        python -m pip install pipenv
+        pipenv install --dev --python ${{ matrix.python-version }}
+        rm -r docs
+
+      - name: Build docs from scratch
+        run: |
+          cd docs_generate
+          pipenv run sphinx-build -a -E -b html . ../docs
+          cd ..
 
       - name: Publish to Github Pages
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/convert-to-github-actions'
