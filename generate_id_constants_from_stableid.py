@@ -74,7 +74,8 @@ def parse_data(data):
             print(f"{key} has value 0 and id {v['id']}, overwriting {key}: {abilities[key]}")
             # Commented out to try to fix: 3670 is not a valid AbilityId
             abilities[key] = v["id"]
-            pass
+        elif key in abilities:
+            print(f"{key} has appeared a second time with id={v['id']}")
         else:
             abilities[key] = v["id"]
 

@@ -32,12 +32,12 @@ def combine_actions(action_iter):
         ability, target, queue, combineable = key
 
         if combineable:
-            # Combine actions with no target, e.g. train and research commands
+            # Combine actions with no target, e.g. lift, burrowup, burrowdown, siege, unsiege, uproot spines
             if target is None:
                 cmd = raw_pb.ActionRawUnitCommand(
                     ability_id=ability.value, unit_tags={u.unit.tag for u in items}, queue_command=queue
                 )
-            # Combine actions with target point
+            # Combine actions with target point, e.g. attack_move or move commands on a position
             elif isinstance(target, Point2):
                 cmd = raw_pb.ActionRawUnitCommand(
                     ability_id=ability.value,
@@ -45,7 +45,7 @@ def combine_actions(action_iter):
                     queue_command=queue,
                     target_world_space_pos=common_pb.Point2D(x=target.x, y=target.y),
                 )
-            # Combine actions with target unit
+            # Combine actions with target unit, e.g. attack commands directly on a unit
             elif isinstance(target, Unit):
                 cmd = raw_pb.ActionRawUnitCommand(
                     ability_id=ability.value,
@@ -63,7 +63,7 @@ def combine_actions(action_iter):
             Return one action for each unit; this is required for certain commands that would otherwise be grouped, and only executed once
             Examples:
             Select 3 hatcheries, build a queen with each hatch - the grouping function would group these unit tags and only issue one train command once to all 3 unit tags - resulting in one total train command
-            I imagine the same thing would happen to certain other abilities: Battlecruiser yamato on same target, queen transfuse on same time, ghost snipe on same target, all build commands with the same unit type and also all morphs (zergling to banelings)
+            I imagine the same thing would happen to certain other abilities: Battlecruiser yamato on same target, queen transfuse on same target, ghost snipe on same target, all build commands with the same unit type and also all morphs (zergling to banelings)
             However, other abilities can and should be grouped, see constants.py 'COMBINEABLE_ABILITIES'
             """
             u: UnitCommand

@@ -11,12 +11,14 @@ from ..ids.upgrade_id import UpgradeId
 from typing import Dict, Set, Union
 
 UNIT_TECH_ALIAS: Dict[UnitTypeId, Set[UnitTypeId]] = {
+    UnitTypeId.ASSIMILATORRICH: {UnitTypeId.ASSIMILATOR},
     UnitTypeId.BARRACKSFLYING: {UnitTypeId.BARRACKS},
     UnitTypeId.BARRACKSREACTOR: {UnitTypeId.REACTOR},
     UnitTypeId.BARRACKSTECHLAB: {UnitTypeId.TECHLAB},
     UnitTypeId.COMMANDCENTERFLYING: {UnitTypeId.COMMANDCENTER},
     UnitTypeId.CREEPTUMORBURROWED: {UnitTypeId.CREEPTUMOR},
     UnitTypeId.CREEPTUMORQUEEN: {UnitTypeId.CREEPTUMOR},
+    UnitTypeId.EXTRACTORRICH: {UnitTypeId.EXTRACTOR},
     UnitTypeId.FACTORYFLYING: {UnitTypeId.FACTORY},
     UnitTypeId.FACTORYREACTOR: {UnitTypeId.REACTOR},
     UnitTypeId.FACTORYTECHLAB: {UnitTypeId.TECHLAB},
@@ -32,6 +34,7 @@ UNIT_TECH_ALIAS: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.PLANETARYFORTRESS: {UnitTypeId.COMMANDCENTER},
     UnitTypeId.PYLONOVERCHARGED: {UnitTypeId.PYLON},
     UnitTypeId.QUEENBURROWED: {UnitTypeId.QUEEN},
+    UnitTypeId.REFINERYRICH: {UnitTypeId.REFINERY},
     UnitTypeId.SIEGETANKSIEGED: {UnitTypeId.SIEGETANK},
     UnitTypeId.STARPORTFLYING: {UnitTypeId.STARPORT},
     UnitTypeId.STARPORTREACTOR: {UnitTypeId.REACTOR},

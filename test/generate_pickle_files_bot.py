@@ -129,7 +129,7 @@ def main():
         "Reminiscence",
         "Sanglune",
         "SequencerLE",
-        # "StasisLE", Commented out because it has uneven number of expansions
+        # "StasisLE", Commented out because it has uneven number of expansions, and wasn't used in the ladder pool anyway
         "TheTimelessVoid",
         "ThunderbirdLE",
         "Treachery",

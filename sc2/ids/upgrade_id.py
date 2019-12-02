@@ -301,6 +301,7 @@ class UpgradeId(enum.Enum):
     DIGGINGCLAWS = 293
     CARRIERCARRIERCAPACITY = 294
     CARRIERLEASHRANGEUPGRADE = 295
+    ENHANCEDSHOCKWAVES = 296
 
 
     def __repr__(self):

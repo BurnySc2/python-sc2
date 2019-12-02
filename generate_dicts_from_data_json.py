@@ -228,15 +228,6 @@ def get_unit_train_build_abilities(data):
 
                 requires_power = entry.get("needs_power", False)
 
-                # Debugging output:
-
-                # if ability_id in {AbilityId.BARRACKSTRAIN_GHOST}:
-                #     print(json.dumps(entry, indent=4))
-
-                # TODO: Hotfix for ghost
-                if ability_id == AbilityId.BARRACKSTRAIN_GHOST:
-                    requires_techlab = True
-
                 resulting_unit = ability_to_unittypeid_dict[ability_id]
 
                 ability_dict = {"ability": ability_id}
@@ -318,19 +309,9 @@ def get_upgrade_abilities(data):
                 if ability_id not in ability_to_upgrade_dict:
                     continue
 
-                greater_spire_as_requirement: Set[AbilityId] = {
-                    AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
-                    AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL3,
-                    AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
-                    AbilityId.RESEARCH_ZERGFLYERARMORLEVEL3,
-                }
-
                 required_building = None
                 requirements = ability_info.get("requirements", [])
-                # TODO: fix for greater spire, wrong in dentosals tech tree (lair and hive instead of greater spire)
-                if ability_id in greater_spire_as_requirement:
-                    required_building = UnitTypeId.GREATERSPIRE
-                elif requirements:
+                if requirements:
                     req_building_id_value = next(
                         (req["building"] for req in requirements if req.get("building", 0)), None
                     )
@@ -349,7 +330,6 @@ def get_upgrade_abilities(data):
                     research_info["requires_power"] = requires_power
                 current_unit_research_abilities[resulting_upgrade] = research_info
 
-        # TODO: Fix liberator range upgrade, missing in dentosals techtree
         if unit_type == UnitTypeId.STARPORTTECHLAB:
             current_unit_research_abilities[UpgradeId.LIBERATORMORPH] = {
                 "upgrade": UpgradeId.LIBERATORMORPH,
@@ -357,7 +337,6 @@ def get_upgrade_abilities(data):
                 "requires_tech_building": UnitTypeId.FUSIONCORE,
             }
 
-        # TODO: Fix lurker den adaptive talons, missing in dentosals techtree
         if unit_type == UnitTypeId.LURKERDENMP:
             current_unit_research_abilities[UpgradeId.DIGGINGCLAWS] = {
                 "upgrade": UpgradeId.DIGGINGCLAWS,
@@ -367,9 +346,6 @@ def get_upgrade_abilities(data):
 
         if current_unit_research_abilities:
             unit_research_abilities[unit_type] = current_unit_research_abilities
-
-    # TODO: Hotfix for greater spire - currently only level 1 research abilities are listed in greater spire (dentosals tech tree), but 1 to 3 are listed in spire
-    unit_research_abilities[UnitTypeId.GREATERSPIRE] = unit_research_abilities[UnitTypeId.SPIRE]
 
     return unit_research_abilities
 
@@ -424,7 +400,7 @@ def generate_unit_alias_dict(data: dict):
     unit_data = data["Unit"]
     upgrade_data = data["Upgrade"]
 
-    # Load pickled game data files
+    # Load pickled game data files from one of the test files
     path = os.path.dirname(__file__)
     pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
     pickled_files = os.listdir(pickled_files_folder_path)

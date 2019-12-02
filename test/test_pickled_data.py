@@ -37,6 +37,10 @@ It will load the pickle files, recreate the bot object from scratch and tests mo
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
 
+from sc2.constants import TARGET_GROUND, TARGET_AIR, TARGET_BOTH, IS_LIGHT, IS_ARMORED, IS_MECHANICAL, IS_BIOLOGICAL
+from sc2.data import TargetType
+from sc2.data import Attribute
+
 
 def get_map_specific_bots() -> Iterable[BotAI]:
     folder = os.path.dirname(__file__)
@@ -364,6 +368,23 @@ def test_bot_ai():
     assert_cost(UnitTypeId.ORBITALCOMMAND, Cost(150, 0))
     assert_cost(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND, Cost(150, 0))
 
+    assert bot.calculate_unit_value(UnitTypeId.ORBITALCOMMAND) == Cost(550, 0)
+    assert bot.calculate_unit_value(UnitTypeId.RAVAGER) == Cost(100, 100)
+    assert bot.calculate_unit_value(UnitTypeId.ARCHON) == Cost(175, 275)
+    assert bot.calculate_unit_value(UnitTypeId.ADEPTPHASESHIFT) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.AUTOTURRET) == Cost(100, 0)
+    assert bot.calculate_unit_value(UnitTypeId.INFESTORTERRAN) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.INFESTORTERRANBURROWED) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.LARVA) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.EGG) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.LOCUSTMP) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.LOCUSTMPFLYING) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.BROODLING) == Cost(0, 0)
+    # Other and effects
+    assert bot.calculate_unit_value(UnitTypeId.KD8CHARGE) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.RAVAGERCORROSIVEBILEMISSILE) == Cost(0, 0)
+    assert bot.calculate_unit_value(UnitTypeId.VIPERACGLUESCREENDUMMY) == Cost(0, 0)
+
     assert bot.calculate_cost(UnitTypeId.BROODLORD) == Cost(150, 150)
     assert bot.calculate_cost(UnitTypeId.RAVAGER) == Cost(25, 75)
     assert bot.calculate_cost(UnitTypeId.BANELING) == Cost(25, 25)
@@ -379,6 +400,7 @@ def test_bot_ai():
     assert bot.calculate_cost(UnitTypeId.SCV) == Cost(50, 0)
     assert bot.calculate_cost(UnitTypeId.PROBE) == Cost(50, 0)
     assert bot.calculate_cost(UnitTypeId.SPIRE) == Cost(200, 200)
+    assert bot.calculate_cost(UnitTypeId.ARCHON) == bot.calculate_unit_value(UnitTypeId.ARCHON)
 
     # The following are morph abilities that may need a fix
     assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
@@ -386,6 +408,9 @@ def test_bot_ai():
     assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(100, 100))
     assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
     assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(50, 25))
+
+    assert Cost(100, 50) == 2 * Cost(50, 25)
+    assert Cost(100, 50) == Cost(50, 25) * 2
 
     assert bot.calculate_supply_cost(UnitTypeId.BARRACKS) == 0
     assert bot.calculate_supply_cost(UnitTypeId.HATCHERY) == 0
@@ -662,6 +687,30 @@ def test_unit():
     # assert not scv.has_buff(buff ID)
     # assert not townhall.has_buff(buff ID)
 
+    assert scv.calculate_damage_vs_target(townhall)[0] == 4
+    assert scv.calculate_damage_vs_target(townhall, ignore_armor=True)[0] == 5
+    assert townhall.calculate_damage_vs_target(scv) == (0, 0, 0)
+    assert townhall.calculate_damage_vs_target(scv, ignore_armor=True) == (0, 0, 0)
+
+    # TODO create one of each unit in the pickle tests to do damage calculations without having to create a mock class for each unit
+
+    # marauder1 = Unit(marauder_proto, random_bot_object)
+    # marauder_15_hp = Unit(marauder_proto, random_bot_object)
+    # marauder_15_hp._proto.health = 15
+    # # Marauder1 should deal now 10+10vs_armored = 20 damage, but other marauder has 1 armor, so resulting damage should be 19
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp)[0] == 19
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True)[0] == 20
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False)[0] == 15
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False)[0] == 15
+    #
+    # marauder1._proto.attack_upgrade_level = 2
+    # marauder_15_hp._proto.armor_upgrade_level = 1
+    # # Marauder1 should deal now 12+12vs_armored = 24 damage, but other marauder has 2 armor, so resulting damage should be 22
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp)[0] == 22
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True)[0] == 24
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, ignore_armor=True, include_overkill_damage=False)[0] == 15
+    # assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False)[0] == 15
+
 
 def test_units():
     bot: BotAI = random_bot_object
@@ -846,6 +895,20 @@ def test_position_point2(x1, y1, x2, y2):
     assert pos1.y == y1
     assert pos1.to2 == pos1
     assert pos1.to3 == Point3((x1, y1, 0))
+
+    length1 = (pos1.x ** 2 + pos1.y ** 2) ** 0.5
+    assert abs(pos1.length - length1) < 0.001
+    if length1:
+        normalized1 = pos1 / length1
+        assert abs(pos1.normalized.is_same_as(pos1 / length1))
+        assert abs(normalized1.length - 1) < 0.001
+    length2 = (pos2.x ** 2 + pos2.y ** 2) ** 0.5
+    assert abs(pos2.length - length2) < 0.001
+    if length2:
+        normalized2 = pos2 / length2
+        assert abs(pos2.normalized.is_same_as(normalized2))
+        assert abs(normalized2.length - 1) < 0.001
+
     assert isinstance(pos1.distance_to(pos2), float)
     assert isinstance(pos1.distance_to_point2(pos2), float)
     if 0 < x2:
@@ -912,3 +975,7 @@ def test_position_rect(x, y, w, h):
     assert rect.size == Size((w, h))
     assert rect.center == Point2((rect.x + rect.width / 2, rect.y + rect.height / 2))
     assert rect.offset((1, 1)) == Rect((x + 1, y + 1, w, h))
+
+
+if __name__ == "__main__":
+    test_unit()
