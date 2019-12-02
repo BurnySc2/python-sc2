@@ -89,7 +89,10 @@ jobs:
 
   release_to_github_pages:
     name: GitHub Pages
+    runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
+
       - name: Publish to Github Pages
         uses: crazy-max/ghaction-github-pages@v1.2.5
         with:
