@@ -9,6 +9,7 @@ jobs:
     name: Run pytest on pickle files
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: [3.7, 3.8]
 
@@ -33,6 +34,8 @@ jobs:
   run_autotest_bot:
     name: Run various tester bots on linux
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     steps:
     # Copy data from repository
     - uses: actions/checkout@v1
