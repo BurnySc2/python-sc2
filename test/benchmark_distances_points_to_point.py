@@ -13,6 +13,7 @@ import scipy as sp
 
 from scipy.spatial.distance import cdist
 from scipy.spatial import KDTree
+
 # from numba import njit, jit
 
 import pytest

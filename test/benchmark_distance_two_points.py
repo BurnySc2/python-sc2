@@ -8,12 +8,18 @@ import random
 import numpy as np
 import scipy as sp
 from scipy.spatial import distance as scipydistance
+
 # from numba import jit, njit, vectorize, float64, int64
 from sc2.position import Point2
 
 import pytest
 from hypothesis import strategies as st, given, settings
 from typing import List, Dict, Set, Tuple, Any, Optional, Union
+
+import platform
+
+PYTHON_VERSION = platform.python_version_tuple()
+USING_PYTHON_3_8: bool = ("3", "8") <= PYTHON_VERSION
 
 
 def distance_to_python_raw(s, p):
@@ -22,6 +28,12 @@ def distance_to_python_raw(s, p):
 
 def distance_to_squared_python_raw(s, p):
     return (s[0] - p[0]) ** 2 + (s[1] - p[1]) ** 2
+
+
+if USING_PYTHON_3_8:
+
+    def distance_to_math_dist(s, p):
+        return math.dist(s, p)
 
 
 def distance_to_math_hypot(s, p):
@@ -106,6 +118,13 @@ def check_result(result1, result2, accuracy=1e-5):
     if abs(result1 - result2) <= accuracy:
         return True
     return False
+
+
+if USING_PYTHON_3_8:
+
+    def test_distance_to_math_dist(benchmark):
+        result = benchmark(distance_to_math_dist, p1, p2)
+        assert check_result(result, correct_result)
 
 
 def test_distance_to_math_hypot(benchmark):
