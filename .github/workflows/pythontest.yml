@@ -68,3 +68,20 @@ jobs:
         docker run -it -d --name app3 test_image
         docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
         docker rm -f app3
+
+
+  artifact_upload_test:
+    name: Upload world.txt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - run: mkdir -p path/to/artifact
+
+    - run: echo hello > path/to/artifact/world.txt
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: my-artifact
+        path: path/to/artifact
+
