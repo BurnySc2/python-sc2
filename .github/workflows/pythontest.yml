@@ -134,16 +134,38 @@ jobs:
   release_to_pypi:
     name: Pypi
     runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+
     # Required jobs to succeed before this job is run
     # needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
     steps:
       - uses: actions/checkout@v1
 
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Update dependencies
+        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
+        run: |
+          pip install --upgrade pipenv
+          pip install --upgrade setuptools wheel
+          pip install --upgrade twine
+
+      - name: Build package
+        # Builds package to dist/* folder
+        run: |
+          python setup.py sdist bdist_wheel
+
       - name: Publish package
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/convert-to-github-actions'
-        uses: mariamrf/py-package-publish-action@v1.0.0
-        with:
-          python_version: '3.7.0'
         env:
           TWINE_PASSWORD: ${{ secrets.pypi_password }}
           TWINE_USERNAME: ${{ secrets.pypi_username }}
+        run: |
+          twine upload dist/* --verbose
