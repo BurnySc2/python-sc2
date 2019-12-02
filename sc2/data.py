@@ -56,20 +56,6 @@ race_townhalls: Dict[Race, Set[UnitTypeId]] = {
         UnitTypeId.ORBITALCOMMANDFLYING,
     },
     Race.Zerg: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
-    Race.Random: {
-        # Protoss
-        UnitTypeId.NEXUS,
-        # Terran
-        UnitTypeId.COMMANDCENTER,
-        UnitTypeId.ORBITALCOMMAND,
-        UnitTypeId.PLANETARYFORTRESS,
-        UnitTypeId.COMMANDCENTERFLYING,
-        UnitTypeId.ORBITALCOMMANDFLYING,
-        # Zerg
-        UnitTypeId.HATCHERY,
-        UnitTypeId.LAIR,
-        UnitTypeId.HIVE,
-    }
 }
 
 warpgate_abilities: Dict[AbilityId, AbilityId] = {

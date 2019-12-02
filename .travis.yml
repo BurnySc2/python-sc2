@@ -89,17 +89,17 @@ jobs:
         # Shut down and remove container after finishing
         - docker rm -f app
 
-    # Script successfully uploads to pypi but then there are errors installing, so I have to manually push the pypi version
-#    - stage: release to pypi
-#      script:
-#        # Necessary random output in this stage
-#        - echo Some script output
-#      before_deploy:
-#        - pip install pipenv
-#      deploy:
-#        provider: pypi
-#        user: "BurnySc2"
-#        # Password needs to be set in travis environment variables: https://travis-ci.com/BurnySc2/python-sc2/settings
-#        password: "$PYPI_PASSWORD"
-#        on:
-#          branch: pypi-release
+
+    - stage: release to pypi
+      script:
+        # Necessary random output in this stage
+        - echo Some script output
+      before_deploy:
+        - pip install pipenv
+      deploy:
+        provider: pypi
+        user: "BurnySc2"
+        # Password needs to be set in travis environment variables: https://travis-ci.com/BurnySc2/python-sc2/settings
+        password: "$PYPI_PASSWORD"
+        on:
+          branch: pypi-release
