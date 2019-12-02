@@ -11,6 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 3
     strategy:
+      fail-fast: false
       matrix:
         # Python 3.6 fails due to: https://www.python.org/dev/peps/pep-0563/
         # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
