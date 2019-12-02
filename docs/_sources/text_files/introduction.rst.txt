@@ -231,6 +231,9 @@ The same can be achieved with the convenience function ``self.build`` which auto
         position_towards_map_center = self.start_location.towards(map_center, distance=5)
         await self.build(UnitTypeId.SPAWNINGPOOL, near=position_towards_map_center, placement_step=1)
 
+TODO: remove me
+docs test
+
 
 
 
