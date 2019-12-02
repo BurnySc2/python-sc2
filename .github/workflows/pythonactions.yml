@@ -8,12 +8,13 @@ jobs:
   run_pytest_tests:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 3
     strategy:
       matrix:
         # Python 3.6 fails due to: https://www.python.org/dev/peps/pep-0563/
         # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
+        os: [macos-latest, windows-latest, ubuntu-latest]
         python-version: [3.7, 3.8]
 
     steps:
