@@ -94,7 +94,7 @@ jobs:
     name: GitHub Pages
     runs-on: ubuntu-latest
     # Required job to succeed before this job is run
-    needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
+    # needs: [run_pytest_tests] # [run_pytest_tests, run_autotest_bot]
     steps:
       - uses: actions/checkout@v1
 
