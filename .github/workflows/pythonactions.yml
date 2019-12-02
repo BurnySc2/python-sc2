@@ -27,27 +27,31 @@ jobs:
           python -m pip install pipenv
           pipenv install --dev --python ${{ matrix.python-version }}
 
-      - name: Run pipenv pytest tests on pickle files
-        # Run tests and benchmarks
-        run: |
-          pipenv run pytest test/
-
       # Run tests
-      - name: Run benchmark distance_two_points
+      - name: Run pipenv pytest tests on pickle files
         run: |
           pipenv run pytest test/
 
       # Run benchmarks
-      - name: Run benchmark benchmark_distances_units
-          pipenv run pytest test/benchmark_distance_two_points.py
-        run: |
-          pipenv run pytest test/benchmark_distances_units.py
       - name: Run benchmark benchmark_array_creation
         run: |
           pipenv run pytest test/benchmark_array_creation.py
+
+      - name: Run benchmark benchmark_distance_two_points
+        run: |
+          pipenv run pytest test/benchmark_distance_two_points.py
+
+      - name: Run benchmark benchmark_distances_cdist
+        run: |
+          pipenv run pytest test/benchmark_distances_cdist.py
+
       - name: Run benchmark benchmark_distances_points_to_point
         run: |
           pipenv run pytest test/benchmark_distances_points_to_point.py
+
+      - name: Run benchmark benchmark_distances_units
+        run: |
+          pipenv run pytest test/benchmark_distances_units.py
 
 
 
