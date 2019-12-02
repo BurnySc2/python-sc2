@@ -2,6 +2,7 @@ import logging
 import os
 import platform
 import re
+import subprocess
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -35,9 +36,34 @@ def get_env():
     # TODO: Linux env conf from: https://github.com/deepmind/pysc2/blob/master/pysc2/run_configs/platforms.py
     return None
 
-def latest_executeble(versions_dir):
-    latest = max((int(p.name[4:]), p) for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith("Base"))
+def get_runner_args(cwd):
+    if "WINE" in os.environ:
+        runner_dir = os.path.dirname(os.environ.get("WINE"))
+        # translate cwd from Unix to Windows path
+        win_cwd = subprocess.run(
+            [os.path.join(runner_dir, "winepath"), "-w", cwd],
+            capture_output=True,
+            text=True
+        ).stdout.rstrip()
+        return [
+            os.environ.get("WINE"),
+            "start",
+            "/d",
+            win_cwd,
+            "/unix"
+        ]
+
+    return []
+
+def latest_executeble(versions_dir, base_build=None):
+
+    if base_build is None:
+        latest = max((int(p.name[4:]), p) for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith("Base"))
+    else:
+        latest = (int(base_build[4:]), max(p for p in versions_dir.iterdir() if p.is_dir() and
+                                  p.name.startswith(str(base_build))))
     version, path = latest
+
     if version < 55958:
         logger.critical(f"Your SC2 binary is too old. Upgrade to 3.16.1 or newer.")
         exit(1)

@@ -88,8 +88,14 @@ class AbilityData:
 
     @property
     def id(self) -> AbilityId:
+        """ Returns the generic remap ID. See sc2/dicts/generic_redirect_abilities.py """
         if self._proto.remaps_to_ability_id:
             return AbilityId(self._proto.remaps_to_ability_id)
+        return AbilityId(self._proto.ability_id)
+
+    @property
+    def exact_id(self) -> AbilityId:
+        """ Returns the exact ID of the ability """
         return AbilityId(self._proto.ability_id)
 
     @property
@@ -316,3 +322,9 @@ class Cost:
         else:
             time = self.time - other.time
         return self.__class__(self.minerals - other.minerals, self.vespene - other.vespene, time=time)
+
+    def __mul__(self, other: int) -> Cost:
+        return self.__class__(self.minerals * other, self.vespene * other, time=self.time)
+
+    def __rmul__(self, other: int) -> Cost:
+        return self.__class__(self.minerals * other, self.vespene * other, time=self.time)

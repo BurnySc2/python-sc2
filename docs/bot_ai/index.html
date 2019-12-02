@@ -105,9 +105,9 @@ if self.alert(Alert.AddOnComplete):</p>
 worker is en route to build it. This also includes queued orders for
 workers and build queues of buildings.</p>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amount_of_scv_in_production</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">)</span>
-<span class="n">amount_of_CCs_in_queue_and_production</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
-<span class="n">amount_of_lairs_morphing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">LAIR</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amount_of_scv_in_production</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">)</span>
+<span class="n">amount_of_CCs_in_queue_and_production</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
+<span class="n">amount_of_lairs_morphing</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">already_pending</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">LAIR</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -115,7 +115,7 @@ workers and build queues of buildings.</p>
 <dd class="field-odd"><p><strong>unit_type</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -139,7 +139,7 @@ workers and build queues of buildings.</p>
 <dd class="field-odd"><p><strong>upgrade_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -180,7 +180,7 @@ The total cost to create a ravager is 100/100, but the actual morph cost from ro
 </pre></div>
 </div>
 <p>More examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.game_data</span> <span class="k">import</span> <span class="n">Cost</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.game_data</span> <span class="kn">import</span> <span class="n">Cost</span>
 
 <span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BROODLORD</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">RAVAGER</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>
@@ -223,6 +223,26 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.calculate_unit_value">
+<code class="sig-name descname">calculate_unit_value</code><span class="sig-paren">(</span><em class="sig-param">unit_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_unit_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlike the function below, this function returns the value of a unit given by the API (e.g. the resources lost value on kill).</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_value</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">550</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_value</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">RAVAGER</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">calculate_value</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ARCHON</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="mi">275</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../game_data/index.html#sc2.game_data.Cost" title="sc2.game_data.Cost"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cost</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -361,9 +381,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 <dd><p>Distributes workers across all the bases taken.
 Keyword <cite>resource_ratio</cite> takes a float. If the current minerals to gas
 ratio is bigger than <cite>resource_ratio</cite>, this function prefer filling gas_buildings
-first, if it is lower, it will prefer sending workers to minerals first.
-This is only for workers that need to be moved anyways, it will NOT fill
-gas_buildings on its own.</p>
+first, if it is lower, it will prefer sending workers to minerals first.</p>
 <p>NOTE: This function is far from optimal, if you really want to have
 refined worker control, you should write your own distribution function.
 For example long distance mining control and moving workers if a base was killed
@@ -407,14 +425,14 @@ are not being handled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>action</strong> (<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><em>UnitCommand</em></a>) – </p></li>
-<li><p><strong>subtract_cost</strong> (<em>bool</em>) – </p></li>
-<li><p><strong>subtract_supply</strong> (<em>bool</em>) – </p></li>
-<li><p><strong>can_afford_check</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>action</strong> (<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>) – </p></li>
+<li><p><strong>subtract_cost</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+<li><p><strong>subtract_supply</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+<li><p><strong>can_afford_check</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>bool</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -438,7 +456,7 @@ are not being handled.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p></li>
-<li><p><strong>max_distance</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – </p></li>
+<li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
 <li><p><strong>location</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
 </ul>
 </dd>
@@ -616,8 +634,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <code class="sig-name descname">in_placement_grid</code><span class="sig-paren">(</span><em class="sig-param">pos</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_placement_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if you can place something at a position.
 Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
-Caution: some x and y offset might be required, see ramp code:
-<a class="reference external" href="https://github.com/Dentosal/python-sc2/blob/master/sc2/game_info.py#L17-L18">https://github.com/Dentosal/python-sc2/blob/master/sc2/game_info.py#L17-L18</a></p>
+Caution: some x and y offset might be required, see ramp code in game_info.py</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
@@ -667,6 +684,15 @@ Look in game_info.py for more information about the Ramp class</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.on_before_start">
+<em class="property">async </em><code class="sig-name descname">on_before_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_before_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this in your bot class. This function is called before “on_start”
+and before “prepare_first_step” that calculates expansion locations.
+Not all data is available yet.
+This function is useful in realtime=True mode to split your workers or start producing the first worker.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_building_construction_complete">
 <em class="property">async </em><code class="sig-name descname">on_building_construction_complete</code><span class="sig-paren">(</span><em class="sig-param">unit</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_building_construction_complete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called when a building
@@ -693,7 +719,7 @@ This function is called when a building construction has started.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_end">
 <em class="property">async </em><code class="sig-name descname">on_end</code><span class="sig-paren">(</span><em class="sig-param">game_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override this in your bot class. This function is called at the end of a game.</p>
+<dd><p>Override this in your bot class. This function is called at the end of a game. Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>game_result</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code>) – </p>
@@ -702,9 +728,37 @@ This function is called when a building construction has started.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.on_enemy_unit_entered_vision">
+<em class="property">async </em><code class="sig-name descname">on_enemy_unit_entered_vision</code><span class="sig-paren">(</span><em class="sig-param">unit</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_entered_vision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this in your bot class. This function is called when an enemy unit (unit or structure) entered vision (which was not visible last frame).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.on_enemy_unit_left_vision">
+<em class="property">async </em><code class="sig-name descname">on_enemy_unit_left_vision</code><span class="sig-paren">(</span><em class="sig-param">unit_tag</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_left_vision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
+Same as the self.on_unit_destroyed event, this function is called with the unit’s tag because the unit is no longer visible anymore. If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">last_known_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">unit_tag</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_structures_previous_map</span><span class="p">[</span><span class="n">unit_tag</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Enemy unit left vision, last known location: </span><span class="si">{last_known_unit.position}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit_tag</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_start">
 <em class="property">async </em><code class="sig-name descname">on_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override this in your bot class. This function is called after “on_start”. 
+<dd><p>Override this in your bot class.
 At this point, game_data, game_info and the first iteration of game_state (self.state) are available.</p>
 </dd></dl>
 
@@ -740,7 +794,43 @@ Note that this function uses unit tags and not the unit objects
 because the unit does not exist any more.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>unit_tag</strong> – </p>
+<dd class="field-odd"><p><strong>unit_tag</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.on_unit_took_damage">
+<em class="property">async </em><code class="sig-name descname">on_unit_took_damage</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">amount_damage_taken</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_took_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this in your bot class. This function is called when your own unit (unit or structure) took damage. It will not be called if the unit died this frame.</p>
+<p>This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep, or terran bio units that just used stimpack ability.
+TODO: If there is a demand for it, then I can add a similar event for when enemy units took damage</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit took damage: </span><span class="si">{unit}</span><span class="s2"> took </span><span class="si">{amount_damage_taken}</span><span class="s2"> damage&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.on_unit_type_changed">
+<em class="property">async </em><code class="sig-name descname">on_unit_type_changed</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">previous_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_type_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use ‘unit.type_id’</p>
+<p>This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair, a corruptor morphed to broodlordcocoon, etc..</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit changed type: </span><span class="si">{unit}</span><span class="s2"> from </span><span class="si">{previous_type}</span><span class="s2"> to </span><span class="si">{unit.type_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
+<li><p><strong>previous_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -783,7 +873,11 @@ because the unit does not exist any more.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.research">
 <code class="sig-name descname">research</code><span class="sig-paren">(</span><em class="sig-param">upgrade_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.research" title="Permalink to this definition">¶</a></dt>
-<dd><p>Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).</p>
+<dd><p>Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).
+Returns True if the research was started.
+Return False if the requirement was not met, or the bot did not have enough resources to start the upgrade,
+or the building to research the upgrade was missing or not idle.</p>
+<p>New function. Please report any bugs!</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Try to research zergling movement speed if we can afford it</span>
 <span class="c1"># and if at least one pool is at build_progress == 1</span>
@@ -860,12 +954,24 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.structure_type_build_progress">
 <code class="sig-name descname">structure_type_build_progress</code><span class="sig-paren">(</span><em class="sig-param">structure_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.structure_type_build_progress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks the build progress of a structure type</p>
+<dd><p>Returns the build progress of a structure type.</p>
+<dl class="simple">
+<dt>Return range: 0 &lt;= x &lt;= 1 where</dt><dd><p>0: no such structure exists
+0 &lt; x &lt; 1: at least one structure is under construction, returns the progress of the one with the highest progress
+1: we have at least one such structure complete</p>
+</dd>
+</dl>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming you have one barracks building at 0.5 build progress:</span>
 <span class="n">progress</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">progress</span><span class="p">)</span>
-<span class="c1"># This should print out 0.5</span>
+<span class="c1"># This prints out 0.5</span>
+
+<span class="c1"># If you want to save up money for mutalisks, you can now save up once the spire is nearly completed:</span>
+<span class="n">spire_almost_completed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.75</span>
+
+<span class="c1"># Assume you have 2 command centers in production, one has 0.5 build_progress and the other 0.2, the following returns 0.5</span>
+<span class="n">highest_progress_of_command_center</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -876,6 +982,27 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.structures_without_construction_SCVs">
+<em class="property">property </em><code class="sig-name descname">structures_without_construction_SCVs</code><a class="headerlink" href="#sc2.bot_ai.BotAI.structures_without_construction_SCVs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all structures that do not have an SCV constructing it.
+Warning: this function may move to become a Units filter.
+New function. Please report any bugs!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.synchronous_do">
+<em class="property">async </em><code class="sig-name descname">synchronous_do</code><span class="sig-paren">(</span><em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.synchronous_do" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not recommended. Use self.do instead to reduce lag.
+This function is only useful for realtime=True in the first frame of the game to instantly produce a worker
+and split workers on the mineral patches.</p>
 </dd></dl>
 
 <dl class="method">
@@ -937,6 +1064,7 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">unit_type</em>, <em class="sig-param">amount=1</em>, <em class="sig-param">closest_to=None</em>, <em class="sig-param">train_only_idle_buildings=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trains a specified number of units. Trains only one if amount is not specified.
 Warning: currently has issues with warp gate warp ins</p>
+<p>New function. Please report any bugs!</p>
 <p>Example Zerg:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">QUEEN</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="c1"># This should queue 5 queens in 5 different townhalls if you have enough townhalls, enough minerals and enough free supply left</span>
@@ -964,6 +1092,45 @@ Warning: currently has issues with warp gate warp ins</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.units_created">
+<em class="property">property </em><code class="sig-name descname">units_created</code><a class="headerlink" href="#sc2.bot_ai.BotAI.units_created" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Counter for all your units and buildings you have created so far.</p>
+<p>This may be used for statistics (at the end of the game) or for strategic decision making.</p>
+<p>CAUTION: This does not properly work at the moment for morphing units and structures. Please use the ‘on_unit_type_changed’ event to add these morphing unit types manually to ‘self._units_created’.
+Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphing back (suddenly the counter counts 2 tanks have been created).</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Give attack command to enemy base every time 10 marines have been trained</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_unit_created</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_created</span><span class="p">[</span><span class="n">MARINE</span><span class="p">]</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">marine</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">marine</span><span class="o">.</span><span class="n">attack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enemy_start_locations</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.worker_en_route_to_build">
+<code class="sig-name descname">worker_en_route_to_build</code><span class="sig-paren">(</span><em class="sig-param">unit_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.worker_en_route_to_build" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function counts how many workers are on the way to start the construction a building.
+Warning: this function may change its name in the future!
+New function. Please report any bugs!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1022,7 +1189,7 @@ Warning: currently has issues with warp gate warp ins</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
     </div>
   </body>
 </html>

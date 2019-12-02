@@ -33,7 +33,7 @@ geyser_ids: Set[int] = {
     SHAKURASVESPENEGEYSER.value,
 }
 transforming: Dict[UnitTypeId, AbilityId] = {
-    # terran structures
+    # Terran structures
     BARRACKS: LAND_BARRACKS,
     BARRACKSFLYING: LAND_BARRACKS,
     COMMANDCENTER: LAND_COMMANDCENTER,
@@ -46,7 +46,7 @@ transforming: Dict[UnitTypeId, AbilityId] = {
     STARPORTFLYING: LAND_STARPORT,
     SUPPLYDEPOT: MORPH_SUPPLYDEPOT_RAISE,
     SUPPLYDEPOTLOWERED: MORPH_SUPPLYDEPOT_LOWER,
-    # terran units
+    # Terran units
     HELLION: MORPH_HELLION,
     HELLIONTANK: MORPH_HELLBAT,
     LIBERATOR: MORPH_LIBERATORAAMODE,
@@ -59,20 +59,20 @@ transforming: Dict[UnitTypeId, AbilityId] = {
     VIKINGFIGHTER: MORPH_VIKINGFIGHTERMODE,
     WIDOWMINE: BURROWUP,
     WIDOWMINEBURROWED: BURROWDOWN,
-    # protoss structures
+    # Protoss structures
     GATEWAY: MORPH_GATEWAY,
     WARPGATE: MORPH_WARPGATE,
-    # protoss units
+    # Protoss units
     OBSERVER: MORPH_OBSERVERMODE,
     OBSERVERSIEGEMODE: MORPH_SURVEILLANCEMODE,
     WARPPRISM: MORPH_WARPPRISMTRANSPORTMODE,
     WARPPRISMPHASING: MORPH_WARPPRISMPHASINGMODE,
-    # zerg structures
+    # Zerg structures
     SPINECRAWLER: SPINECRAWLERROOT_SPINECRAWLERROOT,
     SPINECRAWLERUPROOTED: SPINECRAWLERUPROOT_SPINECRAWLERUPROOT,
     SPORECRAWLER: SPORECRAWLERROOT_SPORECRAWLERROOT,
     SPORECRAWLERUPROOTED: SPORECRAWLERUPROOT_SPORECRAWLERUPROOT,
-    # zerg units
+    # Zerg units
     BANELING: BURROWUP_BANELING,
     BANELINGBURROWED: BURROWDOWN_BANELING,
     DRONE: BURROWUP_DRONE,
@@ -157,15 +157,15 @@ abilityid_to_unittypeid: Dict[AbilityId, UnitTypeId] = {
     AbilityId.TRAINQUEEN_QUEEN: UnitTypeId.QUEEN,
 }
 
-IS_STRUCTURE = Attribute.Structure.value
-IS_LIGHT = Attribute.Light.value
-IS_ARMORED = Attribute.Armored.value
-IS_BIOLOGICAL = Attribute.Biological.value
-IS_MECHANICAL = Attribute.Mechanical.value
-IS_MASSIVE = Attribute.Massive.value
-IS_PSIONIC = Attribute.Psionic.value
-UNIT_BATTLECRUISER = UnitTypeId.BATTLECRUISER
-UNIT_ORACLE = UnitTypeId.ORACLE
+IS_STRUCTURE: int = Attribute.Structure.value
+IS_LIGHT: int = Attribute.Light.value
+IS_ARMORED: int = Attribute.Armored.value
+IS_BIOLOGICAL: int = Attribute.Biological.value
+IS_MECHANICAL: int = Attribute.Mechanical.value
+IS_MASSIVE: int = Attribute.Massive.value
+IS_PSIONIC: int = Attribute.Psionic.value
+UNIT_BATTLECRUISER: UnitTypeId = UnitTypeId.BATTLECRUISER
+UNIT_ORACLE: UnitTypeId = UnitTypeId.ORACLE
 TARGET_GROUND: Set[int] = {TargetType.Ground.value, TargetType.Any.value}
 TARGET_AIR: Set[int] = {TargetType.Air.value, TargetType.Any.value}
 TARGET_BOTH = TARGET_GROUND | TARGET_AIR
@@ -183,17 +183,17 @@ IS_CARRYING_VESPENE: Set[BuffId] = {
     BuffId.CARRYHARVESTABLEVESPENEGEYSERGASZERG,
 }
 IS_CARRYING_RESOURCES: Set[BuffId] = IS_CARRYING_MINERALS | IS_CARRYING_VESPENE
-IS_ATTACKING = {
+IS_ATTACKING: Set[AbilityId] = {
     AbilityId.ATTACK,
     AbilityId.ATTACK_ATTACK,
     AbilityId.ATTACK_ATTACKTOWARDS,
     AbilityId.ATTACK_ATTACKBARRAGE,
     AbilityId.SCAN_MOVE,
 }
-IS_PATROLLING = AbilityId.PATROL_PATROL
-IS_GATHERING = AbilityId.HARVEST_GATHER
-IS_RETURNING = AbilityId.HARVEST_RETURN
-IS_COLLECTING = {IS_GATHERING, IS_RETURNING}
+IS_PATROLLING: AbilityId = AbilityId.PATROL_PATROL
+IS_GATHERING: AbilityId = AbilityId.HARVEST_GATHER
+IS_RETURNING: AbilityId = AbilityId.HARVEST_RETURN
+IS_COLLECTING: Set[AbilityId] = {IS_GATHERING, IS_RETURNING}
 IS_CONSTRUCTING_SCV: Set[AbilityId] = {
     AbilityId.TERRANBUILD_ARMORY,
     AbilityId.TERRANBUILD_BARRACKS,
@@ -219,10 +219,10 @@ IS_DETECTOR: Set[UnitTypeId] = {
     UnitTypeId.OVERSEERSIEGEMODE,
     UnitTypeId.SPORECRAWLER,
 }
-UNIT_PHOTONCANNON = UnitTypeId.PHOTONCANNON
-UNIT_COLOSSUS = UnitTypeId.COLOSSUS
+UNIT_PHOTONCANNON: UnitTypeId = UnitTypeId.PHOTONCANNON
+UNIT_COLOSSUS: UnitTypeId = UnitTypeId.COLOSSUS
 # Used in unit_command.py and action.py to combine only certain abilities
-COMBINEABLE_ABILITIES = {
+COMBINEABLE_ABILITIES: Set[AbilityId] = {
     AbilityId.MOVE,
     AbilityId.ATTACK,
     AbilityId.SCAN_MOVE,
@@ -259,12 +259,29 @@ FakeEffectID: Dict[int, str] = {
     UnitTypeId.FORCEFIELD.value: "FORCEFIELD",
 }
 
+TERRAN_STRUCTURES_REQUIRE_SCV: Set[UnitTypeId] = {
+    UnitTypeId.ARMORY,
+    UnitTypeId.BARRACKS,
+    UnitTypeId.BUNKER,
+    UnitTypeId.COMMANDCENTER,
+    UnitTypeId.ENGINEERINGBAY,
+    UnitTypeId.FACTORY,
+    UnitTypeId.FUSIONCORE,
+    UnitTypeId.GHOSTACADEMY,
+    UnitTypeId.MISSILETURRET,
+    UnitTypeId.REFINERY,
+    UnitTypeId.REFINERYRICH,
+    UnitTypeId.STARPORT,
+    UnitTypeId.SUPPLYDEPOT,
+}
+
 
 def return_NOTAUNIT():
     # NOTAUNIT = 0
     return NOTAUNIT
 
 
+# Hotfix for structures and units as the API does not seem to return the correct values, e.g. ghost and thor have None in the requirements
 TERRAN_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
     return_NOTAUNIT,
     {
@@ -341,3 +358,93 @@ ZERG_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
         BROODLORD: GREATERSPIRE,
     },
 )
+# Required in 'tech_requirement_progress' bot_ai.py function
+EQUIVALENTS_FOR_TECH_PROGRESS: Dict[UnitTypeId, Set[UnitTypeId]] = {
+    UnitTypeId.SUPPLYDEPOT: {UnitTypeId.SUPPLYDEPOTLOWERED, UnitTypeId.SUPPLYDEPOTDROP},
+    UnitTypeId.BARRACKS: {UnitTypeId.BARRACKSFLYING},
+    UnitTypeId.FACTORY: {UnitTypeId.FACTORYFLYING},
+    UnitTypeId.STARPORT: {UnitTypeId.STARPORTFLYING},
+    UnitTypeId.COMMANDCENTER: {
+        UnitTypeId.COMMANDCENTERFLYING,
+        UnitTypeId.PLANETARYFORTRESS,
+        UnitTypeId.ORBITALCOMMAND,
+        UnitTypeId.ORBITALCOMMANDFLYING,
+    },
+    UnitTypeId.LAIR: {UnitTypeId.HIVE},
+    UnitTypeId.HATCHERY: {UnitTypeId.LAIR, UnitTypeId.HIVE},
+    UnitTypeId.SPIRE: {UnitTypeId.GREATERSPIRE},
+}
+ALL_GAS: Set[UnitTypeId] = {
+    UnitTypeId.ASSIMILATOR,
+    UnitTypeId.ASSIMILATORRICH,
+    UnitTypeId.REFINERY,
+    UnitTypeId.REFINERYRICH,
+    UnitTypeId.EXTRACTOR,
+    UnitTypeId.EXTRACTORRICH,
+}
+"""
+How much damage a unit gains per weapon upgrade per attack
+E.g. marauder receives +1 normal damage and +1 vs armored, so we have to list +1 vs armored here - the +1 normal damage is assumed
+E.g. stalker receives +1 normal damage but does not increment at all vs armored, so we don't list it here
+Updated using unit stats: https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void)
+
+Default will be assumed as 1, or 0 against specific armor tags, if it is not listed:
+MyUnitType: {
+    TargetType.Ground.value: {
+        # Bonus damage per weapon upgrade against ground targets
+        None: 1,
+        # Bonus damage per weapon upgrade against ground targets with specific armor tag
+        some_armor_tag: 0
+    }
+    # Same for Air and Any (=both)
+}    
+"""
+DAMAGE_BONUS_PER_UPGRADE: Dict[int, UnitTypeId] = {
+    #
+    # Protoss
+    #
+    UnitTypeId.PROBE: {TargetType.Ground.value: {None: 0}},
+    # Gateway Units
+    UnitTypeId.ADEPT: {TargetType.Ground.value: {IS_LIGHT: 1}},
+    UnitTypeId.STALKER: {TargetType.Any.value: {IS_ARMORED: 1}},
+    UnitTypeId.DARKTEMPLAR: {TargetType.Ground.value: {None: 5}},
+    UnitTypeId.ARCHON: {TargetType.Any.value: {None: 3, IS_BIOLOGICAL: 1}},
+    # Robo Units
+    UnitTypeId.IMMORTAL: {TargetType.Ground.value: {None: 2, IS_ARMORED: 3}},
+    UnitTypeId.COLOSSUS: {TargetType.Ground.value: {IS_LIGHT: 1}},
+    # Stargate Units
+    UnitTypeId.ORACLE: {TargetType.Ground.value: {None: 0}},
+    UnitTypeId.TEMPEST: {TargetType.Ground.value: {None: 4}, TargetType.Air.value: {None: 3, IS_MASSIVE: 2}},
+    #
+    # Terran
+    #
+    UnitTypeId.SCV: {TargetType.Ground.value: {None: 0}},
+    # Barracks Units
+    UnitTypeId.MARAUDER: {TargetType.Ground.value: {IS_ARMORED: 1}},
+    UnitTypeId.GHOST: {TargetType.Any.value: {IS_LIGHT: 1}},
+    # Factory Units
+    UnitTypeId.HELLION: {TargetType.Ground.value: {IS_LIGHT: 1}},
+    UnitTypeId.HELLIONTANK: {TargetType.Ground.value: {None: 2, IS_LIGHT: 1}},
+    UnitTypeId.CYCLONE: {TargetType.Any.value: {None: 2}},
+    UnitTypeId.SIEGETANK: {TargetType.Ground.value: {None: 2, IS_ARMORED: 1}},
+    UnitTypeId.SIEGETANKSIEGED: {TargetType.Ground.value: {None: 4, IS_ARMORED: 1}},
+    UnitTypeId.THOR: {TargetType.Ground.value: {None: 3}, TargetType.Air.value: {IS_LIGHT: 1}},
+    UnitTypeId.THORAP: {TargetType.Ground.value: {None: 3}, TargetType.Air.value: {None: 3, IS_MASSIVE: 1}},
+    # Starport Units
+    UnitTypeId.VIKINGASSAULT: {TargetType.Ground.value: {IS_MECHANICAL: 1}},
+    UnitTypeId.LIBERATORAG: {TargetType.Ground.value: {None: 5}},
+    #
+    # Zerg
+    #
+    UnitTypeId.DRONE: {TargetType.Ground.value: {None: 0}},
+    # Hatch Tech Units (Queen, Ling, Bane, Roach, Ravager)
+    UnitTypeId.BANELING: {TargetType.Ground.value: {None: 2, IS_LIGHT: 2, IS_STRUCTURE: 3}},
+    UnitTypeId.ROACH: {TargetType.Ground.value: {None: 2}},
+    UnitTypeId.RAVAGER: {TargetType.Ground.value: {None: 2}},
+    # Lair Tech Units (Hydra, Lurker, Ultra)
+    UnitTypeId.LURKERMPBURROWED: {TargetType.Ground.value: {None: 2, IS_ARMORED: 1}},
+    UnitTypeId.ULTRALISK: {TargetType.Ground.value: {None: 3}},
+    # Spire Units (Muta, Corruptor, BL)
+    UnitTypeId.CORRUPTOR: {TargetType.Air.value: {IS_MASSIVE: 1}},
+    UnitTypeId.BROODLORD: {TargetType.Ground.value: {None: 2}},
+}

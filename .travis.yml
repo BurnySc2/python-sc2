@@ -9,9 +9,9 @@ jobs:
   fast_finish: true
 
   # Jobs that are allowed to fail
-  allow_failures:
-    - stage: test python 3.8
-    - stage: release to pypi
+#  allow_failures:
+#    - stage: test python 3.8
+#    - stage: release to pypi
 
   # Jobs that are being run
   include:
@@ -81,25 +81,27 @@ jobs:
         - echo Project dir contents
         - ls
         # Build the docker image
-        - docker build -t test_image -f test/Dockerfile .
+        - docker build -t test_image -f test/Dockerfile_3.7 .
         # Run the docker image
         - docker run -it -d --name app test_image
         # Can be run from windows using command "pipenv run python test/travis_test_script.py test/autotest_bot.py"
         - docker exec -i app bash -c "python test/travis_test_script.py test/autotest_bot.py"
+        - docker exec -i app bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+        - docker exec -i app bash -c "python test/travis_test_script.py test/damagetest_bot.py"
         # Shut down and remove container after finishing
         - docker rm -f app
 
-
-    - stage: release to pypi
-      script:
-        # Necessary random output in this stage
-        - echo Some script output
-      before_deploy:
-        - pip install pipenv
-      deploy:
-        provider: pypi
-        user: "BurnySc2"
-        # Password needs to be set in travis environment variables: https://travis-ci.com/BurnySc2/python-sc2/settings
-        password: "$PYPI_PASSWORD"
-        on:
-          branch: pypi-release
+    # Script successfully uploads to pypi but then there are errors installing, so I have to manually push the pypi version
+#    - stage: release to pypi
+#      script:
+#        # Necessary random output in this stage
+#        - echo Some script output
+#      before_deploy:
+#        - pip install pipenv
+#      deploy:
+#        provider: pypi
+#        user: "BurnySc2"
+#        # Password needs to be set in travis environment variables: https://travis-ci.com/BurnySc2/python-sc2/settings
+#        password: "$PYPI_PASSWORD"
+#        on:
+#          branch: pypi-release

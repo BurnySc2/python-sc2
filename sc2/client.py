@@ -45,7 +45,7 @@ class Client(Protocol):
 
     @property
     def in_game(self):
-        return self._status == Status.in_game
+        return self._status in {Status.in_game, Status.in_replay}
 
     async def join_game(self, name=None, race=None, observed_player_id=None, portconfig=None, rgb_render_config=None):
         ifopts = sc_pb.InterfaceOptions(
@@ -139,9 +139,10 @@ class Client(Protocol):
 
         return result
 
-    async def step(self):
+    async def step(self, step_size: int = None):
         """ EXPERIMENTAL: Change self._client.game_step during the step function to increase or decrease steps per second """
-        return await self._execute(step=sc_pb.RequestStep(count=self.game_step))
+        step_size = step_size or self.game_step
+        return await self._execute(step=sc_pb.RequestStep(count=step_size))
 
     async def get_game_data(self) -> GameData:
         result = await self._execute(
@@ -392,6 +393,28 @@ class Client(Protocol):
             )
         )
 
+    async def obs_move_camera(self, position: Union[Unit, Units, Point2, Point3]):
+        """ Moves observer camera to the target position """
+        assert isinstance(position, (Unit, Units, Point2, Point3))
+        if isinstance(position, Units):
+            position = position.center
+        if isinstance(position, Unit):
+            position = position.position
+        await self._execute(
+            obs_action=sc_pb.RequestObserverAction(
+                actions=[
+                    sc_pb.ObserverAction(
+
+                        camera_move=sc_pb.ActionObserverCameraMove(
+                            world_pos=common_pb.Point2D(
+                                x=position.x, y=position.y)
+
+                        )
+                    )
+                ]
+            )
+        )
+
     async def move_camera_spatial(self, position: Union[Point2, Point3]):
         """ Moves camera to the target position using the spatial aciton interface
 
@@ -485,7 +508,7 @@ class Client(Protocol):
         self, p: Union[Unit, Point2, Point3], r: Union[int, float], color: Union[tuple, list, Point3] = None
     ):
         """ Draws a sphere at point p with radius r. """
-        self._debug_boxes.append(DrawItemSphere(start_point=p, radius=r, color=color))
+        self._debug_spheres.append(DrawItemSphere(start_point=p, radius=r, color=color))
 
     async def _send_debug(self):
         """ Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.

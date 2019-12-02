@@ -6,11 +6,12 @@ name = "pypi"
 [packages]
 portpicker = "*"
 async-timeout = "<4.0,>=3.0"
-"s2clientprotocol" = "*"
+s2clientprotocol = "*"
 aiohttp = "*"
 pyglet = "*"
 numpy = "*"
 scipy = "*"
+mpyq = "*"
 
 [dev-packages]
 pytest = "*"
@@ -19,12 +20,12 @@ pillow = "*"
 pytest-asyncio = "*"
 hypothesis = "*"
 pytest-benchmark = "*"
-numba = "*"
 sphinx = "*"
 sphinx-autodoc-typehints = "*"
 pytest-cov = "*"
 coverage = "*"
 codecov = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.7"

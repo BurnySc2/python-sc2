@@ -12,6 +12,7 @@ from typing import Dict, Set, Union
 
 UNIT_UNIT_ALIAS: Dict[UnitTypeId, UnitTypeId] = {
     UnitTypeId.ADEPTPHASESHIFT: UnitTypeId.ADEPT,
+    UnitTypeId.ASSIMILATORRICH: UnitTypeId.ASSIMILATOR,
     UnitTypeId.BANELINGBURROWED: UnitTypeId.BANELING,
     UnitTypeId.BARRACKSFLYING: UnitTypeId.BARRACKS,
     UnitTypeId.CHANGELINGMARINE: UnitTypeId.CHANGELING,
@@ -23,6 +24,7 @@ UNIT_UNIT_ALIAS: Dict[UnitTypeId, UnitTypeId] = {
     UnitTypeId.CREEPTUMORBURROWED: UnitTypeId.CREEPTUMOR,
     UnitTypeId.CREEPTUMORQUEEN: UnitTypeId.CREEPTUMOR,
     UnitTypeId.DRONEBURROWED: UnitTypeId.DRONE,
+    UnitTypeId.EXTRACTORRICH: UnitTypeId.EXTRACTOR,
     UnitTypeId.FACTORYFLYING: UnitTypeId.FACTORY,
     UnitTypeId.GHOSTNOVA: UnitTypeId.GHOST,
     UnitTypeId.HERCPLACEMENT: UnitTypeId.HERC,
@@ -38,6 +40,7 @@ UNIT_UNIT_ALIAS: Dict[UnitTypeId, UnitTypeId] = {
     UnitTypeId.PYLONOVERCHARGED: UnitTypeId.PYLON,
     UnitTypeId.QUEENBURROWED: UnitTypeId.QUEEN,
     UnitTypeId.RAVAGERBURROWED: UnitTypeId.RAVAGER,
+    UnitTypeId.REFINERYRICH: UnitTypeId.REFINERY,
     UnitTypeId.ROACHBURROWED: UnitTypeId.ROACH,
     UnitTypeId.SIEGETANKSIEGED: UnitTypeId.SIEGETANK,
     UnitTypeId.SPINECRAWLERUPROOTED: UnitTypeId.SPINECRAWLER,

@@ -25,7 +25,7 @@ This script does the following:
 - Loop over all units and get their unit and tech aliases
 
 Dentosals data.json
-https://github.com/Dentosal/sc2-techtree/blob/master/data/data.json
+https://github.com/BurnySc2/sc2-techtree/tree/develop/data
 
 json viewers to inspect the data.json manually:
 http://jsonviewer.stack.hu/
@@ -132,6 +132,8 @@ def get_unit_train_build_abilities(data):
                 AbilityId.UPGRADETOLAIR_LAIR,
                 AbilityId.UPGRADETOHIVE_HIVE,
                 AbilityId.UPGRADETOGREATERSPIRE_GREATERSPIRE,
+                AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND,
+                AbilityId.UPGRADETOPLANETARYFORTRESS_PLANETARYFORTRESS,
                 AbilityId.MORPH_OVERLORDTRANSPORT,
                 AbilityId.MORPH_OVERSEER,
             }
@@ -170,7 +172,7 @@ def get_unit_train_build_abilities(data):
             UnitTypeId.ADEPT: {
                 "ability": AbilityId.TRAIN_ADEPT,
                 "requires_techlab": False,
-                "requires_tech_building": UnitTypeId.CYBERNETICSCORE, # Or None
+                "required_building": UnitTypeId.CYBERNETICSCORE, # Or None
                 "requires_placement_position": False, # True for warp gate
                 "requires_power": True, # If a pylon nearby is required
             },
@@ -195,7 +197,7 @@ def get_unit_train_build_abilities(data):
                     continue
 
                 requires_techlab: bool = False
-                requires_tech_building: Optional[UnitTypeId] = None
+                required_building: Optional[UnitTypeId] = None
                 requires_placement_position: bool = False
                 requires_power: bool = False
 
@@ -221,21 +223,12 @@ def get_unit_train_build_abilities(data):
                         (req["building"] for req in requirements if req.get("building", 0)), 0
                     )
                     if requires_tech_builing_id_value:
-                        requires_tech_building = UnitTypeId(requires_tech_builing_id_value)
+                        required_building = UnitTypeId(requires_tech_builing_id_value)
 
                 if ability_id in ability_requires_placement:
                     requires_placement_position = True
 
                 requires_power = entry.get("needs_power", False)
-
-                # Debugging output:
-
-                # if ability_id in {AbilityId.BARRACKSTRAIN_GHOST}:
-                #     print(json.dumps(entry, indent=4))
-
-                # TODO: Hotfix for ghost
-                if ability_id == AbilityId.BARRACKSTRAIN_GHOST:
-                    requires_techlab = True
 
                 resulting_unit = ability_to_unittypeid_dict[ability_id]
 
@@ -243,8 +236,8 @@ def get_unit_train_build_abilities(data):
                 # Only add boolean values and tech requirement if they actually exist, to make the resulting dict file smaller
                 if requires_techlab:
                     ability_dict["requires_techlab"] = requires_techlab
-                if requires_tech_building:
-                    ability_dict["requires_tech_building"] = requires_tech_building
+                if required_building:
+                    ability_dict["required_building"] = required_building
                 if requires_placement_position:
                     ability_dict["requires_placement_position"] = requires_placement_position
                 if requires_power:
@@ -290,12 +283,12 @@ def get_upgrade_abilities(data):
             UpgradeId.TERRANINFANTRYWEAPONSLEVEL1:
             {
                 "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL1,
-                "requires_tech_building": None,
+                "required_building": None,
                 "requires_power": False, # If a pylon nearby is required
             },
             UpgradeId.TERRANINFANTRYWEAPONSLEVEL2: {
                 "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL2,
-                "requires_tech_building": UnitTypeId.ARMORY,
+                "required_building": UnitTypeId.ARMORY,
                 "requires_power": False, # If a pylon nearby is required
             },
         }
@@ -318,19 +311,9 @@ def get_upgrade_abilities(data):
                 if ability_id not in ability_to_upgrade_dict:
                     continue
 
-                greater_spire_as_requirement: Set[AbilityId] = {
-                    AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
-                    AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL3,
-                    AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
-                    AbilityId.RESEARCH_ZERGFLYERARMORLEVEL3,
-                }
-
                 required_building = None
                 requirements = ability_info.get("requirements", [])
-                # TODO: fix for greater spire, wrong in dentosals tech tree (lair and hive instead of greater spire)
-                if ability_id in greater_spire_as_requirement:
-                    required_building = UnitTypeId.GREATERSPIRE
-                elif requirements:
+                if requirements:
                     req_building_id_value = next(
                         (req["building"] for req in requirements if req.get("building", 0)), None
                     )
@@ -349,27 +332,8 @@ def get_upgrade_abilities(data):
                     research_info["requires_power"] = requires_power
                 current_unit_research_abilities[resulting_upgrade] = research_info
 
-        # TODO: Fix liberator range upgrade, missing in dentosals techtree
-        if unit_type == UnitTypeId.STARPORTTECHLAB:
-            current_unit_research_abilities[UpgradeId.LIBERATORMORPH] = {
-                "upgrade": UpgradeId.LIBERATORMORPH,
-                "ability": AbilityId.STARPORTTECHLABRESEARCH_RESEARCHLIBERATORAGMODE,
-                "requires_tech_building": UnitTypeId.FUSIONCORE,
-            }
-
-        # TODO: Fix lurker den adaptive talons, missing in dentosals techtree
-        if unit_type == UnitTypeId.LURKERDENMP:
-            current_unit_research_abilities[UpgradeId.DIGGINGCLAWS] = {
-                "upgrade": UpgradeId.DIGGINGCLAWS,
-                "ability": AbilityId.RESEARCH_ADAPTIVETALONS,
-                "requires_tech_building": UnitTypeId.HIVE,
-            }
-
         if current_unit_research_abilities:
             unit_research_abilities[unit_type] = current_unit_research_abilities
-
-    # TODO: Hotfix for greater spire - currently only level 1 research abilities are listed in greater spire (dentosals tech tree), but 1 to 3 are listed in spire
-    unit_research_abilities[UnitTypeId.GREATERSPIRE] = unit_research_abilities[UnitTypeId.SPIRE]
 
     return unit_research_abilities
 
@@ -424,7 +388,7 @@ def generate_unit_alias_dict(data: dict):
     unit_data = data["Unit"]
     upgrade_data = data["Upgrade"]
 
-    # Load pickled game data files
+    # Load pickled game data files from one of the test files
     path = os.path.dirname(__file__)
     pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
     pickled_files = os.listdir(pickled_files_folder_path)
@@ -443,6 +407,7 @@ def generate_unit_alias_dict(data: dict):
 
         current_unit_tech_aliases: Set[UnitTypeId] = OrderedSet2()
 
+        assert unit_type_value in game_data.units, f"Unit {unit_type} not listed in game_data.units"
         unit_alias: int = game_data.units[unit_type_value]._proto.unit_alias
         if unit_alias:
             # Might be 0 if it has no alias

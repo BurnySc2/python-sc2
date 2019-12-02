@@ -41,21 +41,14 @@ class RampWallBot(sc2.BotAI):
                     self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
                     break
 
-        depot_placement_positions = self.main_base_ramp.corner_depots
-        # Uncomment the following if you want to build 3 supplydepots in the wall instead of a barracks in the middle + 2 depots in the corner
-        # depot_placement_positions = self.main_base_ramp.corner_depots | {self.main_base_ramp.depot_in_middle}
-
-        barracks_placement_position = self.main_base_ramp.barracks_correct_placement
-        # If you prefer to have the barracks in the middle without room for addons, use the following instead
-        # barracks_placement_position = self.main_base_ramp.barracks_in_middle
-
-        depots = self.structures.of_type({SUPPLYDEPOT, SUPPLYDEPOTLOWERED})
-
         # Draw ramp points
         self.draw_ramp_points()
 
-        # Draw pathing grid
+        # # Draw pathing grid
         # self.draw_pathing_grid()
+
+        # Draw placement  grid
+        # self.draw_placement_grid()
 
         # Draw vision blockers
         # self.draw_vision_blockers()
@@ -68,6 +61,16 @@ class RampWallBot(sc2.BotAI):
 
         # Draw if two selected units are facing each other - green if this guy is facing the other, red if he is not
         # self.draw_facing_units()
+
+        depot_placement_positions = self.main_base_ramp.corner_depots
+        # Uncomment the following if you want to build 3 supply depots in the wall instead of a barracks in the middle + 2 depots in the corner
+        # depot_placement_positions = self.main_base_ramp.corner_depots | {self.main_base_ramp.depot_in_middle}
+
+        barracks_placement_position = self.main_base_ramp.barracks_correct_placement
+        # If you prefer to have the barracks in the middle without room for addons, use the following instead
+        # barracks_placement_position = self.main_base_ramp.barracks_in_middle
+
+        depots = self.structures.of_type({SUPPLYDEPOT, SUPPLYDEPOTLOWERED})
 
         # Filter locations close to finished supply depots
         if depots:
@@ -134,7 +137,26 @@ class RampWallBot(sc2.BotAI):
             p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
             # print(f"Drawing {p0} to {p1}")
-            color = Point3((255, 0, 0))
+            color = Point3((0, 255, 0))
+            self._client.debug_box_out(p0, p1, color=color)
+
+    def draw_placement_grid(self):
+        map_area = self._game_info.playable_area
+        for (b, a), value in np.ndenumerate(self._game_info.placement_grid.data_numpy):
+            if value == 0:
+                continue
+            # Skip values outside of playable map area
+            if not (map_area.x <= a < map_area.x + map_area.width):
+                continue
+            if not (map_area.y <= b < map_area.y + map_area.height):
+                continue
+            p = Point2((a, b))
+            h2 = self.get_terrain_z_height(p)
+            pos = Point3((p.x, p.y, h2))
+            p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
+            p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
+            # print(f"Drawing {p0} to {p1}")
+            color = Point3((0, 255, 0))
             self._client.debug_box_out(p0, p1, color=color)
 
     def draw_vision_blockers(self):
@@ -234,8 +256,12 @@ def main():
             "HonorgroundsLE",  # Has 4 or 9 upper points at the large main base ramp
         ]
     )
+    # map = "ParaSiteLE"
     sc2.run_game(
-        sc2.maps.get(map), [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)], realtime=True
+        sc2.maps.get(map),
+        [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)],
+        realtime=True,
+        # sc2_version="4.10.1",
     )
 
 

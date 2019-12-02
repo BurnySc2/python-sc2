@@ -21,8 +21,6 @@ class ZergRushBot(sc2.BotAI):
         if iteration == 0:
             await self.chat_send("(glhf)")
 
-        await self.distribute_workers()
-
         # If townhall no longer exists: attack move with all units to enemy start location
         if not self.townhalls:
             for unit in self.units.exclude_type({UnitTypeId.EGG, UnitTypeId.LARVA}):
@@ -134,7 +132,7 @@ class ZergRushBot(sc2.BotAI):
 
 def main():
     sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+        sc2.maps.get("AcropolisLE"),
         [Bot(Race.Zerg, ZergRushBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         save_replay_as="ZvT.SC2Replay",

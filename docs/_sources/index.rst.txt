@@ -10,6 +10,7 @@ Welcome to python-sc2's documentation!
    :maxdepth: 2
 
    text_files/introduction.rst
+   text_files/introduction.rst
    bot_ai/index.rst
    unit/index.rst
    units/index.rst
