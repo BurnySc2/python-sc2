@@ -28,8 +28,13 @@ jobs:
           pipenv install --dev --python ${{ matrix.python-version }}
 
       - name: Run pipenv pytest tests on pickle files
+        # Run tests and benchmarks
         run: |
           pipenv run pytest test/
+          pipenv run pytest test/benchmark_distance_two_points.py
+          pipenv run pytest test/benchmark_distances_units.py
+          pipenv run pytest test/benchmark_array_creation.py
+          pipenv run pytest test/benchmark_distances_points_to_point.py
 
 
 
@@ -94,6 +99,7 @@ jobs:
         docker build -t test_image -f test/Dockerfile_3.7 .
 
     - name: Run autotest_bot.py
+      # docker exec -i app bash -c "cd /root/template && pipenv run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
                                                                                              # Run bot and list resulting files (replay file, stable_id.json)
       run: |
         docker run -it -d --name app1 test_image

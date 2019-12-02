@@ -8,7 +8,7 @@ import random
 import numpy as np
 import scipy as sp
 from scipy.spatial import distance as scipydistance
-from numba import jit, njit, vectorize, float64, int64
+# from numba import jit, njit, vectorize, float64, int64
 from sc2.position import Point2
 
 import pytest
@@ -50,34 +50,34 @@ def distance_sum_squared(p1, p2) -> Union[int, float]:
     return np.sum((p1 - p2) ** 2, axis=0)
 
 
-@njit
-def distance_python_raw_njit(p1: Point2, p2: Point2) -> Union[int, float]:
-    """ The built in Point2 distance function rewritten differently with njit, same structure as distance02 """
-    return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
+# @njit
+# def distance_python_raw_njit(p1: Point2, p2: Point2) -> Union[int, float]:
+#     """ The built in Point2 distance function rewritten differently with njit, same structure as distance02 """
+#     return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
 
 
-@njit
-def distance_python_raw_square_njit(p1: Point2, p2: Point2) -> Union[int, float]:
-    """ The built in Point2 distance function rewritten differently with njit, same structure as distance02 """
-    return (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2
+# @njit
+# def distance_python_raw_square_njit(p1: Point2, p2: Point2) -> Union[int, float]:
+#     """ The built in Point2 distance function rewritten differently with njit, same structure as distance02 """
+#     return (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2
 
 
-@njit("float64(float64[:], float64[:])")
-def distance_numpy_linalg_norm_njit(p1, p2):
-    """ Distance calculation using numpy + numba, same structure as distance12 """
-    return np.linalg.norm(p1 - p2)
+# @njit("float64(float64[:], float64[:])")
+# def distance_numpy_linalg_norm_njit(p1, p2):
+#     """ Distance calculation using numpy + numba, same structure as distance12 """
+#     return np.linalg.norm(p1 - p2)
 
 
-@njit("float64(float64[:], float64[:])")
-def distance_numpy_square_sum_sqrt_njit(p1, p2) -> Union[int, float]:
-    """ Distance calculation using numpy + numba, same structure as distance13 """
-    return np.sqrt(np.sum((p1 - p2) ** 2))
+# @njit("float64(float64[:], float64[:])")
+# def distance_numpy_square_sum_sqrt_njit(p1, p2) -> Union[int, float]:
+#     """ Distance calculation using numpy + numba, same structure as distance13 """
+#     return np.sqrt(np.sum((p1 - p2) ** 2))
 
 
-@njit("float64(float64[:], float64[:])")
-def distance_numpy_square_sum_njit(p1, p2) -> Union[int, float]:
-    """ Distance calculation using numpy + numba, same structure as distance13 """
-    return np.sum((p1 - p2) ** 2, axis=0)
+# @njit("float64(float64[:], float64[:])")
+# def distance_numpy_square_sum_njit(p1, p2) -> Union[int, float]:
+#     """ Distance calculation using numpy + numba, same structure as distance13 """
+#     return np.sum((p1 - p2) ** 2, axis=0)
 
 
 # Points as Point2 object
@@ -95,11 +95,11 @@ correct_result = distance_to_math_hypot(p1, p2)
 # print(np.sum((p1_np - p2_np)**2))
 
 # Do one call to jit to precompile once to get more accurate results
-distance_python_raw_njit(p1_np, p2_np)
-distance_python_raw_square_njit(p1_np, p2_np)
-distance_numpy_linalg_norm_njit(p1_np, p2_np)
-distance_numpy_square_sum_sqrt_njit(p1_np, p2_np)
-distance_numpy_square_sum_njit(p1_np, p2_np)
+# distance_python_raw_njit(p1_np, p2_np)
+# distance_python_raw_square_njit(p1_np, p2_np)
+# distance_numpy_linalg_norm_njit(p1_np, p2_np)
+# distance_numpy_square_sum_sqrt_njit(p1_np, p2_np)
+# distance_numpy_square_sum_njit(p1_np, p2_np)
 
 
 def check_result(result1, result2, accuracy=1e-5):
@@ -143,29 +143,29 @@ def test_distance_sum_squared(benchmark):
     assert check_result(result, correct_result ** 2)
 
 
-def test_distance_python_raw_njit(benchmark):
-    result = benchmark(distance_python_raw_njit, p1_np, p2_np)
-    assert check_result(result, correct_result)
+# def test_distance_python_raw_njit(benchmark):
+#     result = benchmark(distance_python_raw_njit, p1_np, p2_np)
+#     assert check_result(result, correct_result)
 
 
-def test_distance_python_raw_square_njit(benchmark):
-    result = benchmark(distance_python_raw_square_njit, p1_np, p2_np)
-    assert check_result(result, correct_result ** 2)
-
-
-def test_distance_numpy_linalg_norm_njit(benchmark):
-    result = benchmark(distance_numpy_linalg_norm_njit, p1_np, p2_np)
-    assert check_result(result, correct_result)
-
-
-def test_distance_numpy_square_sum_sqrt_njit(benchmark):
-    result = benchmark(distance_numpy_square_sum_sqrt_njit, p1_np, p2_np)
-    assert check_result(result, correct_result)
-
-
-def test_distance_numpy_square_sum_njit(benchmark):
-    result = benchmark(distance_numpy_square_sum_njit, p1_np, p2_np)
-    assert check_result(result, correct_result ** 2)
+# def test_distance_python_raw_square_njit(benchmark):
+#     result = benchmark(distance_python_raw_square_njit, p1_np, p2_np)
+#     assert check_result(re`sult, correct_result ** 2)
+#
+#
+# def test_distance_numpy_linalg_norm_njit(benchmark):
+#     result = benchmark(distance_numpy_linalg_norm_njit, p1_np, p2_np)
+#     assert check_result(result, correct_result)
+#
+#
+# def test_distance_numpy_square_sum_sqrt_njit(benchmark):
+#     result = benchmark(distance_numpy_square_sum_sqrt_njit, p1_np, p2_np)
+#     assert check_result(result, correct_result)
+#
+#
+# def test_distance_numpy_square_sum_njit(benchmark):
+#     result = benchmark(distance_numpy_square_sum_njit, p1_np, p2_np)
+#     assert check_result(result, correct_result ** 2)
 
 
 # Run this file using
