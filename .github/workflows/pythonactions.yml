@@ -1,0 +1,234 @@
+name: Python
+
+# Help: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
+
+on: [push, pull_request]
+
+jobs:
+  run_pytest_tests:
+    # Run pytest tests on pickle files (pre-generated SC2 API observations)
+    name: Run pytest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        # Python 3.6 fails due to: https://www.python.org/dev/peps/pep-0563/
+        # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        python-version: [3.7, 3.8]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install pipenv
+          pipenv install --dev --python ${{ matrix.python-version }}
+
+      # Run tests
+      - name: Run pipenv pytest tests on pickle files
+        run: |
+          pipenv run pytest test/
+
+      # Run benchmarks
+      - name: Run benchmark benchmark_array_creation
+        run: |
+          pipenv run pytest test/benchmark_array_creation.py
+
+      - name: Run benchmark benchmark_distance_two_points
+        run: |
+          pipenv run pytest test/benchmark_distance_two_points.py
+
+      - name: Run benchmark benchmark_distances_cdist
+        run: |
+          pipenv run pytest test/benchmark_distances_cdist.py
+
+      - name: Run benchmark benchmark_distances_points_to_point
+        run: |
+          pipenv run pytest test/benchmark_distances_points_to_point.py
+
+      - name: Run benchmark benchmark_distances_units
+        run: |
+          pipenv run pytest test/benchmark_distances_units.py
+
+
+
+  run_coverage:
+    # Run and upload coverage report using python 3.7
+    # This coverage test does not cover the whole testing range, check /bat_files/rune_code_coverage.bat
+    name: Run coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install pipenv
+          pipenv install --dev --python ${{ matrix.python-version }}
+
+      - name: Run pipenv coverage
+        run: |
+          pipenv run pytest --cov=./
+
+      - name: Generate html coverage files in htmlcov/ folder
+        run: |
+          pipenv run coverage html
+
+      - name: Upload htmlcov/ folder as artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Coverage_report
+          path: htmlcov
+
+
+
+  run_autotest_bot:
+    # Run test bots that download the SC2 linux client and run it
+    name: Run testbots linux
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      # Do not allow this test to cancel. Finish all jobs regardless of error
+      fail-fast: false
+    steps:
+    # Copy data from repository
+    - uses: actions/checkout@v1
+
+    - name: Print directories and files
+      run: |
+        sudo apt-get install tree
+        tree
+
+    - name: Load and build docker image
+      # Build docker image from Dockerfile using python 3.7
+      run: |
+        docker build -t test_image -f test/Dockerfile_3.7 .
+
+    - name: Run autotest_bot.py
+      # docker exec -i app bash -c "cd /root/template && pipenv run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
+                                                                                             # Run bot and list resulting files (replay file, stable_id.json)
+      run: |
+        docker run -it -d --name app1 test_image
+        docker exec -i app1 bash -c "python test/travis_test_script.py test/autotest_bot.py"
+        docker exec -i app1 bash -c "tree"
+        docker rm -f app1
+
+    - name: Run upgradestest_bot.py
+      run: |
+        docker run -it -d --name app2 test_image
+        docker exec -i app2 bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+        docker exec -i app2 bash -c "tree"
+        docker rm -f app2
+
+    - name: Run damagetest_bot.py
+      run: |
+        docker run -it -d --name app3 test_image
+        docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
+        docker exec -i app3 bash -c "tree"
+        docker rm -f app3
+
+
+
+  # https://github.com/JamesIves/github-pages-deploy-action
+  release_to_github_pages:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    # Required jobs to succeed before this job is run
+    needs: [run_pytest_tests, run_autotest_bot]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Remove docs and prepare to build
+        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
+        run: |
+          echo ${{github.ref}}
+          python -m pip install pipenv
+          pipenv install --dev --python ${{ matrix.python-version }}
+          rm -r docs
+
+      - name: Build docs from scratch
+        run: |
+          cd docs_generate
+          pipenv run sphinx-build -a -E -b html . ../docs
+          cd ..
+
+      - name: Publish to Github Pages
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/convert-to-github-actions'
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BASE_BRANCH: develop # The branch the action should deploy from.
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: . # The folder the action should deploy.
+
+
+
+  release_to_pypi:
+    name: Pypi
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    # Required jobs to succeed before this job is run
+    needs: [run_pytest_tests, run_autotest_bot]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Update dependencies
+        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
+        run: |
+          pip install --upgrade pipenv
+          pip install --upgrade setuptools wheel
+          pip install --upgrade twine
+
+      - name: Build package
+        # Builds package to dist/* directory
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Publish package
+        # continue-on-error: true
+        # Upload files in dist/* directory
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/convert-to-github-actions'
+        env:
+          # Set env variables, 'twine' then uses these to upload to pypi
+          TWINE_PASSWORD: ${{ secrets.pypi_password }}
+          TWINE_USERNAME: ${{ secrets.pypi_username }}
+        # --skip-existing will not make twine error when package version already exists
+        run: |
+          twine upload dist/* --verbose --skip-existing
+
+

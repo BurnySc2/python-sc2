@@ -63,7 +63,7 @@ warnings.simplefilter("once")
 
 if TYPE_CHECKING:
     from .bot_ai import BotAI
-    from .game_data import AbilityData
+    from .game_data import AbilityData, UnitTypeData
 
 
 class UnitOrder:
@@ -116,7 +116,7 @@ class Unit:
         return self._bot_object._game_data.unit_types[unit_type]
 
     @property_immutable_cache
-    def _type_data(self) -> "UnitTypeData":
+    def _type_data(self) -> UnitTypeData:
         """ Provides the unit type data. """
         return self._bot_object._game_data.units[self._proto.unit_type]
 

@@ -13,7 +13,8 @@ import scipy as sp
 
 from scipy.spatial.distance import cdist
 from scipy.spatial import KDTree
-from numba import njit, jit
+
+# from numba import njit, jit
 
 import pytest
 from hypothesis import strategies as st, given, settings
@@ -66,36 +67,36 @@ def distance_numpy_einsum_pre_converted(ps, p1):
     return dist_2
 
 
-@njit("float64[:](float64[:, :], float64[:, :])")
-def distance_numpy_basic_1_numba(ps, p1):
-    """ Distance calculation using numpy with njit """
-    # Subtract and then square the values
-    nppoints = (ps - p1) ** 2
-    # Calc the sum of each vector
-    nppoints = nppoints.sum(axis=1)
-    return nppoints
+# @njit("float64[:](float64[:, :], float64[:, :])")
+# def distance_numpy_basic_1_numba(ps, p1):
+#     """ Distance calculation using numpy with njit """
+#     # Subtract and then square the values
+#     nppoints = (ps - p1) ** 2
+#     # Calc the sum of each vector
+#     nppoints = nppoints.sum(axis=1)
+#     return nppoints
 
 
-@njit("float64[:](float64[:, :], float64[:, :])")
-def distance_numpy_basic_2_numba(ps, p1):
-    """ Distance calculation using numpy with njit """
-    distances = np.sum((ps - p1) ** 2, axis=1)
-    return distances
+# @njit("float64[:](float64[:, :], float64[:, :])")
+# def distance_numpy_basic_2_numba(ps, p1):
+#     """ Distance calculation using numpy with njit """
+#     distances = np.sum((ps - p1) ** 2, axis=1)
+#     return distances
 
 
-# @njit("float64[:](float64[:], float64[:])")
-@jit(nopython=True)
-def distance_numba(ps, p1, amount):
-    """ Distance calculation using numpy with jit(nopython=True) """
-    distances = []
-    x1 = p1[0]
-    y1 = p1[1]
-    for index in range(amount):
-        x0 = ps[2 * index]
-        y0 = ps[2 * index + 1]
-        distance_squared = (x0 - x1) ** 2 + (y0 - y1) ** 2
-        distances.append(distance_squared)
-    return distances
+# # @njit("float64[:](float64[:], float64[:])")
+# @jit(nopython=True)
+# def distance_numba(ps, p1, amount):
+#     """ Distance calculation using numpy with jit(nopython=True) """
+#     distances = []
+#     x1 = p1[0]
+#     y1 = p1[1]
+#     for index in range(amount):
+#         x0 = ps[2 * index]
+#         y0 = ps[2 * index + 1]
+#         distance_squared = (x0 - x1) ** 2 + (y0 - y1) ** 2
+#         distances.append(distance_squared)
+#     return distances
 
 
 def distance_pure_python(ps, p1):
@@ -141,15 +142,15 @@ r1 = distance_matrix_scipy_cdist_squared(units, point).flatten()
 r2 = distance_numpy_basic_1(units, point)
 r3 = distance_numpy_basic_2(units, point)
 r4 = distance_numpy_einsum(units, point)
-r5 = distance_numpy_basic_1_numba(units_np, point_np)
-r6 = distance_numpy_basic_2_numba(units_np, point_np)
-r10 = distance_numba(flat_units, point_np, len(flat_units) // 2)
+# r5 = distance_numpy_basic_1_numba(units_np, point_np)
+# r6 = distance_numpy_basic_2_numba(units_np, point_np)
+# r10 = distance_numba(flat_units, point_np, len(flat_units) // 2)
 
 assert np.array_equal(r1, r2)
 assert np.array_equal(r1, r3)
 assert np.array_equal(r1, r4)
-assert np.array_equal(r1, r5)
-assert np.array_equal(r1, r6)
+# assert np.array_equal(r1, r5)
+# assert np.array_equal(r1, r6)
 
 # print(r10)
 
@@ -174,16 +175,16 @@ def test_distance_numpy_einsum_pre_converted(benchmark):
     result = benchmark(distance_numpy_einsum_pre_converted, units_np, point_np)
 
 
-def test_distance_numpy_basic_1_numba(benchmark):
-    result = benchmark(distance_numpy_basic_1_numba, units_np, point_np)
+# def test_distance_numpy_basic_1_numba(benchmark):
+#     result = benchmark(distance_numpy_basic_1_numba, units_np, point_np)
 
 
-def test_distance_numpy_basic_2_numba(benchmark):
-    result = benchmark(distance_numpy_basic_2_numba, units_np, point_np)
+# def test_distance_numpy_basic_2_numba(benchmark):
+#     result = benchmark(distance_numpy_basic_2_numba, units_np, point_np)
 
 
-def test_distance_numba(benchmark):
-    result = benchmark(distance_numba, flat_units, point, len(flat_units) // 2)
+# def test_distance_numba(benchmark):
+#     result = benchmark(distance_numba, flat_units, point, len(flat_units) // 2)
 
 
 def test_distance_pure_python(benchmark):

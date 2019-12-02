@@ -10,7 +10,7 @@ import numpy as np
 import scipy as sp
 
 # from scipy.spatial import distance as scipydistance
-from numba import jit, njit, vectorize, float64, int64
+# from numba import jit, njit, vectorize, float64, int64
 from scipy.spatial.distance import cdist, pdist
 
 import pytest
