@@ -619,8 +619,8 @@ class Units(list):
         amount = self.amount
         return Point2(
             (
-                sum(unit.position_tuple[0] for unit in self) / amount,
-                sum(unit.position_tuple[1] for unit in self) / amount,
+                sum(unit._proto.pos.x for unit in self) / amount,
+                sum(unit._proto.pos.y for unit in self) / amount,
             )
         )
 
