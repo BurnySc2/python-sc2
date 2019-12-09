@@ -27,7 +27,7 @@ class Pointlike(tuple):
         p = target.position
         return math.hypot(self[0] - p[0], self[1] - p[1])
 
-    def distance_to_point2(self, p: Point2) -> Union[int, float]:
+    def distance_to_point2(self, p: Union[Point2, Tuple[float, float]]) -> Union[int, float]:
         """ Same as the function above, but should be a bit faster because of the dropped asserts
         and conversion.
 
