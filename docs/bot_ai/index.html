@@ -719,7 +719,8 @@ This function is called when a building construction has started.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_end">
 <em class="property">async </em><code class="sig-name descname">on_end</code><span class="sig-paren">(</span><em class="sig-param">game_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override this in your bot class. This function is called at the end of a game. Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</p>
+<dd><p>Override this in your bot class. This function is called at the end of a game.
+Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>game_result</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code>) – </p>
@@ -742,7 +743,8 @@ This function is called when a building construction has started.</p>
 <dt id="sc2.bot_ai.BotAI.on_enemy_unit_left_vision">
 <em class="property">async </em><code class="sig-name descname">on_enemy_unit_left_vision</code><span class="sig-paren">(</span><em class="sig-param">unit_tag</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_left_vision" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
-Same as the self.on_unit_destroyed event, this function is called with the unit’s tag because the unit is no longer visible anymore. If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.</p>
+Same as the self.on_unit_destroyed event, this function is called with the unit’s tag because the unit is no longer visible anymore.
+If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.</p>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">last_known_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">unit_tag</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_structures_previous_map</span><span class="p">[</span><span class="n">unit_tag</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Enemy unit left vision, last known location: </span><span class="si">{last_known_unit.position}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -802,8 +804,10 @@ because the unit does not exist any more.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_unit_took_damage">
 <em class="property">async </em><code class="sig-name descname">on_unit_took_damage</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">amount_damage_taken</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_took_damage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override this in your bot class. This function is called when your own unit (unit or structure) took damage. It will not be called if the unit died this frame.</p>
-<p>This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep, or terran bio units that just used stimpack ability.
+<dd><p>Override this in your bot class. This function is called when your own unit (unit or structure) took damage.
+It will not be called if the unit died this frame.</p>
+<p>This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep,
+or terran bio units that just used stimpack ability.
 TODO: If there is a demand for it, then I can add a similar event for when enemy units took damage</p>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit took damage: </span><span class="si">{unit}</span><span class="s2"> took </span><span class="si">{amount_damage_taken}</span><span class="s2"> damage&quot;</span><span class="p">)</span>
@@ -820,7 +824,8 @@ TODO: If there is a demand for it, then I can add a similar event for when enemy
 <dt id="sc2.bot_ai.BotAI.on_unit_type_changed">
 <em class="property">async </em><code class="sig-name descname">on_unit_type_changed</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">previous_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_type_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use ‘unit.type_id’</p>
-<p>This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair, a corruptor morphed to broodlordcocoon, etc..</p>
+<p>This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair,
+a corruptor morphed to broodlordcocoon, etc..</p>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit changed type: </span><span class="si">{unit}</span><span class="s2"> from </span><span class="si">{previous_type}</span><span class="s2"> to </span><span class="si">{unit.type_id}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>

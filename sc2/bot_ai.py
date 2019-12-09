@@ -384,7 +384,7 @@ class BotAI(DistanceCalculation):
             location = await self.get_next_expansion()
         if not location:
             # All expansions are used up or mined out
-            logger.warning(f"Trying to expand_now() but bot is out of locations to expand to")
+            logger.warning("Trying to expand_now() but bot is out of locations to expand to")
             return
         await self.build(building, near=location, max_distance=max_distance, random_alternative=False, placement_step=1)
 
@@ -918,15 +918,18 @@ class BotAI(DistanceCalculation):
             structure_type, (int, UnitTypeId)
         ), f"Needs to be int or UnitTypeId, but was: {type(structure_type)}"
         if isinstance(structure_type, int):
-            structure_type_value = structure_type
+            structure_type_value: int = structure_type
         else:
             structure_type_value = structure_type.value
         assert structure_type_value, f"structure_type can not be 0 or NOTAUNIT, but was: {structure_type_value}"
-        requirement_structure_ready: bool = next((structure for structure in self.structures if structure._proto.unit_type == structure_type_value and structure.is_ready), False)
-        if requirement_structure_ready:
-            return 1
-        ability = self._game_data.units[structure_type_value].creation_ability
-        return self._abilities_all_units[1].get(ability, 0)
+        max_value = max(
+            (s for s in self.structures if s._proto.unit_type == structure_type_value),
+            key=lambda structure: structure.build_progress,
+            default=0,
+        )
+        if isinstance(max_value, Unit):
+            return max_value.build_progress
+        return max_value
 
     def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:
         """ Returns the tech requirement progress for a specific building
@@ -955,14 +958,17 @@ class BotAI(DistanceCalculation):
             Race.Terran: TERRAN_TECH_REQUIREMENT,
             Race.Zerg: ZERG_TECH_REQUIREMENT,
         }
-        unit_info_id_value = race_dict[self.race][structure_type].value
+        unit_info_id = race_dict[self.race][structure_type]
+        unit_info_id_value = unit_info_id.value
         # The following commented out line is unreliable for ghost / thor as they return 0 which is incorrect
         # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
         if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
         progresses: List[int] = [self.structure_type_build_progress(unit_info_id_value)]
-        for equiv_structure in EQUIVALENTS_FOR_TECH_PROGRESS.get(structure_type, []):
-            progresses.append(self.structure_type_build_progress(equiv_structure))
+        for equiv_structure in EQUIVALENTS_FOR_TECH_PROGRESS.get(unit_info_id, []):
+            progresses.append(self.structure_type_build_progress(equiv_structure.value))
+        if structure_type == UnitTypeId.BARRACKS:
+            print(progresses)
         return max(progresses)
 
     def already_pending(self, unit_type: Union[UpgradeId, UnitTypeId]) -> float:
@@ -1117,7 +1123,11 @@ class BotAI(DistanceCalculation):
                 Race.Zerg: ZERG_TECH_REQUIREMENT,
             }
             unit_info_id = race_dict[self.race][unit_type]
-            logger.warning(f"Trying to produce unit {unit_type} but tech requirement is not met: {unit_info_id}")
+            logger.warning(
+                "{} Trying to produce unit {} in self.train() but tech requirement is not met: {}".format(
+                    self.time_formatted, unit_type, unit_info_id
+                )
+            )
             return 0
 
         # Not affordable
@@ -1426,7 +1436,14 @@ class BotAI(DistanceCalculation):
     def in_map_bounds(self, pos: Union[Point2, tuple]) -> bool:
         """ Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
         :param pos: """
-        return self._game_info.playable_area.x <= pos[0] < self._game_info.playable_area.x + self.game_info.playable_area.width and self._game_info.playable_area.y <= pos[1] < self._game_info.playable_area.y + self.game_info.playable_area.height
+        return (
+            self._game_info.playable_area.x
+            <= pos[0]
+            < self._game_info.playable_area.x + self.game_info.playable_area.width
+            and self._game_info.playable_area.y
+            <= pos[1]
+            < self._game_info.playable_area.y + self.game_info.playable_area.height
+        )
 
     # For the functions below, make sure you are inside the boundries of the map size.
     def get_terrain_height(self, pos: Union[Point2, Point3, Unit]) -> int:
@@ -1625,6 +1642,7 @@ class BotAI(DistanceCalculation):
                             self.reactor_tags.add(unit_obj.tag)
                     else:
                         self.units.append(unit_obj)
+                        # TODO add burrowed drones
                         if unit_id == race_worker[self.race]:
                             self.workers.append(unit_obj)
                         elif unit_id == UnitTypeId.LARVA:
@@ -1667,7 +1685,6 @@ class BotAI(DistanceCalculation):
     async def _advance_steps(self, steps: int):
         """ Advances the game loop by amount of 'steps'. This function is meant to be used as a debugging and testing tool only.
         If you are using this, please be aware of the consequences, e.g. 'self.units' will be filled with completely new data. """
-        old_game_loop = self.state.game_loop
         await self._after_step()
         # Advance simulation by exactly "steps" frames
         await self.client.step(steps)
@@ -1675,8 +1692,7 @@ class BotAI(DistanceCalculation):
         gs = GameState(state.observation)
         proto_game_info = await self.client._execute(game_info=sc_pb.RequestGameInfo())
         self._prepare_step(gs, proto_game_info)
-        # print(f"Advanced from game loop ({old_game_loop}) to ({self.state.game_loop})")
-        # await self.issue_events()
+        await self.issue_events()
         # await self.on_step(-1)
 
     async def issue_events(self):
@@ -1788,7 +1804,8 @@ class BotAI(DistanceCalculation):
     async def on_unit_type_changed(self, unit: Unit, previous_type: UnitTypeId):
         """ Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use 'unit.type_id'
 
-        This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair, a corruptor morphed to broodlordcocoon, etc..
+        This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair,
+        a corruptor morphed to broodlordcocoon, etc..
 
         Examples::
 
@@ -1823,9 +1840,11 @@ class BotAI(DistanceCalculation):
 
     async def on_unit_took_damage(self, unit: Unit, amount_damage_taken: float):
         """
-        Override this in your bot class. This function is called when your own unit (unit or structure) took damage. It will not be called if the unit died this frame.
+        Override this in your bot class. This function is called when your own unit (unit or structure) took damage.
+        It will not be called if the unit died this frame.
 
-        This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep, or terran bio units that just used stimpack ability.
+        This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep,
+        or terran bio units that just used stimpack ability.
         TODO: If there is a demand for it, then I can add a similar event for when enemy units took damage
 
         Examples::
@@ -1845,7 +1864,8 @@ class BotAI(DistanceCalculation):
     async def on_enemy_unit_left_vision(self, unit_tag: int):
         """
         Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
-        Same as the self.on_unit_destroyed event, this function is called with the unit's tag because the unit is no longer visible anymore. If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.
+        Same as the self.on_unit_destroyed event, this function is called with the unit's tag because the unit is no longer visible anymore.
+        If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.
 
         Examples::
 
@@ -1880,6 +1900,7 @@ class BotAI(DistanceCalculation):
         raise NotImplementedError
 
     async def on_end(self, game_result: Result):
-        """ Override this in your bot class. This function is called at the end of a game. Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.
+        """ Override this in your bot class. This function is called at the end of a game.
+        Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.
 
         :param game_result: """
