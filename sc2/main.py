@@ -387,6 +387,9 @@ async def _host_game(
         await server.ping()
 
         client = await _setup_host_game(server, map_settings, players, realtime, random_seed)
+        # Bot can decide if it wants to launch with 'raw_affects_selection=True'
+        if not isinstance(players[0], Human) and getattr(players[0].ai, "raw_affects_selection", None) is not None:
+            client.raw_affects_selection = players[0].ai.raw_affects_selection
 
         try:
             result = await _play_game(
@@ -404,7 +407,13 @@ async def _host_game(
 
 
 async def _host_game_aiter(
-    map_settings, players, realtime, portconfig=None, save_replay_as=None, step_time_limit=None, game_time_limit=None
+    map_settings,
+    players,
+    realtime,
+    portconfig=None,
+    save_replay_as=None,
+    step_time_limit=None,
+    game_time_limit=None,
 ):
     assert players, "Can't create a game without players"
 
@@ -415,6 +424,8 @@ async def _host_game_aiter(
             await server.ping()
 
             client = await _setup_host_game(server, map_settings, players, realtime)
+            if not isinstance(players[0], Human) and getattr(players[0].ai, "raw_affects_selection", None) is not None:
+                client.raw_affects_selection = players[0].ai.raw_affects_selection
 
             try:
                 result = await _play_game(players[0], client, realtime, portconfig, step_time_limit, game_time_limit)
@@ -438,11 +449,21 @@ def _host_game_iter(*args, **kwargs):
         new_playerconfig = yield asyncio.get_event_loop().run_until_complete(game.asend(new_playerconfig))
 
 
-async def _join_game(players, realtime, portconfig, save_replay_as=None, step_time_limit=None, game_time_limit=None):
+async def _join_game(
+    players,
+    realtime,
+    portconfig,
+    save_replay_as=None,
+    step_time_limit=None,
+    game_time_limit=None,
+):
     async with SC2Process(fullscreen=players[1].fullscreen) as server:
         await server.ping()
 
         client = Client(server._ws)
+        # Bot can decide if it wants to launch with 'raw_affects_selection=True'
+        if not isinstance(players[1], Human) and getattr(players[1].ai, "raw_affects_selection", None) is not None:
+            client.raw_affects_selection = players[1].ai.raw_affects_selection
 
         try:
             result = await _play_game(players[1], client, realtime, portconfig, step_time_limit, game_time_limit)

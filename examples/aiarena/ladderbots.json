@@ -1,0 +1,13 @@
+{
+    "Bots": {
+        "example_bot": {
+            "Race": "Random",
+            "Type": "Python",
+            "RootPath": "./",
+            "FileName": "run.py",
+            "Args": "-O",
+            "Debug": true,
+            "SurrenderPhrase": "(pineapple)"
+        }
+    }
+}
