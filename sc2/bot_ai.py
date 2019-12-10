@@ -967,8 +967,6 @@ class BotAI(DistanceCalculation):
         progresses: List[int] = [self.structure_type_build_progress(unit_info_id_value)]
         for equiv_structure in EQUIVALENTS_FOR_TECH_PROGRESS.get(unit_info_id, []):
             progresses.append(self.structure_type_build_progress(equiv_structure.value))
-        if structure_type == UnitTypeId.BARRACKS:
-            print(progresses)
         return max(progresses)
 
     def already_pending(self, unit_type: Union[UpgradeId, UnitTypeId]) -> float:
