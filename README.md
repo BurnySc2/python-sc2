@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/BurnySc2/python-sc2.svg?branch=develop)](https://travis-ci.com/BurnySc2/python-sc2)
+[![Actions Status](https://github.com/{owner}/{repo}/workflows/{workflow_name}/badge.svg)](https://github.com/{owner}/{repo}/actions)
 
 # A StarCraft II API Client for Python 3
 
