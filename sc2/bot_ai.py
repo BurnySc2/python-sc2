@@ -1678,8 +1678,9 @@ class BotAI(DistanceCalculation):
         self._total_time_in_on_step += step_duration
         self._total_steps_iterations += 1
         # Commit and clear bot actions
-        await self._do_actions(self.actions)
-        self.actions.clear()
+        if self.actions:
+            await self._do_actions(self.actions)
+            self.actions.clear()
         # Clear set of unit tags that were given an order this frame by self.do()
         self.unit_tags_received_action.clear()
         # Commit debug queries
