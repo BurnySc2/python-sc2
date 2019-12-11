@@ -49,7 +49,6 @@ Information about your bot::
     self.supply_left: int # 2 for zerg, 3 for T and P at game start
 
     # Units
-    self.larva_count: int # 3 at game start (only zerg)
     self.warp_gate_count: Units # Your warp gate count (only protoss)
     self.idle_worker_count: int # Workers that are doing nothing
     self.army_count: int # Amount of army units
