@@ -919,6 +919,9 @@ class BotAI(DistanceCalculation):
             # If you want to save up money for mutalisks, you can now save up once the spire is nearly completed:
             spire_almost_completed: bool = self.structure_type_build_progress(UnitTypeId.SPIRE) > 0.75
 
+            # If you have a Hive completed but no lair, this function returns 1.0 for the following:
+            self.structure_type_build_progress(UnitTypeId.LAIR)
+
             # Assume you have 2 command centers in production, one has 0.5 build_progress and the other 0.2, the following returns 0.5
             highest_progress_of_command_center: float = self.structure_type_build_progress(UnitTypeId.COMMANDCENTER)
 
@@ -929,16 +932,18 @@ class BotAI(DistanceCalculation):
         ), f"Needs to be int or UnitTypeId, but was: {type(structure_type)}"
         if isinstance(structure_type, int):
             structure_type_value: int = structure_type
+            structure_type = UnitTypeId(structure_type_value)
         else:
             structure_type_value = structure_type.value
         assert structure_type_value, f"structure_type can not be 0 or NOTAUNIT, but was: {structure_type_value}"
+        equiv_values: Set[int] = {structure_type_value} | {
+            s_type.value for s_type in EQUIVALENTS_FOR_TECH_PROGRESS.get(structure_type, set())
+        }
+        creation_ability: AbilityData = self._game_data.units[structure_type_value].creation_ability
         max_value = max(
-            (s for s in self.structures if s._proto.unit_type == structure_type_value),
-            key=lambda structure: structure.build_progress,
-            default=0,
+            [s.build_progress for s in self.structures if s._proto.unit_type in equiv_values]
+            + [self._abilities_all_units[1].get(creation_ability, 0)]
         )
-        if isinstance(max_value, Unit):
-            return max_value.build_progress
         return max_value
 
     def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:

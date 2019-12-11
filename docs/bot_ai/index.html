@@ -981,6 +981,9 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 <span class="c1"># If you want to save up money for mutalisks, you can now save up once the spire is nearly completed:</span>
 <span class="n">spire_almost_completed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.75</span>
 
+<span class="c1"># If you have a Hive completed but no lair, this function returns 1.0 for the following:</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">LAIR</span><span class="p">)</span>
+
 <span class="c1"># Assume you have 2 command centers in production, one has 0.5 build_progress and the other 0.2, the following returns 0.5</span>
 <span class="n">highest_progress_of_command_center</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
 </pre></div>
