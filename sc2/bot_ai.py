@@ -94,7 +94,6 @@ class BotAI(DistanceCalculation):
         self.idle_worker_count: int = None
         self.army_count: int = None
         self.warp_gate_count: int = None
-        self.larva_count: int = None
         self.actions: List[UnitCommand] = []
         self.blips: Set[Blip] = set()
         self._units_created: Counter = Counter()
@@ -157,6 +156,11 @@ class BotAI(DistanceCalculation):
     def client(self) -> Client:
         """ See client.py """
         return self._client
+
+    @property
+    def larva_count(self):
+        """ Replacement for self.state.common.larva_count https://github.com/Blizzard/s2client-proto/blob/d3d18392f9d7c646067d447df0c936a8ca57d587/s2clientprotocol/sc2api.proto#L614 """
+        return len(self.larva)
 
     def alert(self, alert_code: Alert) -> bool:
         """
@@ -1346,12 +1350,6 @@ class BotAI(DistanceCalculation):
             if required_supply > 0:
                 self.supply_used += required_supply
                 self.supply_left -= required_supply
-            if (
-                self.race == Race.Zerg
-                and unit_type in UNIT_TRAINED_FROM
-                and UNIT_TRAINED_FROM[unit_type] == {UnitTypeId.LARVA}
-            ):
-                self.larva_count -= 1
         self.actions.append(action)
         self.unit_tags_received_action.add(action.unit.tag)
         return True
@@ -1555,8 +1553,6 @@ class BotAI(DistanceCalculation):
         self.supply_left: int = self.supply_cap - self.supply_used
 
         if self.race == Race.Zerg:
-            # Larva count does not seem to be reliable at all
-            self.larva_count: int = state.common.larva_count
             # Workaround Zerg supply rounding bug
             self._correct_zerg_supply()
         elif self.race == Race.Protoss:
