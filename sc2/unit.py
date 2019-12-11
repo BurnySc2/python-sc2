@@ -1117,7 +1117,8 @@ class Unit:
         :param position:
         :param queue:
         """
-        # TODO: add asserts to make sure "position" is not a Point2 or Point3 if "unit" is extractor / refinery / assimilator
+        if unit in {UnitTypeId.EXTRACTOR, UnitTypeId.ASSIMILATOR, UnitTypeId.REFINERY}:
+            assert isinstance(position, Unit), f"When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
         return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
 
     def build_gas(self, target_geysir: Unit, queue: bool = False) -> UnitCommand:
@@ -1130,8 +1131,8 @@ class Unit:
         :param target_geysir:
         :param queue:
         """
-        # TODO: add asserts to make sure "target_geysir" is not a Point2 or Point3
         gas_structure_type_id: UnitTypeId = race_gas[self._bot_object.race]
+        assert isinstance(target_geysir, Unit), f"When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
         return self(
             self._bot_object._game_data.units[gas_structure_type_id.value].creation_ability.id,
             target=target_geysir,
@@ -1164,6 +1165,14 @@ class Unit:
         :param queue:
         """
         return self(AbilityId.ATTACK, target=target, queue=queue)
+
+    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+        """ Orders the smart command. Equivalent to a right-click order.
+
+        :param target:
+        :param queue:
+        """
+        return self(AbilityId.SMART, target=target, queue=queue)
 
     def gather(self, target: Unit, queue: bool = False) -> UnitCommand:
         """ Orders a unit to gather minerals or gas.
