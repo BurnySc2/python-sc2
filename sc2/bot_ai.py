@@ -4,6 +4,7 @@ import logging
 import math
 import random
 import time
+import warnings
 from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 from s2clientprotocol import sc2api_pb2 as sc_pb
@@ -160,6 +161,11 @@ class BotAI(DistanceCalculation):
     @property
     def larva_count(self):
         """ Replacement for self.state.common.larva_count https://github.com/Blizzard/s2client-proto/blob/d3d18392f9d7c646067d447df0c936a8ca57d587/s2clientprotocol/sc2api.proto#L614 """
+        warnings.warn(
+            "self.larva_count will be removed soon, please use len(self.larva) or self.larva.amount instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return len(self.larva)
 
     def alert(self, alert_code: Alert) -> bool:
