@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/BurnySc2/python-sc2/workflows/Python/badge.svg)](https://github.com/BurnySc2/python-sc2/actions)
+[![Actions Status](https://github.com/BurnySc2/python-sc2/workflows/Tests/badge.svg)](https://github.com/BurnySc2/python-sc2/actions)
 
 # A StarCraft II API Client for Python 3
 

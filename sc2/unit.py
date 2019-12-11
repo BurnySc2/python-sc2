@@ -1165,6 +1165,14 @@ class Unit:
         """
         return self(AbilityId.ATTACK, target=target, queue=queue)
 
+    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+        """ Orders the smart command. Equivalent to a right-click order.
+
+        :param target:
+        :param queue:
+        """
+        return self(AbilityId.SMART, target=target, queue=queue)
+
     def gather(self, target: Unit, queue: bool = False) -> UnitCommand:
         """ Orders a unit to gather minerals or gas.
         'Target' must be a mineral patch or a gas extraction building. 
