@@ -1666,6 +1666,9 @@ class BotAI(DistanceCalculation):
         elif self.distance_calculation_method == 2:
             _ = self._unit_index_dict
             _ = self._cdist
+        elif self.distance_calculation_method == 3:
+            _ = self._unit_index_dict
+            _ = self._cdist
 
     async def _after_step(self) -> int:
         """ Executed by main.py after each on_step function. """

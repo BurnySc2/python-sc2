@@ -107,6 +107,19 @@ class DistanceCalculation:
 
         return self._cached_cdist
 
+    def _calculate_distances_method3(self) -> np.ndarray:
+        """ Nearly same as above, but without asserts"""
+        if self._generated_frame2 != self.state.game_loop:
+            flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
+            positions_array: np.ndarray = np.fromiter(
+                flat_positions, dtype=np.float, count=2 * self._units_count
+            ).reshape((-1, 2))
+            self._generated_frame2 = self.state.game_loop
+            # See performance benchmarks
+            self._cached_cdist = cdist(positions_array, positions_array, "sqeuclidean")
+
+        return self._cached_cdist
+
     def _get_index_of_two_units_method1(self, unit1: Unit, unit2: Unit) -> int:
         assert (
             unit1.tag in self._unit_index_dict
@@ -125,8 +138,10 @@ class DistanceCalculation:
         assert (
             unit2.tag in self._unit_index_dict
         ), f"Unit2 {unit2} is not in index dict for distance calculation. Make sure the unit is alive in the current frame. Ideally take units from 'self.units' or 'self.structures' as these contain unit data from the current frame. Do not try to save 'Units' objects over several iterations."
-        # index1 = self._unit_index_dict[unit1.tag]
-        # index2 = self._unit_index_dict[unit2.tag]
+        return self._unit_index_dict[unit1.tag], self._unit_index_dict[unit2.tag]
+
+    def _get_index_of_two_units_method3(self, unit1: Unit, unit2: Unit) -> Tuple[int, int]:
+        """ Same function as above, but without asserts"""
         return self._unit_index_dict[unit1.tag], self._unit_index_dict[unit2.tag]
 
     # Helper functions
@@ -196,8 +211,9 @@ class DistanceCalculation:
         method 0: Use python's math.hypot
         The following methods calculate the distances between all units once:
         method 1: Use scipy's pdist condensed matrix (1d array)
-        method 2: Use scipy's cidst square matrix (2d array) """
-        assert 0 <= method <= 2, f"Selected method was: {method}"
+        method 2: Use scipy's cidst square matrix (2d array)
+        method 3: Use scipy's cidst square matrix (2d array) without asserts (careful: very weird error messages, but maybe slightly faster) """
+        assert 0 <= method <= 3, f"Selected method was: {method}"
         if method == 0:
             self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method0
         elif method == 1:
@@ -208,3 +224,7 @@ class DistanceCalculation:
             self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method2
             self.calculate_distances = self._calculate_distances_method2
             self._get_index_of_two_units = self._get_index_of_two_units_method2
+        elif method == 3:
+            self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method2
+            self.calculate_distances = self._calculate_distances_method3
+            self._get_index_of_two_units = self._get_index_of_two_units_method3
