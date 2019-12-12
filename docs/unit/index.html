@@ -476,6 +476,21 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.unit.Unit.distance_to_squared">
+<code class="sig-name descname">distance_to_squared</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.distance_to_squared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the 2d distance squared between self and p. Slightly faster than distance_to, so when filtering a lot of units, this function is recommended to be used.
+To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.unit.Unit.energy">
 <em class="property">property </em><code class="sig-name descname">energy</code><a class="headerlink" href="#sc2.unit.Unit.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of energy the unit has. Returns 0 for units without energy.</p>

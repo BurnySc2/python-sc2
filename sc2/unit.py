@@ -441,6 +441,15 @@ class Unit:
             return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
+    def distance_to_squared(self, p: Union[Unit, Point2, Point3]) -> float:
+        """ Using the 2d distance squared between self and p. Slightly faster than distance_to, so when filtering a lot of units, this function is recommended to be used.
+        To calculate the 3d distance, use unit.position3d.distance_to(p)
+
+        :param p: """
+        if isinstance(p, Unit):
+            return self._bot_object._distance_squared_unit_to_unit(self, p)
+        return self._bot_object.distance_math_hypot_squared(self.position_tuple, p)
+
     def target_in_range(self, target: Unit, bonus_distance: float = 0) -> bool:
         """ Checks if the target is in range.
         Includes the target's radius when calculating distance to target.

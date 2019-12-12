@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 from scipy.spatial.distance import pdist, cdist
 import math
+from math import pow
 import numpy as np
 
 from typing import Dict, Tuple, Iterable, Generator
@@ -164,7 +165,7 @@ class DistanceCalculation:
         return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
 
     def distance_math_hypot_squared(self, p1: Tuple[float, float], p2: Tuple[float, float]):
-        return math.hypot(p1[0] - p2[0], p1[1] - p2[1]) ** 2
+        return pow(p1[0] - p2[0], 2) + pow(p1[1] - p2[1], 2)
 
     def _distance_squared_unit_to_unit_method0(self, unit1: Unit, unit2: Unit) -> float:
         return self.distance_math_hypot_squared(unit1.position_tuple, unit2.position_tuple)
