@@ -360,7 +360,7 @@ ZERG_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
 )
 # Required in 'tech_requirement_progress' bot_ai.py function
 EQUIVALENTS_FOR_TECH_PROGRESS: Dict[UnitTypeId, Set[UnitTypeId]] = {
-    UnitTypeId.SUPPLYDEPOT: {UnitTypeId.SUPPLYDEPOTLOWERED, UnitTypeId.SUPPLYDEPOTDROP},
+    UnitTypeId.SUPPLYDEPOT: {UnitTypeId.SUPPLYDEPOTLOWERED},
     UnitTypeId.BARRACKS: {UnitTypeId.BARRACKSFLYING},
     UnitTypeId.FACTORY: {UnitTypeId.FACTORYFLYING},
     UnitTypeId.STARPORT: {UnitTypeId.STARPORTFLYING},

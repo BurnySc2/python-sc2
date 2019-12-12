@@ -23,7 +23,7 @@ from sc2.units import Units
 class MassReaperBot(sc2.BotAI):
     def __init__(self):
         # Select distance calculation method 0, which is the pure python distance calculation without caching or indexing, using math.hypot(), for more info see distances.py _distances_override_functions() function
-        self.distance_calculation_method = 0
+        self.distance_calculation_method = 3
 
     async def on_step(self, iteration):
         # Benchmark and print duration time of the on_step method based on "self.distance_calculation_method" value
@@ -383,7 +383,7 @@ class MassReaperBot(sc2.BotAI):
 def main():
     # Multiple difficulties for enemy bots available https://github.com/Blizzard/s2client-api/blob/ce2b3c5ac5d0c85ede96cef38ee7ee55714eeb2f/include/sc2api/sc2_gametypes.h#L30
     sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+        sc2.maps.get("AcropolisLE"),
         [Bot(Race.Terran, MassReaperBot()), Computer(Race.Zerg, Difficulty.VeryHard)],
         realtime=False,
     )

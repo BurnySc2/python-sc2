@@ -12,8 +12,10 @@ class ExampleBot(sc2.BotAI):
         pass
 
     async def on_start(self):
-        # On first step/frame, send all workers to attack the enemy start location
         print("Game started")
+        # On game start or in any frame actually, you can set the game step here - do not put it in the __init__ function as the client will not have been initialized yet
+        self.client.game_step = 2
+        # On first step/frame, send all workers to attack the enemy start location
         for worker in self.workers:
             self.do(worker.attack(self.enemy_start_locations[0]))
 
