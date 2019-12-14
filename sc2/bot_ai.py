@@ -1082,20 +1082,23 @@ class BotAI(DistanceCalculation):
         :param placement_step: """
 
         assert isinstance(near, (Unit, Point2, Point3))
-        if isinstance(near, Unit):
+        gas_buildings = {UnitTypeId.EXTRACTOR, UnitTypeId.ASSIMILATOR, UnitTypeId.REFINERY}
+        if isinstance(near, Unit) and building not in gas_buildings:
             near = near.position
-        near = near.to2
-
+        if isinstance(near, (Point2, Point3)):
+            near = near.to2
         if not self.can_afford(building):
             return False
-
-        p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
-        if p is None:
-            return False
-
-        builder = build_worker or self.select_build_worker(p)
+        if isinstance(near, (Point2, Point3)):
+            p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
+            if p is None:
+                return False
+        builder = build_worker or self.select_build_worker(near)
         if builder is None:
             return False
+        if building in gas_buildings:
+            self.do(builder.build_gas(near))
+            return True
         self.do(builder.build(building, p), subtract_cost=True)
         return True
 
