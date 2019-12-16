@@ -199,11 +199,7 @@ class Unit:
     @property_immutable_cache
     def can_attack_both(self) -> bool:
         """ Checks if the unit can attack both ground and air units. """
-        if self.type_id == UNIT_BATTLECRUISER:
-            return True
-        if self._weapons:
-            return any(weapon.type in TARGET_BOTH for weapon in self._weapons)
-        return False
+        return self.can_attack_ground and self.can_attack_air
 
     @property_immutable_cache
     def can_attack_ground(self) -> bool:
