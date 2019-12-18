@@ -1012,6 +1012,10 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
+    UnitTypeId.ROACHWARREN: {
+        AbilityId.RESEARCH_GLIALREGENERATION,
+        AbilityId.RESEARCH_TUNNELINGCLAWS,
+    },
     UnitTypeId.ROBOTICSBAY: {
         AbilityId.RESEARCH_EXTENDEDTHERMALLANCE,
         AbilityId.RESEARCH_GRAVITICBOOSTER,
