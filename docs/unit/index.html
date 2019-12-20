@@ -535,6 +535,21 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.unit.Unit.footprint_radius">
+<em class="property">property </em><code class="sig-name descname">footprint_radius</code><a class="headerlink" href="#sc2.unit.Unit.footprint_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>For structures only.
+For townhalls this returns 2.5
+For barracks, spawning pool, gateway, this returns 1.5
+For supply depot, this returns 1
+For sensor tower, creep tumor, this return 0.5</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.unit.Unit.gather">
 <code class="sig-name descname">gather</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.gather" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders a unit to gather minerals or gas.
