@@ -7,10 +7,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from scipy.spatial.distance import pdist, cdist
 import math
 from math import pow
 import numpy as np
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    from scipy.spatial.distance import pdist, cdist
 
 from typing import Dict, Tuple, Iterable, Generator
 
