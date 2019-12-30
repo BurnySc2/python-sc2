@@ -1071,31 +1071,36 @@ class BotAI(DistanceCalculation):
         random_alternative: bool = True,
         placement_step: int = 2,
     ) -> bool:
-        """ Not recommended as this function checks many positions if it "can place" on them until it found a valid position.
-        Also if the given position is not placeable, this function tries to find a nearby position to place the structure. Then uses 'self.do' to give the worker the order to start the construction.
+        """ Not recommended as this function checks many positions if it "can place" on them until it found a valid
+        position. Also if the given position is not placeable, this function tries to find a nearby position to place
+        the structure. Then uses 'self.do' to give the worker the order to start the construction.
 
         :param building:
         :param near:
         :param max_distance:
-        :param unit:
+        :param build_worker:
         :param random_alternative:
         :param placement_step: """
 
         assert isinstance(near, (Unit, Point2, Point3))
-        if isinstance(near, Unit):
-            near = near.position
-        near = near.to2
-
         if not self.can_afford(building):
             return False
-
-        p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
-        if p is None:
-            return False
-
-        builder = build_worker or self.select_build_worker(p)
+        p = None
+        gas_buildings = {UnitTypeId.EXTRACTOR, UnitTypeId.ASSIMILATOR, UnitTypeId.REFINERY}
+        if isinstance(near, Unit) and building not in gas_buildings:
+            near = near.position
+        if isinstance(near, (Point2, Point3)):
+            near = near.to2
+        if isinstance(near, (Point2, Point3)):
+            p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
+            if p is None:
+                return False
+        builder = build_worker or self.select_build_worker(near)
         if builder is None:
             return False
+        if building in gas_buildings:
+            self.do(builder.build_gas(near))
+            return True
         self.do(builder.build(building, p), subtract_cost=True)
         return True
 
