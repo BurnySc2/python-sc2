@@ -43,7 +43,7 @@ After installing the library, a StarCraft II executable, and some maps, you're r
 python3 examples/protoss/cannon_rush.py
 ```
 
-If you installed StarCraft II on Linux with Wine or Lutris, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`:
+If you installed StarCraft II on Linux with Wine or Lutris, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`):
 
 ```sh
 SC2PF=WineLinux
