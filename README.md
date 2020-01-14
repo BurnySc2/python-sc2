@@ -39,14 +39,19 @@ Maps that are run on the [SC2 AI Ladder](http://sc2ai.net/) and [SC2 AI Arena](h
 
 After installing the library, a StarCraft II executable, and some maps, you're ready to get started. Simply run a bot file to fire up an instance of StarCraft II with the bot running. For example:
 
-```
+```python
 python3 examples/protoss/cannon_rush.py
 ```
 
-If you installed StarCraft II on Linux with Wine, set the `SC2PF` environment variable to `WineLinux`:
+If you installed StarCraft II on Linux with Wine or Lutris, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`:
 
-```
-SC2PF=WineLinux python3 examples/protoss/cannon_rush.py
+```sh
+SC2PF=WineLinux
+WINE=usr/bin/wine
+# Or a wine binary from lutris:
+# WINE=/home/burny/.local/share/lutris/runners/wine/lutris-4.20-x86_64/bin/wine64
+# Default Lutris StarCraftII Installation path:
+SC2PATH=/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
 ```
 
 ## Example
