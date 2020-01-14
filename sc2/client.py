@@ -53,6 +53,7 @@ class Client(Protocol):
             raw=True,
             score=True,
             show_cloaked=True,
+            show_burrowed_shadows=True,
             raw_affects_selection=self.raw_affects_selection,
             raw_crop_to_playable_area=False,
         )
