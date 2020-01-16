@@ -1,7 +1,7 @@
 {
     "Bots": {
         "example_bot": {
-            "Race": "Random",
+            "Race": "Put Terran Zerg or Protoss here",
             "Type": "Python",
             "RootPath": "./",
             "FileName": "run.py",
