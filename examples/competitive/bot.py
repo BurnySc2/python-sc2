@@ -1,7 +1,7 @@
 import sc2
 
 
-class ExampleBot(sc2.BotAI):
+class CompetitiveBot(sc2.BotAI):
     async def on_step(self, iteration):
         # Populate this function with whatever your bot should do!
         pass
