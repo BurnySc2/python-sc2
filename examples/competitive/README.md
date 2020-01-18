@@ -16,3 +16,7 @@ https://ai-arena.net/wiki/getting-started/#wiki-toc-bot-zip
 Make sure to notify AI-Arena if you need additional requirements (python packages) for your bot to run. A "requirements.txt" is not going to be read.
 
 Make an account on https://ai-arena.net/ and upload the zip file as a new bot. Make sure to select the right race and bot type (python).
+
+## Sc2AI & Probots
+
+The [ladderbots.json](ladderbots.json) file contains parameters to support play for Sc2AI and Probots. 
