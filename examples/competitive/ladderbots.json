@@ -1,6 +1,6 @@
 {
     "Bots": {
-        "example_bot": {
+        "YOUR_BOTS_NAME_HERE": {
             "Race": "Put Terran Zerg or Protoss here",
             "Type": "Python",
             "RootPath": "./",
