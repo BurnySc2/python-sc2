@@ -296,6 +296,121 @@ class Unit:
         return self._type_data._proto.movement_speed
 
     @property
+    def real_speed(self):
+        return self.calculate_speed()
+
+    def calculate_speed(self, upgrades=None) -> float:
+        """ Calculates the movement speed of the unit including buffs and upgrades.
+        Note: Upgrades only work with own units. Use "upgrades" param to set expected enemy upgrades.
+
+        :param upgrades: """
+        speed = self.movement_speed
+        unit_type = self.type_id
+
+        # ---- Upgrades ----
+        if upgrades is None:
+            upgrades = self._bot_object.state.upgrades
+
+        if upgrades:
+            if unit_type == UnitTypeId.BANSHEE and UpgradeId.BANSHEESPEED in upgrades:
+                speed = 5.25
+            elif unit_type == UNIT_OBSERVER and UpgradeId.OBSERVERGRAVITICBOOSTER in upgrades:
+                speed *= 2
+            elif unit_type == UnitTypeId.WARPPRISM and UpgradeId.GRAVITICDRIVE in upgrades:
+                speed += 0.422
+            elif unit_type == UnitTypeId.ROACH and UpgradeId.GLIALRECONSTITUTION in upgrades:
+                speed = 4.2
+            elif unit_type == UnitTypeId.OVERLORD and UpgradeId.OVERLORDSPEED in upgrades:
+                speed = 1.88
+            elif unit_type == UnitTypeId.OVERSEER and UpgradeId.OVERLORDSPEED in upgrades:
+                speed = 3.375
+            elif unit_type == UnitTypeId.ZERGLING and UpgradeId.ZERGLINGMOVEMENTSPEED in upgrades:
+                speed *= 1.6
+            elif unit_type == UnitTypeId.BANELING and UpgradeId.CENTRIFICALHOOKS in upgrades:
+                speed += 0.63
+            '''
+            elif unit_type == UnitTypeId.LURKERMP and UpgradeId.DIGGINGCLAWS in upgrades:
+                pass  # todo: can't find how much it increases speed
+            '''
+            ''' todo: add this in 4.11:
+
+            elif unit_type == UnitTypeId.VOIDRAY and UpgradeId.VOIDRAYSPEEDUPGRADE in upgrades:
+                speed += 0.703
+
+            # "Rapid Reignition System" upgrade increases Medivac's base movement speed from 3.5 to 4.13
+            # doesn't increase speed after boost
+            elif unit_type == UnitTypeId.MEDIVAC and UpgradeId.MEDIVACRAPIDDEPLOYMENT in upgrades:
+                speed = 4.13
+
+            # In 4.11 Charge also increases Zealot's base speed to 4.725
+            elif unit_type == UnitTypeId.ZEALOT and UpgradeId.CHARGE in upgrades:
+                speed = 4.725
+            '''
+
+        # ---- Creep ----
+        if not self.is_flying:
+            on_creep: bool = self._bot_object.state.creep[self.position.rounded] == 1
+
+            if on_creep:
+                if unit_type in {
+                        UnitTypeId.ZERGLING,
+                        UnitTypeId.BANELING,
+                        UnitTypeId.ROACH,
+                        UnitTypeId.RAVAGER,
+                        UnitTypeId.HYDRALISK,
+                        UnitTypeId.LURKERMP,
+                        UnitTypeId.ULTRALISK,
+                        UnitTypeId.INFESTOR,
+                        UnitTypeId.INFESTORTERRAN,
+                        UnitTypeId.SWARMHOSTMP,
+                    }:
+                    speed *= 1.3
+                elif unit_type == UnitTypeId.QUEEN:
+                    # 167% bonus
+                    speed *= 2.67
+                elif unit_type == UnitTypeId.LOCUSTMP:
+                    speed *= 1.4
+                elif unit_type in {UnitTypeId.SPINECRAWLER, UnitTypeId.SPORECRAWLER}:
+                    # 150% bonus
+                    speed *= 2.5
+
+            # off creep
+            elif upgrades:
+                if unit_type == UnitTypeId.HYDRALISK and UpgradeId.EVOLVEMUSCULARAUGMENTS in upgrades:
+                    speed *= 1.25
+                '''
+                elif unit_type == UnitTypeId.ULTRALISK and UpgradeId.ANABOLICSYNTHESIS in upgrades:
+                    pass  # todo: can't find how much it increases speed
+                '''
+
+            # Ultralisk has passive ability "Frenzied" which mades it immune to speed altering buffs
+            if unit_type == UnitTypeId.ULTRALISK:
+                return speed
+
+        # ---- Buffs ----
+        buffs = self.buffs
+
+        if not {BuffId.STIMPACK, BuffId.STIMPACKMARAUDER}.isdisjoint(buffs):
+            speed *= 1.5
+        elif BuffId.MEDIVACSPEEDBOOST in buffs:
+            speed = 5.94
+        elif BuffId.CHARGEUP in buffs:
+            speed += 5.67
+        elif BuffId.VOIDRAYSWARMDAMAGEBOOST in buffs:
+            speed *= 0.75
+
+        if BuffId.DUTCHMARAUDERSLOW in buffs:
+            speed /= 2
+        if BuffId.TIMEWARPPRODUCTION in buffs:
+            speed /= 2
+        if BuffId.FUNGALGROWTH in buffs:
+            speed /= 4
+        if BuffId.INHIBITORZONETEMPORALFIELD in buffs:
+            speed *= 0.65
+
+        return speed
+
+    @property
     def is_mineral_field(self) -> bool:
         """ Checks if the unit is a mineral field. """
         return self._type_data.has_minerals
