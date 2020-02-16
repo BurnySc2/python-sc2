@@ -22,12 +22,16 @@ A basic bot can be made by creating a new file `my_bot.py` and filling it with t
 
     import sc2
     from sc2.bot_ai import BotAI
+    from sc2.player import Bot, Computer
+
     class MyBot(BotAI):
         async def on_step(self, iteration: int):
-            print(f"This is my bot in iteration {iteration}!"
+            print(f"This is my bot in iteration {iteration}!")
 
     sc2.run_game(
-        sc2.maps.get(map), [Bot(Race.Zerg, MyBot()), Computer(Race.Zerg, Difficulty.Hard)], realtime=False
+        sc2.maps.get("AcropolisLE"),
+        [Bot(sc2.Race.Zerg, MyBot()), Computer(sc2.Race.Zerg, sc2.Difficulty.Hard)],
+        realtime=False,
     )
 
 You can now run the file using command ``python my_bot.py`` or double clicking the file.
