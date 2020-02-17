@@ -313,38 +313,38 @@ class Unit:
 
         if upgrades:
             if unit_type == UnitTypeId.BANSHEE and UpgradeId.BANSHEESPEED in upgrades:
-                speed = 5.25
+                speed *= 1.3636
             elif unit_type == UNIT_OBSERVER and UpgradeId.OBSERVERGRAVITICBOOSTER in upgrades:
                 speed *= 2
             elif unit_type == UnitTypeId.WARPPRISM and UpgradeId.GRAVITICDRIVE in upgrades:
-                speed += 0.422
+                speed *= 1.3
             elif unit_type == UnitTypeId.ROACH and UpgradeId.GLIALRECONSTITUTION in upgrades:
-                speed = 4.2
+                speed *= 4/3
             elif unit_type == UnitTypeId.OVERLORD and UpgradeId.OVERLORDSPEED in upgrades:
-                speed = 1.88
+                speed *= 2.915
             elif unit_type == UnitTypeId.OVERSEER and UpgradeId.OVERLORDSPEED in upgrades:
-                speed = 3.375
+                speed *= 1.8015
             elif unit_type == UnitTypeId.ZERGLING and UpgradeId.ZERGLINGMOVEMENTSPEED in upgrades:
                 speed *= 1.6
             elif unit_type == UnitTypeId.BANELING and UpgradeId.CENTRIFICALHOOKS in upgrades:
-                speed += 0.63
-            '''
+                speed *= 1.18
             elif unit_type == UnitTypeId.LURKERMP and UpgradeId.DIGGINGCLAWS in upgrades:
-                pass  # todo: can't find how much it increases speed
-            '''
+                speed *= 1.1
             ''' todo: add this in 4.11:
 
+            # "Flux Vanes" upgrade increases Void Ray's base movement speed from 3.5 to 4.65
+            # doesn't increase speed after "Prismatic Alignment"
             elif unit_type == UnitTypeId.VOIDRAY and UpgradeId.VOIDRAYSPEEDUPGRADE in upgrades:
-                speed += 0.703
+                speed *= 1.328
 
             # "Rapid Reignition System" upgrade increases Medivac's base movement speed from 3.5 to 4.13
             # doesn't increase speed after boost
             elif unit_type == UnitTypeId.MEDIVAC and UpgradeId.MEDIVACRAPIDDEPLOYMENT in upgrades:
-                speed = 4.13
+                speed *= 1.18
 
-            # In 4.11 Charge also increases Zealot's base speed to 4.725
+            # In 4.11 Charge also increases Zealot's base speed from 3.15 to 4.725
             elif unit_type == UnitTypeId.ZEALOT and UpgradeId.CHARGE in upgrades:
-                speed = 4.725
+                speed *= 1.5
             '''
 
         # ---- Creep ----
@@ -378,10 +378,8 @@ class Unit:
             elif upgrades:
                 if unit_type == UnitTypeId.HYDRALISK and UpgradeId.EVOLVEMUSCULARAUGMENTS in upgrades:
                     speed *= 1.25
-                '''
                 elif unit_type == UnitTypeId.ULTRALISK and UpgradeId.ANABOLICSYNTHESIS in upgrades:
-                    pass  # todo: can't find how much it increases speed
-                '''
+                    speed *= 1.2
 
             # Ultralisk has passive ability "Frenzied" which mades it immune to speed altering buffs
             if unit_type == UnitTypeId.ULTRALISK:
@@ -390,21 +388,33 @@ class Unit:
         # ---- Buffs ----
         buffs = self.buffs
 
+        # Stimpack increases speed by 1.5
         if not {BuffId.STIMPACK, BuffId.STIMPACKMARAUDER}.isdisjoint(buffs):
             speed *= 1.5
         elif BuffId.MEDIVACSPEEDBOOST in buffs:
-            speed = 5.94
+            speed = self.movement_speed * 1.7
+        # When charging, increases speed by 5.67
         elif BuffId.CHARGEUP in buffs:
-            speed += 5.67
+            speed *= 2.8
+            ''' add this in 4.11 instead
+            if UpgradeId.CHARGE in upgrades:
+                speed *= 2.2
+            else:
+                speed *= 2.8
+            '''
         elif BuffId.VOIDRAYSWARMDAMAGEBOOST in buffs:
-            speed *= 0.75
+            speed = self.movement_speed * 0.75
 
+        # Concussive shells of Marauder reduce speed by 50%
         if BuffId.DUTCHMARAUDERSLOW in buffs:
             speed /= 2
+        # Time Warp of Mothership reduces speed by 50%
         if BuffId.TIMEWARPPRODUCTION in buffs:
             speed /= 2
+        # Fungal Growth of Infestor reduces speed by 75%
         if BuffId.FUNGALGROWTH in buffs:
             speed /= 4
+        # Inhibitor Zones reduce speed by 35%
         if BuffId.INHIBITORZONETEMPORALFIELD in buffs:
             speed *= 0.65
 
