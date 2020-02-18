@@ -164,7 +164,6 @@ class Units(list):
         Example::
 
             enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)
-            my_marine = next(unit for unit in self.units if unit.type_id == UnitTypeId.MARINE)
             my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)
             if my_marine:
                 closest_zergling_distance = enemy_zerglings.closest_distance_to(my_marine)

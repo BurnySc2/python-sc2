@@ -18,20 +18,41 @@ RESEARCH_INFO: Dict[
             "ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1
         },
         UpgradeId.TERRANSHIPWEAPONSLEVEL2: {
-            "ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2
+            "ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2,
+            "required_upgrade": UpgradeId.TERRANSHIPWEAPONSLEVEL1,
         },
         UpgradeId.TERRANSHIPWEAPONSLEVEL3: {
-            "ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL3
+            "ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL3,
+            "required_upgrade": UpgradeId.TERRANSHIPWEAPONSLEVEL2,
+        },
+        UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL1: {
+            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1
+        },
+        UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL2: {
+            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2,
+            "required_upgrade": UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL1,
+        },
+        UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL3: {
+            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3,
+            "required_upgrade": UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL2,
         },
         UpgradeId.TERRANVEHICLEWEAPONSLEVEL1: {
             "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL1
         },
         UpgradeId.TERRANVEHICLEWEAPONSLEVEL2: {
-            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL2
+            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL2,
+            "required_upgrade": UpgradeId.TERRANVEHICLEWEAPONSLEVEL1,
         },
         UpgradeId.TERRANVEHICLEWEAPONSLEVEL3: {
-            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL3
+            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL3,
+            "required_upgrade": UpgradeId.TERRANVEHICLEWEAPONSLEVEL2,
         },
+    },
+    UnitTypeId.BANELINGNEST: {
+        UpgradeId.CENTRIFICALHOOKS: {
+            "ability": AbilityId.RESEARCH_CENTRIFUGALHOOKS,
+            "required_building": UnitTypeId.LAIR,
+        }
     },
     UnitTypeId.BARRACKSTECHLAB: {
         UpgradeId.PUNISHERGRENADES: {"ability": AbilityId.RESEARCH_CONCUSSIVESHELLS},
@@ -46,11 +67,13 @@ RESEARCH_INFO: Dict[
         UpgradeId.PROTOSSAIRARMORSLEVEL2: {
             "ability": AbilityId.CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL2,
             "required_building": UnitTypeId.FLEETBEACON,
+            "required_upgrade": UpgradeId.PROTOSSAIRARMORSLEVEL1,
             "requires_power": True,
         },
         UpgradeId.PROTOSSAIRARMORSLEVEL3: {
             "ability": AbilityId.CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL3,
             "required_building": UnitTypeId.FLEETBEACON,
+            "required_upgrade": UpgradeId.PROTOSSAIRARMORSLEVEL2,
             "requires_power": True,
         },
         UpgradeId.PROTOSSAIRWEAPONSLEVEL1: {
@@ -60,11 +83,13 @@ RESEARCH_INFO: Dict[
         UpgradeId.PROTOSSAIRWEAPONSLEVEL2: {
             "ability": AbilityId.CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL2,
             "required_building": UnitTypeId.FLEETBEACON,
+            "required_upgrade": UpgradeId.PROTOSSAIRWEAPONSLEVEL1,
             "requires_power": True,
         },
         UpgradeId.PROTOSSAIRWEAPONSLEVEL3: {
             "ability": AbilityId.CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL3,
             "required_building": UnitTypeId.FLEETBEACON,
+            "required_upgrade": UpgradeId.PROTOSSAIRWEAPONSLEVEL2,
             "requires_power": True,
         },
         UpgradeId.WARPGATERESEARCH: {
@@ -89,10 +114,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.TERRANINFANTRYARMORSLEVEL2: {
             "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL2,
             "required_building": UnitTypeId.ARMORY,
+            "required_upgrade": UpgradeId.TERRANINFANTRYARMORSLEVEL1,
         },
         UpgradeId.TERRANINFANTRYARMORSLEVEL3: {
             "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL3,
             "required_building": UnitTypeId.ARMORY,
+            "required_upgrade": UpgradeId.TERRANINFANTRYARMORSLEVEL2,
         },
         UpgradeId.TERRANINFANTRYWEAPONSLEVEL1: {
             "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL1
@@ -100,10 +127,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.TERRANINFANTRYWEAPONSLEVEL2: {
             "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL2,
             "required_building": UnitTypeId.ARMORY,
+            "required_upgrade": UpgradeId.TERRANINFANTRYWEAPONSLEVEL1,
         },
         UpgradeId.TERRANINFANTRYWEAPONSLEVEL3: {
             "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL3,
             "required_building": UnitTypeId.ARMORY,
+            "required_upgrade": UpgradeId.TERRANINFANTRYWEAPONSLEVEL2,
         },
     },
     UnitTypeId.EVOLUTIONCHAMBER: {
@@ -113,10 +142,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.ZERGGROUNDARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGGROUNDARMORLEVEL2,
             "required_building": UnitTypeId.LAIR,
+            "required_upgrade": UpgradeId.ZERGGROUNDARMORSLEVEL1,
         },
         UpgradeId.ZERGGROUNDARMORSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGGROUNDARMORLEVEL3,
             "required_building": UnitTypeId.HIVE,
+            "required_upgrade": UpgradeId.ZERGGROUNDARMORSLEVEL2,
         },
         UpgradeId.ZERGMELEEWEAPONSLEVEL1: {
             "ability": AbilityId.RESEARCH_ZERGMELEEWEAPONSLEVEL1
@@ -124,10 +155,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.ZERGMELEEWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGMELEEWEAPONSLEVEL2,
             "required_building": UnitTypeId.LAIR,
+            "required_upgrade": UpgradeId.ZERGMELEEWEAPONSLEVEL1,
         },
         UpgradeId.ZERGMELEEWEAPONSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGMELEEWEAPONSLEVEL3,
             "required_building": UnitTypeId.HIVE,
+            "required_upgrade": UpgradeId.ZERGMELEEWEAPONSLEVEL2,
         },
         UpgradeId.ZERGMISSILEWEAPONSLEVEL1: {
             "ability": AbilityId.RESEARCH_ZERGMISSILEWEAPONSLEVEL1
@@ -135,10 +168,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.ZERGMISSILEWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGMISSILEWEAPONSLEVEL2,
             "required_building": UnitTypeId.LAIR,
+            "required_upgrade": UpgradeId.ZERGMISSILEWEAPONSLEVEL1,
         },
         UpgradeId.ZERGMISSILEWEAPONSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGMISSILEWEAPONSLEVEL3,
             "required_building": UnitTypeId.HIVE,
+            "required_upgrade": UpgradeId.ZERGMISSILEWEAPONSLEVEL2,
         },
     },
     UnitTypeId.FACTORYTECHLAB: {
@@ -175,11 +210,13 @@ RESEARCH_INFO: Dict[
         UpgradeId.PROTOSSGROUNDARMORSLEVEL2: {
             "ability": AbilityId.FORGERESEARCH_PROTOSSGROUNDARMORLEVEL2,
             "required_building": UnitTypeId.TWILIGHTCOUNCIL,
+            "required_upgrade": UpgradeId.PROTOSSGROUNDARMORSLEVEL1,
             "requires_power": True,
         },
         UpgradeId.PROTOSSGROUNDARMORSLEVEL3: {
             "ability": AbilityId.FORGERESEARCH_PROTOSSGROUNDARMORLEVEL3,
             "required_building": UnitTypeId.TWILIGHTCOUNCIL,
+            "required_upgrade": UpgradeId.PROTOSSGROUNDARMORSLEVEL2,
             "requires_power": True,
         },
         UpgradeId.PROTOSSGROUNDWEAPONSLEVEL1: {
@@ -189,11 +226,13 @@ RESEARCH_INFO: Dict[
         UpgradeId.PROTOSSGROUNDWEAPONSLEVEL2: {
             "ability": AbilityId.FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL2,
             "required_building": UnitTypeId.TWILIGHTCOUNCIL,
+            "required_upgrade": UpgradeId.PROTOSSGROUNDWEAPONSLEVEL1,
             "requires_power": True,
         },
         UpgradeId.PROTOSSGROUNDWEAPONSLEVEL3: {
             "ability": AbilityId.FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL3,
             "required_building": UnitTypeId.TWILIGHTCOUNCIL,
+            "required_upgrade": UpgradeId.PROTOSSGROUNDWEAPONSLEVEL2,
             "requires_power": True,
         },
         UpgradeId.PROTOSSSHIELDSLEVEL1: {
@@ -203,11 +242,13 @@ RESEARCH_INFO: Dict[
         UpgradeId.PROTOSSSHIELDSLEVEL2: {
             "ability": AbilityId.FORGERESEARCH_PROTOSSSHIELDSLEVEL2,
             "required_building": UnitTypeId.TWILIGHTCOUNCIL,
+            "required_upgrade": UpgradeId.PROTOSSSHIELDSLEVEL1,
             "requires_power": True,
         },
         UpgradeId.PROTOSSSHIELDSLEVEL3: {
             "ability": AbilityId.FORGERESEARCH_PROTOSSSHIELDSLEVEL3,
             "required_building": UnitTypeId.TWILIGHTCOUNCIL,
+            "required_upgrade": UpgradeId.PROTOSSSHIELDSLEVEL2,
             "requires_power": True,
         },
     },
@@ -235,10 +276,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.ZERGFLYERARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
             "required_building": UnitTypeId.LAIR,
+            "required_upgrade": UpgradeId.ZERGFLYERARMORSLEVEL1,
         },
         UpgradeId.ZERGFLYERARMORSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL3,
             "required_building": UnitTypeId.HIVE,
+            "required_upgrade": UpgradeId.ZERGFLYERARMORSLEVEL2,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL1: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1
@@ -246,10 +289,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.ZERGFLYERWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
             "required_building": UnitTypeId.LAIR,
+            "required_upgrade": UpgradeId.ZERGFLYERWEAPONSLEVEL1,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL3,
             "required_building": UnitTypeId.HIVE,
+            "required_upgrade": UpgradeId.ZERGFLYERWEAPONSLEVEL2,
         },
     },
     UnitTypeId.HATCHERY: {
@@ -281,7 +326,11 @@ RESEARCH_INFO: Dict[
         UpgradeId.DIGGINGCLAWS: {
             "ability": AbilityId.RESEARCH_ADAPTIVETALONS,
             "required_building": UnitTypeId.HIVE,
-        }
+        },
+        UpgradeId.LURKERRANGE: {
+            "ability": AbilityId.LURKERDENRESEARCH_RESEARCHLURKERRANGE,
+            "required_building": UnitTypeId.HIVE,
+        },
     },
     UnitTypeId.ROACHWARREN: {
         UpgradeId.GLIALRECONSTITUTION: {
@@ -323,10 +372,12 @@ RESEARCH_INFO: Dict[
         UpgradeId.ZERGFLYERARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
             "required_building": UnitTypeId.LAIR,
+            "required_upgrade": UpgradeId.ZERGFLYERARMORSLEVEL1,
         },
         UpgradeId.ZERGFLYERARMORSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL3,
             "required_building": UnitTypeId.HIVE,
+            "required_upgrade": UpgradeId.ZERGFLYERARMORSLEVEL2,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL1: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1
@@ -334,20 +385,18 @@ RESEARCH_INFO: Dict[
         UpgradeId.ZERGFLYERWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
             "required_building": UnitTypeId.LAIR,
+            "required_upgrade": UpgradeId.ZERGFLYERWEAPONSLEVEL1,
         },
         UpgradeId.ZERGFLYERWEAPONSLEVEL3: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL3,
             "required_building": UnitTypeId.HIVE,
+            "required_upgrade": UpgradeId.ZERGFLYERWEAPONSLEVEL2,
         },
     },
     UnitTypeId.STARPORTTECHLAB: {
         UpgradeId.BANSHEECLOAK: {"ability": AbilityId.RESEARCH_BANSHEECLOAKINGFIELD},
         UpgradeId.BANSHEESPEED: {
             "ability": AbilityId.RESEARCH_BANSHEEHYPERFLIGHTROTORS
-        },
-        UpgradeId.LIBERATORMORPH: {
-            "ability": AbilityId.STARPORTTECHLABRESEARCH_RESEARCHLIBERATORAGMODE,
-            "required_building": UnitTypeId.FUSIONCORE,
         },
         UpgradeId.RAVENCORVIDREACTOR: {
             "ability": AbilityId.RESEARCH_RAVENCORVIDREACTOR
