@@ -292,11 +292,10 @@ class Unit:
     @property
     def movement_speed(self) -> float:
         """ Returns the movement speed of the unit. Does not include upgrades or buffs. """
-        # TODO: use bot object to calculate if unit is zerg unit and if it is on creep, and if it your own unit: check for movement speed upgrades (e.g. zergling, hydra, ultralisk) or buffs (stimpack, time warp slow, fungal), perhaps write a second property function for this
         return self._type_data._proto.movement_speed
 
     @property
-    def real_speed(self):
+    def real_speed(self) -> float:
         return self.calculate_speed()
 
     def calculate_speed(self, upgrades=None) -> float:
@@ -314,12 +313,12 @@ class Unit:
         if upgrades:
             if unit_type == UnitTypeId.BANSHEE and UpgradeId.BANSHEESPEED in upgrades:
                 speed *= 1.3636
-            elif unit_type == UNIT_OBSERVER and UpgradeId.OBSERVERGRAVITICBOOSTER in upgrades:
+            elif unit_type == UnitTypeId.OBSERVER and UpgradeId.OBSERVERGRAVITICBOOSTER in upgrades:
                 speed *= 2
             elif unit_type == UnitTypeId.WARPPRISM and UpgradeId.GRAVITICDRIVE in upgrades:
                 speed *= 1.3
             elif unit_type == UnitTypeId.ROACH and UpgradeId.GLIALRECONSTITUTION in upgrades:
-                speed *= 4/3
+                speed *= 4 / 3
             elif unit_type == UnitTypeId.OVERLORD and UpgradeId.OVERLORDSPEED in upgrades:
                 speed *= 2.915
             elif unit_type == UnitTypeId.OVERSEER and UpgradeId.OVERLORDSPEED in upgrades:
@@ -330,7 +329,7 @@ class Unit:
                 speed *= 1.18
             elif unit_type == UnitTypeId.LURKERMP and UpgradeId.DIGGINGCLAWS in upgrades:
                 speed *= 1.1
-            ''' todo: add this in 4.11:
+            """ todo: add this in 4.11:
 
             # "Flux Vanes" upgrade increases Void Ray's base movement speed from 3.5 to 4.65
             # doesn't increase speed after "Prismatic Alignment"
@@ -345,7 +344,7 @@ class Unit:
             # In 4.11 Charge also increases Zealot's base speed from 3.15 to 4.725
             elif unit_type == UnitTypeId.ZEALOT and UpgradeId.CHARGE in upgrades:
                 speed *= 1.5
-            '''
+            """
 
         # ---- Creep ----
         if not self.is_flying:
@@ -353,17 +352,17 @@ class Unit:
 
             if on_creep:
                 if unit_type in {
-                        UnitTypeId.ZERGLING,
-                        UnitTypeId.BANELING,
-                        UnitTypeId.ROACH,
-                        UnitTypeId.RAVAGER,
-                        UnitTypeId.HYDRALISK,
-                        UnitTypeId.LURKERMP,
-                        UnitTypeId.ULTRALISK,
-                        UnitTypeId.INFESTOR,
-                        UnitTypeId.INFESTORTERRAN,
-                        UnitTypeId.SWARMHOSTMP,
-                    }:
+                    UnitTypeId.ZERGLING,
+                    UnitTypeId.BANELING,
+                    UnitTypeId.ROACH,
+                    UnitTypeId.RAVAGER,
+                    UnitTypeId.HYDRALISK,
+                    UnitTypeId.LURKERMP,
+                    UnitTypeId.ULTRALISK,
+                    UnitTypeId.INFESTOR,
+                    UnitTypeId.INFESTORTERRAN,
+                    UnitTypeId.SWARMHOSTMP,
+                }:
                     speed *= 1.3
                 elif unit_type == UnitTypeId.QUEEN:
                     # 167% bonus
@@ -396,12 +395,12 @@ class Unit:
         # When charging, increases speed by 5.67
         elif BuffId.CHARGEUP in buffs:
             speed *= 2.8
-            ''' add this in 4.11 instead
+            """ add this in 4.11 instead
             if UpgradeId.CHARGE in upgrades:
                 speed *= 2.2
             else:
                 speed *= 2.8
-            '''
+            """
         elif BuffId.VOIDRAYSWARMDAMAGEBOOST in buffs:
             speed = self.movement_speed * 0.75
 
