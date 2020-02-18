@@ -39,6 +39,12 @@ from .constants import (
     IS_DETECTOR,
     UNIT_PHOTONCANNON,
     UNIT_COLOSSUS,
+    SPEED_INCREASE_DICT,
+    SPEED_UPGRADE_DICT,
+    SPEED_INCREASE_ON_CREEP_DICT,
+    OFF_CREEP_SPEED_UPGRADE_DICT,
+    OFF_CREEP_SPEED_INCREASE_DICT,
+    SPEED_ALTERING_BUFFS,
 )
 from .data import (
     Alliance,
@@ -298,125 +304,51 @@ class Unit:
     def real_speed(self) -> float:
         return self.calculate_speed()
 
-    def calculate_speed(self, upgrades=None) -> float:
+    def calculate_speed(self, upgrades: Set[UpgradeId] = None) -> float:
         """ Calculates the movement speed of the unit including buffs and upgrades.
         Note: Upgrades only work with own units. Use "upgrades" param to set expected enemy upgrades.
 
         :param upgrades: """
-        speed = self.movement_speed
-        unit_type = self.type_id
+        speed: float = self.movement_speed
+        unit_type: UnitTypeId = self.type_id
 
         # ---- Upgrades ----
-        if upgrades is None:
+        if upgrades is None and self.is_mine:
             upgrades = self._bot_object.state.upgrades
 
-        if upgrades:
-            if unit_type == UnitTypeId.BANSHEE and UpgradeId.BANSHEESPEED in upgrades:
-                speed *= 1.3636
-            elif unit_type == UnitTypeId.OBSERVER and UpgradeId.OBSERVERGRAVITICBOOSTER in upgrades:
-                speed *= 2
-            elif unit_type == UnitTypeId.WARPPRISM and UpgradeId.GRAVITICDRIVE in upgrades:
-                speed *= 1.3
-            elif unit_type == UnitTypeId.ROACH and UpgradeId.GLIALRECONSTITUTION in upgrades:
-                speed *= 4 / 3
-            elif unit_type == UnitTypeId.OVERLORD and UpgradeId.OVERLORDSPEED in upgrades:
-                speed *= 2.915
-            elif unit_type == UnitTypeId.OVERSEER and UpgradeId.OVERLORDSPEED in upgrades:
-                speed *= 1.8015
-            elif unit_type == UnitTypeId.ZERGLING and UpgradeId.ZERGLINGMOVEMENTSPEED in upgrades:
-                speed *= 1.6
-            elif unit_type == UnitTypeId.BANELING and UpgradeId.CENTRIFICALHOOKS in upgrades:
-                speed *= 1.18
-            elif unit_type == UnitTypeId.LURKERMP and UpgradeId.DIGGINGCLAWS in upgrades:
-                speed *= 1.1
-            """ todo: add this in 4.11:
-
-            # "Flux Vanes" upgrade increases Void Ray's base movement speed from 3.5 to 4.65
-            # doesn't increase speed after "Prismatic Alignment"
-            elif unit_type == UnitTypeId.VOIDRAY and UpgradeId.VOIDRAYSPEEDUPGRADE in upgrades:
-                speed *= 1.328
-
-            # "Rapid Reignition System" upgrade increases Medivac's base movement speed from 3.5 to 4.13
-            # doesn't increase speed after boost
-            elif unit_type == UnitTypeId.MEDIVAC and UpgradeId.MEDIVACRAPIDDEPLOYMENT in upgrades:
-                speed *= 1.18
-
-            # In 4.11 Charge also increases Zealot's base speed from 3.15 to 4.725
-            elif unit_type == UnitTypeId.ZEALOT and UpgradeId.CHARGE in upgrades:
-                speed *= 1.5
-            """
+        if upgrades and unit_type in SPEED_UPGRADE_DICT:
+            upgrade_id: UpgradeId = SPEED_UPGRADE_DICT.get(unit_type, None)
+            if upgrade_id and upgrade_id in upgrades:
+                speed *= SPEED_INCREASE_DICT.get(unit_type, 1)
 
         # ---- Creep ----
-        if not self.is_flying:
-            on_creep: bool = self._bot_object.state.creep[self.position.rounded] == 1
+        if unit_type in SPEED_INCREASE_ON_CREEP_DICT or unit_type in OFF_CREEP_SPEED_UPGRADE_DICT:
+            # On creep
+            x, y = self.position_tuple
+            if self._bot_object.state.creep[(int(x), int(y))]:
+                speed *= SPEED_INCREASE_ON_CREEP_DICT.get(unit_type, 1)
 
-            if on_creep:
-                if unit_type in {
-                    UnitTypeId.ZERGLING,
-                    UnitTypeId.BANELING,
-                    UnitTypeId.ROACH,
-                    UnitTypeId.RAVAGER,
-                    UnitTypeId.HYDRALISK,
-                    UnitTypeId.LURKERMP,
-                    UnitTypeId.ULTRALISK,
-                    UnitTypeId.INFESTOR,
-                    UnitTypeId.INFESTORTERRAN,
-                    UnitTypeId.SWARMHOSTMP,
-                }:
-                    speed *= 1.3
-                elif unit_type == UnitTypeId.QUEEN:
-                    # 167% bonus
-                    speed *= 2.67
-                elif unit_type == UnitTypeId.LOCUSTMP:
-                    speed *= 1.4
-                elif unit_type in {UnitTypeId.SPINECRAWLER, UnitTypeId.SPORECRAWLER}:
-                    # 150% bonus
-                    speed *= 2.5
-
-            # off creep
+            # Off creep upgrades
             elif upgrades:
-                if unit_type == UnitTypeId.HYDRALISK and UpgradeId.EVOLVEMUSCULARAUGMENTS in upgrades:
-                    speed *= 1.25
-                elif unit_type == UnitTypeId.ULTRALISK and UpgradeId.ANABOLICSYNTHESIS in upgrades:
-                    speed *= 1.2
+                upgrade_id: UpgradeId = OFF_CREEP_SPEED_UPGRADE_DICT.get(unit_type, None)
+                if upgrade_id:
+                    speed *= OFF_CREEP_SPEED_INCREASE_DICT[unit_type]
 
-            # Ultralisk has passive ability "Frenzied" which mades it immune to speed altering buffs
+            # Ultralisk has passive ability "Frenzied" which makes it immune to speed altering buffs
             if unit_type == UnitTypeId.ULTRALISK:
                 return speed
 
         # ---- Buffs ----
-        buffs = self.buffs
+        # Hard reset movement speed: medivac boost, void ray charge
+        if self.buffs and unit_type in {UnitTypeId.MEDIVAC, UnitTypeId.VOIDRAY}:
+            if BuffId.MEDIVACSPEEDBOOST in self.buffs:
+                speed = self.movement_speed * 1.7
+            elif BuffId.VOIDRAYSWARMDAMAGEBOOST in self.buffs:
+                speed = self.movement_speed * 0.75
 
-        # Stimpack increases speed by 1.5
-        if not {BuffId.STIMPACK, BuffId.STIMPACKMARAUDER}.isdisjoint(buffs):
-            speed *= 1.5
-        elif BuffId.MEDIVACSPEEDBOOST in buffs:
-            speed = self.movement_speed * 1.7
-        # When charging, increases speed by 5.67
-        elif BuffId.CHARGEUP in buffs:
-            speed *= 2.8
-            """ add this in 4.11 instead
-            if UpgradeId.CHARGE in upgrades:
-                speed *= 2.2
-            else:
-                speed *= 2.8
-            """
-        elif BuffId.VOIDRAYSWARMDAMAGEBOOST in buffs:
-            speed = self.movement_speed * 0.75
-
-        # Concussive shells of Marauder reduce speed by 50%
-        if BuffId.DUTCHMARAUDERSLOW in buffs:
-            speed /= 2
-        # Time Warp of Mothership reduces speed by 50%
-        if BuffId.TIMEWARPPRODUCTION in buffs:
-            speed /= 2
-        # Fungal Growth of Infestor reduces speed by 75%
-        if BuffId.FUNGALGROWTH in buffs:
-            speed /= 4
-        # Inhibitor Zones reduce speed by 35%
-        if BuffId.INHIBITORZONETEMPORALFIELD in buffs:
-            speed *= 0.65
-
+        # Speed altering buffs, e.g. stimpack, zealot charge, concussive shell, time warp, fungal growth, inhibitor zone
+        for buff in self.buffs:
+            speed *= SPEED_ALTERING_BUFFS.get(buff, 1)
         return speed
 
     @property

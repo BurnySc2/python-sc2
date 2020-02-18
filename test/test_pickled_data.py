@@ -539,7 +539,9 @@ def test_unit():
     assert scv.sight_range
     assert townhall.sight_range
     assert scv.movement_speed
+    assert scv.real_speed == scv.movement_speed
     assert not townhall.movement_speed
+    assert townhall.real_speed == townhall.movement_speed
     assert not scv.is_mineral_field
     assert not townhall.is_mineral_field
     assert not scv.is_vespene_geyser
