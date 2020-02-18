@@ -10,19 +10,14 @@ from ..ids.upgrade_id import UpgradeId
 
 from typing import Dict, Set, Union
 
-TRAIN_INFO: Dict[
-    UnitTypeId, Dict[UnitTypeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]]
-] = {
+TRAIN_INFO: Dict[UnitTypeId, Dict[UnitTypeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]]] = {
     UnitTypeId.BARRACKS: {
         UnitTypeId.GHOST: {
             "ability": AbilityId.BARRACKSTRAIN_GHOST,
             "requires_techlab": True,
             "required_building": UnitTypeId.GHOSTACADEMY,
         },
-        UnitTypeId.MARAUDER: {
-            "ability": AbilityId.BARRACKSTRAIN_MARAUDER,
-            "requires_techlab": True,
-        },
+        UnitTypeId.MARAUDER: {"ability": AbilityId.BARRACKSTRAIN_MARAUDER, "requires_techlab": True},
         UnitTypeId.MARINE: {"ability": AbilityId.BARRACKSTRAIN_MARINE},
         UnitTypeId.REAPER: {"ability": AbilityId.BARRACKSTRAIN_REAPER},
     },
@@ -44,22 +39,13 @@ TRAIN_INFO: Dict[
         }
     },
     UnitTypeId.CREEPTUMOR: {
-        UnitTypeId.CREEPTUMOR: {
-            "ability": AbilityId.BUILD_CREEPTUMOR_TUMOR,
-            "requires_placement_position": True,
-        }
+        UnitTypeId.CREEPTUMOR: {"ability": AbilityId.BUILD_CREEPTUMOR_TUMOR, "requires_placement_position": True}
     },
     UnitTypeId.CREEPTUMORBURROWED: {
-        UnitTypeId.CREEPTUMOR: {
-            "ability": AbilityId.BUILD_CREEPTUMOR,
-            "requires_placement_position": True,
-        }
+        UnitTypeId.CREEPTUMOR: {"ability": AbilityId.BUILD_CREEPTUMOR, "requires_placement_position": True}
     },
     UnitTypeId.CREEPTUMORQUEEN: {
-        UnitTypeId.CREEPTUMOR: {
-            "ability": AbilityId.BUILD_CREEPTUMOR_TUMOR,
-            "requires_placement_position": True,
-        }
+        UnitTypeId.CREEPTUMOR: {"ability": AbilityId.BUILD_CREEPTUMOR_TUMOR, "requires_placement_position": True}
     },
     UnitTypeId.DRONE: {
         UnitTypeId.BANELINGNEST: {
@@ -73,10 +59,7 @@ TRAIN_INFO: Dict[
             "requires_placement_position": True,
         },
         UnitTypeId.EXTRACTOR: {"ability": AbilityId.ZERGBUILD_EXTRACTOR},
-        UnitTypeId.HATCHERY: {
-            "ability": AbilityId.ZERGBUILD_HATCHERY,
-            "requires_placement_position": True,
-        },
+        UnitTypeId.HATCHERY: {"ability": AbilityId.ZERGBUILD_HATCHERY, "requires_placement_position": True},
         UnitTypeId.HYDRALISKDEN: {
             "ability": AbilityId.ZERGBUILD_HYDRALISKDEN,
             "required_building": UnitTypeId.LAIR,
@@ -129,19 +112,10 @@ TRAIN_INFO: Dict[
         },
     },
     UnitTypeId.FACTORY: {
-        UnitTypeId.CYCLONE: {
-            "ability": AbilityId.TRAIN_CYCLONE,
-            "requires_techlab": True,
-        },
+        UnitTypeId.CYCLONE: {"ability": AbilityId.TRAIN_CYCLONE, "requires_techlab": True},
         UnitTypeId.HELLION: {"ability": AbilityId.FACTORYTRAIN_HELLION},
-        UnitTypeId.HELLIONTANK: {
-            "ability": AbilityId.TRAIN_HELLBAT,
-            "required_building": UnitTypeId.ARMORY,
-        },
-        UnitTypeId.SIEGETANK: {
-            "ability": AbilityId.FACTORYTRAIN_SIEGETANK,
-            "requires_techlab": True,
-        },
+        UnitTypeId.HELLIONTANK: {"ability": AbilityId.TRAIN_HELLBAT, "required_building": UnitTypeId.ARMORY},
+        UnitTypeId.SIEGETANK: {"ability": AbilityId.FACTORYTRAIN_SIEGETANK, "requires_techlab": True},
         UnitTypeId.THOR: {
             "ability": AbilityId.FACTORYTRAIN_THOR,
             "requires_techlab": True,
@@ -175,82 +149,37 @@ TRAIN_INFO: Dict[
             "required_building": UnitTypeId.CYBERNETICSCORE,
             "requires_power": True,
         },
-        UnitTypeId.ZEALOT: {
-            "ability": AbilityId.GATEWAYTRAIN_ZEALOT,
-            "requires_power": True,
-        },
+        UnitTypeId.ZEALOT: {"ability": AbilityId.GATEWAYTRAIN_ZEALOT, "requires_power": True},
     },
     UnitTypeId.HATCHERY: {
-        UnitTypeId.LAIR: {
-            "ability": AbilityId.UPGRADETOLAIR_LAIR,
-            "required_building": UnitTypeId.SPAWNINGPOOL,
-        },
-        UnitTypeId.QUEEN: {
-            "ability": AbilityId.TRAINQUEEN_QUEEN,
-            "required_building": UnitTypeId.SPAWNINGPOOL,
-        },
+        UnitTypeId.LAIR: {"ability": AbilityId.UPGRADETOLAIR_LAIR, "required_building": UnitTypeId.SPAWNINGPOOL},
+        UnitTypeId.QUEEN: {"ability": AbilityId.TRAINQUEEN_QUEEN, "required_building": UnitTypeId.SPAWNINGPOOL},
     },
     UnitTypeId.HIVE: {
-        UnitTypeId.QUEEN: {
-            "ability": AbilityId.TRAINQUEEN_QUEEN,
-            "required_building": UnitTypeId.SPAWNINGPOOL,
-        }
+        UnitTypeId.QUEEN: {"ability": AbilityId.TRAINQUEEN_QUEEN, "required_building": UnitTypeId.SPAWNINGPOOL}
     },
     UnitTypeId.HYDRALISK: {
-        UnitTypeId.LURKERMP: {
-            "ability": AbilityId.MORPH_LURKER,
-            "required_building": UnitTypeId.LURKERDENMP,
-        }
+        UnitTypeId.LURKERMP: {"ability": AbilityId.MORPH_LURKER, "required_building": UnitTypeId.LURKERDENMP}
     },
     UnitTypeId.LAIR: {
-        UnitTypeId.HIVE: {
-            "ability": AbilityId.UPGRADETOHIVE_HIVE,
-            "required_building": UnitTypeId.INFESTATIONPIT,
-        },
-        UnitTypeId.QUEEN: {
-            "ability": AbilityId.TRAINQUEEN_QUEEN,
-            "required_building": UnitTypeId.SPAWNINGPOOL,
-        },
+        UnitTypeId.HIVE: {"ability": AbilityId.UPGRADETOHIVE_HIVE, "required_building": UnitTypeId.INFESTATIONPIT},
+        UnitTypeId.QUEEN: {"ability": AbilityId.TRAINQUEEN_QUEEN, "required_building": UnitTypeId.SPAWNINGPOOL},
     },
     UnitTypeId.LARVA: {
-        UnitTypeId.CORRUPTOR: {
-            "ability": AbilityId.LARVATRAIN_CORRUPTOR,
-            "required_building": UnitTypeId.SPIRE,
-        },
+        UnitTypeId.CORRUPTOR: {"ability": AbilityId.LARVATRAIN_CORRUPTOR, "required_building": UnitTypeId.SPIRE},
         UnitTypeId.DRONE: {"ability": AbilityId.LARVATRAIN_DRONE},
-        UnitTypeId.HYDRALISK: {
-            "ability": AbilityId.LARVATRAIN_HYDRALISK,
-            "required_building": UnitTypeId.HYDRALISKDEN,
-        },
-        UnitTypeId.INFESTOR: {
-            "ability": AbilityId.LARVATRAIN_INFESTOR,
-            "required_building": UnitTypeId.INFESTATIONPIT,
-        },
-        UnitTypeId.MUTALISK: {
-            "ability": AbilityId.LARVATRAIN_MUTALISK,
-            "required_building": UnitTypeId.SPIRE,
-        },
+        UnitTypeId.HYDRALISK: {"ability": AbilityId.LARVATRAIN_HYDRALISK, "required_building": UnitTypeId.HYDRALISKDEN},
+        UnitTypeId.INFESTOR: {"ability": AbilityId.LARVATRAIN_INFESTOR, "required_building": UnitTypeId.INFESTATIONPIT},
+        UnitTypeId.MUTALISK: {"ability": AbilityId.LARVATRAIN_MUTALISK, "required_building": UnitTypeId.SPIRE},
         UnitTypeId.OVERLORD: {"ability": AbilityId.LARVATRAIN_OVERLORD},
-        UnitTypeId.ROACH: {
-            "ability": AbilityId.LARVATRAIN_ROACH,
-            "required_building": UnitTypeId.ROACHWARREN,
-        },
-        UnitTypeId.SWARMHOSTMP: {
-            "ability": AbilityId.TRAIN_SWARMHOST,
-            "required_building": UnitTypeId.INFESTATIONPIT,
-        },
+        UnitTypeId.ROACH: {"ability": AbilityId.LARVATRAIN_ROACH, "required_building": UnitTypeId.ROACHWARREN},
+        UnitTypeId.SWARMHOSTMP: {"ability": AbilityId.TRAIN_SWARMHOST, "required_building": UnitTypeId.INFESTATIONPIT},
         UnitTypeId.ULTRALISK: {
             "ability": AbilityId.LARVATRAIN_ULTRALISK,
             "required_building": UnitTypeId.ULTRALISKCAVERN,
         },
-        UnitTypeId.VIPER: {
-            "ability": AbilityId.LARVATRAIN_VIPER,
-            "required_building": UnitTypeId.HIVE,
-        },
-        UnitTypeId.ZERGLING: {
-            "ability": AbilityId.LARVATRAIN_ZERGLING,
-            "required_building": UnitTypeId.SPAWNINGPOOL,
-        },
+        UnitTypeId.VIPER: {"ability": AbilityId.LARVATRAIN_VIPER, "required_building": UnitTypeId.HIVE},
+        UnitTypeId.ZERGLING: {"ability": AbilityId.LARVATRAIN_ZERGLING, "required_building": UnitTypeId.SPAWNINGPOOL},
     },
     UnitTypeId.NEXUS: {
         UnitTypeId.MOTHERSHIP: {
@@ -260,45 +189,25 @@ TRAIN_INFO: Dict[
         UnitTypeId.PROBE: {"ability": AbilityId.NEXUSTRAIN_PROBE},
     },
     UnitTypeId.NYDUSNETWORK: {
-        UnitTypeId.NYDUSCANAL: {
-            "ability": AbilityId.BUILD_NYDUSWORM,
-            "requires_placement_position": True,
-        }
+        UnitTypeId.NYDUSCANAL: {"ability": AbilityId.BUILD_NYDUSWORM, "requires_placement_position": True}
     },
     UnitTypeId.ORACLE: {
-        UnitTypeId.ORACLESTASISTRAP: {
-            "ability": AbilityId.BUILD_STASISTRAP,
-            "requires_placement_position": True,
-        }
+        UnitTypeId.ORACLESTASISTRAP: {"ability": AbilityId.BUILD_STASISTRAP, "requires_placement_position": True}
     },
-    UnitTypeId.ORBITALCOMMAND: {
-        UnitTypeId.SCV: {"ability": AbilityId.COMMANDCENTERTRAIN_SCV}
-    },
+    UnitTypeId.ORBITALCOMMAND: {UnitTypeId.SCV: {"ability": AbilityId.COMMANDCENTERTRAIN_SCV}},
     UnitTypeId.OVERLORD: {
         UnitTypeId.OVERLORDTRANSPORT: {
             "ability": AbilityId.MORPH_OVERLORDTRANSPORT,
             "required_building": UnitTypeId.LAIR,
         },
-        UnitTypeId.OVERSEER: {
-            "ability": AbilityId.MORPH_OVERSEER,
-            "required_building": UnitTypeId.LAIR,
-        },
+        UnitTypeId.OVERSEER: {"ability": AbilityId.MORPH_OVERSEER, "required_building": UnitTypeId.LAIR},
     },
     UnitTypeId.OVERLORDTRANSPORT: {
-        UnitTypeId.OVERSEER: {
-            "ability": AbilityId.MORPH_OVERSEER,
-            "required_building": UnitTypeId.LAIR,
-        }
+        UnitTypeId.OVERSEER: {"ability": AbilityId.MORPH_OVERSEER, "required_building": UnitTypeId.LAIR}
     },
-    UnitTypeId.OVERSEER: {
-        UnitTypeId.CHANGELING: {"ability": AbilityId.SPAWNCHANGELING_SPAWNCHANGELING}
-    },
-    UnitTypeId.OVERSEERSIEGEMODE: {
-        UnitTypeId.CHANGELING: {"ability": AbilityId.SPAWNCHANGELING_SPAWNCHANGELING}
-    },
-    UnitTypeId.PLANETARYFORTRESS: {
-        UnitTypeId.SCV: {"ability": AbilityId.COMMANDCENTERTRAIN_SCV}
-    },
+    UnitTypeId.OVERSEER: {UnitTypeId.CHANGELING: {"ability": AbilityId.SPAWNCHANGELING_SPAWNCHANGELING}},
+    UnitTypeId.OVERSEERSIEGEMODE: {UnitTypeId.CHANGELING: {"ability": AbilityId.SPAWNCHANGELING_SPAWNCHANGELING}},
+    UnitTypeId.PLANETARYFORTRESS: {UnitTypeId.SCV: {"ability": AbilityId.COMMANDCENTERTRAIN_SCV}},
     UnitTypeId.PROBE: {
         UnitTypeId.ASSIMILATOR: {"ability": AbilityId.PROTOSSBUILD_ASSIMILATOR},
         UnitTypeId.CYBERNETICSCORE: {
@@ -326,19 +235,13 @@ TRAIN_INFO: Dict[
             "required_building": UnitTypeId.PYLON,
             "requires_placement_position": True,
         },
-        UnitTypeId.NEXUS: {
-            "ability": AbilityId.PROTOSSBUILD_NEXUS,
-            "requires_placement_position": True,
-        },
+        UnitTypeId.NEXUS: {"ability": AbilityId.PROTOSSBUILD_NEXUS, "requires_placement_position": True},
         UnitTypeId.PHOTONCANNON: {
             "ability": AbilityId.PROTOSSBUILD_PHOTONCANNON,
             "required_building": UnitTypeId.FORGE,
             "requires_placement_position": True,
         },
-        UnitTypeId.PYLON: {
-            "ability": AbilityId.PROTOSSBUILD_PYLON,
-            "requires_placement_position": True,
-        },
+        UnitTypeId.PYLON: {"ability": AbilityId.PROTOSSBUILD_PYLON, "requires_placement_position": True},
         UnitTypeId.ROBOTICSBAY: {
             "ability": AbilityId.PROTOSSBUILD_ROBOTICSBAY,
             "required_building": UnitTypeId.ROBOTICSFACILITY,
@@ -371,23 +274,12 @@ TRAIN_INFO: Dict[
         },
     },
     UnitTypeId.QUEEN: {
-        UnitTypeId.CREEPTUMOR: {
-            "ability": AbilityId.BUILD_CREEPTUMOR,
-            "requires_placement_position": True,
-        },
-        UnitTypeId.CREEPTUMORQUEEN: {
-            "ability": AbilityId.BUILD_CREEPTUMOR_QUEEN,
-            "requires_placement_position": True,
-        },
+        UnitTypeId.CREEPTUMOR: {"ability": AbilityId.BUILD_CREEPTUMOR, "requires_placement_position": True},
+        UnitTypeId.CREEPTUMORQUEEN: {"ability": AbilityId.BUILD_CREEPTUMOR_QUEEN, "requires_placement_position": True},
     },
-    UnitTypeId.RAVEN: {
-        UnitTypeId.AUTOTURRET: {"ability": AbilityId.BUILDAUTOTURRET_AUTOTURRET}
-    },
+    UnitTypeId.RAVEN: {UnitTypeId.AUTOTURRET: {"ability": AbilityId.BUILDAUTOTURRET_AUTOTURRET}},
     UnitTypeId.ROACH: {
-        UnitTypeId.RAVAGER: {
-            "ability": AbilityId.MORPHTORAVAGER_RAVAGER,
-            "required_building": UnitTypeId.HATCHERY,
-        }
+        UnitTypeId.RAVAGER: {"ability": AbilityId.MORPHTORAVAGER_RAVAGER, "required_building": UnitTypeId.HATCHERY}
     },
     UnitTypeId.ROBOTICSFACILITY: {
         UnitTypeId.COLOSSUS: {
@@ -400,18 +292,9 @@ TRAIN_INFO: Dict[
             "required_building": UnitTypeId.ROBOTICSBAY,
             "requires_power": True,
         },
-        UnitTypeId.IMMORTAL: {
-            "ability": AbilityId.ROBOTICSFACILITYTRAIN_IMMORTAL,
-            "requires_power": True,
-        },
-        UnitTypeId.OBSERVER: {
-            "ability": AbilityId.ROBOTICSFACILITYTRAIN_OBSERVER,
-            "requires_power": True,
-        },
-        UnitTypeId.WARPPRISM: {
-            "ability": AbilityId.ROBOTICSFACILITYTRAIN_WARPPRISM,
-            "requires_power": True,
-        },
+        UnitTypeId.IMMORTAL: {"ability": AbilityId.ROBOTICSFACILITYTRAIN_IMMORTAL, "requires_power": True},
+        UnitTypeId.OBSERVER: {"ability": AbilityId.ROBOTICSFACILITYTRAIN_OBSERVER, "requires_power": True},
+        UnitTypeId.WARPPRISM: {"ability": AbilityId.ROBOTICSFACILITYTRAIN_WARPPRISM, "requires_power": True},
     },
     UnitTypeId.SCV: {
         UnitTypeId.ARMORY: {
@@ -429,10 +312,7 @@ TRAIN_INFO: Dict[
             "required_building": UnitTypeId.BARRACKS,
             "requires_placement_position": True,
         },
-        UnitTypeId.COMMANDCENTER: {
-            "ability": AbilityId.TERRANBUILD_COMMANDCENTER,
-            "requires_placement_position": True,
-        },
+        UnitTypeId.COMMANDCENTER: {"ability": AbilityId.TERRANBUILD_COMMANDCENTER, "requires_placement_position": True},
         UnitTypeId.ENGINEERINGBAY: {
             "ability": AbilityId.TERRANBUILD_ENGINEERINGBAY,
             "required_building": UnitTypeId.COMMANDCENTER,
@@ -469,10 +349,7 @@ TRAIN_INFO: Dict[
             "required_building": UnitTypeId.FACTORY,
             "requires_placement_position": True,
         },
-        UnitTypeId.SUPPLYDEPOT: {
-            "ability": AbilityId.TERRANBUILD_SUPPLYDEPOT,
-            "requires_placement_position": True,
-        },
+        UnitTypeId.SUPPLYDEPOT: {"ability": AbilityId.TERRANBUILD_SUPPLYDEPOT, "requires_placement_position": True},
     },
     UnitTypeId.SPIRE: {
         UnitTypeId.GREATERSPIRE: {
@@ -486,29 +363,17 @@ TRAIN_INFO: Dict[
             "required_building": UnitTypeId.FLEETBEACON,
             "requires_power": True,
         },
-        UnitTypeId.ORACLE: {
-            "ability": AbilityId.STARGATETRAIN_ORACLE,
-            "requires_power": True,
-        },
-        UnitTypeId.PHOENIX: {
-            "ability": AbilityId.STARGATETRAIN_PHOENIX,
-            "requires_power": True,
-        },
+        UnitTypeId.ORACLE: {"ability": AbilityId.STARGATETRAIN_ORACLE, "requires_power": True},
+        UnitTypeId.PHOENIX: {"ability": AbilityId.STARGATETRAIN_PHOENIX, "requires_power": True},
         UnitTypeId.TEMPEST: {
             "ability": AbilityId.STARGATETRAIN_TEMPEST,
             "required_building": UnitTypeId.FLEETBEACON,
             "requires_power": True,
         },
-        UnitTypeId.VOIDRAY: {
-            "ability": AbilityId.STARGATETRAIN_VOIDRAY,
-            "requires_power": True,
-        },
+        UnitTypeId.VOIDRAY: {"ability": AbilityId.STARGATETRAIN_VOIDRAY, "requires_power": True},
     },
     UnitTypeId.STARPORT: {
-        UnitTypeId.BANSHEE: {
-            "ability": AbilityId.STARPORTTRAIN_BANSHEE,
-            "requires_techlab": True,
-        },
+        UnitTypeId.BANSHEE: {"ability": AbilityId.STARPORTTRAIN_BANSHEE, "requires_techlab": True},
         UnitTypeId.BATTLECRUISER: {
             "ability": AbilityId.STARPORTTRAIN_BATTLECRUISER,
             "requires_techlab": True,
@@ -516,18 +381,11 @@ TRAIN_INFO: Dict[
         },
         UnitTypeId.LIBERATOR: {"ability": AbilityId.STARPORTTRAIN_LIBERATOR},
         UnitTypeId.MEDIVAC: {"ability": AbilityId.STARPORTTRAIN_MEDIVAC},
-        UnitTypeId.RAVEN: {
-            "ability": AbilityId.STARPORTTRAIN_RAVEN,
-            "requires_techlab": True,
-        },
+        UnitTypeId.RAVEN: {"ability": AbilityId.STARPORTTRAIN_RAVEN, "requires_techlab": True},
         UnitTypeId.VIKINGFIGHTER: {"ability": AbilityId.STARPORTTRAIN_VIKINGFIGHTER},
     },
-    UnitTypeId.SWARMHOSTBURROWEDMP: {
-        UnitTypeId.LOCUSTMPFLYING: {"ability": AbilityId.EFFECT_SPAWNLOCUSTS}
-    },
-    UnitTypeId.SWARMHOSTMP: {
-        UnitTypeId.LOCUSTMPFLYING: {"ability": AbilityId.EFFECT_SPAWNLOCUSTS}
-    },
+    UnitTypeId.SWARMHOSTBURROWEDMP: {UnitTypeId.LOCUSTMPFLYING: {"ability": AbilityId.EFFECT_SPAWNLOCUSTS}},
+    UnitTypeId.SWARMHOSTMP: {UnitTypeId.LOCUSTMPFLYING: {"ability": AbilityId.EFFECT_SPAWNLOCUSTS}},
     UnitTypeId.WARPGATE: {
         UnitTypeId.ADEPT: {
             "ability": AbilityId.TRAINWARP_ADEPT,

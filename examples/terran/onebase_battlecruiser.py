@@ -124,7 +124,12 @@ class BCRushBot(sc2.BotAI):
         for sp in self.structures(UnitTypeId.STARPORT).ready.idle:
             if not sp.has_add_on and self.can_afford(UnitTypeId.STARPORTTECHLAB):
                 addon_points = starport_points_to_build_addon(sp.position)
-                if all(self.in_map_bounds(addon_point) and self.in_placement_grid(addon_point) and self.in_pathing_grid(addon_point) for addon_point in addon_points):
+                if all(
+                    self.in_map_bounds(addon_point)
+                    and self.in_placement_grid(addon_point)
+                    and self.in_pathing_grid(addon_point)
+                    for addon_point in addon_points
+                ):
                     self.do(sp.build(UnitTypeId.STARPORTTECHLAB), subtract_cost=True)
                 else:
                     self.do(sp(AbilityId.LIFT))
@@ -138,13 +143,16 @@ class BCRushBot(sc2.BotAI):
         for sp in self.structures(UnitTypeId.STARPORTFLYING).idle:
             possible_land_positions_offset = sorted(
                 (Point2((x, y)) for x in range(-10, 10) for y in range(-10, 10)),
-                key=lambda point: point.x**2 + point.y**2,
+                key=lambda point: point.x ** 2 + point.y ** 2,
             )
             offset_point = Point2((-0.5, -0.5))
             possible_land_positions = (sp.position.rounded + offset_point + p for p in possible_land_positions_offset)
             for target_land_position in possible_land_positions:
                 land_and_addon_points = starport_land_positions(target_land_position)
-                if all(self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos) and self.in_pathing_grid(land_pos) for land_pos in land_and_addon_points):
+                if all(
+                    self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos) and self.in_pathing_grid(land_pos)
+                    for land_pos in land_and_addon_points
+                ):
                     self.do(sp(AbilityId.LAND, target_land_position))
                     break
 

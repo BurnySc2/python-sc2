@@ -129,7 +129,8 @@ class TestBot(sc2.BotAI):
                 if (
                     research_ability.value not in self.game_data.abilities
                     or upgrade_id.value not in self.game_data.upgrades
-                    or self.game_data.upgrades[upgrade_id.value].research_ability is None or self.game_data.upgrades[upgrade_id.value].research_ability.exact_id != research_ability
+                    or self.game_data.upgrades[upgrade_id.value].research_ability is None
+                    or self.game_data.upgrades[upgrade_id.value].research_ability.exact_id != research_ability
                 ):
                     print(
                         f"Could not find upgrade {upgrade_id} or research ability {research_ability} in self.game_data - potential version mismatch (balance upgrade - windows vs linux SC2 client"

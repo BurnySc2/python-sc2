@@ -64,7 +64,7 @@ def dump_dict_to_file(
         f.write(repr(my_dict))
 
     # Apply formatting
-    subprocess.run(["black", file_path])
+    subprocess.run(["black", "--line-length", "120", file_path])
 
 
 def generate_init_file(dict_file_paths: List[str], file_path: str, file_header: str):
@@ -79,7 +79,7 @@ def generate_init_file(dict_file_paths: List[str], file_path: str, file_header: 
         f.write(all_line)
 
     # Apply formatting
-    subprocess.run(["black", file_path])
+    subprocess.run(["black", "--line-length", "120", file_path])
 
 
 def get_unit_train_build_abilities(data):
@@ -312,6 +312,7 @@ def get_upgrade_abilities(data):
                     continue
 
                 required_building = None
+                required_upgrade = None
                 requirements = ability_info.get("requirements", [])
                 if requirements:
                     req_building_id_value = next(
@@ -321,6 +322,11 @@ def get_upgrade_abilities(data):
                         req_building_id = UnitTypeId(req_building_id_value)
                         required_building = req_building_id
 
+                    req_upgrade_id_value = next((req["upgrade"] for req in requirements if req.get("upgrade", 0)), None)
+                    if req_upgrade_id_value:
+                        req_upgrade_id = UpgradeId(req_upgrade_id_value)
+                        required_upgrade = req_upgrade_id
+
                 requires_power = entry.get("needs_power", False)
 
                 resulting_upgrade = ability_to_upgrade_dict[ability_id]
@@ -328,6 +334,8 @@ def get_upgrade_abilities(data):
                 research_info = {"ability": ability_id}
                 if required_building:
                     research_info["required_building"] = required_building
+                if required_upgrade:
+                    research_info["required_upgrade"] = required_upgrade
                 if requires_power:
                     research_info["requires_power"] = requires_power
                 current_unit_research_abilities[resulting_upgrade] = research_info
@@ -355,7 +363,9 @@ def get_upgrade_researched_from(unit_research_abilities: dict):
 
     for researcher_unit, research_abilities in unit_research_abilities.items():
         for upgrade, research_info in research_abilities.items():
-            upgrade_researched_from[upgrade] = researcher_unit
+            # This if statement is to prevent LAIR and HIVE overriding "UpgradeId.OVERLORDSPEED" as well as greater spire overriding upgrade abilities
+            if upgrade not in upgrade_researched_from:
+                upgrade_researched_from[upgrade] = researcher_unit
 
     return upgrade_researched_from
 

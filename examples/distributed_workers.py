@@ -29,7 +29,8 @@ class TerranBot(sc2.BotAI):
                     await self.build(UnitTypeId.SUPPLYDEPOT, near=cc.position.towards(self.game_info.map_center, 5))
 
 
-run_game(maps.get("Abyssal Reef LE"), [
-    Bot(Race.Terran, TerranBot()),
-    Computer(Race.Protoss, Difficulty.Medium)
-], realtime=False)
+run_game(
+    maps.get("Abyssal Reef LE"),
+    [Bot(Race.Terran, TerranBot()), Computer(Race.Protoss, Difficulty.Medium)],
+    realtime=False,
+)

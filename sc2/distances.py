@@ -11,6 +11,7 @@ import math
 from math import pow
 import numpy as np
 import warnings
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     from scipy.spatial.distance import pdist, cdist

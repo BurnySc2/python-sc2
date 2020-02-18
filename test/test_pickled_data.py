@@ -809,6 +809,7 @@ def test_units():
     assert scvs.prefer_idle
     assert townhalls.prefer_idle
 
+
 def test_dicts():
     # May be missing but that should not fail the tests
     try:
@@ -823,10 +824,14 @@ def test_dicts():
     for unit_id, data in RESEARCH_INFO.items():
         upgrade_id: UpgradeId
         for upgrade_id, upgrade_data in data.items():
-            research_ability_correct: AbilityId  = upgrade_data["ability"]
+            research_ability_correct: AbilityId = upgrade_data["ability"]
             research_ability_from_api: AbilityId = bot._game_data.upgrades[upgrade_id.value].research_ability.exact_id
-            assert research_ability_correct == research_ability_from_api, f"Research abilities do not match: Correct one is {research_ability_correct} but API returned {research_ability_from_api}"
-
+            if upgrade_id.value in {116, 117, 118}:
+                # Research abilities for armory armor plating are mapped incorrectly in the API
+                continue
+            assert (
+                research_ability_correct == research_ability_from_api
+            ), f"Research abilities do not match: Correct one is {research_ability_correct} but API returned {research_ability_from_api}"
 
 
 @given(

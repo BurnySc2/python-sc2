@@ -164,7 +164,6 @@ class Units(list):
         Example::
 
             enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)
-            my_marine = next(unit for unit in self.units if unit.type_id == UnitTypeId.MARINE)
             my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)
             if my_marine:
                 closest_zergling_distance = enemy_zerglings.closest_distance_to(my_marine)
@@ -618,10 +617,7 @@ class Units(list):
         assert self, f"Units object is empty"
         amount = self.amount
         return Point2(
-            (
-                sum(unit._proto.pos.x for unit in self) / amount,
-                sum(unit._proto.pos.y for unit in self) / amount,
-            )
+            (sum(unit._proto.pos.x for unit in self) / amount, sum(unit._proto.pos.y for unit in self) / amount,)
         )
 
     @property

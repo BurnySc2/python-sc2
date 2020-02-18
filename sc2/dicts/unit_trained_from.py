@@ -96,11 +96,7 @@ UNIT_TRAINED_FROM: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.ROACHWARREN: {UnitTypeId.DRONE},
     UnitTypeId.ROBOTICSBAY: {UnitTypeId.PROBE},
     UnitTypeId.ROBOTICSFACILITY: {UnitTypeId.PROBE},
-    UnitTypeId.SCV: {
-        UnitTypeId.COMMANDCENTER,
-        UnitTypeId.ORBITALCOMMAND,
-        UnitTypeId.PLANETARYFORTRESS,
-    },
+    UnitTypeId.SCV: {UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, UnitTypeId.PLANETARYFORTRESS},
     UnitTypeId.SENSORTOWER: {UnitTypeId.SCV},
     UnitTypeId.SENTRY: {UnitTypeId.GATEWAY, UnitTypeId.WARPGATE},
     UnitTypeId.SHIELDBATTERY: {UnitTypeId.PROBE},
