@@ -64,7 +64,7 @@ def dump_dict_to_file(
         f.write(repr(my_dict))
 
     # Apply formatting
-    subprocess.run(["black", file_path])
+    subprocess.run(["black", "--line-length", "120", file_path])
 
 
 def generate_init_file(dict_file_paths: List[str], file_path: str, file_header: str):
@@ -79,7 +79,7 @@ def generate_init_file(dict_file_paths: List[str], file_path: str, file_header: 
         f.write(all_line)
 
     # Apply formatting
-    subprocess.run(["black", file_path])
+    subprocess.run(["black", "--line-length", "120", file_path])
 
 
 def get_unit_train_build_abilities(data):
@@ -322,9 +322,7 @@ def get_upgrade_abilities(data):
                         req_building_id = UnitTypeId(req_building_id_value)
                         required_building = req_building_id
 
-                    req_upgrade_id_value = next(
-                        (req["upgrade"] for req in requirements if req.get("upgrade", 0)), None
-                    )
+                    req_upgrade_id_value = next((req["upgrade"] for req in requirements if req.get("upgrade", 0)), None)
                     if req_upgrade_id_value:
                         req_upgrade_id = UpgradeId(req_upgrade_id_value)
                         required_upgrade = req_upgrade_id

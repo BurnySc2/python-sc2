@@ -32,36 +32,33 @@ CWD = {"Windows": "Support64", "Darwin": None, "Linux": None, "WineLinux": "Supp
 
 PF = os.environ.get("SC2PF", platform.system())
 
+
 def get_env():
     # TODO: Linux env conf from: https://github.com/deepmind/pysc2/blob/master/pysc2/run_configs/platforms.py
     return None
+
 
 def get_runner_args(cwd):
     if "WINE" in os.environ:
         runner_dir = os.path.dirname(os.environ.get("WINE"))
         # translate cwd from Unix to Windows path
         win_cwd = subprocess.run(
-            [os.path.join(runner_dir, "winepath"), "-w", cwd],
-            capture_output=True,
-            text=True
+            [os.path.join(runner_dir, "winepath"), "-w", cwd], capture_output=True, text=True
         ).stdout.rstrip()
-        return [
-            os.environ.get("WINE"),
-            "start",
-            "/d",
-            win_cwd,
-            "/unix"
-        ]
+        return [os.environ.get("WINE"), "start", "/d", win_cwd, "/unix"]
 
     return []
+
 
 def latest_executeble(versions_dir, base_build=None):
 
     if base_build is None:
         latest = max((int(p.name[4:]), p) for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith("Base"))
     else:
-        latest = (int(base_build[4:]), max(p for p in versions_dir.iterdir() if p.is_dir() and
-                                  p.name.startswith(str(base_build))))
+        latest = (
+            int(base_build[4:]),
+            max(p for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith(str(base_build))),
+        )
     version, path = latest
 
     if version < 55958:
@@ -72,6 +69,7 @@ def latest_executeble(versions_dir, base_build=None):
 
 class _MetaPaths(type):
     """"Lazily loads paths to allow importing the library even if SC2 isn't installed."""
+
     def __setup(self):
         if PF not in BASEDIR:
             logger.critical(f"Unsupported platform '{PF}'")
@@ -96,7 +94,6 @@ class _MetaPaths(type):
 
             self.REPLAYS = self.BASE / "Replays"
 
-
             if (self.BASE / "maps").exists():
                 self.MAPS = self.BASE / "maps"
             else:
@@ -108,6 +105,7 @@ class _MetaPaths(type):
     def __getattr__(self, attr):
         self.__setup()
         return getattr(self, attr)
+
 
 class Paths(metaclass=_MetaPaths):
     """Paths for SC2 folders, lazily loaded using the above metaclass."""

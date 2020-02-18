@@ -4,6 +4,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from sc2.expiring_dict import ExpiringDict
 
+
 def test_class():
     class State:
         def __init__(self):
@@ -98,6 +99,5 @@ def test_class():
     # assert len(test) == 0, len(test)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_class()

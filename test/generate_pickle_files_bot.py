@@ -77,7 +77,6 @@ class ExporterBot(sc2.BotAI):
         with lzma.open(file_path, "wb") as f:
             pickle.dump([raw_game_data, raw_game_info, raw_observation], f)
 
-
     async def on_start(self):
         file_path = self.get_pickle_file_path()
         print(f"Saving file to {self.map_name}.xz")

@@ -11,6 +11,7 @@ from typing import Union
 if TYPE_CHECKING:
     from .unit import Unit
 
+
 class UnitCommand:
     def __init__(self, ability: AbilityId, unit: Unit, target: Union[Unit, Point2] = None, queue: bool = False):
         """

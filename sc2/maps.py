@@ -4,6 +4,7 @@ from .paths import Paths
 
 logger = logging.getLogger(__name__)
 
+
 def get(name=None):
     maps = []
     for mapdir in (p for p in Paths.MAPS.iterdir()):
@@ -23,6 +24,7 @@ def get(name=None):
             return m
 
     raise KeyError(f"Map '{name}' was not found. Please put the map file in \"/StarCraft II/Maps/\".")
+
 
 class Map:
     def __init__(self, path):

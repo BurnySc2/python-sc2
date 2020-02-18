@@ -98,7 +98,9 @@ class MassReaperBot(sc2.BotAI):
             ):  # need to check if townhalls.amount > 0 because placement is based on townhall location
                 worker = workers.furthest_to(workers.center)
                 # I chose placement_step 4 here so there will be gaps between barracks hopefully
-                location = await self.find_placement(UnitTypeId.BARRACKS, self.townhalls.random.position, placement_step=4)
+                location = await self.find_placement(
+                    UnitTypeId.BARRACKS, self.townhalls.random.position, placement_step=4
+                )
                 if location:
                     self.do(worker.build(UnitTypeId.BARRACKS, location), subtract_cost=True)
 

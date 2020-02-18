@@ -10,13 +10,9 @@ from ..ids.upgrade_id import UpgradeId
 
 from typing import Dict, Set, Union
 
-RESEARCH_INFO: Dict[
-    UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]]
-] = {
+RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]]] = {
     UnitTypeId.ARMORY: {
-        UpgradeId.TERRANSHIPWEAPONSLEVEL1: {
-            "ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1
-        },
+        UpgradeId.TERRANSHIPWEAPONSLEVEL1: {"ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1},
         UpgradeId.TERRANSHIPWEAPONSLEVEL2: {
             "ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2,
             "required_upgrade": UpgradeId.TERRANSHIPWEAPONSLEVEL1,
@@ -36,9 +32,7 @@ RESEARCH_INFO: Dict[
             "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3,
             "required_upgrade": UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL2,
         },
-        UpgradeId.TERRANVEHICLEWEAPONSLEVEL1: {
-            "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL1
-        },
+        UpgradeId.TERRANVEHICLEWEAPONSLEVEL1: {"ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL1},
         UpgradeId.TERRANVEHICLEWEAPONSLEVEL2: {
             "ability": AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL2,
             "required_upgrade": UpgradeId.TERRANVEHICLEWEAPONSLEVEL1,
@@ -92,25 +86,15 @@ RESEARCH_INFO: Dict[
             "required_upgrade": UpgradeId.PROTOSSAIRWEAPONSLEVEL2,
             "requires_power": True,
         },
-        UpgradeId.WARPGATERESEARCH: {
-            "ability": AbilityId.RESEARCH_WARPGATE,
-            "requires_power": True,
-        },
+        UpgradeId.WARPGATERESEARCH: {"ability": AbilityId.RESEARCH_WARPGATE, "requires_power": True},
     },
     UnitTypeId.DARKSHRINE: {
-        UpgradeId.DARKTEMPLARBLINKUPGRADE: {
-            "ability": AbilityId.RESEARCH_SHADOWSTRIKE,
-            "requires_power": True,
-        }
+        UpgradeId.DARKTEMPLARBLINKUPGRADE: {"ability": AbilityId.RESEARCH_SHADOWSTRIKE, "requires_power": True}
     },
     UnitTypeId.ENGINEERINGBAY: {
         UpgradeId.HISECAUTOTRACKING: {"ability": AbilityId.RESEARCH_HISECAUTOTRACKING},
-        UpgradeId.TERRANBUILDINGARMOR: {
-            "ability": AbilityId.RESEARCH_TERRANSTRUCTUREARMORUPGRADE
-        },
-        UpgradeId.TERRANINFANTRYARMORSLEVEL1: {
-            "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL1
-        },
+        UpgradeId.TERRANBUILDINGARMOR: {"ability": AbilityId.RESEARCH_TERRANSTRUCTUREARMORUPGRADE},
+        UpgradeId.TERRANINFANTRYARMORSLEVEL1: {"ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL1},
         UpgradeId.TERRANINFANTRYARMORSLEVEL2: {
             "ability": AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL2,
             "required_building": UnitTypeId.ARMORY,
@@ -136,9 +120,7 @@ RESEARCH_INFO: Dict[
         },
     },
     UnitTypeId.EVOLUTIONCHAMBER: {
-        UpgradeId.ZERGGROUNDARMORSLEVEL1: {
-            "ability": AbilityId.RESEARCH_ZERGGROUNDARMORLEVEL1
-        },
+        UpgradeId.ZERGGROUNDARMORSLEVEL1: {"ability": AbilityId.RESEARCH_ZERGGROUNDARMORLEVEL1},
         UpgradeId.ZERGGROUNDARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGGROUNDARMORLEVEL2,
             "required_building": UnitTypeId.LAIR,
@@ -149,9 +131,7 @@ RESEARCH_INFO: Dict[
             "required_building": UnitTypeId.HIVE,
             "required_upgrade": UpgradeId.ZERGGROUNDARMORSLEVEL2,
         },
-        UpgradeId.ZERGMELEEWEAPONSLEVEL1: {
-            "ability": AbilityId.RESEARCH_ZERGMELEEWEAPONSLEVEL1
-        },
+        UpgradeId.ZERGMELEEWEAPONSLEVEL1: {"ability": AbilityId.RESEARCH_ZERGMELEEWEAPONSLEVEL1},
         UpgradeId.ZERGMELEEWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGMELEEWEAPONSLEVEL2,
             "required_building": UnitTypeId.LAIR,
@@ -162,9 +142,7 @@ RESEARCH_INFO: Dict[
             "required_building": UnitTypeId.HIVE,
             "required_upgrade": UpgradeId.ZERGMELEEWEAPONSLEVEL2,
         },
-        UpgradeId.ZERGMISSILEWEAPONSLEVEL1: {
-            "ability": AbilityId.RESEARCH_ZERGMISSILEWEAPONSLEVEL1
-        },
+        UpgradeId.ZERGMISSILEWEAPONSLEVEL1: {"ability": AbilityId.RESEARCH_ZERGMISSILEWEAPONSLEVEL1},
         UpgradeId.ZERGMISSILEWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGMISSILEWEAPONSLEVEL2,
             "required_building": UnitTypeId.LAIR,
@@ -177,20 +155,10 @@ RESEARCH_INFO: Dict[
         },
     },
     UnitTypeId.FACTORYTECHLAB: {
-        UpgradeId.CYCLONELOCKONDAMAGEUPGRADE: {
-            "ability": AbilityId.RESEARCH_CYCLONELOCKONDAMAGE
-        },
-        UpgradeId.DRILLCLAWS: {
-            "ability": AbilityId.RESEARCH_DRILLINGCLAWS,
-            "required_building": UnitTypeId.ARMORY,
-        },
-        UpgradeId.HIGHCAPACITYBARRELS: {
-            "ability": AbilityId.RESEARCH_INFERNALPREIGNITER
-        },
-        UpgradeId.SMARTSERVOS: {
-            "ability": AbilityId.RESEARCH_SMARTSERVOS,
-            "required_building": UnitTypeId.ARMORY,
-        },
+        UpgradeId.CYCLONELOCKONDAMAGEUPGRADE: {"ability": AbilityId.RESEARCH_CYCLONELOCKONDAMAGE},
+        UpgradeId.DRILLCLAWS: {"ability": AbilityId.RESEARCH_DRILLINGCLAWS, "required_building": UnitTypeId.ARMORY},
+        UpgradeId.HIGHCAPACITYBARRELS: {"ability": AbilityId.RESEARCH_INFERNALPREIGNITER},
+        UpgradeId.SMARTSERVOS: {"ability": AbilityId.RESEARCH_SMARTSERVOS, "required_building": UnitTypeId.ARMORY},
     },
     UnitTypeId.FLEETBEACON: {
         UpgradeId.PHOENIXRANGEUPGRADE: {
@@ -253,26 +221,16 @@ RESEARCH_INFO: Dict[
         },
     },
     UnitTypeId.FUSIONCORE: {
-        UpgradeId.BATTLECRUISERENABLESPECIALIZATIONS: {
-            "ability": AbilityId.RESEARCH_BATTLECRUISERWEAPONREFIT
-        },
-        UpgradeId.LIBERATORAGRANGEUPGRADE: {
-            "ability": AbilityId.FUSIONCORERESEARCH_RESEARCHBALLISTICRANGE
-        },
-        UpgradeId.MEDIVACINCREASESPEEDBOOST: {
-            "ability": AbilityId.FUSIONCORERESEARCH_RESEARCHRAPIDREIGNITIONSYSTEM
-        },
+        UpgradeId.BATTLECRUISERENABLESPECIALIZATIONS: {"ability": AbilityId.RESEARCH_BATTLECRUISERWEAPONREFIT},
+        UpgradeId.LIBERATORAGRANGEUPGRADE: {"ability": AbilityId.FUSIONCORERESEARCH_RESEARCHBALLISTICRANGE},
+        UpgradeId.MEDIVACINCREASESPEEDBOOST: {"ability": AbilityId.FUSIONCORERESEARCH_RESEARCHRAPIDREIGNITIONSYSTEM},
     },
     UnitTypeId.GHOSTACADEMY: {
-        UpgradeId.ENHANCEDSHOCKWAVES: {
-            "ability": AbilityId.GHOSTACADEMYRESEARCH_RESEARCHENHANCEDSHOCKWAVES
-        },
+        UpgradeId.ENHANCEDSHOCKWAVES: {"ability": AbilityId.GHOSTACADEMYRESEARCH_RESEARCHENHANCEDSHOCKWAVES},
         UpgradeId.PERSONALCLOAKING: {"ability": AbilityId.RESEARCH_PERSONALCLOAKING},
     },
     UnitTypeId.GREATERSPIRE: {
-        UpgradeId.ZERGFLYERARMORSLEVEL1: {
-            "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL1
-        },
+        UpgradeId.ZERGFLYERARMORSLEVEL1: {"ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL1},
         UpgradeId.ZERGFLYERARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
             "required_building": UnitTypeId.LAIR,
@@ -283,9 +241,7 @@ RESEARCH_INFO: Dict[
             "required_building": UnitTypeId.HIVE,
             "required_upgrade": UpgradeId.ZERGFLYERARMORSLEVEL2,
         },
-        UpgradeId.ZERGFLYERWEAPONSLEVEL1: {
-            "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1
-        },
+        UpgradeId.ZERGFLYERWEAPONSLEVEL1: {"ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1},
         UpgradeId.ZERGFLYERWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
             "required_building": UnitTypeId.LAIR,
@@ -307,15 +263,11 @@ RESEARCH_INFO: Dict[
     },
     UnitTypeId.HYDRALISKDEN: {
         UpgradeId.EVOLVEGROOVEDSPINES: {"ability": AbilityId.RESEARCH_GROOVEDSPINES},
-        UpgradeId.EVOLVEMUSCULARAUGMENTS: {
-            "ability": AbilityId.RESEARCH_MUSCULARAUGMENTS
-        },
+        UpgradeId.EVOLVEMUSCULARAUGMENTS: {"ability": AbilityId.RESEARCH_MUSCULARAUGMENTS},
     },
     UnitTypeId.INFESTATIONPIT: {
         UpgradeId.INFESTORENERGYUPGRADE: {"ability": AbilityId.RESEARCH_PATHOGENGLANDS},
-        UpgradeId.MICROBIALSHROUD: {
-            "ability": AbilityId.INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD
-        },
+        UpgradeId.MICROBIALSHROUD: {"ability": AbilityId.INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD},
         UpgradeId.NEURALPARASITE: {"ability": AbilityId.RESEARCH_NEURALPARASITE},
     },
     UnitTypeId.LAIR: {
@@ -323,10 +275,7 @@ RESEARCH_INFO: Dict[
         UpgradeId.OVERLORDSPEED: {"ability": AbilityId.RESEARCH_PNEUMATIZEDCARAPACE},
     },
     UnitTypeId.LURKERDENMP: {
-        UpgradeId.DIGGINGCLAWS: {
-            "ability": AbilityId.RESEARCH_ADAPTIVETALONS,
-            "required_building": UnitTypeId.HIVE,
-        },
+        UpgradeId.DIGGINGCLAWS: {"ability": AbilityId.RESEARCH_ADAPTIVETALONS, "required_building": UnitTypeId.HIVE},
         UpgradeId.LURKERRANGE: {
             "ability": AbilityId.LURKERDENRESEARCH_RESEARCHLURKERRANGE,
             "required_building": UnitTypeId.HIVE,
@@ -337,38 +286,22 @@ RESEARCH_INFO: Dict[
             "ability": AbilityId.RESEARCH_GLIALREGENERATION,
             "required_building": UnitTypeId.LAIR,
         },
-        UpgradeId.TUNNELINGCLAWS: {
-            "ability": AbilityId.RESEARCH_TUNNELINGCLAWS,
-            "required_building": UnitTypeId.LAIR,
-        },
+        UpgradeId.TUNNELINGCLAWS: {"ability": AbilityId.RESEARCH_TUNNELINGCLAWS, "required_building": UnitTypeId.LAIR},
     },
     UnitTypeId.ROBOTICSBAY: {
-        UpgradeId.EXTENDEDTHERMALLANCE: {
-            "ability": AbilityId.RESEARCH_EXTENDEDTHERMALLANCE,
-            "requires_power": True,
-        },
-        UpgradeId.GRAVITICDRIVE: {
-            "ability": AbilityId.RESEARCH_GRAVITICDRIVE,
-            "requires_power": True,
-        },
-        UpgradeId.OBSERVERGRAVITICBOOSTER: {
-            "ability": AbilityId.RESEARCH_GRAVITICBOOSTER,
-            "requires_power": True,
-        },
+        UpgradeId.EXTENDEDTHERMALLANCE: {"ability": AbilityId.RESEARCH_EXTENDEDTHERMALLANCE, "requires_power": True},
+        UpgradeId.GRAVITICDRIVE: {"ability": AbilityId.RESEARCH_GRAVITICDRIVE, "requires_power": True},
+        UpgradeId.OBSERVERGRAVITICBOOSTER: {"ability": AbilityId.RESEARCH_GRAVITICBOOSTER, "requires_power": True},
     },
     UnitTypeId.SPAWNINGPOOL: {
         UpgradeId.ZERGLINGATTACKSPEED: {
             "ability": AbilityId.RESEARCH_ZERGLINGADRENALGLANDS,
             "required_building": UnitTypeId.HIVE,
         },
-        UpgradeId.ZERGLINGMOVEMENTSPEED: {
-            "ability": AbilityId.RESEARCH_ZERGLINGMETABOLICBOOST
-        },
+        UpgradeId.ZERGLINGMOVEMENTSPEED: {"ability": AbilityId.RESEARCH_ZERGLINGMETABOLICBOOST},
     },
     UnitTypeId.SPIRE: {
-        UpgradeId.ZERGFLYERARMORSLEVEL1: {
-            "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL1
-        },
+        UpgradeId.ZERGFLYERARMORSLEVEL1: {"ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL1},
         UpgradeId.ZERGFLYERARMORSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERARMORLEVEL2,
             "required_building": UnitTypeId.LAIR,
@@ -379,9 +312,7 @@ RESEARCH_INFO: Dict[
             "required_building": UnitTypeId.HIVE,
             "required_upgrade": UpgradeId.ZERGFLYERARMORSLEVEL2,
         },
-        UpgradeId.ZERGFLYERWEAPONSLEVEL1: {
-            "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1
-        },
+        UpgradeId.ZERGFLYERWEAPONSLEVEL1: {"ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL1},
         UpgradeId.ZERGFLYERWEAPONSLEVEL2: {
             "ability": AbilityId.RESEARCH_ZERGFLYERATTACKLEVEL2,
             "required_building": UnitTypeId.LAIR,
@@ -395,32 +326,16 @@ RESEARCH_INFO: Dict[
     },
     UnitTypeId.STARPORTTECHLAB: {
         UpgradeId.BANSHEECLOAK: {"ability": AbilityId.RESEARCH_BANSHEECLOAKINGFIELD},
-        UpgradeId.BANSHEESPEED: {
-            "ability": AbilityId.RESEARCH_BANSHEEHYPERFLIGHTROTORS
-        },
-        UpgradeId.RAVENCORVIDREACTOR: {
-            "ability": AbilityId.RESEARCH_RAVENCORVIDREACTOR
-        },
+        UpgradeId.BANSHEESPEED: {"ability": AbilityId.RESEARCH_BANSHEEHYPERFLIGHTROTORS},
+        UpgradeId.RAVENCORVIDREACTOR: {"ability": AbilityId.RESEARCH_RAVENCORVIDREACTOR},
     },
     UnitTypeId.TEMPLARARCHIVE: {
-        UpgradeId.PSISTORMTECH: {
-            "ability": AbilityId.RESEARCH_PSISTORM,
-            "requires_power": True,
-        }
+        UpgradeId.PSISTORMTECH: {"ability": AbilityId.RESEARCH_PSISTORM, "requires_power": True}
     },
     UnitTypeId.TWILIGHTCOUNCIL: {
-        UpgradeId.ADEPTPIERCINGATTACK: {
-            "ability": AbilityId.RESEARCH_ADEPTRESONATINGGLAIVES,
-            "requires_power": True,
-        },
-        UpgradeId.BLINKTECH: {
-            "ability": AbilityId.RESEARCH_BLINK,
-            "requires_power": True,
-        },
-        UpgradeId.CHARGE: {
-            "ability": AbilityId.RESEARCH_CHARGE,
-            "requires_power": True,
-        },
+        UpgradeId.ADEPTPIERCINGATTACK: {"ability": AbilityId.RESEARCH_ADEPTRESONATINGGLAIVES, "requires_power": True},
+        UpgradeId.BLINKTECH: {"ability": AbilityId.RESEARCH_BLINK, "requires_power": True},
+        UpgradeId.CHARGE: {"ability": AbilityId.RESEARCH_CHARGE, "requires_power": True},
     },
     UnitTypeId.ULTRALISKCAVERN: {
         UpgradeId.ANABOLICSYNTHESIS: {"ability": AbilityId.RESEARCH_ANABOLICSYNTHESIS},

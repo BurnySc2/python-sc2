@@ -59,11 +59,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL2,
         AbilityId.ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL3,
     },
-    UnitTypeId.AUTOTURRET: {
-        AbilityId.ATTACK_ATTACK,
-        AbilityId.SMART,
-        AbilityId.STOP_STOP,
-    },
+    UnitTypeId.AUTOTURRET: {AbilityId.ATTACK_ATTACK, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.BANELING: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.BEHAVIOR_BUILDINGATTACKON,
@@ -75,10 +71,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.BANELINGBURROWED: {
-        AbilityId.BURROWUP_BANELING,
-        AbilityId.EXPLODE_EXPLODE,
-    },
+    UnitTypeId.BANELINGBURROWED: {AbilityId.BURROWUP_BANELING, AbilityId.EXPLODE_EXPLODE},
     UnitTypeId.BANELINGCOCOON: {AbilityId.RALLY_BUILDING, AbilityId.SMART},
     UnitTypeId.BANELINGNEST: {AbilityId.RESEARCH_CENTRIFUGALHOOKS},
     UnitTypeId.BANSHEE: {
@@ -142,18 +135,8 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.BUNKER: {
-        AbilityId.EFFECT_SALVAGE,
-        AbilityId.LOAD_BUNKER,
-        AbilityId.RALLY_BUILDING,
-        AbilityId.SMART,
-    },
-    UnitTypeId.BYPASSARMORDRONE: {
-        AbilityId.ATTACK_ATTACK,
-        AbilityId.MOVE_MOVE,
-        AbilityId.SMART,
-        AbilityId.STOP_STOP,
-    },
+    UnitTypeId.BUNKER: {AbilityId.EFFECT_SALVAGE, AbilityId.LOAD_BUNKER, AbilityId.RALLY_BUILDING, AbilityId.SMART},
+    UnitTypeId.BYPASSARMORDRONE: {AbilityId.ATTACK_ATTACK, AbilityId.MOVE_MOVE, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.CARRIER: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.BUILD_INTERCEPTORS,
@@ -258,11 +241,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.CREEPTUMOR: {AbilityId.BUILD_CREEPTUMOR_TUMOR, AbilityId.SMART},
-    UnitTypeId.CREEPTUMORBURROWED: {
-        AbilityId.BUILD_CREEPTUMOR,
-        AbilityId.BUILD_CREEPTUMOR_TUMOR,
-        AbilityId.SMART,
-    },
+    UnitTypeId.CREEPTUMORBURROWED: {AbilityId.BUILD_CREEPTUMOR, AbilityId.BUILD_CREEPTUMOR_TUMOR, AbilityId.SMART},
     UnitTypeId.CREEPTUMORQUEEN: {AbilityId.BUILD_CREEPTUMOR_TUMOR, AbilityId.SMART},
     UnitTypeId.CYBERNETICSCORE: {
         AbilityId.CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL1,
@@ -559,10 +538,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.HYDRALISKBURROWED: {AbilityId.BURROWUP_HYDRALISK},
-    UnitTypeId.HYDRALISKDEN: {
-        AbilityId.RESEARCH_GROOVEDSPINES,
-        AbilityId.RESEARCH_MUSCULARAUGMENTS,
-    },
+    UnitTypeId.HYDRALISKDEN: {AbilityId.RESEARCH_GROOVEDSPINES, AbilityId.RESEARCH_MUSCULARAUGMENTS},
     UnitTypeId.IMMORTAL: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.HOLDPOSITION_HOLD,
@@ -678,10 +654,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.LURKERDENMP: {
-        AbilityId.LURKERDENRESEARCH_RESEARCHLURKERRANGE,
-        AbilityId.RESEARCH_ADAPTIVETALONS,
-    },
+    UnitTypeId.LURKERDENMP: {AbilityId.LURKERDENRESEARCH_RESEARCHLURKERRANGE, AbilityId.RESEARCH_ADAPTIVETALONS},
     UnitTypeId.LURKERMP: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.BURROWDOWN_LURKER,
@@ -777,17 +750,8 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.RALLY_NEXUS,
         AbilityId.SMART,
     },
-    UnitTypeId.NYDUSCANAL: {
-        AbilityId.LOAD_NYDUSWORM,
-        AbilityId.RALLY_BUILDING,
-        AbilityId.SMART,
-        AbilityId.STOP_STOP,
-    },
-    UnitTypeId.NYDUSCANALATTACKER: {
-        AbilityId.ATTACK_ATTACK,
-        AbilityId.SMART,
-        AbilityId.STOP_STOP,
-    },
+    UnitTypeId.NYDUSCANAL: {AbilityId.LOAD_NYDUSWORM, AbilityId.RALLY_BUILDING, AbilityId.SMART, AbilityId.STOP_STOP},
+    UnitTypeId.NYDUSCANALATTACKER: {AbilityId.ATTACK_ATTACK, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.NYDUSCANALCREEPER: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.DIGESTERCREEPSPRAY_DIGESTERCREEPSPRAY,
@@ -889,11 +853,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.PHOTONCANNON: {
-        AbilityId.ATTACK_ATTACK,
-        AbilityId.SMART,
-        AbilityId.STOP_STOP,
-    },
+    UnitTypeId.PHOTONCANNON: {AbilityId.ATTACK_ATTACK, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.PLANETARYFORTRESS: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.COMMANDCENTERTRAIN_SCV,
@@ -975,11 +935,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.RAVENREPAIRDRONE: {
-        AbilityId.EFFECT_REPAIR_REPAIRDRONE,
-        AbilityId.SMART,
-        AbilityId.STOP_STOP,
-    },
+    UnitTypeId.RAVENREPAIRDRONE: {AbilityId.EFFECT_REPAIR_REPAIRDRONE, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.REAPER: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.HOLDPOSITION_HOLD,
@@ -1016,10 +972,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.ROACHWARREN: {
-        AbilityId.RESEARCH_GLIALREGENERATION,
-        AbilityId.RESEARCH_TUNNELINGCLAWS,
-    },
+    UnitTypeId.ROACHWARREN: {AbilityId.RESEARCH_GLIALREGENERATION, AbilityId.RESEARCH_TUNNELINGCLAWS},
     UnitTypeId.ROBOTICSBAY: {
         AbilityId.RESEARCH_EXTENDEDTHERMALLANCE,
         AbilityId.RESEARCH_GRAVITICBOOSTER,
@@ -1097,11 +1050,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.SHIELDBATTERY: {
-        AbilityId.EFFECT_RESTORE,
-        AbilityId.SMART,
-        AbilityId.STOP_STOP,
-    },
+    UnitTypeId.SHIELDBATTERY: {AbilityId.EFFECT_RESTORE, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.SIEGETANK: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.HOLDPOSITION_HOLD,
@@ -1117,10 +1066,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.STOP_STOP,
         AbilityId.UNSIEGE_UNSIEGE,
     },
-    UnitTypeId.SPAWNINGPOOL: {
-        AbilityId.RESEARCH_ZERGLINGADRENALGLANDS,
-        AbilityId.RESEARCH_ZERGLINGMETABOLICBOOST,
-    },
+    UnitTypeId.SPAWNINGPOOL: {AbilityId.RESEARCH_ZERGLINGADRENALGLANDS, AbilityId.RESEARCH_ZERGLINGMETABOLICBOOST},
     UnitTypeId.SPINECRAWLER: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.SMART,
@@ -1271,10 +1217,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.ULTRALISKBURROWED: {AbilityId.BURROWUP_ULTRALISK},
-    UnitTypeId.ULTRALISKCAVERN: {
-        AbilityId.RESEARCH_ANABOLICSYNTHESIS,
-        AbilityId.RESEARCH_CHITINOUSPLATING,
-    },
+    UnitTypeId.ULTRALISKCAVERN: {AbilityId.RESEARCH_ANABOLICSYNTHESIS, AbilityId.RESEARCH_CHITINOUSPLATING},
     UnitTypeId.VIKINGASSAULT: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.HOLDPOSITION_HOLD,
