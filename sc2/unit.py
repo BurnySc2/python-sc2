@@ -580,8 +580,8 @@ class Unit:
                     return 0, 0, 0
                 if not self.can_attack_air and target.is_flying:
                     return 0, 0, 0
-        # Enemy structures that are not completed can't attack
-        if not target.is_ready:
+        # Structures that are not completed can't attack
+        if not self.is_ready:
             return 0, 0, 0
         target_has_guardian_shield: bool = False
         if ignore_armor:
@@ -606,12 +606,12 @@ class Unit:
                 enemy_armor -= 2
                 enemy_shield_armor -= 2
 
-        # Fast return for battlecruiser because they have no weapon in the API
+        # Hard coded return for battlecruiser because they have no weapon in the API
         if self.type_id == UnitTypeId.BATTLECRUISER:
             if target_has_guardian_shield:
                 enemy_armor += 2
                 enemy_shield_armor += 2
-            weapon_damage = (8 if not target.is_flying else 5) + self.attack_upgrade_level
+            weapon_damage = (5 if target.is_flying else 8) + self.attack_upgrade_level
             weapon_damage = weapon_damage - enemy_shield_armor if target.shield else weapon_damage - enemy_armor
             return weapon_damage, 0.224, 6
 
@@ -714,11 +714,12 @@ class Unit:
                 UnitTypeId.MISSILETURRET,
                 UnitTypeId.AUTOTURRET,
             }:
+                upgrades: Set[UpgradeId] = self._bot_object.state.upgrades
                 if (
                     self.type_id == UnitTypeId.ZERGLING
                     # Attack speed calculation only works for our unit
                     and self.is_mine
-                    and UpgradeId.ZERGLINGATTACKSPEED in self._bot_object.state.upgrades
+                    and UpgradeId.ZERGLINGATTACKSPEED in upgrades
                 ):
                     # 0.696044921875 for zerglings divided through 1.4 equals (+40% attack speed bonus from the upgrade):
                     weapon_speed /= 1.4
@@ -726,7 +727,7 @@ class Unit:
                     # Adept ereceive 45% attack speed bonus from glaives
                     self.type_id == UnitTypeId.ADEPT
                     and self.is_mine
-                    and UpgradeId.ADEPTPIERCINGATTACK in self._bot_object.state.upgrades
+                    and UpgradeId.ADEPTPIERCINGATTACK in upgrades
                 ):
                     # TODO next patch: if self.type_id is adept: check if attack speed buff is active, instead of upgrade
                     weapon_speed /= 1.45
@@ -739,19 +740,19 @@ class Unit:
                     # TODO always assume that the enemy has the range upgrade researched
                     self.type_id == UnitTypeId.HYDRALISK
                     and self.is_mine
-                    and UpgradeId.EVOLVEGROOVEDSPINES in self._bot_object.state.upgrades
+                    and UpgradeId.EVOLVEGROOVEDSPINES in upgrades
                 ):
                     weapon_range += 1
                 elif (
                     self.type_id == UnitTypeId.PHOENIX
                     and self.is_mine
-                    and UpgradeId.PHOENIXRANGEUPGRADE in self._bot_object.state.upgrades
+                    and UpgradeId.PHOENIXRANGEUPGRADE in upgrades
                 ):
                     weapon_range += 2
                 elif (
                     self.type_id in {UnitTypeId.PLANETARYFORTRESS, UnitTypeId.MISSILETURRET, UnitTypeId.AUTOTURRET}
                     and self.is_mine
-                    and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
+                    and UpgradeId.HISECAUTOTRACKING in upgrades
                 ):
                     weapon_range += 1
 
