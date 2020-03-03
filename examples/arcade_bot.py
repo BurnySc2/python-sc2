@@ -37,8 +37,9 @@ Improvements that could be made:
 
 
 class MarineSplitChallenge(sc2.BotAI):
-    async def on_step(self, iteration):
+    async def on_step(self, iteration): 
         # do marine micro vs zerglings
+        actions = []
         for unit in self.units(UnitTypeId.MARINE):
 
             if self.enemy_units:
