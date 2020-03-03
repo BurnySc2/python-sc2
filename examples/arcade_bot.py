@@ -79,7 +79,7 @@ class MarineSplitChallenge(sc2.BotAI):
                     stutter_step_positions = {p for p in stutter_step_positions if self.in_pathing_grid(p)}
 
                     # find position furthest away from enemies and closest to unit
-                    enemies_in_range = self.known_enemy_units.filter(lambda u: unit.target_in_range(u, -0.5))
+                    enemies_in_range = self.enemy_units.filter(lambda u: unit.target_in_range(u, -0.5))
 
                     if stutter_step_positions and enemies_in_range:
                         retreat_position = max(
