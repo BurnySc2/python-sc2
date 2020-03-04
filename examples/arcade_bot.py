@@ -64,7 +64,7 @@ class MarineSplitChallenge(sc2.BotAI):
                             filtered_enemies_in_range = enemies_in_range.of_type(UnitTypeId.ZERGLING)
                         # attack lowest hp unit
                         lowest_hp_enemy_in_range = min(filtered_enemies_in_range, key=lambda u: u.health)
-                        actions.append(unit.attack(lowest_hp_enemy_in_range))
+                        self.do(unit.attack(lowest_hp_enemy_in_range))
 
                     # no enemy is in attack-range, so give attack command to closest instead
                     else:
