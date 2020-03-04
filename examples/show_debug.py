@@ -20,8 +20,6 @@ class MyBot(sc2.BotAI):
                 size=12,
             )
 
-        await self._client.send_debug()
-
 
 def main():
     run_game(
