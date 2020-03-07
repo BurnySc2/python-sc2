@@ -1810,6 +1810,8 @@ class BotAI(DistanceCalculation):
         Override this in your bot class.
         Note that this function uses unit tags and not the unit objects
         because the unit does not exist any more.
+        This will event will be called when a unit (or structure) dies.
+        For enemy units, this only works if the enemy unit was in vision on death.
 
         :param unit_tag:
         """
