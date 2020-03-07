@@ -462,6 +462,7 @@ class TestBot(sc2.BotAI):
                 if construction_scvs:
                     await self.client.debug_kill_unit(construction_scvs)
                     await self._advance_steps(8)
+                    await self._advance_steps(8)
 
                     # Test case
                     assert not self.workers.filter(lambda worker: worker.is_constructing_scv)

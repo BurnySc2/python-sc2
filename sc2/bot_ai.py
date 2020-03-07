@@ -1056,10 +1056,12 @@ class BotAI(DistanceCalculation):
                     worker_targets.add(Point2.from_proto(target))
         return self.structures.filter(
             lambda structure: structure.build_progress < 1
-            and structure.position not in worker_targets
-            and structure.tag not in worker_targets
             # Redundant check?
             and structure.type_id in TERRAN_STRUCTURES_REQUIRE_SCV
+            and structure.position not in worker_targets
+            and structure.tag not in worker_targets
+            and structure.tag in self._structures_previous_map
+            and self._structures_previous_map[structure.tag].build_progress == structure.build_progress
         )
 
     async def build(
@@ -1554,10 +1556,12 @@ class BotAI(DistanceCalculation):
             proto_game_info.game_info.start_raw.pathing_grid, in_bits=True, mirrored=False
         )
         # Required for events, needs to be before self.units are initialized so the old units are stored
-        self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
-        self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
-        self._enemy_units_previous_map: Dict = {unit.tag: unit for unit in self.enemy_units}
-        self._enemy_structures_previous_map: Dict = {structure.tag: structure for structure in self.enemy_structures}
+        self._units_previous_map: Dict[int:Unit] = {unit.tag: unit for unit in self.units}
+        self._structures_previous_map: Dict[int:Unit] = {structure.tag: structure for structure in self.structures}
+        self._enemy_units_previous_map: Dict[int:Unit] = {unit.tag: unit for unit in self.enemy_units}
+        self._enemy_structures_previous_map: Dict[int:Unit] = {
+            structure.tag: structure for structure in self.enemy_structures
+        }
 
         self._prepare_units()
         self.minerals: int = state.common.minerals
@@ -1806,6 +1810,8 @@ class BotAI(DistanceCalculation):
         Override this in your bot class.
         Note that this function uses unit tags and not the unit objects
         because the unit does not exist any more.
+        This will event will be called when a unit (or structure) dies.
+        For enemy units, this only works if the enemy unit was in vision on death.
 
         :param unit_tag:
         """
