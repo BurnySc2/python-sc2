@@ -1,6 +1,12 @@
 import os
+import logging
+import platform
+from pathlib import Path
+
 from sc2.observer_ai import ObserverAI
 from sc2 import run_replay
+
+logger = logging.getLogger(__name__)
 
 
 class ObserverBot(ObserverAI):
@@ -21,7 +27,14 @@ if __name__ == "__main__":
     # Enter replay name here
     # The replay should be either in this folder and you can give it a relative path, or change it to the absolute path
     replay_name = "WorkerRush.SC2Replay"
-    if os.path.isabs(replay_name):
+    if platform.system() == "Linux":
+        home_replay_folder = Path.home() / "Documents" / "StarCraft II" / "Replays"
+        replay_path = home_replay_folder / replay_name
+        if not replay_path.is_file():
+            logger.warning(f"You are on linux, please put the replay in directory {home_replay_folder}")
+            raise FileNotFoundError
+        replay_path = str(replay_path)
+    elif os.path.isabs(replay_name):
         replay_path = replay_name
     else:
         # Convert relative path to absolute path, assuming this replay is in this folder
