@@ -30,7 +30,7 @@ class MassReaperBot(sc2.BotAI):
         # print(self.time_formatted, self.supply_used, self.step_time[1])
 
         """
-        -  depots when low on remaining supply
+        - build depots when low on remaining supply
         - townhalls contains commandcenter and orbitalcommand
         - self.units(TYPE).not_ready.amount selects all units of that type, filters incomplete units, and then counts the amount
         - self.already_pending(TYPE) counts how many units are queued

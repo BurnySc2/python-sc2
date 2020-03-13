@@ -1602,6 +1602,9 @@ class BotAI(DistanceCalculation):
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
 
+        worker_types: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
+
+        index: int = 0
         for unit in self.state.observation_raw.units:
             if unit.is_blip:
                 self.blips.add(Blip(unit))
@@ -1611,7 +1614,8 @@ class BotAI(DistanceCalculation):
                 if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue
-                unit_obj = Unit(unit, self)
+                unit_obj = Unit(unit, self, distance_calculation_index=index)
+                index += 1
                 self.all_units.append(unit_obj)
                 alliance = unit.alliance
                 # Alliance.Neutral.value = 3
@@ -1656,8 +1660,7 @@ class BotAI(DistanceCalculation):
                             self.reactor_tags.add(unit_obj.tag)
                     else:
                         self.units.append(unit_obj)
-                        # TODO add burrowed drones
-                        if unit_id == race_worker[self.race]:
+                        if unit_id in worker_types:
                             self.workers.append(unit_obj)
                         elif unit_id == UnitTypeId.LARVA:
                             self.larva.append(unit_obj)
@@ -1670,13 +1673,8 @@ class BotAI(DistanceCalculation):
 
         # Force distance calculation and caching on all units using scipy pdist or cdist
         if self.distance_calculation_method == 1:
-            _ = self._unit_index_dict
             _ = self._pdist
-        elif self.distance_calculation_method == 2:
-            _ = self._unit_index_dict
-            _ = self._cdist
-        elif self.distance_calculation_method == 3:
-            _ = self._unit_index_dict
+        elif self.distance_calculation_method in {2, 3}:
             _ = self._cdist
 
     async def _after_step(self) -> int:
