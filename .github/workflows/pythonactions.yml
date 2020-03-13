@@ -175,6 +175,7 @@ jobs:
 
       - name: Build docs from scratch
         run: |
+          mkdir docs
           cd docs_generate
           pipenv run sphinx-build -a -E -b html . ../docs
           cd ..
