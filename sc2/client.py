@@ -185,9 +185,14 @@ class Client(Protocol):
             return None
         elif not isinstance(actions, list):
             actions = [actions]
-        res = await self._execute(
-            action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
-        )
+
+        # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
+        try:
+            res = await self._execute(
+                action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
+            )
+        except ProtocolError as e:
+            return []
         if return_successes:
             return [ActionResult(r) for r in res.action.result]
         else:

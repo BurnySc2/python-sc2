@@ -123,7 +123,11 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
     while True:
         if iteration != 0:
             if realtime:
-                state = await client.observation(gs.game_loop + client.game_step)
+                # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
+                try:
+                    state = await client.observation(gs.game_loop + client.game_step)
+                except ProtocolError:
+                    pass
             else:
                 state = await client.observation()
             # check game result every time we get the observation

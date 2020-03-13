@@ -6,6 +6,7 @@ import sc2
 from sc2.position import Point2, Point3
 from sc2 import Race, Difficulty
 from sc2.constants import *
+from sc2.data import Result
 from sc2.player import Bot, Computer
 from sc2.unit import Unit
 from sc2.units import Units
@@ -15,6 +16,9 @@ import asyncio
 """
 This bot tests if on 'realtime=True' any nexus has more than 1 probe in the queue.
 """
+
+on_end_was_called: bool = False
+
 
 class RealTimeTestBot(sc2.BotAI):
     async def on_before_start(self):
@@ -75,15 +79,19 @@ class RealTimeTestBot(sc2.BotAI):
         if self.enemy_units:
             await self.client.debug_kill_unit(self.enemy_units)
 
-        if self.supply_used >= 199 or self.time > 7 * 60:
+        if self.supply_used >= 12 or self.time > 7 * 60:
             print(f"Test successful, bot reached 199 supply without queueing two probes at once")
             await self.client.leave()
-
 
     async def on_building_construction_complete(self, unit: Unit):
         # Set worker rally point
         if unit.is_structure:
             unit(AbilityId.RALLY_WORKERS, self.mineral_field.closest_to(unit))
+
+    async def on_end(self, game_result: Result):
+        global on_end_was_called
+        on_end_was_called = True
+        print(f"on_end() was called with result: {game_result}")
 
 
 def main():
@@ -93,6 +101,7 @@ def main():
         realtime=True,
         disable_fog=True,
     )
+    assert on_end_was_called, f"{on_end_was_called}"
 
 
 if __name__ == "__main__":
