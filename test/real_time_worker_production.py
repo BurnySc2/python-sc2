@@ -31,25 +31,26 @@ class RealTimeTestBot(sc2.BotAI):
 
         await self._do_actions(self.actions)
         self.actions.clear()
-        await asyncio.sleep(3)
+        await asyncio.sleep(1)
 
     async def on_start(self):
         """ This function is run after the expansion locations and ramps are calculated. """
-        self.client.game_step = 2
+        self.client.game_step = 1
 
     async def on_step(self, iteration):
-        assert (
-            self.supply_left <= 15
-        ), f"Bot created 2 nexus in one step. Supply: {self.supply_used} / {self.supply_cap}"
+        # assert (
+        #     self.supply_left <= 15
+        # ), f"Bot created 2 nexus in one step. Supply: {self.supply_used} / {self.supply_cap}"
 
         # Simulate that the bot takes too long in one iteration, sometimes
-        if iteration % 10 == 0:
-            await asyncio.sleep(1)
+        if iteration % 20 != 0:
+            await asyncio.sleep(0.1)
 
         # Queue probes
         for nexus in self.townhalls:
             nexus_orders_amount = len(nexus.orders)
             assert nexus_orders_amount <= 1, f"{nexus_orders_amount}"
+            # print(f"{self.time_formatted} {self.state.game_loop} {nexus} orders: {nexus_orders_amount}")
             if nexus.is_idle and self.can_afford(UnitTypeId.PROBE):
                 nexus.train(UnitTypeId.PROBE)
                 print(
@@ -68,6 +69,9 @@ class RealTimeTestBot(sc2.BotAI):
                 if self.enemy_structures.closer_than(10, expansion_location):
                     continue
                 await self.client.debug_create_unit([[UnitTypeId.NEXUS, 1, expansion_location, 1]])
+                print(
+                    f"{self.time_formatted} {self.state.game_loop} Spawning a nexus {self.supply_used} / {self.supply_cap}"
+                )
                 made_nexus = True
                 break
 
