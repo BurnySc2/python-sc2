@@ -1,5 +1,4 @@
 import json
-import os
 import platform
 import subprocess
 import importlib
@@ -7,14 +6,17 @@ import sys
 from pathlib import Path
 
 from loguru import logger
-
-from .ids.id_version import ID_VERSION_STRING
 from .game_data import AbilityData, UnitTypeData, UpgradeData, GameData
+
+try:
+    from .ids.id_version import ID_VERSION_STRING
+except ImportError:
+    ID_VERSION_STRING = "4.11.4.78285"
 
 
 class IdGenerator:
-    def __init__(self, game_data = None, game_version: str = None, verbose: bool = False):
-        self.game_data = game_data
+    def __init__(self, game_data: GameData = None, game_version: str = None, verbose: bool = False):
+        self.game_data: GameData = game_data
         self.game_version = game_version
         self.verbose = verbose
 
@@ -173,7 +175,9 @@ class IdGenerator:
     def update_ids_from_stableid_json(self):
         if self.game_version is None or ID_VERSION_STRING is None or ID_VERSION_STRING != self.game_version:
             if self.verbose and self.game_version is not None and ID_VERSION_STRING is not None:
-                logger.info(f"Game version is different (Old: {self.game_version}, new: {ID_VERSION_STRING}. Updating ids to match game version")
+                logger.info(
+                    f"Game version is different (Old: {self.game_version}, new: {ID_VERSION_STRING}. Updating ids to match game version"
+                )
             with open(self.DATA_JSON[self.PF], encoding="utf-8") as data_file:
                 data = json.loads(data_file.read())
                 self.generate_python_code(self.parse_data(data))
@@ -182,7 +186,6 @@ class IdGenerator:
             if self.game_data is not None:
                 self.reimport_ids()
                 self.update_game_data()
-
 
     def reimport_ids(self):
 
@@ -216,9 +219,7 @@ class IdGenerator:
 
         ids = set(a.value for a in AbilityId if a.value != 0)
         self.game_data.abilities = {
-            a.ability_id: AbilityData(self.game_data, a)
-            for a in self.game_data._proto.abilities
-            if a.ability_id in ids
+            a.ability_id: AbilityData(self.game_data, a) for a in self.game_data._proto.abilities if a.ability_id in ids
         }
         # self.game_data.abilities = {
         #     a.ability_id: AbilityData(self.game_data, a) for a in self.game_data._proto.abilities

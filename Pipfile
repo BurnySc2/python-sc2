@@ -27,6 +27,7 @@ pytest-cov = "*"
 coverage = "*"
 codecov = "*"
 matplotlib = "*"
+loguru = "*"
 
 [requires]
 python_version = "3.7"
