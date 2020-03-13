@@ -1169,13 +1169,13 @@ class Unit:
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs
 
-    def train(self, unit: UnitTypeId, queue: bool = False, can_afford_check: bool = False):
+    def train(self, unit: UnitTypeId, queue: bool = False, can_afford_check: bool = False) -> bool:
         """ Orders unit to train another 'unit'.
         Usage: COMMANDCENTER.train(SCV)
 
         :param unit:
         :param queue: """
-        self(
+        return self(
             self._bot_object._game_data.units[unit.value].creation_ability.id,
             queue=queue,
             subtract_cost=True,
@@ -1188,7 +1188,7 @@ class Unit:
         position: Union[Point2, Point3] = None,
         queue: bool = False,
         can_afford_check: bool = False,
-    ):
+    ) -> bool:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
@@ -1212,7 +1212,7 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def build_gas(self, target_geysir: Unit, queue: bool = False, can_afford_check: bool = False):
+    def build_gas(self, target_geysir: Unit, queue: bool = False, can_afford_check: bool = False) -> bool:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
@@ -1234,28 +1234,28 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def research(self, upgrade: UpgradeId, queue: bool = False, can_afford_check: bool = False):
+    def research(self, upgrade: UpgradeId, queue: bool = False, can_afford_check: bool = False) -> bool:
         """ Orders unit to research 'upgrade'.
         Requires UpgradeId to be passed instead of AbilityId.
 
         :param upgrade:
         :param queue:
         """
-        self(
+        return self(
             self._bot_object._game_data.upgrades[upgrade.value].research_ability.exact_id,
             queue=queue,
             subtract_cost=True,
             can_afford_check=can_afford_check,
         )
 
-    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3], can_afford_check: bool = False):
+    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3], can_afford_check: bool = False) -> bool:
         """ Orders Warpgate to warp in 'unit' at 'position'.
 
         :param unit:
         :param queue:
         """
         normal_creation_ability = self._bot_object._game_data.units[unit.value].creation_ability.id
-        self(
+        return self(
             warpgate_abilities[normal_creation_ability],
             target=position,
             subtract_cost=True,
@@ -1263,70 +1263,70 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False):
+    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> bool:
         """ Orders unit to attack. Target can be a Unit or Point2.
         Attacking a position will make the unit move there and attack everything on its way.
 
         :param target:
         :param queue:
         """
-        self(AbilityId.ATTACK, target=target, queue=queue)
+        return self(AbilityId.ATTACK, target=target, queue=queue)
 
-    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False):
+    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> bool:
         """ Orders the smart command. Equivalent to a right-click order.
 
         :param target:
         :param queue:
         """
-        self(AbilityId.SMART, target=target, queue=queue)
+        return self(AbilityId.SMART, target=target, queue=queue)
 
-    def gather(self, target: Unit, queue: bool = False):
+    def gather(self, target: Unit, queue: bool = False) -> bool:
         """ Orders a unit to gather minerals or gas.
         'Target' must be a mineral patch or a gas extraction building.
 
         :param target:
         :param queue:
         """
-        self(AbilityId.HARVEST_GATHER, target=target, queue=queue)
+        return self(AbilityId.HARVEST_GATHER, target=target, queue=queue)
 
-    def return_resource(self, target: Unit = None, queue: bool = False):
+    def return_resource(self, target: Unit = None, queue: bool = False) -> bool:
         """ Orders the unit to return resource. Does not need a 'target'.
 
         :param target:
         :param queue:
         """
-        self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
+        return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False):
+    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> bool:
         """ Orders the unit to move to 'position'.
         Target can be a Unit (to follow that unit) or Point2.
 
         :param position:
         :param queue:
         """
-        self(AbilityId.MOVE_MOVE, target=position, queue=queue)
+        return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
 
-    def scan_move(self, *args, **kwargs):
+    def scan_move(self, *args, **kwargs) -> bool:
         """ Deprecated: This ability redirects to 'AbilityId.ATTACK' """
-        self(AbilityId.SCAN_MOVE, *args, **kwargs)
+        return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
-    def hold_position(self, queue: bool = False):
+    def hold_position(self, queue: bool = False) -> bool:
         """ Orders a unit to stop moving. It will not move until it gets new orders.
 
         :param queue:
         """
-        self(AbilityId.HOLDPOSITION, queue=queue)
+        return self(AbilityId.HOLDPOSITION, queue=queue)
 
-    def stop(self, queue: bool = False):
+    def stop(self, queue: bool = False) -> bool:
         """ Orders a unit to stop, but can start to move on its own
         if it is attacked, enemy unit is in range or other friendly
         units need the space.
 
         :param queue:
         """
-        self(AbilityId.STOP, queue=queue)
+        return self(AbilityId.STOP, queue=queue)
 
-    def patrol(self, position: Union[Point2, Point3], queue: bool = False):
+    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> bool:
         """ Orders a unit to patrol between position it has when the command starts and the target position.
         Can be queued up to seven patrol points. If the last point is the same as the starting
         point, the unit will patrol in a circle.
@@ -1334,15 +1334,15 @@ class Unit:
         :param position:
         :param queue:
         """
-        self(AbilityId.PATROL, target=position, queue=queue)
+        return self(AbilityId.PATROL, target=position, queue=queue)
 
-    def repair(self, repair_target: Unit, queue: bool = False):
+    def repair(self, repair_target: Unit, queue: bool = False) -> bool:
         """ Order an SCV or MULE to repair.
 
         :param repair_target:
         :param queue:
         """
-        self(AbilityId.EFFECT_REPAIR, target=repair_target, queue=queue)
+        return self(AbilityId.EFFECT_REPAIR, target=repair_target, queue=queue)
 
     def __hash__(self):
         return self.tag
@@ -1361,8 +1361,8 @@ class Unit:
         subtract_cost: bool = False,
         subtract_supply: bool = False,
         can_afford_check: bool = False,
-    ):
-        self._bot_object.do(
+    ) -> bool:
+        return self._bot_object.do(
             UnitCommand(ability, self, target=target, queue=queue),
             subtract_cost=subtract_cost,
             subtract_supply=subtract_supply,
