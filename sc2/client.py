@@ -42,6 +42,7 @@ class Client(Protocol):
         self._debug_spheres = []
 
         self._renderer = None
+        self.raw_affects_selection = False
 
     @property
     def in_game(self):
@@ -49,7 +50,12 @@ class Client(Protocol):
 
     async def join_game(self, name=None, race=None, observed_player_id=None, portconfig=None, rgb_render_config=None):
         ifopts = sc_pb.InterfaceOptions(
-            raw=True, score=True, show_cloaked=True, raw_affects_selection=False, raw_crop_to_playable_area=False
+            raw=True,
+            score=True,
+            show_cloaked=True,
+            show_burrowed_shadows=True,
+            raw_affects_selection=self.raw_affects_selection,
+            raw_crop_to_playable_area=False,
         )
 
         if rgb_render_config:
@@ -404,11 +410,8 @@ class Client(Protocol):
             obs_action=sc_pb.RequestObserverAction(
                 actions=[
                     sc_pb.ObserverAction(
-
                         camera_move=sc_pb.ActionObserverCameraMove(
-                            world_pos=common_pb.Point2D(
-                                x=position.x, y=position.y)
-
+                            world_pos=common_pb.Point2D(x=position.x, y=position.y)
                         )
                     )
                 ]

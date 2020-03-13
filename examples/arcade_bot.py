@@ -64,7 +64,7 @@ class MarineSplitChallenge(sc2.BotAI):
                             filtered_enemies_in_range = enemies_in_range.of_type(UnitTypeId.ZERGLING)
                         # attack lowest hp unit
                         lowest_hp_enemy_in_range = min(filtered_enemies_in_range, key=lambda u: u.health)
-                        actions.append(unit.attack(lowest_hp_enemy_in_range))
+                        self.do(unit.attack(lowest_hp_enemy_in_range))
 
                     # no enemy is in attack-range, so give attack command to closest instead
                     else:
@@ -79,7 +79,7 @@ class MarineSplitChallenge(sc2.BotAI):
                     stutter_step_positions = {p for p in stutter_step_positions if self.in_pathing_grid(p)}
 
                     # find position furthest away from enemies and closest to unit
-                    enemies_in_range = self.known_enemy_units.filter(lambda u: unit.target_in_range(u, -0.5))
+                    enemies_in_range = self.enemy_units.filter(lambda u: unit.target_in_range(u, -0.5))
 
                     if stutter_step_positions and enemies_in_range:
                         retreat_position = max(

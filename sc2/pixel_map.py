@@ -53,7 +53,9 @@ class PixelMap:
         """ Example usage: self._game_info.pathing_grid[Point2((20, 20))] = 255 """
         assert 0 <= pos[0] < self.width, f"x is {pos[0]}, self.width is {self.width}"
         assert 0 <= pos[1] < self.height, f"y is {pos[1]}, self.height is {self.height}"
-        assert 0 <= value <= 254 * self._in_bits + 1, f"value is {value}, it should be between 0 and {254 * self._in_bits + 1}"
+        assert (
+            0 <= value <= 254 * self._in_bits + 1
+        ), f"value is {value}, it should be between 0 and {254 * self._in_bits + 1}"
         assert isinstance(value, int), f"value is of type {type(value)}, it should be an integer"
         self.data_numpy[pos[1], pos[0]] = value
 

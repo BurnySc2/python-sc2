@@ -22,12 +22,16 @@ A basic bot can be made by creating a new file `my_bot.py` and filling it with t
 
     import sc2
     from sc2.bot_ai import BotAI
+    from sc2.player import Bot, Computer
+
     class MyBot(BotAI):
         async def on_step(self, iteration: int):
-            print(f"This is my bot in iteration {iteration}!"
+            print(f"This is my bot in iteration {iteration}!")
 
     sc2.run_game(
-        sc2.maps.get(map), [Bot(Race.Zerg, MyBot()), Computer(Race.Zerg, Difficulty.Hard)], realtime=False
+        sc2.maps.get("AcropolisLE"),
+        [Bot(sc2.Race.Zerg, MyBot()), Computer(sc2.Race.Zerg, sc2.Difficulty.Hard)],
+        realtime=False,
     )
 
 You can now run the file using command ``python my_bot.py`` or double clicking the file.
@@ -49,7 +53,6 @@ Information about your bot::
     self.supply_left: int # 2 for zerg, 3 for T and P at game start
 
     # Units
-    self.larva_count: int # 3 at game start (only zerg)
     self.warp_gate_count: Units # Your warp gate count (only protoss)
     self.idle_worker_count: int # Workers that are doing nothing
     self.army_count: int # Amount of army units
@@ -230,16 +233,4 @@ The same can be achieved with the convenience function ``self.build`` which auto
         map_center = self.game_info.map_center
         position_towards_map_center = self.start_location.towards(map_center, distance=5)
         await self.build(UnitTypeId.SPAWNINGPOOL, near=position_towards_map_center, placement_step=1)
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -352,8 +352,8 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
         iteration += 1
 
 
-async def _setup_host_game(server, map_settings, players, realtime, random_seed=None):
-    r = await server.create_game(map_settings, players, realtime, random_seed)
+async def _setup_host_game(server, map_settings, players, realtime, random_seed=None, disable_fog=None):
+    r = await server.create_game(map_settings, players, realtime, random_seed, disable_fog)
     if r.create_game.HasField("error"):
         err = f"Could not create game: {CreateGameError(r.create_game.error)}"
         if r.create_game.HasField("error_details"):
@@ -375,6 +375,7 @@ async def _host_game(
     rgb_render_config=None,
     random_seed=None,
     sc2_version=None,
+    disable_fog=None,
 ):
 
     assert players, "Can't create a game without players"
@@ -386,7 +387,10 @@ async def _host_game(
     ) as server:
         await server.ping()
 
-        client = await _setup_host_game(server, map_settings, players, realtime, random_seed)
+        client = await _setup_host_game(server, map_settings, players, realtime, random_seed, disable_fog)
+        # Bot can decide if it wants to launch with 'raw_affects_selection=True'
+        if not isinstance(players[0], Human) and getattr(players[0].ai, "raw_affects_selection", None) is not None:
+            client.raw_affects_selection = players[0].ai.raw_affects_selection
 
         try:
             result = await _play_game(
@@ -404,7 +408,7 @@ async def _host_game(
 
 
 async def _host_game_aiter(
-    map_settings, players, realtime, portconfig=None, save_replay_as=None, step_time_limit=None, game_time_limit=None
+    map_settings, players, realtime, portconfig=None, save_replay_as=None, step_time_limit=None, game_time_limit=None,
 ):
     assert players, "Can't create a game without players"
 
@@ -415,6 +419,8 @@ async def _host_game_aiter(
             await server.ping()
 
             client = await _setup_host_game(server, map_settings, players, realtime)
+            if not isinstance(players[0], Human) and getattr(players[0].ai, "raw_affects_selection", None) is not None:
+                client.raw_affects_selection = players[0].ai.raw_affects_selection
 
             try:
                 result = await _play_game(players[0], client, realtime, portconfig, step_time_limit, game_time_limit)
@@ -438,11 +444,16 @@ def _host_game_iter(*args, **kwargs):
         new_playerconfig = yield asyncio.get_event_loop().run_until_complete(game.asend(new_playerconfig))
 
 
-async def _join_game(players, realtime, portconfig, save_replay_as=None, step_time_limit=None, game_time_limit=None):
+async def _join_game(
+    players, realtime, portconfig, save_replay_as=None, step_time_limit=None, game_time_limit=None,
+):
     async with SC2Process(fullscreen=players[1].fullscreen) as server:
         await server.ping()
 
         client = Client(server._ws)
+        # Bot can decide if it wants to launch with 'raw_affects_selection=True'
+        if not isinstance(players[1], Human) and getattr(players[1].ai, "raw_affects_selection", None) is not None:
+            client.raw_affects_selection = players[1].ai.raw_affects_selection
 
         try:
             result = await _play_game(players[1], client, realtime, portconfig, step_time_limit, game_time_limit)
@@ -484,7 +495,7 @@ def get_replay_version(replay_path):
 
 def run_game(map_settings, players, **kwargs):
     if sum(isinstance(p, (Human, Bot)) for p in players) > 1:
-        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version"]
+        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version", "disable_fog"]
         join_kwargs = {k: v for k, v in kwargs.items() if k not in host_only_args}
 
         portconfig = Portconfig()

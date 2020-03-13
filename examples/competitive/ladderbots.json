@@ -1,0 +1,13 @@
+{
+    "Bots": {
+        "YOUR_BOTS_NAME_HERE": {
+            "Race": "Put Terran Zerg or Protoss here",
+            "Type": "Python",
+            "RootPath": "./",
+            "FileName": "run.py",
+            "Args": "-O",
+            "Debug": true,
+            "SurrenderPhrase": "(pineapple)"
+        }
+    }
+}

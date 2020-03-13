@@ -69,7 +69,7 @@ race_townhalls: Dict[Race, Set[UnitTypeId]] = {
         UnitTypeId.HATCHERY,
         UnitTypeId.LAIR,
         UnitTypeId.HIVE,
-    }
+    },
 }
 
 warpgate_abilities: Dict[AbilityId, AbilityId] = {

@@ -539,7 +539,9 @@ def test_unit():
     assert scv.sight_range
     assert townhall.sight_range
     assert scv.movement_speed
+    assert scv.real_speed == scv.movement_speed
     assert not townhall.movement_speed
+    assert townhall.real_speed == townhall.movement_speed
     assert not scv.is_mineral_field
     assert not townhall.is_mineral_field
     assert not scv.is_vespene_geyser
@@ -808,6 +810,30 @@ def test_units():
     assert not townhalls.vespene_geyser
     assert scvs.prefer_idle
     assert townhalls.prefer_idle
+
+
+def test_dicts():
+    # May be missing but that should not fail the tests
+    try:
+        from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+    except:
+        print(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
+
+    bot: BotAI = random_bot_object
+
+    unit_id: UnitTypeId
+    data: dict
+    for unit_id, data in RESEARCH_INFO.items():
+        upgrade_id: UpgradeId
+        for upgrade_id, upgrade_data in data.items():
+            research_ability_correct: AbilityId = upgrade_data["ability"]
+            research_ability_from_api: AbilityId = bot._game_data.upgrades[upgrade_id.value].research_ability.exact_id
+            if upgrade_id.value in {116, 117, 118}:
+                # Research abilities for armory armor plating are mapped incorrectly in the API
+                continue
+            assert (
+                research_ability_correct == research_ability_from_api
+            ), f"Research abilities do not match: Correct one is {research_ability_correct} but API returned {research_ability_from_api}"
 
 
 @given(

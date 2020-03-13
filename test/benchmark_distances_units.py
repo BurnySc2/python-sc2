@@ -59,7 +59,7 @@ ms2 = distance_matrix_scipy_pdist_squared(points)
 
 
 def calc_row_idx(k, n):
-    return int(math.ceil((1 / 2.0) * (-(-8 * k + 4 * n ** 2 - 4 * n - 7) ** 0.5 + 2 * n - 1) - 1))
+    return int(math.ceil((1 / 2.0) * (-((-8 * k + 4 * n ** 2 - 4 * n - 7) ** 0.5) + 2 * n - 1) - 1))
 
 
 def elem_in_i_rows(i, n):

@@ -24,6 +24,8 @@ from sc2.ids.effect_id import EffectId
 
 from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 
+from typing import List, Set, Dict, Optional, Union
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,10 +39,9 @@ class TestBot(sc2.BotAI):
         # At least 4 tests because we test properties and variables
         self.action_tests = [
             getattr(self, f"test_botai_actions{index}")
-            for index in range(1000)
+            for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
-        self.tests_target = 4
         self.tests_done_by_name = set()
 
         # Keep track of the action index and when the last action was started
@@ -96,6 +97,7 @@ class TestBot(sc2.BotAI):
             enemy_units = enemy_units.closer_than(20, map_center)
         if enemy_units:
             await self.client.debug_kill_unit(enemy_units)
+        await self._advance_steps(2)
 
     # Test BotAI properties, starting conditions
     async def test_botai_properties(self):
@@ -234,9 +236,18 @@ class TestBot(sc2.BotAI):
                 await self.get_next_expansion()
                 await self.expand_now()
 
-            await self._advance_steps(100)
+            await self._advance_steps(10)
+
+            assert self.structures_without_construction_SCVs(UnitTypeId.COMMANDCENTER).amount == 0
+
             if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
+                assert self.townhalls(UnitTypeId.COMMANDCENTER).not_ready.amount == 1
+                assert self.already_pending(UnitTypeId.COMMANDCENTER) == 1
+                # The CC construction has started, 'worker_en_route_to_build' should show 0
+                assert self.worker_en_route_to_build(UnitTypeId.COMMANDCENTER) == 0
                 break
+            elif self.already_pending(UnitTypeId.COMMANDCENTER) == 1:
+                assert self.worker_en_route_to_build(UnitTypeId.COMMANDCENTER) == 1
 
         await self._advance_steps(2)
         logger.warning("Action test 05 successful.")
@@ -405,9 +416,7 @@ class TestBot(sc2.BotAI):
     # Trigger anti armor missile of raven against enemy unit and check if buff was received
     async def test_botai_actions11(self):
         await self.clean_up_center()
-        await self._advance_steps(10)
         await self.clean_up_center()
-        await self._advance_steps(10)
 
         map_center = self.game_info.map_center
 
@@ -434,221 +443,60 @@ class TestBot(sc2.BotAI):
                 # print(enemy.buffs, enemy.buff_duration_remain, enemy.buff_duration_max)
                 break
 
-        await self.clean_up_center()
-        await self._advance_steps(2)
-
-    # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
-    async def test_botai_actions12(self):
-        upgrade_levels = [0, 1]
-        attacker_units = [
-            #
-            # Protoss
-            #
-            UnitTypeId.PROBE,
-            # UnitTypeId.ZEALOT,
-            UnitTypeId.ADEPT,
-            UnitTypeId.STALKER,
-            UnitTypeId.HIGHTEMPLAR,
-            UnitTypeId.DARKTEMPLAR,
-            UnitTypeId.ARCHON,  # Doesnt work vs workers when attacklevel > 1
-            UnitTypeId.IMMORTAL,
-            UnitTypeId.COLOSSUS,
-            UnitTypeId.PHOENIX,
-            UnitTypeId.VOIDRAY,
-            # UnitTypeId.CARRIER, # TODO
-            UnitTypeId.MOTHERSHIP,
-            UnitTypeId.TEMPEST,
-            #
-            # Terran
-            #
-            UnitTypeId.SCV,
-            UnitTypeId.MARINE,
-            UnitTypeId.MARAUDER,
-            UnitTypeId.GHOST,
-            UnitTypeId.HELLION,
-            # UnitTypeId.HELLIONTANK, # Incorrect for light targets because hellbat does not seem to have another weapon vs light specifically in the API
-            # UnitTypeId.CYCLONE, # Seems to lock on as soon as it spawns
-            UnitTypeId.SIEGETANK,
-            UnitTypeId.THOR,
-            UnitTypeId.THORAP,
-            UnitTypeId.BANSHEE,
-            UnitTypeId.VIKINGFIGHTER,
-            UnitTypeId.VIKINGASSAULT,
-            # UnitTypeId.BATTLECRUISER, # TODO
-            #
-            # Zerg
-            #
-            UnitTypeId.DRONE,
-            UnitTypeId.ZERGLING,
-            # UnitTypeId.BANELING, # TODO
-            UnitTypeId.QUEEN,
-            # UnitTypeId.ROACH, # Has bugs that I don't know how to fix
-            UnitTypeId.RAVAGER,
-            # UnitTypeId.HYDRALISK, # TODO
-            # UnitTypeId.LURKERMPBURROWED, # Somehow fails the test
-            # UnitTypeId.MUTALISK, # Mutalisk is supposed to deal 9-3-1 damage, but it seems it deals 12 damage if there is no nearby 2nd target
-            UnitTypeId.CORRUPTOR,
-            # UnitTypeId.BROODLORD, # Was unreliable because the broodlings would also attack
-            UnitTypeId.ULTRALISK,
-            # Buildings
-            UnitTypeId.MISSILETURRET,
-            UnitTypeId.SPINECRAWLER,
-            UnitTypeId.SPORECRAWLER,
-            UnitTypeId.PLANETARYFORTRESS,
-        ]
-        defender_units = [
-            # Ideally one of each type: ground and air unit with each armor tage
-            # Ground, no tag
-            UnitTypeId.RAVAGER,
-            # Ground, light
-            UnitTypeId.MULE,
-            # Ground, armored
-            UnitTypeId.MARAUDER,
-            # Ground, biological
-            UnitTypeId.ROACH,
-            # Ground, psionic
-            UnitTypeId.HIGHTEMPLAR,
-            # Ground, mechanical
-            UnitTypeId.STALKER,
-            # Ground, massive
-            UnitTypeId.ULTRALISK,
-            # Ground, structure
-            # UnitTypeId.PYLON, # Pylon seems to regenerate 1 shield for no reason
-            UnitTypeId.SUPPLYDEPOT,
-            # Air, light
-            UnitTypeId.PHOENIX,
-            # Air, armored
-            UnitTypeId.VOIDRAY,
-            # Air, biological
-            UnitTypeId.CORRUPTOR,
-            # Air, psionic
-            UnitTypeId.VIPER,
-            # Air, mechanical
-            UnitTypeId.MEDIVAC,
-            # Air, massive
-            UnitTypeId.BATTLECRUISER,
-            # Air, structure
-            UnitTypeId.BARRACKSFLYING,
-            # Ground and air
-            UnitTypeId.COLOSSUS,
-        ]
-        await self._advance_steps(20)
-        map_center = self.game_info.map_center
-
-        # Show whole map
-        await self.client.debug_show_map()
-
-        def get_attacker_and_defender():
-            my_units = self.units | self.structures
-            enemy_units = self.enemy_units | self.enemy_structures
-            if not my_units or not enemy_units:
-                # print("my units:", my_units)
-                # print("enemy units:",enemy_units)
-                return None, None
-            attacker: Unit = my_units.closest_to(map_center)
-            defender: Unit = enemy_units.closest_to(map_center)
-            return attacker, defender
-
-        await self.clean_up_center()
-        await self._advance_steps(2)
-
-        attacker: Unit
-        defender: Unit
-        for upgrade_level in upgrade_levels:
-            if upgrade_level != 0:
-                await self.client.debug_upgrade()
-                # await self._advance_steps(5)
-            for attacker_type in attacker_units:
-                for defender_type in defender_units:
-                    # DT, Thor, Tempest one-shots workers, so skip test
-                    if attacker_type in {
-                        UnitTypeId.DARKTEMPLAR,
-                        UnitTypeId.TEMPEST,
-                        UnitTypeId.THOR,
-                        UnitTypeId.THORAP,
-                        UnitTypeId.LIBERATORAG,
-                        UnitTypeId.PLANETARYFORTRESS,
-                        UnitTypeId.ARCHON,
-                    } and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}:
-                        continue
-
-                    # Spawn units
-                    await self.client.debug_create_unit(
-                        [[attacker_type, 1, map_center, 1], [defender_type, 1, map_center, 2]]
-                    )
-                    await self._advance_steps(1)
-
-                    # Wait for units to spawn
-                    attacker, defender = get_attacker_and_defender()
-                    while (
-                        attacker is None
-                        or defender is None
-                        or attacker.type_id != attacker_type
-                        or defender.type_id != defender_type
-                    ):
-                        await self._advance_steps(1)
-                        attacker, defender = get_attacker_and_defender()
-                        # TODO check if shield calculation is correct by setting shield of enemy unit
-                    # print(f"Attacker: {attacker}, defender: {defender}")
-
-                    # Units have spawned, calculate expected damage
-                    expected_damage: float = attacker.calculate_damage_vs_target(defender)[0]
-                    # If expected damage is zero, it means that the attacker cannot attack the defender: skip test
-                    if expected_damage == 0:
-                        await self.clean_up_center()
-                        continue
-                    # Thor antiground seems buggy sometimes and not reliable in tests, skip it
-                    if attacker_type in {UnitTypeId.THOR, UnitTypeId.THORAP} and not defender.is_flying:
-                        await self.clean_up_center()
-                        continue
-
-                    real_damage = 0
-                    # Limit the while loop
-                    max_steps = 100
-                    while (
-                        attacker.weapon_cooldown == 0 or attacker.weapon_cooldown > 3
-                    ) and real_damage < expected_damage:
-                        if attacker_type in {UnitTypeId.PROBE, UnitTypeId.SCV, UnitTypeId.DRONE}:
-                            self.do(attacker.attack(defender))
-                        await self._advance_steps(1)
-                        # Unsure why I have to recalculate this here again but it prevents a bug
-                        attacker, defender = get_attacker_and_defender()
-                        expected_damage: float = max(expected_damage, attacker.calculate_damage_vs_target(defender)[0])
-                        real_damage = math.ceil(
-                            defender.health_max + defender.shield_max - defender.health - defender.shield
-                        )
-                        # print(
-                        #     f"Attacker type: {attacker_type}, defender health: {defender.health} / {defender.health_max}, defender shield: {defender.shield} / {defender.shield_max}, expected damage: {expected_damage}, real damage so far: {real_damage}, attacker weapon cooldown: {attacker.weapon_cooldown}"
-                        # )
-                        max_steps -= 1
-                        assert (
-                            max_steps > 0
-                        ), f"Step limit reached. Test timed out for attacker {attacker_type} and defender {defender_type}"
-                    assert (
-                        expected_damage == real_damage
-                    ), f"Expected damage does not match real damage: Unit type {attacker_type} (attack upgrade: {attacker.attack_upgrade_level}) deals {real_damage} damage against {defender_type} (armor upgrade: {defender.armor_upgrade_level} and shield upgrade: {defender.shield_upgrade_level}) but calculated damage was {expected_damage}, attacker weapons: \n{attacker._weapons}"
-
-                    # Cleanup
-                    await self.clean_up_center()
-                    await self._advance_steps(1)
-
-        # Hide map again
-        await self.client.debug_show_map()
-        await self._advance_steps(2)
         logger.warning("Action test 11 successful.")
+        await self.clean_up_center()
+
+    # Test if structures_without_construction_SCVs works after killing the scv
+    async def test_botai_actions12(self):
+        map_center: Point2 = self._game_info.map_center
+
+        # Wait till can afford depot
+        while not self.can_afford(UnitTypeId.SUPPLYDEPOT):
+            await self.client.debug_all_resources()
+            await self._advance_steps(2)
+
+        while 1:
+            # Once depot is under construction: debug kill scv -> advance simulation: should now match the test case
+            if self.structures(UnitTypeId.SUPPLYDEPOT).not_ready.amount == 1:
+                construction_scvs: Units = self.workers.filter(lambda worker: worker.is_constructing_scv)
+                if construction_scvs:
+                    await self.client.debug_kill_unit(construction_scvs)
+                    await self._advance_steps(8)
+                    await self._advance_steps(8)
+
+                    # Test case
+                    assert not self.workers.filter(lambda worker: worker.is_constructing_scv)
+                    assert self.structures_without_construction_SCVs.amount >= 1
+                    break
+
+            if not self.already_pending(UnitTypeId.SUPPLYDEPOT):
+                # Pick scv
+                scv: Unit = self.workers.random
+                # Pick location to build depot on
+                placement_position: Point2 = await self.find_placement(
+                    UnitTypeId.SUPPLYDEPOT, near=self.townhalls.random.position
+                )
+                if placement_position:
+                    self.do(scv.build(UnitTypeId.SUPPLYDEPOT, placement_position))
+            await self._advance_steps(2)
+
+        logger.warning("Action test 12 successful.")
+        await self.clean_up_center()
 
     # TODO:
     # self.can_cast function
     # Test client.py debug functions
     # Test if events work (upgrade complete, unit complete, building complete, building started)
     # Test if functions with various combinations works (e.g. already_pending)
-    # Test self.train function on: larva, hatchery + lair (queens), 2 barracks (2 marines), 2 nexus (probes)
-    # Test self.research function on: ebay, hatchery, forge, evo chamber
+    # Test self.train function on: larva, hatchery + lair (queens), 2 barracks (2 marines), 2 nexus (probes) (best: every building)
+    # Test unit range and (base attack damage) and other unit stats (e.g. acceleration, deceleration, movement speed (on, off creep), turn speed
+    # Test if dicts are correct for unit_trained_from.py -> train all units once
 
 
 class EmptyBot(sc2.BotAI):
     async def on_start(self):
-        await self.client.debug_kill_unit(self.units)
+        if self.units:
+            await self.client.debug_kill_unit(self.units)
 
     async def on_step(self, iteration: int):
         map_center = self.game_info.map_center

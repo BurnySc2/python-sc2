@@ -88,8 +88,14 @@ class AbilityData:
 
     @property
     def id(self) -> AbilityId:
+        """ Returns the generic remap ID. See sc2/dicts/generic_redirect_abilities.py """
         if self._proto.remaps_to_ability_id:
             return AbilityId(self._proto.remaps_to_ability_id)
+        return AbilityId(self._proto.ability_id)
+
+    @property
+    def exact_id(self) -> AbilityId:
+        """ Returns the exact ID of the ability """
         return AbilityId(self._proto.ability_id)
 
     @property

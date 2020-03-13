@@ -10,6 +10,7 @@ from sc2.data import race_townhalls
 
 import enum
 
+
 class BroodlordBot(sc2.BotAI):
     def select_target(self):
         if self.enemy_structures:
@@ -108,11 +109,15 @@ class BroodlordBot(sc2.BotAI):
             if larvae.exists and self.can_afford(ZERGLING):
                 self.do(larvae.random.train(ZERGLING))
 
-def main():
-    sc2.run_game(sc2.maps.get("(2)CatalystLE"), [
-        Bot(Race.Zerg, BroodlordBot()),
-        Computer(Race.Terran, Difficulty.Medium)
-    ], realtime=False, save_replay_as="ZvT.SC2Replay")
 
-if __name__ == '__main__':
+def main():
+    sc2.run_game(
+        sc2.maps.get("AcropolisLE"),
+        [Bot(Race.Zerg, BroodlordBot()), Computer(Race.Terran, Difficulty.Medium)],
+        realtime=False,
+        save_replay_as="ZvT.SC2Replay",
+    )
+
+
+if __name__ == "__main__":
     main()

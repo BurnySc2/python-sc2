@@ -14,20 +14,20 @@ scipy = "*"
 mpyq = "*"
 
 [dev-packages]
+atomicwrites = "*"
 pytest = "*"
 mypy = "*"
 pillow = "*"
 pytest-asyncio = "*"
 hypothesis = "*"
 pytest-benchmark = "*"
-numba = "*"
 sphinx = "*"
 sphinx-autodoc-typehints = "*"
 pytest-cov = "*"
 coverage = "*"
 codecov = "*"
 matplotlib = "*"
-MonkeyType = "*"
+loguru = "*"
 
 [requires]
 python_version = "3.7"

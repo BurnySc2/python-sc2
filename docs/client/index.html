@@ -241,6 +241,12 @@ await self._client.dump_data()</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.client.Client.obs_move_camera">
+<em class="property">async </em><code class="sig-name descname">obs_move_camera</code><span class="sig-paren">(</span><em class="sig-param">position</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.obs_move_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves observer camera to the target position</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.client.Client.query_available_abilities">
 <em class="property">async </em><code class="sig-name descname">query_available_abilities</code><span class="sig-paren">(</span><em class="sig-param">units</em>, <em class="sig-param">ignore_resource_requirements=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.query_available_abilities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Query abilities of multiple units</p>
@@ -308,7 +314,7 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
 
 <dl class="method">
 <dt id="sc2.client.Client.step">
-<em class="property">async </em><code class="sig-name descname">step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.step" title="Permalink to this definition">¶</a></dt>
+<em class="property">async </em><code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">step_size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>EXPERIMENTAL: Change self._client.game_step during the step function to increase or decrease steps per second</p>
 </dd></dl>
 
@@ -380,7 +386,7 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
     </div>
   </body>
 </html>

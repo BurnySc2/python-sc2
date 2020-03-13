@@ -1,10 +1,10 @@
 import sys, subprocess, time
 
 """
-This script is made as a wrapper for sc2 bots to set a timeout to the bots (in case they cant find the last enemy structure or the game is ending in a draw)
+This script is made as a wrapper for sc2 bots to set a timeout to the bots (in case they can't find the last enemy structure or the game is ending in a draw)
 Ideally this script should be done with a bot that terminates on its own after certain things have been achieved, e.g. testing if the bot can expand at all, and then terminates after it has successfully expanded.
 
-Usage:
+Usage: see .bat files in /bat_files/ folder
 cd into python-sc2/ directory
 docker build -t test_image -f test/Dockerfile .
 docker run test_image -c "python test/travis_test_script.py test/autotest_bot.py"
@@ -13,7 +13,7 @@ Or if you want to run from windows:
 pipenv run python test/travis_test_script.py test/autotest_bot.py
 """
 
-retries = 10
+retries = 3
 # My maxout bot (reaching 200 supply in sc2) took 110 - 140 real seconds for 7 minutes in game time
 # How long the script should run before it will be killed:
 timeout_time = 5 * 60  # 5 minutes real time

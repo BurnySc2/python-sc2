@@ -1,5 +1,6 @@
 from sc2.main import SlidingTimeWindow
 
+
 def test_sliding_time_window():
     stw = SlidingTimeWindow(5)
 
