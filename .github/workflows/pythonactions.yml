@@ -171,11 +171,10 @@ jobs:
           echo ${{github.ref}}
           python -m pip install pipenv
           pipenv install --dev --python ${{ matrix.python-version }}
-          rm -r docs
 
       - name: Build docs from scratch
         run: |
-          mkdir docs
+          mkdir -p docs
           cd docs_generate
           pipenv run sphinx-build -a -E -b html . ../docs
           cd ..
