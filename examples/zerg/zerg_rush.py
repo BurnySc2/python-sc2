@@ -24,7 +24,7 @@ class ZergRushBot(sc2.BotAI):
         # If townhall no longer exists: attack move with all units to enemy start location
         if not self.townhalls:
             for unit in self.units.exclude_type({UnitTypeId.EGG, UnitTypeId.LARVA}):
-                self.do(unit.attack(self.enemy_start_locations[0]))
+                unit.attack(self.enemy_start_locations[0])
             return
 
         hatch: Unit = self.townhalls[0]
@@ -34,12 +34,12 @@ class ZergRushBot(sc2.BotAI):
 
         # Give all zerglings an attack command
         for zl in self.units(UnitTypeId.ZERGLING):
-            self.do(zl.attack(target))
+            zl.attack(target)
 
         # Inject hatchery if queen has more than 25 energy
         for queen in self.units(UnitTypeId.QUEEN):
             if queen.energy >= 25 and not hatch.has_buff(BuffId.QUEENSPAWNLARVATIMER):
-                self.do(queen(AbilityId.EFFECT_INJECTLARVA, hatch))
+                queen(AbilityId.EFFECT_INJECTLARVA, hatch)
 
         # Pull workers out of gas if we have almost enough gas mined, this will stop mining when we reached 100 gas mined
         if self.vespene >= 88 or self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) > 0:
@@ -49,7 +49,7 @@ class ZergRushBot(sc2.BotAI):
                 minerals: Units = self.mineral_field.closer_than(10, hatch)
                 if minerals:
                     mineral = minerals.closest_to(drone)
-                    self.do(drone.gather(mineral, queue=True))
+                    drone.gather(mineral, queue=True)
 
         # If we have 100 vespene, this will try to research zergling speed once the spawning pool is at 100% completion
         if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(
@@ -71,14 +71,14 @@ class ZergRushBot(sc2.BotAI):
         ):
             extractor: Unit = self.gas_buildings.first
             if extractor.surplus_harvesters < 0:
-                self.do(self.workers.random.gather(extractor))
+                self.workers.random.gather(extractor)
 
         # If we have lost of minerals, make a macro hatchery
         if self.minerals > 500:
             for d in range(4, 15):
                 pos = hatch.position.towards(self.game_info.map_center, d)
                 if await self.can_place(UnitTypeId.HATCHERY, pos):
-                    self.do(self.workers.random.build(UnitTypeId.HATCHERY, pos), subtract_cost=True)
+                    self.workers.random.build(UnitTypeId.HATCHERY, pos)
                     break
 
         # While we have less than 16 drones, make more drones
@@ -95,7 +95,7 @@ class ZergRushBot(sc2.BotAI):
         ):
             drone = self.workers.random
             target = self.vespene_geyser.closest_to(drone)
-            self.do(drone.build(UnitTypeId.EXTRACTOR, target))
+            drone.build(UnitTypeId.EXTRACTOR, target)
 
         # If we have no spawning pool, try to build spawning pool
         elif self.structures(UnitTypeId.SPAWNINGPOOL).amount + self.already_pending(UnitTypeId.SPAWNINGPOOL) == 0:
@@ -104,7 +104,7 @@ class ZergRushBot(sc2.BotAI):
                     pos = hatch.position.towards(self.game_info.map_center, d)
                     if await self.can_place(UnitTypeId.SPAWNINGPOOL, pos):
                         drone = self.workers.closest_to(pos)
-                        self.do(drone.build(UnitTypeId.SPAWNINGPOOL, pos))
+                        drone.build(UnitTypeId.SPAWNINGPOOL, pos)
 
         # If we have no queen, try to build a queen if we have a spawning pool compelted
         elif (

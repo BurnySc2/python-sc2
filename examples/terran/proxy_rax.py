@@ -21,7 +21,7 @@ class ProxyRaxBot(sc2.BotAI):
         if not ccs:
             target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
             for unit in self.workers | self.units(UnitTypeId.MARINE):
-                self.do(unit.attack(target))
+                unit.attack(target)
             return
         else:
             cc: Unit = ccs.first
@@ -31,11 +31,11 @@ class ProxyRaxBot(sc2.BotAI):
         if marines.amount > 15:
             target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
             for marine in marines:
-                self.do(marine.attack(target))
+                marine.attack(target)
 
         # Train more SCVs
         if self.can_afford(UnitTypeId.SCV) and self.supply_workers < 16 and cc.is_idle:
-            self.do(cc.train(UnitTypeId.SCV), subtract_supply=True, subtract_cost=True)
+            cc.train(UnitTypeId.SCV)
 
         # Build more depots
         elif (
@@ -55,11 +55,11 @@ class ProxyRaxBot(sc2.BotAI):
         # Train marines
         for rax in self.structures(UnitTypeId.BARRACKS).ready.idle:
             if self.can_afford(UnitTypeId.MARINE):
-                self.do(rax.train(UnitTypeId.MARINE), subtract_supply=True, subtract_cost=True)
+                rax.train(UnitTypeId.MARINE)
 
         # Send idle workers to gather minerals near command center
         for scv in self.workers.idle:
-            self.do(scv.gather(self.mineral_field.closest_to(cc)))
+            scv.gather(self.mineral_field.closest_to(cc))
 
 
 def main():

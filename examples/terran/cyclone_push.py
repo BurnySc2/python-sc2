@@ -27,7 +27,7 @@ class CyclonePush(sc2.BotAI):
         if not cc.exists:
             target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
             for unit in self.workers | self.units(CYCLONE):
-                self.do(unit.attack(target))
+                unit.attack(target)
             return
         else:
             cc = cc.first
@@ -37,13 +37,13 @@ class CyclonePush(sc2.BotAI):
             forces = self.units(CYCLONE)
             if (iteration // 50) % 10 == 0:
                 for unit in forces:
-                    self.do(unit.attack(target))
+                    unit.attack(target)
             else:
                 for unit in forces.idle:
-                    self.do(unit.attack(target))
+                    unit.attack(target)
 
         if self.can_afford(SCV) and self.workers.amount < 22 and cc.is_idle:
-            self.do(cc.train(SCV))
+            cc.train(SCV)
 
         elif self.supply_left < 3:
             if self.can_afford(SUPPLYDEPOT) and self.already_pending(SUPPLYDEPOT) < 2:
@@ -65,7 +65,7 @@ class CyclonePush(sc2.BotAI):
                         if worker is None:
                             break
 
-                        self.do(worker.build(REFINERY, vg))
+                        worker.build(REFINERY, vg)
                         break
 
             if self.structures(BARRACKS).ready.exists:
@@ -77,16 +77,16 @@ class CyclonePush(sc2.BotAI):
         for factory in self.structures(FACTORY).ready.idle:
             # Reactor allows us to build two at a time
             if self.can_afford(CYCLONE):
-                self.do(factory.train(CYCLONE))
+                factory.train(CYCLONE)
 
         for a in self.gas_buildings:
             if a.assigned_harvesters < a.ideal_harvesters:
                 w = self.workers.closer_than(20, a)
                 if w.exists:
-                    self.do(w.random.gather(a))
+                    w.random.gather(a)
 
         for scv in self.workers.idle:
-            self.do(scv.gather(self.mineral_field.closest_to(cc)))
+            scv.gather(self.mineral_field.closest_to(cc))
 
 
 def main():

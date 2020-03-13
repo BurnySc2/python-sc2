@@ -35,7 +35,7 @@ class BCRushBot(sc2.BotAI):
             target, target_is_enemy_unit = self.select_target()
             for unit in self.workers | self.units(UnitTypeId.BATTLECRUISER):
                 if not unit.is_attacking:
-                    self.do(unit.attack(target))
+                    unit.attack(target)
             return
         else:
             cc: Unit = ccs.random
@@ -48,14 +48,14 @@ class BCRushBot(sc2.BotAI):
             for bc in bcs:
                 # Order the BC to attack-move the target
                 if target_is_enemy_unit and (bc.is_idle or bc.is_moving):
-                    self.do(bc.attack(target))
+                    bc.attack(target)
                 # Order the BC to move to the target, and once the select_target returns an attack-target, change it to attack-move
                 elif bc.is_idle:
-                    self.do(bc.move(target))
+                    bc.move(target)
 
         # Build more SCVs until 22
         if self.can_afford(UnitTypeId.SCV) and self.supply_workers < 22 and cc.is_idle:
-            self.do(cc.train(UnitTypeId.SCV), subtract_cost=True, subtract_supply=True)
+            cc.train(UnitTypeId.SCV)
 
         # Build more BCs
         if self.structures(UnitTypeId.FUSIONCORE) and self.can_afford(UnitTypeId.BATTLECRUISER):
@@ -63,7 +63,7 @@ class BCRushBot(sc2.BotAI):
                 if sp.has_add_on:
                     if not self.can_afford(UnitTypeId.BATTLECRUISER):
                         break
-                    self.do(sp.train(UnitTypeId.BATTLECRUISER), subtract_supply=True, subtract_cost=True)
+                    sp.train(UnitTypeId.BATTLECRUISER)
 
         # Build more supply depots
         if self.supply_left < 6 and self.supply_used >= 14 and not self.already_pending(UnitTypeId.SUPPLYDEPOT):
@@ -88,7 +88,7 @@ class BCRushBot(sc2.BotAI):
                         if worker is None:
                             break
 
-                        self.do(worker.build(UnitTypeId.REFINERY, vg), subtract_cost=True)
+                        worker.build(UnitTypeId.REFINERY, vg)
                         break
 
             # Build factory if we dont have one
@@ -130,9 +130,9 @@ class BCRushBot(sc2.BotAI):
                     and self.in_pathing_grid(addon_point)
                     for addon_point in addon_points
                 ):
-                    self.do(sp.build(UnitTypeId.STARPORTTECHLAB), subtract_cost=True)
+                    sp.build(UnitTypeId.STARPORTTECHLAB)
                 else:
-                    self.do(sp(AbilityId.LIFT))
+                    sp(AbilityId.LIFT)
 
         def starport_land_positions(sp_position: Point2) -> List[Point2]:
             """ Return all points that need to be checked when trying to land at a location where there is enough space to build an addon. Returns 13 points. """
@@ -153,7 +153,7 @@ class BCRushBot(sc2.BotAI):
                     self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos) and self.in_pathing_grid(land_pos)
                     for land_pos in land_and_addon_points
                 ):
-                    self.do(sp(AbilityId.LAND, target_land_position))
+                    sp(AbilityId.LAND, target_land_position)
                     break
 
         # Show where it is flying to and show grid
@@ -173,11 +173,11 @@ class BCRushBot(sc2.BotAI):
             if a.assigned_harvesters < a.ideal_harvesters:
                 w = self.workers.closer_than(20, a)
                 if w:
-                    self.do(w.random.gather(a))
+                    w.random.gather(a)
 
         # Send workers back to mine if they are idle
         for scv in self.workers.idle:
-            self.do(scv.gather(self.mineral_field.closest_to(cc)))
+            scv.gather(self.mineral_field.closest_to(cc))
 
 
 def main():

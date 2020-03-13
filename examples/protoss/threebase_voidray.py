@@ -15,7 +15,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
         if not self.townhalls.ready:
             # Attack with all workers if we don't have any nexuses left, attack-move on enemy spawn (doesn't work on 4 player map) so that probes auto attack on the way
             for worker in self.workers:
-                self.do(worker.attack(self.enemy_start_locations[0]))
+                worker.attack(self.enemy_start_locations[0])
             return
         else:
             nexus = self.townhalls.ready.random
@@ -26,7 +26,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
             abilities = await self.get_available_abilities(nexuses)
             for loop_nexus, abilities_nexus in zip(nexuses, abilities):
                 if AbilityId.EFFECT_CHRONOBOOSTENERGYCOST in abilities_nexus:
-                    self.do(loop_nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus))
+                    loop_nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus)
                     break
 
         # If we have at least 5 void rays, attack closes enemy unit/building, or if none is visible: attack move towards enemy spawn
@@ -34,14 +34,14 @@ class ThreebaseVoidrayBot(sc2.BotAI):
             for vr in self.units(VOIDRAY):
                 # Activate charge ability if the void ray just attacked
                 if vr.weapon_cooldown > 0:
-                    self.do(vr(AbilityId.EFFECT_VOIDRAYPRISMATICALIGNMENT))
+                    vr(AbilityId.EFFECT_VOIDRAYPRISMATICALIGNMENT)
                 # Choose target and attack, filter out invisible targets
                 targets = (self.enemy_units | self.enemy_structures).filter(lambda unit: unit.can_be_attacked)
                 if targets:
                     target = targets.closest_to(vr)
-                    self.do(vr.attack(target))
+                    vr.attack(target)
                 else:
-                    self.do(vr.attack(self.enemy_start_locations[0]))
+                    vr.attack(self.enemy_start_locations[0])
 
         # Distribute workers in gas and across bases
         await self.distribute_workers()
@@ -62,7 +62,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
         # if nexus.assigned_harvesters < nexus.ideal_harvesters and nexus.is_idle:
         if self.supply_workers + self.already_pending(PROBE) < self.townhalls.amount * 22 and nexus.is_idle:
             if self.can_afford(PROBE):
-                self.do(nexus.train(PROBE), subtract_cost=True, subtract_supply=True)
+                nexus.train(PROBE)
 
         # If we have less than 3 nexuses and none pending yet, expand
         if self.townhalls.ready.amount + self.already_pending(NEXUS) < 3:
@@ -95,8 +95,8 @@ class ThreebaseVoidrayBot(sc2.BotAI):
                         break
 
                     if not self.gas_buildings or not self.gas_buildings.closer_than(1, vg):
-                        self.do(worker.build(ASSIMILATOR, vg), subtract_cost=True)
-                        self.do(worker.stop(queue=True))
+                        worker.build(ASSIMILATOR, vg)
+                        worker.stop(queue=True)
 
         # If we have less than 3  but at least 3 nexuses, build stargate
         if self.structures(PYLON).ready and self.structures(CYBERNETICSCORE).ready:
@@ -112,7 +112,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
         if self.townhalls.amount >= 3:
             for sg in self.structures(STARGATE).ready.idle:
                 if self.can_afford(VOIDRAY):
-                    self.do(sg.train(VOIDRAY), subtract_cost=True, subtract_supply=True)
+                    sg.train(VOIDRAY)
 
 
 def main():

@@ -331,7 +331,7 @@ class BotAI(DistanceCalculation):
                 if unit.type_id == UnitTypeId.MARINE:
                     if self.units_created[MARINE] % 10 == 0:
                         for marine in self.units(UnitTypeId.MARINE):
-                            self.do(marine.attack(self.enemy_start_locations[0]))
+                            marine.attack(self.enemy_start_locations[0])
         """
         return self._units_created
 
@@ -507,7 +507,7 @@ class BotAI(DistanceCalculation):
                 deficit_mining_places.remove(current_place)
                 # if current place is a gas extraction site, go there
                 if current_place.vespene_contents:
-                    self.do(worker.gather(current_place))
+                    worker.gather(current_place)
                 # if current place is a gas extraction site,
                 # go to the mineral field that is near and has the most minerals left
                 else:
@@ -517,12 +517,12 @@ class BotAI(DistanceCalculation):
                     # local_minerals can be empty if townhall is misplaced
                     target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents, default=None)
                     if target_mineral:
-                        self.do(worker.gather(target_mineral))
+                        worker.gather(target_mineral)
             # more workers to distribute than free mining spots
             # send to closest if worker is doing nothing
             elif worker.is_idle and all_minerals_near_base:
                 target_mineral = min(all_minerals_near_base, key=lambda mineral: mineral.distance_to(worker))
-                self.do(worker.gather(target_mineral))
+                worker.gather(target_mineral)
             else:
                 # there are no deficit mining places and worker is not idle
                 # so dont move him
@@ -575,7 +575,7 @@ class BotAI(DistanceCalculation):
             cc = self.townhalls.idle.random_or(None)
             # self.townhalls can be empty or there are no idle townhalls
             if cc and self.can_feed(UnitTypeId.SCV):
-                self.do(cc.train(UnitTypeId.SCV))
+                cc.train(UnitTypeId.SCV)
 
         :param unit_type: """
         required = self.calculate_supply_cost(unit_type)
@@ -666,7 +666,7 @@ class BotAI(DistanceCalculation):
             cc = self.townhalls.idle.random_or(None)
             # self.townhalls can be empty or there are no idle townhalls
             if cc and self.can_afford(UnitTypeId.SCV):
-                self.do(cc.train(UnitTypeId.SCV))
+                cc.train(UnitTypeId.SCV)
 
         Example::
 
@@ -754,7 +754,7 @@ class BotAI(DistanceCalculation):
             worker = self.select_build_worker(barracks_placement_position)
             # Can return None
             if worker:
-                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position))
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         :param pos:
         :param force: """
@@ -782,7 +782,7 @@ class BotAI(DistanceCalculation):
             worker = self.select_build_worker(barracks_placement_position)
             # Can return None
             if worker and (await self.can_place(UnitTypeId.BARRACKS, barracks_placement_position):
-                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position))
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         :param building:
         :param position: """
@@ -1101,9 +1101,9 @@ class BotAI(DistanceCalculation):
         if builder is None:
             return False
         if building in gas_buildings:
-            self.do(builder.build_gas(near))
+            builder.build_gas(near)
             return True
-        self.do(builder.build(building, p), subtract_cost=True)
+        builder.build(building, p)
         return True
 
     def train(
@@ -1206,12 +1206,10 @@ class BotAI(DistanceCalculation):
                 if structure.type_id == UnitTypeId.WARPGATE:
                     pylons = self.structures(UnitTypeId.PYLON)
                     location = pylons.random.position.random_on_distance(4)
-                    successfully_trained = self.do(
-                        structure.warp_in(unit_type, location), subtract_cost=True, subtract_supply=True
-                    )
+                    successfully_trained = structure.warp_in(unit_type, location)
                 else:
                     # Normal train a unit from larva or inside a structure
-                    successfully_trained = self.do(structure.train(unit_type), subtract_cost=True, subtract_supply=True)
+                    successfully_trained = structure.train(unit_type)
                     # Check if structure has reactor: queue same unit again
                     if (
                         # Only terran can have reactors
@@ -1229,9 +1227,7 @@ class BotAI(DistanceCalculation):
                     ):
                         trained_amount += 1
                         # With one command queue=False and one queue=True, you can queue 2 marines in a reactored barracks in one frame
-                        successfully_trained = self.do(
-                            structure.train(unit_type, queue=True), subtract_cost=True, subtract_supply=True
-                        )
+                        successfully_trained = structure.train(unit_type, queue=True)
 
                 if successfully_trained:
                     trained_amount += 1
@@ -1309,7 +1305,7 @@ class BotAI(DistanceCalculation):
                 and (not is_protoss or structure.is_powered)
             ):
                 # Can_afford check was already done earlier in this function
-                successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
+                successful_action: bool = structure.research(upgrade_type)
                 return successful_action
         return False
 
@@ -1328,7 +1324,7 @@ class BotAI(DistanceCalculation):
             cc = self.townhalls.idle.random_or(None)
             # self.townhalls can be empty or there are no idle townhalls
             if cc and self.can_afford(UnitTypeId.SCV):
-                self.do(cc.train(UnitTypeId.SCV), subtract_cost=True, subtract_supply=True)
+                cc.train(UnitTypeId.SCV)
 
         Building a building::
 
@@ -1336,7 +1332,7 @@ class BotAI(DistanceCalculation):
             worker = self.workers.random_or(None)
             barracks_placement_position = self.main_base_ramp.barracks_correct_placement
             if worker and self.can_afford(UnitTypeId.BARRACKS):
-                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position), subtract_cost=True)
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         Moving a unit::
 
@@ -1344,7 +1340,7 @@ class BotAI(DistanceCalculation):
             worker = self.workers.random_or(None)
             # worker can be None if all are dead
             if worker:
-                self.do(worker.move(self.game_info.map_center))
+                worker.move(self.game_info.map_center)
 
         :param action:
         :param subtract_cost:

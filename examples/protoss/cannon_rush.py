@@ -14,7 +14,7 @@ class CannonRushBot(sc2.BotAI):
         if not self.townhalls:
             # Attack with all workers if we don't have any nexuses left, attack-move on enemy spawn (doesn't work on 4 player map) so that probes auto attack on the way
             for worker in self.workers:
-                self.do(worker.attack(self.enemy_start_locations[0]))
+                worker.attack(self.enemy_start_locations[0])
             return
         else:
             nexus = self.townhalls.random
@@ -22,7 +22,7 @@ class CannonRushBot(sc2.BotAI):
         # Make probes until we have 16 total
         if self.supply_workers < 16 and nexus.is_idle:
             if self.can_afford(PROBE):
-                self.do(nexus.train(PROBE), subtract_cost=True, subtract_supply=True)
+                nexus.train(PROBE)
 
         # If we have no pylon, build one near starting nexus
         elif not self.structures(PYLON) and self.already_pending(PYLON) == 0:

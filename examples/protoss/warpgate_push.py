@@ -23,7 +23,7 @@ class WarpGateBot(sc2.BotAI):
                     # return ActionResult.CantFindPlacementLocation
                     print("can't place")
                     return
-                self.do(warpgate.warp_in(STALKER, placement), subtract_cost=True, subtract_supply=True)
+                warpgate.warp_in(STALKER, placement)
 
     async def on_step(self, iteration):
         await self.distribute_workers()
@@ -31,7 +31,7 @@ class WarpGateBot(sc2.BotAI):
         if not self.townhalls.ready:
             # Attack with all workers if we don't have any nexuses left, attack-move on enemy spawn (doesn't work on 4 player map) so that probes auto attack on the way
             for worker in self.workers:
-                self.do(worker.attack(self.enemy_start_locations[0]))
+                worker.attack(self.enemy_start_locations[0])
             return
         else:
             nexus = self.townhalls.ready.random
@@ -45,7 +45,7 @@ class WarpGateBot(sc2.BotAI):
 
         if self.workers.amount < self.townhalls.amount * 22 and nexus.is_idle:
             if self.can_afford(PROBE):
-                self.do(nexus.train(PROBE), subtract_cost=True, subtract_supply=True)
+                nexus.train(PROBE)
 
         elif self.structures(PYLON).amount < 5 and self.already_pending(PYLON) == 0:
             if self.can_afford(PYLON):
@@ -73,8 +73,8 @@ class WarpGateBot(sc2.BotAI):
                 if worker is None:
                     break
                 if not self.gas_buildings or not self.gas_buildings.closer_than(1, vg):
-                    self.do(worker.build(ASSIMILATOR, vg), subtract_cost=True)
-                    self.do(worker.stop(queue=True))
+                    worker.build(ASSIMILATOR, vg)
+                    worker.stop(queue=True)
 
         # Research warp gate if cybercore is completed
         if (
@@ -83,12 +83,12 @@ class WarpGateBot(sc2.BotAI):
             and self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 0
         ):
             ccore = self.structures(CYBERNETICSCORE).ready.first
-            self.do(ccore(RESEARCH_WARPGATE), subtract_cost=True)
+            ccore(RESEARCH_WARPGATE)
 
         # Morph to warp gate when research is complete
         for gateway in self.structures(GATEWAY).ready.idle:
             if self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 1:
-                self.do(gateway(MORPH_WARPGATE))
+                gateway(MORPH_WARPGATE)
 
         if self.proxy_built:
             await self.warp_new_units(proxy)
@@ -99,9 +99,9 @@ class WarpGateBot(sc2.BotAI):
                 targets = (self.enemy_units | self.enemy_structures).filter(lambda unit: unit.can_be_attacked)
                 if targets:
                     target = targets.closest_to(stalker)
-                    self.do(stalker.attack(target))
+                    stalker.attack(target)
                 else:
-                    self.do(stalker.attack(self.enemy_start_locations[0]))
+                    stalker.attack(self.enemy_start_locations[0])
 
         # Build proxy pylon
         if self.structures(CYBERNETICSCORE).amount >= 1 and not self.proxy_built and self.can_afford(PYLON):
@@ -113,12 +113,12 @@ class WarpGateBot(sc2.BotAI):
         if not self.structures(CYBERNETICSCORE).ready:
             if not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST) and not nexus.is_idle:
                 if nexus.energy >= 50:
-                    self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus))
+                    nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, nexus)
         else:
             ccore = self.structures(CYBERNETICSCORE).ready.first
             if not ccore.has_buff(BuffId.CHRONOBOOSTENERGYCOST) and not ccore.is_idle:
                 if nexus.energy >= 50:
-                    self.do(nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, ccore))
+                    nexus(AbilityId.EFFECT_CHRONOBOOSTENERGYCOST, ccore)
 
 
 def main():

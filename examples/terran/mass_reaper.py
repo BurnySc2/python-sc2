@@ -50,11 +50,11 @@ class MassReaperBot(sc2.BotAI):
                 # If a placement location was found
                 if location:
                     # Order worker to build exactly on that location
-                    self.do(worker.build(UnitTypeId.SUPPLYDEPOT, location), subtract_cost=True)
+                    worker.build(UnitTypeId.SUPPLYDEPOT, location)
 
         # Lower all depots when finished
         for depot in self.structures(UnitTypeId.SUPPLYDEPOT).ready:
-            self.do(depot(AbilityId.MORPH_SUPPLYDEPOT_LOWER))
+            depot(AbilityId.MORPH_SUPPLYDEPOT_LOWER)
 
         # Morph commandcenter to orbitalcommand
         # Check if tech requirement for orbital is complete (e.g. you need a barracks to be able to morph an orbital)
@@ -64,7 +64,7 @@ class MassReaperBot(sc2.BotAI):
             for cc in self.townhalls(UnitTypeId.COMMANDCENTER).idle:
                 # Check if we have 150 minerals; this used to be an issue when the API returned 550 (value) of the orbital, but we only wanted the 150 minerals morph cost
                 if self.can_afford(UnitTypeId.ORBITALCOMMAND):
-                    self.do(cc(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND), subtract_cost=True)
+                    cc(AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)
 
         # Expand if we can afford (400 minerals) and have less than 2 bases
         if (
@@ -79,7 +79,7 @@ class MassReaperBot(sc2.BotAI):
                 worker = self.select_build_worker(location)
                 if worker and self.can_afford(UnitTypeId.COMMANDCENTER):
                     # The worker will be commanded to build the command center
-                    self.do(worker.build(UnitTypeId.COMMANDCENTER, location), subtract_cost=True)
+                    worker.build(UnitTypeId.COMMANDCENTER, location)
 
         # Build up to 4 barracks if we can afford them
         # Check if we have a supply depot (tech requirement) before trying to make barracks
@@ -102,7 +102,7 @@ class MassReaperBot(sc2.BotAI):
                     UnitTypeId.BARRACKS, self.townhalls.random.position, placement_step=4
                 )
                 if location:
-                    self.do(worker.build(UnitTypeId.BARRACKS, location), subtract_cost=True)
+                    worker.build(UnitTypeId.BARRACKS, location)
 
         # Build refineries (on nearby vespene) when at least one barracks is in construction
         if (
@@ -119,7 +119,7 @@ class MassReaperBot(sc2.BotAI):
                         if workers:  # same condition as above
                             worker = workers.closest_to(vg)
                             # Caution: the target for the refinery has to be the vespene geyser, not its position!
-                            self.do(worker.build(UnitTypeId.REFINERY, vg), subtract_cost=True)
+                            worker.build(UnitTypeId.REFINERY, vg)
 
                             # Dont build more than one each frame
                             break
@@ -137,14 +137,14 @@ class MassReaperBot(sc2.BotAI):
             )
         ):
             for th in self.townhalls.idle:
-                self.do(th.train(UnitTypeId.SCV), subtract_cost=True, subtract_supply=True)
+                th.train(UnitTypeId.SCV)
 
         # Make reapers if we can afford them and we have supply remaining
         if self.supply_left > 0:
             # Loop through all idle barracks
             for rax in self.structures(UnitTypeId.BARRACKS).idle:
                 if self.can_afford(UnitTypeId.REAPER):
-                    self.do(rax.train(UnitTypeId.REAPER), subtract_cost=True, subtract_supply=True)
+                    rax.train(UnitTypeId.REAPER)
 
         # Send workers to mine from gas
         if iteration % 25 == 0:
@@ -167,7 +167,7 @@ class MassReaperBot(sc2.BotAI):
                 if retreatPoints:
                     closestEnemy = enemyThreatsClose.closest_to(r)
                     retreatPoint = closestEnemy.position.furthest(retreatPoints)
-                    self.do(r.move(retreatPoint))
+                    r.move(retreatPoint)
                     continue  # Continue for loop, dont execute any of the following
 
             # Reaper is ready to attack, shoot nearest ground unit
@@ -177,7 +177,7 @@ class MassReaperBot(sc2.BotAI):
             if r.weapon_cooldown == 0 and enemyGroundUnits:
                 enemyGroundUnits = enemyGroundUnits.sorted(lambda x: x.distance_to(r))
                 closestEnemy = enemyGroundUnits[0]
-                self.do(r.attack(closestEnemy))
+                r.attack(closestEnemy)
                 continue  # Continue for loop, dont execute any of the following
 
             # Attack is on cooldown, check if grenade is on cooldown, if not then throw it to furthest enemy in range 5
@@ -200,7 +200,7 @@ class MassReaperBot(sc2.BotAI):
                         furthestEnemy = enemy
                         break
                 if furthestEnemy:
-                    self.do(r(AbilityId.KD8CHARGE_KD8CHARGE, furthestEnemy))
+                    r(AbilityId.KD8CHARGE_KD8CHARGE, furthestEnemy)
                     continue  # Continue for loop, don't execute any of the following
 
             # Move to max unit range if enemy is closer than 4
@@ -215,18 +215,18 @@ class MassReaperBot(sc2.BotAI):
                 if retreatPoints:
                     closestEnemy = enemyThreatsVeryClose.closest_to(r)
                     retreatPoint = max(retreatPoints, key=lambda x: x.distance_to(closestEnemy) - x.distance_to(r))
-                    self.do(r.move(retreatPoint))
+                    r.move(retreatPoint)
                     continue  # Continue for loop, don't execute any of the following
 
             # Move to nearest enemy ground unit/building because no enemy unit is closer than 5
             allEnemyGroundUnits = self.enemy_units.not_flying
             if allEnemyGroundUnits:
                 closestEnemy = allEnemyGroundUnits.closest_to(r)
-                self.do(r.move(closestEnemy))
+                r.move(closestEnemy)
                 continue  # Continue for loop, don't execute any of the following
 
             # Move to random enemy start location if no enemy buildings have been seen
-            self.do(r.move(random.choice(self.enemy_start_locations)))
+            r.move(random.choice(self.enemy_start_locations))
 
         # Manage idle scvs, would be taken care by distribute workers aswell
         if self.townhalls:
@@ -235,14 +235,14 @@ class MassReaperBot(sc2.BotAI):
                 mfs = self.mineral_field.closer_than(10, th)
                 if mfs:
                     mf = mfs.closest_to(w)
-                    self.do(w.gather(mf))
+                    w.gather(mf)
 
         # Manage orbital energy and drop mules
         for oc in self.townhalls(UnitTypeId.ORBITALCOMMAND).filter(lambda x: x.energy >= 50):
             mfs = self.mineral_field.closer_than(10, oc)
             if mfs:
                 mf = max(mfs, key=lambda x: x.mineral_contents)
-                self.do(oc(AbilityId.CALLDOWNMULE_CALLDOWNMULE, mf))
+                oc(AbilityId.CALLDOWNMULE_CALLDOWNMULE, mf)
 
         # When running out of mineral fields near command center, fly to next base with minerals
 
@@ -362,9 +362,9 @@ class MassReaperBot(sc2.BotAI):
                 if workerPool.amount > 0:
                     w = workerPool.pop()
                     if len(w.orders) == 1 and w.orders[0].ability.id in [AbilityId.HARVEST_RETURN]:
-                        self.do(w.gather(gInfo["unit"], queue=True))
+                        w.gather(gInfo["unit"], queue=True)
                     else:
-                        self.do(w.gather(gInfo["unit"]))
+                        w.gather(gInfo["unit"])
 
         if not onlySaturateGas:
             # If we now have left over workers, make them mine at bases with deficit in mineral workers
@@ -377,9 +377,9 @@ class MassReaperBot(sc2.BotAI):
                         w = workerPool.pop()
                         mf = self.mineral_field.closer_than(10, thInfo["unit"]).closest_to(w)
                         if len(w.orders) == 1 and w.orders[0].ability.id in [AbilityId.HARVEST_RETURN]:
-                            self.do(w.gather(mf, queue=True))
+                            w.gather(mf, queue=True)
                         else:
-                            self.do(w.gather(mf))
+                            w.gather(mf)
 
 
 def main():
