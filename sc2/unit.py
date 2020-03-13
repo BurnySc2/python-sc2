@@ -95,7 +95,7 @@ class UnitOrder:
 
 
 class Unit:
-    def __init__(self, proto_data, bot_object: BotAI):
+    def __init__(self, proto_data, bot_object: BotAI, distance_calculation_index: int = -1):
         """
         :param proto_data:
         :param bot_object:
@@ -105,6 +105,8 @@ class Unit:
         # Used by property_immutable_cache
         self.cache = {}
         self.game_loop: int = bot_object.state.game_loop
+        # Index used in the 2D numpy array to access the 2D distance between two units
+        self.distance_calculation_index: int = distance_calculation_index
 
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
