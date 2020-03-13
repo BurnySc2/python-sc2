@@ -79,7 +79,7 @@ class RealTimeTestBot(sc2.BotAI):
         if self.enemy_units:
             await self.client.debug_kill_unit(self.enemy_units)
 
-        if self.supply_used >= 12 or self.time > 7 * 60:
+        if self.supply_used >= 199 or self.time > 7 * 60:
             print(f"Test successful, bot reached 199 supply without queueing two probes at once")
             await self.client.leave()
 
