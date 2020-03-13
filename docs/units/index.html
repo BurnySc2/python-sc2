@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -91,7 +91,6 @@
 <dd><p>Returns the distance between the closest unit from this group to the target unit.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
-<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">)</span>
 <span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
     <span class="n">closest_zergling_distance</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">closest_distance_to</span><span class="p">(</span><span class="n">my_marine</span><span class="p">)</span>
@@ -802,7 +801,7 @@ TODO: add proper description on which units are exactly visible (not snapshots?)
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -824,7 +823,7 @@ TODO: add proper description on which units are exactly visible (not snapshots?)
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>

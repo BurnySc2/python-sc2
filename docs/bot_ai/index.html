@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -147,15 +147,16 @@ workers and build queues of buildings.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.build">
 <em class="property">async </em><code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">building</em>, <em class="sig-param">near</em>, <em class="sig-param">max_distance=20</em>, <em class="sig-param">build_worker=None</em>, <em class="sig-param">random_alternative=True</em>, <em class="sig-param">placement_step=2</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.build" title="Permalink to this definition">¶</a></dt>
-<dd><p>Not recommended as this function checks many positions if it “can place” on them until it found a valid position.
-Also if the given position is not placeable, this function tries to find a nearby position to place the structure. Then uses ‘self.do’ to give the worker the order to start the construction.</p>
+<dd><p>Not recommended as this function checks many positions if it “can place” on them until it found a valid
+position. Also if the given position is not placeable, this function tries to find a nearby position to place
+the structure. Then uses ‘self.do’ to give the worker the order to start the construction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
 <li><p><strong>near</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
-<li><p><strong>unit</strong> – </p></li>
+<li><p><strong>build_worker</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p></li>
 <li><p><strong>random_alternative</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 <li><p><strong>placement_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 </ul>
@@ -671,6 +672,12 @@ Caution: some x and y offset might be required, see ramp code in game_info.py</p
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.bot_ai.BotAI.larva_count">
+<em class="property">property </em><code class="sig-name descname">larva_count</code><a class="headerlink" href="#sc2.bot_ai.BotAI.larva_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replacement for self.state.common.larva_count <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/d3d18392f9d7c646067d447df0c936a8ca57d587/s2clientprotocol/sc2api.proto#L614">https://github.com/Blizzard/s2client-proto/blob/d3d18392f9d7c646067d447df0c936a8ca57d587/s2clientprotocol/sc2api.proto#L614</a></p>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.bot_ai.BotAI.main_base_ramp">
 <em class="property">property </em><code class="sig-name descname">main_base_ramp</code><a class="headerlink" href="#sc2.bot_ai.BotAI.main_base_ramp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the Ramp instance of the closest main-ramp to start location.
@@ -719,7 +726,8 @@ This function is called when a building construction has started.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_end">
 <em class="property">async </em><code class="sig-name descname">on_end</code><span class="sig-paren">(</span><em class="sig-param">game_result</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override this in your bot class. This function is called at the end of a game. Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</p>
+<dd><p>Override this in your bot class. This function is called at the end of a game.
+Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>game_result</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code>) – </p>
@@ -742,10 +750,11 @@ This function is called when a building construction has started.</p>
 <dt id="sc2.bot_ai.BotAI.on_enemy_unit_left_vision">
 <em class="property">async </em><code class="sig-name descname">on_enemy_unit_left_vision</code><span class="sig-paren">(</span><em class="sig-param">unit_tag</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_left_vision" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
-Same as the self.on_unit_destroyed event, this function is called with the unit’s tag because the unit is no longer visible anymore. If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.</p>
+Same as the self.on_unit_destroyed event, this function is called with the unit’s tag because the unit is no longer visible anymore.
+If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.</p>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">last_known_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">unit_tag</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_structures_previous_map</span><span class="p">[</span><span class="n">unit_tag</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Enemy unit left vision, last known location: </span><span class="si">{last_known_unit.position}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Enemy unit left vision, last known location: </span><span class="si">{</span><span class="n">last_known_unit</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -791,7 +800,9 @@ This function is called on every game step (looped in realtime mode).</p>
 <em class="property">async </em><code class="sig-name descname">on_unit_destroyed</code><span class="sig-paren">(</span><em class="sig-param">unit_tag</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_destroyed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class.
 Note that this function uses unit tags and not the unit objects
-because the unit does not exist any more.</p>
+because the unit does not exist any more.
+This will event will be called when a unit (or structure) dies.
+For enemy units, this only works if the enemy unit was in vision on death.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>unit_tag</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p>
@@ -802,11 +813,13 @@ because the unit does not exist any more.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.on_unit_took_damage">
 <em class="property">async </em><code class="sig-name descname">on_unit_took_damage</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">amount_damage_taken</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_took_damage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override this in your bot class. This function is called when your own unit (unit or structure) took damage. It will not be called if the unit died this frame.</p>
-<p>This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep, or terran bio units that just used stimpack ability.
+<dd><p>Override this in your bot class. This function is called when your own unit (unit or structure) took damage.
+It will not be called if the unit died this frame.</p>
+<p>This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep,
+or terran bio units that just used stimpack ability.
 TODO: If there is a demand for it, then I can add a similar event for when enemy units took damage</p>
 <p>Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit took damage: </span><span class="si">{unit}</span><span class="s2"> took </span><span class="si">{amount_damage_taken}</span><span class="s2"> damage&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit took damage: </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2"> took </span><span class="si">{</span><span class="n">amount_damage_taken</span><span class="si">}</span><span class="s2"> damage&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -820,9 +833,10 @@ TODO: If there is a demand for it, then I can add a similar event for when enemy
 <dt id="sc2.bot_ai.BotAI.on_unit_type_changed">
 <em class="property">async </em><code class="sig-name descname">on_unit_type_changed</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">previous_type</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_type_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use ‘unit.type_id’</p>
-<p>This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair, a corruptor morphed to broodlordcocoon, etc..</p>
+<p>This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair,
+a corruptor morphed to broodlordcocoon, etc..</p>
 <p>Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit changed type: </span><span class="si">{unit}</span><span class="s2"> from </span><span class="si">{previous_type}</span><span class="s2"> to </span><span class="si">{unit.type_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;My unit changed type: </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">previous_type</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -969,6 +983,9 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 
 <span class="c1"># If you want to save up money for mutalisks, you can now save up once the spire is nearly completed:</span>
 <span class="n">spire_almost_completed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.75</span>
+
+<span class="c1"># If you have a Hive completed but no lair, this function returns 1.0 for the following:</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">LAIR</span><span class="p">)</span>
 
 <span class="c1"># Assume you have 2 command centers in production, one has 0.5 build_progress and the other 0.2, the following returns 0.5</span>
 <span class="n">highest_progress_of_command_center</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_type_build_progress</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
@@ -1167,7 +1184,7 @@ New function. Please report any bugs!</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1189,7 +1206,7 @@ New function. Please report any bugs!</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>
