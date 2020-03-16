@@ -552,7 +552,7 @@ from typing import Dict, Set, Union
         unit_research_abilities_dict_path,
         dict_name="RESEARCH_INFO",
         file_header=file_header,
-        dict_type_annotation=": Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]]]",
+        dict_type_annotation=": Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId, UpgradeId]]]]",
     )
     dump_dict_to_file(
         unit_trained_from,

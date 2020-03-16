@@ -1,6 +1,6 @@
 import sys, os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import sc2
 from sc2.position import Point2, Point3
