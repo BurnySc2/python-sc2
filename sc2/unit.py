@@ -299,11 +299,14 @@ class Unit:
 
     @property
     def movement_speed(self) -> float:
-        """ Returns the movement speed of the unit. Does not include upgrades or buffs. """
+        """ Returns the movement speed of the unit.
+        This is the unit movement speed on game speed 'normal'. To convert it to 'faster' movement speed, multiply it by a factor of '1.4'. E.g. reaper movement speed is listed here as 3.75, but should actually be 5.25.
+        Does not include upgrades or buffs. """
         return self._type_data._proto.movement_speed
 
     @property
     def real_speed(self) -> float:
+        """ See 'calculate_speed'. """
         return self.calculate_speed()
 
     def calculate_speed(self, upgrades: Set[UpgradeId] = None) -> float:
@@ -376,7 +379,7 @@ class Unit:
     @property
     def health_percentage(self) -> float:
         """ Returns the percentage of health the unit has. Does not include shields. """
-        if self._proto.health_max == 0:
+        if not self._proto.health_max:
             return 0
         return self._proto.health / self._proto.health_max
 
@@ -393,7 +396,7 @@ class Unit:
     @property
     def shield_percentage(self) -> float:
         """ Returns the percentage of shield points the unit has. Returns 0 for non-protoss units. """
-        if self._proto.shield_max == 0:
+        if not self._proto.shield_max:
             return 0
         return self._proto.shield / self._proto.shield_max
 
@@ -402,7 +405,7 @@ class Unit:
         """ Returns the percentage of combined shield + hp points the unit has.
         Also takes build progress into account. """
         max_ = (self._proto.shield_max + self._proto.health_max) * self.build_progress
-        if max_ == 0:
+        if not max_:
             return 0
         return (self._proto.shield + self._proto.health) / max_
 
@@ -419,7 +422,7 @@ class Unit:
     @property
     def energy_percentage(self) -> float:
         """ Returns the percentage of amount of energy the unit has. Returns 0 for units without energy. """
-        if self._proto.energy_max == 0:
+        if not self._proto.energy_max:
             return 0
         return self._proto.energy / self._proto.energy_max
 
