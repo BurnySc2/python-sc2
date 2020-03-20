@@ -1252,7 +1252,9 @@ Target can be a Unit (to follow that unit) or Point2.</p>
 <dl class="method">
 <dt id="sc2.unit.Unit.movement_speed">
 <em class="property">property </em><code class="sig-name descname">movement_speed</code><a class="headerlink" href="#sc2.unit.Unit.movement_speed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the movement speed of the unit. Does not include upgrades or buffs.</p>
+<dd><p>Returns the movement speed of the unit.
+This is the unit movement speed on game speed ‘normal’. To convert it to ‘faster’ movement speed, multiply it by a factor of ‘1.4’. E.g. reaper movement speed is listed here as 3.75, but should actually be 5.25.
+Does not include upgrades or buffs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
@@ -1405,6 +1407,17 @@ point, the unit will patrol in a circle.</p>
 <dt id="sc2.unit.Unit.radius">
 <em class="property">property </em><code class="sig-name descname">radius</code><a class="headerlink" href="#sc2.unit.Unit.radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>Half of unit size. See <a class="reference external" href="https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void">https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void</a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.unit.Unit.real_speed">
+<em class="property">property </em><code class="sig-name descname">real_speed</code><a class="headerlink" href="#sc2.unit.Unit.real_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>See ‘calculate_speed’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
