@@ -262,8 +262,15 @@ await self._client.dump_data()</p>
 <em class="property">async </em><code class="sig-name descname">query_building_placement</code><span class="sig-paren">(</span><em class="sig-param">ability</em>, <em class="sig-param">positions</em>, <em class="sig-param">ignore_resources=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.query_building_placement" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function might be deleted in favor of the function above (_query_building_placement_fast).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionResult</span></code>]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ability</strong> (<a class="reference internal" href="../game_data/index.html#sc2.game_data.AbilityData" title="sc2.game_data.AbilityData"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityData</span></code></a>) – </p></li>
+<li><p><strong>positions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]]) – </p></li>
+<li><p><strong>ignore_resources</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionResult</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>

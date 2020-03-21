@@ -154,7 +154,7 @@ the structure. Then uses ‘self.do’ to give the worker the order to start the
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
-<li><p><strong>near</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
+<li><p><strong>near</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
 <li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 <li><p><strong>build_worker</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p></li>
 <li><p><strong>random_alternative</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
@@ -293,7 +293,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
 <li><p><strong>ability_id</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>) – </p></li>
-<li><p><strong>target</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>target</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
 <li><p><strong>only_check_energy_and_cooldown</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 <li><p><strong>cached_abilities_of_unit</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]]) – </p></li>
 </ul>
@@ -364,7 +364,7 @@ This function might get removed in favor of the function below (can_place).</p>
 
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.chat_send">
-<em class="property">async </em><code class="sig-name descname">chat_send</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.chat_send" title="Permalink to this definition">¶</a></dt>
+<em class="property">async </em><code class="sig-name descname">chat_send</code><span class="sig-paren">(</span><em class="sig-param">message</em>, <em class="sig-param">team_only=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.chat_send" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a chat message to the SC2 Client.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat_send</span><span class="p">(</span><span class="s2">&quot;Hello, this is a message from my bot!&quot;</span><span class="p">)</span>
@@ -372,7 +372,10 @@ This function might get removed in favor of the function below (can_place).</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
+<li><p><strong>team_only</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -502,7 +505,7 @@ resources (mineral field and vespene geyser) as value.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
-<li><p><strong>near</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
+<li><p><strong>near</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
 <li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 <li><p><strong>random_alternative</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 <li><p><strong>placement_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
@@ -579,7 +582,7 @@ resources (mineral field and vespene geyser) as value.</p>
 Caution: terrain height is different from a unit’s z-coordinate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
+<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
@@ -593,7 +596,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <dd><p>Returns terrain z-height at a position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
+<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
@@ -607,7 +610,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <dd><p>Returns True if there is creep on the grid point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
+<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
@@ -619,7 +622,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <dt id="sc2.bot_ai.BotAI.in_map_bounds">
 <code class="sig-name descname">in_map_bounds</code><span class="sig-paren">(</span><em class="sig-param">pos</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_map_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
-:type pos: <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>]
+:type pos: <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]
 :param pos:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -634,7 +637,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <dd><p>Returns True if a ground unit can pass through a grid point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
+<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
@@ -650,7 +653,7 @@ Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
 Caution: some x and y offset might be required, see ramp code in game_info.py</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
+<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
@@ -664,7 +667,7 @@ Caution: some x and y offset might be required, see ramp code in game_info.py</p
 <dd><p>Returns True if you have vision on a grid point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
+<dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
@@ -939,7 +942,7 @@ or the building to research the upgrade was missing or not idle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
+<li><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
 <li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
