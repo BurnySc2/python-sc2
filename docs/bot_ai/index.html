@@ -327,13 +327,13 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.can_place">
-<em class="property">async </em><code class="sig-name descname">can_place</code><span class="sig-paren">(</span><em class="sig-param">building</em>, <em class="sig-param">position</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests if a building can be placed in the given location.</p>
+<em class="property">async </em><code class="sig-name descname">can_place</code><span class="sig-paren">(</span><em class="sig-param">building</em>, <em class="sig-param">positions</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if a building can be placed in the given locations.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">barracks_placement_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_base_ramp</span><span class="o">.</span><span class="n">barracks_correct_placement</span>
 <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_build_worker</span><span class="p">(</span><span class="n">barracks_placement_position</span><span class="p">)</span>
 <span class="c1"># Can return None</span>
-<span class="k">if</span> <span class="n">worker</span> <span class="ow">and</span> <span class="p">(</span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_place</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">):</span>
+<span class="k">if</span> <span class="n">worker</span> <span class="ow">and</span> <span class="p">(</span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_place</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="p">[</span><span class="n">barracks_placement_position</span><span class="p">])[</span><span class="mi">0</span><span class="p">]:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -341,11 +341,23 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../game_data/index.html#sc2.game_data.AbilityData" title="sc2.game_data.AbilityData"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityData</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p></li>
-<li><p><strong>position</strong> (<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p></li>
+<li><p><strong>position</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.can_place_single">
+<em class="property">async </em><code class="sig-name descname">can_place_single</code><span class="sig-paren">(</span><em class="sig-param">building</em>, <em class="sig-param">position</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place_single" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the placement for only one position.
+This function might get removed in favor of the function below (can_place).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
 </dd></dl>

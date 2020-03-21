@@ -773,28 +773,45 @@ class BotAI(DistanceCalculation):
 
             return workers.random if force else None
 
-    async def can_place(self, building: Union[AbilityData, AbilityId, UnitTypeId], position: Point2) -> bool:
-        """ Tests if a building can be placed in the given location.
+    async def can_place_single(
+        self, building: Union[AbilityData, AbilityId, UnitTypeId], position: Union[Point2, tuple]
+    ) -> bool:
+        """ Checks the placement for only one position.
+        This function might get removed in favor of the function below (can_place). """
+        r = await self._client._query_building_placement_fast(building, [position])
+        return r[0]
+
+    async def can_place(
+        self, building: Union[AbilityData, AbilityId, UnitTypeId], positions: List[Union[Point2, tuple, list]]
+    ) -> List[bool]:
+        """ Tests if a building can be placed in the given locations.
 
         Example::
 
             barracks_placement_position = self.main_base_ramp.barracks_correct_placement
             worker = self.select_build_worker(barracks_placement_position)
             # Can return None
-            if worker and (await self.can_place(UnitTypeId.BARRACKS, barracks_placement_position):
+            if worker and (await self.can_place(UnitTypeId.BARRACKS, [barracks_placement_position])[0]:
                 self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position))
 
         :param building:
         :param position: """
         building_type = type(building)
-        assert building_type in {AbilityData, AbilityId, UnitTypeId}
+        assert type(building) in {AbilityData, AbilityId, UnitTypeId}, f"{building}, {building_type}"
         if building_type == UnitTypeId:
             building = self._game_data.units[building.value].creation_ability
         elif building_type == AbilityId:
             building = self._game_data.abilities[building.value]
 
-        r = await self._client.query_building_placement(building, [position])
-        return r[0] == ActionResult.Success
+        if isinstance(positions, (Point2, tuple)):
+            return await self.can_place_single(building, positions)
+        else:
+            assert isinstance(positions, list), f"Expected an iterable (list, tuple), but was: {positions}"
+            assert isinstance(
+                positions[0], (Point2, tuple, list)
+            ), f"List is expected to have Point2, tuples or lists, but instead had: {positions[0]} {type(positions[0])}"
+
+        return await self._client._query_building_placement_fast(building, positions)
 
     async def find_placement(
         self,

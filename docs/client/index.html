@@ -258,6 +258,17 @@ await self._client.dump_data()</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.client.Client.query_building_placement">
+<em class="property">async </em><code class="sig-name descname">query_building_placement</code><span class="sig-paren">(</span><em class="sig-param">ability</em>, <em class="sig-param">positions</em>, <em class="sig-param">ignore_resources=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.query_building_placement" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function might be deleted in favor of the function above (_query_building_placement_fast).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionResult</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.client.Client.query_pathing">
 <em class="property">async </em><code class="sig-name descname">query_pathing</code><span class="sig-paren">(</span><em class="sig-param">start</em>, <em class="sig-param">end</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.query_pathing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Caution: returns “None” when path not found
