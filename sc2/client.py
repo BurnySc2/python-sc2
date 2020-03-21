@@ -265,6 +265,12 @@ class Client(Protocol):
     async def _query_building_placement_fast(
         self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
+        """
+
+        :param ability:
+        :param positions:
+        :param ignore_resources:
+        """
         result = await self._execute(
             query=query_pb.RequestQuery(
                 placements=(
@@ -282,7 +288,11 @@ class Client(Protocol):
     async def query_building_placement(
         self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
-        """ This function might be deleted in favor of the function above (_query_building_placement_fast). """
+        """ This function might be deleted in favor of the function above (_query_building_placement_fast).
+
+        :param ability:
+        :param positions:
+        :param ignore_resources: """
         assert isinstance(ability, AbilityData)
         result = await self._execute(
             query=query_pb.RequestQuery(
