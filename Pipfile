@@ -12,6 +12,8 @@ pyglet = "*"
 numpy = "*"
 scipy = "*"
 mpyq = "*"
+cchardet = "*"
+aiodns = "*"
 
 [dev-packages]
 atomicwrites = "*"

@@ -37,7 +37,7 @@ from .ids.ability_id import AbilityId
 from .ids.unit_typeid import UnitTypeId
 from .ids.upgrade_id import UpgradeId
 from .pixel_map import PixelMap
-from .position import Point2, Point3
+from .position import Point2
 from .unit import Unit
 from .units import Units
 from .game_data import Cost
@@ -689,7 +689,7 @@ class BotAI(DistanceCalculation):
         self,
         unit: Unit,
         ability_id: AbilityId,
-        target: Optional[Union[Unit, Point2, Point3]] = None,
+        target: Optional[Union[Unit, Point2]] = None,
         only_check_energy_and_cooldown: bool = False,
         cached_abilities_of_unit: List[AbilityId] = None,
     ) -> bool:
@@ -709,7 +709,7 @@ class BotAI(DistanceCalculation):
         :param cached_abilities_of_unit: """
         assert isinstance(unit, Unit), f"{unit} is no Unit object"
         assert isinstance(ability_id, AbilityId), f"{ability_id} is no AbilityId"
-        assert isinstance(target, (type(None), Unit, Point2, Point3))
+        assert isinstance(target, (type(None), Unit, Point2))
         # check if unit has enough energy to cast or if ability is on cooldown
         if cached_abilities_of_unit:
             abilities = cached_abilities_of_unit
@@ -725,7 +725,7 @@ class BotAI(DistanceCalculation):
             if (
                 ability_target == 1
                 or ability_target == Target.PointOrNone.value
-                and isinstance(target, (Point2, Point3))
+                and isinstance(target, Point2)
                 and unit.distance_to(target) <= unit.radius + target.radius + cast_range
             ):  # cant replace 1 with "Target.None.value" because ".None" doesnt seem to be a valid enum name
                 return True
@@ -739,13 +739,13 @@ class BotAI(DistanceCalculation):
             # Check if able to use ability on a position
             elif (
                 ability_target in {Target.Point.value, Target.PointOrUnit.value}
-                and isinstance(target, (Point2, Point3))
+                and isinstance(target, Point2)
                 and unit.distance_to(target) <= unit.radius + cast_range
             ):
                 return True
         return False
 
-    def select_build_worker(self, pos: Union[Unit, Point2, Point3], force: bool = False) -> Optional[Unit]:
+    def select_build_worker(self, pos: Union[Unit, Point2], force: bool = False) -> Optional[Unit]:
         """Select a worker to build a building with.
         
         Example::
@@ -773,33 +773,50 @@ class BotAI(DistanceCalculation):
 
             return workers.random if force else None
 
-    async def can_place(self, building: Union[AbilityData, AbilityId, UnitTypeId], position: Point2) -> bool:
-        """ Tests if a building can be placed in the given location.
+    async def can_place_single(
+        self, building: Union[AbilityData, AbilityId, UnitTypeId], position: Union[Point2, tuple]
+    ) -> bool:
+        """ Checks the placement for only one position.
+        This function might get removed in favor of the function below (can_place). """
+        r = await self._client._query_building_placement_fast(building, [position])
+        return r[0]
+
+    async def can_place(
+        self, building: Union[AbilityData, AbilityId, UnitTypeId], positions: List[Union[Point2, tuple, list]]
+    ) -> List[bool]:
+        """ Tests if a building can be placed in the given locations.
 
         Example::
 
             barracks_placement_position = self.main_base_ramp.barracks_correct_placement
             worker = self.select_build_worker(barracks_placement_position)
             # Can return None
-            if worker and (await self.can_place(UnitTypeId.BARRACKS, barracks_placement_position):
+            if worker and (await self.can_place(UnitTypeId.BARRACKS, [barracks_placement_position])[0]:
                 worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         :param building:
         :param position: """
         building_type = type(building)
-        assert building_type in {AbilityData, AbilityId, UnitTypeId}
+        assert type(building) in {AbilityData, AbilityId, UnitTypeId}, f"{building}, {building_type}"
         if building_type == UnitTypeId:
             building = self._game_data.units[building.value].creation_ability
         elif building_type == AbilityId:
             building = self._game_data.abilities[building.value]
 
-        r = await self._client.query_building_placement(building, [position])
-        return r[0] == ActionResult.Success
+        if isinstance(positions, (Point2, tuple)):
+            return await self.can_place_single(building, positions)
+        else:
+            assert isinstance(positions, list), f"Expected an iterable (list, tuple), but was: {positions}"
+            assert isinstance(
+                positions[0], (Point2, tuple, list)
+            ), f"List is expected to have Point2, tuples or lists, but instead had: {positions[0]} {type(positions[0])}"
+
+        return await self._client._query_building_placement_fast(building, positions)
 
     async def find_placement(
         self,
         building: UnitTypeId,
-        near: Union[Unit, Point2, Point3],
+        near: Union[Unit, Point2],
         max_distance: int = 20,
         random_alternative: bool = True,
         placement_step: int = 2,
@@ -1067,7 +1084,7 @@ class BotAI(DistanceCalculation):
     async def build(
         self,
         building: UnitTypeId,
-        near: Union[Unit, Point2, Point3],
+        near: Union[Unit, Point2],
         max_distance: int = 20,
         build_worker: Optional[Unit] = None,
         random_alternative: bool = True,
@@ -1084,16 +1101,16 @@ class BotAI(DistanceCalculation):
         :param random_alternative:
         :param placement_step: """
 
-        assert isinstance(near, (Unit, Point2, Point3))
+        assert isinstance(near, (Unit, Point2))
         if not self.can_afford(building):
             return False
         p = None
         gas_buildings = {UnitTypeId.EXTRACTOR, UnitTypeId.ASSIMILATOR, UnitTypeId.REFINERY}
         if isinstance(near, Unit) and building not in gas_buildings:
             near = near.position
-        if isinstance(near, (Point2, Point3)):
+        if isinstance(near, Point2):
             near = near.to2
-        if isinstance(near, (Point2, Point3)):
+        if isinstance(near, Point2):
             p = await self.find_placement(building, near, max_distance, random_alternative, placement_step)
             if p is None:
                 return False
@@ -1432,18 +1449,19 @@ class BotAI(DistanceCalculation):
             return True
         return True
 
-    async def chat_send(self, message: str):
+    async def chat_send(self, message: str, team_only: bool = False):
         """ Send a chat message to the SC2 Client.
 
         Example::
 
             await self.chat_send("Hello, this is a message from my bot!")
 
-        :param message: """
+        :param message:
+        :param team_only: """
         assert isinstance(message, str), f"{message} is not a string"
-        await self._client.chat_send(message, False)
+        await self._client.chat_send(message, team_only)
 
-    def in_map_bounds(self, pos: Union[Point2, tuple]) -> bool:
+    def in_map_bounds(self, pos: Union[Point2, tuple, list]) -> bool:
         """ Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
         :param pos: """
         return (
@@ -1455,56 +1473,56 @@ class BotAI(DistanceCalculation):
             < self._game_info.playable_area.y + self.game_info.playable_area.height
         )
 
-    # For the functions below, make sure you are inside the boundries of the map size.
-    def get_terrain_height(self, pos: Union[Point2, Point3, Unit]) -> int:
+    # For the functions below, make sure you are inside the boundaries of the map size.
+    def get_terrain_height(self, pos: Union[Point2, Unit]) -> int:
         """ Returns terrain height at a position.
         Caution: terrain height is different from a unit's z-coordinate.
 
         :param pos: """
-        assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
-        pos = pos.position.to2.rounded
+        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        pos = pos.position.rounded
         return self._game_info.terrain_height[pos]
 
-    def get_terrain_z_height(self, pos: Union[Point2, Point3, Unit]) -> int:
+    def get_terrain_z_height(self, pos: Union[Point2, Unit]) -> int:
         """ Returns terrain z-height at a position.
 
         :param pos: """
-        assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
-        pos = pos.position.to2.rounded
+        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        pos = pos.position.rounded
         return -16 + 32 * self._game_info.terrain_height[pos] / 255
 
-    def in_placement_grid(self, pos: Union[Point2, Point3, Unit]) -> bool:
+    def in_placement_grid(self, pos: Union[Point2, Unit]) -> bool:
         """ Returns True if you can place something at a position.
         Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
         Caution: some x and y offset might be required, see ramp code in game_info.py
 
         :param pos: """
-        assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
-        pos = pos.position.to2.rounded
+        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        pos = pos.position.rounded
         return self._game_info.placement_grid[pos] == 1
 
-    def in_pathing_grid(self, pos: Union[Point2, Point3, Unit]) -> bool:
+    def in_pathing_grid(self, pos: Union[Point2, Unit]) -> bool:
         """ Returns True if a ground unit can pass through a grid point.
 
         :param pos: """
-        assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
+        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.to2.rounded
         return self._game_info.pathing_grid[pos] == 1
 
-    def is_visible(self, pos: Union[Point2, Point3, Unit]) -> bool:
+    def is_visible(self, pos: Union[Point2, Unit]) -> bool:
         """ Returns True if you have vision on a grid point.
 
         :param pos: """
         # more info: https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/spatial.proto#L19
-        assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
+        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.to2.rounded
         return self.state.visibility[pos] == 2
 
-    def has_creep(self, pos: Union[Point2, Point3, Unit]) -> bool:
+    def has_creep(self, pos: Union[Point2, Unit]) -> bool:
         """ Returns True if there is creep on the grid point.
 
         :param pos: """
-        assert isinstance(pos, (Point2, Point3, Unit)), f"pos is not of type Point2, Point3 or Unit"
+        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.to2.rounded
         return self.state.creep[pos] == 1
 

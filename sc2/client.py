@@ -267,21 +267,50 @@ class Client(Protocol):
             )
         return [float(d.distance) for d in results.query.pathing]
 
-    async def query_building_placement(
+    async def _query_building_placement_fast(
         self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
-        assert isinstance(ability, AbilityData)
+        """
+
+        :param ability:
+        :param positions:
+        :param ignore_resources:
+        """
         result = await self._execute(
             query=query_pb.RequestQuery(
                 placements=(
                     query_pb.RequestQueryBuildingPlacement(
-                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position.x, y=position.y)
+                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position[0], y=position[1])
                     )
                     for position in positions
                 ),
                 ignore_resource_requirements=ignore_resources,
             )
         )
+        # Success enum value is 1, see https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/error.proto#L7
+        return [p.result == 1 for p in result.query.placements]
+
+    async def query_building_placement(
+        self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
+    ) -> List[ActionResult]:
+        """ This function might be deleted in favor of the function above (_query_building_placement_fast).
+
+        :param ability:
+        :param positions:
+        :param ignore_resources: """
+        assert isinstance(ability, AbilityData)
+        result = await self._execute(
+            query=query_pb.RequestQuery(
+                placements=(
+                    query_pb.RequestQueryBuildingPlacement(
+                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position[0], y=position[1])
+                    )
+                    for position in positions
+                ),
+                ignore_resource_requirements=ignore_resources,
+            )
+        )
+        # Unnecessary converting to ActionResult?
         return [ActionResult(p.result) for p in result.query.placements]
 
     async def query_available_abilities(
