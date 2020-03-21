@@ -77,7 +77,7 @@ class ZergRushBot(sc2.BotAI):
         if self.minerals > 500:
             for d in range(4, 15):
                 pos = hatch.position.towards(self.game_info.map_center, d)
-                if await self.can_place(UnitTypeId.HATCHERY, pos):
+                if (await self.can_place(UnitTypeId.HATCHERY, [pos]))[0]:
                     self.do(self.workers.random.build(UnitTypeId.HATCHERY, pos), subtract_cost=True)
                     break
 
@@ -102,7 +102,7 @@ class ZergRushBot(sc2.BotAI):
             if self.can_afford(UnitTypeId.SPAWNINGPOOL):
                 for d in range(4, 15):
                     pos = hatch.position.towards(self.game_info.map_center, d)
-                    if await self.can_place(UnitTypeId.SPAWNINGPOOL, pos):
+                    if (await self.can_place(UnitTypeId.SPAWNINGPOOL, [pos]))[0]:
                         drone = self.workers.closest_to(pos)
                         self.do(drone.build(UnitTypeId.SPAWNINGPOOL, pos))
 
