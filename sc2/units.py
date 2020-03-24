@@ -3,7 +3,7 @@ import random
 import warnings
 import math
 from itertools import chain
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, Generator, TYPE_CHECKING
 
 from .ids.unit_typeid import UnitTypeId
 from .position import Point2, Point3
@@ -33,6 +33,9 @@ class Units(list):
 
     def __call__(self, *args, **kwargs):
         return UnitSelection(self, *args, **kwargs)
+
+    def __iter__(self) -> Generator[Unit, None, None]:
+        return (item for item in super().__iter__())
 
     def select(self, *args, **kwargs):
         return UnitSelection(self, *args, **kwargs)
