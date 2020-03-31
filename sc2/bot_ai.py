@@ -1123,7 +1123,7 @@ class BotAI(DistanceCalculation):
         if building in gas_buildings:
             builder.build_gas(near)
             return True
-        builder.build(building, p)
+        self.do(builder.build(building, p), subtract_cost=True, ignore_warning=True)
         return True
 
     def train(
@@ -1229,7 +1229,7 @@ class BotAI(DistanceCalculation):
                     successfully_trained = structure.warp_in(unit_type, location)
                 else:
                     # Normal train a unit from larva or inside a structure
-                    successfully_trained = structure.train(unit_type)
+                    successfully_trained = self.do(structure.train(unit_type), subtract_cost=True, subtract_supply=True, ignore_warning=True)
                     # Check if structure has reactor: queue same unit again
                     if (
                         # Only terran can have reactors
@@ -1247,7 +1247,7 @@ class BotAI(DistanceCalculation):
                     ):
                         trained_amount += 1
                         # With one command queue=False and one queue=True, you can queue 2 marines in a reactored barracks in one frame
-                        successfully_trained = structure.train(unit_type, queue=True)
+                        successfully_trained = self.do(structure.train(unit_type, queue=True), subtract_cost=True, subtract_supply=True, ignore_warning=True)
 
                 if successfully_trained:
                     trained_amount += 1
@@ -1325,7 +1325,7 @@ class BotAI(DistanceCalculation):
                 and (not is_protoss or structure.is_powered)
             ):
                 # Can_afford check was already done earlier in this function
-                successful_action: bool = structure.research(upgrade_type)
+                successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True, ignore_warning=True)
                 return successful_action
         return False
 
@@ -1335,6 +1335,7 @@ class BotAI(DistanceCalculation):
         subtract_cost: bool = False,
         subtract_supply: bool = False,
         can_afford_check: bool = False,
+        ignore_warning: bool = False,
     ) -> bool:
         """ Adds a unit action to the 'self.actions' list which is then executed at the end of the frame.
 
@@ -1368,11 +1369,12 @@ class BotAI(DistanceCalculation):
         :param can_afford_check:
         """
         if not self.unit_command_uses_self_do and isinstance(action, bool):
-            warnings.warn(
-                "You have used self.do(). Please consider putting 'self.unit_command_uses_self_do = True' in your bot __init__() function or removing self.do().",
-                DeprecationWarning,
-                stacklevel=2,
-            )
+            if not ignore_warning:
+                warnings.warn(
+                    "You have used self.do(). Please consider putting 'self.unit_command_uses_self_do = True' in your bot __init__() function or removing self.do().",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
             return action
 
         assert isinstance(
