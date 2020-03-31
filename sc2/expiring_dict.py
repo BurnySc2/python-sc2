@@ -105,14 +105,14 @@ class ExpiringDict(OrderedDict):
         with self.lock:
             return self.keys()
 
-    # TODO: removed expired entries before returning len(self)
-    # def __len__(self):
-    #     """ Override len method as key value pairs aren't instantly being deleted """
-    #     with self.lock:
-    #         return self.length
-
     def __len__(self):
-        raise NotImplementedError("Len for expiring dict is not implemented")
+        """ Override len method as key value pairs aren't instantly being deleted, but only on __get__(item).
+        This function is slow because it has to check if each element is not expired yet. """
+        with self.lock:
+            count = 0
+            for _ in self.values():
+                count += 1
+            return count
 
     def pop(self, key, default=None, with_age=False):
         """ Return the item and remove it """

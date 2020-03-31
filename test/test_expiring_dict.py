@@ -27,7 +27,7 @@ def test_class():
     bot.increment()
 
     # Test len
-    # assert len(test) == 3
+    assert len(test) == 3
 
     # Test contains method
     assert "hello" in test
@@ -89,6 +89,8 @@ def test_class():
 
     # Advance the frames by 10, this means all entries should now be invalid
     bot.increment(10)
+
+    assert len(test) == 0
 
     for key in test.keys():
         assert False
