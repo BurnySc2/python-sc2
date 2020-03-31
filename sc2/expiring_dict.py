@@ -83,19 +83,13 @@ class ExpiringDict(OrderedDict):
 
     def __repr__(self):
         """ Printable version of the dict instead of getting memory adress """
-        print_list = ["ExpiringDict("]
+        print_list = []
         with self.lock:
             for key, value in OrderedDict.items(self):
                 if self.frame - value[1] < self.max_age:
-                    try:
-                        print_list.append(f"{repr(key)}: {repr(value)}")
-                    except:
-                        print_list.append(f"{key}: {value}")
-                    print_list.append(", ")
-        if print_list[-1] == ", ":
-            print_list.pop()
-        print_list.append(")")
-        return "".join(print_list)
+                    print_list.append(f"{key}: {value}")
+        print_str = ", ".join(print_list)
+        return f"ExpiringDict({print_str})"
 
     def __str__(self):
         return self.__repr__()
