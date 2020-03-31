@@ -1364,7 +1364,10 @@ class Unit:
         subtract_cost: bool = False,
         subtract_supply: bool = False,
         can_afford_check: bool = False,
-    ) -> bool:
+    ) -> Union[UnitCommand, bool]:
+        """ Deprecated: Stop using self.do() - This may be removed in the future. """
+        if self._bot_object.unit_command_uses_self_do:
+            return UnitCommand(ability, self, target=target, queue=queue)
         return self._bot_object.do(
             UnitCommand(ability, self, target=target, queue=queue),
             subtract_cost=subtract_cost,

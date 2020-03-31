@@ -111,6 +111,9 @@ class ExpiringDict(OrderedDict):
     #     with self.lock:
     #         return self.length
 
+    def __len__(self):
+        raise NotImplementedError("Len for expiring dict is not implemented")
+
     def pop(self, key, default=None, with_age=False):
         """ Return the item and remove it """
         with self.lock:

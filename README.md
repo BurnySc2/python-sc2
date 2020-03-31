@@ -83,6 +83,14 @@ You can find more examples in the [`examples/`](/examples) folder.
 
 The API supports a number of options for configuring how it operates.
 
+### `unit_command_uses_self_do`
+Set this to 'True' if your bot is issueing commands using `self.do(Unit(Ability, Target))` instead of `Unit(Ability, Target)`.
+```python
+class MyBot(sc2.BotAI):
+    def __init__(self):
+        self.unit_command_uses_self_do = True
+```
+
 ### `raw_affects_selection`
 Setting this to true improves bot performance by a little bit.
 ```python
@@ -99,7 +107,7 @@ The distance calculation method:
 ```python
 class MyBot(sc2.BotAI):
     def __init__(self):
-        self.distance_calculation_method = 2
+        self.distance_calculation_method: int = 2
 ```
 
 ### `game_step`
@@ -111,7 +119,7 @@ class MyBot(sc2.BotAI):
         pass  # don't set it here!
 
     async def on_start(self):
-        self.client.game_step = 2
+        self.client.game_step: int = 2
 ```
 
 ## Community - Help and support

@@ -67,6 +67,9 @@ class BotAI(DistanceCalculation):
         # Select distance calculation method, see distances.py: _distances_override_functions function
         if not hasattr(self, "distance_calculation_method"):
             self.distance_calculation_method: int = 2
+        # Select if the Unit.command should return UnitCommand objects. Set this to True if your bot uses 'self.do(unit(ability, target))'
+        if not hasattr(self, "unit_command_uses_self_do"):
+            self.unit_command_uses_self_do: bool = False
         # This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)
         self.realtime: bool = False
         self.all_units: Units = Units([], self)
@@ -1364,6 +1367,14 @@ class BotAI(DistanceCalculation):
         :param subtract_supply:
         :param can_afford_check:
         """
+        if not self.unit_command_uses_self_do and isinstance(action, bool):
+            warnings.warn(
+                "You have used self.do(). Please consider putting 'self.unit_command_uses_self_do = True' in your bot __init__() function or removing self.do().",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            return action
+
         assert isinstance(
             action, UnitCommand
         ), f"Given unit command is not a command, but instead of type {type(action)}"

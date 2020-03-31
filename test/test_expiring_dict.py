@@ -60,11 +60,17 @@ def test_class():
         assert test.get(key, with_age=True)[0] == item
         assert test.get(key, with_age=True)[1] in {0, 1}
 
+    c = 0
     for key in test.keys():
+        c += 1
         pass
+    assert c == 3
 
+    c = 0
     for value in test.values():
+        c += 1
         pass
+    assert c == 3
 
     # Update from another dict
     updater_dict = {"new_key": "my_new_value"}

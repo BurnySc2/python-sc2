@@ -14,6 +14,9 @@ from sc2.units import Units
 
 
 class RampWallBot(sc2.BotAI):
+    def __init__(self):
+        self.unit_command_uses_self_do = False
+
     async def on_step(self, iteration):
         ccs = self.townhalls(COMMANDCENTER)
         if not ccs:
@@ -24,7 +27,7 @@ class RampWallBot(sc2.BotAI):
         await self.distribute_workers()
 
         if self.can_afford(SCV) and self.workers.amount < 16 and cc.is_idle:
-            cc.train(SCV)
+            self.do(cc.train(SCV))
 
         # Raise depos when enemies are nearby
         for depo in self.structures(SUPPLYDEPOT).ready:
@@ -85,7 +88,7 @@ class RampWallBot(sc2.BotAI):
             ws = self.workers.gathering
             if ws:  # if workers were found
                 w = ws.random
-                w.build(SUPPLYDEPOT, target_depot_location)
+                self.do(w.build(SUPPLYDEPOT, target_depot_location))
 
         # Build barracks
         if depots.ready and self.can_afford(BARRACKS) and self.already_pending(BARRACKS) == 0:
