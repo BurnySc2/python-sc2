@@ -14,7 +14,7 @@ class ExpiringDict(OrderedDict):
 
         async def on_step(iteration: int):
             # This dict will hold up to 10 items and only return values that have been added up to 20 frames ago
-            my_dict = ExpiringDict(self, max_len=10, max_age_frames=20)
+            my_dict = ExpiringDict(self, max_age_frames=20)
             if iteration == 0:
                 # Add item
                 my_dict["test"] = "something"
@@ -27,14 +27,12 @@ class ExpiringDict(OrderedDict):
                     print("test is not anymore in dict")
     """
 
-    def __init__(self, bot: "BotAI", max_len: int = 1, max_age_frames: int = 1):
-        assert max_age_frames > 0
-        assert max_len > 0
+    def __init__(self, bot: "BotAI", max_age_frames: int = 1):
+        assert max_age_frames >= -1
         assert bot
 
         OrderedDict.__init__(self)
         self.bot: BotAI = bot
-        self.max_len: int = max_len
         self.max_age: Union[int, float] = max_age_frames
         self.lock: RLock = RLock()
 
@@ -73,12 +71,6 @@ class ExpiringDict(OrderedDict):
     def __setitem__(self, key, value):
         """ Set d[key] = value """
         with self.lock:
-            if len(self) == self.max_len:
-                try:
-                    # Remove the first element as this is going to be the oldest
-                    OrderedDict.popitem(self, last=False)
-                except KeyError:
-                    pass
             OrderedDict.__setitem__(self, key, (value, self.frame))
 
     def __repr__(self):
@@ -87,7 +79,10 @@ class ExpiringDict(OrderedDict):
         with self.lock:
             for key, value in OrderedDict.items(self):
                 if self.frame - value[1] < self.max_age:
-                    print_list.append(f"{key}: {value}")
+                    try:
+                        print_list.append(f"{repr(key)}: {repr(value)}")
+                    except:
+                        print_list.append(f"{key}: {value}")
         print_str = ", ".join(print_list)
         return f"ExpiringDict({print_str})"
 
@@ -99,6 +94,7 @@ class ExpiringDict(OrderedDict):
         with self.lock:
             return self.keys()
 
+    # TODO find a way to improve len
     def __len__(self):
         """ Override len method as key value pairs aren't instantly being deleted, but only on __get__(item).
         This function is slow because it has to check if each element is not expired yet. """
