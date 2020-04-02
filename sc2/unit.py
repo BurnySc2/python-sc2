@@ -21,6 +21,7 @@ from .constants import (
     TARGET_BOTH,
     IS_SNAPSHOT,
     IS_VISIBLE,
+    IS_PLACEHOLDER,
     IS_MINE,
     IS_ENEMY,
     IS_CLOAKED,
@@ -458,6 +459,24 @@ class Unit:
         NOTE: This means the bot has vision of the position of the unit!
         It does not give any information about the cloak status of the unit."""
         return self._proto.display_type == IS_VISIBLE and not self.is_snapshot
+
+    @property_immutable_cache
+    def is_placeholder(self) -> bool:
+        """ Checks if the unit is a placerholder for the bot.
+        Raw information about placeholders:
+            display_type: Placeholder
+            alliance: Self
+            unit_type: 86
+            owner: 1
+            pos {
+              x: 29.5
+              y: 53.5
+              z: 7.98828125
+            }
+            radius: 2.75
+            is_on_screen: false
+        """
+        return self._proto.display_type == IS_PLACEHOLDER
 
     @property
     def alliance(self) -> Alliance:

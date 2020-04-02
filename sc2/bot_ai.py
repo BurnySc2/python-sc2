@@ -21,6 +21,7 @@ from .constants import (
     ALL_GAS,
     EQUIVALENTS_FOR_TECH_PROGRESS,
     TERRAN_STRUCTURES_REQUIRE_SCV,
+    IS_PLACEHOLDER,
 )
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
@@ -85,6 +86,7 @@ class BotAI(DistanceCalculation):
         self.watchtowers: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
+        self.placeholders: Units = Units([], self)
         self.larva: Units = Units([], self)
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
@@ -1666,6 +1668,7 @@ class BotAI(DistanceCalculation):
     def _prepare_units(self):
         # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
         self.blips: Set[Blip] = set()
+        self.placeholders: Units = Units([], self)
         self.units: Units = Units([], self)
         self.structures: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
@@ -1697,6 +1700,9 @@ class BotAI(DistanceCalculation):
                     continue
                 unit_obj = Unit(unit, self, distance_calculation_index=index)
                 index += 1
+                if unit.display_type == IS_PLACEHOLDER:
+                    self.placeholders.append(unit_obj)
+                    continue
                 self.all_units.append(unit_obj)
                 alliance = unit.alliance
                 # Alliance.Neutral.value = 3
