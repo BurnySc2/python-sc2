@@ -82,12 +82,12 @@ class BCRushBot(sc2.BotAI):
             # Build refineries
             elif self.structures(UnitTypeId.BARRACKS) and self.gas_buildings.amount < 2:
                 if self.can_afford(UnitTypeId.REFINERY):
-                    vgs = self.vespene_geyser.closer_than(20, cc)
+                    vgs: Units = self.vespene_geyser.closer_than(20, cc)
                     for vg in vgs:
                         if self.gas_buildings.filter(lambda unit: unit.distance_to(vg) < 1):
                             break
 
-                        worker = self.select_build_worker(vg.position)
+                        worker: Unit = self.select_build_worker(vg.position)
                         if worker is None:
                             break
 
@@ -96,13 +96,13 @@ class BCRushBot(sc2.BotAI):
 
             # Build factory if we dont have one
             if self.tech_requirement_progress(UnitTypeId.FACTORY) == 1:
-                f = self.structures(UnitTypeId.FACTORY)
-                if not f:
+                factories: Units = self.structures(UnitTypeId.FACTORY)
+                if not factories:
                     if self.can_afford(UnitTypeId.FACTORY):
                         await self.build(UnitTypeId.FACTORY, near=cc.position.towards(self.game_info.map_center, 8))
                 # Build starport once we can build starports, up to 2
                 elif (
-                    f.ready
+                    factories.ready
                     and self.structures.of_type({UnitTypeId.STARPORT, UnitTypeId.STARPORTFLYING}).ready.amount
                     + self.already_pending(UnitTypeId.STARPORT)
                     < 2
@@ -148,10 +148,10 @@ class BCRushBot(sc2.BotAI):
                 (Point2((x, y)) for x in range(-10, 10) for y in range(-10, 10)),
                 key=lambda point: point.x ** 2 + point.y ** 2,
             )
-            offset_point = Point2((-0.5, -0.5))
+            offset_point: Point2 = Point2((-0.5, -0.5))
             possible_land_positions = (sp.position.rounded + offset_point + p for p in possible_land_positions_offset)
             for target_land_position in possible_land_positions:
-                land_and_addon_points = starport_land_positions(target_land_position)
+                land_and_addon_points: List[Point2] = starport_land_positions(target_land_position)
                 if all(
                     self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos) and self.in_pathing_grid(land_pos)
                     for land_pos in land_and_addon_points
@@ -163,7 +163,7 @@ class BCRushBot(sc2.BotAI):
         unit: Unit
         for sp in self.structures(UnitTypeId.STARPORTFLYING).filter(lambda unit: not unit.is_idle):
             if isinstance(sp.order_target, Point2):
-                p = Point3((*sp.order_target, self.get_terrain_z_height(sp.order_target)))
+                p: Point3 = Point3((*sp.order_target, self.get_terrain_z_height(sp.order_target)))
                 self.client.debug_box2_out(p, color=Point3((255, 0, 0)))
 
         # Build fusion core
@@ -172,11 +172,11 @@ class BCRushBot(sc2.BotAI):
                 await self.build(UnitTypeId.FUSIONCORE, near=cc.position.towards(self.game_info.map_center, 8))
 
         # Saturate refineries
-        for a in self.gas_buildings:
-            if a.assigned_harvesters < a.ideal_harvesters:
-                w = self.workers.closer_than(20, a)
-                if w:
-                    w.random.gather(a)
+        for refinery in self.gas_buildings:
+            if refinery.assigned_harvesters < refinery.ideal_harvesters:
+                worker: Units = self.workers.closer_than(20, a)
+                if worker:
+                    worker.random.gather(refinery)
 
         # Send workers back to mine if they are idle
         for scv in self.workers.idle:

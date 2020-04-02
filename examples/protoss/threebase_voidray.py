@@ -4,7 +4,13 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 import sc2
 from sc2 import Race, Difficulty
-from sc2.constants import *
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.ids.buff_id import BuffId
+from sc2.unit import Unit
+from sc2.units import Units
+from sc2.position import Point2
 from sc2.ids.buff_id import BuffId
 from sc2.player import Bot, Computer
 
@@ -24,7 +30,7 @@ class ThreebaseVoidrayBot(sc2.BotAI):
 
         # If this random nexus is not idle and has not chrono buff, chrono it with one of the nexuses we have
         if not nexus.is_idle and not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST):
-            nexuses = self.structures(NEXUS)
+            nexuses = self.structures(UnitTypeId.NEXUS)
             abilities = await self.get_available_abilities(nexuses)
             for loop_nexus, abilities_nexus in zip(nexuses, abilities):
                 if AbilityId.EFFECT_CHRONOBOOSTENERGYCOST in abilities_nexus:
@@ -32,8 +38,8 @@ class ThreebaseVoidrayBot(sc2.BotAI):
                     break
 
         # If we have at least 5 void rays, attack closes enemy unit/building, or if none is visible: attack move towards enemy spawn
-        if self.units(VOIDRAY).amount > 5:
-            for vr in self.units(VOIDRAY):
+        if self.units(UnitTypeId.VOIDRAY).amount > 5:
+            for vr in self.units(UnitTypeId.VOIDRAY):
                 # Activate charge ability if the void ray just attacked
                 if vr.weapon_cooldown > 0:
                     vr(AbilityId.EFFECT_VOIDRAYPRISMATICALIGNMENT)
@@ -51,45 +57,48 @@ class ThreebaseVoidrayBot(sc2.BotAI):
         # If we are low on supply, build pylon
         if (
             self.supply_left < 2
-            and self.already_pending(PYLON) == 0
+            and self.already_pending(UnitTypeId.PYLON) == 0
             or self.supply_used > 15
             and self.supply_left < 4
-            and self.already_pending(PYLON) < 2
+            and self.already_pending(UnitTypeId.PYLON) < 2
         ):
             # Always check if you can afford something before you build it
-            if self.can_afford(PYLON):
-                await self.build(PYLON, near=nexus)
+            if self.can_afford(UnitTypeId.PYLON):
+                await self.build(UnitTypeId.PYLON, near=nexus)
 
         # Train probe on nexuses that are undersaturated (avoiding distribute workers functions)
         # if nexus.assigned_harvesters < nexus.ideal_harvesters and nexus.is_idle:
-        if self.supply_workers + self.already_pending(PROBE) < self.townhalls.amount * 22 and nexus.is_idle:
-            if self.can_afford(PROBE):
-                nexus.train(PROBE)
+        if self.supply_workers + self.already_pending(UnitTypeId.PROBE) < self.townhalls.amount * 22 and nexus.is_idle:
+            if self.can_afford(UnitTypeId.PROBE):
+                nexus.train(UnitTypeId.PROBE)
 
         # If we have less than 3 nexuses and none pending yet, expand
-        if self.townhalls.ready.amount + self.already_pending(NEXUS) < 3:
-            if self.can_afford(NEXUS):
+        if self.townhalls.ready.amount + self.already_pending(UnitTypeId.NEXUS) < 3:
+            if self.can_afford(UnitTypeId.NEXUS):
                 await self.expand_now()
 
         # Once we have a pylon completed
-        if self.structures(PYLON).ready:
-            pylon = self.structures(PYLON).ready.random
-            if self.structures(GATEWAY).ready:
+        if self.structures(UnitTypeId.PYLON).ready:
+            pylon = self.structures(UnitTypeId.PYLON).ready.random
+            if self.structures(UnitTypeId.GATEWAY).ready:
                 # If we have gateway completed, build cyber core
-                if not self.structures(CYBERNETICSCORE):
-                    if self.can_afford(CYBERNETICSCORE) and self.already_pending(CYBERNETICSCORE) == 0:
-                        await self.build(CYBERNETICSCORE, near=pylon)
+                if not self.structures(UnitTypeId.CYBERNETICSCORE):
+                    if (
+                        self.can_afford(UnitTypeId.CYBERNETICSCORE)
+                        and self.already_pending(UnitTypeId.CYBERNETICSCORE) == 0
+                    ):
+                        await self.build(UnitTypeId.CYBERNETICSCORE, near=pylon)
             else:
                 # If we have no gateway, build gateway
-                if self.can_afford(GATEWAY) and self.already_pending(GATEWAY) == 0:
-                    await self.build(GATEWAY, near=pylon)
+                if self.can_afford(UnitTypeId.GATEWAY) and self.already_pending(UnitTypeId.GATEWAY) == 0:
+                    await self.build(UnitTypeId.GATEWAY, near=pylon)
 
         # Build gas near completed nexuses once we have a cybercore (does not need to be completed
-        if self.structures(CYBERNETICSCORE):
+        if self.structures(UnitTypeId.CYBERNETICSCORE):
             for nexus in self.townhalls.ready:
                 vgs = self.vespene_geyser.closer_than(15, nexus)
                 for vg in vgs:
-                    if not self.can_afford(ASSIMILATOR):
+                    if not self.can_afford(UnitTypeId.ASSIMILATOR):
                         break
 
                     worker = self.select_build_worker(vg.position)
@@ -97,24 +106,24 @@ class ThreebaseVoidrayBot(sc2.BotAI):
                         break
 
                     if not self.gas_buildings or not self.gas_buildings.closer_than(1, vg):
-                        worker.build(ASSIMILATOR, vg)
+                        worker.build(UnitTypeId.ASSIMILATOR, vg)
                         worker.stop(queue=True)
 
         # If we have less than 3  but at least 3 nexuses, build stargate
-        if self.structures(PYLON).ready and self.structures(CYBERNETICSCORE).ready:
-            pylon = self.structures(PYLON).ready.random
+        if self.structures(UnitTypeId.PYLON).ready and self.structures(UnitTypeId.CYBERNETICSCORE).ready:
+            pylon = self.structures(UnitTypeId.PYLON).ready.random
             if (
-                self.townhalls.ready.amount + self.already_pending(NEXUS) >= 3
-                and self.structures(STARGATE).ready.amount + self.already_pending(STARGATE) < 3
+                self.townhalls.ready.amount + self.already_pending(UnitTypeId.NEXUS) >= 3
+                and self.structures(UnitTypeId.STARGATE).ready.amount + self.already_pending(UnitTypeId.STARGATE) < 3
             ):
-                if self.can_afford(STARGATE):
-                    await self.build(STARGATE, near=pylon)
+                if self.can_afford(UnitTypeId.STARGATE):
+                    await self.build(UnitTypeId.STARGATE, near=pylon)
 
         # Save up for expansions, loop over idle completed stargates and queue void ray if we can afford
         if self.townhalls.amount >= 3:
-            for sg in self.structures(STARGATE).ready.idle:
-                if self.can_afford(VOIDRAY):
-                    sg.train(VOIDRAY)
+            for sg in self.structures(UnitTypeId.STARGATE).ready.idle:
+                if self.can_afford(UnitTypeId.VOIDRAY):
+                    sg.train(UnitTypeId.VOIDRAY)
 
 
 def main():

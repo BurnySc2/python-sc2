@@ -17,7 +17,7 @@ class ProxyRaxBot(sc2.BotAI):
         # If we don't have a townhall anymore, send all units to attack
         ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         if not ccs:
-            target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
+            target: Point2 = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
             for unit in self.workers | self.units(UnitTypeId.MARINE):
                 unit.attack(target)
             return
@@ -27,7 +27,7 @@ class ProxyRaxBot(sc2.BotAI):
         # Send marines in waves of 15, each time 15 are idle, send them to their death
         marines: Units = self.units(UnitTypeId.MARINE).idle
         if marines.amount > 15:
-            target = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
+            target: Point2 = self.enemy_structures.random_or(self.enemy_start_locations[0]).position
             for marine in marines:
                 marine.attack(target)
 
@@ -47,7 +47,7 @@ class ProxyRaxBot(sc2.BotAI):
             self.minerals > 400 and self.structures(UnitTypeId.BARRACKS).amount < 5
         ):
             if self.can_afford(UnitTypeId.BARRACKS):
-                p = self.game_info.map_center.towards(self.enemy_start_locations[0], 25)
+                p: Point2 = self.game_info.map_center.towards(self.enemy_start_locations[0], 25)
                 await self.build(UnitTypeId.BARRACKS, near=p)
 
         # Train marines
