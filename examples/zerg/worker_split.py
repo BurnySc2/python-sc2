@@ -23,7 +23,7 @@ you want your bot to be reliable against Human opponents.
 class WorkerSplitBot(sc2.BotAI):
     async def on_before_start(self):
         """ This function is run before the expansion locations and ramps are calculated. These calculations can take up to a second, depending on the CPU. """
-        mf = self.mineral_field
+        mf: Units = self.mineral_field
         for w in self.workers:
             w.gather(mf.closest_to(w))
         await self._do_actions(self.actions)
