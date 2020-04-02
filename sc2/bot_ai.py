@@ -1700,10 +1700,10 @@ class BotAI(DistanceCalculation):
                     continue
                 unit_obj = Unit(unit, self, distance_calculation_index=index)
                 index += 1
+                self.all_units.append(unit_obj)
                 if unit.display_type == IS_PLACEHOLDER:
                     self.placeholders.append(unit_obj)
                     continue
-                self.all_units.append(unit_obj)
                 alliance = unit.alliance
                 # Alliance.Neutral.value = 3
                 if alliance == 3:
