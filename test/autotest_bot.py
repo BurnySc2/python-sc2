@@ -115,16 +115,16 @@ class TestBot(sc2.BotAI):
         assert self.can_afford(UnitTypeId.SCV)
         assert self.owned_expansions == {self.townhalls.first.position: self.townhalls.first}
         # Test if bot start location is in expansion locations
-        assert self.townhalls.random.position in set(self.expansion_locations.keys())
+        assert self.townhalls.random.position in self.expansion_locations_list
         # Test if enemy start locations are in expansion locations
         for location in self.enemy_start_locations:
-            assert location in set(self.expansion_locations.keys())
+            assert location in self.expansion_locations_list
 
         self.tests_done_by_name.add("test_botai_properties")
 
     # Test BotAI functions
     async def test_botai_functions(self):
-        for location in self.expansion_locations.keys():
+        for location in self.expansion_locations_list:
             # Can't build on spawn locations, skip these
             if location in self.enemy_start_locations or location == self.start_location:
                 continue

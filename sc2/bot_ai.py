@@ -107,6 +107,8 @@ class BotAI(DistanceCalculation):
         self._enemy_units_previous_map: Dict[int, Unit] = dict()
         self._enemy_structures_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
+        self._expansion_positions_list: List[Point2] = []
+        self._resource_location_to_expansion_position_dict: Dict[Point2, Point2] = {}
         self._time_before_step: float = None
         self._time_after_step: float = None
         self._min_step_time: float = math.inf
@@ -250,21 +252,58 @@ class BotAI(DistanceCalculation):
             )
         return self.cached_main_base_ramp
 
-    @property_cache_forever
-    def expansion_locations(self) -> Dict[Point2, Units]:
+    @property_cache_once_per_frame
+    def expansion_locations_list(self) -> List[Point2]:
+        """ Returns a list of expansion positions, not sorted in any way. """
+        assert (
+            self._expansion_positions_list
+        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        return self._expansion_positions_list
+
+    @property_cache_once_per_frame
+    def expansion_locations_dict(self) -> Dict[Point2, Units]:
         """
         Returns dict with the correct expansion position Point2 object as key,
-        resources (mineral field and vespene geyser) as value.
-        """
+        resources as Units (mineral fields and vespene geysers) as value.
 
+        Caution: This function is slow. If you only need the expansion locations, use the property above.
+        """
+        assert (
+            self._expansion_positions_list
+        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        expansion_locations: Dict[Point2, Units] = {pos: Units([], self) for pos in self._expansion_positions_list}
+        for resource in self.resources:
+            # It may be that some resources are not mapped to an expansion location
+            exp_position: Point2 = self._resource_location_to_expansion_position_dict.get(resource.position, None)
+            if exp_position:
+                assert exp_position in expansion_locations
+                expansion_locations[exp_position].append(resource.position)
+        return expansion_locations
+
+    # Deprecated
+    @property_cache_once_per_frame
+    def expansion_locations(self) -> Dict[Point2, Units]:
+        """ Same as the function above. """
+        assert (
+            self._expansion_positions_list
+        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        warnings.warn(
+            f"You are using 'self.expansion_locations', please use 'self.expansion_locations_list' (fast) or 'self.expansion_locations_dict' (slow) instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.expansion_locations_dict
+
+    def _find_expansion_locations(self):
+        """ Ran once at the start of the game to calculate expansion locations. """
         # Idea: create a group for every resource, then merge these groups if
         # any resource in a group is closer than a threshold to any resource of another group
 
         # Distance we group resources by
-        resource_spread_threshold = 8.5
-        geysers = self.vespene_geyser
+        resource_spread_threshold: float = 8.5
+        geysers: Units = self.vespene_geyser
         # Create a group for every resource
-        resource_groups = [
+        resource_groups: List[List[Unit]] = [
             [resource]
             for resource in self.resources
             if resource.name != "MineralField450"  # dont use low mineral count patches
@@ -314,9 +353,15 @@ class BotAI(DistanceCalculation):
                 and all(point.distance_to(resource) > (7 if resource in geysers else 6) for resource in resources)
             )
             # Choose best fitting point
-            result = min(possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources))
+            result: Point2 = min(
+                possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources)
+            )
             centers[result] = resources
-        return centers
+            # Put all expansion locations in a list
+            self._expansion_positions_list.append(result)
+            # Maps all resource positions to the expansion position
+            for resource in resources:
+                self._resource_location_to_expansion_position_dict[resource.position] = result
 
     @property
     def units_created(self) -> Counter:
@@ -406,7 +451,7 @@ class BotAI(DistanceCalculation):
 
         closest = None
         distance = math.inf
-        for el in self.expansion_locations:
+        for el in self.expansion_locations_list:
 
             def is_near_to_expansion(t):
                 return t.distance_to(el) < self.EXPANSION_GAP_THRESHOLD
@@ -1229,7 +1274,9 @@ class BotAI(DistanceCalculation):
                     successfully_trained = structure.warp_in(unit_type, location)
                 else:
                     # Normal train a unit from larva or inside a structure
-                    successfully_trained = self.do(structure.train(unit_type), subtract_cost=True, subtract_supply=True, ignore_warning=True)
+                    successfully_trained = self.do(
+                        structure.train(unit_type), subtract_cost=True, subtract_supply=True, ignore_warning=True
+                    )
                     # Check if structure has reactor: queue same unit again
                     if (
                         # Only terran can have reactors
@@ -1247,7 +1294,12 @@ class BotAI(DistanceCalculation):
                     ):
                         trained_amount += 1
                         # With one command queue=False and one queue=True, you can queue 2 marines in a reactored barracks in one frame
-                        successfully_trained = self.do(structure.train(unit_type, queue=True), subtract_cost=True, subtract_supply=True, ignore_warning=True)
+                        successfully_trained = self.do(
+                            structure.train(unit_type, queue=True),
+                            subtract_cost=True,
+                            subtract_supply=True,
+                            ignore_warning=True,
+                        )
 
                 if successfully_trained:
                     trained_amount += 1
@@ -1325,7 +1377,9 @@ class BotAI(DistanceCalculation):
                 and (not is_protoss or structure.is_powered)
             ):
                 # Can_afford check was already done earlier in this function
-                successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True, ignore_warning=True)
+                successful_action: bool = self.do(
+                    structure.research(upgrade_type), subtract_cost=True, ignore_warning=True
+                )
                 return successful_action
         return False
 
@@ -1567,7 +1621,7 @@ class BotAI(DistanceCalculation):
         if self.townhalls:
             self._game_info.player_start_location = self.townhalls.first.position
             # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
-            _ = self.expansion_locations
+            _ = self._find_expansion_locations()
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
         self._time_before_step: float = time.perf_counter()
 

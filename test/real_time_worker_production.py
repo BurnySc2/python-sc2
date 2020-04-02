@@ -63,7 +63,7 @@ class RealTimeTestBot(sc2.BotAI):
         # Spawn nexus at expansion location that is not used
         made_nexus = False
         if self.supply_left == 0:
-            for expansion_location in self.expansion_locations:
+            for expansion_location in self.expansion_locations_list:
                 if self.townhalls.closer_than(10, expansion_location):
                     continue
                 if self.enemy_structures.closer_than(10, expansion_location):

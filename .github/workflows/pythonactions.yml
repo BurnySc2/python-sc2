@@ -10,7 +10,7 @@ jobs:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
@@ -103,7 +103,7 @@ jobs:
     # Run test bots that download the SC2 linux client and run it
     name: Run testbots linux
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       # Do not allow this test to cancel. Finish all jobs regardless of error
       fail-fast: false

@@ -128,25 +128,31 @@ def test_bot_ai():
     if hasattr(bot, "_cache_expansion_locations"):
         delattr(bot, "_cache_expansion_locations")
     t0 = time.perf_counter()
-    bot.expansion_locations
+    bot._find_expansion_locations()
     t1 = time.perf_counter()
     print(f"Time to calculate expansion locations: {t1-t0} s")
 
     # TODO: Cache all expansion positions for a map and check if it is the same
-    assert len(bot.expansion_locations) >= 10, f"Too few expansions found: {len(bot.expansion_locations)}"
+    assert len(bot.expansion_locations_list) >= 10, f"Too few expansions found: {len(bot.expansion_locations_list)}"
     # Honorgrounds LE has 24
-    assert len(bot.expansion_locations) <= 24, f"Too many expansions found: {len(bot.expansion_locations)}"
+    assert len(bot.expansion_locations_list) <= 24, f"Too many expansions found: {len(bot.expansion_locations_list)}"
     # On N player maps, it is expected that there are N*X bases because of symmetry, at least for 1vs1 maps
     assert (
-        len(bot.expansion_locations) % (len(bot.enemy_start_locations) + 1) == 0
-    ), f"{set(bot.expansion_locations.keys())}"
+        len(bot.expansion_locations_list) % (len(bot.enemy_start_locations) + 1) == 0
+    ), f"{bot.expansion_locations_list}"
     # Test if bot start location is in expansion locations
     assert bot.townhalls.random.position in set(
-        bot.expansion_locations.keys()
-    ), f'This error might occur if you are running the tests locally using command "pytest test/", possibly because you are using an outdated cache.py version, but it should not occur when using docker and pipenv.\n{bot.townhalls.random.position}, {set(bot.expansion_locations.keys())}'
+        bot.expansion_locations_list
+    ), f'This error might occur if you are running the tests locally using command "pytest test/", possibly because you are using an outdated cache.py version, but it should not occur when using docker and pipenv.\n{bot.townhalls.random.position}, {bot.expansion_locations_list}'
     # Test if enemy start locations are in expansion locations
     for location in bot.enemy_start_locations:
-        assert location in set(bot.expansion_locations.keys()), f"{location}, {bot.expansion_locations.keys()}"
+        assert location in set(bot.expansion_locations_list), f"{location}, {bot.expansion_locations_list}"
+    # Each expansion is supposed to have at least one geysir and 6-12 minerals
+    for expansion, resource_positions in bot.expansion_locations_dict.items():
+        assert isinstance(resource_positions, Units)
+        assert (
+            7 <= len(resource_positions) <= 10
+        ), f"{len(resource_positions)} resource fields in one base on map {bot.game_info.map_name}"
 
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
     assert bot.owned_expansions == {bot.townhalls.first.position: bot.townhalls.first}
