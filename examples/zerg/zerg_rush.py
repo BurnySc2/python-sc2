@@ -15,7 +15,7 @@ from sc2.units import Units
 
 class ZergRushBot(sc2.BotAI):
     async def on_start(self):
-        self._client.game_step: int = 2
+        self.client.game_step = 2
 
     async def on_step(self, iteration):
         if iteration == 0:
@@ -98,7 +98,7 @@ class ZergRushBot(sc2.BotAI):
         ):
             drone: Unit = self.workers.random
             target: Unit = self.vespene_geyser.closest_to(drone)
-            drone.build(UnitTypeId.EXTRACTOR, target)
+            drone.build_gas(target)
 
         # If we have no spawning pool, try to build spawning pool
         elif self.structures(UnitTypeId.SPAWNINGPOOL).amount + self.already_pending(UnitTypeId.SPAWNINGPOOL) == 0:

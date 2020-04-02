@@ -174,7 +174,7 @@ class BCRushBot(sc2.BotAI):
         # Saturate refineries
         for refinery in self.gas_buildings:
             if refinery.assigned_harvesters < refinery.ideal_harvesters:
-                worker: Units = self.workers.closer_than(20, a)
+                worker: Units = self.workers.closer_than(10, refinery)
                 if worker:
                     worker.random.gather(refinery)
 

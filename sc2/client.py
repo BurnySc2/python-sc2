@@ -30,7 +30,7 @@ class Client(Protocol):
         """
         super().__init__(ws)
         # How many frames will be waited between iterations before the next one is called
-        self.game_step = 8
+        self.game_step: int = 8
         self._player_id = None
         self._game_result = None
         # Store a hash value of all the debug requests to prevent sending the same ones again if they haven't changed last frame

@@ -61,7 +61,7 @@ class Hydralisk(sc2.BotAI):
         # Build spawning pool
         if self.structures(UnitTypeId.SPAWNINGPOOL).amount + self.already_pending(UnitTypeId.SPAWNINGPOOL) == 0:
             if self.can_afford(UnitTypeId.SPAWNINGPOOL):
-                await self.build(UnitTypeId.SPAWNINGPOOL, near=hq)
+                await self.build(UnitTypeId.SPAWNINGPOOL, near=hq.position.towards(self.game_info.map_center, 5))
 
         # Upgrade to lair if spawning pool is complete
         if self.structures(UnitTypeId.SPAWNINGPOOL).ready:
@@ -73,18 +73,19 @@ class Hydralisk(sc2.BotAI):
         if self.townhalls(UnitTypeId.LAIR).ready:
             if self.structures(UnitTypeId.HYDRALISKDEN).amount + self.already_pending(UnitTypeId.HYDRALISKDEN) == 0:
                 if self.can_afford(UnitTypeId.HYDRALISKDEN):
-                    await self.build(UnitTypeId.HYDRALISKDEN, near=hq)
+                    await self.build(UnitTypeId.HYDRALISKDEN, near=hq.position.towards(self.game_info.map_center, 5))
 
         # If we dont have both extractors: build them
         if (
-            self.units(UnitTypeId.SPAWNINGPOOL)
+            self.structures(UnitTypeId.SPAWNINGPOOL)
             and self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) < 2
         ):
             if self.can_afford(UnitTypeId.EXTRACTOR):
                 # May crash if we dont have any drones
-                drone: Unit = self.workers.random
-                target: Unit = self.vespene_geyser.closest_to(drone.position)
-                drone.build_gas(target)
+                for vg in self.vespene_geyser.closer_than(10, hq):
+                    drone: Unit = self.workers.random
+                    drone.build_gas(vg)
+                    break
 
         # If we have less than 22 drones, build drones
         if self.supply_workers + self.already_pending(UnitTypeId.DRONE) < 22:
