@@ -13,11 +13,7 @@ from sc2.ids.unit_typeid import UnitTypeId
 
 
 class ProxyRaxBot(sc2.BotAI):
-    def __init__(self):
-        self.attack_groups = set()
-
     async def on_step(self, iteration):
-
         # If we don't have a townhall anymore, send all units to attack
         ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         if not ccs:
