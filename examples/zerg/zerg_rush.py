@@ -111,7 +111,7 @@ class ZergRushBot(sc2.BotAI):
 
         # If we have no queen, try to build a queen if we have a spawning pool compelted
         elif (
-            self.units(UnitTypeId.QUEEN).amount + self.already_pending(UnitTypeId.QUEEN) == 0
+            self.units(UnitTypeId.QUEEN).amount + self.already_pending(UnitTypeId.QUEEN) < self.townhalls.amount
             and self.structures(UnitTypeId.SPAWNINGPOOL).ready
         ):
             if self.can_afford(UnitTypeId.QUEEN):
