@@ -10,7 +10,7 @@ jobs:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
