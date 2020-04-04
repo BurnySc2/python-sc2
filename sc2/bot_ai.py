@@ -1269,7 +1269,7 @@ class BotAI(DistanceCalculation):
             ):
                 # Warp in at location
                 # TODO: find fast warp in locations either random location or closest to the given parameter "closest_to"
-                # TODO: find out which pylons have fast warp in by checking distance to nexus.ready and warp gates
+                # TODO: find out which pylons have fast warp in by checking distance to nexus and warpgates.ready
                 if structure.type_id == UnitTypeId.WARPGATE:
                     pylons = self.structures(UnitTypeId.PYLON)
                     location = pylons.random.position.random_on_distance(4)
@@ -1350,14 +1350,17 @@ class BotAI(DistanceCalculation):
         requirement_met = (
             required_tech_building is None or self.structure_type_build_progress(required_tech_building) == 1
         )
-        # Requirement not met
         if not requirement_met:
             return False
 
         is_protoss = self.race == Race.Protoss
 
+        # All upgrades right now that can be researched in spire and hatch can also be researched in their morphs
         equiv_structures = {
+            UnitTypeId.SPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
             UnitTypeId.GREATERSPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
+            UnitTypeId.HATCHERY: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
+            UnitTypeId.LAIR: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
             UnitTypeId.HIVE: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
         }
         # Convert to a set, or equivalent structures are chosen
@@ -1369,10 +1372,10 @@ class BotAI(DistanceCalculation):
         structure: Unit
         for structure in self.structures:
             if (
-                # If structure hasn't received an action/order this frame
-                structure.tag not in self.unit_tags_received_action
                 # Structure can research this upgrade
-                and structure.type_id in research_structure_types
+                structure.type_id in research_structure_types
+                # If structure hasn't received an action/order this frame
+                and structure.tag not in self.unit_tags_received_action
                 # Structure is idle
                 and structure.is_idle
                 # Structure belongs to protoss and is powered (near pylon)
