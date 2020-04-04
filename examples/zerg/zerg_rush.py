@@ -6,6 +6,7 @@ import numpy as np
 from sc2.position import Point2, Point3
 
 import sc2
+from sc2.data import Result
 from sc2 import Race, Difficulty
 from sc2.constants import *
 from sc2.player import Bot, Computer
@@ -129,6 +130,9 @@ class ZergRushBot(sc2.BotAI):
                 color = Point3((0, 255, 0))
             self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
+
+    async def on_end(self, game_result: Result):
+        print(f"{self.time_formatted} On end was called")
 
 def main():
     sc2.run_game(
