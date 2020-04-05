@@ -149,7 +149,10 @@ def test_bot_ai():
         assert location in set(bot.expansion_locations_list), f"{location}, {bot.expansion_locations_list}"
     # Each expansion is supposed to have at least one geysir and 6-12 minerals
     for expansion, resource_positions in bot.expansion_locations_dict.items():
+        assert isinstance(expansion, Point2)
         assert isinstance(resource_positions, Units)
+        if resource_positions:
+            assert isinstance(resource_positions[0], Unit)
         assert (
             7 <= len(resource_positions) <= 10
         ), f"{len(resource_positions)} resource fields in one base on map {bot.game_info.map_name}"

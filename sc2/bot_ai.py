@@ -279,7 +279,7 @@ class BotAI(DistanceCalculation):
             exp_position: Point2 = self._resource_location_to_expansion_position_dict.get(resource.position, None)
             if exp_position:
                 assert exp_position in expansion_locations
-                expansion_locations[exp_position].append(resource.position)
+                expansion_locations[exp_position].append(resource)
         return expansion_locations
 
     # Deprecated
