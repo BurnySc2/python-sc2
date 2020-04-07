@@ -175,7 +175,7 @@ class TestBot(sc2.BotAI):
                         upgrader_structure: Unit = upgrader_structures.closest_to(map_center)
                         if upgrader_structure.is_idle:
                             # print(f"Making {upgrader_structure} research upgrade {upgrade_id}")
-                            self.do(upgrader_structure.research(upgrade_id))
+                            upgrader_structure.research(upgrade_id)
                         await self._advance_steps(2)
                         if upgrade_id in self.state.upgrades:
                             break
@@ -197,11 +197,11 @@ class EmptyBot(sc2.BotAI):
         if enemies:
             # If attacker is visible: move command to attacker but try to not attack
             for unit in self.units:
-                self.do(unit.move(enemies.closest_to(unit).position))
+                unit.move(enemies.closest_to(unit).position)
         else:
             # If attacker is invisible: dont move
             for unit in self.units:
-                self.do(unit.hold_position())
+                unit.hold_position()
 
 
 def main():

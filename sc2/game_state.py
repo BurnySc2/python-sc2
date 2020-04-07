@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
-from .constants import FakeEffectID, FakeEffectRadii
+from .constants import FakeEffectID, FakeEffectRadii, IS_MINE, IS_ENEMY
 from .data import Alliance, DisplayType
 from .ids.effect_id import EffectId
 from .ids.unit_typeid import UnitTypeId
@@ -105,6 +105,16 @@ class EffectData:
     @property
     def alliance(self) -> Alliance:
         return self._proto.alliance
+
+    @property
+    def is_mine(self) -> bool:
+        """ Checks if the effect is caused by me. """
+        return self._proto.alliance == IS_MINE
+
+    @property
+    def is_enemy(self) -> bool:
+        """ Checks if the effect is hostile. """
+        return self._proto.alliance == IS_ENEMY
 
     @property
     def owner(self) -> int:

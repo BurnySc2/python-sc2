@@ -30,7 +30,7 @@ pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/a
 ```
 Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments or pipenv.
 
-You'll need an StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
+You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
 
 You probably want some maps too. Official map downloads are available from [Blizzard/s2client-proto](https://github.com/Blizzard/s2client-proto#downloads). Notice: the map files are to be extracted into *subdirectories* of the `install-dir/Maps` directory.
 Maps that are run on the [SC2 AI Ladder](http://sc2ai.net/) and [SC2 AI Arena](https://ai-arena.net/) can be downloaded [from the sc2ai wiki](http://wiki.sc2ai.net/Ladder_Maps) and [the ai-arena wiki](https://ai-arena.net/wiki/getting-started/#wiki-toc-maps).
@@ -83,6 +83,14 @@ You can find more examples in the [`examples/`](/examples) folder.
 
 The API supports a number of options for configuring how it operates.
 
+### `unit_command_uses_self_do`
+Set this to 'True' if your bot is issueing commands using `self.do(Unit(Ability, Target))` instead of `Unit(Ability, Target)`.
+```python
+class MyBot(sc2.BotAI):
+    def __init__(self):
+        self.unit_command_uses_self_do = True
+```
+
 ### `raw_affects_selection`
 Setting this to true improves bot performance by a little bit.
 ```python
@@ -99,7 +107,7 @@ The distance calculation method:
 ```python
 class MyBot(sc2.BotAI):
     def __init__(self):
-        self.distance_calculation_method = 2
+        self.distance_calculation_method: int = 2
 ```
 
 ### `game_step`
@@ -111,7 +119,7 @@ class MyBot(sc2.BotAI):
         pass  # don't set it here!
 
     async def on_start(self):
-        self.client.game_step = 2
+        self.client.game_step: int = 2
 ```
 
 ## Community - Help and support

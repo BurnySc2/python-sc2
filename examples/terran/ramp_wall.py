@@ -12,33 +12,38 @@ from sc2.position import Point2, Point3
 from sc2.unit import Unit
 from sc2.units import Units
 
+from typing import List, Set
+
 
 class RampWallBot(sc2.BotAI):
+    def __init__(self):
+        self.unit_command_uses_self_do = False
+
     async def on_step(self, iteration):
-        ccs = self.townhalls(COMMANDCENTER)
+        ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         if not ccs:
             return
         else:
-            cc = ccs.first
+            cc: Unit = ccs.first
 
         await self.distribute_workers()
 
-        if self.can_afford(SCV) and self.workers.amount < 16 and cc.is_idle:
-            self.do(cc.train(SCV), subtract_cost=True, subtract_supply=True)
+        if self.can_afford(UnitTypeId.SCV) and self.workers.amount < 16 and cc.is_idle:
+            self.do(cc.train(UnitTypeId.SCV))
 
         # Raise depos when enemies are nearby
-        for depo in self.structures(SUPPLYDEPOT).ready:
+        for depo in self.structures(UnitTypeId.SUPPLYDEPOT).ready:
             for unit in self.enemy_units:
                 if unit.distance_to(depo) < 15:
                     break
             else:
-                self.do(depo(MORPH_SUPPLYDEPOT_LOWER))
+                depo(AbilityId.MORPH_SUPPLYDEPOT_LOWER)
 
         # Lower depos when no enemies are nearby
-        for depo in self.structures(SUPPLYDEPOTLOWERED).ready:
+        for depo in self.structures(UnitTypeId.SUPPLYDEPOTLOWERED).ready:
             for unit in self.enemy_units:
                 if unit.distance_to(depo) < 10:
-                    self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
+                    depo(AbilityId.MORPH_SUPPLYDEPOT_RAISE)
                     break
 
         # Draw ramp points
@@ -62,39 +67,41 @@ class RampWallBot(sc2.BotAI):
         # Draw if two selected units are facing each other - green if this guy is facing the other, red if he is not
         # self.draw_facing_units()
 
-        depot_placement_positions = self.main_base_ramp.corner_depots
+        depot_placement_positions: Set[Point2] = self.main_base_ramp.corner_depots
         # Uncomment the following if you want to build 3 supply depots in the wall instead of a barracks in the middle + 2 depots in the corner
         # depot_placement_positions = self.main_base_ramp.corner_depots | {self.main_base_ramp.depot_in_middle}
 
-        barracks_placement_position = self.main_base_ramp.barracks_correct_placement
+        barracks_placement_position: Point2 = self.main_base_ramp.barracks_correct_placement
         # If you prefer to have the barracks in the middle without room for addons, use the following instead
         # barracks_placement_position = self.main_base_ramp.barracks_in_middle
 
-        depots = self.structures.of_type({SUPPLYDEPOT, SUPPLYDEPOTLOWERED})
+        depots: Units = self.structures.of_type({UnitTypeId.SUPPLYDEPOT, UnitTypeId.SUPPLYDEPOTLOWERED})
 
         # Filter locations close to finished supply depots
         if depots:
-            depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
+            depot_placement_positions: Set[Point2] = {
+                d for d in depot_placement_positions if depots.closest_distance_to(d) > 1
+            }
 
         # Build depots
-        if self.can_afford(SUPPLYDEPOT) and self.already_pending(SUPPLYDEPOT) == 0:
+        if self.can_afford(UnitTypeId.SUPPLYDEPOT) and self.already_pending(UnitTypeId.SUPPLYDEPOT) == 0:
             if len(depot_placement_positions) == 0:
                 return
             # Choose any depot location
-            target_depot_location = depot_placement_positions.pop()
-            ws = self.workers.gathering
-            if ws:  # if workers were found
-                w = ws.random
-                self.do(w.build(SUPPLYDEPOT, target_depot_location))
+            target_depot_location: Point2 = depot_placement_positions.pop()
+            workers: Units = self.workers.gathering
+            if workers:  # if workers were found
+                worker: Unit = workers.random
+                self.do(worker.build(UnitTypeId.SUPPLYDEPOT, target_depot_location))
 
         # Build barracks
-        if depots.ready and self.can_afford(BARRACKS) and self.already_pending(BARRACKS) == 0:
-            if self.structures(BARRACKS).amount + self.already_pending(BARRACKS) > 0:
+        if depots.ready and self.can_afford(UnitTypeId.BARRACKS) and self.already_pending(UnitTypeId.BARRACKS) == 0:
+            if self.structures(UnitTypeId.BARRACKS).amount + self.already_pending(UnitTypeId.BARRACKS) > 0:
                 return
-            ws = self.workers.gathering
-            if ws and barracks_placement_position:  # if workers were found
-                w = ws.random
-                self.do(w.build(BARRACKS, barracks_placement_position))
+            workers = self.workers.gathering
+            if workers and barracks_placement_position:  # if workers were found
+                worker: Unit = workers.random
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
     async def on_building_construction_started(self, unit: Unit):
         print(f"Construction of building {unit} started at {unit.position}.")
@@ -202,6 +209,8 @@ class RampWallBot(sc2.BotAI):
         if self.townhalls:
             cc = self.townhalls[0]
             p0 = cc.position3d
+            if not self.structures:
+                return
             structure: Unit
             for structure in self.structures:
                 if structure == cc:

@@ -10,7 +10,7 @@ jobs:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -103,7 +103,7 @@ jobs:
     # Run test bots that download the SC2 linux client and run it
     name: Run testbots linux
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       # Do not allow this test to cancel. Finish all jobs regardless of error
       fail-fast: false
@@ -144,6 +144,12 @@ jobs:
         docker exec -i app3 bash -c "tree"
         docker rm -f app3
 
+    - name: Run real_time_worker_production.py
+      run: |
+        docker run -it -d --name app4 test_image
+        docker exec -i app4 bash -c "python test/travis_test_script.py test/real_time_worker_production.py"
+        docker exec -i app4 bash -c "tree"
+        docker rm -f app4
 
 
   # https://github.com/JamesIves/github-pages-deploy-action

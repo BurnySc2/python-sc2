@@ -1,92 +1,127 @@
-import random
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 import sc2
 from sc2 import Race, Difficulty
-from sc2.constants import *
 from sc2.player import Bot, Computer
 from sc2.player import Human
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.ability_id import AbilityId
+from sc2.unit import Unit
+from sc2.units import Units
+from sc2.position import Point2
 
 
 class CyclonePush(sc2.BotAI):
-    def select_target(self):
-        target = self.known_enemy_structures
-        if target.exists:
-            return target.random.position
+    def select_target(self) -> Point2:
+        # Pick a random enemy structure's position
+        targets = self.enemy_structures
+        if targets:
+            return targets.random.position
 
-        target = self.known_enemy_units
-        if target.exists:
-            return target.random.position
+        # Pick a random enemy unit's position
+        targets = self.enemy_units
+        if targets:
+            return targets.random.position
 
-        if min([u.position.distance_to(self.enemy_start_locations[0]) for u in self.units]) < 5:
-            return self.enemy_start_locations[0].position
+        # Pick enemy start location if it has no friendly units nearby
+        if min([unit.distance_to(self.enemy_start_locations[0]) for unit in self.units]) > 5:
+            return self.enemy_start_locations[0]
 
-        return self.state.mineral_field.random.position
+        # Pick a random mineral field on the map
+        return self.mineral_field.random.position
 
     async def on_step(self, iteration):
-        cc = self.townhalls(COMMANDCENTER)
-        if not cc.exists:
-            target = self.known_enemy_structures.random_or(self.enemy_start_locations[0]).position
-            for unit in self.workers | self.units(CYCLONE):
-                self.do(unit.attack(target))
+        CCs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
+        # If no command center exists, attack-move with all workers and cyclones
+        if not CCs:
+            target = self.structures.random_or(self.enemy_start_locations[0]).position
+            for unit in self.workers | self.units(UnitTypeId.CYCLONE):
+                unit.attack(target)
             return
         else:
-            cc = cc.first
+            # Otherwise, grab the first command center from the list of command centers
+            cc: Unit = CCs.first
 
-        if iteration % 50 == 0 and self.units(CYCLONE).amount > 2:
-            target = self.select_target()
-            forces = self.units(CYCLONE)
-            if (iteration // 50) % 10 == 0:
+        # Every 50 iterations (here: every 50*8 = 400 frames)
+        if iteration % 50 == 0 and self.units(UnitTypeId.CYCLONE).amount > 2:
+            target: Point2 = self.select_target()
+            forces: Units = self.units(UnitTypeId.CYCLONE)
+            # Every 4000 frames: send all forces to attack-move the target position
+            if iteration % 500 == 0:
                 for unit in forces:
-                    self.do(unit.attack(target))
+                    unit.attack(target)
+            # Every 400 frames: only send idle forces to attack the target position
             else:
                 for unit in forces.idle:
-                    self.do(unit.attack(target))
+                    unit.attack(target)
 
-        if self.can_afford(SCV) and self.workers.amount < 22 and cc.is_idle:
-            self.do(cc.train(SCV))
+        # While we have less than 22 workers: build more
+        # Check if we can afford them (by minerals and by supply)
+        if (
+            self.can_afford(UnitTypeId.SCV)
+            and self.supply_workers + self.already_pending(UnitTypeId.SCV) < 22
+            and cc.is_idle
+        ):
+            cc.train(UnitTypeId.SCV)
 
+        # Build supply depots if we are low on supply, do not construct more than 2 at a time
         elif self.supply_left < 3:
-            if self.can_afford(SUPPLYDEPOT) and self.already_pending(SUPPLYDEPOT) < 2:
-                await self.build(SUPPLYDEPOT, near=cc.position.towards(self.game_info.map_center, 8))
+            if self.can_afford(UnitTypeId.SUPPLYDEPOT) and self.already_pending(UnitTypeId.SUPPLYDEPOT) < 2:
+                # This picks a near-random worker to build a depot at location
+                # 'from command center towards game center, distance 8'
+                await self.build(UnitTypeId.SUPPLYDEPOT, near=cc.position.towards(self.game_info.map_center, 8))
 
-        if self.structures(SUPPLYDEPOT).exists:
-            if not self.structures(BARRACKS).exists:
-                if self.can_afford(BARRACKS):
-                    await self.build(BARRACKS, near=cc.position.towards(self.game_info.map_center, 8))
+        # If we have supply depots (careful, lowered supply depots have a different UnitTypeId: UnitTypeId.SUPPLYDEPOTLOWERED)
+        if self.structures(UnitTypeId.SUPPLYDEPOT):
+            # If we have no barracks
+            if not self.structures(UnitTypeId.BARRACKS):
+                # If we can afford barracks
+                if self.can_afford(UnitTypeId.BARRACKS):
+                    # Near same command as above with the depot
+                    await self.build(UnitTypeId.BARRACKS, near=cc.position.towards(self.game_info.map_center, 8))
 
-            elif self.structures(BARRACKS).exists and self.gas_buildings.amount < 2:
-                if self.can_afford(REFINERY):
-                    vgs = self.vespene_geyser.closer_than(20.0, cc)
+            # If we have a barracks (complete or under construction) and less than 2 gas structures (here: refineries)
+            elif self.structures(UnitTypeId.BARRACKS) and self.gas_buildings.amount < 2:
+                if self.can_afford(UnitTypeId.REFINERY):
+                    # All the vespene geysirs nearby, including ones with a refinery on top of it
+                    vgs = self.vespene_geyser.closer_than(10, cc)
                     for vg in vgs:
                         if self.gas_buildings.filter(lambda unit: unit.distance_to(vg) < 1):
-                            break
-
-                        worker = self.select_build_worker(vg.position)
+                            continue
+                        # Select a worker closest to the vespene geysir
+                        worker: Unit = self.select_build_worker(vg)
+                        # Worker can be none in cases where all workers are dead
+                        # or 'select_build_worker' function only selects from workers which carry no minerals
                         if worker is None:
-                            break
-
-                        self.do(worker.build(REFINERY, vg))
+                            continue
+                        # Issue the build command to the worker, important: vg has to be a Unit, not a position
+                        worker.build_gas(vg)
+                        # Only issue one build geysir command per frame
                         break
 
-            if self.structures(BARRACKS).ready.exists:
-                if self.structures(FACTORY).amount < 3 and not self.already_pending(FACTORY):
-                    if self.can_afford(FACTORY):
-                        p = cc.position.towards_with_random_angle(self.game_info.map_center, 16)
-                        await self.build(FACTORY, near=p)
+            # If we have at least one barracks that is compelted, build factory
+            if self.structures(UnitTypeId.BARRACKS).ready:
+                if self.structures(UnitTypeId.FACTORY).amount < 3 and not self.already_pending(UnitTypeId.FACTORY):
+                    if self.can_afford(UnitTypeId.FACTORY):
+                        position: Point2 = cc.position.towards_with_random_angle(self.game_info.map_center, 16)
+                        await self.build(UnitTypeId.FACTORY, near=position)
 
-        for factory in self.structures(FACTORY).ready.idle:
+        for factory in self.structures(UnitTypeId.FACTORY).ready.idle:
             # Reactor allows us to build two at a time
-            if self.can_afford(CYCLONE):
-                self.do(factory.train(CYCLONE))
+            if self.can_afford(UnitTypeId.CYCLONE):
+                factory.train(UnitTypeId.CYCLONE)
 
-        for a in self.gas_buildings:
-            if a.assigned_harvesters < a.ideal_harvesters:
-                w = self.workers.closer_than(20, a)
-                if w.exists:
-                    self.do(w.random.gather(a))
+        # Saturate gas
+        for refinery in self.gas_buildings:
+            if refinery.assigned_harvesters < refinery.ideal_harvesters:
+                worker: Units = self.workers.closer_than(10, refinery)
+                if worker:
+                    worker.random.gather(refinery)
 
         for scv in self.workers.idle:
-            self.do(scv.gather(self.mineral_field.closest_to(cc)))
+            scv.gather(self.mineral_field.closest_to(cc))
 
 
 def main():

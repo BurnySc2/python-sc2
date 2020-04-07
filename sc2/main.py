@@ -123,8 +123,18 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
     while True:
         if iteration != 0:
             if realtime:
-                # TODO: check what happens if a bot takes too long to respond for realtime=True, so that the requested game_loop might already be in the past
-                state = await client.observation(gs.game_loop + client.game_step)
+                # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
+                try:
+                    requested_step = gs.game_loop + client.game_step
+                    state = await client.observation(requested_step)
+                    # If the bot took too long in the previous observation, request another observation one frame after
+                    if state.observation.observation.game_loop > requested_step:
+                        # TODO Remove these 2 comments
+                        # t = state.observation.observation.game_loop
+                        state = await client.observation(state.observation.observation.game_loop + 1)
+                        # print(f"Requested step: {requested_step}, received: {t}, new: {state.observation.observation.game_loop}")
+                except ProtocolError:
+                    pass
             else:
                 state = await client.observation()
             # check game result every time we get the observation
