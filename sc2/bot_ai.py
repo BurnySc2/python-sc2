@@ -21,6 +21,7 @@ from .constants import (
     ALL_GAS,
     EQUIVALENTS_FOR_TECH_PROGRESS,
     TERRAN_STRUCTURES_REQUIRE_SCV,
+    IS_PLACEHOLDER,
 )
 from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
 from .distances import DistanceCalculation
@@ -67,6 +68,9 @@ class BotAI(DistanceCalculation):
         # Select distance calculation method, see distances.py: _distances_override_functions function
         if not hasattr(self, "distance_calculation_method"):
             self.distance_calculation_method: int = 2
+        # Select if the Unit.command should return UnitCommand objects. Set this to True if your bot uses 'self.do(unit(ability, target))'
+        if not hasattr(self, "unit_command_uses_self_do"):
+            self.unit_command_uses_self_do: bool = False
         # This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)
         self.realtime: bool = False
         self.all_units: Units = Units([], self)
@@ -82,6 +86,7 @@ class BotAI(DistanceCalculation):
         self.watchtowers: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
+        self.placeholders: Units = Units([], self)
         self.larva: Units = Units([], self)
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
@@ -104,6 +109,8 @@ class BotAI(DistanceCalculation):
         self._enemy_units_previous_map: Dict[int, Unit] = dict()
         self._enemy_structures_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
+        self._expansion_positions_list: List[Point2] = []
+        self._resource_location_to_expansion_position_dict: Dict[Point2, Point2] = {}
         self._time_before_step: float = None
         self._time_after_step: float = None
         self._min_step_time: float = math.inf
@@ -247,21 +254,58 @@ class BotAI(DistanceCalculation):
             )
         return self.cached_main_base_ramp
 
-    @property_cache_forever
-    def expansion_locations(self) -> Dict[Point2, Units]:
+    @property_cache_once_per_frame
+    def expansion_locations_list(self) -> List[Point2]:
+        """ Returns a list of expansion positions, not sorted in any way. """
+        assert (
+            self._expansion_positions_list
+        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        return self._expansion_positions_list
+
+    @property_cache_once_per_frame
+    def expansion_locations_dict(self) -> Dict[Point2, Units]:
         """
         Returns dict with the correct expansion position Point2 object as key,
-        resources (mineral field and vespene geyser) as value.
-        """
+        resources as Units (mineral fields and vespene geysers) as value.
 
+        Caution: This function is slow. If you only need the expansion locations, use the property above.
+        """
+        assert (
+            self._expansion_positions_list
+        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        expansion_locations: Dict[Point2, Units] = {pos: Units([], self) for pos in self._expansion_positions_list}
+        for resource in self.resources:
+            # It may be that some resources are not mapped to an expansion location
+            exp_position: Point2 = self._resource_location_to_expansion_position_dict.get(resource.position, None)
+            if exp_position:
+                assert exp_position in expansion_locations
+                expansion_locations[exp_position].append(resource)
+        return expansion_locations
+
+    # Deprecated
+    @property_cache_once_per_frame
+    def expansion_locations(self) -> Dict[Point2, Units]:
+        """ Same as the function above. """
+        assert (
+            self._expansion_positions_list
+        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        warnings.warn(
+            f"You are using 'self.expansion_locations', please use 'self.expansion_locations_list' (fast) or 'self.expansion_locations_dict' (slow) instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.expansion_locations_dict
+
+    def _find_expansion_locations(self):
+        """ Ran once at the start of the game to calculate expansion locations. """
         # Idea: create a group for every resource, then merge these groups if
         # any resource in a group is closer than a threshold to any resource of another group
 
         # Distance we group resources by
-        resource_spread_threshold = 8.5
-        geysers = self.vespene_geyser
+        resource_spread_threshold: float = 8.5
+        geysers: Units = self.vespene_geyser
         # Create a group for every resource
-        resource_groups = [
+        resource_groups: List[List[Unit]] = [
             [resource]
             for resource in self.resources
             if resource.name != "MineralField450"  # dont use low mineral count patches
@@ -311,9 +355,15 @@ class BotAI(DistanceCalculation):
                 and all(point.distance_to(resource) > (7 if resource in geysers else 6) for resource in resources)
             )
             # Choose best fitting point
-            result = min(possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources))
+            result: Point2 = min(
+                possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources)
+            )
             centers[result] = resources
-        return centers
+            # Put all expansion locations in a list
+            self._expansion_positions_list.append(result)
+            # Maps all resource positions to the expansion position
+            for resource in resources:
+                self._resource_location_to_expansion_position_dict[resource.position] = result
 
     @property
     def units_created(self) -> Counter:
@@ -331,7 +381,7 @@ class BotAI(DistanceCalculation):
                 if unit.type_id == UnitTypeId.MARINE:
                     if self.units_created[MARINE] % 10 == 0:
                         for marine in self.units(UnitTypeId.MARINE):
-                            self.do(marine.attack(self.enemy_start_locations[0]))
+                            marine.attack(self.enemy_start_locations[0])
         """
         return self._units_created
 
@@ -403,7 +453,7 @@ class BotAI(DistanceCalculation):
 
         closest = None
         distance = math.inf
-        for el in self.expansion_locations:
+        for el in self.expansion_locations_list:
 
             def is_near_to_expansion(t):
                 return t.distance_to(el) < self.EXPANSION_GAP_THRESHOLD
@@ -507,7 +557,7 @@ class BotAI(DistanceCalculation):
                 deficit_mining_places.remove(current_place)
                 # if current place is a gas extraction site, go there
                 if current_place.vespene_contents:
-                    self.do(worker.gather(current_place))
+                    worker.gather(current_place)
                 # if current place is a gas extraction site,
                 # go to the mineral field that is near and has the most minerals left
                 else:
@@ -517,12 +567,12 @@ class BotAI(DistanceCalculation):
                     # local_minerals can be empty if townhall is misplaced
                     target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents, default=None)
                     if target_mineral:
-                        self.do(worker.gather(target_mineral))
+                        worker.gather(target_mineral)
             # more workers to distribute than free mining spots
             # send to closest if worker is doing nothing
             elif worker.is_idle and all_minerals_near_base:
                 target_mineral = min(all_minerals_near_base, key=lambda mineral: mineral.distance_to(worker))
-                self.do(worker.gather(target_mineral))
+                worker.gather(target_mineral)
             else:
                 # there are no deficit mining places and worker is not idle
                 # so dont move him
@@ -575,7 +625,7 @@ class BotAI(DistanceCalculation):
             cc = self.townhalls.idle.random_or(None)
             # self.townhalls can be empty or there are no idle townhalls
             if cc and self.can_feed(UnitTypeId.SCV):
-                self.do(cc.train(UnitTypeId.SCV))
+                cc.train(UnitTypeId.SCV)
 
         :param unit_type: """
         required = self.calculate_supply_cost(unit_type)
@@ -666,7 +716,7 @@ class BotAI(DistanceCalculation):
             cc = self.townhalls.idle.random_or(None)
             # self.townhalls can be empty or there are no idle townhalls
             if cc and self.can_afford(UnitTypeId.SCV):
-                self.do(cc.train(UnitTypeId.SCV))
+                cc.train(UnitTypeId.SCV)
 
         Example::
 
@@ -754,7 +804,7 @@ class BotAI(DistanceCalculation):
             worker = self.select_build_worker(barracks_placement_position)
             # Can return None
             if worker:
-                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position))
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         :param pos:
         :param force: """
@@ -792,7 +842,7 @@ class BotAI(DistanceCalculation):
             worker = self.select_build_worker(barracks_placement_position)
             # Can return None
             if worker and (await self.can_place(UnitTypeId.BARRACKS, [barracks_placement_position])[0]:
-                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position))
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         :param building:
         :param position: """
@@ -1118,9 +1168,9 @@ class BotAI(DistanceCalculation):
         if builder is None:
             return False
         if building in gas_buildings:
-            self.do(builder.build_gas(near))
+            builder.build_gas(near)
             return True
-        self.do(builder.build(building, p), subtract_cost=True)
+        self.do(builder.build(building, p), subtract_cost=True, ignore_warning=True)
         return True
 
     def train(
@@ -1219,16 +1269,16 @@ class BotAI(DistanceCalculation):
             ):
                 # Warp in at location
                 # TODO: find fast warp in locations either random location or closest to the given parameter "closest_to"
-                # TODO: find out which pylons have fast warp in by checking distance to nexus.ready and warp gates
+                # TODO: find out which pylons have fast warp in by checking distance to nexus and warpgates.ready
                 if structure.type_id == UnitTypeId.WARPGATE:
                     pylons = self.structures(UnitTypeId.PYLON)
                     location = pylons.random.position.random_on_distance(4)
-                    successfully_trained = self.do(
-                        structure.warp_in(unit_type, location), subtract_cost=True, subtract_supply=True
-                    )
+                    successfully_trained = structure.warp_in(unit_type, location)
                 else:
                     # Normal train a unit from larva or inside a structure
-                    successfully_trained = self.do(structure.train(unit_type), subtract_cost=True, subtract_supply=True)
+                    successfully_trained = self.do(
+                        structure.train(unit_type), subtract_cost=True, subtract_supply=True, ignore_warning=True
+                    )
                     # Check if structure has reactor: queue same unit again
                     if (
                         # Only terran can have reactors
@@ -1247,7 +1297,10 @@ class BotAI(DistanceCalculation):
                         trained_amount += 1
                         # With one command queue=False and one queue=True, you can queue 2 marines in a reactored barracks in one frame
                         successfully_trained = self.do(
-                            structure.train(unit_type, queue=True), subtract_cost=True, subtract_supply=True
+                            structure.train(unit_type, queue=True),
+                            subtract_cost=True,
+                            subtract_supply=True,
+                            ignore_warning=True,
                         )
 
                 if successfully_trained:
@@ -1297,14 +1350,17 @@ class BotAI(DistanceCalculation):
         requirement_met = (
             required_tech_building is None or self.structure_type_build_progress(required_tech_building) == 1
         )
-        # Requirement not met
         if not requirement_met:
             return False
 
         is_protoss = self.race == Race.Protoss
 
+        # All upgrades right now that can be researched in spire and hatch can also be researched in their morphs
         equiv_structures = {
+            UnitTypeId.SPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
             UnitTypeId.GREATERSPIRE: {UnitTypeId.SPIRE, UnitTypeId.GREATERSPIRE},
+            UnitTypeId.HATCHERY: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
+            UnitTypeId.LAIR: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
             UnitTypeId.HIVE: {UnitTypeId.HATCHERY, UnitTypeId.LAIR, UnitTypeId.HIVE},
         }
         # Convert to a set, or equivalent structures are chosen
@@ -1316,17 +1372,19 @@ class BotAI(DistanceCalculation):
         structure: Unit
         for structure in self.structures:
             if (
-                # If structure hasn't received an action/order this frame
-                structure.tag not in self.unit_tags_received_action
                 # Structure can research this upgrade
-                and structure.type_id in research_structure_types
+                structure.type_id in research_structure_types
+                # If structure hasn't received an action/order this frame
+                and structure.tag not in self.unit_tags_received_action
                 # Structure is idle
                 and structure.is_idle
                 # Structure belongs to protoss and is powered (near pylon)
                 and (not is_protoss or structure.is_powered)
             ):
                 # Can_afford check was already done earlier in this function
-                successful_action: bool = self.do(structure.research(upgrade_type), subtract_cost=True)
+                successful_action: bool = self.do(
+                    structure.research(upgrade_type), subtract_cost=True, ignore_warning=True
+                )
                 return successful_action
         return False
 
@@ -1336,6 +1394,7 @@ class BotAI(DistanceCalculation):
         subtract_cost: bool = False,
         subtract_supply: bool = False,
         can_afford_check: bool = False,
+        ignore_warning: bool = False,
     ) -> bool:
         """ Adds a unit action to the 'self.actions' list which is then executed at the end of the frame.
 
@@ -1345,7 +1404,7 @@ class BotAI(DistanceCalculation):
             cc = self.townhalls.idle.random_or(None)
             # self.townhalls can be empty or there are no idle townhalls
             if cc and self.can_afford(UnitTypeId.SCV):
-                self.do(cc.train(UnitTypeId.SCV), subtract_cost=True, subtract_supply=True)
+                cc.train(UnitTypeId.SCV)
 
         Building a building::
 
@@ -1353,7 +1412,7 @@ class BotAI(DistanceCalculation):
             worker = self.workers.random_or(None)
             barracks_placement_position = self.main_base_ramp.barracks_correct_placement
             if worker and self.can_afford(UnitTypeId.BARRACKS):
-                self.do(worker.build(UnitTypeId.BARRACKS, barracks_placement_position), subtract_cost=True)
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         Moving a unit::
 
@@ -1361,13 +1420,22 @@ class BotAI(DistanceCalculation):
             worker = self.workers.random_or(None)
             # worker can be None if all are dead
             if worker:
-                self.do(worker.move(self.game_info.map_center))
+                worker.move(self.game_info.map_center)
 
         :param action:
         :param subtract_cost:
         :param subtract_supply:
         :param can_afford_check:
         """
+        if not self.unit_command_uses_self_do and isinstance(action, bool):
+            if not ignore_warning:
+                warnings.warn(
+                    "You have used self.do(). Please consider putting 'self.unit_command_uses_self_do = True' in your bot __init__() function or removing self.do().",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+            return action
+
         assert isinstance(
             action, UnitCommand
         ), f"Given unit command is not a command, but instead of type {type(action)}"
@@ -1558,7 +1626,7 @@ class BotAI(DistanceCalculation):
         if self.townhalls:
             self._game_info.player_start_location = self.townhalls.first.position
             # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
-            _ = self.expansion_locations
+            _ = self._find_expansion_locations()
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
         self._time_before_step: float = time.perf_counter()
 
@@ -1603,6 +1671,7 @@ class BotAI(DistanceCalculation):
     def _prepare_units(self):
         # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
         self.blips: Set[Blip] = set()
+        self.placeholders: Units = Units([], self)
         self.units: Units = Units([], self)
         self.structures: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
@@ -1635,6 +1704,9 @@ class BotAI(DistanceCalculation):
                 unit_obj = Unit(unit, self, distance_calculation_index=index)
                 index += 1
                 self.all_units.append(unit_obj)
+                if unit.display_type == IS_PLACEHOLDER:
+                    self.placeholders.append(unit_obj)
+                    continue
                 alliance = unit.alliance
                 # Alliance.Neutral.value = 3
                 if alliance == 3:

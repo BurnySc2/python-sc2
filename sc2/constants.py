@@ -171,6 +171,7 @@ TARGET_AIR: Set[int] = {TargetType.Air.value, TargetType.Any.value}
 TARGET_BOTH = TARGET_GROUND | TARGET_AIR
 IS_SNAPSHOT = DisplayType.Snapshot.value
 IS_VISIBLE = DisplayType.Visible.value
+IS_PLACEHOLDER = DisplayType.Placeholder.value
 IS_MINE = Alliance.Self.value
 IS_ENEMY = Alliance.Enemy.value
 IS_CLOAKED: Set[int] = {CloakState.Cloaked.value, CloakState.CloakedDetected.value, CloakState.CloakedAllied.value}

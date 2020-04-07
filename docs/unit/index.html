@@ -184,7 +184,7 @@ Attacking a position will make the unit move there and attack everything on its 
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -245,12 +245,12 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 
 <dl class="method">
 <dt id="sc2.unit.Unit.build">
-<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position=None</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position=None</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to build another ‘unit’ at ‘position’.
 Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">SCV</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">COMMANDCENTER</span><span class="p">,</span> <span class="n">position</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SCV</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">COMMANDCENTER</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 <span class="c1"># Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">SCV</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">REFINERY</span><span class="p">,</span> <span class="n">target_vespene_geysir</span><span class="p">))</span>
+<span class="n">SCV</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">REFINERY</span><span class="p">,</span> <span class="n">target_vespene_geysir</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -262,18 +262,18 @@ Usage:</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sc2.unit.Unit.build_gas">
-<code class="sig-name descname">build_gas</code><span class="sig-paren">(</span><em class="sig-param">target_geysir</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build_gas" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build_gas</code><span class="sig-paren">(</span><em class="sig-param">target_geysir</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build_gas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to build another ‘unit’ at ‘position’.
 Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">SCV</span><span class="o">.</span><span class="n">build_gas</span><span class="p">(</span><span class="n">target_vespene_geysir</span><span class="p">))</span>
+<span class="n">SCV</span><span class="o">.</span><span class="n">build_gas</span><span class="p">(</span><span class="n">target_vespene_geysir</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -284,7 +284,7 @@ Usage:</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -577,7 +577,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -713,7 +713,7 @@ You can’t build extractors on empty geysers.</p>
 <dd class="field-odd"><p><strong>queue</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1070,6 +1070,33 @@ Only works for own units.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sc2.unit.Unit.is_placeholder">
+<em class="property">property </em><code class="sig-name descname">is_placeholder</code><a class="headerlink" href="#sc2.unit.Unit.is_placeholder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the unit is a placerholder for the bot.
+Raw information about placeholders:</p>
+<blockquote>
+<div><p>display_type: Placeholder
+alliance: Self
+unit_type: 86
+owner: 1
+pos {</p>
+<blockquote>
+<div><p>x: 29.5
+y: 53.5
+z: 7.98828125</p>
+</div></blockquote>
+<p>}
+radius: 2.75
+is_on_screen: false</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="sc2.unit.Unit.is_powered">
 <em class="property">property </em><code class="sig-name descname">is_powered</code><a class="headerlink" href="#sc2.unit.Unit.is_powered" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is powered by a pylon or warppism.</p>
@@ -1244,7 +1271,7 @@ Target can be a Unit (to follow that unit) or Point2.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1354,7 +1381,7 @@ point, the unit will patrol in a circle.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1437,14 +1464,14 @@ point, the unit will patrol in a circle.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="sc2.unit.Unit.research">
-<code class="sig-name descname">research</code><span class="sig-paren">(</span><em class="sig-param">upgrade</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.research" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">research</code><span class="sig-paren">(</span><em class="sig-param">upgrade</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.research" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to research ‘upgrade’.
 Requires UpgradeId to be passed instead of AbilityId.</p>
 <dl class="field-list simple">
@@ -1455,7 +1482,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1472,7 +1499,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1483,7 +1510,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 <dd><p>Deprecated: This ability redirects to ‘AbilityId.ATTACK’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1568,7 +1595,7 @@ Also takes build progress into account.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1584,7 +1611,7 @@ units need the space.</p>
 <dd class="field-odd"><p><strong>queue</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1645,9 +1672,9 @@ For SCV, this returns None</p>
 
 <dl class="method">
 <dt id="sc2.unit.Unit.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to train another ‘unit’.
-Usage: self.do(COMMANDCENTER.train(SCV))</p>
+Usage: COMMANDCENTER.train(SCV)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1656,7 +1683,7 @@ Usage: self.do(COMMANDCENTER.train(SCV))</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1699,7 +1726,7 @@ For SCV, this returns None</p>
 
 <dl class="method">
 <dt id="sc2.unit.Unit.warp_in">
-<code class="sig-name descname">warp_in</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.warp_in" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">warp_in</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.warp_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders Warpgate to warp in ‘unit’ at ‘position’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1709,7 +1736,7 @@ For SCV, this returns None</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1722,12 +1749,12 @@ returns -1 for units that can’t attack.
 Usage:
 if unit.weapon_cooldown == 0:</p>
 <blockquote>
-<div><p>self.do(unit.attack(target))</p>
+<div><p>unit.attack(target)</p>
 </div></blockquote>
 <dl class="simple">
-<dt>elif unit.weapon_cooldown &lt; 0:</dt><dd><p>self.do(unit.move(closest_allied_unit_because_cant_attack))</p>
+<dt>elif unit.weapon_cooldown &lt; 0:</dt><dd><p>unit.move(closest_allied_unit_because_cant_attack)</p>
 </dd>
-<dt>else:</dt><dd><p>self.do(unit.move(retreatPosition))</p>
+<dt>else:</dt><dd><p>unit.move(retreatPosition)</p>
 </dd>
 </dl>
 <dl class="field-list simple">

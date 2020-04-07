@@ -306,7 +306,7 @@ class TestBot(sc2.BotAI):
                         attacker.weapon_cooldown == 0 or attacker.weapon_cooldown > 3
                     ) and real_damage < expected_damage:
                         if attacker_type in {UnitTypeId.PROBE, UnitTypeId.SCV, UnitTypeId.DRONE}:
-                            self.do(attacker.attack(defender))
+                            attacker.attack(defender)
                         await self._advance_steps(1)
                         # Unsure why I have to recalculate this here again but it prevents a bug
                         attacker, defender = get_attacker_and_defender()
@@ -346,11 +346,11 @@ class EmptyBot(sc2.BotAI):
         if enemies:
             # If attacker is visible: move command to attacker but try to not attack
             for unit in self.units:
-                self.do(unit.move(enemies.closest_to(unit).position))
+                unit.move(enemies.closest_to(unit).position)
         else:
             # If attacker is invisible: dont move
             for unit in self.units:
-                self.do(unit.hold_position())
+                unit.hold_position()
 
 
 def main():

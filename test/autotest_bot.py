@@ -115,16 +115,16 @@ class TestBot(sc2.BotAI):
         assert self.can_afford(UnitTypeId.SCV)
         assert self.owned_expansions == {self.townhalls.first.position: self.townhalls.first}
         # Test if bot start location is in expansion locations
-        assert self.townhalls.random.position in set(self.expansion_locations.keys())
+        assert self.townhalls.random.position in self.expansion_locations_list
         # Test if enemy start locations are in expansion locations
         for location in self.enemy_start_locations:
-            assert location in set(self.expansion_locations.keys())
+            assert location in self.expansion_locations_list
 
         self.tests_done_by_name.add("test_botai_properties")
 
     # Test BotAI functions
     async def test_botai_functions(self):
-        for location in self.expansion_locations.keys():
+        for location in self.expansion_locations_list:
             # Can't build on spawn locations, skip these
             if location in self.enemy_start_locations or location == self.start_location:
                 continue
@@ -156,7 +156,7 @@ class TestBot(sc2.BotAI):
     async def test_botai_actions1(self):
         while self.already_pending(UnitTypeId.SCV) < 1:
             if self.can_afford(UnitTypeId.SCV):
-                self.do(self.townhalls.random.train(UnitTypeId.SCV))
+                self.townhalls.random.train(UnitTypeId.SCV)
             await self._advance_steps(2)
 
         await self._advance_steps(2)
@@ -180,18 +180,18 @@ class TestBot(sc2.BotAI):
             scv: Unit
             for index, scv in enumerate(self.workers):
                 if index > len(self.scv_action_list):
-                    self.do(scv.stop())
+                    scv.stop()
                 action = self.scv_action_list[index % len(self.scv_action_list)]
                 if action == "move":
-                    self.do(scv.move(center))
+                    scv.move(center)
                 elif action == "patrol":
-                    self.do(scv.patrol(center))
+                    scv.patrol(center)
                 elif action == "attack":
-                    self.do(scv.attack(center))
+                    scv.attack(center)
                 elif action == "hold":
-                    self.do(scv.hold_position())
+                    scv.hold_position()
                 elif action == "scan_move":
-                    self.do(scv.scan_move(center))
+                    scv.scan_move(center)
 
             await self._advance_steps(2)
 
@@ -208,10 +208,10 @@ class TestBot(sc2.BotAI):
             scvs1 = scvs[:6]
             scvs2 = scvs[6:]
             for scv in scvs1:
-                self.do(scv.move(center))
+                scv.move(center)
             mf = self.mineral_field.closest_to(self.townhalls.random)
             for scv in scvs2:
-                self.do(scv.gather(mf))
+                scv.gather(mf)
 
             await self._advance_steps(2)
         await self._advance_steps(2)
@@ -223,7 +223,7 @@ class TestBot(sc2.BotAI):
         while self.units.gathering.amount < 12:
             mf = self.mineral_field.closest_to(self.townhalls.random)
             for scv in self.workers:
-                self.do(scv.gather(mf))
+                scv.gather(mf)
 
             await self._advance_steps(2)
         await self._advance_steps(2)
@@ -264,7 +264,7 @@ class TestBot(sc2.BotAI):
                 await self._client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
 
             for reaper in self.units(UnitTypeId.REAPER):
-                self.do(reaper(AbilityId.KD8CHARGE_KD8CHARGE, center))
+                reaper(AbilityId.KD8CHARGE_KD8CHARGE, center)
 
             # print(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
@@ -289,7 +289,7 @@ class TestBot(sc2.BotAI):
             if self.units(UnitTypeId.RAVAGER).amount < 10:
                 await self._client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
             for ravager in self.units(UnitTypeId.RAVAGER):
-                self.do(ravager(AbilityId.EFFECT_CORROSIVEBILE, center))
+                ravager(AbilityId.EFFECT_CORROSIVEBILE, center)
 
             # print(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
@@ -325,7 +325,7 @@ class TestBot(sc2.BotAI):
                 self.train(UnitTypeId.QUEEN, amount=3)
                 # Equivalent to:
                 # for townhall in townhalls:
-                #     self.do(townhall.train(UnitTypeId.QUEEN), subtract_cost=True, subtract_supply=True)
+                #     townhall.train(UnitTypeId.QUEEN)
             await self._advance_steps(20)
             # Check if condition is met
             if self.already_pending(UnitTypeId.QUEEN) == 3:
@@ -354,7 +354,7 @@ class TestBot(sc2.BotAI):
 
             else:
                 for ht in HTs:
-                    self.do(ht(AbilityId.MORPH_ARCHON))
+                    ht(AbilityId.MORPH_ARCHON)
 
             await self._advance_steps(2)
             # Check if condition is met
@@ -398,7 +398,7 @@ class TestBot(sc2.BotAI):
 
             if lings.amount >= target_amount and self.minerals >= 10_000 and self.vespene >= 10_000:
                 for ling in lings:
-                    self.do(ling(AbilityId.MORPHZERGLINGTOBANELING_BANELING), subtract_cost=True)
+                    ling.train(UnitTypeId.BANELING)
             await self._advance_steps(20)
 
             # Check if condition is met
@@ -438,7 +438,7 @@ class TestBot(sc2.BotAI):
         enemy = self.enemy_units(UnitTypeId.INFESTOR)[0]
         while 1:
             raven = self.units(UnitTypeId.RAVEN)[0]
-            self.do(raven(AbilityId.EFFECT_ANTIARMORMISSILE, enemy))
+            raven(AbilityId.EFFECT_ANTIARMORMISSILE, enemy)
             await self._advance_steps(2)
             enemy = self.enemy_units(UnitTypeId.INFESTOR)[0]
             if enemy.buffs:
@@ -479,7 +479,7 @@ class TestBot(sc2.BotAI):
                     UnitTypeId.SUPPLYDEPOT, near=self.townhalls.random.position
                 )
                 if placement_position:
-                    self.do(scv.build(UnitTypeId.SUPPLYDEPOT, placement_position))
+                    scv.build(UnitTypeId.SUPPLYDEPOT, placement_position)
             await self._advance_steps(2)
 
         logger.warning("Action test 12 successful.")
@@ -508,11 +508,11 @@ class EmptyBot(sc2.BotAI):
         if enemies:
             # If attacker is visible: move command to attacker but try to not attack
             for unit in self.units:
-                self.do(unit.move(enemies.closest_to(unit).position))
+                unit.move(enemies.closest_to(unit).position)
         else:
             # If attacker is invisible: dont move
             for unit in self.units:
-                self.do(unit.hold_position())
+                unit.hold_position()
 
 
 def main():

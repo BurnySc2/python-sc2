@@ -3,6 +3,7 @@ import logging
 import os.path
 import shutil
 import signal
+import platform
 import subprocess
 import sys
 import tempfile
@@ -206,10 +207,18 @@ class SC2Process:
                     time.sleep(0.5)
                     if not self._process or self._process.poll() is not None:
                         break
-                else:
-                    self._process.kill()
-                    self._process.wait()
-                    logger.error("KILLED")
+            else:
+                self._process.kill()
+                self._process.wait()
+                logger.error("KILLED")
+            # Try to kill wineserver on linux
+            if platform.system() == "Linux":
+                try:
+                    p = subprocess.Popen(["wineserver", "-k"])
+                    p.wait()
+                # Command wineserver not detected
+                except FileNotFoundError:
+                    pass
 
         if os.path.exists(self._tmp_dir):
             shutil.rmtree(self._tmp_dir)

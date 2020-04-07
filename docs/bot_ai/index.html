@@ -256,7 +256,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">idle</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 <span class="c1"># self.townhalls can be empty or there are no idle townhalls</span>
 <span class="k">if</span> <span class="n">cc</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">))</span>
+    <span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Example:</p>
@@ -312,7 +312,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">idle</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 <span class="c1"># self.townhalls can be empty or there are no idle townhalls</span>
 <span class="k">if</span> <span class="n">cc</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_feed</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">))</span>
+    <span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -334,7 +334,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_build_worker</span><span class="p">(</span><span class="n">barracks_placement_position</span><span class="p">)</span>
 <span class="c1"># Can return None</span>
 <span class="k">if</span> <span class="n">worker</span> <span class="ow">and</span> <span class="p">(</span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_place</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="p">[</span><span class="n">barracks_placement_position</span><span class="p">])[</span><span class="mi">0</span><span class="p">]:</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">))</span>
+    <span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -412,14 +412,14 @@ are not being handled.</p>
 
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.do">
-<code class="sig-name descname">do</code><span class="sig-paren">(</span><em class="sig-param">action</em>, <em class="sig-param">subtract_cost=False</em>, <em class="sig-param">subtract_supply=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.do" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">do</code><span class="sig-paren">(</span><em class="sig-param">action</em>, <em class="sig-param">subtract_cost=False</em>, <em class="sig-param">subtract_supply=False</em>, <em class="sig-param">can_afford_check=False</em>, <em class="sig-param">ignore_warning=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.do" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a unit action to the ‘self.actions’ list which is then executed at the end of the frame.</p>
 <p>Training a unit:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train an SCV from a random idle command center</span>
 <span class="n">cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">idle</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 <span class="c1"># self.townhalls can be empty or there are no idle townhalls</span>
 <span class="k">if</span> <span class="n">cc</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">),</span> <span class="n">subtract_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subtract_supply</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Building a building:</p>
@@ -427,7 +427,7 @@ are not being handled.</p>
 <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">barracks_placement_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_base_ramp</span><span class="o">.</span><span class="n">barracks_correct_placement</span>
 <span class="k">if</span> <span class="n">worker</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">),</span> <span class="n">subtract_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Moving a unit:</p>
@@ -435,7 +435,7 @@ are not being handled.</p>
 <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 <span class="c1"># worker can be None if all are dead</span>
 <span class="k">if</span> <span class="n">worker</span><span class="p">:</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">worker</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">map_center</span><span class="p">))</span>
+    <span class="n">worker</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">map_center</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -482,11 +482,34 @@ are not being handled.</p>
 <dl class="method">
 <dt id="sc2.bot_ai.BotAI.expansion_locations">
 <em class="property">property </em><code class="sig-name descname">expansion_locations</code><a class="headerlink" href="#sc2.bot_ai.BotAI.expansion_locations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns dict with the correct expansion position Point2 object as key,
-resources (mineral field and vespene geyser) as value.</p>
+<dd><p>Same as the function above.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.expansion_locations_dict">
+<em class="property">property </em><code class="sig-name descname">expansion_locations_dict</code><a class="headerlink" href="#sc2.bot_ai.BotAI.expansion_locations_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dict with the correct expansion position Point2 object as key,
+resources as Units (mineral fields and vespene geysers) as value.</p>
+<p>Caution: This function is slow. If you only need the expansion locations, use the property above.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sc2.bot_ai.BotAI.expansion_locations_list">
+<em class="property">property </em><code class="sig-name descname">expansion_locations_list</code><a class="headerlink" href="#sc2.bot_ai.BotAI.expansion_locations_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of expansion positions, not sorted in any way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -936,7 +959,7 @@ or the building to research the upgrade was missing or not idle.</p>
 <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_build_worker</span><span class="p">(</span><span class="n">barracks_placement_position</span><span class="p">)</span>
 <span class="c1"># Can return None</span>
 <span class="k">if</span> <span class="n">worker</span><span class="p">:</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">))</span>
+    <span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -1141,7 +1164,7 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
     <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_created</span><span class="p">[</span><span class="n">MARINE</span><span class="p">]</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">marine</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">marine</span><span class="o">.</span><span class="n">attack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enemy_start_locations</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="n">marine</span><span class="o">.</span><span class="n">attack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enemy_start_locations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

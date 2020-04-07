@@ -21,6 +21,7 @@ from .constants import (
     TARGET_BOTH,
     IS_SNAPSHOT,
     IS_VISIBLE,
+    IS_PLACEHOLDER,
     IS_MINE,
     IS_ENEMY,
     IS_CLOAKED,
@@ -459,6 +460,24 @@ class Unit:
         It does not give any information about the cloak status of the unit."""
         return self._proto.display_type == IS_VISIBLE and not self.is_snapshot
 
+    @property_immutable_cache
+    def is_placeholder(self) -> bool:
+        """ Checks if the unit is a placerholder for the bot.
+        Raw information about placeholders:
+            display_type: Placeholder
+            alliance: Self
+            unit_type: 86
+            owner: 1
+            pos {
+              x: 29.5
+              y: 53.5
+              z: 7.98828125
+            }
+            radius: 2.75
+            is_on_screen: false
+        """
+        return self._proto.display_type == IS_PLACEHOLDER
+
     @property
     def alliance(self) -> Alliance:
         """ Returns the team the unit belongs to. """
@@ -748,11 +767,7 @@ class Unit:
                     and UpgradeId.EVOLVEGROOVEDSPINES in upgrades
                 ):
                     weapon_range += 1
-                elif (
-                    self.type_id == UnitTypeId.PHOENIX
-                    and self.is_mine
-                    and UpgradeId.PHOENIXRANGEUPGRADE in upgrades
-                ):
+                elif self.type_id == UnitTypeId.PHOENIX and self.is_mine and UpgradeId.PHOENIXRANGEUPGRADE in upgrades:
                     weapon_range += 2
                 elif (
                     self.type_id in {UnitTypeId.PLANETARYFORTRESS, UnitTypeId.MISSILETURRET, UnitTypeId.AUTOTURRET}
@@ -1153,11 +1168,11 @@ class Unit:
         returns -1 for units that can't attack.
         Usage:
         if unit.weapon_cooldown == 0:
-            self.do(unit.attack(target))
+            unit.attack(target)
         elif unit.weapon_cooldown < 0:
-            self.do(unit.move(closest_allied_unit_because_cant_attack))
+            unit.move(closest_allied_unit_because_cant_attack)
         else:
-            self.do(unit.move(retreatPosition)) """
+            unit.move(retreatPosition) """
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1
@@ -1176,21 +1191,32 @@ class Unit:
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs
 
-    def train(self, unit: UnitTypeId, queue: bool = False) -> UnitCommand:
+    def train(self, unit: UnitTypeId, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to train another 'unit'.
-        Usage: self.do(COMMANDCENTER.train(SCV))
+        Usage: COMMANDCENTER.train(SCV)
 
         :param unit:
         :param queue: """
-        return self(self._bot_object._game_data.units[unit.value].creation_ability.id, queue=queue)
+        return self(
+            self._bot_object._game_data.units[unit.value].creation_ability.id,
+            queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
+    def build(
+        self,
+        unit: UnitTypeId,
+        position: Union[Point2, Point3] = None,
+        queue: bool = False,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
-            self.do(SCV.build(COMMANDCENTER, position))
+            SCV.build(COMMANDCENTER, position)
             # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
-            self.do(SCV.build(REFINERY, target_vespene_geysir))
+            SCV.build(REFINERY, target_vespene_geysir)
 
         :param unit:
         :param position:
@@ -1200,14 +1226,20 @@ class Unit:
             assert isinstance(
                 position, Unit
             ), f"When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
-        return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
+        return self(
+            self._bot_object._game_data.units[unit.value].creation_ability.id,
+            target=position,
+            queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def build_gas(self, target_geysir: Unit, queue: bool = False) -> UnitCommand:
+    def build_gas(self, target_geysir: Unit, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
             # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
-            self.do(SCV.build_gas(target_vespene_geysir))
+            SCV.build_gas(target_vespene_geysir)
 
         :param target_geysir:
         :param queue:
@@ -1220,36 +1252,49 @@ class Unit:
             self._bot_object._game_data.units[gas_structure_type_id.value].creation_ability.id,
             target=target_geysir,
             queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
         )
 
-    def research(self, upgrade: UpgradeId, queue: bool = False) -> UnitCommand:
+    def research(self, upgrade: UpgradeId, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to research 'upgrade'.
         Requires UpgradeId to be passed instead of AbilityId.
 
         :param upgrade:
         :param queue:
         """
-        return self(self._bot_object._game_data.upgrades[upgrade.value].research_ability.exact_id, queue=queue)
+        return self(
+            self._bot_object._game_data.upgrades[upgrade.value].research_ability.exact_id,
+            queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3]) -> UnitCommand:
-        """ Orders Warpgate to warp in 'unit' at 'position'. 
+    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3], can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+        """ Orders Warpgate to warp in 'unit' at 'position'.
 
         :param unit:
         :param queue:
         """
         normal_creation_ability = self._bot_object._game_data.units[unit.value].creation_ability.id
-        return self(warpgate_abilities[normal_creation_ability], target=position)
+        return self(
+            warpgate_abilities[normal_creation_ability],
+            target=position,
+            subtract_cost=True,
+            subtract_supply=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to attack. Target can be a Unit or Point2.
-        Attacking a position will make the unit move there and attack everything on its way. 
+        Attacking a position will make the unit move there and attack everything on its way.
 
         :param target:
         :param queue:
         """
         return self(AbilityId.ATTACK, target=target, queue=queue)
 
-    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders the smart command. Equivalent to a right-click order.
 
         :param target:
@@ -1257,64 +1302,64 @@ class Unit:
         """
         return self(AbilityId.SMART, target=target, queue=queue)
 
-    def gather(self, target: Unit, queue: bool = False) -> UnitCommand:
+    def gather(self, target: Unit, queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders a unit to gather minerals or gas.
-        'Target' must be a mineral patch or a gas extraction building. 
+        'Target' must be a mineral patch or a gas extraction building.
 
         :param target:
         :param queue:
         """
         return self(AbilityId.HARVEST_GATHER, target=target, queue=queue)
 
-    def return_resource(self, target: Unit = None, queue: bool = False) -> UnitCommand:
-        """ Orders the unit to return resource. Does not need a 'target'. 
+    def return_resource(self, target: Unit = None, queue: bool = False) -> Union[UnitCommand, bool]:
+        """ Orders the unit to return resource. Does not need a 'target'.
 
         :param target:
         :param queue:
         """
         return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders the unit to move to 'position'.
-        Target can be a Unit (to follow that unit) or Point2. 
+        Target can be a Unit (to follow that unit) or Point2.
 
         :param position:
         :param queue:
         """
         return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
 
-    def scan_move(self, *args, **kwargs) -> UnitCommand:
+    def scan_move(self, *args, **kwargs) -> Union[UnitCommand, bool]:
         """ Deprecated: This ability redirects to 'AbilityId.ATTACK' """
         return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
-    def hold_position(self, queue: bool = False) -> UnitCommand:
-        """ Orders a unit to stop moving. It will not move until it gets new orders. 
+    def hold_position(self, queue: bool = False) -> Union[UnitCommand, bool]:
+        """ Orders a unit to stop moving. It will not move until it gets new orders.
 
         :param queue:
         """
         return self(AbilityId.HOLDPOSITION, queue=queue)
 
-    def stop(self, queue: bool = False) -> UnitCommand:
+    def stop(self, queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders a unit to stop, but can start to move on its own
         if it is attacked, enemy unit is in range or other friendly
-        units need the space. 
+        units need the space.
 
         :param queue:
         """
         return self(AbilityId.STOP, queue=queue)
 
-    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
+    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders a unit to patrol between position it has when the command starts and the target position.
         Can be queued up to seven patrol points. If the last point is the same as the starting
-        point, the unit will patrol in a circle. 
+        point, the unit will patrol in a circle.
 
         :param position:
         :param queue:
         """
         return self(AbilityId.PATROL, target=position, queue=queue)
 
-    def repair(self, repair_target: Unit, queue: bool = False) -> UnitCommand:
-        """ Order an SCV or MULE to repair. 
+    def repair(self, repair_target: Unit, queue: bool = False) -> Union[UnitCommand, bool]:
+        """ Order an SCV or MULE to repair.
 
         :param repair_target:
         :param queue:
@@ -1330,5 +1375,21 @@ class Unit:
         except:
             return False
 
-    def __call__(self, ability, target=None, queue: bool = False):
-        return UnitCommand(ability, self, target=target, queue=queue)
+    def __call__(
+        self,
+        ability,
+        target=None,
+        queue: bool = False,
+        subtract_cost: bool = False,
+        subtract_supply: bool = False,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
+        """ Deprecated: Stop using self.do() - This may be removed in the future. """
+        if self._bot_object.unit_command_uses_self_do:
+            return UnitCommand(ability, self, target=target, queue=queue)
+        return self._bot_object.do(
+            UnitCommand(ability, self, target=target, queue=queue),
+            subtract_cost=subtract_cost,
+            subtract_supply=subtract_supply,
+            can_afford_check=can_afford_check,
+        )

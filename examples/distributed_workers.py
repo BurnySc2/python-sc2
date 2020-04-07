@@ -14,7 +14,7 @@ class TerranBot(sc2.BotAI):
     async def build_workers(self):
         for cc in self.townhalls(UnitTypeId.COMMANDCENTER).ready.idle:
             if self.can_afford(UnitTypeId.SCV):
-                self.do(cc.train(UnitTypeId.SCV))
+                cc.train(UnitTypeId.SCV)
 
     async def expand(self):
         if self.townhalls(UnitTypeId.COMMANDCENTER).amount < 3 and self.can_afford(UnitTypeId.COMMANDCENTER):

@@ -30,7 +30,7 @@ class Client(Protocol):
         """
         super().__init__(ws)
         # How many frames will be waited between iterations before the next one is called
-        self.game_step = 8
+        self.game_step: int = 8
         self._player_id = None
         self._game_result = None
         # Store a hash value of all the debug requests to prevent sending the same ones again if they haven't changed last frame
@@ -56,6 +56,7 @@ class Client(Protocol):
             show_burrowed_shadows=True,
             raw_affects_selection=self.raw_affects_selection,
             raw_crop_to_playable_area=False,
+            show_placeholders=True,
         )
 
         if rgb_render_config:
@@ -185,9 +186,14 @@ class Client(Protocol):
             return None
         elif not isinstance(actions, list):
             actions = [actions]
-        res = await self._execute(
-            action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
-        )
+
+        # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
+        try:
+            res = await self._execute(
+                action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
+            )
+        except ProtocolError as e:
+            return []
         if return_successes:
             return [ActionResult(r) for r in res.action.result]
         else:
