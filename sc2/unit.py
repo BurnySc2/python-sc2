@@ -823,7 +823,7 @@ class Unit:
         For barracks, spawning pool, gateway, this returns 1.5
         For supply depot, this returns 1
         For sensor tower, creep tumor, this return 0.5 """
-        return self._bot_object._game_data.units[self._proto.unit_type].creation_ability._proto.footprint_radius
+        return self._bot_object._game_data.units[self._proto.unit_type].footprint_radius
 
     @property
     def radius(self) -> float:
