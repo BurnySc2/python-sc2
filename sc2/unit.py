@@ -358,6 +358,14 @@ class Unit:
         return speed
 
     @property
+    def distance_per_step(self) -> float:
+        return (self.real_speed/22.4) * self._bot_object.client.game_step
+
+    @property
+    def distance_to_weapon_ready(self) -> float:
+        return (self.real_speed / 22.4) * self.weapon_cooldown
+
+    @property
     def is_mineral_field(self) -> bool:
         """ Checks if the unit is a mineral field. """
         return self._type_data.has_minerals
@@ -1176,6 +1184,10 @@ class Unit:
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1
+
+    @property
+    def weapon_ready(self) -> bool:
+        return self.weapon_cooldown < self._bot_object.client.game_step
 
     @property
     def engaged_target_tag(self) -> int:
