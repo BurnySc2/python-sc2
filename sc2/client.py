@@ -336,6 +336,19 @@ class Client(Protocol):
             return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities][0]
         return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities]
 
+    async def query_available_abilities_with_tag(
+            self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
+    ) -> Dict[Set[AbilityId]]:
+        """ Query abilities of multiple units """
+
+        result = await self._execute(
+            query=query_pb.RequestQuery(
+                abilities=(query_pb.RequestQueryAvailableAbilities(unit_tag=unit.tag) for unit in units),
+                ignore_resource_requirements=ignore_resource_requirements,
+            )
+        )
+        return {b.unit_tag: {AbilityId(a.ability_id) for a in b.abilities} for b in result.query.abilities}
+
     async def chat_send(self, message: str, team_only: bool):
         """ Writes a message to the chat """
         ch = ChatChannel.Team if team_only else ChatChannel.Broadcast
