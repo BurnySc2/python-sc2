@@ -45,10 +45,10 @@
 <div class="section" id="unit-py">
 <h1>unit.py<a class="headerlink" href="#unit-py" title="Permalink to this headline">¶</a></h1>
 <p>TODO: Replace this with info about this file</p>
-<dl class="class">
+<dl class="py class">
 <dt id="sc2.unit.Unit">
-<em class="property">class </em><code class="sig-prename descclassname">sc2.unit.</code><code class="sig-name descname">Unit</code><span class="sig-paren">(</span><em class="sig-param">proto_data</em>, <em class="sig-param">bot_object</em>, <em class="sig-param">distance_calculation_index=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<em class="property">class </em><code class="sig-prename descclassname">sc2.unit.</code><code class="sig-name descname">Unit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">proto_data</span></em>, <em class="sig-param"><span class="n">bot_object</span></em>, <em class="sig-param"><span class="n">distance_calculation_index</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
 <dt id="sc2.unit.Unit.add_on_land_position">
 <em class="property">property </em><code class="sig-name descname">add_on_land_position</code><a class="headerlink" href="#sc2.unit.Unit.add_on_land_position" title="Permalink to this definition">¶</a></dt>
 <dd><p>If this unit is an addon (techlab, reactor), returns the position
@@ -60,7 +60,7 @@ where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to 
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.add_on_position">
 <em class="property">property </em><code class="sig-name descname">add_on_position</code><a class="headerlink" href="#sc2.unit.Unit.add_on_position" title="Permalink to this definition">¶</a></dt>
 <dd><p>If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
@@ -72,7 +72,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.add_on_tag">
 <em class="property">property </em><code class="sig-name descname">add_on_tag</code><a class="headerlink" href="#sc2.unit.Unit.add_on_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the tag of the addon of unit. If the unit has no addon, returns 0.</p>
@@ -83,7 +83,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.age">
 <em class="property">property </em><code class="sig-name descname">age</code><a class="headerlink" href="#sc2.unit.Unit.age" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how old the unit object data is (in game seconds). This age does not reflect when the unit was created / trained / morphed!</p>
@@ -94,7 +94,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.age_in_frames">
 <em class="property">property </em><code class="sig-name descname">age_in_frames</code><a class="headerlink" href="#sc2.unit.Unit.age_in_frames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how old the unit object data is (in game frames). This age does not reflect the unit was created / trained / morphed!</p>
@@ -105,7 +105,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.air_dps">
 <em class="property">property </em><code class="sig-name descname">air_dps</code><a class="headerlink" href="#sc2.unit.Unit.air_dps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dps against air units. Does not include upgrades.</p>
@@ -116,7 +116,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.air_range">
 <em class="property">property </em><code class="sig-name descname">air_range</code><a class="headerlink" href="#sc2.unit.Unit.air_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the range against air units. Does not include upgrades.</p>
@@ -127,7 +127,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.alliance">
 <em class="property">property </em><code class="sig-name descname">alliance</code><a class="headerlink" href="#sc2.unit.Unit.alliance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the team the unit belongs to.</p>
@@ -138,7 +138,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.armor">
 <em class="property">property </em><code class="sig-name descname">armor</code><a class="headerlink" href="#sc2.unit.Unit.armor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the armor of the unit. Does not include upgrades</p>
@@ -149,7 +149,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.armor_upgrade_level">
 <em class="property">property </em><code class="sig-name descname">armor_upgrade_level</code><a class="headerlink" href="#sc2.unit.Unit.armor_upgrade_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upgrade level of the units armor.</p>
@@ -160,7 +160,7 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.assigned_harvesters">
 <em class="property">property </em><code class="sig-name descname">assigned_harvesters</code><a class="headerlink" href="#sc2.unit.Unit.assigned_harvesters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of workers currently gathering resources at a geyser or mining base.</p>
@@ -171,9 +171,9 @@ this property returns the position of where the addon should be, if it should bu
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.attack">
-<code class="sig-name descname">attack</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.attack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">attack</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.attack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to attack. Target can be a Unit or Point2.
 Attacking a position will make the unit move there and attack everything on its way.</p>
 <dl class="field-list simple">
@@ -189,7 +189,7 @@ Attacking a position will make the unit move there and attack everything on its 
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.attack_upgrade_level">
 <em class="property">property </em><code class="sig-name descname">attack_upgrade_level</code><a class="headerlink" href="#sc2.unit.Unit.attack_upgrade_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upgrade level of the units attack.
@@ -201,14 +201,14 @@ Attacking a position will make the unit move there and attack everything on its 
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.bonus_damage">
 <em class="property">property </em><code class="sig-name descname">bonus_damage</code><a class="headerlink" href="#sc2.unit.Unit.bonus_damage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a tuple of form ‘(bonus damage, armor type)’ if unit does ‘bonus damage’ against ‘armor type’.
 Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechanical’, ‘Psionic’, ‘Massive’, ‘Structure’.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.buff_duration_max">
 <em class="property">property </em><code class="sig-name descname">buff_duration_max</code><a class="headerlink" href="#sc2.unit.Unit.buff_duration_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum amount of frames of the visible timer bar.
@@ -220,7 +220,7 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.buff_duration_remain">
 <em class="property">property </em><code class="sig-name descname">buff_duration_remain</code><a class="headerlink" href="#sc2.unit.Unit.buff_duration_remain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of remaining frames of the visible timer bar.
@@ -232,7 +232,7 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.buffs">
 <em class="property">property </em><code class="sig-name descname">buffs</code><a class="headerlink" href="#sc2.unit.Unit.buffs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the set of current buffs the unit has.</p>
@@ -243,9 +243,9 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.build">
-<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position=None</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">unit</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">can_afford_check</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to build another ‘unit’ at ‘position’.
 Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SCV</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">COMMANDCENTER</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
@@ -267,9 +267,9 @@ Usage:</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.build_gas">
-<code class="sig-name descname">build_gas</code><span class="sig-paren">(</span><em class="sig-param">target_geysir</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build_gas" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build_gas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target_geysir</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">can_afford_check</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.build_gas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to build another ‘unit’ at ‘position’.
 Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position</span>
@@ -289,7 +289,7 @@ Usage:</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.build_progress">
 <em class="property">property </em><code class="sig-name descname">build_progress</code><a class="headerlink" href="#sc2.unit.Unit.build_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns completion in range [0,1].</p>
@@ -300,9 +300,9 @@ Usage:</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.calculate_damage_vs_target">
-<code class="sig-name descname">calculate_damage_vs_target</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">ignore_armor=False</em>, <em class="sig-param">include_overkill_damage=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_damage_vs_target" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate_damage_vs_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">ignore_armor</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_overkill_damage</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_damage_vs_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a tuple of: [potential damage against target, attack speed, attack range]
 Returns the properly calculated damage per full-attack against the target unit.
 Returns (0, 0, 0) if this unit can’t attack the target unit.</p>
@@ -326,9 +326,9 @@ For ‘ignore_armor=True’ this function would return 10.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.calculate_dps_vs_target">
-<code class="sig-name descname">calculate_dps_vs_target</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">ignore_armor=False</em>, <em class="sig-param">include_overkill_damage=True</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_dps_vs_target" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate_dps_vs_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">ignore_armor</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_overkill_damage</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_dps_vs_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the DPS against the given target.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -337,9 +337,9 @@ For ‘ignore_armor=True’ this function would return 10.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.calculate_speed">
-<code class="sig-name descname">calculate_speed</code><span class="sig-paren">(</span><em class="sig-param">upgrades=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_speed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate_speed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upgrades</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.calculate_speed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the movement speed of the unit including buffs and upgrades.
 Note: Upgrades only work with own units. Use “upgrades” param to set expected enemy upgrades.</p>
 <dl class="field-list simple">
@@ -352,7 +352,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.can_attack">
 <em class="property">property </em><code class="sig-name descname">can_attack</code><a class="headerlink" href="#sc2.unit.Unit.can_attack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can attack at all.</p>
@@ -363,7 +363,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.can_attack_air">
 <em class="property">property </em><code class="sig-name descname">can_attack_air</code><a class="headerlink" href="#sc2.unit.Unit.can_attack_air" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can air attack at all. Does not include upgrades.</p>
@@ -374,7 +374,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.can_attack_both">
 <em class="property">property </em><code class="sig-name descname">can_attack_both</code><a class="headerlink" href="#sc2.unit.Unit.can_attack_both" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can attack both ground and air units.</p>
@@ -385,7 +385,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.can_attack_ground">
 <em class="property">property </em><code class="sig-name descname">can_attack_ground</code><a class="headerlink" href="#sc2.unit.Unit.can_attack_ground" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can attack ground units.</p>
@@ -396,7 +396,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.can_be_attacked">
 <em class="property">property </em><code class="sig-name descname">can_be_attacked</code><a class="headerlink" href="#sc2.unit.Unit.can_be_attacked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is revealed or not cloaked and therefore can be attacked.</p>
@@ -407,7 +407,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.cargo_left">
 <em class="property">property </em><code class="sig-name descname">cargo_left</code><a class="headerlink" href="#sc2.unit.Unit.cargo_left" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how much cargo space is currently left in the unit.</p>
@@ -418,7 +418,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.cargo_max">
 <em class="property">property </em><code class="sig-name descname">cargo_max</code><a class="headerlink" href="#sc2.unit.Unit.cargo_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>How much cargo space is available at maximum.</p>
@@ -429,7 +429,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.cargo_size">
 <em class="property">property </em><code class="sig-name descname">cargo_size</code><a class="headerlink" href="#sc2.unit.Unit.cargo_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of cargo space the unit needs.</p>
@@ -440,7 +440,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.cargo_used">
 <em class="property">property </em><code class="sig-name descname">cargo_used</code><a class="headerlink" href="#sc2.unit.Unit.cargo_used" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how much cargo space is currently used in the unit.
@@ -452,7 +452,7 @@ Note that some units take up more than one space.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.cloak">
 <em class="property">property </em><code class="sig-name descname">cloak</code><a class="headerlink" href="#sc2.unit.Unit.cloak" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns cloak state.
@@ -464,7 +464,7 @@ See <a class="reference external" href="https://github.com/Blizzard/s2client-api
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.detect_range">
 <em class="property">property </em><code class="sig-name descname">detect_range</code><a class="headerlink" href="#sc2.unit.Unit.detect_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the detection distance of the unit.</p>
@@ -475,9 +475,9 @@ See <a class="reference external" href="https://github.com/Blizzard/s2client-api
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.distance_to">
-<code class="sig-name descname">distance_to</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.distance_to" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">distance_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.distance_to" title="Permalink to this definition">¶</a></dt>
 <dd><p>Using the 2d distance between self and p.
 To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dl class="field-list simple">
@@ -490,9 +490,9 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.distance_to_squared">
-<code class="sig-name descname">distance_to_squared</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.distance_to_squared" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">distance_to_squared</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.distance_to_squared" title="Permalink to this definition">¶</a></dt>
 <dd><p>Using the 2d distance squared between self and p. Slightly faster than distance_to, so when filtering a lot of units, this function is recommended to be used.
 To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 <dl class="field-list simple">
@@ -505,7 +505,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.energy">
 <em class="property">property </em><code class="sig-name descname">energy</code><a class="headerlink" href="#sc2.unit.Unit.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of energy the unit has. Returns 0 for units without energy.</p>
@@ -516,7 +516,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.energy_max">
 <em class="property">property </em><code class="sig-name descname">energy_max</code><a class="headerlink" href="#sc2.unit.Unit.energy_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum amount of energy the unit can have. Returns 0 for units without energy.</p>
@@ -527,7 +527,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.energy_percentage">
 <em class="property">property </em><code class="sig-name descname">energy_percentage</code><a class="headerlink" href="#sc2.unit.Unit.energy_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of amount of energy the unit has. Returns 0 for units without energy.</p>
@@ -538,7 +538,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.facing">
 <em class="property">property </em><code class="sig-name descname">facing</code><a class="headerlink" href="#sc2.unit.Unit.facing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis.</p>
@@ -549,7 +549,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.footprint_radius">
 <em class="property">property </em><code class="sig-name descname">footprint_radius</code><a class="headerlink" href="#sc2.unit.Unit.footprint_radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>For structures only.
@@ -564,9 +564,9 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.gather">
-<code class="sig-name descname">gather</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.gather" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">gather</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.gather" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders a unit to gather minerals or gas.
 ‘Target’ must be a mineral patch or a gas extraction building.</p>
 <dl class="field-list simple">
@@ -582,7 +582,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.ground_dps">
 <em class="property">property </em><code class="sig-name descname">ground_dps</code><a class="headerlink" href="#sc2.unit.Unit.ground_dps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dps against ground units. Does not include upgrades.</p>
@@ -593,7 +593,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.ground_range">
 <em class="property">property </em><code class="sig-name descname">ground_range</code><a class="headerlink" href="#sc2.unit.Unit.ground_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the range against ground units. Does not include upgrades.</p>
@@ -604,7 +604,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.has_add_on">
 <em class="property">property </em><code class="sig-name descname">has_add_on</code><a class="headerlink" href="#sc2.unit.Unit.has_add_on" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if unit has an addon attached.</p>
@@ -615,9 +615,9 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.has_buff">
-<code class="sig-name descname">has_buff</code><span class="sig-paren">(</span><em class="sig-param">buff</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.has_buff" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">has_buff</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buff</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.has_buff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if unit has buff ‘buff’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -626,7 +626,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.has_cargo">
 <em class="property">property </em><code class="sig-name descname">has_cargo</code><a class="headerlink" href="#sc2.unit.Unit.has_cargo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this unit has any units loaded.</p>
@@ -637,7 +637,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.has_reactor">
 <em class="property">property </em><code class="sig-name descname">has_reactor</code><a class="headerlink" href="#sc2.unit.Unit.has_reactor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a structure is connected to a reactor addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.</p>
@@ -648,7 +648,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.has_techlab">
 <em class="property">property </em><code class="sig-name descname">has_techlab</code><a class="headerlink" href="#sc2.unit.Unit.has_techlab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a structure is connected to a techlab addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.</p>
@@ -659,7 +659,7 @@ For sensor tower, creep tumor, this return 0.5</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.has_vespene">
 <em class="property">property </em><code class="sig-name descname">has_vespene</code><a class="headerlink" href="#sc2.unit.Unit.has_vespene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a geyser has any gas remaining.
@@ -671,7 +671,7 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.health">
 <em class="property">property </em><code class="sig-name descname">health</code><a class="headerlink" href="#sc2.unit.Unit.health" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the health of the unit. Does not include shields.</p>
@@ -682,7 +682,7 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.health_max">
 <em class="property">property </em><code class="sig-name descname">health_max</code><a class="headerlink" href="#sc2.unit.Unit.health_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum health of the unit. Does not include shields.</p>
@@ -693,7 +693,7 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.health_percentage">
 <em class="property">property </em><code class="sig-name descname">health_percentage</code><a class="headerlink" href="#sc2.unit.Unit.health_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of health the unit has. Does not include shields.</p>
@@ -704,9 +704,9 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.hold_position">
-<code class="sig-name descname">hold_position</code><span class="sig-paren">(</span><em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.hold_position" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">hold_position</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.hold_position" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders a unit to stop moving. It will not move until it gets new orders.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -718,7 +718,7 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.ideal_harvesters">
 <em class="property">property </em><code class="sig-name descname">ideal_harvesters</code><a class="headerlink" href="#sc2.unit.Unit.ideal_harvesters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the ideal harverster count for unit.
@@ -730,9 +730,9 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.in_ability_cast_range">
-<code class="sig-name descname">in_ability_cast_range</code><span class="sig-paren">(</span><em class="sig-param">ability_id</em>, <em class="sig-param">target</em>, <em class="sig-param">bonus_distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.in_ability_cast_range" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">in_ability_cast_range</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ability_id</span></em>, <em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">bonus_distance</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.in_ability_cast_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test if a unit is able to cast an ability on the target without checking ability cooldown (like stalker blink) or if ability is made available through research (like HT storm).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -748,7 +748,7 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_active">
 <em class="property">property </em><code class="sig-name descname">is_active</code><a class="headerlink" href="#sc2.unit.Unit.is_active" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has an order (e.g. unit is currently moving or attacking, structure is currently training or researching).</p>
@@ -759,7 +759,7 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_armored">
 <em class="property">property </em><code class="sig-name descname">is_armored</code><a class="headerlink" href="#sc2.unit.Unit.is_armored" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘armored’ attribute.</p>
@@ -770,7 +770,7 @@ You can’t build extractors on empty geysers.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_attacking">
 <em class="property">property </em><code class="sig-name descname">is_attacking</code><a class="headerlink" href="#sc2.unit.Unit.is_attacking" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is attacking.
@@ -782,7 +782,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_biological">
 <em class="property">property </em><code class="sig-name descname">is_biological</code><a class="headerlink" href="#sc2.unit.Unit.is_biological" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘biological’ attribute.</p>
@@ -793,7 +793,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_blip">
 <em class="property">property </em><code class="sig-name descname">is_blip</code><a class="headerlink" href="#sc2.unit.Unit.is_blip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is detected by a sensor tower.</p>
@@ -804,7 +804,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_burrowed">
 <em class="property">property </em><code class="sig-name descname">is_burrowed</code><a class="headerlink" href="#sc2.unit.Unit.is_burrowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is burrowed.</p>
@@ -815,7 +815,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_carrying_minerals">
 <em class="property">property </em><code class="sig-name descname">is_carrying_minerals</code><a class="headerlink" href="#sc2.unit.Unit.is_carrying_minerals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a worker or MULE is carrying (gold-)minerals.</p>
@@ -826,7 +826,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_carrying_resource">
 <em class="property">property </em><code class="sig-name descname">is_carrying_resource</code><a class="headerlink" href="#sc2.unit.Unit.is_carrying_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a worker is carrying a resource.</p>
@@ -837,7 +837,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_carrying_vespene">
 <em class="property">property </em><code class="sig-name descname">is_carrying_vespene</code><a class="headerlink" href="#sc2.unit.Unit.is_carrying_vespene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a worker is carrying vespene gas.</p>
@@ -848,7 +848,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_cloaked">
 <em class="property">property </em><code class="sig-name descname">is_cloaked</code><a class="headerlink" href="#sc2.unit.Unit.is_cloaked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is cloaked.</p>
@@ -859,7 +859,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_collecting">
 <em class="property">property </em><code class="sig-name descname">is_collecting</code><a class="headerlink" href="#sc2.unit.Unit.is_collecting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is gathering or returning.
@@ -871,7 +871,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_constructing_scv">
 <em class="property">property </em><code class="sig-name descname">is_constructing_scv</code><a class="headerlink" href="#sc2.unit.Unit.is_constructing_scv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is an SCV that is currently building.
@@ -883,7 +883,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_detector">
 <em class="property">property </em><code class="sig-name descname">is_detector</code><a class="headerlink" href="#sc2.unit.Unit.is_detector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a detector. Has to be completed
@@ -895,7 +895,7 @@ in order to detect and Photoncannons also need to be powered.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_enemy">
 <em class="property">property </em><code class="sig-name descname">is_enemy</code><a class="headerlink" href="#sc2.unit.Unit.is_enemy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is hostile.</p>
@@ -906,9 +906,9 @@ in order to detect and Photoncannons also need to be powered.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_facing">
-<code class="sig-name descname">is_facing</code><span class="sig-paren">(</span><em class="sig-param">other_unit</em>, <em class="sig-param">angle_error=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.is_facing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_facing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other_unit</span></em>, <em class="sig-param"><span class="n">angle_error</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.is_facing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if this unit is facing the target unit. If you make angle_error too small, there might be rounding errors. If you make angle_error too big, this function might return false positives.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -923,7 +923,7 @@ in order to detect and Photoncannons also need to be powered.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_flying">
 <em class="property">property </em><code class="sig-name descname">is_flying</code><a class="headerlink" href="#sc2.unit.Unit.is_flying" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is flying.</p>
@@ -934,7 +934,7 @@ in order to detect and Photoncannons also need to be powered.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_gathering">
 <em class="property">property </em><code class="sig-name descname">is_gathering</code><a class="headerlink" href="#sc2.unit.Unit.is_gathering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is on its way to a mineral field or vespene geyser to mine.
@@ -946,7 +946,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_hallucination">
 <em class="property">property </em><code class="sig-name descname">is_hallucination</code><a class="headerlink" href="#sc2.unit.Unit.is_hallucination" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the unit is your own hallucination or detected.</p>
@@ -957,7 +957,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_idle">
 <em class="property">property </em><code class="sig-name descname">is_idle</code><a class="headerlink" href="#sc2.unit.Unit.is_idle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if unit is idle.</p>
@@ -968,7 +968,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_light">
 <em class="property">property </em><code class="sig-name descname">is_light</code><a class="headerlink" href="#sc2.unit.Unit.is_light" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘light’ attribute.</p>
@@ -979,7 +979,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_massive">
 <em class="property">property </em><code class="sig-name descname">is_massive</code><a class="headerlink" href="#sc2.unit.Unit.is_massive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘massive’ attribute.</p>
@@ -990,7 +990,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_mechanical">
 <em class="property">property </em><code class="sig-name descname">is_mechanical</code><a class="headerlink" href="#sc2.unit.Unit.is_mechanical" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘mechanical’ attribute.</p>
@@ -1001,7 +1001,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_memory">
 <em class="property">property </em><code class="sig-name descname">is_memory</code><a class="headerlink" href="#sc2.unit.Unit.is_memory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if this Unit object is referenced from the future and is outdated.</p>
@@ -1012,7 +1012,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_mine">
 <em class="property">property </em><code class="sig-name descname">is_mine</code><a class="headerlink" href="#sc2.unit.Unit.is_mine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is controlled by the bot.</p>
@@ -1023,7 +1023,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_mineral_field">
 <em class="property">property </em><code class="sig-name descname">is_mineral_field</code><a class="headerlink" href="#sc2.unit.Unit.is_mineral_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a mineral field.</p>
@@ -1034,7 +1034,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_moving">
 <em class="property">property </em><code class="sig-name descname">is_moving</code><a class="headerlink" href="#sc2.unit.Unit.is_moving" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is moving.
@@ -1046,7 +1046,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_on_screen">
 <em class="property">property </em><code class="sig-name descname">is_on_screen</code><a class="headerlink" href="#sc2.unit.Unit.is_on_screen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is on the screen.</p>
@@ -1057,7 +1057,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_patrolling">
 <em class="property">property </em><code class="sig-name descname">is_patrolling</code><a class="headerlink" href="#sc2.unit.Unit.is_patrolling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is patrolling.
@@ -1069,7 +1069,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_placeholder">
 <em class="property">property </em><code class="sig-name descname">is_placeholder</code><a class="headerlink" href="#sc2.unit.Unit.is_placeholder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a placerholder for the bot.
@@ -1096,7 +1096,7 @@ is_on_screen: false</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_powered">
 <em class="property">property </em><code class="sig-name descname">is_powered</code><a class="headerlink" href="#sc2.unit.Unit.is_powered" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is powered by a pylon or warppism.</p>
@@ -1107,7 +1107,7 @@ is_on_screen: false</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_psionic">
 <em class="property">property </em><code class="sig-name descname">is_psionic</code><a class="headerlink" href="#sc2.unit.Unit.is_psionic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘psionic’ attribute.</p>
@@ -1118,7 +1118,7 @@ is_on_screen: false</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_ready">
 <em class="property">property </em><code class="sig-name descname">is_ready</code><a class="headerlink" href="#sc2.unit.Unit.is_ready" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is completed.</p>
@@ -1129,7 +1129,7 @@ is_on_screen: false</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_repairing">
 <em class="property">property </em><code class="sig-name descname">is_repairing</code><a class="headerlink" href="#sc2.unit.Unit.is_repairing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is an SCV or MULE that is currently repairing.
@@ -1141,7 +1141,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_returning">
 <em class="property">property </em><code class="sig-name descname">is_returning</code><a class="headerlink" href="#sc2.unit.Unit.is_returning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is returning from mineral field or vespene geyser to deliver resources to townhall.
@@ -1153,7 +1153,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_revealed">
 <em class="property">property </em><code class="sig-name descname">is_revealed</code><a class="headerlink" href="#sc2.unit.Unit.is_revealed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is revealed.</p>
@@ -1164,7 +1164,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_selected">
 <em class="property">property </em><code class="sig-name descname">is_selected</code><a class="headerlink" href="#sc2.unit.Unit.is_selected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is currently selected.</p>
@@ -1175,7 +1175,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_snapshot">
 <em class="property">property </em><code class="sig-name descname">is_snapshot</code><a class="headerlink" href="#sc2.unit.Unit.is_snapshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is only available as a snapshot for the bot.
@@ -1188,7 +1188,7 @@ attacking enemy units on higher, not visible ground appear this way.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_structure">
 <em class="property">property </em><code class="sig-name descname">is_structure</code><a class="headerlink" href="#sc2.unit.Unit.is_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a structure.</p>
@@ -1199,7 +1199,7 @@ attacking enemy units on higher, not visible ground appear this way.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_transforming">
 <em class="property">property </em><code class="sig-name descname">is_transforming</code><a class="headerlink" href="#sc2.unit.Unit.is_transforming" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit transforming.
@@ -1211,9 +1211,9 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_using_ability">
-<code class="sig-name descname">is_using_ability</code><span class="sig-paren">(</span><em class="sig-param">abilities</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.is_using_ability" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_using_ability</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">abilities</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.is_using_ability" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the unit is using one of the given abilities.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -1223,7 +1223,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_vespene_geyser">
 <em class="property">property </em><code class="sig-name descname">is_vespene_geyser</code><a class="headerlink" href="#sc2.unit.Unit.is_vespene_geyser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a non-empty vespene geyser or gas extraction building.</p>
@@ -1234,7 +1234,7 @@ Only works for own units.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.is_visible">
 <em class="property">property </em><code class="sig-name descname">is_visible</code><a class="headerlink" href="#sc2.unit.Unit.is_visible" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is visible for the bot.
@@ -1247,7 +1247,7 @@ It does not give any information about the cloak status of the unit.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.mineral_contents">
 <em class="property">property </em><code class="sig-name descname">mineral_contents</code><a class="headerlink" href="#sc2.unit.Unit.mineral_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of minerals remaining in a mineral field.</p>
@@ -1258,9 +1258,9 @@ It does not give any information about the cloak status of the unit.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.move">
-<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param">position</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.move" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">position</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders the unit to move to ‘position’.
 Target can be a Unit (to follow that unit) or Point2.</p>
 <dl class="field-list simple">
@@ -1276,7 +1276,7 @@ Target can be a Unit (to follow that unit) or Point2.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.movement_speed">
 <em class="property">property </em><code class="sig-name descname">movement_speed</code><a class="headerlink" href="#sc2.unit.Unit.movement_speed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the movement speed of the unit.
@@ -1289,7 +1289,7 @@ Does not include upgrades or buffs.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.name">
 <em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#sc2.unit.Unit.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the unit.</p>
@@ -1300,7 +1300,7 @@ Does not include upgrades or buffs.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.noqueue">
 <em class="property">property </em><code class="sig-name descname">noqueue</code><a class="headerlink" href="#sc2.unit.Unit.noqueue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is idle.</p>
@@ -1311,7 +1311,7 @@ Does not include upgrades or buffs.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.order_target">
 <em class="property">property </em><code class="sig-name descname">order_target</code><a class="headerlink" href="#sc2.unit.Unit.order_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the target tag (if it is a Unit) or Point2 (if it is a Position)
@@ -1323,7 +1323,7 @@ from the first order, returns None if the unit is idle</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.orders">
 <em class="property">property </em><code class="sig-name descname">orders</code><a class="headerlink" href="#sc2.unit.Unit.orders" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the a list of the current orders.</p>
@@ -1334,7 +1334,7 @@ from the first order, returns None if the unit is idle</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.owner_id">
 <em class="property">property </em><code class="sig-name descname">owner_id</code><a class="headerlink" href="#sc2.unit.Unit.owner_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the owner of the unit. This is a value of 1 or 2 in a two player game.</p>
@@ -1345,7 +1345,7 @@ from the first order, returns None if the unit is idle</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.passengers">
 <em class="property">property </em><code class="sig-name descname">passengers</code><a class="headerlink" href="#sc2.unit.Unit.passengers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.</p>
@@ -1356,7 +1356,7 @@ from the first order, returns None if the unit is idle</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.passengers_tags">
 <em class="property">property </em><code class="sig-name descname">passengers_tags</code><a class="headerlink" href="#sc2.unit.Unit.passengers_tags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the tags of the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.</p>
@@ -1367,9 +1367,9 @@ from the first order, returns None if the unit is idle</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.patrol">
-<code class="sig-name descname">patrol</code><span class="sig-paren">(</span><em class="sig-param">position</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.patrol" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">patrol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">position</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.patrol" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders a unit to patrol between position it has when the command starts and the target position.
 Can be queued up to seven patrol points. If the last point is the same as the starting
 point, the unit will patrol in a circle.</p>
@@ -1386,7 +1386,7 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.position">
 <em class="property">property </em><code class="sig-name descname">position</code><a class="headerlink" href="#sc2.unit.Unit.position" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the 2d position of the unit.</p>
@@ -1397,7 +1397,7 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.position3d">
 <em class="property">property </em><code class="sig-name descname">position3d</code><a class="headerlink" href="#sc2.unit.Unit.position3d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the 3d position of the unit.</p>
@@ -1408,7 +1408,7 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.position_tuple">
 <em class="property">property </em><code class="sig-name descname">position_tuple</code><a class="headerlink" href="#sc2.unit.Unit.position_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the 2d position of the unit as tuple without conversion to Point2.</p>
@@ -1419,7 +1419,7 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.race">
 <em class="property">property </em><code class="sig-name descname">race</code><a class="headerlink" href="#sc2.unit.Unit.race" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the race of the unit</p>
@@ -1430,7 +1430,7 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.radius">
 <em class="property">property </em><code class="sig-name descname">radius</code><a class="headerlink" href="#sc2.unit.Unit.radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>Half of unit size. See <a class="reference external" href="https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void">https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void</a>)</p>
@@ -1441,7 +1441,7 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.real_speed">
 <em class="property">property </em><code class="sig-name descname">real_speed</code><a class="headerlink" href="#sc2.unit.Unit.real_speed" title="Permalink to this definition">¶</a></dt>
 <dd><p>See ‘calculate_speed’.</p>
@@ -1452,9 +1452,9 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.repair">
-<code class="sig-name descname">repair</code><span class="sig-paren">(</span><em class="sig-param">repair_target</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.repair" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">repair</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">repair_target</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.repair" title="Permalink to this definition">¶</a></dt>
 <dd><p>Order an SCV or MULE to repair.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1469,9 +1469,9 @@ point, the unit will patrol in a circle.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.research">
-<code class="sig-name descname">research</code><span class="sig-paren">(</span><em class="sig-param">upgrade</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.research" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">research</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upgrade</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">can_afford_check</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.research" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to research ‘upgrade’.
 Requires UpgradeId to be passed instead of AbilityId.</p>
 <dl class="field-list simple">
@@ -1487,9 +1487,9 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.return_resource">
-<code class="sig-name descname">return_resource</code><span class="sig-paren">(</span><em class="sig-param">target=None</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.return_resource" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">return_resource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.return_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders the unit to return resource. Does not need a ‘target’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1504,9 +1504,9 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.scan_move">
-<code class="sig-name descname">scan_move</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.scan_move" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">scan_move</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.scan_move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated: This ability redirects to ‘AbilityId.ATTACK’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1515,7 +1515,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.shield">
 <em class="property">property </em><code class="sig-name descname">shield</code><a class="headerlink" href="#sc2.unit.Unit.shield" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the shield points the unit has. Returns 0 for non-protoss units.</p>
@@ -1526,7 +1526,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.shield_health_percentage">
 <em class="property">property </em><code class="sig-name descname">shield_health_percentage</code><a class="headerlink" href="#sc2.unit.Unit.shield_health_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of combined shield + hp points the unit has.
@@ -1538,7 +1538,7 @@ Also takes build progress into account.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.shield_max">
 <em class="property">property </em><code class="sig-name descname">shield_max</code><a class="headerlink" href="#sc2.unit.Unit.shield_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum shield points the unit can have. Returns 0 for non-protoss units.</p>
@@ -1549,7 +1549,7 @@ Also takes build progress into account.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.shield_percentage">
 <em class="property">property </em><code class="sig-name descname">shield_percentage</code><a class="headerlink" href="#sc2.unit.Unit.shield_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of shield points the unit has. Returns 0 for non-protoss units.</p>
@@ -1560,7 +1560,7 @@ Also takes build progress into account.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.shield_upgrade_level">
 <em class="property">property </em><code class="sig-name descname">shield_upgrade_level</code><a class="headerlink" href="#sc2.unit.Unit.shield_upgrade_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upgrade level of the units shield.
@@ -1572,7 +1572,7 @@ Also takes build progress into account.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.sight_range">
 <em class="property">property </em><code class="sig-name descname">sight_range</code><a class="headerlink" href="#sc2.unit.Unit.sight_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the sight range of the unit.</p>
@@ -1583,9 +1583,9 @@ Also takes build progress into account.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.smart">
-<code class="sig-name descname">smart</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.smart" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">smart</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.smart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders the smart command. Equivalent to a right-click order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1600,9 +1600,9 @@ Also takes build progress into account.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><em class="sig-param">queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders a unit to stop, but can start to move on its own
 if it is attacked, enemy unit is in range or other friendly
 units need the space.</p>
@@ -1616,7 +1616,7 @@ units need the space.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.surplus_harvesters">
 <em class="property">property </em><code class="sig-name descname">surplus_harvesters</code><a class="headerlink" href="#sc2.unit.Unit.surplus_harvesters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a positive int if unit has too many harvesters mining,
@@ -1628,7 +1628,7 @@ a negative int if it has too few mining.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.tag">
 <em class="property">property </em><code class="sig-name descname">tag</code><a class="headerlink" href="#sc2.unit.Unit.tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the unique tag of the unit.</p>
@@ -1639,9 +1639,9 @@ a negative int if it has too few mining.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.target_in_range">
-<code class="sig-name descname">target_in_range</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">bonus_distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.target_in_range" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">target_in_range</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">bonus_distance</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.target_in_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the target is in range.
 Includes the target’s radius when calculating distance to target.</p>
 <dl class="field-list simple">
@@ -1657,7 +1657,7 @@ Includes the target’s radius when calculating distance to target.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.tech_alias">
 <em class="property">property </em><code class="sig-name descname">tech_alias</code><a class="headerlink" href="#sc2.unit.Unit.tech_alias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
@@ -1670,9 +1670,9 @@ For SCV, this returns None</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">queue=False</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">unit</span></em>, <em class="sig-param"><span class="n">queue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">can_afford_check</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders unit to train another ‘unit’.
 Usage: COMMANDCENTER.train(SCV)</p>
 <dl class="field-list simple">
@@ -1688,7 +1688,7 @@ Usage: COMMANDCENTER.train(SCV)</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.type_id">
 <em class="property">property </em><code class="sig-name descname">type_id</code><a class="headerlink" href="#sc2.unit.Unit.type_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>UnitTypeId found in sc2/ids/unit_typeid.
@@ -1700,7 +1700,7 @@ Caches all type_ids of the same unit type.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.unit_alias">
 <em class="property">property </em><code class="sig-name descname">unit_alias</code><a class="headerlink" href="#sc2.unit.Unit.unit_alias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building type equality, e.g. FlyingOrbitalCommand is the same as OrbitalCommand
@@ -1713,7 +1713,7 @@ For SCV, this returns None</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.vespene_contents">
 <em class="property">property </em><code class="sig-name descname">vespene_contents</code><a class="headerlink" href="#sc2.unit.Unit.vespene_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of gas remaining in a geyser.</p>
@@ -1724,9 +1724,9 @@ For SCV, this returns None</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.warp_in">
-<code class="sig-name descname">warp_in</code><span class="sig-paren">(</span><em class="sig-param">unit</em>, <em class="sig-param">position</em>, <em class="sig-param">can_afford_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.warp_in" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">warp_in</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">unit</span></em>, <em class="sig-param"><span class="n">position</span></em>, <em class="sig-param"><span class="n">can_afford_check</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit.warp_in" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orders Warpgate to warp in ‘unit’ at ‘position’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1741,7 +1741,7 @@ For SCV, this returns None</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sc2.unit.Unit.weapon_cooldown">
 <em class="property">property </em><code class="sig-name descname">weapon_cooldown</code><a class="headerlink" href="#sc2.unit.Unit.weapon_cooldown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the time until the unit can fire again,
@@ -1818,7 +1818,7 @@ if unit.weapon_cooldown == 0:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.
     </div>
   </body>
 </html>

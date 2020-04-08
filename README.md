@@ -21,7 +21,7 @@ For this fork, you'll need Python 3.7 or newer.
 
 Install the pypi package:
 ```
-pip install --upgrade pipenv burnysc2
+pip install --upgrade burnysc2
 ```
 or directly from develop branch:
 ```
@@ -67,7 +67,7 @@ class WorkerRushBot(sc2.BotAI):
     async def on_step(self, iteration: int):
         if iteration == 0:
             for worker in self.workers:
-                self.do(worker.attack(self.enemy_start_locations[0]))
+                worker.attack(self.enemy_start_locations[0])
 
 run_game(maps.get("Abyssal Reef LE"), [
     Bot(Race.Zerg, WorkerRushBot()),
