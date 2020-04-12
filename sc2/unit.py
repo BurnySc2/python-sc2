@@ -359,10 +359,13 @@ class Unit:
 
     @property
     def distance_per_step(self) -> float:
+        """ The distance a unit can move in one step. This does not take acceleration into account.
+        Useful for micro-retreat/pathfinding """
         return (self.real_speed/22.4) * self._bot_object.client.game_step
 
     @property
     def distance_to_weapon_ready(self) -> float:
+        """ Distance a unit can travel before it's weapon is ready to be fired again."""
         return (self.real_speed / 22.4) * self.weapon_cooldown
 
     @property
@@ -1187,6 +1190,7 @@ class Unit:
 
     @property
     def weapon_ready(self) -> bool:
+        """ Checks if the weapon is ready to be fired. """
         return self.weapon_cooldown < self._bot_object.client.game_step
 
     @property
