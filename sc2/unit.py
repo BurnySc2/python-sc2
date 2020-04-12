@@ -1191,7 +1191,7 @@ class Unit:
     @property
     def weapon_ready(self) -> bool:
         """ Checks if the weapon is ready to be fired. """
-        return self.weapon_cooldown < self._bot_object.client.game_step
+        return self.weapon_cooldown == 0
 
     @property
     def engaged_target_tag(self) -> int:
