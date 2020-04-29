@@ -78,7 +78,7 @@ Information about the enemy player::
     self.enemy_structures: Units
 
     # Enemy spawn locations as a list of Point2 points
-    self.enemy_start_location: List[Point2]
+    self.enemy_start_locations: List[Point2]
 
     # Enemy units that are inside your sensor tower range
     self.blips: Set[Blip]
