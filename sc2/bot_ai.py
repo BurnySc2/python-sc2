@@ -75,11 +75,13 @@ class BotAI(DistanceCalculation):
         self.realtime: bool = False
         self.all_units: Units = Units([], self)
         self.units: Units = Units([], self)
+        self.all_own_units: Units = Units([], self)
         self.workers: Units = Units([], self)
         self.townhalls: Units = Units([], self)
         self.structures: Units = Units([], self)
         self.gas_buildings: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
+        self.all_enemy_units: Units = Units([], self)
         self.enemy_structures: Units = Units([], self)
         self.resources: Units = Units([], self)
         self.destructables: Units = Units([], self)
@@ -1674,8 +1676,10 @@ class BotAI(DistanceCalculation):
         self.placeholders: Units = Units([], self)
         self.units: Units = Units([], self)
         self.structures: Units = Units([], self)
+        self.all_own_units: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
         self.enemy_structures: Units = Units([], self)
+        self.all_enemy_units: Units = Units([], self)
         self.mineral_field: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
         self.resources: Units = Units([], self)
@@ -1726,6 +1730,7 @@ class BotAI(DistanceCalculation):
                         self.destructables.append(unit_obj)
                 # Alliance.Self.value = 1
                 elif alliance == 1:
+                    self.all_own_units.append(unit_obj)
                     unit_id = unit_obj.type_id
                     if unit_obj.is_structure:
                         self.structures.append(unit_obj)
@@ -1756,6 +1761,7 @@ class BotAI(DistanceCalculation):
                             self.larva.append(unit_obj)
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
+                    self.all_enemy_units.append(unit_obj)
                     if unit_obj.is_structure:
                         self.enemy_structures.append(unit_obj)
                     else:
