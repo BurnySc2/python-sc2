@@ -896,9 +896,8 @@ class BotAI(DistanceCalculation):
         else:  # AbilityId
             building = self._game_data.abilities[building.value]
 
-        if await self.can_place(building, near):
-            if not addon_place or await self.can_place(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5))):
-                return near
+        if await self.can_place(building, near) and (not addon_place or await self.can_place(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5)))):
+            return near
 
         if max_distance == 0:
             return None
