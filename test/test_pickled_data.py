@@ -154,7 +154,7 @@ def test_bot_ai():
         if resource_positions:
             assert isinstance(resource_positions[0], Unit)
         assert (
-            7 <= len(resource_positions) <= 10
+            6 <= len(resource_positions) <= 10
         ), f"{len(resource_positions)} resource fields in one base on map {bot.game_info.map_name}"
 
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
