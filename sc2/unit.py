@@ -1171,7 +1171,7 @@ class Unit:
     def surplus_harvesters(self) -> int:
         """ Returns a positive int if unit has too many harvesters mining,
         a negative int if it has too few mining.
-        will only works for townhalls, and gasgeysers 
+        Will only works on townhalls, and gas buildings.
         """
         return self._proto.assigned_harvesters - self._proto.ideal_harvesters
 
