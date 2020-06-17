@@ -872,6 +872,7 @@ class BotAI(DistanceCalculation):
         max_distance: int = 20,
         random_alternative: bool = True,
         placement_step: int = 2,
+        addon_place: bool = False,
     ) -> Optional[Point2]:
         """ Finds a placement location for building.
 
@@ -895,7 +896,7 @@ class BotAI(DistanceCalculation):
         else:  # AbilityId
             building = self._game_data.abilities[building.value]
 
-        if await self.can_place(building, near):
+        if await self.can_place(building, near) and (not addon_place or await self.can_place(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5)))):
             return near
 
         if max_distance == 0:
@@ -913,6 +914,14 @@ class BotAI(DistanceCalculation):
             ]
             res = await self._client.query_building_placement(building, possible_positions)
             possible = [p for r, p in zip(res, possible_positions) if r == ActionResult.Success]
+
+            if addon_place:
+                res = await self._client.query_building_placement(
+                    self._game_data.units[UnitTypeId.SUPPLYDEPOT.value].creation_ability,
+                    [p.offset((2.5, -0.5)) for p in possible]
+                )
+                possible = [p for r, p in zip(res, possible) if r == ActionResult.Success]
+
             if not possible:
                 continue
 
