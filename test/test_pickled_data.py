@@ -125,7 +125,6 @@ def test_bot_ai():
     assert bot.main_base_ramp  # Test if any ramp was found
 
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
-    assert bot.owned_expansions == {bot.townhalls.first.position: bot.townhalls.first}
     assert bot.can_feed(UnitTypeId.MARINE)
     assert bot.can_feed(UnitTypeId.SIEGETANK)
     assert not bot.can_feed(UnitTypeId.THOR)

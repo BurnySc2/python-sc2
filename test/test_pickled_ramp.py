@@ -162,3 +162,5 @@ class TestClass:
             assert (
                 6 <= len(resource_positions) <= 12
             ), f"{len(resource_positions)} resource fields in one base on map {bot.game_info.map_name}"
+
+        assert bot.owned_expansions == {bot.townhalls.first.position: bot.townhalls.first}
