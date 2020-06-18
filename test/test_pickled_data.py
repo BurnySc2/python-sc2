@@ -124,32 +124,7 @@ def test_bot_ai():
     bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
     assert bot.main_base_ramp  # Test if any ramp was found
 
-    # Clear cache for expansion locations, recalculate and time it
-    if hasattr(bot, "_cache_expansion_locations"):
-        delattr(bot, "_cache_expansion_locations")
-    t0 = time.perf_counter()
-    bot.expansion_locations
-    t1 = time.perf_counter()
-    print(f"Time to calculate expansion locations: {t1-t0} s")
-
-    # TODO: Cache all expansion positions for a map and check if it is the same
-    assert len(bot.expansion_locations) >= 10, f"Too few expansions found: {len(bot.expansion_locations)}"
-    # Honorgrounds LE has 24
-    assert len(bot.expansion_locations) <= 24, f"Too many expansions found: {len(bot.expansion_locations)}"
-    # On N player maps, it is expected that there are N*X bases because of symmetry, at least for 1vs1 maps
-    assert (
-        len(bot.expansion_locations) % (len(bot.enemy_start_locations) + 1) == 0
-    ), f"{set(bot.expansion_locations.keys())}"
-    # Test if bot start location is in expansion locations
-    assert bot.townhalls.random.position in set(
-        bot.expansion_locations.keys()
-    ), f'This error might occur if you are running the tests locally using command "pytest test/", possibly because you are using an outdated cache.py version, but it should not occur when using docker and pipenv.\n{bot.townhalls.random.position}, {set(bot.expansion_locations.keys())}'
-    # Test if enemy start locations are in expansion locations
-    for location in bot.enemy_start_locations:
-        assert location in set(bot.expansion_locations.keys()), f"{location}, {bot.expansion_locations.keys()}"
-
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
-    assert bot.owned_expansions == {bot.townhalls.first.position: bot.townhalls.first}
     assert bot.can_feed(UnitTypeId.MARINE)
     assert bot.can_feed(UnitTypeId.SIEGETANK)
     assert not bot.can_feed(UnitTypeId.THOR)
@@ -539,7 +514,9 @@ def test_unit():
     assert scv.sight_range
     assert townhall.sight_range
     assert scv.movement_speed
+    assert scv.real_speed == scv.movement_speed
     assert not townhall.movement_speed
+    assert townhall.real_speed == townhall.movement_speed
     assert not scv.is_mineral_field
     assert not townhall.is_mineral_field
     assert not scv.is_vespene_geyser
@@ -809,6 +786,7 @@ def test_units():
     assert scvs.prefer_idle
     assert townhalls.prefer_idle
 
+
 def test_dicts():
     # May be missing but that should not fail the tests
     try:
@@ -823,10 +801,14 @@ def test_dicts():
     for unit_id, data in RESEARCH_INFO.items():
         upgrade_id: UpgradeId
         for upgrade_id, upgrade_data in data.items():
-            research_ability_correct: AbilityId  = upgrade_data["ability"]
+            research_ability_correct: AbilityId = upgrade_data["ability"]
             research_ability_from_api: AbilityId = bot._game_data.upgrades[upgrade_id.value].research_ability.exact_id
-            assert research_ability_correct == research_ability_from_api, f"Research abilities do not match: Correct one is {research_ability_correct} but API returned {research_ability_from_api}"
-
+            if upgrade_id.value in {116, 117, 118}:
+                # Research abilities for armory armor plating are mapped incorrectly in the API
+                continue
+            assert (
+                research_ability_correct == research_ability_from_api
+            ), f"Research abilities do not match: Correct one is {research_ability_correct} but API returned {research_ability_from_api}"
 
 
 @given(

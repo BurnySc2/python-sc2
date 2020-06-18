@@ -5,7 +5,11 @@ from s2clientprotocol import sc2api_pb2 as sc_pb
 from .player import Computer
 from .protocol import Protocol
 
+from pathlib import Path
+import platform
+
 logger = logging.getLogger(__name__)
+
 
 class Controller(Protocol):
     def __init__(self, ws, process):
@@ -16,9 +20,10 @@ class Controller(Protocol):
     def running(self):
         return self.__process._process is not None
 
-    async def create_game(self, game_map, players, realtime, random_seed=None):
-        assert isinstance(realtime, bool)
-        req = sc_pb.RequestCreateGame(local_map=sc_pb.LocalMap(map_path=str(game_map.relative_path)), realtime=realtime)
+    async def create_game(self, game_map, players, realtime: bool, random_seed=None, disable_fog=None):
+        req = sc_pb.RequestCreateGame(
+            local_map=sc_pb.LocalMap(map_path=str(game_map.relative_path)), realtime=realtime, disable_fog=disable_fog
+        )
         if random_seed is not None:
             req.random_seed = random_seed
 
@@ -36,13 +41,41 @@ class Controller(Protocol):
         result = await self._execute(create_game=req)
         return result
 
-    async def start_replay(self, replay_path, realtime, observed_id=0):  # Added
+    async def request_available_maps(self):
+        req = sc_pb.RequestAvailableMaps()
+        result = await self._execute(available_maps=req)
+        return result
+
+    async def request_save_map(self, download_path: str):
+        """ Not working on linux. """
+        req = sc_pb.RequestSaveMap(map_path=download_path)
+        result = await self._execute(save_map=req)
+        return result
+
+    async def request_replay_info(self, replay_path: str):
+        """ Not working on linux. """
+        req = sc_pb.RequestReplayInfo(replay_path=replay_path, download_data=False)
+        result = await self._execute(replay_info=req)
+        return result
+
+    async def start_replay(self, replay_path: str, realtime: bool, observed_id: int = 0):
         ifopts = sc_pb.InterfaceOptions(
-            raw=True, score=True, show_cloaked=True, raw_affects_selection=False, raw_crop_to_playable_area=False
+            raw=True, score=True, show_cloaked=True, raw_affects_selection=True, raw_crop_to_playable_area=False
         )
+        if platform.system() == "Linux":
+            replay_name = Path(replay_path).name
+            home_replay_folder = Path.home() / "Documents" / "StarCraft II" / "Replays"
+            if str(home_replay_folder / replay_name) != replay_path:
+                logger.warning(
+                    f"Linux detected, please put your replay in your home directory at {home_replay_folder}. It was detected at {replay_path}"
+                )
+                raise FileNotFoundError
+            replay_path = replay_name
+
         req = sc_pb.RequestStartReplay(
-            replay_path=replay_path, observed_player_id=observed_id, options=ifopts)
+            replay_path=replay_path, observed_player_id=observed_id, realtime=realtime, options=ifopts
+        )
 
         result = await self._execute(start_replay=req)
-
+        assert result.status == 4, f"{result.start_replay.error} - {result.start_replay.error_details}"
         return result

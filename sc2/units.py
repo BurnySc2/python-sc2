@@ -3,7 +3,7 @@ import random
 import warnings
 import math
 from itertools import chain
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, Generator, TYPE_CHECKING
 
 from .ids.unit_typeid import UnitTypeId
 from .position import Point2, Point3
@@ -33,6 +33,9 @@ class Units(list):
 
     def __call__(self, *args, **kwargs):
         return UnitSelection(self, *args, **kwargs)
+
+    def __iter__(self) -> Generator[Unit, None, None]:
+        return (item for item in super().__iter__())
 
     def select(self, *args, **kwargs):
         return UnitSelection(self, *args, **kwargs)
@@ -164,7 +167,6 @@ class Units(list):
         Example::
 
             enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)
-            my_marine = next(unit for unit in self.units if unit.type_id == UnitTypeId.MARINE)
             my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)
             if my_marine:
                 closest_zergling_distance = enemy_zerglings.closest_distance_to(my_marine)
@@ -618,10 +620,7 @@ class Units(list):
         assert self, f"Units object is empty"
         amount = self.amount
         return Point2(
-            (
-                sum(unit._proto.pos.x for unit in self) / amount,
-                sum(unit._proto.pos.y for unit in self) / amount,
-            )
+            (sum(unit._proto.pos.x for unit in self) / amount, sum(unit._proto.pos.y for unit in self) / amount,)
         )
 
     @property

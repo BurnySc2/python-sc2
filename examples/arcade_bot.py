@@ -55,7 +55,7 @@ class MarineSplitChallenge(sc2.BotAI):
                             and not unit.has_buff(BuffId.STIMPACK)
                             and unit.health > 10
                         ):
-                            self.do(unit(AbilityId.EFFECT_STIM))
+                            unit(AbilityId.EFFECT_STIM)
 
                         # attack baneling first
                         filtered_enemies_in_range = enemies_in_range.of_type(UnitTypeId.BANELING)
@@ -64,12 +64,12 @@ class MarineSplitChallenge(sc2.BotAI):
                             filtered_enemies_in_range = enemies_in_range.of_type(UnitTypeId.ZERGLING)
                         # attack lowest hp unit
                         lowest_hp_enemy_in_range = min(filtered_enemies_in_range, key=lambda u: u.health)
-                        actions.append(unit.attack(lowest_hp_enemy_in_range))
+                        unit.attack(lowest_hp_enemy_in_range)
 
                     # no enemy is in attack-range, so give attack command to closest instead
                     else:
                         closest_enemy = self.enemy_units.closest_to(unit)
-                        self.do(unit.attack(closest_enemy))
+                        unit.attack(closest_enemy)
 
                 # move away from zergling / banelings
                 else:
@@ -79,14 +79,14 @@ class MarineSplitChallenge(sc2.BotAI):
                     stutter_step_positions = {p for p in stutter_step_positions if self.in_pathing_grid(p)}
 
                     # find position furthest away from enemies and closest to unit
-                    enemies_in_range = self.known_enemy_units.filter(lambda u: unit.target_in_range(u, -0.5))
+                    enemies_in_range = self.enemy_units.filter(lambda u: unit.target_in_range(u, -0.5))
 
                     if stutter_step_positions and enemies_in_range:
                         retreat_position = max(
                             stutter_step_positions,
                             key=lambda x: x.distance_to(enemies_in_range.center) - x.distance_to(unit),
                         )
-                        self.do(unit.move(retreat_position))
+                        unit.move(retreat_position)
 
                     else:
                         print("No retreat positions detected for unit {} at {}.".format(unit, unit.position.rounded))

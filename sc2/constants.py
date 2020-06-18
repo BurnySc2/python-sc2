@@ -171,6 +171,7 @@ TARGET_AIR: Set[int] = {TargetType.Air.value, TargetType.Any.value}
 TARGET_BOTH = TARGET_GROUND | TARGET_AIR
 IS_SNAPSHOT = DisplayType.Snapshot.value
 IS_VISIBLE = DisplayType.Visible.value
+IS_PLACEHOLDER = DisplayType.Placeholder.value
 IS_MINE = Alliance.Self.value
 IS_ENEMY = Alliance.Enemy.value
 IS_CLOAKED: Set[int] = {CloakState.Cloaked.value, CloakState.CloakedDetected.value, CloakState.CloakedAllied.value}
@@ -218,6 +219,90 @@ IS_DETECTOR: Set[UnitTypeId] = {
     UnitTypeId.OVERSEER,
     UnitTypeId.OVERSEERSIEGEMODE,
     UnitTypeId.SPORECRAWLER,
+}
+SPEED_UPGRADE_DICT: Dict[UnitTypeId, UpgradeId] = {
+    # Terran
+    UnitTypeId.MEDIVAC: UpgradeId.MEDIVACRAPIDDEPLOYMENT,
+    UnitTypeId.BANSHEE: UpgradeId.BANSHEESPEED,
+    # Protoss
+    UnitTypeId.ZEALOT: UpgradeId.CHARGE,
+    UnitTypeId.OBSERVER: UpgradeId.OBSERVERGRAVITICBOOSTER,
+    UnitTypeId.WARPPRISM: UpgradeId.GRAVITICDRIVE,
+    UnitTypeId.VOIDRAY: UpgradeId.VOIDRAYSPEEDUPGRADE,
+    # Zerg
+    UnitTypeId.OVERLORD: UpgradeId.OVERLORDSPEED,
+    UnitTypeId.OVERSEER: UpgradeId.OVERLORDSPEED,
+    UnitTypeId.ZERGLING: UpgradeId.ZERGLINGMOVEMENTSPEED,
+    UnitTypeId.BANELING: UpgradeId.CENTRIFICALHOOKS,
+    UnitTypeId.ROACH: UpgradeId.GLIALRECONSTITUTION,
+    UnitTypeId.LURKERMP: UpgradeId.DIGGINGCLAWS,
+}
+SPEED_INCREASE_DICT: Dict[UnitTypeId, float] = {
+    # Terran
+    UnitTypeId.MEDIVAC: 1.18,
+    UnitTypeId.BANSHEE: 1.3636,
+    # Protoss
+    UnitTypeId.ZEALOT: 1.5,
+    UnitTypeId.OBSERVER: 2,
+    UnitTypeId.WARPPRISM: 1.3,
+    UnitTypeId.VOIDRAY: 1.328,
+    # Zerg
+    UnitTypeId.OVERLORD: 2.915,
+    UnitTypeId.OVERSEER: 1.8015,
+    UnitTypeId.ZERGLING: 1.6,
+    UnitTypeId.BANELING: 1.18,
+    UnitTypeId.ROACH: 1.3333333333,
+    UnitTypeId.LURKERMP: 1.1,
+}
+temp1 = set(SPEED_UPGRADE_DICT.keys())
+temp2 = set(SPEED_INCREASE_DICT.keys())
+assert temp1 == temp2, f"{temp1.symmetric_difference(temp2)}"
+del temp1
+del temp2
+SPEED_INCREASE_ON_CREEP_DICT: Dict[UnitTypeId, float] = {
+    UnitTypeId.QUEEN: 2.67,
+    UnitTypeId.ZERGLING: 1.3,
+    UnitTypeId.BANELING: 1.3,
+    UnitTypeId.ROACH: 1.3,
+    UnitTypeId.RAVAGER: 1.3,
+    UnitTypeId.HYDRALISK: 1.3,
+    UnitTypeId.LURKERMP: 1.3,
+    UnitTypeId.ULTRALISK: 1.3,
+    UnitTypeId.INFESTOR: 1.3,
+    UnitTypeId.INFESTORTERRAN: 1.3,
+    UnitTypeId.SWARMHOSTMP: 1.3,
+    UnitTypeId.LOCUSTMP: 1.4,
+    UnitTypeId.SPINECRAWLER: 2.5,
+    UnitTypeId.SPORECRAWLER: 2.5,
+}
+OFF_CREEP_SPEED_UPGRADE_DICT: Dict[UnitTypeId, UpgradeId] = {
+    UnitTypeId.HYDRALISK: UpgradeId.EVOLVEMUSCULARAUGMENTS,
+    UnitTypeId.ULTRALISK: UpgradeId.ANABOLICSYNTHESIS,
+}
+OFF_CREEP_SPEED_INCREASE_DICT: Dict[UnitTypeId, float] = {
+    UnitTypeId.HYDRALISK: 1.25,
+    UnitTypeId.ULTRALISK: 1.2,
+}
+temp1 = set(OFF_CREEP_SPEED_UPGRADE_DICT.keys())
+temp2 = set(OFF_CREEP_SPEED_INCREASE_DICT.keys())
+assert temp1 == temp2, f"{temp1.symmetric_difference(temp2)}"
+del temp1
+del temp2
+# Movement speed gets altered by this factor if it is affected by this buff
+SPEED_ALTERING_BUFFS: Dict[BuffId, float] = {
+    # Stimpack increases speed by 1.5
+    BuffId.STIMPACK: 1.5,
+    BuffId.STIMPACKMARAUDER: 1.5,
+    BuffId.CHARGEUP: 2.2,  # x2.8 speed up in pre version 4.11
+    # Concussive shells of Marauder reduce speed by 50%
+    BuffId.DUTCHMARAUDERSLOW: 0.5,
+    # Time Warp of Mothership reduces speed by 50%
+    BuffId.TIMEWARPPRODUCTION: 0.5,
+    # Fungal Growth of Infestor reduces speed by 75%
+    BuffId.FUNGALGROWTH: 0.25,
+    # Inhibitor Zones reduce speed by 35%
+    BuffId.INHIBITORZONETEMPORALFIELD: 0.65,
+    # TODO there is a new zone coming (acceleration zone) which increase movement speed, ultralisk will be affected by this
 }
 UNIT_PHOTONCANNON: UnitTypeId = UnitTypeId.PHOTONCANNON
 UNIT_COLOSSUS: UnitTypeId = UnitTypeId.COLOSSUS

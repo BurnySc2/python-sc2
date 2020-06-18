@@ -30,7 +30,7 @@ class Client(Protocol):
         """
         super().__init__(ws)
         # How many frames will be waited between iterations before the next one is called
-        self.game_step = 8
+        self.game_step: int = 8
         self._player_id = None
         self._game_result = None
         # Store a hash value of all the debug requests to prevent sending the same ones again if they haven't changed last frame
@@ -56,6 +56,7 @@ class Client(Protocol):
             show_burrowed_shadows=True,
             raw_affects_selection=self.raw_affects_selection,
             raw_crop_to_playable_area=False,
+            show_placeholders=True,
         )
 
         if rgb_render_config:
@@ -185,9 +186,14 @@ class Client(Protocol):
             return None
         elif not isinstance(actions, list):
             actions = [actions]
-        res = await self._execute(
-            action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
-        )
+
+        # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
+        try:
+            res = await self._execute(
+                action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
+            )
+        except ProtocolError as e:
+            return []
         if return_successes:
             return [ActionResult(r) for r in res.action.result]
         else:
@@ -262,21 +268,50 @@ class Client(Protocol):
             )
         return [float(d.distance) for d in results.query.pathing]
 
-    async def query_building_placement(
+    async def _query_building_placement_fast(
         self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
-        assert isinstance(ability, AbilityData)
+        """
+
+        :param ability:
+        :param positions:
+        :param ignore_resources:
+        """
         result = await self._execute(
             query=query_pb.RequestQuery(
                 placements=(
                     query_pb.RequestQueryBuildingPlacement(
-                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position.x, y=position.y)
+                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position[0], y=position[1])
                     )
                     for position in positions
                 ),
                 ignore_resource_requirements=ignore_resources,
             )
         )
+        # Success enum value is 1, see https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/error.proto#L7
+        return [p.result == 1 for p in result.query.placements]
+
+    async def query_building_placement(
+        self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
+    ) -> List[ActionResult]:
+        """ This function might be deleted in favor of the function above (_query_building_placement_fast).
+
+        :param ability:
+        :param positions:
+        :param ignore_resources: """
+        assert isinstance(ability, AbilityData)
+        result = await self._execute(
+            query=query_pb.RequestQuery(
+                placements=(
+                    query_pb.RequestQueryBuildingPlacement(
+                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position[0], y=position[1])
+                    )
+                    for position in positions
+                ),
+                ignore_resource_requirements=ignore_resources,
+            )
+        )
+        # Unnecessary converting to ActionResult?
         return [ActionResult(p.result) for p in result.query.placements]
 
     async def query_available_abilities(
@@ -300,6 +335,19 @@ class Client(Protocol):
         if not input_was_a_list:
             return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities][0]
         return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities]
+
+    async def query_available_abilities_with_tag(
+            self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
+    ) -> Dict[Set[AbilityId]]:
+        """ Query abilities of multiple units """
+
+        result = await self._execute(
+            query=query_pb.RequestQuery(
+                abilities=(query_pb.RequestQueryAvailableAbilities(unit_tag=unit.tag) for unit in units),
+                ignore_resource_requirements=ignore_resource_requirements,
+            )
+        )
+        return {b.unit_tag: {AbilityId(a.ability_id) for a in b.abilities} for b in result.query.abilities}
 
     async def chat_send(self, message: str, team_only: bool):
         """ Writes a message to the chat """

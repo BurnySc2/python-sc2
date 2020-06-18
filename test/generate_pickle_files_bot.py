@@ -77,7 +77,6 @@ class ExporterBot(sc2.BotAI):
         with lzma.open(file_path, "wb") as f:
             pickle.dump([raw_game_data, raw_game_info, raw_observation], f)
 
-
     async def on_start(self):
         file_path = self.get_pickle_file_path()
         print(f"Saving file to {self.map_name}.xz")
@@ -141,6 +140,7 @@ def main():
         "CrystalCavern",
         "CyberForestLE",
         "DarknessSanctuaryLE",
+        "DeathAuraLE",
         "DefendersLandingLE",
         "DigitalFrontier",
         "DiscoBloodbathLE",
@@ -148,9 +148,13 @@ def main():
         "EastwatchLE",
         "Ephemeron",
         "EphemeronLE",
+        "EternalEmpireLE",
+        "EverDreamLE",
         "FractureLE",
         "FrostLE",
+        "GoldenWallLE",
         "HonorgroundsLE",
+        "IceandChromeLE",
         "InterloperLE",
         "KairosJunctionLE",
         "KingsCoveLE",
@@ -159,10 +163,12 @@ def main():
         "NeonVioletSquareLE",
         "NewkirkPrecinctTE",
         "NewRepugnancyLE",
+        "NightshadeLE",
         "OdysseyLE",
         "OldSunshine",
         "PaladinoTerminalLE",
         "ParaSiteLE",
+        "PillarsofGoldLE",
         "PortAleksanderLE",
         "PrimusQ9",
         "ProximaStationLE",
@@ -170,6 +176,8 @@ def main():
         "Reminiscence",
         "Sanglune",
         "SequencerLE",
+        "SimulacrumLE",
+        "SubmarineLE",
         # "StasisLE", Commented out because it has uneven number of expansions, and wasn't used in the ladder pool anyway
         "TheTimelessVoid",
         "ThunderbirdLE",
@@ -179,6 +187,7 @@ def main():
         "WintersGateLE",
         "WorldofSleepersLE",
         "YearZeroLE",
+        "ZenLE",
     ]
 
     for map_ in maps:

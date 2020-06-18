@@ -159,6 +159,11 @@ class UnitTypeData:
         return self._game_data.abilities[self._proto.ability_id]
 
     @property
+    def footprint_radius(self) -> float:
+        """ See unit.py footprint_radius """
+        return self.creation_ability._proto.footprint_radius
+
+    @property
     def attributes(self) -> List[Attribute]:
         return self._proto.attributes
 

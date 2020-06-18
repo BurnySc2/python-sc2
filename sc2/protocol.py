@@ -42,10 +42,12 @@ class Protocol:
         try:
             response_bytes = await self._ws.receive_bytes()
         except TypeError:
-            # logger.exception("Cannot receive: Connection already closed.")
-            # raise ConnectionAlreadyClosed("Connection already closed.")
-            logger.info("Cannot receive: Connection already closed.")
-            sys.exit(2)
+            if self._status == Status.ended:
+                logger.info("Cannot receive: Game has already ended.")
+                sys.exit()
+            else:
+                logger.error("Cannot receive: Connection already closed.")
+                sys.exit(2)
         except asyncio.CancelledError:
             # If request is sent, the response must be received before reraising cancel
             try:

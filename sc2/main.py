@@ -123,8 +123,18 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
     while True:
         if iteration != 0:
             if realtime:
-                # TODO: check what happens if a bot takes too long to respond for realtime=True, so that the requested game_loop might already be in the past
-                state = await client.observation(gs.game_loop + client.game_step)
+                # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
+                try:
+                    requested_step = gs.game_loop + client.game_step
+                    state = await client.observation(requested_step)
+                    # If the bot took too long in the previous observation, request another observation one frame after
+                    if state.observation.observation.game_loop > requested_step:
+                        # TODO Remove these 2 comments
+                        # t = state.observation.observation.game_loop
+                        state = await client.observation(state.observation.observation.game_loop + 1)
+                        # print(f"Requested step: {requested_step}, received: {t}, new: {state.observation.observation.game_loop}")
+                except ProtocolError:
+                    pass
             else:
                 state = await client.observation()
             # check game result every time we get the observation
@@ -352,8 +362,8 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
         iteration += 1
 
 
-async def _setup_host_game(server, map_settings, players, realtime, random_seed=None):
-    r = await server.create_game(map_settings, players, realtime, random_seed)
+async def _setup_host_game(server, map_settings, players, realtime, random_seed=None, disable_fog=None):
+    r = await server.create_game(map_settings, players, realtime, random_seed, disable_fog)
     if r.create_game.HasField("error"):
         err = f"Could not create game: {CreateGameError(r.create_game.error)}"
         if r.create_game.HasField("error_details"):
@@ -375,6 +385,7 @@ async def _host_game(
     rgb_render_config=None,
     random_seed=None,
     sc2_version=None,
+    disable_fog=None,
 ):
 
     assert players, "Can't create a game without players"
@@ -386,7 +397,7 @@ async def _host_game(
     ) as server:
         await server.ping()
 
-        client = await _setup_host_game(server, map_settings, players, realtime, random_seed)
+        client = await _setup_host_game(server, map_settings, players, realtime, random_seed, disable_fog)
         # Bot can decide if it wants to launch with 'raw_affects_selection=True'
         if not isinstance(players[0], Human) and getattr(players[0].ai, "raw_affects_selection", None) is not None:
             client.raw_affects_selection = players[0].ai.raw_affects_selection
@@ -407,13 +418,7 @@ async def _host_game(
 
 
 async def _host_game_aiter(
-    map_settings,
-    players,
-    realtime,
-    portconfig=None,
-    save_replay_as=None,
-    step_time_limit=None,
-    game_time_limit=None,
+    map_settings, players, realtime, portconfig=None, save_replay_as=None, step_time_limit=None, game_time_limit=None,
 ):
     assert players, "Can't create a game without players"
 
@@ -450,12 +455,7 @@ def _host_game_iter(*args, **kwargs):
 
 
 async def _join_game(
-    players,
-    realtime,
-    portconfig,
-    save_replay_as=None,
-    step_time_limit=None,
-    game_time_limit=None,
+    players, realtime, portconfig, save_replay_as=None, step_time_limit=None, game_time_limit=None,
 ):
     async with SC2Process(fullscreen=players[1].fullscreen) as server:
         await server.ping()
@@ -505,7 +505,7 @@ def get_replay_version(replay_path):
 
 def run_game(map_settings, players, **kwargs):
     if sum(isinstance(p, (Human, Bot)) for p in players) > 1:
-        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version"]
+        host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version", "disable_fog"]
         join_kwargs = {k: v for k, v in kwargs.items() if k not in host_only_args}
 
         portconfig = Portconfig()

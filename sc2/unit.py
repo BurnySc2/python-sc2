@@ -21,6 +21,7 @@ from .constants import (
     TARGET_BOTH,
     IS_SNAPSHOT,
     IS_VISIBLE,
+    IS_PLACEHOLDER,
     IS_MINE,
     IS_ENEMY,
     IS_CLOAKED,
@@ -39,6 +40,12 @@ from .constants import (
     IS_DETECTOR,
     UNIT_PHOTONCANNON,
     UNIT_COLOSSUS,
+    SPEED_INCREASE_DICT,
+    SPEED_UPGRADE_DICT,
+    SPEED_INCREASE_ON_CREEP_DICT,
+    OFF_CREEP_SPEED_UPGRADE_DICT,
+    OFF_CREEP_SPEED_INCREASE_DICT,
+    SPEED_ALTERING_BUFFS,
 )
 from .data import (
     Alliance,
@@ -89,7 +96,7 @@ class UnitOrder:
 
 
 class Unit:
-    def __init__(self, proto_data, bot_object: BotAI):
+    def __init__(self, proto_data, bot_object: BotAI, distance_calculation_index: int = -1):
         """
         :param proto_data:
         :param bot_object:
@@ -99,6 +106,8 @@ class Unit:
         # Used by property_immutable_cache
         self.cache = {}
         self.game_loop: int = bot_object.state.game_loop
+        # Index used in the 2D numpy array to access the 2D distance between two units
+        self.distance_calculation_index: int = distance_calculation_index
 
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
@@ -291,9 +300,73 @@ class Unit:
 
     @property
     def movement_speed(self) -> float:
-        """ Returns the movement speed of the unit. Does not include upgrades or buffs. """
-        # TODO: use bot object to calculate if unit is zerg unit and if it is on creep, and if it your own unit: check for movement speed upgrades (e.g. zergling, hydra, ultralisk) or buffs (stimpack, time warp slow, fungal), perhaps write a second property function for this
+        """ Returns the movement speed of the unit.
+        This is the unit movement speed on game speed 'normal'. To convert it to 'faster' movement speed, multiply it by a factor of '1.4'. E.g. reaper movement speed is listed here as 3.75, but should actually be 5.25.
+        Does not include upgrades or buffs. """
         return self._type_data._proto.movement_speed
+
+    @property
+    def real_speed(self) -> float:
+        """ See 'calculate_speed'. """
+        return self.calculate_speed()
+
+    def calculate_speed(self, upgrades: Set[UpgradeId] = None) -> float:
+        """ Calculates the movement speed of the unit including buffs and upgrades.
+        Note: Upgrades only work with own units. Use "upgrades" param to set expected enemy upgrades.
+
+        :param upgrades: """
+        speed: float = self.movement_speed
+        unit_type: UnitTypeId = self.type_id
+
+        # ---- Upgrades ----
+        if upgrades is None and self.is_mine:
+            upgrades = self._bot_object.state.upgrades
+
+        if upgrades and unit_type in SPEED_UPGRADE_DICT:
+            upgrade_id: UpgradeId = SPEED_UPGRADE_DICT.get(unit_type, None)
+            if upgrade_id and upgrade_id in upgrades:
+                speed *= SPEED_INCREASE_DICT.get(unit_type, 1)
+
+        # ---- Creep ----
+        if unit_type in SPEED_INCREASE_ON_CREEP_DICT or unit_type in OFF_CREEP_SPEED_UPGRADE_DICT:
+            # On creep
+            x, y = self.position_tuple
+            if self._bot_object.state.creep[(int(x), int(y))]:
+                speed *= SPEED_INCREASE_ON_CREEP_DICT.get(unit_type, 1)
+
+            # Off creep upgrades
+            elif upgrades:
+                upgrade_id: UpgradeId = OFF_CREEP_SPEED_UPGRADE_DICT.get(unit_type, None)
+                if upgrade_id:
+                    speed *= OFF_CREEP_SPEED_INCREASE_DICT[unit_type]
+
+            # Ultralisk has passive ability "Frenzied" which makes it immune to speed altering buffs
+            if unit_type == UnitTypeId.ULTRALISK:
+                return speed
+
+        # ---- Buffs ----
+        # Hard reset movement speed: medivac boost, void ray charge
+        if self.buffs and unit_type in {UnitTypeId.MEDIVAC, UnitTypeId.VOIDRAY}:
+            if BuffId.MEDIVACSPEEDBOOST in self.buffs:
+                speed = self.movement_speed * 1.7
+            elif BuffId.VOIDRAYSWARMDAMAGEBOOST in self.buffs:
+                speed = self.movement_speed * 0.75
+
+        # Speed altering buffs, e.g. stimpack, zealot charge, concussive shell, time warp, fungal growth, inhibitor zone
+        for buff in self.buffs:
+            speed *= SPEED_ALTERING_BUFFS.get(buff, 1)
+        return speed
+
+    @property
+    def distance_per_step(self) -> float:
+        """ The distance a unit can move in one step. This does not take acceleration into account.
+        Useful for micro-retreat/pathfinding """
+        return (self.real_speed/22.4) * self._bot_object.client.game_step
+
+    @property
+    def distance_to_weapon_ready(self) -> float:
+        """ Distance a unit can travel before it's weapon is ready to be fired again."""
+        return (self.real_speed / 22.4) * self.weapon_cooldown
 
     @property
     def is_mineral_field(self) -> bool:
@@ -318,7 +391,7 @@ class Unit:
     @property
     def health_percentage(self) -> float:
         """ Returns the percentage of health the unit has. Does not include shields. """
-        if self._proto.health_max == 0:
+        if not self._proto.health_max:
             return 0
         return self._proto.health / self._proto.health_max
 
@@ -335,7 +408,7 @@ class Unit:
     @property
     def shield_percentage(self) -> float:
         """ Returns the percentage of shield points the unit has. Returns 0 for non-protoss units. """
-        if self._proto.shield_max == 0:
+        if not self._proto.shield_max:
             return 0
         return self._proto.shield / self._proto.shield_max
 
@@ -344,7 +417,7 @@ class Unit:
         """ Returns the percentage of combined shield + hp points the unit has.
         Also takes build progress into account. """
         max_ = (self._proto.shield_max + self._proto.health_max) * self.build_progress
-        if max_ == 0:
+        if not max_:
             return 0
         return (self._proto.shield + self._proto.health) / max_
 
@@ -361,7 +434,7 @@ class Unit:
     @property
     def energy_percentage(self) -> float:
         """ Returns the percentage of amount of energy the unit has. Returns 0 for units without energy. """
-        if self._proto.energy_max == 0:
+        if not self._proto.energy_max:
             return 0
         return self._proto.energy / self._proto.energy_max
 
@@ -397,6 +470,24 @@ class Unit:
         NOTE: This means the bot has vision of the position of the unit!
         It does not give any information about the cloak status of the unit."""
         return self._proto.display_type == IS_VISIBLE and not self.is_snapshot
+
+    @property_immutable_cache
+    def is_placeholder(self) -> bool:
+        """ Checks if the unit is a placerholder for the bot.
+        Raw information about placeholders:
+            display_type: Placeholder
+            alliance: Self
+            unit_type: 86
+            owner: 1
+            pos {
+              x: 29.5
+              y: 53.5
+              z: 7.98828125
+            }
+            radius: 2.75
+            is_on_screen: false
+        """
+        return self._proto.display_type == IS_PLACEHOLDER
 
     @property
     def alliance(self) -> Alliance:
@@ -524,8 +615,8 @@ class Unit:
                     return 0, 0, 0
                 if not self.can_attack_air and target.is_flying:
                     return 0, 0, 0
-        # Enemy structures that are not completed can't attack
-        if not target.is_ready:
+        # Structures that are not completed can't attack
+        if not self.is_ready:
             return 0, 0, 0
         target_has_guardian_shield: bool = False
         if ignore_armor:
@@ -550,12 +641,12 @@ class Unit:
                 enemy_armor -= 2
                 enemy_shield_armor -= 2
 
-        # Fast return for battlecruiser because they have no weapon in the API
+        # Hard coded return for battlecruiser because they have no weapon in the API
         if self.type_id == UnitTypeId.BATTLECRUISER:
             if target_has_guardian_shield:
                 enemy_armor += 2
                 enemy_shield_armor += 2
-            weapon_damage = (8 if not target.is_flying else 5) + self.attack_upgrade_level
+            weapon_damage = (5 if target.is_flying else 8) + self.attack_upgrade_level
             weapon_damage = weapon_damage - enemy_shield_armor if target.shield else weapon_damage - enemy_armor
             return weapon_damage, 0.224, 6
 
@@ -658,11 +749,12 @@ class Unit:
                 UnitTypeId.MISSILETURRET,
                 UnitTypeId.AUTOTURRET,
             }:
+                upgrades: Set[UpgradeId] = self._bot_object.state.upgrades
                 if (
                     self.type_id == UnitTypeId.ZERGLING
                     # Attack speed calculation only works for our unit
                     and self.is_mine
-                    and UpgradeId.ZERGLINGATTACKSPEED in self._bot_object.state.upgrades
+                    and UpgradeId.ZERGLINGATTACKSPEED in upgrades
                 ):
                     # 0.696044921875 for zerglings divided through 1.4 equals (+40% attack speed bonus from the upgrade):
                     weapon_speed /= 1.4
@@ -670,7 +762,7 @@ class Unit:
                     # Adept ereceive 45% attack speed bonus from glaives
                     self.type_id == UnitTypeId.ADEPT
                     and self.is_mine
-                    and UpgradeId.ADEPTPIERCINGATTACK in self._bot_object.state.upgrades
+                    and UpgradeId.ADEPTPIERCINGATTACK in upgrades
                 ):
                     # TODO next patch: if self.type_id is adept: check if attack speed buff is active, instead of upgrade
                     weapon_speed /= 1.45
@@ -683,19 +775,15 @@ class Unit:
                     # TODO always assume that the enemy has the range upgrade researched
                     self.type_id == UnitTypeId.HYDRALISK
                     and self.is_mine
-                    and UpgradeId.EVOLVEGROOVEDSPINES in self._bot_object.state.upgrades
+                    and UpgradeId.EVOLVEGROOVEDSPINES in upgrades
                 ):
                     weapon_range += 1
-                elif (
-                    self.type_id == UnitTypeId.PHOENIX
-                    and self.is_mine
-                    and UpgradeId.PHOENIXRANGEUPGRADE in self._bot_object.state.upgrades
-                ):
+                elif self.type_id == UnitTypeId.PHOENIX and self.is_mine and UpgradeId.PHOENIXRANGEUPGRADE in upgrades:
                     weapon_range += 2
                 elif (
                     self.type_id in {UnitTypeId.PLANETARYFORTRESS, UnitTypeId.MISSILETURRET, UnitTypeId.AUTOTURRET}
                     and self.is_mine
-                    and UpgradeId.HISECAUTOTRACKING in self._bot_object.state.upgrades
+                    and UpgradeId.HISECAUTOTRACKING in upgrades
                 ):
                     weapon_range += 1
 
@@ -746,7 +834,7 @@ class Unit:
         For barracks, spawning pool, gateway, this returns 1.5
         For supply depot, this returns 1
         For sensor tower, creep tumor, this return 0.5 """
-        return self._bot_object._game_data.units[self._proto.unit_type].creation_ability._proto.footprint_radius
+        return self._bot_object._game_data.units[self._proto.unit_type].footprint_radius
 
     @property
     def radius(self) -> float:
@@ -1082,7 +1170,9 @@ class Unit:
     @property
     def surplus_harvesters(self) -> int:
         """ Returns a positive int if unit has too many harvesters mining,
-        a negative int if it has too few mining."""
+        a negative int if it has too few mining.
+        Will only works on townhalls, and gas buildings.
+        """
         return self._proto.assigned_harvesters - self._proto.ideal_harvesters
 
     @property_immutable_cache
@@ -1091,14 +1181,19 @@ class Unit:
         returns -1 for units that can't attack.
         Usage:
         if unit.weapon_cooldown == 0:
-            self.do(unit.attack(target))
+            unit.attack(target)
         elif unit.weapon_cooldown < 0:
-            self.do(unit.move(closest_allied_unit_because_cant_attack))
+            unit.move(closest_allied_unit_because_cant_attack)
         else:
-            self.do(unit.move(retreatPosition)) """
+            unit.move(retreatPosition) """
         if self.can_attack:
             return self._proto.weapon_cooldown
         return -1
+
+    @property
+    def weapon_ready(self) -> bool:
+        """ Checks if the weapon is ready to be fired. """
+        return self.weapon_cooldown == 0
 
     @property
     def engaged_target_tag(self) -> int:
@@ -1114,21 +1209,32 @@ class Unit:
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs
 
-    def train(self, unit: UnitTypeId, queue: bool = False) -> UnitCommand:
+    def train(self, unit: UnitTypeId, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to train another 'unit'.
-        Usage: self.do(COMMANDCENTER.train(SCV))
+        Usage: COMMANDCENTER.train(SCV)
 
         :param unit:
         :param queue: """
-        return self(self._bot_object._game_data.units[unit.value].creation_ability.id, queue=queue)
+        return self(
+            self._bot_object._game_data.units[unit.value].creation_ability.id,
+            queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def build(self, unit: UnitTypeId, position: Union[Point2, Point3] = None, queue: bool = False) -> UnitCommand:
+    def build(
+        self,
+        unit: UnitTypeId,
+        position: Union[Point2, Point3] = None,
+        queue: bool = False,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
-            self.do(SCV.build(COMMANDCENTER, position))
+            SCV.build(COMMANDCENTER, position)
             # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
-            self.do(SCV.build(REFINERY, target_vespene_geysir))
+            SCV.build(REFINERY, target_vespene_geysir)
 
         :param unit:
         :param position:
@@ -1138,14 +1244,20 @@ class Unit:
             assert isinstance(
                 position, Unit
             ), f"When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
-        return self(self._bot_object._game_data.units[unit.value].creation_ability.id, target=position, queue=queue)
+        return self(
+            self._bot_object._game_data.units[unit.value].creation_ability.id,
+            target=position,
+            queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def build_gas(self, target_geysir: Unit, queue: bool = False) -> UnitCommand:
+    def build_gas(self, target_geysir: Unit, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
             # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
-            self.do(SCV.build_gas(target_vespene_geysir))
+            SCV.build_gas(target_vespene_geysir)
 
         :param target_geysir:
         :param queue:
@@ -1158,36 +1270,49 @@ class Unit:
             self._bot_object._game_data.units[gas_structure_type_id.value].creation_ability.id,
             target=target_geysir,
             queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
         )
 
-    def research(self, upgrade: UpgradeId, queue: bool = False) -> UnitCommand:
+    def research(self, upgrade: UpgradeId, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to research 'upgrade'.
         Requires UpgradeId to be passed instead of AbilityId.
 
         :param upgrade:
         :param queue:
         """
-        return self(self._bot_object._game_data.upgrades[upgrade.value].research_ability.exact_id, queue=queue)
+        return self(
+            self._bot_object._game_data.upgrades[upgrade.value].research_ability.exact_id,
+            queue=queue,
+            subtract_cost=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3]) -> UnitCommand:
-        """ Orders Warpgate to warp in 'unit' at 'position'. 
+    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3], can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+        """ Orders Warpgate to warp in 'unit' at 'position'.
 
         :param unit:
         :param queue:
         """
         normal_creation_ability = self._bot_object._game_data.units[unit.value].creation_ability.id
-        return self(warpgate_abilities[normal_creation_ability], target=position)
+        return self(
+            warpgate_abilities[normal_creation_ability],
+            target=position,
+            subtract_cost=True,
+            subtract_supply=True,
+            can_afford_check=can_afford_check,
+        )
 
-    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders unit to attack. Target can be a Unit or Point2.
-        Attacking a position will make the unit move there and attack everything on its way. 
+        Attacking a position will make the unit move there and attack everything on its way.
 
         :param target:
         :param queue:
         """
         return self(AbilityId.ATTACK, target=target, queue=queue)
 
-    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders the smart command. Equivalent to a right-click order.
 
         :param target:
@@ -1195,64 +1320,64 @@ class Unit:
         """
         return self(AbilityId.SMART, target=target, queue=queue)
 
-    def gather(self, target: Unit, queue: bool = False) -> UnitCommand:
+    def gather(self, target: Unit, queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders a unit to gather minerals or gas.
-        'Target' must be a mineral patch or a gas extraction building. 
+        'Target' must be a mineral patch or a gas extraction building.
 
         :param target:
         :param queue:
         """
         return self(AbilityId.HARVEST_GATHER, target=target, queue=queue)
 
-    def return_resource(self, target: Unit = None, queue: bool = False) -> UnitCommand:
-        """ Orders the unit to return resource. Does not need a 'target'. 
+    def return_resource(self, target: Unit = None, queue: bool = False) -> Union[UnitCommand, bool]:
+        """ Orders the unit to return resource. Does not need a 'target'.
 
         :param target:
         :param queue:
         """
         return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> UnitCommand:
+    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders the unit to move to 'position'.
-        Target can be a Unit (to follow that unit) or Point2. 
+        Target can be a Unit (to follow that unit) or Point2.
 
         :param position:
         :param queue:
         """
         return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
 
-    def scan_move(self, *args, **kwargs) -> UnitCommand:
+    def scan_move(self, *args, **kwargs) -> Union[UnitCommand, bool]:
         """ Deprecated: This ability redirects to 'AbilityId.ATTACK' """
         return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
-    def hold_position(self, queue: bool = False) -> UnitCommand:
-        """ Orders a unit to stop moving. It will not move until it gets new orders. 
+    def hold_position(self, queue: bool = False) -> Union[UnitCommand, bool]:
+        """ Orders a unit to stop moving. It will not move until it gets new orders.
 
         :param queue:
         """
         return self(AbilityId.HOLDPOSITION, queue=queue)
 
-    def stop(self, queue: bool = False) -> UnitCommand:
+    def stop(self, queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders a unit to stop, but can start to move on its own
         if it is attacked, enemy unit is in range or other friendly
-        units need the space. 
+        units need the space.
 
         :param queue:
         """
         return self(AbilityId.STOP, queue=queue)
 
-    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> UnitCommand:
+    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
         """ Orders a unit to patrol between position it has when the command starts and the target position.
         Can be queued up to seven patrol points. If the last point is the same as the starting
-        point, the unit will patrol in a circle. 
+        point, the unit will patrol in a circle.
 
         :param position:
         :param queue:
         """
         return self(AbilityId.PATROL, target=position, queue=queue)
 
-    def repair(self, repair_target: Unit, queue: bool = False) -> UnitCommand:
-        """ Order an SCV or MULE to repair. 
+    def repair(self, repair_target: Unit, queue: bool = False) -> Union[UnitCommand, bool]:
+        """ Order an SCV or MULE to repair.
 
         :param repair_target:
         :param queue:
@@ -1268,5 +1393,21 @@ class Unit:
         except:
             return False
 
-    def __call__(self, ability, target=None, queue: bool = False):
-        return UnitCommand(ability, self, target=target, queue=queue)
+    def __call__(
+        self,
+        ability,
+        target=None,
+        queue: bool = False,
+        subtract_cost: bool = False,
+        subtract_supply: bool = False,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
+        """ Deprecated: Stop using self.do() - This may be removed in the future. """
+        if self._bot_object.unit_command_uses_self_do:
+            return UnitCommand(ability, self, target=target, queue=queue)
+        return self._bot_object.do(
+            UnitCommand(ability, self, target=target, queue=queue),
+            subtract_cost=subtract_cost,
+            subtract_supply=subtract_supply,
+            can_afford_check=can_afford_check,
+        )

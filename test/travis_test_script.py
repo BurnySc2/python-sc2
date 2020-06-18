@@ -16,7 +16,7 @@ pipenv run python test/travis_test_script.py test/autotest_bot.py
 retries = 3
 # My maxout bot (reaching 200 supply in sc2) took 110 - 140 real seconds for 7 minutes in game time
 # How long the script should run before it will be killed:
-timeout_time = 5 * 60  # 5 minutes real time
+timeout_time = 8 * 60  # 8 minutes real time
 
 
 if len(sys.argv) > 1:

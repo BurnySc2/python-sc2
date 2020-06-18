@@ -157,8 +157,7 @@ class ObserverAI(DistanceCalculation):
 
         :param alert_code:
         """
-        assert isinstance(
-            alert_code, Alert), f"alert_code {alert_code} is no Alert"
+        assert isinstance(alert_code, Alert), f"alert_code {alert_code} is no Alert"
         return alert_code.value in self.state.alerts
 
     @property
@@ -237,10 +236,8 @@ class ObserverAI(DistanceCalculation):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # Required for events, needs to be before self.units are initialized so the old units are stored
-        self._units_previous_map: Dict = {
-            unit.tag: unit for unit in self.units}
-        self._structures_previous_map: Dict = {
-            structure.tag: structure for structure in self.structures}
+        self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
+        self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
 
         self._prepare_units()
 
@@ -315,8 +312,7 @@ class ObserverAI(DistanceCalculation):
             if structure.build_progress < 1:
                 continue
             # Using get function in case somehow the previous structure map (from last frame) does not contain this structure
-            structure_prev = self._structures_previous_map.get(
-                structure.tag, None)
+            structure_prev = self._structures_previous_map.get(structure.tag, None)
             if structure_prev and structure_prev.build_progress < 1:
                 await self.on_building_construction_complete(structure)
 

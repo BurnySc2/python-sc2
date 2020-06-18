@@ -21,7 +21,7 @@ For this fork, you'll need Python 3.7 or newer.
 
 Install the pypi package:
 ```
-pip install --upgrade pipenv burnysc2
+pip install --upgrade burnysc2
 ```
 or directly from develop branch:
 ```
@@ -31,7 +31,7 @@ pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/a
 Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments or pipenv.
 
 ### StarCraft II
-You'll need an StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
+You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
 
 ### Maps
 You probably want some maps too.
@@ -78,7 +78,7 @@ class WorkerRushBot(sc2.BotAI):
     async def on_step(self, iteration: int):
         if iteration == 0:
             for worker in self.workers:
-                self.do(worker.attack(self.enemy_start_locations[0]))
+                worker.attack(self.enemy_start_locations[0])
 
 run_game(maps.get("Abyssal Reef LE"), [
     Bot(Race.Zerg, WorkerRushBot()),
@@ -89,6 +89,49 @@ run_game(maps.get("Abyssal Reef LE"), [
 This is probably the simplest bot that has any realistic chances of winning the game. I have ran it against the medium AI a few times, and once in a while, it wins.
 
 You can find more examples in the [`examples/`](/examples) folder.
+
+## API Configuration Options
+
+The API supports a number of options for configuring how it operates.
+
+### `unit_command_uses_self_do`
+Set this to 'True' if your bot is issueing commands using `self.do(Unit(Ability, Target))` instead of `Unit(Ability, Target)`.
+```python
+class MyBot(sc2.BotAI):
+    def __init__(self):
+        self.unit_command_uses_self_do = True
+```
+
+### `raw_affects_selection`
+Setting this to true improves bot performance by a little bit.
+```python
+class MyBot(sc2.BotAI):
+    def __init__(self):
+        self.raw_affects_selection = True
+```
+
+### `distance_calculation_method`
+The distance calculation method:
+- 0 for raw python
+- 1 for scipy pdist
+- 2 for scipy cdist
+```python
+class MyBot(sc2.BotAI):
+    def __init__(self):
+        self.distance_calculation_method: int = 2
+```
+
+### `game_step`
+On game start or in any frame actually, you can set the game step. This controls how often your bot's `step` method is called.  
+__Do not set this in the \_\_init\_\_ function as the client will not have been initialized yet!__
+```python
+class MyBot(sc2.BotAI):
+    def __init__(self):
+        pass  # don't set it here!
+
+    async def on_start(self):
+        self.client.game_step: int = 2
+```
 
 ## Community - Help and support
 

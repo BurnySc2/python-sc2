@@ -1268,7 +1268,6 @@ class AbilityId(enum.Enum):
     MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPRIGHTGREEN_CANCEL = 3800
     AMORPHOUSARMORCLOUD_AMORPHOUSARMORCLOUD = 3801
 
-
     def __repr__(self):
         return f"AbilityId.{self.name}"
 
