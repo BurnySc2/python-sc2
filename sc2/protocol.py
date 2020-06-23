@@ -23,11 +23,12 @@ class ConnectionAlreadyClosed(ProtocolError):
 class Protocol:
     def __init__(self, ws):
         """
-        :param ws:
+        A class for communicating with an SCII application.
+        :param ws: the websocket (type: aiohttp.ClientWebSocketResponse) used to communicate with a specific SCII app
         """
         assert ws
         self._ws = ws
-        self._status = None
+        self._status: Status = None
 
     async def __request(self, request):
         logger.debug(f"Sending request: {request !r}")
@@ -64,9 +65,7 @@ class Protocol:
     async def _execute(self, **kwargs):
         assert len(kwargs) == 1, "Only one request allowed"
 
-        request = sc_pb.Request(**kwargs)
-
-        response = await self.__request(request)
+        response = await self.__request(sc_pb.Request(**kwargs))
 
         new_status = Status(response.status)
         if new_status != self._status:

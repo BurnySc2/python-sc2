@@ -4,6 +4,8 @@ import math
 import random
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, Iterable, TYPE_CHECKING
 
+from s2clientprotocol import common_pb2 as common_pb
+
 if TYPE_CHECKING:
     from .unit import Unit
     from .units import Units
@@ -155,6 +157,15 @@ class Point2(Pointlike):
         :param data:
         """
         return cls((data.x, data.y))
+
+    @property
+    def as_Point2D(self) -> common_pb.Point2D:
+        return common_pb.Point2D(x=self.x, y=self.y)
+
+    @property
+    def as_PointI(self) -> common_pb.PointI:
+        """Represents points on the minimap. Values must be between 0 and 64."""
+        return common_pb.PointI(x=self.x, y=self.y)
 
     @property
     def rounded(self) -> Point2:
@@ -321,6 +332,10 @@ class Point3(Point2):
         :param data:
         """
         return cls((data.x, data.y, data.z))
+
+    @property
+    def as_Point(self) -> common_pb.Point:
+        return common_pb.Point(x=self.x, y=self.y, z=self.z)
 
     @property
     def rounded(self) -> Point3:
