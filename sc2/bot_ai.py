@@ -1681,6 +1681,9 @@ class BotAI(DistanceCalculation):
         self.army_count: int = state.common.army_count
         self._time_before_step: float = time.perf_counter()
 
+        if self.enemy_race == Race.Random and self.all_enemy_units:
+            self.enemy_race = Race(self.all_enemy_units.first.race)
+
     def _prepare_units(self):
         # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
         self.blips: Set[Blip] = set()
