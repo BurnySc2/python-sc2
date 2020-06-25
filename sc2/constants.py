@@ -445,7 +445,12 @@ ZERG_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
 )
 # Required in 'tech_requirement_progress' bot_ai.py function
 EQUIVALENTS_FOR_TECH_PROGRESS: Dict[UnitTypeId, Set[UnitTypeId]] = {
-    UnitTypeId.SUPPLYDEPOT: {UnitTypeId.SUPPLYDEPOTLOWERED},
+    # Protoss
+    UnitTypeId.GATEWAY: {UnitTypeId.WARPGATE},
+    UnitTypeId.WARPPRISM: {UnitTypeId.WARPPRISMPHASING},
+    UnitTypeId.OBSERVER: {UnitTypeId.OBSERVERSIEGEMODE},
+    # Terran
+    UnitTypeId.SUPPLYDEPOT: {UnitTypeId.SUPPLYDEPOTLOWERED, UnitTypeId.SUPPLYDEPOTDROP},
     UnitTypeId.BARRACKS: {UnitTypeId.BARRACKSFLYING},
     UnitTypeId.FACTORY: {UnitTypeId.FACTORYFLYING},
     UnitTypeId.STARPORT: {UnitTypeId.STARPORTFLYING},
@@ -455,9 +460,31 @@ EQUIVALENTS_FOR_TECH_PROGRESS: Dict[UnitTypeId, Set[UnitTypeId]] = {
         UnitTypeId.ORBITALCOMMAND,
         UnitTypeId.ORBITALCOMMANDFLYING,
     },
+    UnitTypeId.ORBITALCOMMAND: {UnitTypeId.ORBITALCOMMANDFLYING},
+    UnitTypeId.HELLION: {UnitTypeId.HELLIONTANK},
+    UnitTypeId.WIDOWMINE: {UnitTypeId.WIDOWMINEBURROWED},
+    UnitTypeId.SIEGETANK: {UnitTypeId.SIEGETANKSIEGED},
+    UnitTypeId.THOR: {UnitTypeId.THORAP},
+    UnitTypeId.VIKINGFIGHTER: {UnitTypeId.VIKINGASSAULT},
+    UnitTypeId.LIBERATOR: {UnitTypeId.LIBERATORAG},
+    # Zerg
     UnitTypeId.LAIR: {UnitTypeId.HIVE},
     UnitTypeId.HATCHERY: {UnitTypeId.LAIR, UnitTypeId.HIVE},
     UnitTypeId.SPIRE: {UnitTypeId.GREATERSPIRE},
+    UnitTypeId.SPINECRAWLER: {UnitTypeId.SPINECRAWLERUPROOTED},
+    UnitTypeId.SPORECRAWLER: {UnitTypeId.SPORECRAWLERUPROOTED},
+    UnitTypeId.OVERLORD: {UnitTypeId.OVERLORDTRANSPORT},
+    UnitTypeId.OVERSEER: {UnitTypeId.OVERSEERSIEGEMODE},
+    UnitTypeId.DRONE: {UnitTypeId.DRONEBURROWED},
+    UnitTypeId.ZERGLING: {UnitTypeId.ZERGLINGBURROWED},
+    UnitTypeId.ROACH: {UnitTypeId.ROACHBURROWED},
+    UnitTypeId.RAVAGER: {UnitTypeId.RAVAGERBURROWED},
+    UnitTypeId.HYDRALISK: {UnitTypeId.HYDRALISKBURROWED},
+    UnitTypeId.LURKERMP: {UnitTypeId.LURKERMPBURROWED},
+    UnitTypeId.SWARMHOSTMP: {UnitTypeId.SWARMHOSTBURROWEDMP},
+    UnitTypeId.INFESTOR: {UnitTypeId.INFESTORBURROWED},
+    UnitTypeId.ULTRALISK: {UnitTypeId.ULTRALISKBURROWED},
+    # TODO What about morphing untis? E.g. roach to ravager, overlord to drop-overlord or overseer
 }
 ALL_GAS: Set[UnitTypeId] = {
     UnitTypeId.ASSIMILATOR,
