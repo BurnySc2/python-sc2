@@ -1110,14 +1110,26 @@ class Unit:
 
     @property_immutable_cache
     def add_on_land_position(self) -> Point2:
-        """ If this unit is an addon (techlab, reactor), returns the position
-        where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to this addon. """
+        """
+        If this unit is an addon (techlab, reactor), returns the position
+        where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to this addon.
+
+        Why offset (-2.5, 0.5)? See description in 'add_on_position'
+        """
         return self.position.offset(Point2((-2.5, 0.5)))
 
     @property_immutable_cache
     def add_on_position(self) -> Point2:
-        """ If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
-        this property returns the position of where the addon should be, if it should build one or has one attached. """
+        """
+        If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
+        this property returns the position of where the addon should be, if it should build one or has one attached.
+
+        Why offset (2.5, -0.5)?
+        A barracks is of size 3x3. The distance from the center to the edge is 1.5.
+        An addon is 2x2 and the distance from the edge to center is 1.
+        The total distance from center to center on the x-axis is 2.5.
+        The distance from center to center on the y-axis is -0.5.
+        """
         return self.position.offset(Point2((2.5, -0.5)))
 
     @property_mutable_cache
