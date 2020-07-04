@@ -37,8 +37,8 @@ def combine_actions(action_iter):
             )
             # Combine actions with target point, e.g. attack_move or move commands on a position
             if isinstance(target, Point2):
-                # protobuf doesn't allow assigning repeated fields like target_world_space_pos
-                cmd.target_world_space_pos.x, cmd.target_world_space_pos.y = tuple(target)
+                cmd.target_world_space_pos.x = target.x
+                cmd.target_world_space_pos.y = target.y
             # Combine actions with target unit, e.g. attack commands directly on a unit
             elif isinstance(target, Unit):
                 cmd.target_unit_tag = target.tag

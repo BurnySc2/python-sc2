@@ -5,18 +5,51 @@ import six
 import json
 import os
 import mpyq
+import signal
 import async_timeout
+from dataclasses import dataclass
+from typing import Dict, List
+
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from .client import Client
-from .data import CreateGameError, Result
+from .controller import Controller
+from .data import CreateGameError, Result, Status
 from .game_state import GameState
-from .player import Bot, Human
+from .maps import Map
+from .player import AbstractPlayer, Bot, Human
 from .portconfig import Portconfig
 from .protocol import ConnectionAlreadyClosed, ProtocolError
-from .sc2process import SC2Process
+from .sc2process import SC2Process, kill_switch
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class GameMatch:
+    """Dataclass for hosting a match of SC2.
+    This contains all of the needed information for RequestCreateGame."""
+    map_settings: Map
+    players: List[AbstractPlayer]
+    realtime: bool
+    random_seed: int = None
+    disable_fog: bool = None
+
+    # avoid players sharing names
+    def __post_init__(self):
+        if len(self.players) > 1 and self.players[0].name is not None and self.players[0].name == self.players[1].name:
+            self.players[1].name += "2"
+
+    @property
+    def needed_sc2_count(self) -> int:
+        return sum(isinstance(player, (Bot, Human)) for player in self.players)
+
+    def __repr__(self):
+        p1 = self.players[0]
+        p1 = p1.name if p1.name else p1
+        p2 = self.players[1]
+        p2 = p2.name if p2.name else p2
+        return f"Map: {self.map_settings.name}, {p1} vs {p2}, realtime:{self.realtime}, seed={self.random_seed}"
 
 
 class SlidingTimeWindow:
@@ -108,10 +141,10 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         return client._game_result[player_id]
     gs = GameState(state.observation)
     proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
-    ai._prepare_step(gs, proto_game_info)
-    await ai.on_before_start()
-    ai._prepare_first_step()
     try:
+        ai._prepare_step(gs, proto_game_info)
+        await ai.on_before_start()
+        ai._prepare_first_step()
         await ai.on_start()
     except Exception as e:
         logger.exception(f"AI on_start threw an error")
@@ -245,7 +278,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
 
 async def _play_game(
-    player, client, realtime, portconfig, step_time_limit=None, game_time_limit=None, rgb_render_config=None
+    player, client: Client, realtime, portconfig, step_time_limit=None, game_time_limit=None, rgb_render_config=None
 ):
     assert isinstance(realtime, bool), repr(realtime)
 
@@ -362,7 +395,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
         iteration += 1
 
 
-async def _setup_host_game(server, map_settings, players, realtime, random_seed=None, disable_fog=None):
+async def _setup_host_game(server: Controller, map_settings, players, realtime, random_seed=None, disable_fog=None):
     r = await server.create_game(map_settings, players, realtime, random_seed, disable_fog)
     if r.create_game.HasField("error"):
         err = f"Could not create game: {CreateGameError(r.create_game.error)}"
@@ -531,3 +564,177 @@ def run_replay(ai, replay_path, realtime=False, observed_id=0):
         _host_replay(replay_path, ai, realtime, portconfig, base_build, data_version, observed_id)
     )
     return result
+
+
+async def play_from_websocket(
+        ws_connection: Union[str, ClientWebSocketResponse],
+        player: AbstractPlayer,
+        realtime: bool,
+        portconfig: Portconfig=None,
+        save_replay_as=None,
+        should_close=True
+):
+    """Use this to play when the match is handled externally e.g. for bot ladder games.
+    Portconfig MUST be specified if not playing vs Computer.
+    :param ws_connection: either a string("ws://127.0.0.1:{port}/sc2api") or a ClientWebSocketResponse object
+    :param should_close: closes the connection if True. Use False if something else will reuse the connection"""
+
+    if isinstance(ws_connection, str):
+        ws_connection = await ClientSession().ws_connect(ws_connection, timeout=120)
+        should_close = True
+    client = Client(ws_connection)
+    try:
+        result = await _play_game(player, client, realtime, portconfig)
+        if save_replay_as is not None:
+            await client.save_replay(save_replay_as)
+    except ConnectionAlreadyClosed:
+        logging.error(f"Connection was closed before the game ended")
+        return None
+    finally:
+        if should_close:
+            await ws_connection.close()
+
+    return result
+
+
+async def run_match(controllers: List[Controller], match: GameMatch, portconfig: Portconfig, close_ws=True) -> [Result, Result]:
+    """Sets up and plays a 1v1 match, returning the results of each player (in order of player id)
+    :param close_ws: set as False to reuse the websockets"""
+    await _setup_host_game(controllers[0], **match.__dict__)
+
+    # Player vs Computer doesn't need the second SC2 window, so handle it differently
+    if not isinstance(match.players[1], (Bot, Human)):
+        result1 = await play_from_websocket(controllers[0]._ws, match.players[0], match.realtime, should_close=close_ws)
+        other_result = {
+            Result.Victory: Result.Defeat,
+            Result.Defeat: Result.Victory,
+            Result.Tie: Result.Tie
+        }
+        result2 = other_result[result1] if result1 in other_result else None
+        return result1, result2
+
+    results = await asyncio.wait_for(asyncio.gather(
+        *(play_from_websocket(
+            controllers[i]._ws, match.players[i], match.realtime, portconfig, should_close=close_ws
+        ) for i in range(2)),
+        return_exceptions=True
+    ), timeout=None)
+    # Sometimes one player returns Victory but the other doesn't return Defeat.
+    if Result.Victory in results and Result.Defeat not in results:
+        for i in range(2):
+            if results[i] is not Result.Victory:
+                results[i] = Result.Defeat
+    return results
+
+
+async def maintain_SCII_count(count: int, controllers: List[Controller], proc_args: Dict):
+    """Modifies the given list of controllers to reflect the desired amount of SCII processes"""
+    # kill unhealthy ones.
+    if controllers:
+        toRemove = []
+        alive = await asyncio.wait_for(
+            asyncio.gather(*(c.ping() for c in controllers), return_exceptions=True), timeout=20)
+        for i, controller in enumerate(controllers):
+            if not isinstance(alive[i], sc_pb.Response):
+                try:
+                    await controller._process._close_connection()
+                    controller._process._clean()
+                finally:
+                    toRemove.append(controller)
+        for c in toRemove:
+            controllers.remove(c)
+
+    if len(controllers) < count:
+        needed = count - len(controllers)
+        extra = [SC2Process(**proc_args) for _ in range(needed)]
+        logger.info(f"Creating {needed} more SC2 Processes")
+        for k in range(3):  # try thrice
+            new = await asyncio.wait_for(
+                asyncio.gather(*(sc.__aenter__() for sc in extra), return_exceptions=True), timeout=50)
+            controllers.extend(c for c in new if isinstance(c, Controller))
+            if len(controllers) == count:
+                await asyncio.wait_for(asyncio.gather(*(c.ping() for c in controllers)), timeout=20)
+                break
+            extra = [extra[i] for i, result in enumerate(new) if not isinstance(new, Controller)]
+        else:
+            logger.critical("Could not launch sufficient SC2")
+            raise RuntimeError
+
+    while len(controllers) > count:
+        proc = controllers.pop()
+        proc = proc._process
+        logger.info(f"Removing SCII listening to {proc._port}")
+        await proc._close_connection()
+        proc._clean()
+        if proc in kill_switch._to_kill:
+            kill_switch._to_kill.remove(proc)
+
+
+async def a_run_multiple_games(matches: List[GameMatch], sc2_args=None):
+    if not matches:
+        return
+    if not sc2_args:
+        sc2_args = {"host": "127.0.0.1"}
+
+    results = []
+    for m in matches:
+        result = None
+        portconfig = Portconfig()
+        try:
+            controllers = []
+            await maintain_SCII_count(m.needed_sc2_count, controllers, sc2_args)
+            result = await run_match(controllers, m, portconfig, close_ws=True)
+        except SystemExit as e:
+            print(f"Game sys.exit'ed as {e} during match {m}")
+        except Exception as e:
+            print(f"Exception {e} thrown in match {m}")
+        finally:
+            kill_switch.kill_all()
+            portconfig.clean()
+            results.append(result)
+
+    return results
+
+
+async def a_run_multiple_games_nokill(matches: List[GameMatch], sc2_args=None):
+    """Run multiple matches while reusing SCII processes.
+    When playing bot vs bot, this is less likely to fatally crash than repeating run_game()
+    :param sc2_args: arguments for launching sc2's e.g. fullscreen, rbg"""
+    # TODO: allow non-python bots to play
+    if not matches:
+        return
+    if not sc2_args:
+        sc2_args = {"host": "127.0.0.1"}
+
+    # Start the matches
+    results = []
+    controllers = []
+    portconfig = Portconfig()
+    for m in matches:
+        logger.info(f"Starting match {1 + len(results)}: {m}")
+        result = None
+        try:
+            await maintain_SCII_count(m.needed_sc2_count, controllers, sc2_args)
+            result = await run_match(controllers, m, portconfig, close_ws=False)
+        except Exception as e:
+            print(f"Exception {e} thrown in match {m}")
+        finally:
+            for c in controllers:
+                if c._status not in {Status.ended, Status.launched}:
+                    try:
+                        await c._execute(leave_game=sc_pb.RequestLeaveGame())
+                    except:
+                        pass
+
+            results.append(result)
+
+    # Fire the killswitch manually, instead of letting the winning player fire it.
+    await asyncio.wait_for(asyncio.gather(*(c._process._close_connection() for c in controllers)), timeout=50)
+    kill_switch.kill_all()
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    return results
+
+
+def run_multiple_games(matches: List[GameMatch]):
+    return asyncio.get_event_loop().run_until_complete(a_run_multiple_games(matches))
