@@ -1,4 +1,5 @@
 import sys, os
+from contextlib import suppress
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
@@ -42,7 +43,7 @@ class ExpandEverywhere(sc2.BotAI):
         await self.distribute_workers()
 
         # Expand if we have 300 minerals, try to expand if there is one more expansion location available
-        try:
+        with suppress(AssertionError):
             if self.can_afford(UnitTypeId.HATCHERY):
                 planned_hatch_locations: Set[Point2] = {placeholder.position for placeholder in self.placeholders}
                 my_structure_locations: Set[Point2] = {structure.position for structure in self.structures}
@@ -57,8 +58,6 @@ class ExpandEverywhere(sc2.BotAI):
                         drone: Unit
                         drone.build(UnitTypeId.HATCHERY, exp_pos)
                         assert False, f"Break out of 2 for loops"
-        except AssertionError:
-            pass
 
         # Kill all enemy units in vision / sight
         if self.enemy_units:

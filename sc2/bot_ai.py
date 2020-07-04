@@ -7,6 +7,7 @@ import time
 import warnings
 from collections import Counter
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from contextlib import suppress
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from .cache import property_cache_forever, property_cache_once_per_frame, property_cache_once_per_frame_no_copy
@@ -899,7 +900,9 @@ class BotAI(DistanceCalculation):
         else:  # AbilityId
             building = self._game_data.abilities[building.value]
 
-        if await self.can_place(building, near) and (not addon_place or await self.can_place(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5)))):
+        if await self.can_place(building, near) and (
+            not addon_place or await self.can_place(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5)))
+        ):
             return near
 
         if max_distance == 0:
@@ -921,7 +924,7 @@ class BotAI(DistanceCalculation):
             if addon_place:
                 res = await self._client.query_building_placement(
                     self._game_data.units[UnitTypeId.SUPPLYDEPOT.value].creation_ability,
-                    [p.offset((2.5, -0.5)) for p in possible]
+                    [p.offset((2.5, -0.5)) for p in possible],
                 )
                 possible = [p for r, p in zip(res, possible) if r == ActionResult.Success]
 
@@ -1517,21 +1520,17 @@ class BotAI(DistanceCalculation):
             # action: UnitCommand
             # current_action: UnitOrder
             current_action = action.unit.orders[0]
-            if current_action.ability.id != action.ability:
+            if current_action.ability.id != action.ability and current_action.ability.exact_id != action.ability:
                 # Different action, return True
                 return True
-            try:
+            with suppress(AttributeError):
                 if current_action.target == action.target.tag:
                     # Same action, remove action if same target unit
                     return False
-            except AttributeError:
-                pass
-            try:
+            with suppress(AttributeError):
                 if action.target.x == current_action.target.x and action.target.y == current_action.target.y:
                     # Same action, remove action if same target position
                     return False
-            except AttributeError:
-                pass
             return True
         return True
 
