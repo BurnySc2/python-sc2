@@ -4,6 +4,7 @@ import logging
 import sys
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
+from aiohttp import ClientWebSocketResponse
 
 from .data import Status
 
@@ -27,7 +28,7 @@ class Protocol:
         :param ws: the websocket (type: aiohttp.ClientWebSocketResponse) used to communicate with a specific SCII app
         """
         assert ws
-        self._ws = ws
+        self._ws: ClientWebSocketResponse = ws
         self._status: Status = None
 
     async def __request(self, request):

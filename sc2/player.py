@@ -1,3 +1,5 @@
+from typing import Union
+
 from .bot_ai import BotAI
 from .data import AIBuild, Difficulty, PlayerType, Race
 
@@ -29,6 +31,10 @@ class AbstractPlayer:
             assert isinstance(race, Race), f"race is of type {type(race)}"
             assert difficulty is None
             assert ai_build is None
+
+    @property
+    def needs_sc2(self):
+        return not isinstance(self, Computer)
 
 
 class Human(AbstractPlayer):
@@ -93,3 +99,80 @@ class Player(AbstractPlayer):
         super().__init__(p_type, requested_race, difficulty=difficulty, name=name, ai_build=ai_build)
         self.id: int = player_id
         self.actual_race: Race = actual_race
+
+
+class BotProcess(AbstractPlayer):
+    """
+    Class for handling bots launched externally, including non-python bots.
+    Default parameters comply with sc2ai and ai-arena ladders.
+
+    :param path: the executable file's path
+    :param launch_str: the cmd-line string that launches the bot e.g. 'python run.py' or 'run.exe'
+    :param race: bot's race
+    :param name: bot's name
+    :param sc2port_arg: the accepted argument name for the port of the sc2 instance to listen to
+    :param hostaddress_arg: the accepted argument name for the address of the sc2 instance to listen to
+    :param match_arg: the accepted argument name for the starting port to generate a portconfig from
+    :param realtime_arg: the accepted argument name for specifying realtime
+    :param other_args: anything else that is needed
+
+    e.g. to call a bot capable of running on the bot ladders:
+        BotProcess(os.getcwd(), "python run.py", Race.Terran, "INnoVation")
+    """
+
+    def __init__(
+            self,
+            path: str,
+            launch_str: str,
+            race: Race,
+            name=None,
+            sc2port_arg="--GamePort",
+            hostaddress_arg="--LadderServer",
+            match_arg="--StartPort",
+            realtime_arg="--Realtime",
+            other_args: str=None,
+            stdout: str=None,
+    ):
+        self.race = race
+        self.type = PlayerType.Participant
+        self.name = name
+
+        self.path = path
+        self.launch_str = launch_str
+        self.sc2port_arg = sc2port_arg
+        self.match_arg = match_arg
+        self.hostaddress_arg = hostaddress_arg
+        self.realtime_arg = realtime_arg
+        self.other_args = other_args
+        self.stdout = stdout
+        if stdout is None:
+            self.stdout = launch_str
+
+    def __repr__(self):
+        if self.name is not None:
+            return f"Bot {self.name}({self.race.name} from {self.launch_str})"
+        else:
+            return f"Bot({self.race.name} from {self.launch_str})"
+
+    def cmd_line(self, sc2port: Union[int, str], matchport: Union[int, str], hostaddress: str, realtime: str=None):
+        """
+
+        :param sc2port: the port that the launched sc2 instance listens to
+        :param matchport: some starting port that both bots use to generate identical portconfigs
+        :param hostaddress: the address the sc2 instances used
+        :param realtime: 1 or 0, indicating whether the match is played in realtime or not
+        :return: string that will be used to start the bot's process
+        """
+        cmd_line = [
+            self.launch_str,
+            self.sc2port_arg, str(sc2port),
+            self.match_arg, str(matchport),
+            self.hostaddress_arg, hostaddress,
+        ]
+        if self.other_args is not None:
+            cmd_line.append(self.other_args)
+        if realtime is not None:
+            cmd_line.extend([self.realtime_arg, str(realtime)])
+        return " ".join(cmd_line)
+
+
