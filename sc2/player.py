@@ -1,4 +1,5 @@
-from typing import Union
+from pathlib import Path
+from typing import Union, List
 
 from .bot_ai import BotAI
 from .data import AIBuild, Difficulty, PlayerType, Race
@@ -121,40 +122,44 @@ class BotProcess(AbstractPlayer):
     """
 
     def __init__(
-            self,
-            path: str,
-            launch_str: str,
-            race: Race,
-            name=None,
-            sc2port_arg="--GamePort",
-            hostaddress_arg="--LadderServer",
-            match_arg="--StartPort",
-            realtime_arg="--Realtime",
-            other_args: str=None,
-            stdout: str=None,
+        self,
+        path: str,
+        launch_list: List[str],
+        race: Race,
+        name=None,
+        sc2port_arg="--GamePort",
+        hostaddress_arg="--LadderServer",
+        match_arg="--StartPort",
+        realtime_arg="--Realtime",
+        other_args: str = None,
+        stdout: str = None,
     ):
         self.race = race
         self.type = PlayerType.Participant
         self.name = name
 
+        assert Path(path).exists()
         self.path = path
-        self.launch_str = launch_str
+        self.launch_list = launch_list
         self.sc2port_arg = sc2port_arg
         self.match_arg = match_arg
         self.hostaddress_arg = hostaddress_arg
         self.realtime_arg = realtime_arg
         self.other_args = other_args
         self.stdout = stdout
-        if stdout is None:
-            self.stdout = launch_str
+        # Why was stdout set to launch_str?
+        # if stdout is None:
+        #     self.stdout = launch_str
 
     def __repr__(self):
         if self.name is not None:
-            return f"Bot {self.name}({self.race.name} from {self.launch_str})"
+            return f"Bot {self.name}({self.race.name} from {self.launch_list})"
         else:
-            return f"Bot({self.race.name} from {self.launch_str})"
+            return f"Bot({self.race.name} from {self.launch_list})"
 
-    def cmd_line(self, sc2port: Union[int, str], matchport: Union[int, str], hostaddress: str, realtime: str=None):
+    def cmd_line(
+        self, sc2port: Union[int, str], matchport: Union[int, str], hostaddress: str, realtime: str = None
+    ) -> List[str]:
         """
 
         :param sc2port: the port that the launched sc2 instance listens to
@@ -164,15 +169,16 @@ class BotProcess(AbstractPlayer):
         :return: string that will be used to start the bot's process
         """
         cmd_line = [
-            self.launch_str,
-            self.sc2port_arg, str(sc2port),
-            self.match_arg, str(matchport),
-            self.hostaddress_arg, hostaddress,
+            *self.launch_list,
+            self.sc2port_arg,
+            str(sc2port),
+            self.match_arg,
+            str(matchport),
+            self.hostaddress_arg,
+            hostaddress,
         ]
         if self.other_args is not None:
             cmd_line.append(self.other_args)
         if realtime is not None:
             cmd_line.extend([self.realtime_arg, str(realtime)])
-        return " ".join(cmd_line)
-
-
+        return cmd_line

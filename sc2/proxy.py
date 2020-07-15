@@ -1,6 +1,5 @@
 import asyncio
 from aiohttp import web, WSMsgType, WSMessage
-import logging
 import os
 import platform
 import subprocess
@@ -15,12 +14,12 @@ from .player import BotProcess
 
 from pathlib import Path
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class Proxy:
     def __init__(self, controller: Controller, player: BotProcess, proxyport: int):
-        self.ctrler = controller
+        self.controller = controller
         self.player = player
         self.port = proxyport
 
@@ -38,27 +37,23 @@ class Proxy:
             self.result = {self.player_id: Result.Defeat}
         elif request.HasField("join_game") and not request.join_game.HasField("player_name"):
             request.join_game.player_name = self.player.name
-        await self.ctrler._ws.send_bytes(request.SerializeToString())
+        await self.controller._ws.send_bytes(request.SerializeToString())
 
     async def get_response(self):
         response_bytes = None
         try:
-            response_bytes = await self.ctrler._ws.receive_bytes()
+            response_bytes = await self.controller._ws.receive_bytes()
         except TypeError as e:
             logger.exception("Cannot receive: SC2 Connection already closed.")
             tb = traceback.format_exc()
             logger.error(f"Exception {e}: {tb}")
         except asyncio.CancelledError:
-            print(f"Proxy({self.player.name}), caught receive from sc2, {traceback.format_exc()}")
+            logger.info(f"Proxy({self.player.name}), caught receive from sc2, {traceback.format_exc()}")
             try:
-                x = await self.ctrler._ws.receive_bytes()
+                x = await self.controller._ws.receive_bytes()
                 if response_bytes is None:
                     response_bytes = x
-            except (
-                    asyncio.CancelledError,
-                    asyncio.TimeoutError,
-                    Exception
-            ) as e:
+            except (asyncio.CancelledError, asyncio.TimeoutError, Exception) as e:
                 tb = traceback.format_exc()
                 logger.error(f"Exception {e}: {tb}")
         except Exception as e:
@@ -70,13 +65,13 @@ class Proxy:
         response = sc_pb.Response()
         response.ParseFromString(response_bytes)
         new_status = Status(response.status)
-        if new_status != self.ctrler._status:
-            logger.info(f"Controller({self.player.name}): {self.ctrler._status}->{new_status}")
-            self.ctrler._status = new_status
+        if new_status != self.controller._status:
+            logger.info(f"Controller({self.player.name}): {self.controller._status}->{new_status}")
+            self.controller._status = new_status
         if self.player_id is None:
             if response.HasField("join_game"):
                 self.player_id = response.join_game.player_id
-                print(f"Proxy({self.player.name}): got join_game for {self.player_id}")
+                logger.info(f"Proxy({self.player.name}): got join_game for {self.player_id}")
         if self.result is None:
             if response.HasField("observation") and response.observation.player_result:
                 self.result = {pr.player_id: Result(pr.result) for pr in response.observation.player_result}
@@ -107,58 +102,58 @@ class Proxy:
             IGNORED_ERRORS = {ConnectionError, asyncio.CancelledError}
             if not any([isinstance(e, E) for E in IGNORED_ERRORS]):
                 tb = traceback.format_exc()
-                print(f"Proxy({self.player.name}): Caught {e} traceback: {tb}")
+                logger.info(f"Proxy({self.player.name}): Caught {e} traceback: {tb}")
         finally:
             try:
-                if self.ctrler._status in {Status.in_game, Status.in_replay}:
-                    await self.ctrler._execute(leave_game=sc_pb.RequestLeaveGame())
+                if self.controller._status in {Status.in_game, Status.in_replay}:
+                    await self.controller._execute(leave_game=sc_pb.RequestLeaveGame())
                 await bot_ws.close()
             except Exception as ee:
                 tbb = traceback.format_exc()
-                print(f"Proxy({self.player.name}): Caught during Surrender", ee, "traceback:", tbb)
+                logger.info(f"Proxy({self.player.name}): Caught during Surrender", ee, "traceback:", tbb)
             self.done = True
         return bot_ws
 
     async def play_with_proxy(self, startport):
-        print(f"Proxy({self.port}): starting app")
+        logger.info(f"Proxy({self.port}): starting app")
         app = web.Application()
         app.router.add_route("GET", "/sc2api", self.proxy_handler)
         apprunner = web.AppRunner(app, access_log=None)
         await apprunner.setup()
-        appsite = web.TCPSite(apprunner, self.ctrler._process._host, self.port)
+        appsite = web.TCPSite(apprunner, self.controller._process._host, self.port)
         await appsite.start()
 
-        subproc_args = {"cwd": str(self.player.path),
-                        "stderr": subprocess.STDOUT}
+        subproc_args = {"cwd": str(self.player.path), "stderr": subprocess.STDOUT}
         if platform.system() == "Linux":
             subproc_args["preexec_fn"] = os.setpgrp
         elif platform.system() == "Windows":
             subproc_args["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
 
+        player_command_line = self.player.cmd_line(self.port, startport, self.controller._process._host)
         if self.player.stdout is not None:
             with open(self.player.stdout, "w+") as out:
-                bot_process = subprocess.Popen(
-                    self.player.cmd_line(self.port, startport, self.ctrler._process._host), stdout=out, **subproc_args)
+                bot_process = subprocess.Popen(player_command_line, stdout=out, **subproc_args)
         else:
             # outfile = os.path.join(self.player.launch_str, "data", "stderr.txt")
             # with open(outfile, "w+") as out:
             #     bot_process = subprocess.Popen(
-            #         self.player.cmd_line(self.port, startport, self.ctrler._process._host), stdout=out, **subproc_args)
-            bot_process = subprocess.Popen(
-                self.player.cmd_line(self.port, startport, self.ctrler._process._host), stdout=subprocess.PIPE, **subproc_args)
+            #         self.player.cmd_line(self.port, startport, self.controller._process._host), stdout=out, **subproc_args)
+            bot_process = subprocess.Popen(player_command_line, stdout=subprocess.PIPE, **subproc_args)
 
-        print(f"Proxy({self.port}): starting while loop")
+        logger.info(f"Proxy({self.port}): starting while loop")
         while self.result is None:
             bot_alive = bot_process and bot_process.poll() is None
-            sc2_alive = self.ctrler.running and self.ctrler._process._process.poll() is None
+            sc2_alive = self.controller.running and self.controller._process._process.poll() is None
             if self.done or not (bot_alive and sc2_alive):
-                logger.info(f"Proxy({self.port}): {self.player.name} died/rekt'ed, "
-                      f"bot{(not bot_alive) * ' not'} alive, sc2{(not sc2_alive) * ' not'} alive")
+                logger.info(
+                    f"Proxy({self.port}): {self.player.name} died/rekt'ed, "
+                    f"bot{(not bot_alive) * ' not'} alive, sc2{(not sc2_alive) * ' not'} alive"
+                )
                 if sc2_alive and not self.done:
                     try:
-                        res = await self.ctrler.ping()
+                        res = await self.controller.ping()
                         if res.status in {Status.in_game, Status.in_replay, Status.ended}:
-                            res = await self.ctrler._execute(observation=sc_pb.RequestObservation())
+                            res = await self.controller._execute(observation=sc_pb.RequestObservation())
                             if res.HasField("observation") and res.observation.player_result:
                                 self.result = {pr.player_id: Result(pr.result) for pr in res.observation.player_result}
                     except Exception as e:
@@ -173,10 +168,10 @@ class Proxy:
         for i in range(3):
             if isinstance(bot_process, subprocess.Popen):
                 if bot_process.stdout and not bot_process.stdout.closed:
-                    # print("==================output for player", self.player.name)
-                    # print(*bot_process.stdout.readlines())
+                    # logger.info("==================output for player", self.player.name)
+                    # logger.info(*bot_process.stdout.readlines())
                     bot_process.stdout.close()
-                    # print("==================")
+                    # logger.info("==================")
                 bot_process.terminate()
                 bot_process.wait()
             time.sleep(0.5)
@@ -194,4 +189,3 @@ class Proxy:
             return self.result[self.player_id]
         else:
             return self.result
-

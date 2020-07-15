@@ -1,5 +1,4 @@
 from __future__ import annotations
-import logging
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from s2clientprotocol import debug_pb2 as debug_pb
@@ -19,7 +18,7 @@ from .renderer import Renderer
 from .unit import Unit
 from .units import Units
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class Client(Protocol):
@@ -211,11 +210,7 @@ class Client(Protocol):
             path = [query_pb.RequestQueryPathing(start_pos=start.as_Point2D, end_pos=end.as_Point2D)]
         else:
             path = [query_pb.RequestQueryPathing(unit_tag=start.tag, end_pos=end.as_Point2D)]
-        result = await self._execute(
-            query=query_pb.RequestQuery(
-                pathing=path
-            )
-        )
+        result = await self._execute(query=query_pb.RequestQuery(pathing=path))
         distance = float(result.query.pathing[0].distance)
         if distance <= 0.0:
             return None
@@ -236,17 +231,11 @@ class Client(Protocol):
         assert isinstance(zipped_list[0][1], Point2), f"{type(zipped_list[0][1])}"
         if isinstance(zipped_list[0][0], Point2):
             path = (
-                query_pb.RequestQueryPathing(
-                    start_pos=p1.as_Point2D, end_pos=p2.as_Point2D
-                ) for p1, p2 in zipped_list
+                query_pb.RequestQueryPathing(start_pos=p1.as_Point2D, end_pos=p2.as_Point2D) for p1, p2 in zipped_list
             )
         else:
             path = (query_pb.RequestQueryPathing(unit_tag=p1.tag, end_pos=p2.as_Point2D) for p1, p2 in zipped_list)
-        results = await self._execute(
-            query=query_pb.RequestQuery(
-                pathing=path
-            )
-        )
+        results = await self._execute(query=query_pb.RequestQuery(pathing=path))
         return [float(d.distance) for d in results.query.pathing]
 
     async def _query_building_placement_fast(
@@ -261,9 +250,7 @@ class Client(Protocol):
         result = await self._execute(
             query=query_pb.RequestQuery(
                 placements=(
-                    query_pb.RequestQueryBuildingPlacement(
-                        ability_id=ability.id.value, target_pos=position.as_Point2D
-                    )
+                    query_pb.RequestQueryBuildingPlacement(ability_id=ability.id.value, target_pos=position.as_Point2D)
                     for position in positions
                 ),
                 ignore_resource_requirements=ignore_resources,
@@ -284,9 +271,7 @@ class Client(Protocol):
         result = await self._execute(
             query=query_pb.RequestQuery(
                 placements=(
-                    query_pb.RequestQueryBuildingPlacement(
-                        ability_id=ability.id.value, target_pos=position.as_Point2D
-                    )
+                    query_pb.RequestQueryBuildingPlacement(ability_id=ability.id.value, target_pos=position.as_Point2D)
                     for position in positions
                 ),
                 ignore_resource_requirements=ignore_resources,
@@ -318,7 +303,7 @@ class Client(Protocol):
         return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities]
 
     async def query_available_abilities_with_tag(
-            self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
+        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> Dict[int, Set[AbilityId]]:
         """ Query abilities of multiple units """
 
@@ -419,9 +404,7 @@ class Client(Protocol):
                 actions=[
                     sc_pb.Action(
                         action_raw=raw_pb.ActionRaw(
-                            camera_move=raw_pb.ActionRawCameraMove(
-                                center_world_space=position.to3.as_Point
-                            )
+                            camera_move=raw_pb.ActionRawCameraMove(center_world_space=position.to3.as_Point)
                         )
                     )
                 ]
@@ -438,11 +421,7 @@ class Client(Protocol):
         await self._execute(
             obs_action=sc_pb.RequestObserverAction(
                 actions=[
-                    sc_pb.ObserverAction(
-                        camera_move=sc_pb.ActionObserverCameraMove(
-                            world_pos=position.as_Point2D
-                        )
-                    )
+                    sc_pb.ObserverAction(camera_move=sc_pb.ActionObserverCameraMove(world_pos=position.as_Point2D))
                 ]
             )
         )
@@ -456,9 +435,7 @@ class Client(Protocol):
         assert isinstance(position, (Point2, Point3))
         action = sc_pb.Action(
             action_render=spatial_pb.ActionSpatial(
-                camera_move=spatial_pb.ActionSpatialCameraMove(
-                    center_minimap=position.as_PointI
-                )
+                camera_move=spatial_pb.ActionSpatialCameraMove(center_minimap=position.as_PointI)
             )
         )
         await self._execute(action=sc_pb.RequestAction(actions=[action]))
@@ -782,9 +759,7 @@ class DrawItemBox(DrawItem):
 
     def to_proto(self):
         return debug_pb.DebugBox(
-            min=self._start_point.as_Point,
-            max=self._end_point.as_Point,
-            color=self.to_debug_color(self._color),
+            min=self._start_point.as_Point, max=self._end_point.as_Point, color=self.to_debug_color(self._color),
         )
 
     def __hash__(self):

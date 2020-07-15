@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import os.path
 import shutil
 import signal
@@ -10,7 +9,7 @@ import tempfile
 import time
 import json
 import re
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
 
 import aiohttp
 import portpicker
@@ -21,7 +20,7 @@ from sc2 import paths
 
 from sc2.versions import VERSIONS
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class kill_switch:
@@ -54,13 +53,14 @@ class SC2Process:
     :param base_build:
     :param data_hash:
     """
+
     def __init__(
         self,
         host: str = "127.0.0.1",
         port: Optional[int] = None,
         fullscreen: bool = False,
-        resolution: Optional[Iterable[int]] = None,
-        placement: Optional[Iterable[int]] = None,
+        resolution: Optional[Union[List[int], Tuple[int, int]]] = None,
+        placement: Optional[Union[List[int], Tuple[int, int]]] = None,
         render: bool = False,
         sc2_version: str = None,
         base_build: str = None,
@@ -92,7 +92,7 @@ class SC2Process:
         self._base_build = base_build
         self._data_hash = data_hash
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Controller:
         kill_switch.add(self)
 
         def signal_handler(*args):
@@ -127,7 +127,7 @@ class SC2Process:
         https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json """
         return VERSIONS
 
-    def find_data_hash(self, target_sc2_version: str):
+    def find_data_hash(self, target_sc2_version: str) -> Optional[str]:
         """ Returns the data hash from the matching version string. """
         version: dict
         for version in self.versions:
@@ -183,8 +183,8 @@ class SC2Process:
         if self._render:
             args.extend(["-eglpath", "libEGL.so"])
 
-        if logger.getEffectiveLevel() <= logging.DEBUG:
-            args.append("-verbose")
+        # if logger.getEffectiveLevel() <= logging.DEBUG:
+        args.append("-verbose")
 
         return subprocess.Popen(
             args,

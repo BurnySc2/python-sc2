@@ -1,6 +1,5 @@
 from __future__ import annotations
 import itertools
-import logging
 import math
 import random
 import time
@@ -45,7 +44,7 @@ from .units import Units
 from .game_data import Cost
 from .unit_command import UnitCommand
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 if TYPE_CHECKING:
     from .game_info import GameInfo, Ramp

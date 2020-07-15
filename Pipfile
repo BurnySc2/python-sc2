@@ -11,6 +11,7 @@ pyglet = "*"
 numpy = "*"
 scipy = "*"
 mpyq = "*"
+loguru = "*"
 
 [dev-packages]
 atomicwrites = "*"
@@ -26,7 +27,6 @@ pytest-cov = "*"
 coverage = "*"
 codecov = "*"
 matplotlib = "*"
-loguru = "*"
 
 [requires]
 python_version = "3.7"

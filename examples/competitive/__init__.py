@@ -2,7 +2,6 @@ import argparse
 
 import sys
 import asyncio
-import logging
 import aiohttp
 
 import sc2
@@ -11,6 +10,8 @@ from sc2.player import Bot, Computer
 
 from sc2.sc2process import SC2Process
 from sc2.client import Client
+
+from loguru import logger
 
 # Run ladder game
 # This lets python-sc2 connect to a LadderManager game: https://github.com/Cryptyc/Sc2LadderServer
@@ -75,7 +76,7 @@ async def join_ladder_game(
         # await client.leave()
         # await client.quit()
     except ConnectionAlreadyClosed:
-        logging.error(f"Connection was closed before the game ended")
+        logger.error(f"Connection was closed before the game ended")
         return None
     finally:
         ws_connection.close()

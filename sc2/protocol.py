@@ -1,6 +1,5 @@
 import asyncio
 
-import logging
 import sys
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
@@ -8,7 +7,7 @@ from aiohttp import ClientWebSocketResponse
 
 from .data import Status
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class ProtocolError(Exception):

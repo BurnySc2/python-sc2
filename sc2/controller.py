@@ -1,5 +1,3 @@
-import logging
-
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from .player import Computer
@@ -8,7 +6,7 @@ from .protocol import Protocol
 from pathlib import Path
 import platform
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class Controller(Protocol):
