@@ -828,12 +828,15 @@ class Unit:
         return angle_difference < angle_error
 
     @property
-    def footprint_radius(self) -> float:
+    def footprint_radius(self) -> Optional[float]:
         """ For structures only.
         For townhalls this returns 2.5
         For barracks, spawning pool, gateway, this returns 1.5
         For supply depot, this returns 1
-        For sensor tower, creep tumor, this return 0.5 """
+        For sensor tower, creep tumor, this return 0.5
+
+        NOTE: This can be None if a building doesn't have a creation ability.
+        For rich vespene buildings, flying terran buildings, this returns None"""
         return self._bot_object._game_data.units[self._proto.unit_type].footprint_radius
 
     @property

@@ -91,7 +91,6 @@ class BotAI(DistanceCalculation):
         self.mineral_field: Units = Units([], self)
         self.vespene_geyser: Units = Units([], self)
         self.placeholders: Units = Units([], self)
-        self.larva: Units = Units([], self)
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
         self.minerals: int = 50
@@ -1591,7 +1590,7 @@ class BotAI(DistanceCalculation):
 
         :param pos: """
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
-        pos = pos.position.to2.rounded
+        pos = pos.position.rounded
         return self._game_info.pathing_grid[pos] == 1
 
     def is_visible(self, pos: Union[Point2, Unit]) -> bool:
@@ -1600,7 +1599,7 @@ class BotAI(DistanceCalculation):
         :param pos: """
         # more info: https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/spatial.proto#L19
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
-        pos = pos.position.to2.rounded
+        pos = pos.position.rounded
         return self.state.visibility[pos] == 2
 
     def has_creep(self, pos: Union[Point2, Unit]) -> bool:
@@ -1608,7 +1607,7 @@ class BotAI(DistanceCalculation):
 
         :param pos: """
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
-        pos = pos.position.to2.rounded
+        pos = pos.position.rounded
         return self.state.creep[pos] == 1
 
     def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False):
@@ -1650,7 +1649,7 @@ class BotAI(DistanceCalculation):
         """
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
-        # update pathing grid
+        # update pathing grid, which unfortunately is in GameInfo instead of GameState
         self._game_info.pathing_grid: PixelMap = PixelMap(
             proto_game_info.game_info.start_raw.pathing_grid, in_bits=True, mirrored=False
         )
@@ -1680,6 +1679,9 @@ class BotAI(DistanceCalculation):
         self.idle_worker_count: int = state.common.idle_worker_count
         self.army_count: int = state.common.army_count
         self._time_before_step: float = time.perf_counter()
+
+        if self.enemy_race == Race.Random and self.all_enemy_units:
+            self.enemy_race = Race(self.all_enemy_units.first.race)
 
     def _prepare_units(self):
         # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units

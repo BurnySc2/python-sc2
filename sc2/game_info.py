@@ -6,7 +6,7 @@ import numpy as np
 
 from .cache import property_immutable_cache, property_mutable_cache
 from .pixel_map import PixelMap
-from .player import Player
+from .player import Player, Race
 from .position import Point2, Rect, Size
 
 
@@ -240,7 +240,7 @@ class GameInfo:
         self.map_center = self.playable_area.center
         self.map_ramps: List[Ramp] = None  # Filled later by BotAI._prepare_first_step
         self.vision_blockers: Set[Point2] = None  # Filled later by BotAI._prepare_first_step
-        self.player_races: Dict[int, "Race"] = {
+        self.player_races: Dict[int, Race] = {
             p.player_id: p.race_actual or p.race_requested for p in self._proto.player_info
         }
         self.start_locations: List[Point2] = [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
@@ -248,7 +248,7 @@ class GameInfo:
 
     def _find_ramps_and_vision_blockers(self) -> Tuple[List[Ramp], Set[Point2]]:
         """ Calculate points that are pathable but not placeable.
-        Then devide them into ramp points if not all points around the points are equal height
+        Then divide them into ramp points if not all points around the points are equal height
         and into vision blockers if they are. """
 
         def equal_height_around(tile):

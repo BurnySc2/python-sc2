@@ -10,7 +10,7 @@ import tempfile
 import time
 import json
 import re
-from typing import Any, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 import aiohttp
 import portpicker
@@ -34,17 +34,33 @@ class kill_switch:
 
     @classmethod
     def kill_all(cls):
-        logger.info("kill_switch: Process cleanup")
+        logger.info(f"kill_switch: Process cleanup for {len(cls._to_kill)} processes")
         for p in cls._to_kill:
             p._clean()
 
 
 class SC2Process:
+    """
+    A class for handling SCII applications.
+
+    :param host: hostname for the url the SCII application will listen to
+    :param port: the websocket port the SCII application will listen to
+    :param fullscreen: whether to launch the SCII application in fullscreen or not, defaults to False
+    :param resolution: (window width, window height) in pixels, defaults to (1024, 768)
+    :param placement: (x, y) the distances of the SCII app's top left corner from the top left corner of the screen
+                       e.g. (20, 30) is 20 to the right of the screen's left border, and 30 below the top border
+    :param render:
+    :param sc2_version:
+    :param base_build:
+    :param data_hash:
+    """
     def __init__(
         self,
         host: str = "127.0.0.1",
         port: Optional[int] = None,
         fullscreen: bool = False,
+        resolution: Optional[Iterable[int]] = None,
+        placement: Optional[Iterable[int]] = None,
         render: bool = False,
         sc2_version: str = None,
         base_build: str = None,
@@ -54,14 +70,22 @@ class SC2Process:
         assert isinstance(port, int) or port is None
 
         self._render = render
-        self._fullscreen = fullscreen
+        self._arguments: Dict[str, str] = {"-displayMode": str(int(fullscreen))}
+        if not fullscreen:
+            if resolution and len(resolution) == 2:
+                self._arguments["-windowwidth"] = str(resolution[0])
+                self._arguments["-windowheight"] = str(resolution[1])
+            if placement and len(placement) == 2:
+                self._arguments["-windowx"] = str(placement[0])
+                self._arguments["-windowy"] = str(placement[1])
         self._host = host
         if port is None:
             self._port = portpicker.pick_unused_port()
         else:
             self._port = port
+        self._used_portpicker = bool(port is None)
         self._tmp_dir = tempfile.mkdtemp(prefix="SC2_")
-        self._process = None
+        self._process: subprocess = None
         self._session = None
         self._ws = None
         self._sc2_version = sc2_version
@@ -89,6 +113,7 @@ class SC2Process:
         return Controller(self._ws, self)
 
     async def __aexit__(self, *args):
+        await self._close_connection()
         kill_switch.kill_all()
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -114,19 +139,23 @@ class SC2Process:
             executable = str(paths.latest_executeble(Paths.BASE / "Versions", self._base_build))
         else:
             executable = str(Paths.EXECUTABLE)
+        if self._port is None:
+            self._port = portpicker.pick_unused_port()
+            self._used_portpicker = True
         args = paths.get_runner_args(Paths.CWD) + [
             executable,
             "-listen",
             self._host,
             "-port",
             str(self._port),
-            "-displayMode",
-            "1" if self._fullscreen else "0",
             "-dataDir",
             str(Paths.BASE),
             "-tempDir",
             self._tmp_dir,
         ]
+        for arg, value in self._arguments.items():
+            args.append(arg)
+            args.append(value)
         if self._sc2_version:
 
             def special_match(strg: str):
@@ -189,7 +218,7 @@ class SC2Process:
         raise TimeoutError("Websocket")
 
     async def _close_connection(self):
-        logger.info("Closing connection...")
+        logger.info(f"Closing connection at {self._port}...")
 
         if self._ws is not None:
             await self._ws.close()
@@ -225,4 +254,7 @@ class SC2Process:
 
         self._process = None
         self._ws = None
+        if self._used_portpicker and self._port is not None:
+            portpicker.return_port(self._port)
+            self._port = None
         logger.info("Cleanup complete")

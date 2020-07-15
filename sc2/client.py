@@ -2,7 +2,6 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
-from s2clientprotocol import common_pb2 as common_pb
 from s2clientprotocol import debug_pb2 as debug_pb
 from s2clientprotocol import query_pb2 as query_pb
 from s2clientprotocol import raw_pb2 as raw_pb
@@ -82,7 +81,6 @@ class Client(Protocol):
             req = sc_pb.RequestJoinGame(race=race.value, options=ifopts)
 
         if portconfig:
-            req.shared_port = portconfig.shared
             req.server_ports.game_port = portconfig.server[0]
             req.server_ports.base_port = portconfig.server[1]
 
@@ -210,24 +208,14 @@ class Client(Protocol):
         assert isinstance(start, (Point2, Unit))
         assert isinstance(end, Point2)
         if isinstance(start, Point2):
-            result = await self._execute(
-                query=query_pb.RequestQuery(
-                    pathing=[
-                        query_pb.RequestQueryPathing(
-                            start_pos=common_pb.Point2D(x=start.x, y=start.y),
-                            end_pos=common_pb.Point2D(x=end.x, y=end.y),
-                        )
-                    ]
-                )
-            )
+            path = [query_pb.RequestQueryPathing(start_pos=start.as_Point2D, end_pos=end.as_Point2D)]
         else:
-            result = await self._execute(
-                query=query_pb.RequestQuery(
-                    pathing=[
-                        query_pb.RequestQueryPathing(unit_tag=start.tag, end_pos=common_pb.Point2D(x=end.x, y=end.y))
-                    ]
-                )
+            path = [query_pb.RequestQueryPathing(unit_tag=start.tag, end_pos=end.as_Point2D)]
+        result = await self._execute(
+            query=query_pb.RequestQuery(
+                pathing=path
             )
+        )
         distance = float(result.query.pathing[0].distance)
         if distance <= 0.0:
             return None
@@ -247,25 +235,18 @@ class Client(Protocol):
         assert isinstance(zipped_list[0][0], (Point2, Unit)), f"{type(zipped_list[0][0])}"
         assert isinstance(zipped_list[0][1], Point2), f"{type(zipped_list[0][1])}"
         if isinstance(zipped_list[0][0], Point2):
-            results = await self._execute(
-                query=query_pb.RequestQuery(
-                    pathing=(
-                        query_pb.RequestQueryPathing(
-                            start_pos=common_pb.Point2D(x=p1.x, y=p1.y), end_pos=common_pb.Point2D(x=p2.x, y=p2.y)
-                        )
-                        for p1, p2 in zipped_list
-                    )
-                )
+            path = (
+                query_pb.RequestQueryPathing(
+                    start_pos=p1.as_Point2D, end_pos=p2.as_Point2D
+                ) for p1, p2 in zipped_list
             )
         else:
-            results = await self._execute(
-                query=query_pb.RequestQuery(
-                    pathing=(
-                        query_pb.RequestQueryPathing(unit_tag=p1.tag, end_pos=common_pb.Point2D(x=p2.x, y=p2.y))
-                        for p1, p2 in zipped_list
-                    )
-                )
+            path = (query_pb.RequestQueryPathing(unit_tag=p1.tag, end_pos=p2.as_Point2D) for p1, p2 in zipped_list)
+        results = await self._execute(
+            query=query_pb.RequestQuery(
+                pathing=path
             )
+        )
         return [float(d.distance) for d in results.query.pathing]
 
     async def _query_building_placement_fast(
@@ -281,7 +262,7 @@ class Client(Protocol):
             query=query_pb.RequestQuery(
                 placements=(
                     query_pb.RequestQueryBuildingPlacement(
-                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position[0], y=position[1])
+                        ability_id=ability.id.value, target_pos=position.as_Point2D
                     )
                     for position in positions
                 ),
@@ -304,7 +285,7 @@ class Client(Protocol):
             query=query_pb.RequestQuery(
                 placements=(
                     query_pb.RequestQueryBuildingPlacement(
-                        ability_id=ability.id.value, target_pos=common_pb.Point2D(x=position[0], y=position[1])
+                        ability_id=ability.id.value, target_pos=position.as_Point2D
                     )
                     for position in positions
                 ),
@@ -338,7 +319,7 @@ class Client(Protocol):
 
     async def query_available_abilities_with_tag(
             self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
-    ) -> Dict[Set[AbilityId]]:
+    ) -> Dict[int, Set[AbilityId]]:
         """ Query abilities of multiple units """
 
         result = await self._execute(
@@ -403,7 +384,7 @@ class Client(Protocol):
                         create_unit=debug_pb.DebugCreateUnit(
                             unit_type=unit_type.value,
                             owner=owner_id,
-                            pos=common_pb.Point2D(x=position.x, y=position.y),
+                            pos=position.as_Point2D,
                             quantity=amount_of_units,
                         )
                     )
@@ -439,7 +420,7 @@ class Client(Protocol):
                     sc_pb.Action(
                         action_raw=raw_pb.ActionRaw(
                             camera_move=raw_pb.ActionRawCameraMove(
-                                center_world_space=common_pb.Point(x=position.x, y=position.y)
+                                center_world_space=position.to3.as_Point
                             )
                         )
                     )
@@ -459,7 +440,7 @@ class Client(Protocol):
                 actions=[
                     sc_pb.ObserverAction(
                         camera_move=sc_pb.ActionObserverCameraMove(
-                            world_pos=common_pb.Point2D(x=position.x, y=position.y)
+                            world_pos=position.as_Point2D
                         )
                     )
                 ]
@@ -476,7 +457,7 @@ class Client(Protocol):
         action = sc_pb.Action(
             action_render=spatial_pb.ActionSpatial(
                 camera_move=spatial_pb.ActionSpatialCameraMove(
-                    center_minimap=common_pb.PointI(x=position.x, y=position.y)
+                    center_minimap=position.as_PointI
                 )
             )
         )
@@ -716,13 +697,8 @@ class Client(Protocol):
 
 
 class DrawItem:
-    def to_debug_point(self, point: Union[Unit, Point2, Point3]) -> common_pb.Point:
-        """ Helper function for point conversion """
-        if isinstance(point, Unit):
-            point = point.position3d
-        return common_pb.Point(x=point.x, y=point.y, z=getattr(point, "z", 0))
-
-    def to_debug_color(self, color: Union[tuple, Point3]):
+    @staticmethod
+    def to_debug_color(color: Union[tuple, Point3]):
         """ Helper function for color conversion """
         if color is None:
             return debug_pb.Color(r=255, g=255, b=255)
@@ -753,7 +729,7 @@ class DrawItemScreenText(DrawItem):
         return debug_pb.DebugText(
             color=self.to_debug_color(self._color),
             text=self._text,
-            virtual_pos=self.to_debug_point(self._start_point),
+            virtual_pos=self._start_point.to3.as_Point,
             world_pos=None,
             size=self._font_size,
         )
@@ -774,7 +750,7 @@ class DrawItemWorldText(DrawItem):
             color=self.to_debug_color(self._color),
             text=self._text,
             virtual_pos=None,
-            world_pos=self.to_debug_point(self._start_point),
+            world_pos=self._start_point.as_Point,
             size=self._font_size,
         )
 
@@ -790,7 +766,7 @@ class DrawItemLine(DrawItem):
 
     def to_proto(self):
         return debug_pb.DebugLine(
-            line=debug_pb.Line(p0=self.to_debug_point(self._start_point), p1=self.to_debug_point(self._end_point)),
+            line=debug_pb.Line(p0=self._start_point.as_Point, p1=self._end_point.as_Point),
             color=self.to_debug_color(self._color),
         )
 
@@ -806,8 +782,8 @@ class DrawItemBox(DrawItem):
 
     def to_proto(self):
         return debug_pb.DebugBox(
-            min=self.to_debug_point(self._start_point),
-            max=self.to_debug_point(self._end_point),
+            min=self._start_point.as_Point,
+            max=self._end_point.as_Point,
             color=self.to_debug_color(self._color),
         )
 
@@ -823,7 +799,7 @@ class DrawItemSphere(DrawItem):
 
     def to_proto(self):
         return debug_pb.DebugSphere(
-            p=self.to_debug_point(self._start_point), r=self._radius, color=self.to_debug_color(self._color)
+            p=self._start_point.as_Point, r=self._radius, color=self.to_debug_color(self._color)
         )
 
     def __hash__(self):

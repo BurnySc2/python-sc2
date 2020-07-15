@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 from itertools import groupby
 
-from s2clientprotocol import common_pb2 as common_pb
 from s2clientprotocol import raw_pb2 as raw_pb
 
 from .position import Point2
@@ -33,27 +32,17 @@ def combine_actions(action_iter):
 
         if combineable:
             # Combine actions with no target, e.g. lift, burrowup, burrowdown, siege, unsiege, uproot spines
-            if target is None:
-                cmd = raw_pb.ActionRawUnitCommand(
-                    ability_id=ability.value, unit_tags={u.unit.tag for u in items}, queue_command=queue
-                )
+            cmd = raw_pb.ActionRawUnitCommand(
+                ability_id=ability.value, unit_tags={u.unit.tag for u in items}, queue_command=queue
+            )
             # Combine actions with target point, e.g. attack_move or move commands on a position
-            elif isinstance(target, Point2):
-                cmd = raw_pb.ActionRawUnitCommand(
-                    ability_id=ability.value,
-                    unit_tags={u.unit.tag for u in items},
-                    queue_command=queue,
-                    target_world_space_pos=common_pb.Point2D(x=target.x, y=target.y),
-                )
+            if isinstance(target, Point2):
+                cmd.target_world_space_pos.x = target.x
+                cmd.target_world_space_pos.y = target.y
             # Combine actions with target unit, e.g. attack commands directly on a unit
             elif isinstance(target, Unit):
-                cmd = raw_pb.ActionRawUnitCommand(
-                    ability_id=ability.value,
-                    unit_tags={u.unit.tag for u in items},
-                    queue_command=queue,
-                    target_unit_tag=target.tag,
-                )
-            else:
+                cmd.target_unit_tag = target.tag
+            elif target is not None:
                 raise RuntimeError(f"Must target a unit, point or None, found '{target !r}'")
 
             yield raw_pb.ActionRaw(unit_command=cmd)
@@ -79,7 +68,7 @@ def combine_actions(action_iter):
                         ability_id=ability.value,
                         unit_tags={u.unit.tag},
                         queue_command=queue,
-                        target_world_space_pos=common_pb.Point2D(x=target.x, y=target.y),
+                        target_world_space_pos=target.as_Point2D,
                     )
                     yield raw_pb.ActionRaw(unit_command=cmd)
 
