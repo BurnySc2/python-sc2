@@ -6,6 +6,7 @@ import json
 import mpyq
 import os
 import sys
+import platform
 import portpicker
 import signal
 import async_timeout
@@ -719,13 +720,14 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
         extra = [SC2Process(**proc_args[(index + _) % len(proc_args)]) for _ in range(needed)]
         logger.info(f"Creating {needed} more SC2 Processes")
         for k in range(3):  # try thrice
-            # Doesnt seem to work on linux: starting 2 clients nearly at the same time
-            # new_controllers = await asyncio.wait_for(
-            #     asyncio.gather(*[sc.__aenter__() for sc in extra], return_exceptions=True), timeout=50
-            # )
-
-            # Works on linux: start one client after the other
-            new_controllers = [await asyncio.wait_for(sc.__aenter__(), timeout=50) for sc in extra]
+            if platform.system() == "Linux":
+                # Works on linux: start one client after the other
+                new_controllers = [await asyncio.wait_for(sc.__aenter__(), timeout=50) for sc in extra]
+            else:
+                # Doesnt seem to work on linux: starting 2 clients nearly at the same time
+                new_controllers = await asyncio.wait_for(
+                    asyncio.gather(*[sc.__aenter__() for sc in extra], return_exceptions=True), timeout=50
+                )
 
             controllers.extend(c for c in new_controllers if isinstance(c, Controller))
             if len(controllers) == count:
