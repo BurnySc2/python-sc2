@@ -108,7 +108,7 @@ class BotProcess(AbstractPlayer):
     Default parameters comply with sc2ai and ai-arena ladders.
 
     :param path: the executable file's path
-    :param launch_str: the cmd-line string that launches the bot e.g. 'python run.py' or 'run.exe'
+    :param launch_list: list of strings that launches the bot e.g. ["python", "run.py"] or ["run.exe"]
     :param race: bot's race
     :param name: bot's name
     :param sc2port_arg: the accepted argument name for the port of the sc2 instance to listen to
@@ -147,9 +147,6 @@ class BotProcess(AbstractPlayer):
         self.realtime_arg = realtime_arg
         self.other_args = other_args
         self.stdout = stdout
-        # Why was stdout set to launch_str?
-        # if stdout is None:
-        #     self.stdout = launch_str
 
     def __repr__(self):
         if self.name is not None:

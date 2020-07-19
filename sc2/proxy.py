@@ -1,5 +1,5 @@
 import asyncio
-from aiohttp import web, WSMsgType, WSMessage
+from aiohttp import web, WSMsgType
 import os
 import platform
 import subprocess
@@ -11,8 +11,6 @@ from s2clientprotocol import sc2api_pb2 as sc_pb
 from .controller import Controller
 from .data import Result, Status
 from .player import BotProcess
-
-from pathlib import Path
 
 from loguru import logger
 
@@ -33,8 +31,11 @@ class Proxy:
         if request.HasField("quit"):
             request = sc_pb.Request(leave_game=sc_pb.RequestLeaveGame())
         if request.HasField("leave_game"):
-            logger.info(f"Proxy: player {self.player.name}({self.player_id}) surrenders")
-            self.result = {self.player_id: Result.Defeat}
+            if self.controller._status == Status.in_game:
+                logger.info(f"Proxy: player {self.player.name}({self.player_id}) surrenders")
+                self.result = {self.player_id: Result.Defeat}
+            elif self.controller._status == Status.ended:
+                await self.get_response()
         elif request.HasField("join_game") and not request.join_game.HasField("player_name"):
             request.join_game.player_name = self.player.name
         await self.controller._ws.send_bytes(request.SerializeToString())
@@ -64,6 +65,8 @@ class Proxy:
     async def parse_response(self, response_bytes):
         response = sc_pb.Response()
         response.ParseFromString(response_bytes)
+        if not response.HasField("status"):
+            logger.critical("Proxy: RESPONSE HAS NO STATUS {response}")
         new_status = Status(response.status)
         if new_status != self.controller._status:
             logger.info(f"Controller({self.player.name}): {self.controller._status}->{new_status}")
@@ -75,6 +78,17 @@ class Proxy:
         if self.result is None:
             if response.HasField("observation") and response.observation.player_result:
                 self.result = {pr.player_id: Result(pr.result) for pr in response.observation.player_result}
+
+    async def get_result(self):
+        try:
+            res = await self.controller.ping()
+            if res.status in {Status.in_game, Status.in_replay, Status.ended}:
+                res = await self.controller._execute(observation=sc_pb.RequestObservation())
+                if res.HasField("observation") and res.observation.player_result:
+                    self.result = {pr.player_id: Result(pr.result) for pr in res.observation.player_result}
+        except Exception as e:
+            tb = traceback.format_exc()
+            logger.error(f"Obs-check: {e}, traceback: {tb}")
 
     async def proxy_handler(self, request):
         bot_ws = web.WebSocketResponse(receive_timeout=30)
@@ -130,48 +144,37 @@ class Proxy:
             subproc_args["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
 
         player_command_line = self.player.cmd_line(self.port, startport, self.controller._process._host)
-        if self.player.stdout is not None:
+        if self.player.stdout is None:
+            bot_process = subprocess.Popen(player_command_line, stdout=subprocess.DEVNULL, **subproc_args)
+        else:
             with open(self.player.stdout, "w+") as out:
                 bot_process = subprocess.Popen(player_command_line, stdout=out, **subproc_args)
-        else:
-            # outfile = os.path.join(self.player.launch_str, "data", "stderr.txt")
-            # with open(outfile, "w+") as out:
-            #     bot_process = subprocess.Popen(
-            #         self.player.cmd_line(self.port, startport, self.controller._process._host), stdout=out, **subproc_args)
-            bot_process = subprocess.Popen(player_command_line, stdout=subprocess.PIPE, **subproc_args)
 
-        logger.info(f"Proxy({self.port}): starting while loop")
         while self.result is None:
             bot_alive = bot_process and bot_process.poll() is None
             sc2_alive = self.controller.running and self.controller._process._process.poll() is None
             if self.done or not (bot_alive and sc2_alive):
                 logger.info(
-                    f"Proxy({self.port}): {self.player.name} died/rekt'ed, "
+                    f"Proxy({self.port}): {self.player.name} died, "
                     f"bot{(not bot_alive) * ' not'} alive, sc2{(not sc2_alive) * ' not'} alive"
                 )
+                # Maybe its still possible to retrieve a result
                 if sc2_alive and not self.done:
-                    try:
-                        res = await self.controller.ping()
-                        if res.status in {Status.in_game, Status.in_replay, Status.ended}:
-                            res = await self.controller._execute(observation=sc_pb.RequestObservation())
-                            if res.HasField("observation") and res.observation.player_result:
-                                self.result = {pr.player_id: Result(pr.result) for pr in res.observation.player_result}
-                    except Exception as e:
-                        tb = traceback.format_exc()
-                        logger.error(f"Obs-check: {e}, traceback: {tb}")
+                    await self.get_response()
                 logger.info(f"Proxy({self.port}): breaking, result {self.result}")
                 break
             await asyncio.sleep(5)
 
         # cleanup
-        logger.info(f"({self.port}): cleaning up bot")
+        logger.info(f"({self.port}): cleaning up {self.player !r}")
         for i in range(3):
             if isinstance(bot_process, subprocess.Popen):
-                if bot_process.stdout and not bot_process.stdout.closed:
-                    # logger.info("==================output for player", self.player.name)
-                    # logger.info(*bot_process.stdout.readlines())
+                if bot_process.stdout and not bot_process.stdout.closed:  # should not run anymore
+                    logger.info(f"==================output for player {self.player.name}")
+                    for l in bot_process.stdout.readlines():
+                        logger.opt(raw=True).info(l.decode("utf-8"))
                     bot_process.stdout.close()
-                    # logger.info("==================")
+                    logger.info("==================")
                 bot_process.terminate()
                 bot_process.wait()
             time.sleep(0.5)

@@ -772,9 +772,9 @@ async def a_run_multiple_games(matches: List[GameMatch]):
             await maintain_SCII_count(m.needed_sc2_count, controllers, m.sc2_config)
             result = await run_match(controllers, m, close_ws=dont_restart)
         except SystemExit as e:
-            print(f"Game exit'ed as {e} during match {m}")
+            logger.info(f"Game exit'ed as {e} during match {m}")
         except Exception as e:
-            print(f"Exception {e} thrown in match {m}")
+            logger.info(f"Exception {e} thrown in match {m}")
         finally:
             if dont_restart:  # Keeping them alive after a non-computer match can cause crashes
                 await maintain_SCII_count(0, controllers, m.sc2_config)
