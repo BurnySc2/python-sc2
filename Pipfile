@@ -27,6 +27,7 @@ coverage = "*"
 codecov = "*"
 matplotlib = "*"
 loguru = "*"
+radon = "*"
 
 [requires]
 python_version = "3.7"
