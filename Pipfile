@@ -13,6 +13,7 @@ scipy = "*"
 mpyq = "*"
 loguru = "*"
 win32-setctime = "*"
+importlib-metadata = "*"
 
 [dev-packages]
 atomicwrites = "*"
