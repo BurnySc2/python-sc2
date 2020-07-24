@@ -98,6 +98,32 @@ jobs:
           path: htmlcov
 
 
+  run_radon:
+    # Output a cyclomatic complexity report of the project
+    name: Run radon
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install pipenv
+          pipenv install --dev --python ${{ matrix.python-version }}
+
+      - name: Run pipenv radon
+        run: |
+          pipenv run radon cc sc2/ -a -nb
+
 
   run_autotest_bot:
     # Run test bots that download the SC2 linux client and run it

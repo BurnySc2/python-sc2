@@ -28,6 +28,7 @@ pytest-cov = "*"
 coverage = "*"
 codecov = "*"
 matplotlib = "*"
+radon = "*"
 
 [requires]
 python_version = "3.7"
