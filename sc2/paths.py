@@ -39,13 +39,16 @@ def get_env():
 
 def get_runner_args(cwd):
     if "WINE" in os.environ:
-        runner_dir = os.path.dirname(os.environ.get("WINE"))
-        # translate cwd from Unix to Windows path
-        win_cwd = subprocess.run(
-            [os.path.join(runner_dir, "winepath"), "-w", cwd], capture_output=True, text=True
-        ).stdout.rstrip()
-        return [os.environ.get("WINE"), "start", "/d", win_cwd, "/unix"]
-
+        runner_file = Path(os.environ.get("WINE"))
+        runner_file = runner_file if runner_file.is_file() else runner_file / "wine"
+        """
+        TODO Is converting linux path really necessary?
+        That would convert 
+        '/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/Support64'
+        to 
+        'Z:\\home\\burny\\Games\\battlenet\\drive_c\\Program Files (x86)\\StarCraft II\\Support64'
+        """
+        return [runner_file, "start", "/d", cwd, "/unix"]
     return []
 
 
