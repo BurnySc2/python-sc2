@@ -7,6 +7,7 @@ import aiohttp
 import sc2
 from sc2 import Race, Difficulty
 from sc2.player import Bot, Computer
+from sc2.protocol import ConnectionAlreadyClosed
 
 from sc2.sc2process import SC2Process
 from sc2.client import Client

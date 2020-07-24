@@ -152,7 +152,7 @@ class Proxy:
         return bot_ws
 
     async def play_with_proxy(self, startport):
-        logger.info(f"Proxy({self.port}): starting app")
+        logger.info(f"Proxy({self.port}): Starting app")
         app = web.Application()
         app.router.add_route("GET", "/sc2api", self.proxy_handler)
         apprunner = web.AppRunner(app, access_log=None)
@@ -167,6 +167,7 @@ class Proxy:
             subproc_args["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
 
         player_command_line = self.player.cmd_line(self.port, startport, self.controller._process._host)
+        logger.info(f"Starting bot with command: {' '.join(player_command_line)}")
         if self.player.stdout is None:
             bot_process = subprocess.Popen(player_command_line, stdout=subprocess.DEVNULL, **subproc_args)
         else:
