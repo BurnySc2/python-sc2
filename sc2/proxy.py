@@ -16,10 +16,15 @@ from loguru import logger
 
 
 class Proxy:
-    def __init__(self, controller: Controller, player: BotProcess, proxyport: int):
+    """
+    Class for handling communication between sc2 and an external bot.
+    This "middleman" is needed for enforcing time limits, collecting results, and closing things properly.
+    """
+    def __init__(self, controller: Controller, player: BotProcess, proxyport: int, game_time_limit: int = None):
         self.controller = controller
         self.player = player
         self.port = proxyport
+        self.timeout_loop = game_time_limit * 22.4
 
         self.result = None
         self.player_id: int = None
@@ -49,7 +54,7 @@ class Proxy:
             tb = traceback.format_exc()
             logger.error(f"Exception {e}: {tb}")
         except asyncio.CancelledError:
-            logger.info(f"Proxy({self.player.name}), caught receive from sc2, {traceback.format_exc()}")
+            logger.info(f"Proxy({self.player.name}), caught receive from sc2")
             try:
                 x = await self.controller._ws.receive_bytes()
                 if response_bytes is None:
@@ -65,19 +70,31 @@ class Proxy:
     async def parse_response(self, response_bytes):
         response = sc_pb.Response()
         response.ParseFromString(response_bytes)
+
         if not response.HasField("status"):
             logger.critical("Proxy: RESPONSE HAS NO STATUS {response}")
-        new_status = Status(response.status)
-        if new_status != self.controller._status:
-            logger.info(f"Controller({self.player.name}): {self.controller._status}->{new_status}")
-            self.controller._status = new_status
+        else:
+            new_status = Status(response.status)
+            if new_status != self.controller._status:
+                logger.info(f"Controller({self.player.name}): {self.controller._status}->{new_status}")
+                self.controller._status = new_status
+
         if self.player_id is None:
             if response.HasField("join_game"):
                 self.player_id = response.join_game.player_id
                 logger.info(f"Proxy({self.player.name}): got join_game for {self.player_id}")
+
         if self.result is None:
-            if response.HasField("observation") and response.observation.player_result:
-                self.result = {pr.player_id: Result(pr.result) for pr in response.observation.player_result}
+            if response.HasField("observation"):
+                obs: sc_pb.ResponseObservation = response.observation
+                if obs.player_result:
+                    self.result = {pr.player_id: Result(pr.result) for pr in obs.player_result}
+                elif self.timeout_loop and obs.HasField("observation") and obs.observation.game_loop > self.timeout_loop:
+                    self.result = {i: Result.Tie for i in range(1, 3)}
+                    logger.info(f"Proxy({self.player.name}) timing out")
+                    act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message=f"Proxy: Timing out"))]
+                    await self.controller._execute(action=sc_pb.RequestAction(actions=act))
+        return response
 
     async def get_result(self):
         try:
@@ -105,8 +122,8 @@ class Proxy:
                     if response_bytes is None:
                         raise ConnectionError("Could not get response_bytes")
 
-                    await self.parse_response(response_bytes)
-                    await bot_ws.send_bytes(response_bytes)
+                    new_response = await self.parse_response(response_bytes)
+                    await bot_ws.send_bytes(new_response.SerializeToString())
 
                 elif msg.type == WSMsgType.CLOSED:
                     logger.error("Client shutdown")

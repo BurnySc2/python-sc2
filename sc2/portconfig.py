@@ -47,13 +47,17 @@ class Portconfig:
         return json.dumps({"shared": self.shared, "server": self.server, "players": self.players})
 
     @classmethod
-    def contiguous_ports(cls, attempts=40):
+    def contiguous_ports(cls, guests=1, attempts=40):
         """Returns a Portconfig with adjacent ports"""
         for _ in range(attempts):
             start = portpicker.pick_unused_port()
-            others = [start + j for j in range(1, 4)]
+            others = [start + j for j in range(1, 2 + guests * 2)]
             if all(portpicker.is_port_free(p) for p in others):
-                pc = cls(server_ports=[start, others[0]], player_ports=[others[1], others[2]])
+                server_ports = [start, others.pop(0)]
+                player_ports = []
+                while others:
+                    player_ports.append([others.pop(0), others.pop(0)])
+                pc = cls(server_ports=server_ports, player_ports=player_ports)
                 pc._picked_ports.append(start)
                 return pc
         else:

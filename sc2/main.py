@@ -40,6 +40,7 @@ class GameMatch:
     :param sc2_config: dicts of arguments to unpack into sc2process's construction, one per player
         second sc2_config will be ignored if only one sc2_instance is spawned
         e.g. sc2_args=[{"fullscreen": True}, {}]: only player 1's sc2instance will be fullscreen
+    :param game_time_limit: The time (in seconds) until a match is artificially declared a Tie
     """
 
     map_sc2: Map
@@ -48,6 +49,7 @@ class GameMatch:
     random_seed: int = None
     disable_fog: bool = None
     sc2_config: List[Dict] = None
+    game_time_limit: int = None
 
     def __post_init__(self):
         # avoid players sharing names
@@ -601,6 +603,7 @@ async def play_from_websocket(
     realtime: bool = False,
     portconfig: Portconfig = None,
     save_replay_as=None,
+    game_time_limit: int = None,
     should_close=True,
 ):
     """Use this to play when the match is handled externally e.g. for bot ladder games.
@@ -617,7 +620,7 @@ async def play_from_websocket(
             ws_connection = await session.ws_connect(ws_connection, timeout=120)
             should_close = True
         client = Client(ws_connection)
-        result = await _play_game(player, client, realtime, portconfig)
+        result = await _play_game(player, client, realtime, portconfig, game_time_limit=game_time_limit)
         if save_replay_as is not None:
             await client.save_replay(save_replay_as)
     except ConnectionAlreadyClosed:
@@ -636,14 +639,15 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
     await _setup_host_game(controllers[0], **match.host_game_kwargs)
 
     # Setup portconfig beforehand, so all players use the same ports
-    external_count = sum(isinstance(player, BotProcess) for player in match.players)
-    if external_count:
-        portconfig = Portconfig.contiguous_ports()
-        # Most ladder bots generate their server and client ports as [s+2, s+3], [s+4, s+5]
-        startport = portconfig.server[0] - 2
-    else:
-        portconfig = Portconfig() if match.needed_sc2_count > 1 else None
-        startport = None
+    startport = None
+    portconfig = None
+    if match.needed_sc2_count > 1:
+        if any(isinstance(player, BotProcess) for player in match.players):
+            portconfig = Portconfig.contiguous_ports()
+            # Most ladder bots generate their server and client ports as [s+2, s+3], [s+4, s+5]
+            startport = portconfig.server[0] - 2
+        else:
+            portconfig = Portconfig()
 
     proxies = []
     coros = []
@@ -652,12 +656,17 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
         if player.needs_sc2:
             if isinstance(player, BotProcess):
                 pport = portpicker.pick_unused_port()
-                p = Proxy(controllers[i], player, pport)
+                p = Proxy(controllers[i], player, pport, match.game_time_limit)
                 proxies.append(p)
                 coros.append(p.play_with_proxy(startport))
             else:
                 coros.append(
-                    play_from_websocket(controllers[i]._ws, player, match.realtime, portconfig, should_close=close_ws)
+                    play_from_websocket(
+                        controllers[i]._ws, player, match.realtime, 
+                        portconfig, 
+                        should_close=close_ws,
+                        game_time_limit=match.game_time_limit,
+                    )
                 )
             i += 1
 
@@ -666,9 +675,9 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
 
     if not isinstance(async_results, list):
         async_results = [async_results]
-    for a in async_results:
+    for i, a in enumerate(async_results):
         if isinstance(a, Exception):
-            logger.error(f"EXCEPTION: {a}")
+            logger.error(f"Exception[{a}] thrown by {[p for p in match.players if p.needs_sc2][i]}")
 
     return process_results(match.players, async_results)
 
@@ -697,16 +706,25 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
     if controllers:
         toRemove = []
         alive = await asyncio.wait_for(
-            asyncio.gather(*(c.ping() for c in controllers), return_exceptions=True), timeout=20
+            asyncio.gather(*(c.ping() for c in controllers if not c._ws.closed), return_exceptions=True), timeout=20
         )
-        for i, controller in enumerate(controllers):
-            if not isinstance(alive[i], sc_pb.Response):
-                try:
-                    await controller._process._close_connection()
-                    controller._process._clean()
-                finally:
-                    toRemove.append(controller)
+        i = 0  # for alive
+        for controller in controllers:
+            if controller._ws.closed:
+                if not controller._process._session.closed:
+                    await controller._process._session.close()
+                toRemove.append(controller)
+            else:
+                if not isinstance(alive[i], sc_pb.Response):
+                    try:
+                        await controller._process._close_connection()
+                    finally:
+                        toRemove.append(controller)
+                i += 1
         for c in toRemove:
+            c._process._clean()
+            if c._process in kill_switch._to_kill:
+                kill_switch._to_kill.remove(c._process)
             controllers.remove(c)
 
     # spawn more

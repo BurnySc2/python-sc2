@@ -160,7 +160,8 @@ class BotProcess(AbstractPlayer):
         """
 
         :param sc2port: the port that the launched sc2 instance listens to
-        :param matchport: some starting port that both bots use to generate identical portconfigs
+        :param matchport: some starting port that both bots use to generate identical portconfigs.
+                Note: This will not be sent if playing vs computer
         :param hostaddress: the address the sc2 instances used
         :param realtime: 1 or 0, indicating whether the match is played in realtime or not
         :return: string that will be used to start the bot's process
@@ -169,11 +170,11 @@ class BotProcess(AbstractPlayer):
             *self.launch_list,
             self.sc2port_arg,
             str(sc2port),
-            self.match_arg,
-            str(matchport),
             self.hostaddress_arg,
             hostaddress,
         ]
+        if matchport is not None:
+            cmd_line.extend([self.match_arg, str(matchport)])
         if self.other_args is not None:
             cmd_line.append(self.other_args)
         if realtime is not None:
