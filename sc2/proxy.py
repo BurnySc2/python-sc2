@@ -24,7 +24,8 @@ class Proxy:
         self.controller = controller
         self.player = player
         self.port = proxyport
-        self.timeout_loop = game_time_limit * 22.4
+        self.timeout_loop = game_time_limit * 22.4 if game_time_limit else None
+        logger.debug(f"Proxy Inited with ctrl {controller}({controller._process._port}), player {player}, proxyport {proxyport}, lim {game_time_limit}")
 
         self.result = None
         self.player_id: int = None
