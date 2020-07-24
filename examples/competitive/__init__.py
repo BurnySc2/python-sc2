@@ -47,12 +47,14 @@ def run_ladder_game(bot):
         computer_difficulty = args.ComputerDifficulty
 
     # Port config
-    ports = [lan_port + p for p in range(1, 6)]
+    if lan_port is None:
+        portconfig = None
+    else:
+        ports = [lan_port + p for p in range(1, 6)]
 
-    portconfig = sc2.portconfig.Portconfig()
-    portconfig.shared = ports[0]  # Not used
-    portconfig.server = [ports[1], ports[2]]
-    portconfig.players = [[ports[3], ports[4]]]
+        portconfig = sc2.portconfig.Portconfig()
+        portconfig.server = [ports[1], ports[2]]
+        portconfig.players = [[ports[3], ports[4]]]
 
     # Join ladder game
     g = join_ladder_game(host=host, port=host_port, players=[bot], realtime=False, portconfig=portconfig)
