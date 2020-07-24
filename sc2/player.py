@@ -123,7 +123,7 @@ class BotProcess(AbstractPlayer):
 
     def __init__(
         self,
-        path: str,
+        path: Union[str, Path],
         launch_list: List[str],
         race: Race,
         name=None,

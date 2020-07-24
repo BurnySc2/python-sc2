@@ -20,12 +20,15 @@ class Proxy:
     Class for handling communication between sc2 and an external bot.
     This "middleman" is needed for enforcing time limits, collecting results, and closing things properly.
     """
+
     def __init__(self, controller: Controller, player: BotProcess, proxyport: int, game_time_limit: int = None):
         self.controller = controller
         self.player = player
         self.port = proxyport
         self.timeout_loop = game_time_limit * 22.4 if game_time_limit else None
-        logger.debug(f"Proxy Inited with ctrl {controller}({controller._process._port}), player {player}, proxyport {proxyport}, lim {game_time_limit}")
+        logger.debug(
+            f"Proxy Inited with ctrl {controller}({controller._process._port}), player {player}, proxyport {proxyport}, lim {game_time_limit}"
+        )
 
         self.result = None
         self.player_id: int = None
@@ -90,7 +93,9 @@ class Proxy:
                 obs: sc_pb.ResponseObservation = response.observation
                 if obs.player_result:
                     self.result = {pr.player_id: Result(pr.result) for pr in obs.player_result}
-                elif self.timeout_loop and obs.HasField("observation") and obs.observation.game_loop > self.timeout_loop:
+                elif (
+                    self.timeout_loop and obs.HasField("observation") and obs.observation.game_loop > self.timeout_loop
+                ):
                     self.result = {i: Result.Tie for i in range(1, 3)}
                     logger.info(f"Proxy({self.player.name}) timing out")
                     act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message=f"Proxy: Timing out"))]

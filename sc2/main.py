@@ -662,8 +662,10 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
             else:
                 coros.append(
                     play_from_websocket(
-                        controllers[i]._ws, player, match.realtime, 
-                        portconfig, 
+                        controllers[i]._ws,
+                        player,
+                        match.realtime,
+                        portconfig,
                         should_close=close_ws,
                         game_time_limit=match.game_time_limit,
                     )
