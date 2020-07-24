@@ -27,7 +27,9 @@ from sc2.protocol import ProtocolError
 from typing import List, Dict, Set, Tuple, Any, Optional, Union
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
-import pickle, os, sys, logging, traceback, lzma
+import pickle, os, sys, traceback, lzma
+
+from loguru import logger
 
 
 """
@@ -191,7 +193,6 @@ def main():
     ]
 
     for map_ in maps:
-        logger = logging.getLogger()
         try:
             bot = ExporterBot()
             bot.map_name = map_

@@ -3,7 +3,6 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import random
-import logging
 import math
 
 import sc2
@@ -26,7 +25,7 @@ from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 
 from typing import List, Set, Dict, Optional, Union
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class TestBot(sc2.BotAI):

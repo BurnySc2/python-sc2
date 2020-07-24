@@ -1,6 +1,5 @@
 from __future__ import annotations
 import itertools
-import logging
 import math
 import random
 from collections import Counter
@@ -36,7 +35,7 @@ from sc2.unit import Unit
 from sc2.units import Units
 from sc2.game_data import Cost
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 if TYPE_CHECKING:
     from sc2.game_info import GameInfo, Ramp

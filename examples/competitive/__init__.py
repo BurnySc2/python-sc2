@@ -2,7 +2,6 @@ import argparse
 
 import sys
 import asyncio
-import logging
 import aiohttp
 
 import sc2
@@ -11,6 +10,8 @@ from sc2.player import Bot, Computer
 
 from sc2.sc2process import SC2Process
 from sc2.client import Client
+
+from loguru import logger
 
 # Run ladder game
 # This lets python-sc2 connect to a LadderManager game: https://github.com/Cryptyc/Sc2LadderServer
@@ -46,12 +47,14 @@ def run_ladder_game(bot):
         computer_difficulty = args.ComputerDifficulty
 
     # Port config
-    ports = [lan_port + p for p in range(1, 6)]
+    if lan_port is None:
+        portconfig = None
+    else:
+        ports = [lan_port + p for p in range(1, 6)]
 
-    portconfig = sc2.portconfig.Portconfig()
-    portconfig.shared = ports[0]  # Not used
-    portconfig.server = [ports[1], ports[2]]
-    portconfig.players = [[ports[3], ports[4]]]
+        portconfig = sc2.portconfig.Portconfig()
+        portconfig.server = [ports[1], ports[2]]
+        portconfig.players = [[ports[3], ports[4]]]
 
     # Join ladder game
     g = join_ladder_game(host=host, port=host_port, players=[bot], realtime=False, portconfig=portconfig)
@@ -75,7 +78,7 @@ async def join_ladder_game(
         # await client.leave()
         # await client.quit()
     except ConnectionAlreadyClosed:
-        logging.error(f"Connection was closed before the game ended")
+        logger.error(f"Connection was closed before the game ended")
         return None
     finally:
         ws_connection.close()

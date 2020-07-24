@@ -3,9 +3,7 @@ from sc2.unit import Unit
 from sc2.units import Units
 from sc2.game_state import GameState
 
-import logging
-
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 import math
 from math import pow

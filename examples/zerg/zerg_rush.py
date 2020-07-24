@@ -94,8 +94,10 @@ class ZergRushBot(sc2.BotAI):
             amount_trained: int = self.train(UnitTypeId.ZERGLING, self.larva.amount)
 
         # If we have no extractor, build extractor
-        if self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) == 0 and self.can_afford(
-            UnitTypeId.EXTRACTOR
+        if (
+            self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) == 0
+            and self.can_afford(UnitTypeId.EXTRACTOR)
+            and self.workers
         ):
             drone: Unit = self.workers.random
             target: Unit = self.vespene_geyser.closest_to(drone)
@@ -130,9 +132,9 @@ class ZergRushBot(sc2.BotAI):
                 color = Point3((0, 255, 0))
             self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
-
     async def on_end(self, game_result: Result):
         print(f"{self.time_formatted} On end was called")
+
 
 def main():
     sc2.run_game(
