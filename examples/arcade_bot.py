@@ -102,7 +102,7 @@ class MarineSplitChallenge(sc2.BotAI):
         step_size: int = 1,
         exclude_out_of_bounds: bool = True,
     ):
-        pos = pos.position.to2.rounded
+        pos = pos.position.rounded
         positions = {
             pos.offset(Point2((x, y)))
             for x in range(-distance, distance + 1, step_size)

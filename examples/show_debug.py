@@ -3,6 +3,9 @@ from sc2 import run_game, maps, Race, Difficulty
 from sc2.player import Bot, Computer
 
 
+""" DEPRECATED - see debug examples in terran/ramp_wall.py """
+
+
 class MyBot(sc2.BotAI):
     async def on_step(self, iteration):
         for structure in self.structures:

@@ -588,9 +588,11 @@ For townhalls this returns 2.5
 For barracks, spawning pool, gateway, this returns 1.5
 For supply depot, this returns 1
 For sensor tower, creep tumor, this return 0.5</p>
+<p>NOTE: This can be None if a building doesn’t have a creation ability.
+For rich vespene buildings, flying terran buildings, this returns None</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>

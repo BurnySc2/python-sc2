@@ -9,6 +9,8 @@ from sc2.player import Bot
 
 from zerg.zerg_rush import ZergRushBot
 
+""" DEPRECATED - use external_bot.py or competitive/run.py instead """
+
 
 def main(is_host, pc):
     if args.portconfig:

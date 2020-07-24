@@ -1,5 +1,3 @@
-import logging
-
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from .player import Computer
@@ -8,17 +6,17 @@ from .protocol import Protocol
 from pathlib import Path
 import platform
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class Controller(Protocol):
     def __init__(self, ws, process):
         super().__init__(ws)
-        self.__process = process
+        self._process = process
 
     @property
     def running(self):
-        return self.__process._process is not None
+        return self._process._process is not None
 
     async def create_game(self, game_map, players, realtime: bool, random_seed=None, disable_fog=None):
         req = sc_pb.RequestCreateGame(

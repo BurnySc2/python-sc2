@@ -11,6 +11,9 @@ pyglet = "*"
 numpy = "*"
 scipy = "*"
 mpyq = "*"
+loguru = "*"
+win32-setctime = "*"
+importlib-metadata = "*"
 
 [dev-packages]
 atomicwrites = "*"
@@ -26,7 +29,6 @@ pytest-cov = "*"
 coverage = "*"
 codecov = "*"
 matplotlib = "*"
-loguru = "*"
 radon = "*"
 
 [requires]

@@ -361,7 +361,7 @@ class Unit:
     def distance_per_step(self) -> float:
         """ The distance a unit can move in one step. This does not take acceleration into account.
         Useful for micro-retreat/pathfinding """
-        return (self.real_speed/22.4) * self._bot_object.client.game_step
+        return (self.real_speed / 22.4) * self._bot_object.client.game_step
 
     @property
     def distance_to_weapon_ready(self) -> float:
@@ -828,12 +828,15 @@ class Unit:
         return angle_difference < angle_error
 
     @property
-    def footprint_radius(self) -> float:
+    def footprint_radius(self) -> Optional[float]:
         """ For structures only.
         For townhalls this returns 2.5
         For barracks, spawning pool, gateway, this returns 1.5
         For supply depot, this returns 1
-        For sensor tower, creep tumor, this return 0.5 """
+        For sensor tower, creep tumor, this return 0.5
+
+        NOTE: This can be None if a building doesn't have a creation ability.
+        For rich vespene buildings, flying terran buildings, this returns None"""
         return self._bot_object._game_data.units[self._proto.unit_type].footprint_radius
 
     @property
@@ -1264,7 +1267,9 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def build_gas(self, target_geysir: Unit, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+    def build_gas(
+        self, target_geysir: Unit, queue: bool = False, can_afford_check: bool = False
+    ) -> Union[UnitCommand, bool]:
         """ Orders unit to build another 'unit' at 'position'.
         Usage::
 
@@ -1286,7 +1291,9 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def research(self, upgrade: UpgradeId, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+    def research(
+        self, upgrade: UpgradeId, queue: bool = False, can_afford_check: bool = False
+    ) -> Union[UnitCommand, bool]:
         """ Orders unit to research 'upgrade'.
         Requires UpgradeId to be passed instead of AbilityId.
 
@@ -1300,7 +1307,9 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def warp_in(self, unit: UnitTypeId, position: Union[Point2, Point3], can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+    def warp_in(
+        self, unit: UnitTypeId, position: Union[Point2, Point3], can_afford_check: bool = False
+    ) -> Union[UnitCommand, bool]:
         """ Orders Warpgate to warp in 'unit' at 'position'.
 
         :param unit:
