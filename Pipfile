@@ -12,6 +12,7 @@ numpy = "*"
 scipy = "*"
 mpyq = "*"
 loguru = "*"
+win32-setctime = "*"
 
 [dev-packages]
 atomicwrites = "*"
