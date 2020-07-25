@@ -109,6 +109,12 @@ class Unit:
         # Index used in the 2D numpy array to access the 2D distance between two units
         self.distance_calculation_index: int = distance_calculation_index
 
+    def update(self, proto_data, distance_calculation_index: int = -1, game_loop: int = -1):
+        self._proto = proto_data
+        self.cache.clear()
+        self.game_loop = game_loop
+        self.distance_calculation_index = distance_calculation_index
+
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
         return f"Unit(name={self.name !r}, tag={self.tag})"

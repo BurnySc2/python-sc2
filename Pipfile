@@ -30,6 +30,9 @@ coverage = "*"
 codecov = "*"
 matplotlib = "*"
 radon = "*"
+ipython = "*"
+line-profiler = "*"
+snakeviz = "*"
 
 [requires]
 python_version = "3.7"

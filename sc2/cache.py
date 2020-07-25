@@ -24,14 +24,9 @@ def property_cache_once_per_frame(f):
 
     @wraps(f)
     def inner(self):
-        property_cache = "_cache_" + f.__name__
-        state_cache = "_frame_" + f.__name__
-        cache_updated = getattr(self, state_cache, -1) == self.state.game_loop
-        if not cache_updated:
-            setattr(self, property_cache, f(self))
-            setattr(self, state_cache, self.state.game_loop)
-
-        cache = getattr(self, property_cache)
+        if f.__name__ not in self._bot_ai_cache:
+            self._bot_ai_cache[f.__name__] = f(self)
+        cache = self._bot_ai_cache[f.__name__]
         should_copy = callable(getattr(cache, "copy", None))
         if should_copy:
             return cache.copy()
@@ -50,15 +45,9 @@ def property_cache_once_per_frame_no_copy(f):
 
     @wraps(f)
     def inner(self):
-        property_cache = "_cache_" + f.__name__
-        state_cache = "_frame_" + f.__name__
-        cache_updated = getattr(self, state_cache, -1) == self.state.game_loop
-        if not cache_updated:
-            setattr(self, property_cache, f(self))
-            setattr(self, state_cache, self.state.game_loop)
-
-        cache = getattr(self, property_cache)
-        return cache
+        if f.__name__ not in self._bot_ai_cache:
+            self._bot_ai_cache[f.__name__] = f(self)
+        return self._bot_ai_cache[f.__name__]
 
     return property(inner)
 

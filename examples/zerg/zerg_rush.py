@@ -98,6 +98,7 @@ class ZergRushBot(sc2.BotAI):
             self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) == 0
             and self.can_afford(UnitTypeId.EXTRACTOR)
             and self.workers
+            and self.vespene_geyser
         ):
             drone: Unit = self.workers.random
             target: Unit = self.vespene_geyser.closest_to(drone)

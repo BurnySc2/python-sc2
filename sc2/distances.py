@@ -28,7 +28,7 @@ class DistanceCalculation:
 
     @property
     def _units_count(self) -> int:
-        return len(self.all_units)
+        return len(self.tag_to_unit)
 
     @property
     def _pdist(self) -> np.ndarray:
@@ -47,7 +47,12 @@ class DistanceCalculation:
     def _calculate_distances_method1(self) -> np.ndarray:
         self._generated_frame2 = self.state.game_loop
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
-        flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
+        flat_positions = []
+        for index, unit in enumerate(self.tag_to_unit.values()):
+            unit.distance_calculation_index = index
+            pos = unit._proto.pos
+            flat_positions.append(pos.x)
+            flat_positions.append(pos.y)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
         positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float, count=2 * self._units_count).reshape(
             (self._units_count, 2)
@@ -61,7 +66,12 @@ class DistanceCalculation:
     def _calculate_distances_method2(self) -> np.ndarray:
         self._generated_frame2 = self.state.game_loop
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
-        flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
+        flat_positions = []
+        for index, unit in enumerate(self.tag_to_unit.values()):
+            unit.distance_calculation_index = index
+            pos = unit._proto.pos
+            flat_positions.append(pos.x)
+            flat_positions.append(pos.y)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
         positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float, count=2 * self._units_count).reshape(
             (self._units_count, 2)
@@ -75,7 +85,7 @@ class DistanceCalculation:
     def _calculate_distances_method3(self) -> np.ndarray:
         """ Nearly same as above, but without asserts"""
         self._generated_frame2 = self.state.game_loop
-        flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
+        flat_positions = (coord for unit in self.tag_to_unit.values() for coord in unit.position_tuple)
         positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float, count=2 * self._units_count).reshape(
             (-1, 2)
         )

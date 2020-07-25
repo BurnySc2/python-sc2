@@ -1,4 +1,4 @@
-from .data import Alliance, Attribute, CloakState, DisplayType, TargetType
+from .data import Alliance, Attribute, CloakState, DisplayType, TargetType, race_townhalls, Race
 from .ids.ability_id import *
 from .ids.buff_id import *
 from .ids.effect_id import *
@@ -560,3 +560,8 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[int, UnitTypeId] = {
     UnitTypeId.CORRUPTOR: {TargetType.Air.value: {IS_MASSIVE: 1}},
     UnitTypeId.BROODLORD: {TargetType.Ground.value: {None: 2}},
 }
+
+WORKER_TYPES_INT: Set[int] = {
+    unit_type.value for unit_type in [UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE]
+}
+TOWNHALL_TYPES_INT: Set[int] = {unit_type.value for unit_type in race_townhalls[Race.Random]}

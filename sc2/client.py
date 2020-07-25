@@ -54,7 +54,7 @@ class Client(Protocol):
             show_burrowed_shadows=True,
             raw_affects_selection=self.raw_affects_selection,
             raw_crop_to_playable_area=False,
-            show_placeholders=True,
+            show_placeholders=False,
         )
 
         if rgb_render_config:

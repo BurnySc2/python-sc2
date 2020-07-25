@@ -5,9 +5,10 @@ import random
 import time
 import warnings
 from collections import Counter
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING, Iterable, Generator
 from contextlib import suppress
 from s2clientprotocol import sc2api_pb2 as sc_pb
+import sqlite3
 
 from .cache import property_cache_forever, property_cache_once_per_frame, property_cache_once_per_frame_no_copy
 from .constants import (
@@ -21,9 +22,10 @@ from .constants import (
     ALL_GAS,
     EQUIVALENTS_FOR_TECH_PROGRESS,
     TERRAN_STRUCTURES_REQUIRE_SCV,
-    IS_PLACEHOLDER,
+    WORKER_TYPES_INT,
+    TOWNHALL_TYPES_INT,
 )
-from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker
+from .data import ActionResult, Alert, Race, Result, Target, race_gas, race_townhalls, race_worker, Alliance
 from .distances import DistanceCalculation
 from .game_data import AbilityData, GameData
 
@@ -73,12 +75,17 @@ class BotAI(DistanceCalculation):
             self.unit_command_uses_self_do: bool = False
         # This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)
         self.realtime: bool = False
+
+        # Units management
+        self.tag_to_blip: Dict[int, Unit] = {}
+        self.tag_to_unit: Dict[int, Unit] = {}
+        # self._bot_ai_cache_frame: Dict[str, int] = {}
+        self._bot_ai_cache: Dict[str, any] = {}
+        # Filled in prepare_start
+        self.ALL_STRUCTURE_TYPES: Set[int] = set()
+
         self.all_units: Units = Units([], self)
-        self.units: Units = Units([], self)
-        self.workers: Units = Units([], self)
         self.larva: Units = Units([], self)
-        self.structures: Units = Units([], self)
-        self.townhalls: Units = Units([], self)
         self.gas_buildings: Units = Units([], self)
         self.all_own_units: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
@@ -92,6 +99,13 @@ class BotAI(DistanceCalculation):
         self.placeholders: Units = Units([], self)
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
+
+        self.db = sqlite3.connect(":memory:")
+        # TODO Replace alliance with owner_id ?
+        self.db.execute(
+            "CREATE TABLE units (tag integer PRIMARY KEY, type integer, alliance integer, build_progress real, health real, shield real, energy real, x real, y real, game_loop int)"
+        )
+
         self.minerals: int = 50
         self.vespene: int = 0
         self.supply_army: float = 0
@@ -103,7 +117,7 @@ class BotAI(DistanceCalculation):
         self.army_count: int = 0
         self.warp_gate_count: int = 0
         self.actions: List[UnitCommand] = []
-        self.blips: Set[Blip] = set()
+        self.blips: Set[Unit] = set()
         self.race: Race = None
         self.enemy_race: Race = None
         self._units_created: Counter = Counter()
@@ -124,6 +138,160 @@ class BotAI(DistanceCalculation):
         self._total_steps_iterations: int = 0
         # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
         self.unit_tags_received_action: Set[int] = set()
+
+    @property_cache_once_per_frame_no_copy
+    def units(self) -> Units:
+        # TODO Convert this string to a constant
+        structure_ids = ",".join(map(str, self.ALL_STRUCTURE_TYPES))
+        structures_string = f"({structure_ids})"
+        return Units(
+            (
+                self.tag_to_unit[unit_tag]
+                for unit_tag, *_rest in self.db.execute(
+                    f"SELECT tag FROM units WHERE type NOT IN {structures_string} and alliance==1 AND game_loop=={self.state.game_loop}"
+                )
+            ),
+            self,
+        )
+
+    @property_cache_once_per_frame_no_copy
+    def structures(self) -> Units:
+        # TODO Convert this string to a constant
+        structure_ids = ",".join(map(str, self.ALL_STRUCTURE_TYPES))
+        structures_string = f"({structure_ids})"
+        return Units(
+            (
+                self.tag_to_unit[unit_tag]
+                for unit_tag, *_rest in self.db.execute(
+                    f"SELECT tag FROM units WHERE type IN {structures_string} and alliance==1 AND game_loop=={self.state.game_loop}"
+                )
+            ),
+            self,
+        )
+
+    @property_cache_once_per_frame_no_copy
+    def townhalls(self) -> Units:
+        # TODO Convert this string to a constant
+        townhall_ids = ",".join(map(str, TOWNHALL_TYPES_INT))
+        townhalls_string = f"({townhall_ids})"
+        return Units(
+            (
+                self.tag_to_unit[unit_tag]
+                for unit_tag, *_rest in self.db.execute(
+                    f"SELECT tag FROM units WHERE alliance==1 AND type IN {townhalls_string} AND game_loop=={self.state.game_loop}"
+                )
+            ),
+            self,
+        )
+
+    @property_cache_once_per_frame_no_copy
+    def workers(self) -> Units:
+        # TODO Convert this string to a constant
+        worker_ids = ",".join(map(str, WORKER_TYPES_INT))
+        workers_string = f"({worker_ids})"
+        return Units(
+            (
+                self.tag_to_unit[unit_tag]
+                for unit_tag, *_rest in self.db.execute(
+                    f"SELECT tag FROM units WHERE alliance==1 AND type IN {workers_string} AND game_loop=={self.state.game_loop}"
+                )
+            ),
+            self,
+        )
+
+    # TODO Add the remaining filters, all_units, all_own_units, all_enemy_units, enemy_units, enemy_structures, gas_buildings, resources, destructables, watchtowers, mineralfield, vespene geyser, larva, techlab tags, reactor tags, placeholders?
+    # TODO filter by type, by tag, by coordinate
+
+    def units_general_purpose_filter(
+        self,
+        tags: Set[int] = None,
+        not_tags: Set[int] = None,
+        types: Set[UnitTypeId] = None,
+        not_types: Set[UnitTypeId] = None,
+        alliance: int = None,
+        is_structure: bool = None,
+        is_townhall: bool = None,
+        is_worker: bool = None,
+        min_x: int = None,
+        max_x: int = None,
+        min_y: int = None,
+        max_y: int = None,
+    ) -> Units:
+        """
+        This is just a general purpose units filter. Ideally you would want to make your own filter function.
+
+        :param tags:
+        :param not_tags:
+        :param types:
+        :param not_types:
+        :param alliance:
+        :param is_structure:
+        :param is_townhall:
+        :param is_worker:
+        :param min_x:
+        :param max_x:
+        :param min_y:
+        :param max_y:
+        :return:
+        """
+        filters = []
+        if tags:
+            types_filter = ",".join(f"{tag}" for tag in tags)
+            filters.append(f"tag IN ({types_filter})")
+        if not_tags:
+            not_types_filter = ",".join(f"{tag}" for tag in not_tags)
+            filters.append(f"tag NOT IN ({not_types_filter})")
+
+        if alliance is not None:
+            filters.append(f"alliance=={alliance}")
+
+        if any(x is not None for x in [types, not_types, is_structure, is_townhall, is_worker]):
+            include_types = set()
+            exclude_types = set()
+            if types:
+                include_types |= types
+            if not_types:
+                exclude_types |= not_types
+            if is_structure is True:
+                include_types |= self.ALL_STRUCTURE_TYPES
+            elif is_structure is False:
+                exclude_types |= self.ALL_STRUCTURE_TYPES
+            if is_townhall is True:
+                include_types |= TOWNHALL_TYPES_INT
+            elif is_townhall is False:
+                exclude_types |= TOWNHALL_TYPES_INT
+            if is_worker is True:
+                include_types |= WORKER_TYPES_INT
+            elif is_worker is False:
+                exclude_types |= WORKER_TYPES_INT
+            if include_types:
+                filter_types_str = ",".join(f"{unit_type}" for unit_type in include_types)
+                filters.append(f"type IN ({filter_types_str})")
+            if exclude_types:
+                filter_types_str = ",".join(f"{unit_type}" for unit_type in exclude_types)
+                filters.append(f"type NOT IN ({filter_types_str})")
+
+        if min_x is not None:
+            if max_x is not None:
+                filters.append(f"x BETWEEN {min_x} AND {max_x}")
+            else:
+                filters.append(f"{min_x}<=x")
+        elif max_x is not None:
+            filters.append(f"x<={max_x}")
+
+        if min_y is not None:
+            if max_x is not None:
+                filters.append(f"y BETWEEN {min_y} AND {max_y}")
+            else:
+                filters.append(f"{min_y}<=y")
+        elif max_y is not None:
+            filters.append(f"y<={max_y}")
+        # TODO: More filters
+        filter_string = " AND ".join(filters)
+        where_string = f"WHERE {filter_string}" if filter_string else ""
+        final_string = f"SELECT tag FROM units {where_string} and game_loop=={self.state.game_loop}"
+        matching_tags: Generator[int, None, None] = (unit_tag for unit_tag, *_rest in self.db.execute(final_string))
+        return Units((self.tag_to_unit[unit_tag] for unit_tag in matching_tags), self,)
 
     @property
     def time(self) -> float:
@@ -1634,6 +1802,17 @@ class BotAI(DistanceCalculation):
 
     def _prepare_first_step(self):
         """First step extra preparations. Must not be called before _prepare_step."""
+        self.ALL_STRUCTURE_TYPES: Set[int] = {
+            unit_id
+            for unit_id, unit_type_data in self.game_data.units.items()
+            if unit_type_data._proto.available
+            and unit_type_data._proto.race in {1, 2, 3}
+            and unit_type_data._proto.armor < 3
+            and 8 in unit_type_data._proto.attributes
+        }
+        # for unit_id in self.ALL_STRUCTURE_TYPES:
+        #     structure_data = self.game_data.units[unit_id]
+        #     logger.info(f"Structure ({UnitTypeId(unit_id)}): {structure_data._proto}")
         if self.townhalls:
             self._game_info.player_start_location = self.townhalls.first.position
             # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
@@ -1649,7 +1828,7 @@ class BotAI(DistanceCalculation):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # update pathing grid, which unfortunately is in GameInfo instead of GameState
-        self._game_info.pathing_grid: PixelMap = PixelMap(
+        self.game_info.pathing_grid = PixelMap(
             proto_game_info.game_info.start_raw.pathing_grid, in_bits=True, mirrored=False
         )
         # Required for events, needs to be before self.units are initialized so the old units are stored
@@ -1683,101 +1862,55 @@ class BotAI(DistanceCalculation):
             self.enemy_race = Race(self.all_enemy_units.first.race)
 
     def _prepare_units(self):
-        # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
-        self.blips: Set[Blip] = set()
-        self.all_units: Units = Units([], self)
-        self.units: Units = Units([], self)
-        self.workers: Units = Units([], self)
-        self.larva: Units = Units([], self)
-        self.structures: Units = Units([], self)
-        self.townhalls: Units = Units([], self)
-        self.gas_buildings: Units = Units([], self)
-        self.all_own_units: Units = Units([], self)
-        self.enemy_units: Units = Units([], self)
-        self.enemy_structures: Units = Units([], self)
-        self.all_enemy_units: Units = Units([], self)
-        self.resources: Units = Units([], self)
-        self.destructables: Units = Units([], self)
-        self.watchtowers: Units = Units([], self)
-        self.mineral_field: Units = Units([], self)
-        self.vespene_geyser: Units = Units([], self)
-        self.placeholders: Units = Units([], self)
-        self.techlab_tags: Set[int] = set()
-        self.reactor_tags: Set[int] = set()
+        # Clear cache
+        self._bot_ai_cache.clear()
 
-        worker_types: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
-
-        index: int = 0
+        game_loop: int = self.state.game_loop
+        index: int = -1
+        db_units: List[str] = []
         for unit in self.state.observation_raw.units:
+            unit_type: int = unit.unit_type
+            # Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
+            if unit_type in FakeEffectID:
+                self.state.effects.add(EffectData(unit, fake=True))
+                continue
+
+            index += 1
+            unit_tag: int = unit.tag
+            # Handle blips (detected by sensor tower)
             if unit.is_blip:
-                self.blips.add(Blip(unit))
+                if unit_tag in self.tag_to_blip:
+                    unit_obj = self.tag_to_blip[unit_tag]
+                    unit_obj.update(unit, game_loop=game_loop)
+                else:
+                    unit_obj = Unit(unit, self)
+                    self.blips.add(unit_obj)
+                    self.tag_to_blip[unit_tag] = unit_obj
+                continue
+
+            # Handle units
+            if unit_tag in self.tag_to_unit:
+                self.tag_to_unit[unit_tag].update(unit, game_loop=game_loop)
             else:
-                unit_type: int = unit.unit_type
-                # Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
-                if unit_type in FakeEffectID:
-                    self.state.effects.add(EffectData(unit, fake=True))
-                    continue
-                unit_obj = Unit(unit, self, distance_calculation_index=index)
-                index += 1
-                self.all_units.append(unit_obj)
-                if unit.display_type == IS_PLACEHOLDER:
-                    self.placeholders.append(unit_obj)
-                    continue
-                alliance = unit.alliance
-                # Alliance.Neutral.value = 3
-                if alliance == 3:
-                    # XELNAGATOWER = 149
-                    if unit_type == 149:
-                        self.watchtowers.append(unit_obj)
-                    # mineral field enums
-                    elif unit_type in mineral_ids:
-                        self.mineral_field.append(unit_obj)
-                        self.resources.append(unit_obj)
-                    # geyser enums
-                    elif unit_type in geyser_ids:
-                        self.vespene_geyser.append(unit_obj)
-                        self.resources.append(unit_obj)
-                    # all destructable rocks
-                    else:
-                        self.destructables.append(unit_obj)
-                # Alliance.Self.value = 1
-                elif alliance == 1:
-                    self.all_own_units.append(unit_obj)
-                    unit_id = unit_obj.type_id
-                    if unit_obj.is_structure:
-                        self.structures.append(unit_obj)
-                        if unit_id in race_townhalls[self.race]:
-                            self.townhalls.append(unit_obj)
-                        elif unit_id in ALL_GAS or unit_obj.vespene_contents:
-                            # TODO: remove "or unit_obj.vespene_contents" when a new linux client newer than version 4.10.0 is released
-                            self.gas_buildings.append(unit_obj)
-                        elif unit_id in {
-                            UnitTypeId.TECHLAB,
-                            UnitTypeId.BARRACKSTECHLAB,
-                            UnitTypeId.FACTORYTECHLAB,
-                            UnitTypeId.STARPORTTECHLAB,
-                        }:
-                            self.techlab_tags.add(unit_obj.tag)
-                        elif unit_id in {
-                            UnitTypeId.REACTOR,
-                            UnitTypeId.BARRACKSREACTOR,
-                            UnitTypeId.FACTORYREACTOR,
-                            UnitTypeId.STARPORTREACTOR,
-                        }:
-                            self.reactor_tags.add(unit_obj.tag)
-                    else:
-                        self.units.append(unit_obj)
-                        if unit_id in worker_types:
-                            self.workers.append(unit_obj)
-                        elif unit_id == UnitTypeId.LARVA:
-                            self.larva.append(unit_obj)
-                # Alliance.Enemy.value = 4
-                elif alliance == 4:
-                    self.all_enemy_units.append(unit_obj)
-                    if unit_obj.is_structure:
-                        self.enemy_structures.append(unit_obj)
-                    else:
-                        self.enemy_units.append(unit_obj)
+                self.tag_to_unit[unit_tag] = Unit(unit, self)
+
+            # 'upsert' alternative: insert or update
+            # db_units.append(f"INSERT INTO units VALUES ({unit_tag}, {unit_type}, {unit.alliance}, {unit.build_progress}, {unit.health}, {unit.shield}, {unit.energy}, {unit.pos.x}, {unit.pos.y}, {game_loop}) ON CONFLICT(tag) DO UPDATE SET type={unit_type}, alliance={unit.alliance}, build_progress={unit.build_progress}, health={unit.health}, shield={unit.shield}, energy={unit.energy}, x={unit.pos.x}, y={unit.pos.y}, game_loop={game_loop};")
+
+            # Replace: insert or replace
+            db_units.append(
+                f"REPLACE INTO units VALUES ({unit_tag}, {unit_type}, {unit.alliance}, {unit.build_progress}, {unit.health}, {unit.shield}, {unit.energy}, {unit.pos.x}, {unit.pos.y}, {game_loop});"
+            )
+
+        if db_units:
+            self.db.executescript("\n".join(db_units))
+
+        # All units that were not updated this frame mean they got out of vision or died last frame, remove from tag_to_unit dict
+        current_tags = ",".join(map(str, self.tag_to_unit))
+        for unit_tag, *_rest in self.db.execute(
+            f"SELECT tag FROM units WHERE game_loop!={game_loop} AND tag IN ({current_tags})"
+        ):
+            self.tag_to_unit.pop(unit_tag)
 
         # Force distance calculation and caching on all units using scipy pdist or cdist
         if self.distance_calculation_method == 1:
