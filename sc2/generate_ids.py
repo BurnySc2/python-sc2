@@ -50,7 +50,8 @@ class IdGenerator:
     def make_key(self, key):
         if key[0].isdigit():
             key = "_" + key
-        return key.upper().replace(" ", "_")
+        # In patch 5.0, the key has "@" character in it which is not possible with python enums
+        return key.upper().replace(" ", "_").replace("@", "")
 
     def parse_data(self, data):
         # for d in data:  # Units, Abilities, Upgrades, Buffs, Effects
@@ -75,7 +76,7 @@ class IdGenerator:
                 else:
                     exit(f"Not mapped: {v !r}")
 
-            key = key.upper().replace(" ", "_")
+            key = key.upper().replace(" ", "_").replace("@", "")
 
             if "name" in v:
                 key = f'{v["name"].upper().replace(" ", "_")}_{key}'
