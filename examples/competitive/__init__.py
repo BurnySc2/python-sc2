@@ -27,6 +27,7 @@ def run_ladder_game(bot):
     parser.add_argument("--ComputerRace", type=str, nargs="?", help="Computer race")
     parser.add_argument("--ComputerDifficulty", type=str, nargs="?", help="Computer difficulty")
     parser.add_argument("--OpponentId", type=str, nargs="?", help="Opponent ID")
+    parser.add_argument("--RealTime", type=bool, nargs="?", const=True, default=False, help="Real Time")
     args, unknown = parser.parse_known_args()
 
     if args.LadderServer == None:
@@ -39,6 +40,8 @@ def run_ladder_game(bot):
 
     # Add opponent_id to the bot class (accessed through self.opponent_id)
     bot.ai.opponent_id = args.OpponentId
+
+    realtime = args.RealTime
 
     # Versus Computer doesn't work yet
     computer_opponent = False
@@ -58,7 +61,7 @@ def run_ladder_game(bot):
         portconfig.players = [[ports[3], ports[4]]]
 
     # Join ladder game
-    g = join_ladder_game(host=host, port=host_port, players=[bot], realtime=False, portconfig=portconfig)
+    g = join_ladder_game(host=host, port=host_port, players=[bot], realtime=realtime, portconfig=portconfig)
 
     # Run it
     result = asyncio.get_event_loop().run_until_complete(g)

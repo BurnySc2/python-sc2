@@ -130,7 +130,7 @@ class BotProcess(AbstractPlayer):
         sc2port_arg="--GamePort",
         hostaddress_arg="--LadderServer",
         match_arg="--StartPort",
-        realtime_arg="--Realtime",
+        realtime_arg="--RealTime",
         other_args: str = None,
         stdout: str = None,
     ):
@@ -155,7 +155,7 @@ class BotProcess(AbstractPlayer):
             return f"Bot({self.race.name} from {self.launch_list})"
 
     def cmd_line(
-        self, sc2port: Union[int, str], matchport: Union[int, str], hostaddress: str, realtime: str = None
+        self, sc2port: Union[int, str], matchport: Union[int, str], hostaddress: str, realtime: bool = False
     ) -> List[str]:
         """
 
@@ -177,6 +177,6 @@ class BotProcess(AbstractPlayer):
             cmd_line.extend([self.match_arg, str(matchport)])
         if self.other_args is not None:
             cmd_line.append(self.other_args)
-        if realtime is not None:
-            cmd_line.extend([self.realtime_arg, str(realtime)])
+        if realtime:
+            cmd_line.extend([self.realtime_arg])
         return cmd_line

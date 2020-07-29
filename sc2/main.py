@@ -314,7 +314,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
 async def _play_game(
     player, client: Client, realtime, portconfig, step_time_limit=None, game_time_limit=None, rgb_render_config=None
-):
+) -> Result:
     assert isinstance(realtime, bool), repr(realtime)
 
     player_id = await client.join_game(
@@ -656,7 +656,7 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
         if player.needs_sc2:
             if isinstance(player, BotProcess):
                 pport = portpicker.pick_unused_port()
-                p = Proxy(controllers[i], player, pport, match.game_time_limit)
+                p = Proxy(controllers[i], player, pport, match.game_time_limit, match.realtime)
                 proxies.append(p)
                 coros.append(p.play_with_proxy(startport))
             else:

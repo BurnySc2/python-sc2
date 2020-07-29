@@ -28,6 +28,7 @@ def main():
                     # Bot(Race.Zerg, ZergRushBot()),
                     Computer(Race.Zerg),
                 ],
+                realtime=True,
             ),
         ]
     )

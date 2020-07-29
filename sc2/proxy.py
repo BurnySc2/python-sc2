@@ -21,11 +21,19 @@ class Proxy:
     This "middleman" is needed for enforcing time limits, collecting results, and closing things properly.
     """
 
-    def __init__(self, controller: Controller, player: BotProcess, proxyport: int, game_time_limit: int = None):
+    def __init__(
+        self,
+        controller: Controller,
+        player: BotProcess,
+        proxyport: int,
+        game_time_limit: int = None,
+        realtime: bool = False,
+    ):
         self.controller = controller
         self.player = player
         self.port = proxyport
         self.timeout_loop = game_time_limit * 22.4 if game_time_limit else None
+        self.realtime = realtime
         logger.debug(
             f"Proxy Inited with ctrl {controller}({controller._process._port}), player {player}, proxyport {proxyport}, lim {game_time_limit}"
         )
@@ -166,7 +174,7 @@ class Proxy:
         elif platform.system() == "Windows":
             subproc_args["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
 
-        player_command_line = self.player.cmd_line(self.port, startport, self.controller._process._host)
+        player_command_line = self.player.cmd_line(self.port, startport, self.controller._process._host, self.realtime)
         logger.info(f"Starting bot with command: {' '.join(player_command_line)}")
         if self.player.stdout is None:
             bot_process = subprocess.Popen(player_command_line, stdout=subprocess.DEVNULL, **subproc_args)
