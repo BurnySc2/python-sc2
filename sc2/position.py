@@ -29,14 +29,14 @@ class Pointlike(tuple):
         p = target.position
         return math.hypot(self[0] - p[0], self[1] - p[1])
 
-    def distance_to_point2(self, p: Union[Point2, Tuple[float, float]]) -> Union[int, float]:
+    def distance_to_point2(self, p: Union[Point2, Tuple[float, float]]) -> float:
         """ Same as the function above, but should be a bit faster because of the dropped asserts
         and conversion.
 
         :param p: """
         return math.hypot(self[0] - p[0], self[1] - p[1])
 
-    def _distance_squared(self, p2: Point2) -> Union[int, float]:
+    def _distance_squared(self, p2: Point2) -> float:
         """ Function used to not take the square root as the distances will stay proportionally the same.
         This is to speed up the sorting process.
 
@@ -74,7 +74,7 @@ class Pointlike(tuple):
         assert ps, f"ps is empty"
         return min(ps, key=lambda p: self.distance_to(p))
 
-    def distance_to_closest(self, ps: Union[Units, Iterable[Point2]]) -> Union[int, float]:
+    def distance_to_closest(self, ps: Union[Units, Iterable[Point2]]) -> float:
         """ This function assumes the 2d distance is meant
         :param ps: """
         assert ps, f"ps is empty"
@@ -93,7 +93,7 @@ class Pointlike(tuple):
         assert ps, f"ps is empty"
         return max(ps, key=lambda p: self.distance_to(p))
 
-    def distance_to_furthest(self, ps: Union[Units, Iterable[Point2]]) -> Union[int, float]:
+    def distance_to_furthest(self, ps: Union[Units, Iterable[Point2]]) -> float:
         """ This function assumes the 2d distance is meant
 
         :param ps: """
@@ -185,11 +185,11 @@ class Point2(Pointlike):
         return self.__class__((self[0] / length, self[1] / length))
 
     @property
-    def x(self) -> Union[int, float]:
+    def x(self) -> float:
         return self[0]
 
     @property
-    def y(self) -> Union[int, float]:
+    def y(self) -> float:
         return self[1]
 
     @property
@@ -281,7 +281,7 @@ class Point2(Pointlike):
     def __neg__(self) -> Point2:
         return self.__class__(-a for a in self)
 
-    def __abs__(self) -> Union[int, float]:
+    def __abs__(self) -> float:
         return math.hypot(self.x, self.y)
 
     def __bool__(self) -> bool:
@@ -308,7 +308,7 @@ class Point2(Pointlike):
         """ Converts a vector to a direction that can face vertically, horizontally or diagonal or be zero, e.g. (0, 0), (1, -1), (1, 0) """
         return self.__class__((_sign(other.x - self.x), _sign(other.y - self.y)))
 
-    def manhattan_distance(self, other: Point2) -> Union[int, float]:
+    def manhattan_distance(self, other: Point2) -> float:
         """
         :param other:
         """
@@ -342,7 +342,7 @@ class Point3(Point2):
         return Point3((math.floor(self[0]), math.floor(self[1]), math.floor(self[2])))
 
     @property
-    def z(self) -> Union[int, float]:
+    def z(self) -> float:
         return self[2]
 
     @property
@@ -357,11 +357,11 @@ class Point3(Point2):
 
 class Size(Point2):
     @property
-    def width(self) -> Union[int, float]:
+    def width(self) -> float:
         return self[0]
 
     @property
-    def height(self) -> Union[int, float]:
+    def height(self) -> float:
         return self[1]
 
 
@@ -375,20 +375,30 @@ class Rect(tuple):
         return cls((data.p0.x, data.p0.y, data.p1.x - data.p0.x, data.p1.y - data.p0.y))
 
     @property
-    def x(self) -> Union[int, float]:
+    def x(self) -> float:
         return self[0]
 
     @property
-    def y(self) -> Union[int, float]:
+    def y(self) -> float:
         return self[1]
 
     @property
-    def width(self) -> Union[int, float]:
+    def width(self) -> float:
         return self[2]
 
     @property
-    def height(self) -> Union[int, float]:
+    def height(self) -> float:
         return self[3]
+
+    @property
+    def right(self) -> float:
+        """ Returns the x-coordinate of the rectangle of its right side. """
+        return self.x + self.width
+
+    @property
+    def top(self) -> float:
+        """ Returns the y-coordinate of the rectangle of its top side. """
+        return self.y + self.height
 
     @property
     def size(self) -> Size:

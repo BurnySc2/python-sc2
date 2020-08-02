@@ -973,6 +973,8 @@ def test_position_rect(x, y, w, h):
     assert rect.y == y
     assert rect.width == w
     assert rect.height == h
+    assert rect.right == x + w
+    assert rect.top == y + h
     assert rect.size == Size((w, h))
     assert rect.center == Point2((rect.x + rect.width / 2, rect.y + rect.height / 2))
     assert rect.offset((1, 1)) == Rect((x + 1, y + 1, w, h))
