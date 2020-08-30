@@ -5,6 +5,7 @@ import random
 import time
 import warnings
 from collections import Counter
+from functools import lru_cache
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 from contextlib import suppress
 from s2clientprotocol import sc2api_pb2 as sc_pb
@@ -1544,16 +1545,17 @@ class BotAI(DistanceCalculation):
         assert isinstance(message, str), f"{message} is not a string"
         await self._client.chat_send(message, team_only)
 
-    def in_map_bounds(self, pos: Union[Point2, tuple, list]) -> bool:
+    @lru_cache(maxsize=None)
+    def in_map_bounds(self, pos: Union[Point2, Tuple[float, float]]) -> bool:
         """ Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
         :param pos: """
         return (
             self._game_info.playable_area.x
             <= pos[0]
-            < self._game_info.playable_area.x + self.game_info.playable_area.width
+            < self.game_info.playable_area.right
             and self._game_info.playable_area.y
             <= pos[1]
-            < self._game_info.playable_area.y + self.game_info.playable_area.height
+            < self.game_info.playable_area.top
         )
 
     # For the functions below, make sure you are inside the boundaries of the map size.
