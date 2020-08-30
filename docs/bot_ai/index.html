@@ -58,13 +58,11 @@
 <dd><p>Check if alert is triggered in the current step.
 Possible alerts are listed here <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702">https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702</a></p>
 <p>Example use:</p>
-<blockquote>
-<div><p>from sc2.data import Alert
-if self.alert(Alert.AddOnComplete):</p>
-<blockquote>
-<div><p>print(“Addon Complete”)</p>
-</div></blockquote>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.data</span> <span class="kn">import</span> <span class="n">Alert</span>
+<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alert</span><span class="p">(</span><span class="n">Alert</span><span class="o">.</span><span class="n">AddOnComplete</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Addon Complete&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Alert codes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AlertError</span>
 <span class="n">AddOnComplete</span>

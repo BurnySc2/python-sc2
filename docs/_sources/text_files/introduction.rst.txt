@@ -2,6 +2,8 @@
 Introduction
 *************
 
+This is an overview to the BurnySc2/python-sc2 library which can be found here: https://github.com/BurnySc2/python-sc2
+
 Requirements
 -------------
 - Python 3.7 or newer

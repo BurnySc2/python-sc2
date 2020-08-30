@@ -184,7 +184,7 @@ class BotAI(DistanceCalculation):
         Check if alert is triggered in the current step.
         Possible alerts are listed here https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702
 
-        Example use:
+        Example use::
 
             from sc2.data import Alert
             if self.alert(Alert.AddOnComplete):
@@ -1903,7 +1903,7 @@ class BotAI(DistanceCalculation):
                     await self.on_enemy_unit_left_vision(enemy_unit_tag)
         if self.enemy_structures:
             visible_enemy_structures = self.enemy_structures.tags
-            for enemy_structure_tag in self._enemy_units_previous_map.keys():
+            for enemy_structure_tag in self._enemy_structures_previous_map.keys():
                 if enemy_structure_tag not in visible_enemy_structures:
                     await self.on_enemy_unit_left_vision(enemy_structure_tag)
 

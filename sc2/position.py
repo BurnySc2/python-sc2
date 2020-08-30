@@ -285,7 +285,9 @@ class Point2(Pointlike):
         return math.hypot(self.x, self.y)
 
     def __bool__(self) -> bool:
-        return self.x != 0 or self.y != 0
+        if self.x != 0 or self.y != 0:
+            return True
+        return False
 
     def __mul__(self, other: Union[int, float, Point2]) -> Point2:
         try:
