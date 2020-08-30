@@ -1903,7 +1903,7 @@ class BotAI(DistanceCalculation):
                     await self.on_enemy_unit_left_vision(enemy_unit_tag)
         if self.enemy_structures:
             visible_enemy_structures = self.enemy_structures.tags
-            for enemy_structure_tag in self._enemy_units_previous_map.keys():
+            for enemy_structure_tag in self._enemy_structures_previous_map.keys():
                 if enemy_structure_tag not in visible_enemy_structures:
                     await self.on_enemy_unit_left_vision(enemy_structure_tag)
 
