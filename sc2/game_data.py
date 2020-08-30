@@ -285,6 +285,11 @@ class UpgradeData:
 
 
 class Cost:
+    """
+    The cost of an action, a structure, a unit or a research upgrade.
+    The time is given in frames (22.4 frames per game second).
+    """
+
     def __init__(self, minerals: int, vespene: int, time: float = None):
         """
         :param minerals:
