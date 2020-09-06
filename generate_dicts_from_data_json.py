@@ -1,5 +1,6 @@
 import json, os, subprocess
 import lzma, pickle
+from pathlib import Path
 from typing import Dict, Set, List, Union, Optional
 
 from sc2.ids.unit_typeid import UnitTypeId
@@ -401,12 +402,10 @@ def generate_unit_alias_dict(data: dict):
     upgrade_data = data["Upgrade"]
 
     # Load pickled game data files from one of the test files
-    path = os.path.dirname(__file__)
-    pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
-    pickled_files = os.listdir(pickled_files_folder_path)
-    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz") and "AcropolisLE" in f)
-    logger.info(f"Loading pickled game data file {random_pickled_file}")
-    with lzma.open(os.path.join(pickled_files_folder_path, random_pickled_file), "rb") as f:
+    pickled_file_path = Path(__file__).parent / "test" / "pickle_data" / "AcropolisLE.xz"
+    assert pickled_file_path.is_file(), f"Could not find pickled data file {pickled_file_path}"
+    logger.info(f"Loading pickled game data file {pickled_file_path}")
+    with lzma.open(pickled_file_path.absolute(), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
         game_data = GameData(raw_game_data.data)
 
@@ -422,7 +421,7 @@ def generate_unit_alias_dict(data: dict):
 
         assert (
             unit_type_value in game_data.units
-        ), f"Unit {unit_type} not listed in game_data.units - perhaps pickled file {random_pickled_file} is outdated?"
+        ), f"Unit {unit_type} not listed in game_data.units - perhaps pickled file {pickled_file_path} is outdated?"
         unit_alias: int = game_data.units[unit_type_value]._proto.unit_alias
         if unit_alias:
             # Might be 0 if it has no alias
@@ -448,12 +447,10 @@ def generate_redirect_abilities_dict(data: dict):
     upgrade_data = data["Upgrade"]
 
     # Load pickled game data files
-    path = os.path.dirname(__file__)
-    pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
-    pickled_files = os.listdir(pickled_files_folder_path)
-    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz") and "AcropolisLE" in f)
-    logger.info(f"Loading pickled game data file {random_pickled_file}")
-    with lzma.open(os.path.join(pickled_files_folder_path, random_pickled_file), "rb") as f:
+    pickled_file_path = Path(__file__).parent / "test" / "pickle_data" / "AcropolisLE.xz"
+    assert pickled_file_path.is_file(), f"Could not find pickled data file {pickled_file_path}"
+    logger.info(f"Loading pickled game data file {pickled_file_path}")
+    with lzma.open(pickled_file_path.absolute(), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
         game_data = GameData(raw_game_data.data)
 

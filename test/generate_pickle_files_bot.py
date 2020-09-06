@@ -81,7 +81,7 @@ class ExporterBot(sc2.BotAI):
 
     async def on_start(self):
         file_path = self.get_pickle_file_path()
-        print(f"Saving file to {self.map_name}.xz")
+        logger.info(f"Saving pickle file to {self.map_name}.xz")
         await self.store_data_to_file(file_path)
 
         # Make map visible
