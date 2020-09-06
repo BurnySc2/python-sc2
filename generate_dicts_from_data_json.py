@@ -11,6 +11,8 @@ from sc2.game_data import GameData
 
 from collections import OrderedDict
 
+from loguru import logger
+
 # from ordered_set import OrderedSet
 
 """
@@ -60,7 +62,7 @@ def dump_dict_to_file(
         f.write("\n")
         f.write(f"{dict_name}{dict_type_annotation} = ")
         assert isinstance(my_dict, OrderedDict2)
-        print(my_dict)
+        logger.info(my_dict)
         f.write(repr(my_dict))
 
     # Apply formatting
@@ -75,7 +77,7 @@ def generate_init_file(dict_file_paths: List[str], file_path: str, file_header: 
         f.write("\n")
 
         all_line = f"__all__ = {base_file_names}"
-        print(all_line)
+        logger.info(all_line)
         f.write(all_line)
 
     # Apply formatting
@@ -387,7 +389,7 @@ def get_unit_abilities(data: dict):
                 ability_id: AbilityId = AbilityId(ability_id_value)
                 current_collected_unit_abilities.add(ability_id)
 
-        # print(unit_type, current_unit_abilities)
+        # logger.info(unit_type, current_unit_abilities)
         if current_collected_unit_abilities:
             all_unit_abilities[unit_type] = current_collected_unit_abilities
     return all_unit_abilities
@@ -402,7 +404,8 @@ def generate_unit_alias_dict(data: dict):
     path = os.path.dirname(__file__)
     pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
     pickled_files = os.listdir(pickled_files_folder_path)
-    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz"))
+    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz") and "AcropolisLE" in f)
+    logger.info(f"Loading pickled game data file {random_pickled_file}")
     with lzma.open(os.path.join(pickled_files_folder_path, random_pickled_file), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
         game_data = GameData(raw_game_data.data)
@@ -417,7 +420,9 @@ def generate_unit_alias_dict(data: dict):
 
         current_unit_tech_aliases: Set[UnitTypeId] = OrderedSet2()
 
-        assert unit_type_value in game_data.units, f"Unit {unit_type} not listed in game_data.units"
+        assert (
+            unit_type_value in game_data.units
+        ), f"Unit {unit_type} not listed in game_data.units - perhaps pickled file {random_pickled_file} is outdated?"
         unit_alias: int = game_data.units[unit_type_value]._proto.unit_alias
         if unit_alias:
             # Might be 0 if it has no alias
@@ -446,7 +451,8 @@ def generate_redirect_abilities_dict(data: dict):
     path = os.path.dirname(__file__)
     pickled_files_folder_path = os.path.join(path, "test", "pickle_data")
     pickled_files = os.listdir(pickled_files_folder_path)
-    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz"))
+    random_pickled_file = next(f for f in pickled_files if f.endswith(".xz") and "AcropolisLE" in f)
+    logger.info(f"Loading pickled game data file {random_pickled_file}")
     with lzma.open(os.path.join(pickled_files_folder_path, random_pickled_file), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
         game_data = GameData(raw_game_data.data)
@@ -459,7 +465,7 @@ def generate_redirect_abilities_dict(data: dict):
         try:
             ability_id: AbilityId = AbilityId(ability_id_value)
         except Exception as e:
-            print(f"Error with ability id value {ability_id_value}")
+            logger.info(f"Error with ability id value {ability_id_value}")
             continue
 
         generic_redirect_ability_value: int = game_data.abilities[ability_id_value]._proto.remaps_to_ability_id
@@ -597,7 +603,7 @@ from typing import Dict, Set, Union
         dict_type_annotation=": Dict[AbilityId, AbilityId]",
     )
 
-    # print(unit_train_abilities)
+    # logger.info(unit_train_abilities)
 
 
 if __name__ == "__main__":

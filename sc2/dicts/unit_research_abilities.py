@@ -10,7 +10,7 @@ from ..ids.upgrade_id import UpgradeId
 
 from typing import Dict, Set, Union
 
-RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]]] = {
+RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId, UpgradeId]]]] = {
     UnitTypeId.ARMORY: {
         UpgradeId.TERRANSHIPWEAPONSLEVEL1: {"ability": AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1},
         UpgradeId.TERRANSHIPWEAPONSLEVEL2: {
@@ -165,6 +165,10 @@ RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool,
             "ability": AbilityId.RESEARCH_PHOENIXANIONPULSECRYSTALS,
             "requires_power": True,
         },
+        UpgradeId.TEMPESTGROUNDATTACKUPGRADE: {
+            "ability": AbilityId.FLEETBEACONRESEARCH_TEMPESTRESEARCHGROUNDATTACKUPGRADE,
+            "requires_power": True,
+        },
         UpgradeId.VOIDRAYSPEEDUPGRADE: {
             "ability": AbilityId.FLEETBEACONRESEARCH_RESEARCHVOIDRAYSPEEDUPGRADE,
             "requires_power": True,
@@ -267,7 +271,6 @@ RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool,
     },
     UnitTypeId.INFESTATIONPIT: {
         UpgradeId.INFESTORENERGYUPGRADE: {"ability": AbilityId.RESEARCH_PATHOGENGLANDS},
-        UpgradeId.MICROBIALSHROUD: {"ability": AbilityId.INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD},
         UpgradeId.NEURALPARASITE: {"ability": AbilityId.RESEARCH_NEURALPARASITE},
     },
     UnitTypeId.LAIR: {

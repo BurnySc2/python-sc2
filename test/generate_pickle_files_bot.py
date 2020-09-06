@@ -124,7 +124,6 @@ def main():
         "AbyssalReefLE",
         "AcidPlantLE",
         "AcolyteLE",
-        "Acropolis",
         "AcropolisLE",
         "Artana",
         "AscensiontoAiurLE",
