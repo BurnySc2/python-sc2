@@ -159,6 +159,7 @@ class TestClass:
                 assert isinstance(resource_positions[0], Unit)
             # Neon violet has bases with just 6 resources. I think that was the back corner base with 4 minerals and 2 vespene
             # Odyssey has bases with 10 mineral patches and 2 geysirs
+            # Blood boil returns 21?
             assert (
                 6 <= len(resource_positions) <= 12
             ), f"{len(resource_positions)} resource fields in one base on map {bot.game_info.map_name}"

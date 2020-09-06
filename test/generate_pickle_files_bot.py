@@ -133,7 +133,6 @@ def main():
         "BattleontheBoardwalkLE",
         "BelShirVestigeLE",
         "BlackpinkLE",
-        "BloodBoilLE",
         "BlueshiftLE",
         "CactusValleyLE",
         "CatalystLE",
