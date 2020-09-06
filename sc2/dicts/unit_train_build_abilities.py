@@ -259,7 +259,7 @@ TRAIN_INFO: Dict[UnitTypeId, Dict[UnitTypeId, Dict[str, Union[AbilityId, bool, U
         },
         UnitTypeId.STARGATE: {
             "ability": AbilityId.PROTOSSBUILD_STARGATE,
-            "required_building": UnitTypeId.GATEWAY,
+            "required_building": UnitTypeId.CYBERNETICSCORE,
             "requires_placement_position": True,
         },
         UnitTypeId.TEMPLARARCHIVE: {
