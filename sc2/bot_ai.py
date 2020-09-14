@@ -1021,10 +1021,14 @@ class BotAI(DistanceCalculation):
         equiv_values: Set[int] = {structure_type_value} | {
             s_type.value for s_type in EQUIVALENTS_FOR_TECH_PROGRESS.get(structure_type, set())
         }
+        # SUPPLYDEPOTDROP is not in self._game_data.units, so bot_ai should not check the build progress via creation ability (worker abilities)
+        if structure_type_value not in self._game_data.units:
+            return max([s.build_progress for s in self.structures if s._proto.unit_type in equiv_values], default=0)
         creation_ability: AbilityData = self._game_data.units[structure_type_value].creation_ability
         max_value = max(
             [s.build_progress for s in self.structures if s._proto.unit_type in equiv_values]
-            + [self._abilities_all_units[1].get(creation_ability, 0)]
+            + [self._abilities_all_units[1].get(creation_ability, 0)],
+            default=0,
         )
         return max_value
 
@@ -1061,7 +1065,7 @@ class BotAI(DistanceCalculation):
         # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
         if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
-        progresses: List[int] = [self.structure_type_build_progress(unit_info_id_value)]
+        progresses: List[float] = [self.structure_type_build_progress(unit_info_id_value)]
         for equiv_structure in EQUIVALENTS_FOR_TECH_PROGRESS.get(unit_info_id, []):
             progresses.append(self.structure_type_build_progress(equiv_structure.value))
         return max(progresses)
