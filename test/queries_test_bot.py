@@ -96,15 +96,20 @@ class TestBot(sc2.BotAI):
                 await self.client.debug_create_unit([[i, 1, self.game_info.map_center, 2]])
 
     async def run_can_place(self) -> bool:
-        await self._advance_steps(1000)
+        # await self._advance_steps(200)
         result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
         return result[0]
 
     async def test_can_place_expect_true(self):
         test_cases = [
+            # Invisible undetected enemy units
             [UnitTypeId.OVERLORD, UnitTypeId.DARKTEMPLAR],
             [UnitTypeId.OVERLORD, UnitTypeId.ROACHBURROWED],
+            [UnitTypeId.OVERLORD, UnitTypeId.ZERGLINGBURROWED],
+            [UnitTypeId.BARRACKSFLYING, UnitTypeId.WIDOWMINEBURROWED],
+            # Own units
             [UnitTypeId.ZEALOT, None],
+            # Enemy units and structures, but without vision
             [None, UnitTypeId.ZEALOT],
             [None, UnitTypeId.SUPPLYDEPOT],
             [None, UnitTypeId.DARKTEMPLAR],
@@ -116,6 +121,13 @@ class TestBot(sc2.BotAI):
                 await self.spawn_unit_enemy(enemy_unit_type)
             if own_unit_type:
                 await self.spawn_unit(own_unit_type)
+
+            # Wait for creep
+            if enemy_unit_type == UnitTypeId.CREEPTUMOR:
+                await self._advance_steps(1000)
+            else:
+                await self._advance_steps(10)
+
             result = await self.run_can_place()
             if result:
                 logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
@@ -128,15 +140,25 @@ class TestBot(sc2.BotAI):
 
     async def test_can_place_expect_false(self):
         test_cases = [
-            [UnitTypeId.OVERLORD, UnitTypeId.ZEALOT],
+            # Own structures
+            [UnitTypeId.COMMANDCENTER, None],
+            # Enemy structures
             [UnitTypeId.OVERLORD, UnitTypeId.SUPPLYDEPOT],
+            [UnitTypeId.OVERLORD, UnitTypeId.SUPPLYDEPOTLOWERED],
+            # Visible units
+            [UnitTypeId.OVERLORD, UnitTypeId.ZEALOT],
+            [UnitTypeId.OVERLORD, UnitTypeId.SIEGETANKSIEGED],
+            # Visible creep
             [UnitTypeId.OVERLORD, UnitTypeId.CREEPTUMOR],
             [UnitTypeId.OBSERVER, UnitTypeId.CREEPTUMOR],
+            # Invisible but detected units
             [UnitTypeId.OBSERVER, UnitTypeId.DARKTEMPLAR],
             [UnitTypeId.OBSERVER, UnitTypeId.ROACHBURROWED],
+            [UnitTypeId.OBSERVER, UnitTypeId.WIDOWMINEBURROWED],
+            # Special cases
+            [UnitTypeId.SIEGETANKSIEGED, None],
             [UnitTypeId.OVERLORD, UnitTypeId.CHANGELING],
             [UnitTypeId.OBSERVER, UnitTypeId.CHANGELING],
-            [UnitTypeId.COMMANDCENTER, None],
             # True for linux client, False for windows client:
             # [UnitTypeId.OVERLORD, UnitTypeId.MINERALFIELD450],
             # [None, UnitTypeId.MINERALFIELD450],
@@ -147,6 +169,13 @@ class TestBot(sc2.BotAI):
                 await self.spawn_unit(own_unit_type)
             if enemy_unit_type:
                 await self.spawn_unit_enemy(enemy_unit_type)
+
+            # Wait for creep
+            if enemy_unit_type == UnitTypeId.CREEPTUMOR:
+                await self._advance_steps(1000)
+            else:
+                await self._advance_steps(10)
+
             result = await self.run_can_place()
             if result:
                 logger.error(
@@ -156,6 +185,11 @@ class TestBot(sc2.BotAI):
                 logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
             assert not result, f"Expected result to be False, but was True for test case: {i}"
             await self.clear_map_center()
+
+        # TODO Losing vision of a blocking enemy unit, check if can_place still returns False
+        #   for: creep, burrowed ling, burrowed roach, dark templar
+
+        # TODO Check if a moving invisible unit is blocking (patroulling dark templar, patroulling burrowed roach)
 
 
 class EmptyBot(sc2.BotAI):
