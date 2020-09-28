@@ -79,25 +79,31 @@ class TestBot(sc2.BotAI):
             await self._advance_steps(10)
 
     async def spawn_unit(self, unit_type: Union[UnitTypeId, List[UnitTypeId]]):
+        await self._advance_steps(10)
         if not isinstance(unit_type, List):
             unit_type = [unit_type]
         for i in unit_type:
             await self.client.debug_create_unit([[i, 1, self.game_info.map_center, 1]])
 
     async def spawn_unit_enemy(self, unit_type: Union[UnitTypeId, List[UnitTypeId]]):
+        await self._advance_steps(10)
         if not isinstance(unit_type, List):
             unit_type = [unit_type]
         for i in unit_type:
-            await self.client.debug_create_unit([[i, 1, self.game_info.map_center, 2]])
+            if i == UnitTypeId.CREEPTUMOR:
+                await self.client.debug_create_unit([[i, 1, self.game_info.map_center + Point2((5, 5)), 2]])
+            else:
+                await self.client.debug_create_unit([[i, 1, self.game_info.map_center, 2]])
 
     async def run_can_place(self) -> bool:
-        await self._advance_steps(20)
+        await self._advance_steps(1000)
         result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
         return result[0]
 
     async def test_can_place_expect_true(self):
         test_cases = [
             [UnitTypeId.OVERLORD, UnitTypeId.DARKTEMPLAR],
+            [UnitTypeId.OVERLORD, UnitTypeId.ROACHBURROWED],
             [UnitTypeId.ZEALOT, None],
             [None, UnitTypeId.ZEALOT],
             [None, UnitTypeId.SUPPLYDEPOT],
@@ -106,10 +112,10 @@ class TestBot(sc2.BotAI):
         ]
 
         for i, (own_unit_type, enemy_unit_type) in enumerate(test_cases):
-            if own_unit_type:
-                await self.spawn_unit(own_unit_type)
             if enemy_unit_type:
                 await self.spawn_unit_enemy(enemy_unit_type)
+            if own_unit_type:
+                await self.spawn_unit(own_unit_type)
             result = await self.run_can_place()
             if result:
                 logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
@@ -127,13 +133,12 @@ class TestBot(sc2.BotAI):
             [UnitTypeId.OVERLORD, UnitTypeId.CREEPTUMOR],
             [UnitTypeId.OBSERVER, UnitTypeId.CREEPTUMOR],
             [UnitTypeId.OBSERVER, UnitTypeId.DARKTEMPLAR],
-            [UnitTypeId.OVERLORD, UnitTypeId.ROACHBURROWED],
             [UnitTypeId.OBSERVER, UnitTypeId.ROACHBURROWED],
-            [UnitTypeId.OVERLORD, UnitTypeId.MINERALFIELD450],
             [UnitTypeId.OVERLORD, UnitTypeId.CHANGELING],
             [UnitTypeId.OBSERVER, UnitTypeId.CHANGELING],
             [UnitTypeId.COMMANDCENTER, None],
-            # True for linux client:
+            # True for linux client, False for windows client:
+            # [UnitTypeId.OVERLORD, UnitTypeId.MINERALFIELD450],
             # [None, UnitTypeId.MINERALFIELD450],
         ]
 
