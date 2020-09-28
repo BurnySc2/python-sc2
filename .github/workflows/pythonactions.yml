@@ -170,12 +170,19 @@ jobs:
         docker exec -i app3 bash -c "tree"
         docker rm -f app3
 
-    - name: Run real_time_worker_production.py
+    - name: Run queries_test_bot.py
       run: |
         docker run -it -d --name app4 test_image
-        docker exec -i app4 bash -c "python test/travis_test_script.py test/real_time_worker_production.py"
+        docker exec -i app4 bash -c "python test/travis_test_script.py test/queries_test_bot.py"
         docker exec -i app4 bash -c "tree"
         docker rm -f app4
+
+    - name: Run real_time_worker_production.py
+      run: |
+        docker run -it -d --name app5 test_image
+        docker exec -i app5 bash -c "python test/travis_test_script.py test/real_time_worker_production.py"
+        docker exec -i app5 bash -c "tree"
+        docker rm -f app5
 
 
   # https://github.com/JamesIves/github-pages-deploy-action
