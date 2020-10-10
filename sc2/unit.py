@@ -1429,19 +1429,19 @@ class Unit:
             return UnitCommand(ability, self, target=target, queue=queue)
         expected_target: int = self._bot_object.game_data.abilities[ability.value]._proto.target
         # 1: None, 2: Point, 3: Unit, 4: PointOrUnit, 5: PointOrNone
-        if target is None and expected_target not in [1, 5]:
+        if target is None and expected_target not in {1, 5}:
             warnings.warn(
                 f"{self} got {ability} with no target but expected {TARGET_HELPER[expected_target]}",
                 RuntimeWarning,
                 stacklevel=2,
             )
-        elif isinstance(target, Point2) and expected_target not in [2, 4, 5]:
+        elif isinstance(target, Point2) and expected_target not in {2, 4, 5}:
             warnings.warn(
                 f"{self} got {ability} with Point2 as target but expected {TARGET_HELPER[expected_target]}",
                 RuntimeWarning,
                 stacklevel=2,
             )
-        elif isinstance(target, Unit) and expected_target not in [3, 4]:
+        elif isinstance(target, Unit) and expected_target not in {3, 4}:
             warnings.warn(
                 f"{self} got {ability} with Unit as target but expected {TARGET_HELPER[expected_target]}",
                 RuntimeWarning,
