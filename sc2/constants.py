@@ -560,3 +560,10 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[int, UnitTypeId] = {
     UnitTypeId.CORRUPTOR: {TargetType.Air.value: {IS_MASSIVE: 1}},
     UnitTypeId.BROODLORD: {TargetType.Ground.value: {None: 2}},
 }
+TARGET_HELPER = {
+    1: "no target",
+    2: "Point2",
+    3: "Unit",
+    4: "Point2 or Unit",
+    5: "Point2 or no target",
+}
