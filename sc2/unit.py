@@ -46,6 +46,7 @@ from .constants import (
     OFF_CREEP_SPEED_UPGRADE_DICT,
     OFF_CREEP_SPEED_INCREASE_DICT,
     SPEED_ALTERING_BUFFS,
+    TARGET_HELPER,
 )
 from .data import (
     Alliance,
@@ -1416,8 +1417,8 @@ class Unit:
 
     def __call__(
         self,
-        ability,
-        target=None,
+        ability: AbilityId,
+        target: Optional[Union[Point2, Unit]] = None,
         queue: bool = False,
         subtract_cost: bool = False,
         subtract_supply: bool = False,
@@ -1426,6 +1427,26 @@ class Unit:
         """ Deprecated: Stop using self.do() - This may be removed in the future. """
         if self._bot_object.unit_command_uses_self_do:
             return UnitCommand(ability, self, target=target, queue=queue)
+        expected_target: int = self._bot_object.game_data.abilities[ability.value]._proto.target
+        # 1: None, 2: Point, 3: Unit, 4: PointOrUnit, 5: PointOrNone
+        if target is None and expected_target not in {1, 5}:
+            warnings.warn(
+                f"{self} got {ability} with no target but expected {TARGET_HELPER[expected_target]}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+        elif isinstance(target, Point2) and expected_target not in {2, 4, 5}:
+            warnings.warn(
+                f"{self} got {ability} with Point2 as target but expected {TARGET_HELPER[expected_target]}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+        elif isinstance(target, Unit) and expected_target not in {3, 4}:
+            warnings.warn(
+                f"{self} got {ability} with Unit as target but expected {TARGET_HELPER[expected_target]}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
         return self._bot_object.do(
             UnitCommand(ability, self, target=target, queue=queue),
             subtract_cost=subtract_cost,

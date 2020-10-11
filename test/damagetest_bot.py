@@ -87,7 +87,7 @@ class TestBot(sc2.BotAI):
 
     # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
     async def test_botai_actions1001(self):
-        upgrade_levels = [0, 1]
+        upgrade_levels = {0, 1}
         attacker_units = [
             #
             # Protoss
