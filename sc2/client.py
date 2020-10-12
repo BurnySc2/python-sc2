@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from typing import Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from s2clientprotocol import debug_pb2 as debug_pb
 from s2clientprotocol import query_pb2 as query_pb
@@ -474,7 +474,9 @@ class Client(Protocol):
         To grab a unit's 3d position, use unit.position3d
         Usually the Z value of a Point3 is between 8 and 14 (except for flying units). Use self.get_terrain_z_height() from bot_ai.py to get the Z value (height) of the terrain at a 2D position.
         """
-        if isinstance(pos, Point2) and not isinstance(pos, Point3):  # a Point3 is also a Point2
+        if isinstance(pos, Unit):
+            pos = pos.position3d
+        elif not isinstance(pos, Point3):
             pos = Point3((pos.x, pos.y, 0))
         self._debug_texts.append(DrawItemWorldText(text=text, color=color, start_point=pos, font_size=size))
 
@@ -486,6 +488,14 @@ class Client(Protocol):
     def debug_line_out(
         self, p0: Union[Unit, Point2, Point3], p1: Union[Unit, Point2, Point3], color: Union[tuple, list, Point3] = None
     ):
+        if isinstance(p0, Unit):
+            p0 = p0.position3d
+        elif not isinstance(p0, Point3):
+            p0 = Point3((p0.x, p0.y, 0))
+        if isinstance(p1, Unit):
+            p1 = p1.position3d
+        elif not isinstance(p1, Point3):
+            p1 = Point3((p1.x, p1.y, 0))
         """ Draws a line from p0 to p1. """
         self._debug_lines.append(DrawItemLine(color=color, start_point=p0, end_point=p1))
 
@@ -496,6 +506,14 @@ class Client(Protocol):
         color: Union[tuple, list, Point3] = None,
     ):
         """ Draws a box with p_min and p_max as corners of the box. """
+        if isinstance(p_min, Unit):
+            p_min = p_min.position3d
+        elif not isinstance(p_min, Point3):
+            p_min = Point3((p_min.x, p_min.y, 0))
+        if isinstance(p_max, Unit):
+            p_max = p_max.position3d
+        elif not isinstance(p_max, Point3):
+            p_max = Point3((p_max.x, p_max.y, 0))
         self._debug_boxes.append(DrawItemBox(start_point=p_min, end_point=p_max, color=color))
 
     def debug_box2_out(
@@ -517,6 +535,10 @@ class Client(Protocol):
         self, p: Union[Unit, Point2, Point3], r: Union[int, float], color: Union[tuple, list, Point3] = None
     ):
         """ Draws a sphere at point p with radius r. """
+        if isinstance(p, Unit):
+            p = p.position3d
+        elif not isinstance(p, Point3):
+            p = Point3((p.x, p.y, 0))
         self._debug_spheres.append(DrawItemSphere(start_point=p, radius=r, color=color))
 
     async def _send_debug(self):
