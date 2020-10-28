@@ -8,6 +8,7 @@ import sc2
 from sc2 import Race, Difficulty
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.ability_id import AbilityId
+from sc2.ids.upgrade_id import UpgradeId
 from sc2.unit import Unit
 from sc2.units import Units
 from sc2.position import Point2
@@ -34,6 +35,19 @@ class Hydralisk(sc2.BotAI):
         if self.supply_left < 2 and larvae and self.can_afford(UnitTypeId.OVERLORD):
             larvae.random.train(UnitTypeId.OVERLORD)
             return
+
+        # If hydra den is ready and idle, research upgrades
+        hydra_dens = self.structures(UnitTypeId.HYDRALISKDEN)
+        if hydra_dens:
+            for hydra_den in hydra_dens.ready.idle:
+                if self.already_pending_upgrade(UpgradeId.EVOLVEGROOVEDSPINES) < 1 and self.can_afford(
+                    UpgradeId.EVOLVEGROOVEDSPINES
+                ):
+                    hydra_den.research(UpgradeId.EVOLVEGROOVEDSPINES)
+                elif self.already_pending_upgrade(UpgradeId.EVOLVEMUSCULARAUGMENTS) < 1 and self.can_afford(
+                    UpgradeId.EVOLVEMUSCULARAUGMENTS
+                ):
+                    hydra_den.research(UpgradeId.EVOLVEMUSCULARAUGMENTS)
 
         # If hydra den is ready, train hydra
         if larvae and self.can_afford(UnitTypeId.HYDRALISK) and self.structures(UnitTypeId.HYDRALISKDEN).ready:
