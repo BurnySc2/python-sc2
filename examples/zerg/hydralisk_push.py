@@ -40,11 +40,11 @@ class Hydralisk(sc2.BotAI):
         hydra_dens = self.structures(UnitTypeId.HYDRALISKDEN)
         if hydra_dens:
             for hydra_den in hydra_dens.ready.idle:
-                if self.already_pending_upgrade(UpgradeId.EVOLVEGROOVEDSPINES) < 1 and self.can_afford(
+                if self.already_pending_upgrade(UpgradeId.EVOLVEGROOVEDSPINES) == 0 and self.can_afford(
                     UpgradeId.EVOLVEGROOVEDSPINES
                 ):
                     hydra_den.research(UpgradeId.EVOLVEGROOVEDSPINES)
-                elif self.already_pending_upgrade(UpgradeId.EVOLVEMUSCULARAUGMENTS) < 1 and self.can_afford(
+                elif self.already_pending_upgrade(UpgradeId.EVOLVEMUSCULARAUGMENTS) == 0 and self.can_afford(
                     UpgradeId.EVOLVEMUSCULARAUGMENTS
                 ):
                     hydra_den.research(UpgradeId.EVOLVEMUSCULARAUGMENTS)
