@@ -65,10 +65,8 @@ class Ramp:
             return set()  # HACK: makes this work for now
             # FIXME: please do
 
-        upper2 = sorted(list(self.upper), key=lambda x: x.distance_to_point2(self.bottom_center), reverse=True)
-        while len(upper2) > 2:
-            upper2.pop()
-        return set(upper2)
+        
+        return set(sorted(list(self.upper), key=lambda x: x.distance_to_point2(self.bottom_center), reverse=True)[:2])
 
     @property_immutable_cache
     def top_center(self) -> Point2:
