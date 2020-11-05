@@ -314,6 +314,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.ATTACK_ATTACK,
         AbilityId.BUILD_LURKERDEN,
         AbilityId.BURROWDOWN_DRONE,
+        AbilityId.EFFECT_SPRAY_ZERG,
         AbilityId.HARVEST_GATHER_DRONE,
         AbilityId.HOLDPOSITION_HOLD,
         AbilityId.MOVE_MOVE,
@@ -863,6 +864,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
     UnitTypeId.PROBE: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.BUILD_SHIELDBATTERY,
+        AbilityId.EFFECT_SPRAY_PROTOSS,
         AbilityId.HARVEST_GATHER_PROBE,
         AbilityId.HOLDPOSITION_HOLD,
         AbilityId.MOVE_MOVE,
@@ -1003,6 +1005,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
     UnitTypeId.SCV: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.EFFECT_REPAIR_SCV,
+        AbilityId.EFFECT_SPRAY_TERRAN,
         AbilityId.HARVEST_GATHER_SCV,
         AbilityId.HOLDPOSITION_HOLD,
         AbilityId.MOVE_MOVE,

@@ -65,7 +65,6 @@ class Ramp:
             return set()  # HACK: makes this work for now
             # FIXME: please do
 
-        
         return set(sorted(list(self.upper), key=lambda x: x.distance_to_point2(self.bottom_center), reverse=True)[:2])
 
     @property_immutable_cache

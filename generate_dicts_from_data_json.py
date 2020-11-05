@@ -35,6 +35,11 @@ http://jsonviewer.stack.hu/
 https://jsonformatter.org/json-viewer
 """
 
+
+def get_map_file_path() -> Path:
+    return Path(__file__).parent / "test" / "pickle_data" / "DeathAuraLE.xz"
+
+
 # Custom repr function so that the output is always the same and only changes when there were changes in the data.json tech tree file
 # The output just needs to be ordered (sorted by enum name), but it does not matter anymore if the bot then imports an unordered dict and set
 class OrderedDict2(OrderedDict):
@@ -402,7 +407,7 @@ def generate_unit_alias_dict(data: dict):
     upgrade_data = data["Upgrade"]
 
     # Load pickled game data files from one of the test files
-    pickled_file_path = Path(__file__).parent / "test" / "pickle_data" / "AcropolisLE.xz"
+    pickled_file_path = get_map_file_path()
     assert pickled_file_path.is_file(), f"Could not find pickled data file {pickled_file_path}"
     logger.info(f"Loading pickled game data file {pickled_file_path}")
     with lzma.open(pickled_file_path.absolute(), "rb") as f:
@@ -447,7 +452,7 @@ def generate_redirect_abilities_dict(data: dict):
     upgrade_data = data["Upgrade"]
 
     # Load pickled game data files
-    pickled_file_path = Path(__file__).parent / "test" / "pickle_data" / "AcropolisLE.xz"
+    pickled_file_path = get_map_file_path()
     assert pickled_file_path.is_file(), f"Could not find pickled data file {pickled_file_path}"
     logger.info(f"Loading pickled game data file {pickled_file_path}")
     with lzma.open(pickled_file_path.absolute(), "rb") as f:
