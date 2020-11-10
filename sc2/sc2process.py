@@ -193,7 +193,8 @@ class SC2Process:
         )
 
     async def _connect(self):
-        for i in range(60):
+        # How long it waits for SC2 to start (in seconds)
+        for i in range(180):
             if self._process is None:
                 # The ._clean() was called, clearing the process
                 logger.debug("Process cleanup complete, exit")
