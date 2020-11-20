@@ -336,7 +336,7 @@ class BotAI(DistanceCalculation):
         offsets = [
             (x, y)
             for x, y in itertools.product(range(-offset_range, offset_range + 1), repeat=2)
-            if math.hypot(x, y) <= 8
+            if 4 < math.hypot(x, y) <= 8
         ]
         # Dict we want to return
         centers = {}
@@ -356,7 +356,7 @@ class BotAI(DistanceCalculation):
                 # Check if point can be built on
                 if self._game_info.placement_grid[point.rounded] == 1
                 # Check if all resources have enough space to point
-                and all(point.distance_to(resource) > (7 if resource in geysers else 6) for resource in resources)
+                and all(point.distance_to(resource) >= (7 if resource._proto.unit_type in geyser_ids else 6) for resource in resources)
             )
             # Choose best fitting point
             result: Point2 = min(

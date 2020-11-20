@@ -49,6 +49,9 @@ class RampWallBot(sc2.BotAI):
         # Draw ramp points
         self.draw_ramp_points()
 
+        # Draw all detected expansions on the map
+        self.draw_expansions()
+
         # # Draw pathing grid
         # self.draw_pathing_grid()
 
@@ -127,6 +130,13 @@ class RampWallBot(sc2.BotAI):
                 # p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
                 # print(f"Drawing {p0} to {p1}")
                 # self._client.debug_box_out(p0, p1, color=color)
+
+    def draw_expansions(self):
+        green = Point3((0, 255, 0))
+        for expansion_pos in self.expansion_locations_list:
+            height = self.get_terrain_z_height(expansion_pos)
+            expansion_pos3 = Point3((*expansion_pos, height))
+            self._client.debug_box2_out(expansion_pos3, half_vertex_length=2.5, color=green)
 
     def draw_pathing_grid(self):
         map_area = self._game_info.playable_area
@@ -265,7 +275,7 @@ def main():
             "HonorgroundsLE",  # Has 4 or 9 upper points at the large main base ramp
         ]
     )
-    # map = "ParaSiteLE"
+    map = "GoldenWallLE"
     sc2.run_game(
         sc2.maps.get(map),
         [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)],
