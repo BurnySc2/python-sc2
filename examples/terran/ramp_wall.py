@@ -124,10 +124,10 @@ class RampWallBot(sc2.BotAI):
                     color = Point3((0, 255, 255))
                 if p in ramp.lower:
                     color = Point3((0, 0, 255))
-                self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
+                self._client.debug_box2_out(pos + Point2((0.5, 0.5)), half_vertex_length=0.25, color=color)
                 # Identical to above:
-                # p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
-                # p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+                # p0 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z + 0.25))
+                # p1 = Point3((pos.x + 0.75, pos.y + 0.75, pos.z - 0.25))
                 # print(f"Drawing {p0} to {p1}")
                 # self._client.debug_box_out(p0, p1, color=color)
 
@@ -275,7 +275,7 @@ def main():
             "HonorgroundsLE",  # Has 4 or 9 upper points at the large main base ramp
         ]
     )
-    map = "GoldenWallLE"
+    map = "PillarsofGoldLE"
     sc2.run_game(
         sc2.maps.get(map),
         [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)],
