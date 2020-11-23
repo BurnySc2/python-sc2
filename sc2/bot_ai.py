@@ -59,7 +59,7 @@ class BotAI(DistanceCalculation):
     def _initialize_variables(self):
         """ Called from main.py internally """
         DistanceCalculation.__init__(self)
-        # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://ai-arena.net
+        # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://aiarena.net
         # The bot ID will stay the same each game so your bot can "adapt" to the opponent
         if not hasattr(self, "opponent_id"):
             # Prevent overwriting the opponent_id which is set here https://github.com/Hannessa/python-sc2-ladderbot/blob/master/__init__.py#L40

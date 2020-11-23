@@ -105,7 +105,7 @@ class Player(AbstractPlayer):
 class BotProcess(AbstractPlayer):
     """
     Class for handling bots launched externally, including non-python bots.
-    Default parameters comply with sc2ai and ai-arena ladders.
+    Default parameters comply with sc2ai and aiarena ladders.
 
     :param path: the executable file's path
     :param launch_list: list of strings that launches the bot e.g. ["python", "run.py"] or ["run.exe"]
