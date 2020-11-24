@@ -3,7 +3,6 @@ import os
 import os.path
 import shutil
 import signal
-import platform
 import subprocess
 import sys
 import tempfile
@@ -18,6 +17,7 @@ import portpicker
 from .controller import Controller
 from .paths import Paths
 from sc2 import paths
+from sc2 import wsl
 
 from sc2.versions import VERSIONS
 
@@ -190,9 +190,14 @@ class SC2Process:
         # if logger.getEffectiveLevel() <= logging.DEBUG:
         args.append("-verbose")
 
+        sc2_cwd = str(Paths.CWD) if Paths.CWD else None
+
+        if paths.PF == "WSL1" or paths.PF == "WSL2":
+            return wsl.run(args, sc2_cwd)
+
         return subprocess.Popen(
             args,
-            cwd=(str(Paths.CWD) if Paths.CWD else None),
+            cwd=sc2_cwd,
             # , env=run_config.env
         )
 
@@ -235,7 +240,9 @@ class SC2Process:
         logger.info("Cleaning up...")
 
         if self._process is not None:
-            if self._process.poll() is None:
+            if paths.PF == "WSL1" or paths.PF == "WSL2":
+                if wsl.kill(self._process): logger.error("KILLED")
+            elif self._process.poll() is None:
                 for _ in range(3):
                     self._process.terminate()
                     time.sleep(0.5)
@@ -246,7 +253,7 @@ class SC2Process:
                 self._process.wait()
                 logger.error("KILLED")
             # Try to kill wineserver on linux
-            if platform.system() == "Linux":
+            if paths.PF == "Linux" or paths.PF == "WineLinux":
                 try:
                     p = subprocess.Popen(["wineserver", "-k"])
                     p.wait()
