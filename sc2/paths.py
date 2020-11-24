@@ -2,7 +2,9 @@ import os
 import platform
 import re
 import subprocess
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
+
+import sc2.wsl as wsl
 
 from loguru import logger
 
@@ -44,20 +46,10 @@ CWD = {
 
 PF = os.environ.get("SC2PF", platform.system())
 
-def win_path_to_wsl_path(path):
-    """Convert a windows-style path to a WSL path"""
-    # Substitute C:/ or equivalent with c/ or equivalent and prepend /mnt
-    return Path('/mnt') / PureWindowsPath(re.sub('^([A-Z]):', lambda m: m.group(1).lower(), path))
-
 def get_home():
     """Get home directory of user, using Windows home directory for WSL."""
     if PF == "WSL1" or PF == "WSL2":
-        # Get windows home dir
-        proc = subprocess.run(['powershell.exe','-Command','Write-Host -NoNewLine $HOME'], capture_output = True)
-
-        if proc.returncode != 0: return Path.home().expanduser()
-
-        return win_path_to_wsl_path(proc.stdout.decode('utf-8'))
+        return wsl.get_wsl_home() or Path.home().expanduser()
     return Path.home().expanduser()
 
 def get_user_sc2_install():
@@ -70,7 +62,7 @@ def get_user_sc2_install():
             if content:
                 base = re.search(r" = (.*)Versions", content).group(1)
                 if PF == "WSL1" or PF == "WSL2":
-                    base = str(win_path_to_wsl_path(base))
+                    base = str(wsl.win_path_to_wsl_path(base))
 
                 if os.path.exists(base):
                     return base
