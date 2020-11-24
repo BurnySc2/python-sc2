@@ -1,4 +1,5 @@
 import asyncio
+import os
 import os.path
 import shutil
 import signal
@@ -56,7 +57,7 @@ class SC2Process:
 
     def __init__(
         self,
-        host: str = "127.0.0.1",
+        host: Optional[str] = None,
         port: Optional[int] = None,
         fullscreen: bool = False,
         resolution: Optional[Union[List[int], Tuple[int, int]]] = None,
@@ -66,7 +67,7 @@ class SC2Process:
         base_build: str = None,
         data_hash: str = None,
     ) -> None:
-        assert isinstance(host, str)
+        assert isinstance(host, str) or host is None
         assert isinstance(port, int) or port is None
 
         self._render = render
@@ -78,7 +79,10 @@ class SC2Process:
             if placement and len(placement) == 2:
                 self._arguments["-windowx"] = str(placement[0])
                 self._arguments["-windowy"] = str(placement[1])
-        self._host = host
+
+        self._host = host or os.environ.get("SC2CLIENTHOST", "127.0.0.1")
+        self._serverhost = os.environ.get("SC2SERVERHOST", self._host)
+
         if port is None:
             self._port = portpicker.pick_unused_port()
         else:
@@ -145,7 +149,7 @@ class SC2Process:
         args = paths.get_runner_args(Paths.CWD) + [
             executable,
             "-listen",
-            self._host,
+            self._serverhost,
             "-port",
             str(self._port),
             "-dataDir",
