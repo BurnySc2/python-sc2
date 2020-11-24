@@ -8,6 +8,8 @@ from loguru import logger
 
 BASEDIR = {
     "Windows": "C:/Program Files (x86)/StarCraft II",
+    "WSL1": "/mnt/c/Program Files (x86)/StarCraft II",
+    "WSL2": "/mnt/c/Program Files (x86)/StarCraft II",
     "Darwin": "/Applications/StarCraft II",
     "Linux": "~/StarCraftII",
     "WineLinux": "~/.wine/drive_c/Program Files (x86)/StarCraft II",
@@ -15,6 +17,8 @@ BASEDIR = {
 
 USERPATH = {
     "Windows": "\\Documents\\StarCraft II\\ExecuteInfo.txt",
+    "WSL1": "/Documents/StarCraft II/ExecuteInfo.txt",
+    "WSL2": "/Documents/StarCraft II/ExecuteInfo.txt",
     "Darwin": "/Library/Application Support/Blizzard/StarCraft II/ExecuteInfo.txt",
     "Linux": None,
     "WineLinux": None,
@@ -22,12 +26,21 @@ USERPATH = {
 
 BINPATH = {
     "Windows": "SC2_x64.exe",
+    "WSL1": "SC2_x64.exe",
+    "WSL2": "SC2_x64.exe",
     "Darwin": "SC2.app/Contents/MacOS/SC2",
     "Linux": "SC2_x64",
     "WineLinux": "SC2_x64.exe",
 }
 
-CWD = {"Windows": "Support64", "Darwin": None, "Linux": None, "WineLinux": "Support64"}
+CWD = {
+    "Windows": "Support64",
+    "WSL1": "Support64",
+    "WSL2": "Support64",
+    "Darwin": None,
+    "Linux": None,
+    "WineLinux": "Support64"
+}
 
 PF = os.environ.get("SC2PF", platform.system())
 
