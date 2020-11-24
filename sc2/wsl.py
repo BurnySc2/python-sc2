@@ -1,6 +1,8 @@
+import os
 import subprocess
 import re
 from pathlib import Path, PureWindowsPath
+from loguru import logger
 
 ## This file is used for compatibility with WSL and shouldn't need to be
 ## accessed directly by any bot clients
@@ -56,3 +58,41 @@ def kill(wsl_process):
     wsl_process.__exit__(None, None, None)
     proc = subprocess.run(["taskkill.exe", "-f", "-pid", out], capture_output = True)
     return proc.returncode == 0 # Returns 128 on failure
+
+def detect():
+    """Detect the current running version of WSL, and bail out if it doesn't exist"""
+    wsl_name = os.environ.get("WSL_DISTRO_NAME")
+    if not wsl_name: return None
+
+    try:
+        wsl_proc = subprocess.run(["wsl.exe", "--list", "--running", "--verbose"], capture_output = True)
+    except Exception: return None
+    if wsl_proc.returncode != 0: return None
+
+    # WSL.exe returns a bunch of null characters for some reason, as well as
+    # windows-style linebreaks. It's inconsistent about how many \rs it uses
+    # and this could change in the future, so strip out all junk and split by
+    # Unix-style newlines for safety's sake.
+    lines = re.sub(r'\000|\r', '', wsl_proc.stdout.decode('utf-8')).split('\n')
+
+    def line_has_proc(ln):
+        return re.search('^\\s*[*]?\\s+' + wsl_name, ln)
+
+    def line_version(ln):
+        return re.sub('^.*\\s+(\\d+)\\s*$', '\\1', ln)
+
+    versions = [line_version(ln) for ln in lines if line_has_proc(ln)]
+
+    try:
+        version = versions[0]
+        if int(version) not in [1, 2]: return None
+    except (ValueError, IndexError): return None
+
+    logger.info(f"WSL version {version} detected")
+
+    if version == '2' and not (os.environ.get("SC2CLIENTHOST") and os.environ.get("SC2SERVERHOST")):
+        logger.warning("You appear to be running WSL2 without your hosts configured correctly.")
+        logger.warning("This may result in SC2 staying on a black screen and not connecting to your bot.")
+        logger.warning("Please see the python-sc2 README for WSL2 configuration instructions.")
+
+    return "WSL" + version

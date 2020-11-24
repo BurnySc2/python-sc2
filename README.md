@@ -69,9 +69,9 @@ SC2PATH=/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
 
 #### WSL
 
-To run from a WSL1 instance, set `SC2PF=WSL1`. You may be asked to allow Python through your firewall.
+WSL1 should not require any configuration. You may be asked to allow Python through your firewall.
 
-To run from a WSL2 instance, set `SC2PF=WSL2`. You also must supply
+When running WSL you need to supply the following environment variables so that your bot can connect:
 
 ```sh
 SC2CLIENTHOST=<your windows IP>

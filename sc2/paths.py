@@ -44,7 +44,13 @@ CWD = {
     "WineLinux": "Support64"
 }
 
-PF = os.environ.get("SC2PF", platform.system())
+def platform_detect():
+    pf = os.environ.get("SC2PF", platform.system())
+    if pf == "Linux":
+        return wsl.detect() or pf
+    return pf
+
+PF = platform_detect()
 
 def get_home():
     """Get home directory of user, using Windows home directory for WSL."""
