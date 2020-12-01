@@ -166,9 +166,12 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
     game_data = await client.get_game_data()
     game_info = await client.get_game_info()
+    ping_response = await client.ping()
 
     # This game_data will become self._game_data in botAI
-    ai._prepare_start(client, player_id, game_info, game_data, realtime=realtime)
+    ai._prepare_start(
+        client, player_id, game_info, game_data, realtime=realtime, base_build=ping_response.ping.base_build
+    )
     state = await client.observation()
     # check game result every time we get the observation
     if client._game_result:
@@ -340,9 +343,13 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
 
     game_data = await client.get_game_data()
     game_info = await client.get_game_info()
+    ping_response = await client.ping()
+
     client.game_step = 1
     # This game_data will become self._game_data in botAI
-    ai._prepare_start(client, player_id, game_info, game_data, realtime=realtime)
+    ai._prepare_start(
+        client, player_id, game_info, game_data, realtime=realtime, base_build=ping_response.ping.base_build
+    )
     state = await client.observation()
     # Check game result every time we get the observation
     if client._game_result:

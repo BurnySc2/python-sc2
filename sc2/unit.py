@@ -97,7 +97,7 @@ class UnitOrder:
 
 
 class Unit:
-    def __init__(self, proto_data, bot_object: BotAI, distance_calculation_index: int = -1):
+    def __init__(self, proto_data, bot_object: BotAI, distance_calculation_index: int = -1, base_build: int = -1):
         """
         :param proto_data:
         :param bot_object:
@@ -107,6 +107,7 @@ class Unit:
         # Used by property_immutable_cache
         self.cache = {}
         self.game_loop: int = bot_object.state.game_loop
+        self.base_build = base_build
         # Index used in the 2D numpy array to access the 2D distance between two units
         self.distance_calculation_index: int = distance_calculation_index
 
@@ -459,9 +460,9 @@ class Unit:
         """ Checks if the unit is only available as a snapshot for the bot.
         Enemy buildings that have been scouted and are in the fog of war or
         attacking enemy units on higher, not visible ground appear this way. """
-        # TODO: remove usage of bot.state.visibility when display_type is fixed by blizzard: https://github.com/Blizzard/s2client-proto/issues/167
-        if self._proto.display_type == IS_SNAPSHOT:
-            return True
+        if self.base_build >= 82457:
+            return self._proto.display_type == IS_SNAPSHOT
+        # TODO: Fixed in version 5.0.4, remove if a new linux binary is released: https://github.com/Blizzard/s2client-proto/issues/167
         position = self.position.rounded
         return self._bot_object.state.visibility.data_numpy[position[1], position[0]] != 2
 
@@ -470,6 +471,9 @@ class Unit:
         """ Checks if the unit is visible for the bot.
         NOTE: This means the bot has vision of the position of the unit!
         It does not give any information about the cloak status of the unit."""
+        if self.base_build >= 82457:
+            return self._proto.display_type == IS_VISIBLE
+        # TODO: Remove when a new linux binary (5.0.4 or newer) is released
         return self._proto.display_type == IS_VISIBLE and not self.is_snapshot
 
     @property_immutable_cache
