@@ -73,6 +73,7 @@ class BotAI(DistanceCalculation):
             self.unit_command_uses_self_do: bool = False
         # This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)
         self.realtime: bool = False
+        self.base_build: int = -1
         self.all_units: Units = Units([], self)
         self.units: Units = Units([], self)
         self.workers: Units = Units([], self)
@@ -356,7 +357,10 @@ class BotAI(DistanceCalculation):
                 # Check if point can be built on
                 if self._game_info.placement_grid[point.rounded] == 1
                 # Check if all resources have enough space to point
-                and all(point.distance_to(resource) >= (7 if resource._proto.unit_type in geyser_ids else 6) for resource in resources)
+                and all(
+                    point.distance_to(resource) >= (7 if resource._proto.unit_type in geyser_ids else 6)
+                    for resource in resources
+                )
             )
             # Choose best fitting point
             result: Point2 = min(
@@ -1613,7 +1617,7 @@ class BotAI(DistanceCalculation):
         pos = pos.position.rounded
         return self.state.creep[pos] == 1
 
-    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False):
+    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False, base_build: int = -1):
         """
         Ran until game start to set game and player data.
 
@@ -1628,6 +1632,7 @@ class BotAI(DistanceCalculation):
         self._game_info: GameInfo = game_info
         self._game_data: GameData = game_data
         self.realtime: bool = realtime
+        self.base_build: int = base_build
 
         self.race: Race = Race(self._game_info.player_races[self.player_id])
 
@@ -1657,10 +1662,10 @@ class BotAI(DistanceCalculation):
             proto_game_info.game_info.start_raw.pathing_grid, in_bits=True, mirrored=False
         )
         # Required for events, needs to be before self.units are initialized so the old units are stored
-        self._units_previous_map: Dict[int:Unit] = {unit.tag: unit for unit in self.units}
-        self._structures_previous_map: Dict[int:Unit] = {structure.tag: structure for structure in self.structures}
-        self._enemy_units_previous_map: Dict[int:Unit] = {unit.tag: unit for unit in self.enemy_units}
-        self._enemy_structures_previous_map: Dict[int:Unit] = {
+        self._units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.units}
+        self._structures_previous_map: Dict[int, Unit] = {structure.tag: structure for structure in self.structures}
+        self._enemy_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.enemy_units}
+        self._enemy_structures_previous_map: Dict[int, Unit] = {
             structure.tag: structure for structure in self.enemy_structures
         }
 
@@ -1721,7 +1726,7 @@ class BotAI(DistanceCalculation):
                 if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue
-                unit_obj = Unit(unit, self, distance_calculation_index=index)
+                unit_obj = Unit(unit, self, distance_calculation_index=index, base_build=self.base_build)
                 index += 1
                 self.all_units.append(unit_obj)
                 if unit.display_type == IS_PLACEHOLDER:
