@@ -315,7 +315,7 @@ class Client(Protocol):
         )
         return {b.unit_tag: {AbilityId(a.ability_id) for a in b.abilities} for b in result.query.abilities}
 
-    async def chat_send(self, message: str, team_only: bool):
+    async def chat_send(self, message: str, team_only: bool = False):
         """ Writes a message to the chat """
         ch = ChatChannel.Team if team_only else ChatChannel.Broadcast
         await self._execute(
