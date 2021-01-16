@@ -590,7 +590,7 @@ class BotAI(DistanceCalculation):
     def owned_expansions(self) -> Dict[Point2, Unit]:
         """List of expansions owned by the player."""
         owned = {}
-        for el in self.expansion_locations:
+        for el in self.expansion_locations_list:
 
             def is_near_to_expansion(t):
                 return t.distance_to(el) < self.EXPANSION_GAP_THRESHOLD
@@ -882,8 +882,8 @@ class BotAI(DistanceCalculation):
 
     async def find_placement(
         self,
-        building: UnitTypeId,
-        near: Union[Unit, Point2],
+        building: Union[UnitTypeId, AbilityId],
+        near: Point2,
         max_distance: int = 20,
         random_alternative: bool = True,
         placement_step: int = 2,
@@ -893,7 +893,7 @@ class BotAI(DistanceCalculation):
 
         Example::
 
-            if self.townahlls:
+            if self.townhalls:
                 cc = self.townhalls[0]
                 depot_position = await self.find_placement(UnitTypeId.SUPPLYDEPOT, near=cc)
 
@@ -901,17 +901,16 @@ class BotAI(DistanceCalculation):
         :param near:
         :param max_distance:
         :param random_alternative:
-        :param placement_step: """
+        :param placement_step:
+        :param addon_place: """
 
         assert isinstance(building, (AbilityId, UnitTypeId))
         assert isinstance(near, Point2), f"{near} is no Point2 object"
 
         if isinstance(building, UnitTypeId):
-            building = self._game_data.units[building.value].creation_ability
-        else:  # AbilityId
-            building = self._game_data.abilities[building.value]
+            building = self._game_data.units[building.value].creation_ability.id
 
-        if await self.can_place(building, near) and (
+        if await self.can_place_single(building, near) and (
             not addon_place or await self.can_place_single(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5)))
         ):
             return near
@@ -929,15 +928,16 @@ class BotAI(DistanceCalculation):
                     + [(distance, dy) for dy in range(-distance, distance + 1, placement_step)]
                 )
             ]
-            res = await self._client.query_building_placement(building, possible_positions)
-            possible = [p for r, p in zip(res, possible_positions) if r == ActionResult.Success]
+            res = await self._client._query_building_placement_fast(building, possible_positions)
+            # Filter all positions if building can be placed
+            possible = [p for r, p in zip(res, possible_positions) if r]
 
             if addon_place:
-                res = await self._client.query_building_placement(
-                    self._game_data.units[UnitTypeId.SUPPLYDEPOT.value].creation_ability,
-                    [p.offset((2.5, -0.5)) for p in possible],
+                # Filter remaining positions if addon can be placed
+                res = await self._client._query_building_placement_fast(
+                    AbilityId.TERRANBUILDDROP_SUPPLYDEPOTDROP, [p.offset((2.5, -0.5)) for p in possible],
                 )
-                possible = [p for r, p in zip(res, possible) if r == ActionResult.Success]
+                possible = [p for r, p in zip(res, possible) if r]
 
             if not possible:
                 continue
