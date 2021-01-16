@@ -128,13 +128,6 @@ class Units(list):
         else:
             return self.subgroup(random.sample(self, n))
 
-    # TODO: append, insert, remove, pop and extend functions should reset the cache for Units.positions because the number of units in the list has changed
-    # @property_immutable_cache
-    # def positions(self) -> np.ndarray:
-    #     flat_units_positions = (coord for unit in self for coord in unit.position)
-    #     unit_positions_np = np.fromiter(flat_units_positions, dtype=float, count=2 * len(self)).reshape((len(self), 2))
-    #     return unit_positions_np
-
     def in_attack_range_of(self, unit: Unit, bonus_distance: Union[int, float] = 0) -> Units:
         """
         Filters units that are in attack range of the given unit.
