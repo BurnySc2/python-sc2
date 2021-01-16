@@ -241,7 +241,8 @@ class SC2Process:
 
         if self._process is not None:
             if paths.PF == "WSL1" or paths.PF == "WSL2":
-                if wsl.kill(self._process): logger.error("KILLED")
+                if wsl.kill(self._process):
+                    logger.error("KILLED")
             elif self._process.poll() is None:
                 for _ in range(3):
                     self._process.terminate()

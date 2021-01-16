@@ -41,8 +41,9 @@ CWD = {
     "WSL2": "Support64",
     "Darwin": None,
     "Linux": None,
-    "WineLinux": "Support64"
+    "WineLinux": "Support64",
 }
+
 
 def platform_detect():
     pf = os.environ.get("SC2PF", platform.system())
@@ -50,13 +51,16 @@ def platform_detect():
         return wsl.detect() or pf
     return pf
 
+
 PF = platform_detect()
+
 
 def get_home():
     """Get home directory of user, using Windows home directory for WSL."""
     if PF == "WSL1" or PF == "WSL2":
         return wsl.get_wsl_home() or Path.home().expanduser()
     return Path.home().expanduser()
+
 
 def get_user_sc2_install():
     """Attempts to find a user's SC2 install if their OS has ExecuteInfo.txt"""
@@ -73,6 +77,7 @@ def get_user_sc2_install():
                 if os.path.exists(base):
                     return base
     return None
+
 
 def get_env():
     # TODO: Linux env conf from: https://github.com/deepmind/pysc2/blob/master/pysc2/run_configs/platforms.py

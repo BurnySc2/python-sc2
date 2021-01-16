@@ -128,8 +128,12 @@ class TestBot(sc2.BotAI):
             if location in self.enemy_start_locations or location == self.start_location:
                 continue
             assert (await self.can_place(UnitTypeId.COMMANDCENTER, [location]))[0]
-            # TODO Remove the following line if can_place function gets fully converted to only accept list of positions
+            assert (await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location]))[0]
+            # TODO Remove the following two lines if can_place function gets fully converted to only accept list of positions
             assert await self.can_place(UnitTypeId.COMMANDCENTER, location)
+            assert await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, location)
+            assert await self.can_place_single(UnitTypeId.COMMANDCENTER, location)
+            assert await self.can_place_single(AbilityId.TERRANBUILD_COMMANDCENTER, location)
             await self.find_placement(UnitTypeId.COMMANDCENTER, location)
         assert len(await self.get_available_abilities(self.workers)) == self.workers.amount
         self.tests_done_by_name.add("test_botai_functions")

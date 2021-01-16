@@ -239,9 +239,10 @@ class Client(Protocol):
         return [float(d.distance) for d in results.query.pathing]
 
     async def _query_building_placement_fast(
-        self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
-    ) -> List[ActionResult]:
+        self, ability: AbilityId, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
+    ) -> List[bool]:
         """
+        Returns a list of booleans. Return True for positions that are valid, False otherwise.
 
         :param ability:
         :param positions:
@@ -250,7 +251,7 @@ class Client(Protocol):
         result = await self._execute(
             query=query_pb.RequestQuery(
                 placements=(
-                    query_pb.RequestQueryBuildingPlacement(ability_id=ability.id.value, target_pos=position.as_Point2D)
+                    query_pb.RequestQueryBuildingPlacement(ability_id=ability.value, target_pos=position.as_Point2D)
                     for position in positions
                 ),
                 ignore_resource_requirements=ignore_resources,
