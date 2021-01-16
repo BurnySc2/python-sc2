@@ -54,6 +54,8 @@ After installing the library, a StarCraft II executable, and some maps, you're r
 python3 examples/protoss/cannon_rush.py
 ```
 
+#### WINE and Lutris
+
 If you installed StarCraft II on Linux with Wine or Lutris, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`):
 
 ```sh
@@ -64,6 +66,19 @@ WINE=usr/bin/wine
 # Default Lutris StarCraftII Installation path:
 SC2PATH=/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
 ```
+
+#### WSL
+
+WSL version 1 should not require any configuration. You may be asked to allow Python through your firewall.
+
+When running WSL version 2 you need to supply the following environment variables so that your bot can connect:
+
+```sh
+SC2CLIENTHOST=<your windows IP>
+SC2SERVERHOST=0.0.0.0
+```
+
+You can find your Windows IP using `ipconfig /all` from `PowerShell.exe` or `CMD.exe`.
 
 ## Example
 
