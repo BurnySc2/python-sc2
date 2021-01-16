@@ -1,8 +1,8 @@
 import asyncio
+import os
 import os.path
 import shutil
 import signal
-import platform
 import subprocess
 import sys
 import tempfile
@@ -17,6 +17,7 @@ import portpicker
 from .controller import Controller
 from .paths import Paths
 from sc2 import paths
+from sc2 import wsl
 
 from sc2.versions import VERSIONS
 
@@ -56,7 +57,7 @@ class SC2Process:
 
     def __init__(
         self,
-        host: str = "127.0.0.1",
+        host: Optional[str] = None,
         port: Optional[int] = None,
         fullscreen: bool = False,
         resolution: Optional[Union[List[int], Tuple[int, int]]] = None,
@@ -66,7 +67,7 @@ class SC2Process:
         base_build: str = None,
         data_hash: str = None,
     ) -> None:
-        assert isinstance(host, str)
+        assert isinstance(host, str) or host is None
         assert isinstance(port, int) or port is None
 
         self._render = render
@@ -78,7 +79,10 @@ class SC2Process:
             if placement and len(placement) == 2:
                 self._arguments["-windowx"] = str(placement[0])
                 self._arguments["-windowy"] = str(placement[1])
-        self._host = host
+
+        self._host = host or os.environ.get("SC2CLIENTHOST", "127.0.0.1")
+        self._serverhost = os.environ.get("SC2SERVERHOST", self._host)
+
         if port is None:
             self._port = portpicker.pick_unused_port()
         else:
@@ -145,7 +149,7 @@ class SC2Process:
         args = paths.get_runner_args(Paths.CWD) + [
             executable,
             "-listen",
-            self._host,
+            self._serverhost,
             "-port",
             str(self._port),
             "-dataDir",
@@ -186,9 +190,14 @@ class SC2Process:
         # if logger.getEffectiveLevel() <= logging.DEBUG:
         args.append("-verbose")
 
+        sc2_cwd = str(Paths.CWD) if Paths.CWD else None
+
+        if paths.PF == "WSL1" or paths.PF == "WSL2":
+            return wsl.run(args, sc2_cwd)
+
         return subprocess.Popen(
             args,
-            cwd=(str(Paths.CWD) if Paths.CWD else None),
+            cwd=sc2_cwd,
             # , env=run_config.env
         )
 
@@ -231,7 +240,9 @@ class SC2Process:
         logger.info("Cleaning up...")
 
         if self._process is not None:
-            if self._process.poll() is None:
+            if paths.PF == "WSL1" or paths.PF == "WSL2":
+                if wsl.kill(self._process): logger.error("KILLED")
+            elif self._process.poll() is None:
                 for _ in range(3):
                     self._process.terminate()
                     time.sleep(0.5)
@@ -242,7 +253,7 @@ class SC2Process:
                 self._process.wait()
                 logger.error("KILLED")
             # Try to kill wineserver on linux
-            if platform.system() == "Linux":
+            if paths.PF == "Linux" or paths.PF == "WineLinux":
                 try:
                     p = subprocess.Popen(["wineserver", "-k"])
                     p.wait()

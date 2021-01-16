@@ -4,33 +4,75 @@ import re
 import subprocess
 from pathlib import Path
 
+import sc2.wsl as wsl
+
 from loguru import logger
 
 BASEDIR = {
     "Windows": "C:/Program Files (x86)/StarCraft II",
+    "WSL1": "/mnt/c/Program Files (x86)/StarCraft II",
+    "WSL2": "/mnt/c/Program Files (x86)/StarCraft II",
     "Darwin": "/Applications/StarCraft II",
     "Linux": "~/StarCraftII",
     "WineLinux": "~/.wine/drive_c/Program Files (x86)/StarCraft II",
 }
 
 USERPATH = {
-    "Windows": "\\Documents\\StarCraft II\\ExecuteInfo.txt",
-    "Darwin": "/Library/Application Support/Blizzard/StarCraft II/ExecuteInfo.txt",
+    "Windows": "Documents\\StarCraft II\\ExecuteInfo.txt",
+    "WSL1": "Documents/StarCraft II/ExecuteInfo.txt",
+    "WSL2": "Documents/StarCraft II/ExecuteInfo.txt",
+    "Darwin": "Library/Application Support/Blizzard/StarCraft II/ExecuteInfo.txt",
     "Linux": None,
     "WineLinux": None,
 }
 
 BINPATH = {
     "Windows": "SC2_x64.exe",
+    "WSL1": "SC2_x64.exe",
+    "WSL2": "SC2_x64.exe",
     "Darwin": "SC2.app/Contents/MacOS/SC2",
     "Linux": "SC2_x64",
     "WineLinux": "SC2_x64.exe",
 }
 
-CWD = {"Windows": "Support64", "Darwin": None, "Linux": None, "WineLinux": "Support64"}
+CWD = {
+    "Windows": "Support64",
+    "WSL1": "Support64",
+    "WSL2": "Support64",
+    "Darwin": None,
+    "Linux": None,
+    "WineLinux": "Support64"
+}
 
-PF = os.environ.get("SC2PF", platform.system())
+def platform_detect():
+    pf = os.environ.get("SC2PF", platform.system())
+    if pf == "Linux":
+        return wsl.detect() or pf
+    return pf
 
+PF = platform_detect()
+
+def get_home():
+    """Get home directory of user, using Windows home directory for WSL."""
+    if PF == "WSL1" or PF == "WSL2":
+        return wsl.get_wsl_home() or Path.home().expanduser()
+    return Path.home().expanduser()
+
+def get_user_sc2_install():
+    """Attempts to find a user's SC2 install if their OS has ExecuteInfo.txt"""
+    if USERPATH[PF]:
+        einfo = str(get_home() / Path(USERPATH[PF]))
+        if os.path.isfile(einfo):
+            with open(einfo) as f:
+                content = f.read()
+            if content:
+                base = re.search(r" = (.*)Versions", content).group(1)
+                if PF == "WSL1" or PF == "WSL2":
+                    base = str(wsl.win_path_to_wsl_path(base))
+
+                if os.path.exists(base):
+                    return base
+    return None
 
 def get_env():
     # TODO: Linux env conf from: https://github.com/deepmind/pysc2/blob/master/pysc2/run_configs/platforms.py
@@ -84,18 +126,7 @@ class _MetaPaths(type):
             exit(1)
 
         try:
-            base = os.environ.get("SC2PATH")
-            if base is None and USERPATH[PF] is not None:
-                einfo = str(Path.home().expanduser()) + USERPATH[PF]
-                if os.path.isfile(einfo):
-                    with open(einfo) as f:
-                        content = f.read()
-                    if content:
-                        base = re.search(r" = (.*)Versions", content).group(1)
-                        if not os.path.exists(base):
-                            base = None
-            if base is None:
-                base = BASEDIR[PF]
+            base = os.environ.get("SC2PATH") or get_user_sc2_install() or BASEDIR[PF]
             self.BASE = Path(base).expanduser()
             self.EXECUTABLE = latest_executeble(self.BASE / "Versions")
             self.CWD = self.BASE / CWD[PF] if CWD[PF] else None
