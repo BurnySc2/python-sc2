@@ -118,7 +118,7 @@ class MassReaperBot(sc2.BotAI):
                 # Find all vespene geysers that are closer than range 10 to this townhall
                 vgs: Units = self.vespene_geyser.closer_than(10, th)
                 for vg in vgs:
-                    if (await self.can_place(UnitTypeId.REFINERY, [vg.position]))[0] and self.can_afford(
+                    if await self.can_place_single(UnitTypeId.REFINERY, vg.position) and self.can_afford(
                         UnitTypeId.REFINERY
                     ):
                         workers: Units = self.workers.gathering

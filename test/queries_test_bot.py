@@ -100,6 +100,11 @@ class TestBot(sc2.BotAI):
         result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
         return result[0]
 
+    async def run_can_place_single(self) -> bool:
+        # await self._advance_steps(200)
+        result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
+        return result[0]
+
     async def test_can_place_expect_true(self):
         test_cases = [
             # Invisible undetected enemy units
@@ -136,6 +141,14 @@ class TestBot(sc2.BotAI):
                     f"Expected result to be True, but was False for test case: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
                 )
             assert result, f"Expected result to be False, but was True for test case: {i}"
+            result2 = await self.run_can_place_single()
+            if result2:
+                logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
+            else:
+                logger.error(
+                    f"Expected result2 to be True, but was False for test case: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
+                )
+            assert result2, f"Expected result to be False, but was True for test case: {i}"
             await self.clear_map_center()
 
     async def test_can_place_expect_false(self):

@@ -831,16 +831,15 @@ class BotAI(DistanceCalculation):
 
             return workers.random if force else None
 
-    async def can_place_single(
-        self, building: Union[AbilityData, AbilityId, UnitTypeId], position: Union[Point2, tuple]
-    ) -> bool:
-        """ Checks the placement for only one position.
-        This function might get removed in favor of the function below (can_place). """
-        r = await self._client._query_building_placement_fast(building, [position])
-        return r[0]
+    async def can_place_single(self, building: Union[AbilityId, UnitTypeId], position: Point2) -> bool:
+        """ Checks the placement for only one position. """
+        if isinstance(building, UnitTypeId):
+            creation_ability = self._game_data.units[building.value].creation_ability.id
+            return (await self._client._query_building_placement_fast(creation_ability, [position]))[0]
+        return (await self._client._query_building_placement_fast(building, [position]))[0]
 
     async def can_place(
-        self, building: Union[AbilityData, AbilityId, UnitTypeId], positions: List[Union[Point2, tuple, list]]
+        self, building: Union[AbilityData, AbilityId, UnitTypeId], positions: List[Point2]
     ) -> List[bool]:
         """ Tests if a building can be placed in the given locations.
 
@@ -857,17 +856,27 @@ class BotAI(DistanceCalculation):
         building_type = type(building)
         assert type(building) in {AbilityData, AbilityId, UnitTypeId}, f"{building}, {building_type}"
         if building_type == UnitTypeId:
-            building = self._game_data.units[building.value].creation_ability
-        elif building_type == AbilityId:
-            building = self._game_data.abilities[building.value]
+            building = self._game_data.units[building.value].creation_ability.id
+        elif building_type == AbilityData:
+            warnings.warn(
+                "Using AbilityData is deprecated and may be removed soon. Please use AbilityId or UnitTypeId instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            building = building_type.id
 
         if isinstance(positions, (Point2, tuple)):
+            warnings.warn(
+                "The support for querying single entries will be removed soon. Please use either 'await self.can_place_single(building, position)' or 'await (self.can_place(building, [position]))[0]",
+                DeprecationWarning,
+                stacklevel=2,
+            )
             return await self.can_place_single(building, positions)
         else:
             assert isinstance(positions, list), f"Expected an iterable (list, tuple), but was: {positions}"
             assert isinstance(
-                positions[0], (Point2, tuple, list)
-            ), f"List is expected to have Point2, tuples or lists, but instead had: {positions[0]} {type(positions[0])}"
+                positions[0], Point2
+            ), f"List is expected to have Point2, but instead had: {positions[0]} {type(positions[0])}"
 
         return await self._client._query_building_placement_fast(building, positions)
 
@@ -903,7 +912,7 @@ class BotAI(DistanceCalculation):
             building = self._game_data.abilities[building.value]
 
         if await self.can_place(building, near) and (
-            not addon_place or await self.can_place(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5)))
+            not addon_place or await self.can_place_single(UnitTypeId.SUPPLYDEPOT, near.offset((2.5, -0.5)))
         ):
             return near
 

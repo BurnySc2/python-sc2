@@ -77,7 +77,7 @@ class CompetitiveBot(sc2.BotAI):
         if self.minerals > 500:
             for d in range(4, 15):
                 pos: Point2 = hatch.position.towards(self.game_info.map_center, d)
-                if (await self.can_place(UnitTypeId.HATCHERY, [pos]))[0]:
+                if await self.can_place_single(UnitTypeId.HATCHERY, pos):
                     self.workers.random.build(UnitTypeId.HATCHERY, pos)
                     break
 
@@ -104,7 +104,7 @@ class CompetitiveBot(sc2.BotAI):
             if self.can_afford(UnitTypeId.SPAWNINGPOOL):
                 for d in range(4, 15):
                     pos: Point2 = hatch.position.towards(self.game_info.map_center, d)
-                    if (await self.can_place(UnitTypeId.SPAWNINGPOOL, [pos]))[0]:
+                    if await self.can_place_single(UnitTypeId.SPAWNINGPOOL, pos):
                         drone: Unit = self.workers.closest_to(pos)
                         drone.build(UnitTypeId.SPAWNINGPOOL, pos)
 
