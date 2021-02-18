@@ -256,15 +256,19 @@ class TestBot(sc2.BotAI):
             for attacker_type in attacker_units:
                 for defender_type in defender_units:
                     # DT, Thor, Tempest one-shots workers, so skip test
-                    if attacker_type in {
-                        UnitTypeId.DARKTEMPLAR,
-                        UnitTypeId.TEMPEST,
-                        UnitTypeId.THOR,
-                        UnitTypeId.THORAP,
-                        UnitTypeId.LIBERATORAG,
-                        UnitTypeId.PLANETARYFORTRESS,
-                        UnitTypeId.ARCHON,
-                    } and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}:
+                    if (
+                        attacker_type
+                        in {
+                            UnitTypeId.DARKTEMPLAR,
+                            UnitTypeId.TEMPEST,
+                            UnitTypeId.THOR,
+                            UnitTypeId.THORAP,
+                            UnitTypeId.LIBERATORAG,
+                            UnitTypeId.PLANETARYFORTRESS,
+                            UnitTypeId.ARCHON,
+                        }
+                        and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}
+                    ):
                         continue
 
                     # Spawn units

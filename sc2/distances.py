@@ -144,12 +144,12 @@ class DistanceCalculation:
         return (self.distance_math_hypot(p, pos) for p in points)
 
     def _distances_override_functions(self, method: int = 0):
-        """ Overrides the internal distance calculation functions at game start in bot_ai.py self._prepare_start() function
+        """Overrides the internal distance calculation functions at game start in bot_ai.py self._prepare_start() function
         method 0: Use python's math.hypot
         The following methods calculate the distances between all units once:
         method 1: Use scipy's pdist condensed matrix (1d array)
         method 2: Use scipy's cidst square matrix (2d array)
-        method 3: Use scipy's cidst square matrix (2d array) without asserts (careful: very weird error messages, but maybe slightly faster) """
+        method 3: Use scipy's cidst square matrix (2d array) without asserts (careful: very weird error messages, but maybe slightly faster)"""
         assert 0 <= method <= 3, f"Selected method was: {method}"
         if method == 0:
             self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method0

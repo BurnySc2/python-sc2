@@ -244,9 +244,9 @@ class GameInfo:
         self.player_start_location: Point2 = None  # Filled later by BotAI._prepare_first_step
 
     def _find_ramps_and_vision_blockers(self) -> Tuple[List[Ramp], Set[Point2]]:
-        """ Calculate points that are pathable but not placeable.
+        """Calculate points that are pathable but not placeable.
         Then divide them into ramp points if not all points around the points are equal height
-        and into vision blockers if they are. """
+        and into vision blockers if they are."""
 
         def equal_height_around(tile):
             # mask to slice array 1 around tile
