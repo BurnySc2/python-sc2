@@ -1584,7 +1584,7 @@ class BotAI(DistanceCalculation):
         pos = pos.position.rounded
         return self._game_info.terrain_height[pos]
 
-    def get_terrain_z_height(self, pos: Union[Point2, Unit]) -> int:
+    def get_terrain_z_height(self, pos: Union[Point2, Unit]) -> float:
         """Returns terrain z-height at a position.
 
         :param pos:"""
