@@ -197,10 +197,10 @@ class UnitTypeData:
 
     @property
     def tech_alias(self) -> Optional[List[UnitTypeId]]:
-        """ Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
+        """Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
         Building tech equality, e.g. Hive is the same as Lair and Hatchery
         For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]
-        For SCV, this returns None """
+        For SCV, this returns None"""
         return_list = [
             UnitTypeId(tech_alias) for tech_alias in self._proto.tech_alias if tech_alias in self._game_data.units
         ]

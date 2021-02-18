@@ -127,8 +127,8 @@ class SC2Process:
 
     @property
     def versions(self):
-        """ Opens the versions.json file which origins from
-        https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json """
+        """Opens the versions.json file which origins from
+        https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json"""
         return VERSIONS
 
     def find_data_hash(self, target_sc2_version: str) -> Optional[str]:

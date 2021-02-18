@@ -96,8 +96,8 @@ class ExpiringDict(OrderedDict):
 
     # TODO find a way to improve len
     def __len__(self):
-        """ Override len method as key value pairs aren't instantly being deleted, but only on __get__(item).
-        This function is slow because it has to check if each element is not expired yet. """
+        """Override len method as key value pairs aren't instantly being deleted, but only on __get__(item).
+        This function is slow because it has to check if each element is not expired yet."""
         with self.lock:
             count = 0
             for _ in self.values():

@@ -199,11 +199,11 @@ class Client(Protocol):
     async def query_pathing(
         self, start: Union[Unit, Point2, Point3], end: Union[Point2, Point3]
     ) -> Optional[Union[int, float]]:
-        """ Caution: returns "None" when path not found
+        """Caution: returns "None" when path not found
         Try to combine queries with the function below because the pathing query is generally slow.
 
         :param start:
-        :param end: """
+        :param end:"""
         assert isinstance(start, (Point2, Unit))
         assert isinstance(end, Point2)
         if isinstance(start, Point2):
@@ -217,7 +217,7 @@ class Client(Protocol):
         return distance
 
     async def query_pathings(self, zipped_list: List[List[Union[Unit, Point2, Point3]]]) -> List[Union[float, int]]:
-        """ Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])
+        """Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])
         -> returns [distance1, distance2]
         Caution: returns 0 when path not found
 
@@ -263,11 +263,11 @@ class Client(Protocol):
     async def query_building_placement(
         self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
     ) -> List[ActionResult]:
-        """ This function might be deleted in favor of the function above (_query_building_placement_fast).
+        """This function might be deleted in favor of the function above (_query_building_placement_fast).
 
         :param ability:
         :param positions:
-        :param ignore_resources: """
+        :param ignore_resources:"""
         assert isinstance(ability, AbilityData)
         result = await self._execute(
             query=query_pb.RequestQuery(
@@ -326,10 +326,10 @@ class Client(Protocol):
         )
 
     async def toggle_autocast(self, units: Union[List[Unit], Units], ability: AbilityId):
-        """ Toggle autocast of all specified units
+        """Toggle autocast of all specified units
 
         :param units:
-        :param ability: """
+        :param ability:"""
         assert units
         assert isinstance(units, list)
         assert all(isinstance(u, Unit) for u in units)
@@ -350,10 +350,10 @@ class Client(Protocol):
         )
 
     async def debug_create_unit(self, unit_spawn_commands: List[List[Union[UnitTypeId, int, Point2, Point3]]]):
-        """ Usage example (will spawn 5 marines in the center of the map for player ID 1):
+        """Usage example (will spawn 5 marines in the center of the map for player ID 1):
         await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])
 
-        :param unit_spawn_commands: """
+        :param unit_spawn_commands:"""
         assert isinstance(unit_spawn_commands, list)
         assert unit_spawn_commands
         assert isinstance(unit_spawn_commands[0], list)
@@ -394,7 +394,9 @@ class Client(Protocol):
         )
 
     async def move_camera(self, position: Union[Unit, Units, Point2, Point3]):
-        """ Moves camera to the target position """
+        """Moves camera to the target position
+
+        :param position:"""
         assert isinstance(position, (Unit, Units, Point2, Point3))
         if isinstance(position, Units):
             position = position.center
@@ -413,7 +415,9 @@ class Client(Protocol):
         )
 
     async def obs_move_camera(self, position: Union[Unit, Units, Point2, Point3]):
-        """ Moves observer camera to the target position """
+        """Moves observer camera to the target position. Only works when observing (e.g. watching the replay).
+
+        :param position:"""
         assert isinstance(position, (Unit, Units, Point2, Point3))
         if isinstance(position, Units):
             position = position.center
@@ -428,9 +432,9 @@ class Client(Protocol):
         )
 
     async def move_camera_spatial(self, position: Union[Point2, Point3]):
-        """ Moves camera to the target position using the spatial aciton interface
+        """Moves camera to the target position using the spatial aciton interface
 
-        :param position: """
+        :param position:"""
         from s2clientprotocol import spatial_pb2 as spatial_pb
 
         assert isinstance(position, (Point2, Point3))
@@ -452,7 +456,14 @@ class Client(Protocol):
         color: Union[tuple, list, Point3] = None,
         size: int = 8,
     ):
-        """ Draws a text on the screen (monitor / game window) with coordinates 0 <= x, y <= 1. """
+        """
+        Draws a text on the screen (monitor / game window) with coordinates 0 <= x, y <= 1.
+
+        :param text:
+        :param pos:
+        :param color:
+        :param size:
+        """
         assert len(pos) >= 2
         assert 0 <= pos[0] <= 1
         assert 0 <= pos[1] <= 1
@@ -469,81 +480,101 @@ class Client(Protocol):
         return self.debug_text_screen(text, pos, color, size)
 
     def debug_text_world(
-        self, text: str, pos: Union[Unit, Point2, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
+        self, text: str, pos: Union[Unit, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
     ):
-        """ Draws a text at Point3 position in the game world.
+        """
+        Draws a text at Point3 position in the game world.
         To grab a unit's 3d position, use unit.position3d
         Usually the Z value of a Point3 is between 8 and 14 (except for flying units). Use self.get_terrain_z_height() from bot_ai.py to get the Z value (height) of the terrain at a 2D position.
+
+        :param text:
+        :param color:
+        :param size:
         """
         if isinstance(pos, Unit):
             pos = pos.position3d
-        elif not isinstance(pos, Point3):
-            pos = Point3((pos.x, pos.y, 0))
+        assert isinstance(pos, Point3)
         self._debug_texts.append(DrawItemWorldText(text=text, color=color, start_point=pos, font_size=size))
 
     def debug_text_3d(
-        self, text: str, pos: Union[Unit, Point2, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
+        self, text: str, pos: Union[Unit, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
     ):
         return self.debug_text_world(text, pos, color, size)
 
     def debug_line_out(
-        self, p0: Union[Unit, Point2, Point3], p1: Union[Unit, Point2, Point3], color: Union[tuple, list, Point3] = None
+        self, p0: Union[Unit, Point3], p1: Union[Unit, Point3], color: Union[tuple, list, Point3] = None
     ):
+        """
+        Draws a line from p0 to p1.
+
+        :param p0:
+        :param p1:
+        :param color:
+        """
         if isinstance(p0, Unit):
             p0 = p0.position3d
-        elif not isinstance(p0, Point3):
-            p0 = Point3((p0.x, p0.y, 0))
+        assert isinstance(p0, Point3)
         if isinstance(p1, Unit):
             p1 = p1.position3d
-        elif not isinstance(p1, Point3):
-            p1 = Point3((p1.x, p1.y, 0))
-        """ Draws a line from p0 to p1. """
+        assert isinstance(p1, Point3)
         self._debug_lines.append(DrawItemLine(color=color, start_point=p0, end_point=p1))
 
     def debug_box_out(
         self,
-        p_min: Union[Unit, Point2, Point3],
-        p_max: Union[Unit, Point2, Point3],
+        p_min: Union[Unit, Point3],
+        p_max: Union[Unit, Point3],
         color: Union[tuple, list, Point3] = None,
     ):
-        """ Draws a box with p_min and p_max as corners of the box. """
+        """
+        Draws a box with p_min and p_max as corners of the box.
+
+        :param p_min:
+        :param p_max:
+        :param color:
+        """
         if isinstance(p_min, Unit):
             p_min = p_min.position3d
-        elif not isinstance(p_min, Point3):
-            p_min = Point3((p_min.x, p_min.y, 0))
+        assert isinstance(p_min, Point3)
         if isinstance(p_max, Unit):
             p_max = p_max.position3d
-        elif not isinstance(p_max, Point3):
-            p_max = Point3((p_max.x, p_max.y, 0))
+        assert isinstance(p_max, Point3)
         self._debug_boxes.append(DrawItemBox(start_point=p_min, end_point=p_max, color=color))
 
     def debug_box2_out(
         self,
-        pos: Union[Unit, Point2, Point3],
+        pos: Union[Unit, Point3],
         half_vertex_length: float = 0.25,
         color: Union[tuple, list, Point3] = None,
     ):
-        """ Draws a box center at a position 'pos', with box side lengths (vertices) of two times 'half_vertex_length'. """
+        """
+        Draws a box center at a position 'pos', with box side lengths (vertices) of two times 'half_vertex_length'.
+
+        :param pos:
+        :param half_vertex_length:
+        :param color:
+        """
         if isinstance(pos, Unit):
             pos = pos.position3d
-        elif not isinstance(pos, Point3):
-            pos = Point3((pos.x, pos.y, 0))
+        assert isinstance(pos, Point3)
         p0 = pos + Point3((-half_vertex_length, -half_vertex_length, -half_vertex_length))
         p1 = pos + Point3((half_vertex_length, half_vertex_length, half_vertex_length))
         self._debug_boxes.append(DrawItemBox(start_point=p0, end_point=p1, color=color))
 
-    def debug_sphere_out(
-        self, p: Union[Unit, Point2, Point3], r: Union[int, float], color: Union[tuple, list, Point3] = None
-    ):
-        """ Draws a sphere at point p with radius r. """
+    def debug_sphere_out(self, p: Union[Unit, Point3], r: float, color: Union[tuple, list, Point3] = None):
+        """
+        Draws a sphere at point p with radius r.
+
+        :param p:
+        :param r:
+        :param color:
+        """
         if isinstance(p, Unit):
             p = p.position3d
-        elif not isinstance(p, Point3):
-            p = Point3((p.x, p.y, 0))
+        assert isinstance(p, Point3)
         self._debug_spheres.append(DrawItemSphere(start_point=p, radius=r, color=color))
 
     async def _send_debug(self):
-        """ Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.
+        """Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.
         Check examples/terran/ramp_wall.py for example drawing. Each draw request needs to be sent again in every single on_step iteration.
         """
         debug_hash = (
@@ -595,10 +626,10 @@ class Client(Protocol):
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(end_game=debug_pb.DebugEndGame())]))
 
     async def debug_set_unit_value(self, unit_tags: Union[Iterable[int], Units, Unit], unit_value: int, value: float):
-        """ Sets a "unit value" (Energy, Life or Shields) of the given units to the given value.
+        """Sets a "unit value" (Energy, Life or Shields) of the given units to the given value.
         Can't set the life of a unit to 0, use "debug_kill_unit" for that. Also can't set the life above the unit's maximum.
         The following example sets the health of all your workers to 1:
-        await self.debug_set_unit_value(self.workers, 2, value=1) """
+        await self.debug_set_unit_value(self.workers, 2, value=1)"""
         if isinstance(unit_tags, Units):
             unit_tags = unit_tags.tags
         if isinstance(unit_tags, Unit):
@@ -683,16 +714,16 @@ class Client(Protocol):
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=12)]))
 
     async def quick_save(self):
-        """ Saves the current game state to an in-memory bookmark.
-        See: https://github.com/Blizzard/s2client-proto/blob/eeaf5efaea2259d7b70247211dff98da0a2685a2/s2clientprotocol/sc2api.proto#L93 """
+        """Saves the current game state to an in-memory bookmark.
+        See: https://github.com/Blizzard/s2client-proto/blob/eeaf5efaea2259d7b70247211dff98da0a2685a2/s2clientprotocol/sc2api.proto#L93"""
         await self._execute(quick_save=sc_pb.RequestQuickSave())
 
     async def quick_load(self):
-        """ Loads the game state from the previously stored in-memory bookmark.
+        """Loads the game state from the previously stored in-memory bookmark.
         Caution:
             - The SC2 Client will crash if the game wasn't quicksaved
             - The bot step iteration counter will not reset
-            - self.state.game_loop will be set to zero after the quickload, and self.time is dependant on it """
+            - self.state.game_loop will be set to zero after the quickload, and self.time is dependant on it"""
         await self._execute(quick_load=sc_pb.RequestQuickLoad())
 
 
@@ -782,7 +813,9 @@ class DrawItemBox(DrawItem):
 
     def to_proto(self):
         return debug_pb.DebugBox(
-            min=self._start_point.as_Point, max=self._end_point.as_Point, color=self.to_debug_color(self._color),
+            min=self._start_point.as_Point,
+            max=self._end_point.as_Point,
+            color=self.to_debug_color(self._color),
         )
 
     def __hash__(self):

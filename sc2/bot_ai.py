@@ -139,12 +139,12 @@ class BotAI(DistanceCalculation):
 
     @property
     def step_time(self) -> Tuple[float, float, float, float]:
-        """ Returns a tuple of step duration in milliseconds.
+        """Returns a tuple of step duration in milliseconds.
         First value is the minimum step duration - the shortest the bot ever took
         Second value is the average step duration
         Third value is the maximum step duration - the longest the bot ever took (including on_start())
         Fourth value is the step duration the bot took last iteration
-        If called in the first iteration, it returns (inf, 0, 0, 0) """
+        If called in the first iteration, it returns (inf, 0, 0, 0)"""
         avg_step_duration = (
             (self._total_time_in_on_step / self._total_steps_iterations) if self._total_steps_iterations else 0
         )
@@ -236,7 +236,7 @@ class BotAI(DistanceCalculation):
 
     @property
     def main_base_ramp(self) -> Ramp:
-        """ Returns the Ramp instance of the closest main-ramp to start location.
+        """Returns the Ramp instance of the closest main-ramp to start location.
         Look in game_info.py for more information about the Ramp class
 
         Example: See terran ramp wall bot
@@ -375,7 +375,7 @@ class BotAI(DistanceCalculation):
 
     @property
     def units_created(self) -> Counter:
-        """ Returns a Counter for all your units and buildings you have created so far.
+        """Returns a Counter for all your units and buildings you have created so far.
 
         This may be used for statistics (at the end of the game) or for strategic decision making.
 
@@ -394,10 +394,10 @@ class BotAI(DistanceCalculation):
         return self._units_created
 
     def _correct_zerg_supply(self):
-        """ The client incorrectly rounds zerg supply down instead of up (see
-            https://github.com/Blizzard/s2client-proto/issues/123), so self.supply_used
-            and friends return the wrong value when there are an odd number of zerglings
-            and banelings. This function corrects the bad values. """
+        """The client incorrectly rounds zerg supply down instead of up (see
+        https://github.com/Blizzard/s2client-proto/issues/123), so self.supply_used
+        and friends return the wrong value when there are an odd number of zerglings
+        and banelings. This function corrects the bad values."""
         # TODO: remove when Blizzard/sc2client-proto#123 gets fixed.
         half_supply_units = {
             UnitTypeId.ZERGLING,
@@ -414,7 +414,7 @@ class BotAI(DistanceCalculation):
     async def get_available_abilities(
         self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
-        """ Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
+        """Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
 
         Examples::
 
@@ -425,17 +425,17 @@ class BotAI(DistanceCalculation):
             units_abilities = await self.get_available_abilities([self.units.random])
 
         :param units:
-        :param ignore_resource_requirements: """
+        :param ignore_resource_requirements:"""
         return await self._client.query_available_abilities(units, ignore_resource_requirements)
 
     async def expand_now(
         self, building: UnitTypeId = None, max_distance: float = 10, location: Optional[Point2] = None
     ):
-        """ Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.
+        """Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.
 
         :param building:
         :param max_distance:
-        :param location: """
+        :param location:"""
 
         if not building:
             # self.race is never Race.Random
@@ -495,7 +495,7 @@ class BotAI(DistanceCalculation):
 
         WARNING: This is quite slow when there are lots of workers or multiple bases.
 
-        :param resource_ratio: """
+        :param resource_ratio:"""
         if not self.mineral_field or not self.workers or not self.townhalls.ready:
             return
         worker_pool = [worker for worker in self.workers.idle]
@@ -613,7 +613,7 @@ class BotAI(DistanceCalculation):
             ravager_supply_cost = self.calculate_supply_cost(UnitTypeId.RAVAGER) # Is 1
             baneling_supply_cost = self.calculate_supply_cost(UnitTypeId.BANELING) # Is 0
 
-        :param unit_type: """
+        :param unit_type:"""
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
         unit_supply_cost = self._game_data.units[unit_type.value]._proto.food_required
@@ -626,7 +626,7 @@ class BotAI(DistanceCalculation):
         return unit_supply_cost
 
     def can_feed(self, unit_type: UnitTypeId) -> bool:
-        """ Checks if you have enough free supply to build the unit
+        """Checks if you have enough free supply to build the unit
 
         Example::
 
@@ -635,7 +635,7 @@ class BotAI(DistanceCalculation):
             if cc and self.can_feed(UnitTypeId.SCV):
                 cc.train(UnitTypeId.SCV)
 
-        :param unit_type: """
+        :param unit_type:"""
         required = self.calculate_supply_cost(unit_type)
         # "required <= 0" in case self.supply_left is negative
         return required <= 0 or self.supply_left >= required
@@ -717,7 +717,7 @@ class BotAI(DistanceCalculation):
         return cost
 
     def can_afford(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId], check_supply_cost: bool = True) -> bool:
-        """ Tests if the player has enough resources to build a unit or structure.
+        """Tests if the player has enough resources to build a unit or structure.
 
         Example::
 
@@ -733,7 +733,7 @@ class BotAI(DistanceCalculation):
             # Will be 'True' although the API reports that an orbital is worth 550 minerals, but the morph cost is only 150 minerals
 
         :param item_id:
-        :param check_supply_cost: """
+        :param check_supply_cost:"""
         cost = self.calculate_cost(item_id)
         if cost.minerals > self.minerals or cost.vespene > self.vespene:
             return False
@@ -751,7 +751,7 @@ class BotAI(DistanceCalculation):
         only_check_energy_and_cooldown: bool = False,
         cached_abilities_of_unit: List[AbilityId] = None,
     ) -> bool:
-        """ Tests if a unit has an ability available and enough energy to cast it.
+        """Tests if a unit has an ability available and enough energy to cast it.
 
         Example::
 
@@ -764,7 +764,7 @@ class BotAI(DistanceCalculation):
         :param ability_id:
         :param target:
         :param only_check_energy_and_cooldown:
-        :param cached_abilities_of_unit: """
+        :param cached_abilities_of_unit:"""
         assert isinstance(unit, Unit), f"{unit} is no Unit object"
         assert isinstance(ability_id, AbilityId), f"{ability_id} is no AbilityId"
         assert isinstance(target, (type(None), Unit, Point2))
@@ -805,7 +805,7 @@ class BotAI(DistanceCalculation):
 
     def select_build_worker(self, pos: Union[Unit, Point2], force: bool = False) -> Optional[Unit]:
         """Select a worker to build a building with.
-        
+
         Example::
 
             barracks_placement_position = self.main_base_ramp.barracks_correct_placement
@@ -815,7 +815,7 @@ class BotAI(DistanceCalculation):
                 worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         :param pos:
-        :param force: """
+        :param force:"""
         workers = (
             self.workers.filter(lambda w: (w.is_gathering or w.is_idle) and w.distance_to(pos) < 20) or self.workers
         )
@@ -841,7 +841,7 @@ class BotAI(DistanceCalculation):
     async def can_place(
         self, building: Union[AbilityData, AbilityId, UnitTypeId], positions: List[Point2]
     ) -> List[bool]:
-        """ Tests if a building can be placed in the given locations.
+        """Tests if a building can be placed in the given locations.
 
         Example::
 
@@ -852,7 +852,7 @@ class BotAI(DistanceCalculation):
                 worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
         :param building:
-        :param position: """
+        :param position:"""
         building_type = type(building)
         assert type(building) in {AbilityData, AbilityId, UnitTypeId}, f"{building}, {building_type}"
         if building_type == UnitTypeId:
@@ -889,7 +889,7 @@ class BotAI(DistanceCalculation):
         placement_step: int = 2,
         addon_place: bool = False,
     ) -> Optional[Point2]:
-        """ Finds a placement location for building.
+        """Finds a placement location for building.
 
         Example::
 
@@ -902,7 +902,7 @@ class BotAI(DistanceCalculation):
         :param max_distance:
         :param random_alternative:
         :param placement_step:
-        :param addon_place: """
+        :param addon_place:"""
 
         assert isinstance(building, (AbilityId, UnitTypeId))
         assert isinstance(near, Point2), f"{near} is no Point2 object"
@@ -935,7 +935,8 @@ class BotAI(DistanceCalculation):
             if addon_place:
                 # Filter remaining positions if addon can be placed
                 res = await self._client._query_building_placement_fast(
-                    AbilityId.TERRANBUILDDROP_SUPPLYDEPOTDROP, [p.offset((2.5, -0.5)) for p in possible],
+                    AbilityId.TERRANBUILDDROP_SUPPLYDEPOTDROP,
+                    [p.offset((2.5, -0.5)) for p in possible],
                 )
                 possible = [p for r, p in zip(res, possible) if r]
 
@@ -950,7 +951,7 @@ class BotAI(DistanceCalculation):
 
     # TODO: improve using cache per frame
     def already_pending_upgrade(self, upgrade_type: UpgradeId) -> float:
-        """ Check if an upgrade is being researched
+        """Check if an upgrade is being researched
 
         Returns values are::
 
@@ -976,8 +977,8 @@ class BotAI(DistanceCalculation):
 
     @property_cache_once_per_frame_no_copy
     def _abilities_all_units(self) -> Tuple[Counter, Dict[UnitTypeId, float]]:
-        """ Cache for the already_pending function, includes protoss units warping in,
-        all units in production and all structures, and all morphs """
+        """Cache for the already_pending function, includes protoss units warping in,
+        all units in production and all structures, and all morphs"""
         abilities_amount = Counter()
         max_build_progress: Dict[UnitTypeId, float] = {}
         for unit in self.units + self.structures:  # type: Unit
@@ -1046,7 +1047,7 @@ class BotAI(DistanceCalculation):
         return max_value
 
     def tech_requirement_progress(self, structure_type: UnitTypeId) -> float:
-        """ Returns the tech requirement progress for a specific building
+        """Returns the tech requirement progress for a specific building
 
         Example::
 
@@ -1066,7 +1067,7 @@ class BotAI(DistanceCalculation):
             tech_requirement = self.tech_requirement_progress(UnitTypeId.STARPORT)
             print(tech_requirement) # Prints 1 because even though the type id of the flying factory is different, it still has build progress of 1 and thus tech requirement is completed
 
-        :param structure_type: """
+        :param structure_type:"""
         race_dict = {
             Race.Protoss: PROTOSS_TECH_REQUIREMENT,
             Race.Terran: TERRAN_TECH_REQUIREMENT,
@@ -1128,19 +1129,19 @@ class BotAI(DistanceCalculation):
         return abilities_amount
 
     def worker_en_route_to_build(self, unit_type: UnitTypeId) -> float:
-        """ This function counts how many workers are on the way to start the construction a building.
+        """This function counts how many workers are on the way to start the construction a building.
         Warning: this function may change its name in the future!
         New function. Please report any bugs!
 
-        :param unit_type: """
+        :param unit_type:"""
         ability = self._game_data.units[unit_type.value].creation_ability
         return self._worker_orders[ability]
 
     @property_cache_once_per_frame
     def structures_without_construction_SCVs(self) -> Units:
-        """ Returns all structures that do not have an SCV constructing it.
+        """Returns all structures that do not have an SCV constructing it.
         Warning: this function may move to become a Units filter.
-        New function. Please report any bugs! """
+        New function. Please report any bugs!"""
         worker_targets: Set[Union[int, Point2]] = set()
         for worker in self.workers:
             # Ignore repairing workers
@@ -1172,7 +1173,7 @@ class BotAI(DistanceCalculation):
         random_alternative: bool = True,
         placement_step: int = 2,
     ) -> bool:
-        """ Not recommended as this function checks many positions if it "can place" on them until it found a valid
+        """Not recommended as this function checks many positions if it "can place" on them until it found a valid
         position. Also if the given position is not placeable, this function tries to find a nearby position to place
         the structure. Then uses 'self.do' to give the worker the order to start the construction.
 
@@ -1181,7 +1182,7 @@ class BotAI(DistanceCalculation):
         :param max_distance:
         :param build_worker:
         :param random_alternative:
-        :param placement_step: """
+        :param placement_step:"""
 
         assert isinstance(near, (Unit, Point2))
         if not self.can_afford(building):
@@ -1208,7 +1209,7 @@ class BotAI(DistanceCalculation):
     def train(
         self, unit_type: UnitTypeId, amount: int = 1, closest_to: Point2 = None, train_only_idle_buildings: bool = True
     ) -> int:
-        """ Trains a specified number of units. Trains only one if amount is not specified.
+        """Trains a specified number of units. Trains only one if amount is not specified.
         Warning: currently has issues with warp gate warp ins
 
         New function. Please report any bugs!
@@ -1233,7 +1234,7 @@ class BotAI(DistanceCalculation):
         :param unit_type:
         :param amount:
         :param closest_to:
-        :param train_only_idle_buildings: """
+        :param train_only_idle_buildings:"""
         # Tech requirement not met
         if self.tech_requirement_progress(unit_type) < 1:
             race_dict = {
@@ -1428,7 +1429,7 @@ class BotAI(DistanceCalculation):
         can_afford_check: bool = False,
         ignore_warning: bool = False,
     ) -> bool:
-        """ Adds a unit action to the 'self.actions' list which is then executed at the end of the frame.
+        """Adds a unit action to the 'self.actions' list which is then executed at the end of the frame.
 
         Training a unit::
 
@@ -1513,10 +1514,10 @@ class BotAI(DistanceCalculation):
         return r
 
     async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
-        """ Used internally by main.py automatically, use self.do() instead!
+        """Used internally by main.py automatically, use self.do() instead!
 
         :param actions:
-        :param prevent_double: """
+        :param prevent_double:"""
         if not actions:
             return None
         if prevent_double:
@@ -1550,20 +1551,20 @@ class BotAI(DistanceCalculation):
         return True
 
     async def chat_send(self, message: str, team_only: bool = False):
-        """ Send a chat message to the SC2 Client.
+        """Send a chat message to the SC2 Client.
 
         Example::
 
             await self.chat_send("Hello, this is a message from my bot!")
 
         :param message:
-        :param team_only: """
+        :param team_only:"""
         assert isinstance(message, str), f"{message} is not a string"
         await self._client.chat_send(message, team_only)
 
     def in_map_bounds(self, pos: Union[Point2, tuple, list]) -> bool:
-        """ Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
-        :param pos: """
+        """Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
+        :param pos:"""
         return (
             self._game_info.playable_area.x
             <= pos[0]
@@ -1575,53 +1576,53 @@ class BotAI(DistanceCalculation):
 
     # For the functions below, make sure you are inside the boundaries of the map size.
     def get_terrain_height(self, pos: Union[Point2, Unit]) -> int:
-        """ Returns terrain height at a position.
+        """Returns terrain height at a position.
         Caution: terrain height is different from a unit's z-coordinate.
 
-        :param pos: """
+        :param pos:"""
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self._game_info.terrain_height[pos]
 
     def get_terrain_z_height(self, pos: Union[Point2, Unit]) -> int:
-        """ Returns terrain z-height at a position.
+        """Returns terrain z-height at a position.
 
-        :param pos: """
+        :param pos:"""
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return -16 + 32 * self._game_info.terrain_height[pos] / 255
 
     def in_placement_grid(self, pos: Union[Point2, Unit]) -> bool:
-        """ Returns True if you can place something at a position.
+        """Returns True if you can place something at a position.
         Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
         Caution: some x and y offset might be required, see ramp code in game_info.py
 
-        :param pos: """
+        :param pos:"""
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self._game_info.placement_grid[pos] == 1
 
     def in_pathing_grid(self, pos: Union[Point2, Unit]) -> bool:
-        """ Returns True if a ground unit can pass through a grid point.
+        """Returns True if a ground unit can pass through a grid point.
 
-        :param pos: """
+        :param pos:"""
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self._game_info.pathing_grid[pos] == 1
 
     def is_visible(self, pos: Union[Point2, Unit]) -> bool:
-        """ Returns True if you have vision on a grid point.
+        """Returns True if you have vision on a grid point.
 
-        :param pos: """
+        :param pos:"""
         # more info: https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/spatial.proto#L19
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self.state.visibility[pos] == 2
 
     def has_creep(self, pos: Union[Point2, Unit]) -> bool:
-        """ Returns True if there is creep on the grid point.
+        """Returns True if there is creep on the grid point.
 
-        :param pos: """
+        :param pos:"""
         assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self.state.creep[pos] == 1
@@ -1825,8 +1826,8 @@ class BotAI(DistanceCalculation):
         return self.state.game_loop
 
     async def _advance_steps(self, steps: int):
-        """ Advances the game loop by amount of 'steps'. This function is meant to be used as a debugging and testing tool only.
-        If you are using this, please be aware of the consequences, e.g. 'self.units' will be filled with completely new data. """
+        """Advances the game loop by amount of 'steps'. This function is meant to be used as a debugging and testing tool only.
+        If you are using this, please be aware of the consequences, e.g. 'self.units' will be filled with completely new data."""
         await self._after_step()
         # Advance simulation by exactly "steps" frames
         await self.client.step(steps)
@@ -1838,7 +1839,7 @@ class BotAI(DistanceCalculation):
         # await self.on_step(-1)
 
     async def issue_events(self):
-        """ This function will be automatically run from main.py and triggers the following functions:
+        """This function will be automatically run from main.py and triggers the following functions:
         - on_unit_created
         - on_unit_destroyed
         - on_building_construction_started
@@ -1941,12 +1942,12 @@ class BotAI(DistanceCalculation):
         """
 
     async def on_unit_created(self, unit: Unit):
-        """ Override this in your bot class. This function is called when a unit is created.
+        """Override this in your bot class. This function is called when a unit is created.
 
-        :param unit: """
+        :param unit:"""
 
     async def on_unit_type_changed(self, unit: Unit, previous_type: UnitTypeId):
-        """ Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use 'unit.type_id'
+        """Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use 'unit.type_id'
 
         This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair,
         a corruptor morphed to broodlordcocoon, etc..
@@ -2044,7 +2045,7 @@ class BotAI(DistanceCalculation):
         raise NotImplementedError
 
     async def on_end(self, game_result: Result):
-        """ Override this in your bot class. This function is called at the end of a game.
+        """Override this in your bot class. This function is called at the end of a game.
         Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.
 
-        :param game_result: """
+        :param game_result:"""

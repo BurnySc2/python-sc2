@@ -48,9 +48,9 @@ class ExpandEverywhere(sc2.BotAI):
                 planned_hatch_locations: Set[Point2] = {placeholder.position for placeholder in self.placeholders}
                 my_structure_locations: Set[Point2] = {structure.position for structure in self.structures}
                 enemy_structure_locations: Set[Point2] = {structure.position for structure in self.enemy_structures}
-                blocked_locations: Set[
-                    Point2
-                ] = my_structure_locations | planned_hatch_locations | enemy_structure_locations
+                blocked_locations: Set[Point2] = (
+                    my_structure_locations | planned_hatch_locations | enemy_structure_locations
+                )
                 for exp_pos in self.expansion_locations_list:
                     if exp_pos in blocked_locations:
                         continue

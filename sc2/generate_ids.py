@@ -214,8 +214,8 @@ class IdGenerator:
         importlib.reload(sys.modules["sc2.constants"])
 
     def update_game_data(self):
-        """ Re-generate the dicts from self.game_data.
-        This should be done after the ids have been reimported. """
+        """Re-generate the dicts from self.game_data.
+        This should be done after the ids have been reimported."""
         from .ids.ability_id import AbilityId
 
         ids = set(a.value for a in AbilityId if a.value != 0)
