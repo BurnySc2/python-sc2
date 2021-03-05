@@ -191,6 +191,8 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         return Result.Defeat
 
     iteration = 0
+    # Only used in realtime=True
+    previous_state_observation = None
     while True:
         if iteration != 0:
             if realtime:
@@ -200,10 +202,9 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     state = await client.observation(requested_step)
                     # If the bot took too long in the previous observation, request another observation one frame after
                     if state.observation.observation.game_loop > requested_step:
-                        # TODO Remove these 2 comments
-                        # t = state.observation.observation.game_loop
+                        logger.debug(f"Skipped a step in realtime=True")
+                        previous_state_observation = state.observation
                         state = await client.observation(state.observation.observation.game_loop + 1)
-                        # print(f"Requested step: {requested_step}, received: {t}, new: {state.observation.observation.game_loop}")
                 except ProtocolError:
                     pass
             else:
@@ -217,7 +218,8 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     # print(f"return {client._game_result[player_id]}")
                     return client._game_result[player_id]
                 return client._game_result[player_id]
-            gs = GameState(state.observation)
+            gs = GameState(state.observation, previous_state_observation)
+            previous_state_observation = None
             logger.debug(f"Score: {gs.score.score}")
 
             if game_time_limit and (gs.game_loop * 0.725 * (1 / 16)) > game_time_limit:
