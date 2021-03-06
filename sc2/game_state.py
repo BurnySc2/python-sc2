@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 from itertools import chain
+from loguru import logger
 
 from .cache import property_cache_forever
 from .constants import FakeEffectID, FakeEffectRadii, IS_MINE, IS_ENEMY
@@ -14,10 +15,12 @@ from .pixel_map import PixelMap
 from .position import Point2, Point3
 from .power_source import PsionicMatrix
 from .score import ScoreDetails
-from .dicts.generic_redirect_abilities import GENERIC_REDIRECT_ABILITIES
 
-if TYPE_CHECKING:
-    from .game_data import GameData
+try:
+    from .dicts.generic_redirect_abilities import GENERIC_REDIRECT_ABILITIES
+except ImportError:
+    logger.info(f'Unable to import "GENERIC_REDIRECT_ABILITIES"')
+    GENERIC_REDIRECT_ABILITIES = {}
 
 
 class Blip:
@@ -148,15 +151,15 @@ class ChatMessage:
 @dataclass
 class AbilityLookupTemplateClass:
     @property
-    def real_ability(self) -> AbilityId:
+    def exact_id(self) -> AbilityId:
         return AbilityId(self.ability_id)
 
     @property
-    def generic_ability(self) -> AbilityId:
+    def generic_id(self) -> AbilityId:
         """
         See https://github.com/BurnySc2/python-sc2/blob/511c34f6b7ae51bd11e06ba91b6a9624dc04a0c0/sc2/dicts/generic_redirect_abilities.py#L13
         """
-        return GENERIC_REDIRECT_ABILITIES.get(self.real_ability, self.real_ability)
+        return GENERIC_REDIRECT_ABILITIES.get(self.exact_id, self.exact_id)
 
 
 @dataclass
