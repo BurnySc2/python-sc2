@@ -164,6 +164,7 @@ class AbilityLookupTemplateClass:
 
 @dataclass
 class ActionRawUnitCommand(AbilityLookupTemplateClass):
+    game_loop: int
     ability_id: int
     unit_tags: List[int]
     queue_command: bool
@@ -173,8 +174,14 @@ class ActionRawUnitCommand(AbilityLookupTemplateClass):
 
 @dataclass
 class ActionRawToggleAutocast(AbilityLookupTemplateClass):
+    game_loop: int
     ability_id: int
     unit_tags: List[int]
+
+
+@dataclass
+class ActionRawCameraMove:
+    center_world_space: Point2
 
 
 @dataclass
@@ -249,72 +256,85 @@ class GameState:
         Game alerts, see https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L683-L706
         """
         if self.previous_observation:
-            return [alert for alert in chain(self.previous_observation.observation.alerts, self.observation.alerts)]
+            return list(chain(self.previous_observation.observation.alerts, self.observation.alerts))
         return self.observation.alerts
 
     @property_cache_forever
-    def actions(self) -> List[Any]:
+    def actions(self) -> List[Union[ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove]]:
         """
         List of successful actions since last frame.
         See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L630-L637
 
-        Each action in the list has the following attributes:
-            action_raw:
-                One of these: https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L202
-            game_loop: int
+        Each action is converted into Python dataclasses: ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove
         """
-        if self.previous_observation:
-            return [action for action in chain(self.previous_observation.actions, self.response_observation.actions)]
-        return self.response_observation.actions
-
-    @property_cache_forever
-    def actions_unit_commands(self) -> List[ActionRawUnitCommand]:
-        """ List of successful unit actions since last frame. """
+        previous_frame_actions = self.previous_observation and self.previous_observation.actions or []
         actions = []
-        for raw_action in self.actions:
-            if not raw_action.action_raw.HasField("unit_command"):
-                continue
-            raw_unit_command = raw_action.action_raw.unit_command
-            if raw_unit_command.HasField("target_world_space_pos"):
+        for action in chain(previous_frame_actions, self.response_observation.actions):
+            action_raw = action.action_raw
+            game_loop = action.game_loop
+            if action_raw.HasField("unit_command"):
+                # Unit commands
+                raw_unit_command = action_raw.unit_command
+                if raw_unit_command.HasField("target_world_space_pos"):
+                    # Actions that have a point as target
+                    actions.append(
+                        ActionRawUnitCommand(
+                            game_loop,
+                            raw_unit_command.ability_id,
+                            raw_unit_command.unit_tags,
+                            raw_unit_command.queue_command,
+                            Point2.from_proto(raw_unit_command.target_world_space_pos),
+                        )
+                    )
+                else:
+                    # Actions that have a unit as target
+                    actions.append(
+                        ActionRawUnitCommand(
+                            game_loop,
+                            raw_unit_command.ability_id,
+                            raw_unit_command.unit_tags,
+                            raw_unit_command.queue_command,
+                            None,
+                            raw_unit_command.target_unit_tag,
+                        )
+                    )
+            elif action_raw.HasField("toggle_autocast"):
+                # Toggle autocast actions
+                raw_toggle_autocast_action = action_raw.toggle_autocast
                 actions.append(
-                    ActionRawUnitCommand(
-                        raw_unit_command.ability_id,
-                        raw_unit_command.unit_tags,
-                        raw_unit_command.queue_command,
-                        Point2.from_proto(raw_unit_command.target_world_space_pos),
+                    ActionRawToggleAutocast(
+                        game_loop,
+                        raw_toggle_autocast_action.ability_id,
+                        raw_toggle_autocast_action.unit_tags,
                     )
                 )
             else:
-                actions.append(
-                    ActionRawUnitCommand(
-                        raw_unit_command.ability_id,
-                        raw_unit_command.unit_tags,
-                        raw_unit_command.queue_command,
-                        None,
-                        raw_unit_command.target_unit_tag,
-                    )
-                )
+                # Camera move actions
+                actions.append(ActionRawCameraMove(Point2.from_proto(action.action_raw.camera_move.center_world_space)))
         return actions
+
+    @property_cache_forever
+    def actions_unit_commands(self) -> List[ActionRawUnitCommand]:
+        """
+        List of successful unit actions since last frame.
+        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L193
+        """
+        return list(filter(lambda action: isinstance(action, ActionRawUnitCommand), self.actions))
 
     @property_cache_forever
     def actions_toggle_autocast(self) -> List[ActionRawToggleAutocast]:
-        """ List of successful autocast toggle actions since last frame. """
-        actions = []
-        for raw_action in self.actions:
-            if not raw_action.action_raw.HasField("toggle_autocast"):
-                continue
-            raw_toggle_autocast_action = raw_action.action_raw.toggle_autocast
-            actions.append(
-                ActionRawToggleAutocast(
-                    raw_toggle_autocast_action.ability_id,
-                    raw_toggle_autocast_action.unit_tags,
-                )
-            )
-        return actions
+        """
+        List of successful autocast toggle actions since last frame.
+        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L199-L202
+        """
+        return list(filter(lambda action: isinstance(action, ActionRawToggleAutocast), self.actions))
 
     @property_cache_forever
     def action_errors(self) -> List[ActionError]:
-        """ List of errorneous actions since last frame. """
+        """
+        List of erroneous actions since last frame.
+        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L648-L652
+        """
         previous_frame_errors = self.previous_observation and self.previous_observation.action_errors or []
         return [
             ActionError(error.ability_id, error.unit_tag, error.result)
