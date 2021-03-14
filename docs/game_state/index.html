@@ -48,8 +48,90 @@
 <p>TODO: Replace this with info about this file</p>
 <dl class="py class">
 <dt id="sc2.game_state.GameState">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></code><code class="sig-name descname"><span class="pre">GameState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.GameState" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></code><code class="sig-name descname"><span class="pre">GameState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_observation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_observation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.GameState" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="sc2.game_state.GameState.action_errors">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">action_errors</span></code><a class="headerlink" href="#sc2.game_state.GameState.action_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of erroneous actions since last frame.
+See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L648-L652">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L648-L652</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionError</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sc2.game_state.GameState.actions">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">actions</span></code><a class="headerlink" href="#sc2.game_state.GameState.actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of successful actions since last frame.
+See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L630-L637">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L630-L637</a></p>
+<p>Each action is converted into Python dataclasses: ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionRawUnitCommand</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ActionRawToggleAutocast</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ActionRawCameraMove</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sc2.game_state.GameState.actions_toggle_autocast">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">actions_toggle_autocast</span></code><a class="headerlink" href="#sc2.game_state.GameState.actions_toggle_autocast" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of successful autocast toggle actions since last frame.
+See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L199-L202">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L199-L202</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionRawToggleAutocast</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sc2.game_state.GameState.actions_unit_commands">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">actions_unit_commands</span></code><a class="headerlink" href="#sc2.game_state.GameState.actions_unit_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of successful unit actions since last frame.
+See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L193">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L193</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionRawUnitCommand</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sc2.game_state.GameState.alerts">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">alerts</span></code><a class="headerlink" href="#sc2.game_state.GameState.alerts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Game alerts, see <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L683-L706">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L683-L706</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sc2.game_state.GameState.chat">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">chat</span></code><a class="headerlink" href="#sc2.game_state.GameState.chat" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of chat messages sent this frame (by either player).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ChatMessage</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sc2.game_state.GameState.dead_units">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">dead_units</span></code><a class="headerlink" href="#sc2.game_state.GameState.dead_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of unit tags that died this frame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="sc2.game_state.GameState.effects">
 <code class="sig-name descname"><span class="pre">effects</span></code><em class="property"><span class="pre">:</span> <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sc2.game_state.EffectData" title="sc2.game_state.EffectData"><span class="pre">sc2.game_state.EffectData</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.effects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Usage:

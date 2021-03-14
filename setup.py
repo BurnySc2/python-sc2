@@ -10,7 +10,7 @@ test_requirements = convert_deps_to_pip(pfile["dev-packages"], r=False)
 setup(
     name="burnysc2",
     packages=find_packages(exclude=["examples*", "examples"]),
-    version="5.0.9",
+    version="5.0.10",
     description="A StarCraft II API Client for Python 3",
     license="MIT",
     author="BurnySc2",
@@ -35,5 +35,6 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
 )
