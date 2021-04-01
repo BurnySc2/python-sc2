@@ -205,7 +205,7 @@ class ObserverAI(DistanceCalculation):
 
         return abilities_amount
 
-    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False):
+    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False, base_build: int = -1):
         """
         Ran until game start to set game and player data.
 
@@ -220,6 +220,7 @@ class ObserverAI(DistanceCalculation):
         self._game_info: GameInfo = game_info
         self._game_data: GameData = game_data
         self.realtime: bool = realtime
+        self.base_build: int = base_build
 
     def _prepare_first_step(self):
         """First step extra preparations. Must not be called before _prepare_step."""
