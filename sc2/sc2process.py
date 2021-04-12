@@ -198,6 +198,8 @@ class SC2Process:
         return subprocess.Popen(
             args,
             cwd=sc2_cwd,
+            # Suppress Wine error messages
+            stderr=subprocess.DEVNULL
             # , env=run_config.env
         )
 
