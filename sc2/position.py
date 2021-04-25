@@ -152,11 +152,16 @@ class Pointlike(tuple):
 
 class Point2(Pointlike):
     @classmethod
-    def from_proto(cls, data) -> Point2:
+    def from_proto(cls, *data) -> Point2:
         """
         :param data:
+
+        Accepts a single tuple as input, or two arguments representing x and y
         """
-        return cls((data.x, data.y))
+        if len(data) == 1:
+            return cls((data[0].x, data[0].y))
+        else:
+            return cls((data[0], data[1]))
 
     @property
     def as_Point2D(self) -> common_pb.Point2D:
@@ -329,11 +334,16 @@ class Point2(Pointlike):
 
 class Point3(Point2):
     @classmethod
-    def from_proto(cls, data):
+    def from_proto(cls, *data):
         """
         :param data:
+
+        Accepts a single tuple as input, or three arguments representing x, y, and z
         """
-        return cls((data.x, data.y, data.z))
+        if len(data) == 1:
+            return cls((data[0].x, data[0].y, data[0].z))
+        else:
+            return cls((data[0], data[1], data[2]))
 
     @property
     def as_Point(self) -> common_pb.Point:

@@ -7,6 +7,9 @@ import random
 from sc2.position import Point2, EPSILON
 
 P0 = Point2((0, 0))
+P0_individual = Point2.from_proto(0, 0)
+coordinates = [0, 0]
+P0_starred = Point2.from_proto(*coordinates)
 P1 = Point2((1, 1))
 P2 = Point2((3, 1))
 P3 = Point2((3, 3))
@@ -33,12 +36,18 @@ def test_test_rad_diff():
 
 def test_distance():
     assert P0.distance_to(P1) == sqrt(2)
+    assert P0_individual.distance_to(P1) == sqrt(2)
+    assert P0_starred.distance_to(P1) == sqrt(2)
     assert P1.distance_to(P2) == 2
     assert P0.distance_to(P2) == sqrt(10)
+    assert P0_individual.distance_to(P2) == sqrt(10)
+    assert P0_starred.distance_to(P2) == sqrt(10)
 
 
 def test_towards():
     assert P0.towards(P1, 1) == Point2((sqrt(2) / 2, sqrt(2) / 2))
+    assert P0_individual.towards(P1, 1) == Point2((sqrt(2) / 2, sqrt(2) / 2))
+    assert P0_starred.towards(P1, 1) == Point2((sqrt(2) / 2, sqrt(2) / 2))
 
 
 def test_random_on_distance():
@@ -58,10 +67,14 @@ def test_random_on_distance():
         assert len(quadrants) == 4
 
     verify_distances(P0, 1e2)
+    verify_distances(P0_individual, 1e2)
+    verify_distances(P0_starred, 1e2)
     verify_distances(P1, 1e3)
     verify_distances(P2, 1e4)
 
     verify_angles(P0, 1e2)
+    verify_angles(P0_individual, 1e2)
+    verify_angles(P0_starred, 1e2)
     verify_angles(P1, 1e3)
     verify_angles(P2, 1e4)
 
@@ -86,12 +99,20 @@ def test_towards_random_angle():
 
             assert abs(source.distance_to(p) - d) <= EPSILON
 
+    verify(P0, P0_individual)
+    verify(P0, P0_starred)
+    verify(P0_individual, P0_starred)
+
     verify(P0, P1)
+    verify(P0_individual, P1)
+    verify(P0_starred, P1)
     verify(P1, P2)
     verify(P1, P3)
     verify(P2, P3)
 
     verify(P1, P0)
+    verify(P1, P0_individual)
+    verify(P1, P0_starred)
     verify(P2, P1)
     verify(P3, P1)
     verify(P3, P2)
