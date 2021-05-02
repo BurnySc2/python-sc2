@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from .constants import ZERGLING
 from .data import Attribute, Race
+from .dicts.unit_trained_from import UNIT_TRAINED_FROM
 from .ids.ability_id import AbilityId
 from .ids.unit_typeid import UnitTypeId
 from .unit_command import UnitCommand
@@ -238,6 +239,21 @@ class UnitTypeData:
     @property
     def morph_cost(self) -> Optional[Cost]:
         """ This returns 150 minerals for OrbitalCommand instead of 550 """
+        # Morphing units
+        supply_cost = self._proto.food_required
+        if supply_cost > 0 and self.id in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[self.id]) == 1:
+            for producer in UNIT_TRAINED_FROM[self.id]:  # type: UnitTypeId
+                producer_unit_data = self._game_data.units[producer.value]
+                if 0 < producer_unit_data._proto.food_required <= supply_cost:
+                    if producer == UnitTypeId.ZERGLING:
+                        producer_cost = Cost(25, 0)
+                    else:
+                        producer_cost = self._game_data.calculate_ability_cost(producer_unit_data.creation_ability)
+                    return Cost(
+                        self._proto.mineral_cost - producer_cost.minerals,
+                        self._proto.vespene_cost - producer_cost.vespene,
+                        self._proto.build_time,
+                    )
         # Fix for BARRACKSREACTOR which has tech alias [REACTOR] which has (0, 0) cost
         if self.tech_alias is None or self.tech_alias[0] in {UnitTypeId.TECHLAB, UnitTypeId.REACTOR}:
             return None
