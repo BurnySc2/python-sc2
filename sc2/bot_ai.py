@@ -1904,16 +1904,14 @@ class BotAI(DistanceCalculation):
                 await self.on_enemy_unit_entered_vision(enemy_structure)
 
         # Call events for enemy unit left vision
-        if self.enemy_units:
-            visible_enemy_units = self.enemy_units.tags
-            for enemy_unit_tag in self._enemy_units_previous_map.keys():
-                if enemy_unit_tag not in visible_enemy_units:
-                    await self.on_enemy_unit_left_vision(enemy_unit_tag)
-        if self.enemy_structures:
-            visible_enemy_structures = self.enemy_structures.tags
-            for enemy_structure_tag in self._enemy_structures_previous_map.keys():
-                if enemy_structure_tag not in visible_enemy_structures:
-                    await self.on_enemy_unit_left_vision(enemy_structure_tag)
+        enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map.keys()) - self.enemy_units.tags
+        for enemy_unit_tag in enemy_units_left_vision:
+            await self.on_enemy_unit_left_vision(enemy_unit_tag)
+        enemy_structures_left_vision: Set[int] = (
+            set(self._enemy_structures_previous_map.keys()) - self.enemy_structures.tags
+        )
+        for enemy_structure_tag in enemy_structures_left_vision:
+            await self.on_enemy_unit_left_vision(enemy_structure_tag)
 
     async def _issue_unit_dead_events(self):
         for unit_tag in self.state.dead_units:
