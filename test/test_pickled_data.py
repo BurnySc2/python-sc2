@@ -377,12 +377,10 @@ def test_bot_ai():
     assert bot.calculate_cost(UnitTypeId.SPIRE) == Cost(200, 200)
     assert bot.calculate_cost(UnitTypeId.ARCHON) == bot.calculate_unit_value(UnitTypeId.ARCHON)
 
-    # The following are morph abilities that may need a fix
-    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
-    assert_cost(UnitTypeId.BROODLORD, Cost(300, 250))
-    assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(100, 100))
-    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
-    assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(50, 25))
+    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(150, 150))
+    assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(25, 75))
+    assert_cost(AbilityId.MORPH_LURKER, Cost(50, 100))
+    assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(25, 25))
 
     assert Cost(100, 50) == 2 * Cost(50, 25)
     assert Cost(100, 50) == Cost(50, 25) * 2
