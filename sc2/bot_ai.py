@@ -695,19 +695,8 @@ class BotAI(DistanceCalculation):
                 elif item_id == UnitTypeId.ARCHON:
                     return self.calculate_unit_value(UnitTypeId.ARCHON)
             unit_data = self._game_data.units[item_id.value]
-            # Cost of structure morphs is automatically correctly calculated by 'calculate_ability_cost'
-            cost = self._game_data.calculate_ability_cost(unit_data.creation_ability)
-            # Fix non-structure morph cost: check if is morph, then subtract the original cost
-            unit_supply_cost = unit_data._proto.food_required
-            if unit_supply_cost > 0 and item_id in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[item_id]) == 1:
-                for producer in UNIT_TRAINED_FROM[item_id]:  # type: UnitTypeId
-                    producer_unit_data = self.game_data.units[producer.value]
-                    if 0 < producer_unit_data._proto.food_required <= unit_supply_cost:
-                        if producer == UnitTypeId.ZERGLING:
-                            producer_cost = Cost(25, 0)
-                        else:
-                            producer_cost = self.game_data.calculate_ability_cost(producer_unit_data.creation_ability)
-                        cost = cost - producer_cost
+            # Cost of morphs is automatically correctly calculated by 'calculate_ability_cost'
+            return self._game_data.calculate_ability_cost(unit_data.creation_ability)
 
         elif isinstance(item_id, UpgradeId):
             cost = self._game_data.upgrades[item_id.value].cost
