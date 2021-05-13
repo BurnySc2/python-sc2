@@ -85,10 +85,18 @@ class ObserverAI(DistanceCalculation):
         self.larva_count: int = None
         self.actions: List[UnitCommand] = []
         self.blips: Set[Blip] = set()
+        self.race: Race = None
+        self.enemy_race: Race = None
+        self._units_created: Counter = Counter()
         self._unit_tags_seen_this_game: Set[int] = set()
         self._units_previous_map: Dict[int, Unit] = dict()
         self._structures_previous_map: Dict[int, Unit] = dict()
+        self._enemy_units_previous_map: Dict[int, Unit] = dict()
+        self._enemy_structures_previous_map: Dict[int, Unit] = dict()
+        self._all_units_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
+        self._expansion_positions_list: List[Point2] = []
+        self._resource_location_to_expansion_position_dict: Dict[Point2, Point2] = {}
         # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
         self.unit_tags_received_action: Set[int] = set()
 
@@ -236,8 +244,13 @@ class ObserverAI(DistanceCalculation):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # Required for events, needs to be before self.units are initialized so the old units are stored
-        self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
-        self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
+        self._units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.units}
+        self._structures_previous_map: Dict[int, Unit] = {structure.tag: structure for structure in self.structures}
+        self._enemy_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.enemy_units}
+        self._enemy_structures_previous_map: Dict[int, Unit] = {
+            structure.tag: structure for structure in self.enemy_structures
+        }
+        self._all_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.all_units}
 
         self._prepare_units()
 
@@ -318,15 +331,17 @@ class ObserverAI(DistanceCalculation):
 
     async def _issue_unit_dead_events(self):
         for unit_tag in self.state.dead_units:
-            await self.on_unit_destroyed(unit_tag)
+            dead_unit: Optional[Unit] = self._all_units_previous_map.get(unit_tag, None)
+            if dead_unit:
+                await self.on_unit_destroyed(dead_unit)
 
-    async def on_unit_destroyed(self, unit_tag):
+    async def on_unit_destroyed(self, unit: Unit):
         """
         Override this in your bot class.
-        Note that this function uses unit tags and not the unit objects
-        because the unit does not exist any more.
+        This will event will be called when a unit (or structure, friendly or enemy) dies.
+        For enemy units, this only works if the enemy unit was in vision on death.
 
-        :param unit_tag:
+        :param unit:
         """
 
     async def on_unit_created(self, unit: Unit):
