@@ -1918,18 +1918,18 @@ class BotAI(DistanceCalculation):
                     await self.on_enemy_unit_left_vision(enemy_structure_tag)
 
     async def _issue_unit_dead_events(self):
-        for unit_tag in self.state.dead_units:
-            dead_unit: Optional[Unit] = self._all_units_previous_map.get(unit_tag, None)
-            if dead_unit:
-                await self.on_unit_destroyed(dead_unit)
+        for unit_tag in self.state.dead_units & set(self._all_units_previous_map.keys()):
+            await self.on_unit_destroyed(unit_tag)
 
-    async def on_unit_destroyed(self, unit: Unit):
+    async def on_unit_destroyed(self, unit_tag: int):
         """
         Override this in your bot class.
+        Note that this function uses unit tags and not the unit objects
+        because the unit does not exist any more.
         This will event will be called when a unit (or structure, friendly or enemy) dies.
         For enemy units, this only works if the enemy unit was in vision on death.
 
-        :param unit:
+        :param unit_tag:
         """
 
     async def on_unit_created(self, unit: Unit):
