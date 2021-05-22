@@ -113,6 +113,7 @@ class BotAI(DistanceCalculation):
         self._structures_previous_map: Dict[int, Unit] = dict()
         self._enemy_units_previous_map: Dict[int, Unit] = dict()
         self._enemy_structures_previous_map: Dict[int, Unit] = dict()
+        self._all_units_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
         self._expansion_positions_list: List[Point2] = []
         self._resource_location_to_expansion_position_dict: Dict[Point2, Point2] = {}
@@ -1667,6 +1668,7 @@ class BotAI(DistanceCalculation):
         self._enemy_structures_previous_map: Dict[int, Unit] = {
             structure.tag: structure for structure in self.enemy_structures
         }
+        self._all_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.all_units}
 
         self._prepare_units()
         self.minerals: int = state.common.minerals
@@ -1914,7 +1916,7 @@ class BotAI(DistanceCalculation):
             await self.on_enemy_unit_left_vision(enemy_structure_tag)
 
     async def _issue_unit_dead_events(self):
-        for unit_tag in self.state.dead_units:
+        for unit_tag in self.state.dead_units & set(self._all_units_previous_map.keys()):
             await self.on_unit_destroyed(unit_tag)
 
     async def on_unit_destroyed(self, unit_tag: int):
@@ -1922,7 +1924,7 @@ class BotAI(DistanceCalculation):
         Override this in your bot class.
         Note that this function uses unit tags and not the unit objects
         because the unit does not exist any more.
-        This will event will be called when a unit (or structure) dies.
+        This will event will be called when a unit (or structure, friendly or enemy) dies.
         For enemy units, this only works if the enemy unit was in vision on death.
 
         :param unit_tag:
