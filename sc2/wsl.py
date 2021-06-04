@@ -69,6 +69,10 @@ def kill(wsl_process):
 
 def detect():
     """Detect the current running version of WSL, and bail out if it doesn't exist"""
+    # Allow disabling WSL detection with an environment variable
+    if os.getenv("SC2_WSL_DETECT", "1") == "0":
+        return None
+
     wsl_name = os.environ.get("WSL_DISTRO_NAME")
     if not wsl_name:
         return None

@@ -69,6 +69,14 @@ SC2PATH=/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
 
 #### WSL
 
+When running WSL in Windows, python-sc2 detects WSL by default and starts Windows Starcraft 2 instead of Linux Starcraft 2.
+If you wish to instead have the game played in Linux, you can disable this behavior by setting `SC2_WSL_DETECT`
+environment variable to "0". You can do this inside python with the following code:
+```py
+import os
+os.environ["SC2_WSL_DETECT"] = "0"
+```  
+
 WSL version 1 should not require any configuration. You may be asked to allow Python through your firewall.
 
 When running WSL version 2 you need to supply the following environment variables so that your bot can connect:
