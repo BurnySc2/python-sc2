@@ -363,6 +363,10 @@ class BotAI(DistanceCalculation):
                     for resource in resources
                 )
             )
+            #Recast generator object 'possible_points' to list as no further changes are done. Skip processing of this loop if no 'possible_points' left.
+            possible_points = list(possible_points)
+            if len(possible_points) == 0:
+                continue
             # Choose best fitting point
             result: Point2 = min(
                 possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources)
