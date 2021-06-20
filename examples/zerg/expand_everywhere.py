@@ -13,6 +13,8 @@ from sc2.player import Bot, Computer
 from sc2.unit import Unit
 from sc2.units import Units
 
+import random
+
 from typing import Set
 
 
@@ -51,7 +53,9 @@ class ExpandEverywhere(sc2.BotAI):
                 blocked_locations: Set[Point2] = (
                     my_structure_locations | planned_hatch_locations | enemy_structure_locations
                 )
-                for exp_pos in self.expansion_locations_list:
+                shuffled_expansions = self.expansion_locations_list.copy()
+                random.shuffle(shuffled_expansions)
+                for exp_pos in shuffled_expansions:
                     if exp_pos in blocked_locations:
                         continue
                     for drone in self.workers.collecting:
