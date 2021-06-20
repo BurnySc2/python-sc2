@@ -1,12 +1,11 @@
 import os
-import logging
 import platform
 from pathlib import Path
 
 from sc2.observer_ai import ObserverAI
 from sc2 import run_replay
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class ObserverBot(ObserverAI):

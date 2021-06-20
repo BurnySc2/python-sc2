@@ -1,5 +1,5 @@
 import asyncio
-import logging
+import os
 import os.path
 import shutil
 import signal
@@ -9,7 +9,7 @@ import tempfile
 import time
 import json
 import re
-from typing import Any, List, Optional
+from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
 
 import aiohttp
 import portpicker
@@ -17,10 +17,11 @@ import portpicker
 from .controller import Controller
 from .paths import Paths
 from sc2 import paths
+from sc2 import wsl
 
 from sc2.versions import VERSIONS
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class kill_switch:
@@ -33,41 +34,69 @@ class kill_switch:
 
     @classmethod
     def kill_all(cls):
-        logger.info("kill_switch: Process cleanup")
+        logger.info(f"kill_switch: Process cleanup for {len(cls._to_kill)} processes")
         for p in cls._to_kill:
             p._clean()
 
 
 class SC2Process:
+    """
+    A class for handling SCII applications.
+
+    :param host: hostname for the url the SCII application will listen to
+    :param port: the websocket port the SCII application will listen to
+    :param fullscreen: whether to launch the SCII application in fullscreen or not, defaults to False
+    :param resolution: (window width, window height) in pixels, defaults to (1024, 768)
+    :param placement: (x, y) the distances of the SCII app's top left corner from the top left corner of the screen
+                       e.g. (20, 30) is 20 to the right of the screen's left border, and 30 below the top border
+    :param render:
+    :param sc2_version:
+    :param base_build:
+    :param data_hash:
+    """
+
     def __init__(
         self,
-        host: str = "127.0.0.1",
+        host: Optional[str] = None,
         port: Optional[int] = None,
         fullscreen: bool = False,
+        resolution: Optional[Union[List[int], Tuple[int, int]]] = None,
+        placement: Optional[Union[List[int], Tuple[int, int]]] = None,
         render: bool = False,
         sc2_version: str = None,
         base_build: str = None,
         data_hash: str = None,
     ) -> None:
-        assert isinstance(host, str)
+        assert isinstance(host, str) or host is None
         assert isinstance(port, int) or port is None
 
         self._render = render
-        self._fullscreen = fullscreen
-        self._host = host
+        self._arguments: Dict[str, str] = {"-displayMode": str(int(fullscreen))}
+        if not fullscreen:
+            if resolution and len(resolution) == 2:
+                self._arguments["-windowwidth"] = str(resolution[0])
+                self._arguments["-windowheight"] = str(resolution[1])
+            if placement and len(placement) == 2:
+                self._arguments["-windowx"] = str(placement[0])
+                self._arguments["-windowy"] = str(placement[1])
+
+        self._host = host or os.environ.get("SC2CLIENTHOST", "127.0.0.1")
+        self._serverhost = os.environ.get("SC2SERVERHOST", self._host)
+
         if port is None:
             self._port = portpicker.pick_unused_port()
         else:
             self._port = port
+        self._used_portpicker = bool(port is None)
         self._tmp_dir = tempfile.mkdtemp(prefix="SC2_")
-        self._process = None
+        self._process: subprocess = None
         self._session = None
         self._ws = None
         self._sc2_version = sc2_version
         self._base_build = base_build
         self._data_hash = data_hash
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Controller:
         kill_switch.add(self)
 
         def signal_handler(*args):
@@ -88,6 +117,7 @@ class SC2Process:
         return Controller(self._ws, self)
 
     async def __aexit__(self, *args):
+        await self._close_connection()
         kill_switch.kill_all()
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -97,11 +127,11 @@ class SC2Process:
 
     @property
     def versions(self):
-        """ Opens the versions.json file which origins from
-        https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json """
+        """Opens the versions.json file which origins from
+        https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json"""
         return VERSIONS
 
-    def find_data_hash(self, target_sc2_version: str):
+    def find_data_hash(self, target_sc2_version: str) -> Optional[str]:
         """ Returns the data hash from the matching version string. """
         version: dict
         for version in self.versions:
@@ -113,19 +143,23 @@ class SC2Process:
             executable = str(paths.latest_executeble(Paths.BASE / "Versions", self._base_build))
         else:
             executable = str(Paths.EXECUTABLE)
+        if self._port is None:
+            self._port = portpicker.pick_unused_port()
+            self._used_portpicker = True
         args = paths.get_runner_args(Paths.CWD) + [
             executable,
             "-listen",
-            self._host,
+            self._serverhost,
             "-port",
             str(self._port),
-            "-displayMode",
-            "1" if self._fullscreen else "0",
             "-dataDir",
             str(Paths.BASE),
             "-tempDir",
             self._tmp_dir,
         ]
+        for arg, value in self._arguments.items():
+            args.append(arg)
+            args.append(value)
         if self._sc2_version:
 
             def special_match(strg: str):
@@ -153,17 +187,25 @@ class SC2Process:
         if self._render:
             args.extend(["-eglpath", "libEGL.so"])
 
-        if logger.getEffectiveLevel() <= logging.DEBUG:
-            args.append("-verbose")
+        # if logger.getEffectiveLevel() <= logging.DEBUG:
+        args.append("-verbose")
+
+        sc2_cwd = str(Paths.CWD) if Paths.CWD else None
+
+        if paths.PF == "WSL1" or paths.PF == "WSL2":
+            return wsl.run(args, sc2_cwd)
 
         return subprocess.Popen(
             args,
-            cwd=(str(Paths.CWD) if Paths.CWD else None),
+            cwd=sc2_cwd,
+            # Suppress Wine error messages
+            stderr=subprocess.DEVNULL
             # , env=run_config.env
         )
 
     async def _connect(self):
-        for i in range(60):
+        # How long it waits for SC2 to start (in seconds)
+        for i in range(180):
             if self._process is None:
                 # The ._clean() was called, clearing the process
                 logger.debug("Process cleanup complete, exit")
@@ -188,7 +230,7 @@ class SC2Process:
         raise TimeoutError("Websocket")
 
     async def _close_connection(self):
-        logger.info("Closing connection...")
+        logger.info(f"Closing connection at {self._port}...")
 
         if self._ws is not None:
             await self._ws.close()
@@ -200,20 +242,34 @@ class SC2Process:
         logger.info("Cleaning up...")
 
         if self._process is not None:
-            if self._process.poll() is None:
+            if paths.PF == "WSL1" or paths.PF == "WSL2":
+                if wsl.kill(self._process):
+                    logger.error("KILLED")
+            elif self._process.poll() is None:
                 for _ in range(3):
                     self._process.terminate()
                     time.sleep(0.5)
                     if not self._process or self._process.poll() is not None:
                         break
-                else:
-                    self._process.kill()
-                    self._process.wait()
-                    logger.error("KILLED")
+            else:
+                self._process.kill()
+                self._process.wait()
+                logger.error("KILLED")
+            # Try to kill wineserver on linux
+            if paths.PF == "Linux" or paths.PF == "WineLinux":
+                try:
+                    p = subprocess.Popen(["wineserver", "-k"])
+                    p.wait()
+                # Command wineserver not detected
+                except FileNotFoundError:
+                    pass
 
         if os.path.exists(self._tmp_dir):
             shutil.rmtree(self._tmp_dir)
 
         self._process = None
         self._ws = None
+        if self._used_portpicker and self._port is not None:
+            portpicker.return_port(self._port)
+            self._port = None
         logger.info("Cleanup complete")

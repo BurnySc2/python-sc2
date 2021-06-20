@@ -1,113 +1,131 @@
-from functools import reduce
-from operator import or_
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
+
 import random
 
 import sc2
 from sc2 import Race, Difficulty
-from sc2.constants import *
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.ability_id import AbilityId
+from sc2.unit import Unit
+from sc2.units import Units
+from sc2.position import Point2
 from sc2.player import Bot, Computer
 from sc2.data import race_townhalls
 
-import enum
-
 
 class BroodlordBot(sc2.BotAI):
-    def select_target(self):
+    def select_target(self) -> Point2:
         if self.enemy_structures:
             return random.choice(self.enemy_structures).position
-
         return self.enemy_start_locations[0]
 
     async def on_step(self, iteration):
-        larvae = self.larva
-        forces = self.units(ZERGLING) | self.units(CORRUPTOR) | self.units(BROODLORD)
+        larvae: Units = self.larva
+        forces: Units = self.units.of_type({UnitTypeId.ZERGLING, UnitTypeId.CORRUPTOR, UnitTypeId.BROODLORD})
 
-        if self.units(BROODLORD).amount > 2 and iteration % 50 == 0:
+        if self.units(UnitTypeId.BROODLORD).amount > 2 and iteration % 50 == 0:
             for unit in forces:
-                self.do(unit.attack(self.select_target()))
+                unit.attack(self.select_target())
 
         if self.supply_left < 2:
-            if self.can_afford(OVERLORD) and larvae.exists:
-                self.do(larvae.random.train(OVERLORD))
+            if larvae and self.can_afford(UnitTypeId.OVERLORD):
+                larvae.random.train(UnitTypeId.OVERLORD)
                 return
 
-        if self.structures(GREATERSPIRE).ready.exists:
-            corruptors = self.units(CORRUPTOR)
+        if self.structures(UnitTypeId.GREATERSPIRE).ready:
+            corruptors: Units = self.units(UnitTypeId.CORRUPTOR)
             # build half-and-half corruptors and broodlords
-            if corruptors.exists and corruptors.amount > self.units(BROODLORD).amount:
-                if self.can_afford(BROODLORD):
-                    self.do(corruptors.random.train(BROODLORD))
-            elif self.can_afford(CORRUPTOR) and larvae.exists:
-                self.do(larvae.random.train(CORRUPTOR))
+            if corruptors and corruptors.amount > self.units(UnitTypeId.BROODLORD).amount:
+                if self.can_afford(UnitTypeId.BROODLORD):
+                    corruptors.random.train(UnitTypeId.BROODLORD)
+            elif larvae and self.can_afford(UnitTypeId.CORRUPTOR):
+                larvae.random.train(UnitTypeId.CORRUPTOR)
                 return
 
-        if not self.townhalls.exists:
-            for unit in self.units(DRONE) | self.units(QUEEN) | forces:
-                self.do(unit.attack(self.enemy_start_locations[0]))
+        # Send all units to attack if we dont have any more townhalls
+        if not self.townhalls:
+            all_attack_units: Units = self.units.of_type(
+                {UnitTypeId.DRONE, UnitTypeId.QUEEN, UnitTypeId.ZERGLING, UnitTypeId.CORRUPTOR, UnitTypeId.BROODLORD}
+            )
+            for unit in all_attack_units:
+                unit.attack(self.enemy_start_locations[0])
             return
         else:
-            hq = self.townhalls.first
+            hq: Unit = self.townhalls.first
 
-        for queen in self.units(QUEEN).idle:
-            abilities = await self.get_available_abilities(queen)
-            if AbilityId.EFFECT_INJECTLARVA in abilities:
-                self.do(queen(EFFECT_INJECTLARVA, hq))
+        # Make idle queens inject
+        for queen in self.units(UnitTypeId.QUEEN).idle:
+            if queen.energy >= 25:
+                queen(AbilityId.EFFECT_INJECTLARVA, hq)
 
-        if not (self.structures(SPAWNINGPOOL).exists or self.already_pending(SPAWNINGPOOL)):
-            if self.can_afford(SPAWNINGPOOL):
-                await self.build(SPAWNINGPOOL, near=hq)
+        # Build pool
+        if self.structures(UnitTypeId.SPAWNINGPOOL).amount + self.already_pending(UnitTypeId.SPAWNINGPOOL) == 0:
+            if self.can_afford(UnitTypeId.SPAWNINGPOOL):
+                await self.build(UnitTypeId.SPAWNINGPOOL, near=hq)
 
-        if self.structures(SPAWNINGPOOL).ready.exists:
-            if not self.townhalls(LAIR).exists and not self.townhalls(HIVE).exists and hq.is_idle:
-                if self.can_afford(LAIR):
-                    self.do(hq.build(LAIR))
+        # Upgrade to lair
+        if self.structures(UnitTypeId.SPAWNINGPOOL).ready:
+            if not self.townhalls(UnitTypeId.LAIR) and not self.townhalls(UnitTypeId.HIVE) and hq.is_idle:
+                if self.can_afford(UnitTypeId.LAIR):
+                    hq.build(UnitTypeId.LAIR)
 
-        if self.townhalls(LAIR).ready.exists:
-            if not (self.structures(INFESTATIONPIT).exists or self.already_pending(INFESTATIONPIT)):
-                if self.can_afford(INFESTATIONPIT):
-                    await self.build(INFESTATIONPIT, near=hq)
+        # Build infestation pit
+        if self.townhalls(UnitTypeId.LAIR).ready:
+            if self.structures(UnitTypeId.INFESTATIONPIT).amount + self.already_pending(UnitTypeId.INFESTATIONPIT) == 0:
+                if self.can_afford(UnitTypeId.INFESTATIONPIT):
+                    await self.build(UnitTypeId.INFESTATIONPIT, near=hq)
 
-            if not (self.structures(SPIRE).exists or self.already_pending(SPIRE)):
-                if self.can_afford(SPIRE):
-                    await self.build(SPIRE, near=hq)
+            # Build spire
+            if self.structures(UnitTypeId.SPIRE).amount + self.already_pending(UnitTypeId.SPIRE) == 0:
+                if self.can_afford(UnitTypeId.SPIRE):
+                    await self.build(UnitTypeId.SPIRE, near=hq)
 
-        if self.structures(INFESTATIONPIT).ready.exists and not self.townhalls(HIVE).exists and hq.is_idle:
-            if self.can_afford(HIVE):
-                self.do(hq.build(HIVE))
+        # Upgrade to hive
+        if self.structures(UnitTypeId.INFESTATIONPIT).ready and not self.townhalls(UnitTypeId.HIVE) and hq.is_idle:
+            if self.can_afford(UnitTypeId.HIVE):
+                hq.build(UnitTypeId.HIVE)
 
-        if self.townhalls(HIVE).ready.exists:
-            spires = self.structures(SPIRE).ready
-            if spires.exists:
-                spire = spires.random
-                if self.can_afford(GREATERSPIRE) and spire.is_idle:
-                    self.do(spire.build(GREATERSPIRE))
+        # Upgrade to greater spire
+        if self.townhalls(UnitTypeId.HIVE).ready:
+            spires: Units = self.structures(UnitTypeId.SPIRE).ready
+            if spires:
+                spire: Unit = spires.random
+                if self.can_afford(UnitTypeId.GREATERSPIRE) and spire.is_idle:
+                    spire.build(UnitTypeId.GREATERSPIRE)
 
-        if self.gas_buildings.amount < 2 and not self.already_pending(EXTRACTOR):
-            if self.can_afford(EXTRACTOR):
-                drone = self.workers.random
-                target = self.vespene_geyser.closest_to(drone.position)
-                err = self.do(drone.build(EXTRACTOR, target))
+        # Build extractor
+        if self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) < 2:
+            if self.can_afford(UnitTypeId.EXTRACTOR):
+                drone: Unit = self.workers.random
+                target: Unit = self.vespene_geyser.closest_to(drone.position)
+                drone.build_gas(target)
 
-        if hq.assigned_harvesters < hq.ideal_harvesters:
-            if self.can_afford(DRONE) and larvae.exists:
-                larva = larvae.random
-                self.do(larva.train(DRONE))
+        # Build up to 22 drones
+        if self.supply_workers + self.already_pending(UnitTypeId.DRONE) < 22:
+            if larvae and self.can_afford(UnitTypeId.DRONE):
+                larva: Unit = larvae.random
+                larva.train(UnitTypeId.DRONE)
                 return
 
-        for a in self.gas_buildings:
-            if a.assigned_harvesters < a.ideal_harvesters:
-                w = self.workers.closer_than(20, a)
-                if w.exists:
-                    self.do(w.random.gather(a))
+        # Saturate gas
+        for extractor in self.gas_buildings:
+            if extractor.assigned_harvesters < extractor.ideal_harvesters:
+                workers: Units = self.workers.closer_than(20, extractor)
+                if workers:
+                    workers.random.gather(extractor)
 
-        if self.structures(SPAWNINGPOOL).ready.exists:
-            if not self.units(QUEEN).exists and hq.is_ready and hq.is_idle:
-                if self.can_afford(QUEEN):
-                    self.do(hq.train(QUEEN))
+        # Build queen
+        if self.structures(UnitTypeId.SPAWNINGPOOL).ready:
+            if not self.units(UnitTypeId.QUEEN) and hq.is_idle:
+                if self.can_afford(UnitTypeId.QUEEN):
+                    hq.train(UnitTypeId.QUEEN)
 
-        if self.units(ZERGLING).amount < 40 and self.minerals > 1000:
-            if larvae.exists and self.can_afford(ZERGLING):
-                self.do(larvae.random.train(ZERGLING))
+        # Build zerglings if we have not enough gas to build corruptors and broodlords
+        if self.units(UnitTypeId.ZERGLING).amount < 40 and self.minerals > 1000:
+            if larvae and self.can_afford(UnitTypeId.ZERGLING):
+                larvae.random.train(UnitTypeId.ZERGLING)
 
 
 def main():

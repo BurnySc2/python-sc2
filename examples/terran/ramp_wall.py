@@ -12,37 +12,45 @@ from sc2.position import Point2, Point3
 from sc2.unit import Unit
 from sc2.units import Units
 
+from typing import List, Set
+
 
 class RampWallBot(sc2.BotAI):
+    def __init__(self):
+        self.unit_command_uses_self_do = False
+
     async def on_step(self, iteration):
-        ccs = self.townhalls(COMMANDCENTER)
+        ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         if not ccs:
             return
         else:
-            cc = ccs.first
+            cc: Unit = ccs.first
 
         await self.distribute_workers()
 
-        if self.can_afford(SCV) and self.workers.amount < 16 and cc.is_idle:
-            self.do(cc.train(SCV), subtract_cost=True, subtract_supply=True)
+        if self.can_afford(UnitTypeId.SCV) and self.workers.amount < 16 and cc.is_idle:
+            self.do(cc.train(UnitTypeId.SCV))
 
         # Raise depos when enemies are nearby
-        for depo in self.structures(SUPPLYDEPOT).ready:
+        for depo in self.structures(UnitTypeId.SUPPLYDEPOT).ready:
             for unit in self.enemy_units:
                 if unit.distance_to(depo) < 15:
                     break
             else:
-                self.do(depo(MORPH_SUPPLYDEPOT_LOWER))
+                depo(AbilityId.MORPH_SUPPLYDEPOT_LOWER)
 
         # Lower depos when no enemies are nearby
-        for depo in self.structures(SUPPLYDEPOTLOWERED).ready:
+        for depo in self.structures(UnitTypeId.SUPPLYDEPOTLOWERED).ready:
             for unit in self.enemy_units:
                 if unit.distance_to(depo) < 10:
-                    self.do(depo(MORPH_SUPPLYDEPOT_RAISE))
+                    depo(AbilityId.MORPH_SUPPLYDEPOT_RAISE)
                     break
 
         # Draw ramp points
         self.draw_ramp_points()
+
+        # Draw all detected expansions on the map
+        self.draw_expansions()
 
         # # Draw pathing grid
         # self.draw_pathing_grid()
@@ -62,39 +70,41 @@ class RampWallBot(sc2.BotAI):
         # Draw if two selected units are facing each other - green if this guy is facing the other, red if he is not
         # self.draw_facing_units()
 
-        depot_placement_positions = self.main_base_ramp.corner_depots
+        depot_placement_positions: Set[Point2] = self.main_base_ramp.corner_depots
         # Uncomment the following if you want to build 3 supply depots in the wall instead of a barracks in the middle + 2 depots in the corner
         # depot_placement_positions = self.main_base_ramp.corner_depots | {self.main_base_ramp.depot_in_middle}
 
-        barracks_placement_position = self.main_base_ramp.barracks_correct_placement
+        barracks_placement_position: Point2 = self.main_base_ramp.barracks_correct_placement
         # If you prefer to have the barracks in the middle without room for addons, use the following instead
         # barracks_placement_position = self.main_base_ramp.barracks_in_middle
 
-        depots = self.structures.of_type({SUPPLYDEPOT, SUPPLYDEPOTLOWERED})
+        depots: Units = self.structures.of_type({UnitTypeId.SUPPLYDEPOT, UnitTypeId.SUPPLYDEPOTLOWERED})
 
         # Filter locations close to finished supply depots
         if depots:
-            depot_placement_positions = {d for d in depot_placement_positions if depots.closest_distance_to(d) > 1}
+            depot_placement_positions: Set[Point2] = {
+                d for d in depot_placement_positions if depots.closest_distance_to(d) > 1
+            }
 
         # Build depots
-        if self.can_afford(SUPPLYDEPOT) and self.already_pending(SUPPLYDEPOT) == 0:
+        if self.can_afford(UnitTypeId.SUPPLYDEPOT) and self.already_pending(UnitTypeId.SUPPLYDEPOT) == 0:
             if len(depot_placement_positions) == 0:
                 return
             # Choose any depot location
-            target_depot_location = depot_placement_positions.pop()
-            ws = self.workers.gathering
-            if ws:  # if workers were found
-                w = ws.random
-                self.do(w.build(SUPPLYDEPOT, target_depot_location))
+            target_depot_location: Point2 = depot_placement_positions.pop()
+            workers: Units = self.workers.gathering
+            if workers:  # if workers were found
+                worker: Unit = workers.random
+                self.do(worker.build(UnitTypeId.SUPPLYDEPOT, target_depot_location))
 
         # Build barracks
-        if depots.ready and self.can_afford(BARRACKS) and self.already_pending(BARRACKS) == 0:
-            if self.structures(BARRACKS).amount + self.already_pending(BARRACKS) > 0:
+        if depots.ready and self.can_afford(UnitTypeId.BARRACKS) and self.already_pending(UnitTypeId.BARRACKS) == 0:
+            if self.structures(UnitTypeId.BARRACKS).amount + self.already_pending(UnitTypeId.BARRACKS) > 0:
                 return
-            ws = self.workers.gathering
-            if ws and barracks_placement_position:  # if workers were found
-                w = ws.random
-                self.do(w.build(BARRACKS, barracks_placement_position))
+            workers = self.workers.gathering
+            if workers and barracks_placement_position:  # if workers were found
+                worker: Unit = workers.random
+                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
     async def on_building_construction_started(self, unit: Unit):
         print(f"Construction of building {unit} started at {unit.position}.")
@@ -114,12 +124,19 @@ class RampWallBot(sc2.BotAI):
                     color = Point3((0, 255, 255))
                 if p in ramp.lower:
                     color = Point3((0, 0, 255))
-                self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
+                self._client.debug_box2_out(pos + Point2((0.5, 0.5)), half_vertex_length=0.25, color=color)
                 # Identical to above:
-                # p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25))
-                # p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25))
+                # p0 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z + 0.25))
+                # p1 = Point3((pos.x + 0.75, pos.y + 0.75, pos.z - 0.25))
                 # print(f"Drawing {p0} to {p1}")
                 # self._client.debug_box_out(p0, p1, color=color)
+
+    def draw_expansions(self):
+        green = Point3((0, 255, 0))
+        for expansion_pos in self.expansion_locations_list:
+            height = self.get_terrain_z_height(expansion_pos)
+            expansion_pos3 = Point3((*expansion_pos, height))
+            self._client.debug_box2_out(expansion_pos3, half_vertex_length=2.5, color=green)
 
     def draw_pathing_grid(self):
         map_area = self._game_info.playable_area
@@ -202,6 +219,8 @@ class RampWallBot(sc2.BotAI):
         if self.townhalls:
             cc = self.townhalls[0]
             p0 = cc.position3d
+            if not self.structures:
+                return
             structure: Unit
             for structure in self.structures:
                 if structure == cc:
@@ -256,7 +275,7 @@ def main():
             "HonorgroundsLE",  # Has 4 or 9 upper points at the large main base ramp
         ]
     )
-    # map = "ParaSiteLE"
+    map = "PillarsofGoldLE"
     sc2.run_game(
         sc2.maps.get(map),
         [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)],

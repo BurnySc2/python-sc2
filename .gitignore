@@ -29,3 +29,7 @@ mini_games/
 # Code coverage
 .coverage
 /htmlcov
+
+/bat_files/temp/
+
+/docs

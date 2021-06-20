@@ -3,7 +3,6 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import random
-import logging
 import math
 
 import sc2
@@ -26,7 +25,7 @@ from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 
 from typing import List, Set, Dict, Optional, Union
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class TestBot(sc2.BotAI):
@@ -88,7 +87,7 @@ class TestBot(sc2.BotAI):
 
     # Create a lot of units and check if their damage calculation is correct based on Unit.calculate_damage_vs_target()
     async def test_botai_actions1001(self):
-        upgrade_levels = [0, 1]
+        upgrade_levels = {0, 1}
         attacker_units = [
             #
             # Protoss
@@ -257,15 +256,19 @@ class TestBot(sc2.BotAI):
             for attacker_type in attacker_units:
                 for defender_type in defender_units:
                     # DT, Thor, Tempest one-shots workers, so skip test
-                    if attacker_type in {
-                        UnitTypeId.DARKTEMPLAR,
-                        UnitTypeId.TEMPEST,
-                        UnitTypeId.THOR,
-                        UnitTypeId.THORAP,
-                        UnitTypeId.LIBERATORAG,
-                        UnitTypeId.PLANETARYFORTRESS,
-                        UnitTypeId.ARCHON,
-                    } and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}:
+                    if (
+                        attacker_type
+                        in {
+                            UnitTypeId.DARKTEMPLAR,
+                            UnitTypeId.TEMPEST,
+                            UnitTypeId.THOR,
+                            UnitTypeId.THORAP,
+                            UnitTypeId.LIBERATORAG,
+                            UnitTypeId.PLANETARYFORTRESS,
+                            UnitTypeId.ARCHON,
+                        }
+                        and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}
+                    ):
                         continue
 
                     # Spawn units
@@ -306,7 +309,7 @@ class TestBot(sc2.BotAI):
                         attacker.weapon_cooldown == 0 or attacker.weapon_cooldown > 3
                     ) and real_damage < expected_damage:
                         if attacker_type in {UnitTypeId.PROBE, UnitTypeId.SCV, UnitTypeId.DRONE}:
-                            self.do(attacker.attack(defender))
+                            attacker.attack(defender)
                         await self._advance_steps(1)
                         # Unsure why I have to recalculate this here again but it prevents a bug
                         attacker, defender = get_attacker_and_defender()
@@ -346,11 +349,11 @@ class EmptyBot(sc2.BotAI):
         if enemies:
             # If attacker is visible: move command to attacker but try to not attack
             for unit in self.units:
-                self.do(unit.move(enemies.closest_to(unit).position))
+                unit.move(enemies.closest_to(unit).position)
         else:
             # If attacker is invisible: dont move
             for unit in self.units:
-                self.do(unit.hold_position())
+                unit.hold_position()
 
 
 def main():

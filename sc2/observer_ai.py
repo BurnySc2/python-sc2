@@ -1,6 +1,5 @@
 from __future__ import annotations
 import itertools
-import logging
 import math
 import random
 from collections import Counter
@@ -36,7 +35,7 @@ from sc2.unit import Unit
 from sc2.units import Units
 from sc2.game_data import Cost
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 if TYPE_CHECKING:
     from sc2.game_info import GameInfo, Ramp
@@ -86,10 +85,18 @@ class ObserverAI(DistanceCalculation):
         self.larva_count: int = None
         self.actions: List[UnitCommand] = []
         self.blips: Set[Blip] = set()
+        self.race: Race = None
+        self.enemy_race: Race = None
+        self._units_created: Counter = Counter()
         self._unit_tags_seen_this_game: Set[int] = set()
         self._units_previous_map: Dict[int, Unit] = dict()
         self._structures_previous_map: Dict[int, Unit] = dict()
+        self._enemy_units_previous_map: Dict[int, Unit] = dict()
+        self._enemy_structures_previous_map: Dict[int, Unit] = dict()
+        self._all_units_previous_map: Dict[int, Unit] = dict()
         self._previous_upgrades: Set[UpgradeId] = set()
+        self._expansion_positions_list: List[Point2] = []
+        self._resource_location_to_expansion_position_dict: Dict[Point2, Point2] = {}
         # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
         self.unit_tags_received_action: Set[int] = set()
 
@@ -176,7 +183,7 @@ class ObserverAI(DistanceCalculation):
     async def get_available_abilities(
         self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
-        """ Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
+        """Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.
 
         Examples::
 
@@ -187,13 +194,13 @@ class ObserverAI(DistanceCalculation):
             units_abilities = await self.get_available_abilities([self.units.random])
 
         :param units:
-        :param ignore_resource_requirements: """
+        :param ignore_resource_requirements:"""
         return await self._client.query_available_abilities(units, ignore_resource_requirements)
 
     @property_cache_once_per_frame
     def _abilities_all_units(self) -> Counter:
-        """ Cache for the already_pending function, includes protoss units warping in,
-        all units in production and all structures, and all morphs """
+        """Cache for the already_pending function, includes protoss units warping in,
+        all units in production and all structures, and all morphs"""
         abilities_amount = Counter()
         for unit in self.units + self.structures:  # type: Unit
             for order in unit.orders:
@@ -206,7 +213,7 @@ class ObserverAI(DistanceCalculation):
 
         return abilities_amount
 
-    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False):
+    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False, base_build: int = -1):
         """
         Ran until game start to set game and player data.
 
@@ -221,6 +228,7 @@ class ObserverAI(DistanceCalculation):
         self._game_info: GameInfo = game_info
         self._game_data: GameData = game_data
         self.realtime: bool = realtime
+        self.base_build: int = base_build
 
     def _prepare_first_step(self):
         """First step extra preparations. Must not be called before _prepare_step."""
@@ -236,8 +244,13 @@ class ObserverAI(DistanceCalculation):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # Required for events, needs to be before self.units are initialized so the old units are stored
-        self._units_previous_map: Dict = {unit.tag: unit for unit in self.units}
-        self._structures_previous_map: Dict = {structure.tag: structure for structure in self.structures}
+        self._units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.units}
+        self._structures_previous_map: Dict[int, Unit] = {structure.tag: structure for structure in self.structures}
+        self._enemy_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.enemy_units}
+        self._enemy_structures_previous_map: Dict[int, Unit] = {
+            structure.tag: structure for structure in self.enemy_structures
+        }
+        self._all_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.all_units}
 
         self._prepare_units()
 
@@ -278,7 +291,7 @@ class ObserverAI(DistanceCalculation):
         return self.state.game_loop
 
     async def issue_events(self):
-        """ This function will be automatically run from main.py and triggers the following functions:
+        """This function will be automatically run from main.py and triggers the following functions:
         - on_unit_created
         - on_unit_destroyed
         - on_building_construction_started
@@ -317,22 +330,22 @@ class ObserverAI(DistanceCalculation):
                 await self.on_building_construction_complete(structure)
 
     async def _issue_unit_dead_events(self):
-        for unit_tag in self.state.dead_units:
+        for unit_tag in self.state.dead_units & set(self._all_units_previous_map.keys()):
             await self.on_unit_destroyed(unit_tag)
 
-    async def on_unit_destroyed(self, unit_tag):
+    async def on_unit_destroyed(self, unit_tag: int):
         """
         Override this in your bot class.
-        Note that this function uses unit tags and not the unit objects
-        because the unit does not exist any more.
+        This will event will be called when a unit (or structure, friendly or enemy) dies.
+        For enemy units, this only works if the enemy unit was in vision on death.
 
         :param unit_tag:
         """
 
     async def on_unit_created(self, unit: Unit):
-        """ Override this in your bot class. This function is called when a unit is created.
+        """Override this in your bot class. This function is called when a unit is created.
 
-        :param unit: """
+        :param unit:"""
 
     async def on_building_construction_started(self, unit: Unit):
         """
@@ -359,7 +372,7 @@ class ObserverAI(DistanceCalculation):
 
     async def on_start(self):
         """
-        Override this in your bot class. This function is called after "on_start". 
+        Override this in your bot class. This function is called after "on_start".
         At this point, game_data, game_info and the first iteration of game_state (self.state) are available.
         """
 
@@ -374,6 +387,6 @@ class ObserverAI(DistanceCalculation):
         raise NotImplementedError
 
     async def on_end(self, game_result: Result):
-        """ Override this in your bot class. This function is called at the end of a game.
+        """Override this in your bot class. This function is called at the end of a game.
 
-        :param game_result: """
+        :param game_result:"""

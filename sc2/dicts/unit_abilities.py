@@ -390,6 +390,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
     },
     UnitTypeId.FLEETBEACON: {
         AbilityId.FLEETBEACONRESEARCH_RESEARCHVOIDRAYSPEEDUPGRADE,
+        AbilityId.FLEETBEACONRESEARCH_TEMPESTRESEARCHGROUNDATTACKUPGRADE,
         AbilityId.RESEARCH_PHOENIXANIONPULSECRYSTALS,
     },
     UnitTypeId.FORGE: {
@@ -547,11 +548,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.INFESTATIONPIT: {
-        AbilityId.INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD,
-        AbilityId.RESEARCH_NEURALPARASITE,
-        AbilityId.RESEARCH_PATHOGENGLANDS,
-    },
+    UnitTypeId.INFESTATIONPIT: {AbilityId.RESEARCH_NEURALPARASITE, AbilityId.RESEARCH_PATHOGENGLANDS},
     UnitTypeId.INFESTEDTERRANSEGG: {
         AbilityId.HOLDPOSITION_HOLD,
         AbilityId.MOVE_MOVE,
@@ -702,6 +699,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
+    UnitTypeId.MISSILETURRET: {AbilityId.ATTACK_ATTACK, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.MOTHERSHIP: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.EFFECT_MASSRECALL_STRATEGICRECALL,
@@ -743,6 +741,7 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.NEXUS: {
+        AbilityId.BATTERYOVERCHARGE_BATTERYOVERCHARGE,
         AbilityId.EFFECT_CHRONOBOOSTENERGYCOST,
         AbilityId.EFFECT_MASSRECALL_NEXUS,
         AbilityId.NEXUSTRAINMOTHERSHIP_MOTHERSHIP,
@@ -1050,7 +1049,6 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.SHIELDBATTERY: {AbilityId.EFFECT_RESTORE, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.SIEGETANK: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.HOLDPOSITION_HOLD,
@@ -1173,7 +1171,6 @@ UNIT_ABILITIES: Dict[UnitTypeId, Set[AbilityId]] = {
         AbilityId.RESEARCH_DRILLINGCLAWS,
         AbilityId.RESEARCH_INFERNALPREIGNITER,
         AbilityId.RESEARCH_RAVENCORVIDREACTOR,
-        AbilityId.STARPORTTECHLABRESEARCH_RESEARCHDURABLEMATERIALS,
     },
     UnitTypeId.TEMPEST: {
         AbilityId.ATTACK_ATTACK,

@@ -4,6 +4,8 @@ import math
 import random
 from typing import Any, Dict, List, Optional, Set, Tuple, Union, Iterable, TYPE_CHECKING
 
+from s2clientprotocol import common_pb2 as common_pb
+
 if TYPE_CHECKING:
     from .unit import Unit
     from .units import Units
@@ -23,58 +25,58 @@ class Pointlike(tuple):
     def distance_to(self, target: Union[Unit, Point2]) -> float:
         """Calculate a single distance from a point or unit to another point or unit
 
-        :param target: """
+        :param target:"""
         p = target.position
         return math.hypot(self[0] - p[0], self[1] - p[1])
 
-    def distance_to_point2(self, p: Union[Point2, Tuple[float, float]]) -> Union[int, float]:
-        """ Same as the function above, but should be a bit faster because of the dropped asserts
+    def distance_to_point2(self, p: Union[Point2, Tuple[float, float]]) -> float:
+        """Same as the function above, but should be a bit faster because of the dropped asserts
         and conversion.
 
-        :param p: """
+        :param p:"""
         return math.hypot(self[0] - p[0], self[1] - p[1])
 
-    def _distance_squared(self, p2: Point2) -> Union[int, float]:
-        """ Function used to not take the square root as the distances will stay proportionally the same.
+    def _distance_squared(self, p2: Point2) -> float:
+        """Function used to not take the square root as the distances will stay proportionally the same.
         This is to speed up the sorting process.
 
-        :param p2: """
+        :param p2:"""
         return (self[0] - p2[0]) ** 2 + (self[1] - p2[1]) ** 2
 
     def is_closer_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:
-        """ Check if another point (or unit) is closer than the given distance.
+        """Check if another point (or unit) is closer than the given distance.
 
         :param distance:
-        :param p: """
+        :param p:"""
         p = p.position
         return self.distance_to_point2(p) < distance
 
     def is_further_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:
-        """ Check if another point (or unit) is further than the given distance.
+        """Check if another point (or unit) is further than the given distance.
 
         :param distance:
-        :param p: """
+        :param p:"""
         p = p.position
         return self.distance_to_point2(p) > distance
 
     def sort_by_distance(self, ps: Union[Units, Iterable[Point2]]) -> List[Point2]:
-        """ This returns the target points sorted as list.
+        """This returns the target points sorted as list.
         You should not pass a set or dict since those are not sortable.
         If you want to sort your units towards a point, use 'units.sorted_by_distance_to(point)' instead.
 
-        :param ps: """
+        :param ps:"""
         return sorted(ps, key=lambda p: self.distance_to_point2(p.position))
 
     def closest(self, ps: Union[Units, Iterable[Point2]]) -> Union[Unit, Point2]:
-        """ This function assumes the 2d distance is meant
+        """This function assumes the 2d distance is meant
 
-        :param ps: """
+        :param ps:"""
         assert ps, f"ps is empty"
         return min(ps, key=lambda p: self.distance_to(p))
 
-    def distance_to_closest(self, ps: Union[Units, Iterable[Point2]]) -> Union[int, float]:
-        """ This function assumes the 2d distance is meant
-        :param ps: """
+    def distance_to_closest(self, ps: Union[Units, Iterable[Point2]]) -> float:
+        """This function assumes the 2d distance is meant
+        :param ps:"""
         assert ps, f"ps is empty"
         closest_distance = math.inf
         for p2 in ps:
@@ -85,16 +87,16 @@ class Pointlike(tuple):
         return closest_distance
 
     def furthest(self, ps: Union[Units, Iterable[Point2]]) -> Union[Unit, Pointlike]:
-        """ This function assumes the 2d distance is meant
+        """This function assumes the 2d distance is meant
 
-        :param ps: Units object, or iterable of Unit or Point2 """
+        :param ps: Units object, or iterable of Unit or Point2"""
         assert ps, f"ps is empty"
         return max(ps, key=lambda p: self.distance_to(p))
 
-    def distance_to_furthest(self, ps: Union[Units, Iterable[Point2]]) -> Union[int, float]:
-        """ This function assumes the 2d distance is meant
+    def distance_to_furthest(self, ps: Union[Units, Iterable[Point2]]) -> float:
+        """This function assumes the 2d distance is meant
 
-        :param ps: """
+        :param ps:"""
         assert ps, f"ps is empty"
         furthest_distance = -math.inf
         for p2 in ps:
@@ -157,6 +159,15 @@ class Point2(Pointlike):
         return cls((data.x, data.y))
 
     @property
+    def as_Point2D(self) -> common_pb.Point2D:
+        return common_pb.Point2D(x=self.x, y=self.y)
+
+    @property
+    def as_PointI(self) -> common_pb.PointI:
+        """Represents points on the minimap. Values must be between 0 and 64."""
+        return common_pb.PointI(x=self.x, y=self.y)
+
+    @property
     def rounded(self) -> Point2:
         return Point2((math.floor(self[0]), math.floor(self[1])))
 
@@ -174,11 +185,11 @@ class Point2(Pointlike):
         return self.__class__((self[0] / length, self[1] / length))
 
     @property
-    def x(self) -> Union[int, float]:
+    def x(self) -> float:
         return self[0]
 
     @property
-    def y(self) -> Union[int, float]:
+    def y(self) -> float:
         return self[1]
 
     @property
@@ -214,11 +225,11 @@ class Point2(Pointlike):
         return Point2((self.x + math.cos(angle) * distance, self.y + math.sin(angle) * distance))
 
     def circle_intersection(self, p: Point2, r: Union[int, float]) -> Set[Point2]:
-        """ self is point1, p is point2, r is the radius for circles originating in both points
+        """self is point1, p is point2, r is the radius for circles originating in both points
         Used in ramp finding
 
         :param p:
-        :param r: """
+        :param r:"""
         assert self != p, f"self is equal to p"
         distanceBetweenPoints = self.distance_to(p)
         assert r >= distanceBetweenPoints / 2
@@ -259,7 +270,7 @@ class Point2(Pointlike):
         }
 
     def negative_offset(self, other: Point2) -> Point2:
-        return self.__class__((self.x - other.x, self.y - other.y))
+        return self.__class__((self[0] - other[0], self[1] - other[1]))
 
     def __add__(self, other: Point2) -> Point2:
         return self.offset(other)
@@ -270,11 +281,13 @@ class Point2(Pointlike):
     def __neg__(self) -> Point2:
         return self.__class__(-a for a in self)
 
-    def __abs__(self) -> Union[int, float]:
+    def __abs__(self) -> float:
         return math.hypot(self.x, self.y)
 
     def __bool__(self) -> bool:
-        return self.x != 0 or self.y != 0
+        if self.x != 0 or self.y != 0:
+            return True
+        return False
 
     def __mul__(self, other: Union[int, float, Point2]) -> Point2:
         try:
@@ -297,7 +310,7 @@ class Point2(Pointlike):
         """ Converts a vector to a direction that can face vertically, horizontally or diagonal or be zero, e.g. (0, 0), (1, -1), (1, 0) """
         return self.__class__((_sign(other.x - self.x), _sign(other.y - self.y)))
 
-    def manhattan_distance(self, other: Point2) -> Union[int, float]:
+    def manhattan_distance(self, other: Point2) -> float:
         """
         :param other:
         """
@@ -305,7 +318,7 @@ class Point2(Pointlike):
 
     @staticmethod
     def center(units_or_points: Iterable[Point2]) -> Point2:
-        """ Returns the central point for points in list
+        """Returns the central point for points in list
 
         :param units_or_points:"""
         s = Point2((0, 0))
@@ -323,11 +336,15 @@ class Point3(Point2):
         return cls((data.x, data.y, data.z))
 
     @property
+    def as_Point(self) -> common_pb.Point:
+        return common_pb.Point(x=self.x, y=self.y, z=self.z)
+
+    @property
     def rounded(self) -> Point3:
         return Point3((math.floor(self[0]), math.floor(self[1]), math.floor(self[2])))
 
     @property
-    def z(self) -> Union[int, float]:
+    def z(self) -> float:
         return self[2]
 
     @property
@@ -342,11 +359,11 @@ class Point3(Point2):
 
 class Size(Point2):
     @property
-    def width(self) -> Union[int, float]:
+    def width(self) -> float:
         return self[0]
 
     @property
-    def height(self) -> Union[int, float]:
+    def height(self) -> float:
         return self[1]
 
 
@@ -360,20 +377,30 @@ class Rect(tuple):
         return cls((data.p0.x, data.p0.y, data.p1.x - data.p0.x, data.p1.y - data.p0.y))
 
     @property
-    def x(self) -> Union[int, float]:
+    def x(self) -> float:
         return self[0]
 
     @property
-    def y(self) -> Union[int, float]:
+    def y(self) -> float:
         return self[1]
 
     @property
-    def width(self) -> Union[int, float]:
+    def width(self) -> float:
         return self[2]
 
     @property
-    def height(self) -> Union[int, float]:
+    def height(self) -> float:
         return self[3]
+
+    @property
+    def right(self) -> float:
+        """ Returns the x-coordinate of the rectangle of its right side. """
+        return self.x + self.width
+
+    @property
+    def top(self) -> float:
+        """ Returns the y-coordinate of the rectangle of its top side. """
+        return self.y + self.height
 
     @property
     def size(self) -> Size:

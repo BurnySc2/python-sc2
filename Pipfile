@@ -5,18 +5,20 @@ name = "pypi"
 
 [packages]
 portpicker = "*"
-async-timeout = "<4.0,>=3.0"
 s2clientprotocol = "*"
-aiohttp = "*"
 pyglet = "*"
-numpy = "*"
+numpy = "<=1.19.3"
 scipy = "*"
 mpyq = "*"
+aiohttp = "*"
+typing-extensions = "*"
+loguru = "*"
+win32-setctime = "*"
+importlib-metadata = "<=2.1.0"
 
 [dev-packages]
 atomicwrites = "*"
 pytest = "*"
-mypy = "*"
 pillow = "*"
 pytest-asyncio = "*"
 hypothesis = "*"
@@ -27,7 +29,7 @@ pytest-cov = "*"
 coverage = "*"
 codecov = "*"
 matplotlib = "*"
-loguru = "*"
+radon = "*"
 
 [requires]
 python_version = "3.7"

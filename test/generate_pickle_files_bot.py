@@ -27,7 +27,9 @@ from sc2.protocol import ProtocolError
 from typing import List, Dict, Set, Tuple, Any, Optional, Union
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
-import pickle, os, sys, logging, traceback, lzma
+import pickle, os, sys, traceback, lzma
+
+from loguru import logger
 
 
 """
@@ -79,7 +81,7 @@ class ExporterBot(sc2.BotAI):
 
     async def on_start(self):
         file_path = self.get_pickle_file_path()
-        print(f"Saving file to {self.map_name}.xz")
+        logger.info(f"Saving pickle file to {self.map_name}.xz")
         await self.store_data_to_file(file_path)
 
         # Make map visible
@@ -122,7 +124,6 @@ def main():
         "AbyssalReefLE",
         "AcidPlantLE",
         "AcolyteLE",
-        "Acropolis",
         "AcropolisLE",
         "Artana",
         "AscensiontoAiurLE",
@@ -132,7 +133,6 @@ def main():
         "BattleontheBoardwalkLE",
         "BelShirVestigeLE",
         "BlackpinkLE",
-        "BloodBoilLE",
         "BlueshiftLE",
         "CactusValleyLE",
         "CatalystLE",
@@ -140,6 +140,7 @@ def main():
         "CrystalCavern",
         "CyberForestLE",
         "DarknessSanctuaryLE",
+        "DeathAuraLE",
         "DefendersLandingLE",
         "DigitalFrontier",
         "DiscoBloodbathLE",
@@ -147,9 +148,13 @@ def main():
         "EastwatchLE",
         "Ephemeron",
         "EphemeronLE",
+        "EternalEmpireLE",
+        "EverDreamLE",
         "FractureLE",
         "FrostLE",
+        "GoldenWallLE",
         "HonorgroundsLE",
+        "IceandChromeLE",
         "InterloperLE",
         "KairosJunctionLE",
         "KingsCoveLE",
@@ -158,10 +163,12 @@ def main():
         "NeonVioletSquareLE",
         "NewkirkPrecinctTE",
         "NewRepugnancyLE",
+        "NightshadeLE",
         "OdysseyLE",
         "OldSunshine",
         "PaladinoTerminalLE",
         "ParaSiteLE",
+        "PillarsofGoldLE",
         "PortAleksanderLE",
         "PrimusQ9",
         "ProximaStationLE",
@@ -169,6 +176,8 @@ def main():
         "Reminiscence",
         "Sanglune",
         "SequencerLE",
+        "SimulacrumLE",
+        "SubmarineLE",
         # "StasisLE", Commented out because it has uneven number of expansions, and wasn't used in the ladder pool anyway
         "TheTimelessVoid",
         "ThunderbirdLE",
@@ -178,10 +187,10 @@ def main():
         "WintersGateLE",
         "WorldofSleepersLE",
         "YearZeroLE",
+        "ZenLE",
     ]
 
     for map_ in maps:
-        logger = logging.getLogger()
         try:
             bot = ExporterBot()
             bot.map_name = map_

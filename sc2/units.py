@@ -3,7 +3,7 @@ import random
 import warnings
 import math
 from itertools import chain
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, Union, Generator, TYPE_CHECKING
 
 from .ids.unit_typeid import UnitTypeId
 from .position import Point2, Point3
@@ -33,6 +33,9 @@ class Units(list):
 
     def __call__(self, *args, **kwargs):
         return UnitSelection(self, *args, **kwargs)
+
+    def __iter__(self) -> Generator[Unit, None, None]:
+        return (item for item in super().__iter__())
 
     def select(self, *args, **kwargs):
         return UnitSelection(self, *args, **kwargs)
@@ -125,13 +128,6 @@ class Units(list):
         else:
             return self.subgroup(random.sample(self, n))
 
-    # TODO: append, insert, remove, pop and extend functions should reset the cache for Units.positions because the number of units in the list has changed
-    # @property_immutable_cache
-    # def positions(self) -> np.ndarray:
-    #     flat_units_positions = (coord for unit in self for coord in unit.position)
-    #     unit_positions_np = np.fromiter(flat_units_positions, dtype=float, count=2 * len(self)).reshape((len(self), 2))
-    #     return unit_positions_np
-
     def in_attack_range_of(self, unit: Unit, bonus_distance: Union[int, float] = 0) -> Units:
         """
         Filters units that are in attack range of the given unit.
@@ -154,7 +150,7 @@ class Units(list):
                 # Is empty because mutalisk are flying and marauder cannot attack air
 
         :param unit:
-        :param bonus_distance: """
+        :param bonus_distance:"""
         return self.filter(lambda x: unit.target_in_range(x, bonus_distance=bonus_distance))
 
     def closest_distance_to(self, position: Union[Unit, Point2, Point3]) -> float:
@@ -169,7 +165,7 @@ class Units(list):
                 closest_zergling_distance = enemy_zerglings.closest_distance_to(my_marine)
             # Contains the distance between the marine and the closest zergling
 
-        :param position: """
+        :param position:"""
         assert self, "Units object is empty"
         if isinstance(position, Unit):
             return min(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self) ** 0.5
@@ -188,7 +184,7 @@ class Units(list):
                 furthest_zergling_distance = enemy_zerglings.furthest_distance_to(my_marine)
                 # Contains the distance between the marine and the furthest away zergling
 
-        :param position: """
+        :param position:"""
         assert self, "Units object is empty"
         if isinstance(position, Unit):
             return max(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self) ** 0.5
@@ -206,7 +202,7 @@ class Units(list):
                 closest_zergling = enemy_zerglings.closest_to(my_marine)
                 # Contains the zergling that is closest to the target marine
 
-        :param position: """
+        :param position:"""
         assert self, "Units object is empty"
         if isinstance(position, Unit):
             return min(
@@ -229,7 +225,7 @@ class Units(list):
                 furthest_zergling = enemy_zerglings.furthest_to(my_marine)
                 # Contains the zergling that is furthest away to the target marine
 
-        :param position: """
+        :param position:"""
         assert self, "Units object is empty"
         if isinstance(position, Unit):
             return max(
@@ -365,7 +361,7 @@ class Units(list):
         return self.subgroup(self._list_sorted_by_distance_to(position)[-n:])
 
     def in_distance_of_group(self, other_units: Units, distance: float) -> Units:
-        """ Returns units that are closer than distance from any unit in the other units object.
+        """Returns units that are closer than distance from any unit in the other units object.
 
         :param other_units:
         :param distance:
@@ -399,7 +395,7 @@ class Units(list):
 
         Loops over all units in self, then loops over all units in other_units and calculates the shortest distance. Returns the units that is closest to any unit of 'other_units'.
 
-        :param other_units: """
+        :param other_units:"""
         assert self, "Units object is empty"
         assert other_units, "Given units object is empty"
         return min(
@@ -422,9 +418,9 @@ class Units(list):
         return sorted(self, key=lambda unit2: abs(unit_dist_dict[unit2.tag] - distance), reverse=True)
 
     def n_closest_to_distance(self, position: Union[Point2, np.ndarray], distance: Union[int, float], n: int) -> Units:
-        """ Returns n units that are the closest to distance away.
+        """Returns n units that are the closest to distance away.
         For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7] to position,
-        the units with distance [4, 5, 6] will be returned """
+        the units with distance [4, 5, 6] will be returned"""
         return self.subgroup(self._list_sorted_closest_to_distance(position=position, distance=distance)[:n])
 
     def n_furthest_to_distance(self, position: Union[Point2, np.ndarray], distance: Union[int, float], n: int) -> Units:
@@ -435,7 +431,7 @@ class Units(list):
         """
         Creates a new mutable Units object from Units or list object.
 
-        :param units: """
+        :param units:"""
         return Units(units, self._bot_object)
 
     def filter(self, pred: callable) -> Units:
@@ -480,7 +476,7 @@ class Units(list):
         return self.subgroup(self._list_sorted_by_distance_to(position, reverse=reverse))
 
     def tags_in(self, other: Union[Set[int], List[int], Dict[int, Any]]) -> Units:
-        """ Filters all units that have their tags in the 'other' set/list/dict
+        """Filters all units that have their tags in the 'other' set/list/dict
 
         Example::
 
@@ -517,7 +513,7 @@ class Units(list):
             # Use a set instead of lists in the argument
             some_attack_units = self.units.of_type({ZERGLING, ROACH, HYDRALISK, BROODLORD})
 
-        :param other: """
+        :param other:"""
         if isinstance(other, UnitTypeId):
             other = {other}
         elif isinstance(other, list):
@@ -533,7 +529,7 @@ class Units(list):
             # Use a set instead of lists in the argument
             ignore_units = self.enemy_units.exclude_type({LARVA, EGG, OVERLORD})
 
-        :param other: """
+        :param other:"""
         if isinstance(other, UnitTypeId):
             other = {other}
         elif isinstance(other, list):
@@ -617,7 +613,10 @@ class Units(list):
         assert self, f"Units object is empty"
         amount = self.amount
         return Point2(
-            (sum(unit._proto.pos.x for unit in self) / amount, sum(unit._proto.pos.y for unit in self) / amount,)
+            (
+                sum(unit._proto.pos.x for unit in self) / amount,
+                sum(unit._proto.pos.y for unit in self) / amount,
+            )
         )
 
     @property
@@ -692,8 +691,8 @@ class Units(list):
 
     @property
     def visible(self) -> Units:
-        """ Returns all units or structures that are visible.
-        TODO: add proper description on which units are exactly visible (not snapshots?) """
+        """Returns all units or structures that are visible.
+        TODO: add proper description on which units are exactly visible (not snapshots?)"""
         return self.filter(lambda unit: unit.is_visible)
 
     @property

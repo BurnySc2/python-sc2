@@ -1,36 +1,82 @@
-import logging
 import os
 import platform
 import re
 import subprocess
 from pathlib import Path
 
-logger = logging.getLogger(__name__)
+import sc2.wsl as wsl
+
+from loguru import logger
 
 BASEDIR = {
     "Windows": "C:/Program Files (x86)/StarCraft II",
+    "WSL1": "/mnt/c/Program Files (x86)/StarCraft II",
+    "WSL2": "/mnt/c/Program Files (x86)/StarCraft II",
     "Darwin": "/Applications/StarCraft II",
     "Linux": "~/StarCraftII",
     "WineLinux": "~/.wine/drive_c/Program Files (x86)/StarCraft II",
 }
 
 USERPATH = {
-    "Windows": "\\Documents\\StarCraft II\\ExecuteInfo.txt",
-    "Darwin": "/Library/Application Support/Blizzard/StarCraft II/ExecuteInfo.txt",
+    "Windows": "Documents\\StarCraft II\\ExecuteInfo.txt",
+    "WSL1": "Documents/StarCraft II/ExecuteInfo.txt",
+    "WSL2": "Documents/StarCraft II/ExecuteInfo.txt",
+    "Darwin": "Library/Application Support/Blizzard/StarCraft II/ExecuteInfo.txt",
     "Linux": None,
     "WineLinux": None,
 }
 
 BINPATH = {
     "Windows": "SC2_x64.exe",
+    "WSL1": "SC2_x64.exe",
+    "WSL2": "SC2_x64.exe",
     "Darwin": "SC2.app/Contents/MacOS/SC2",
     "Linux": "SC2_x64",
     "WineLinux": "SC2_x64.exe",
 }
 
-CWD = {"Windows": "Support64", "Darwin": None, "Linux": None, "WineLinux": "Support64"}
+CWD = {
+    "Windows": "Support64",
+    "WSL1": "Support64",
+    "WSL2": "Support64",
+    "Darwin": None,
+    "Linux": None,
+    "WineLinux": "Support64",
+}
 
-PF = os.environ.get("SC2PF", platform.system())
+
+def platform_detect():
+    pf = os.environ.get("SC2PF", platform.system())
+    if pf == "Linux":
+        return wsl.detect() or pf
+    return pf
+
+
+PF = platform_detect()
+
+
+def get_home():
+    """Get home directory of user, using Windows home directory for WSL."""
+    if PF == "WSL1" or PF == "WSL2":
+        return wsl.get_wsl_home() or Path.home().expanduser()
+    return Path.home().expanduser()
+
+
+def get_user_sc2_install():
+    """Attempts to find a user's SC2 install if their OS has ExecuteInfo.txt"""
+    if USERPATH[PF]:
+        einfo = str(get_home() / Path(USERPATH[PF]))
+        if os.path.isfile(einfo):
+            with open(einfo) as f:
+                content = f.read()
+            if content:
+                base = re.search(r" = (.*)Versions", content).group(1)
+                if PF == "WSL1" or PF == "WSL2":
+                    base = str(wsl.win_path_to_wsl_path(base))
+
+                if os.path.exists(base):
+                    return base
+    return None
 
 
 def get_env():
@@ -40,13 +86,16 @@ def get_env():
 
 def get_runner_args(cwd):
     if "WINE" in os.environ:
-        runner_dir = os.path.dirname(os.environ.get("WINE"))
-        # translate cwd from Unix to Windows path
-        win_cwd = subprocess.run(
-            [os.path.join(runner_dir, "winepath"), "-w", cwd], capture_output=True, text=True
-        ).stdout.rstrip()
-        return [os.environ.get("WINE"), "start", "/d", win_cwd, "/unix"]
-
+        runner_file = Path(os.environ.get("WINE"))
+        runner_file = runner_file if runner_file.is_file() else runner_file / "wine"
+        """
+        TODO Is converting linux path really necessary?
+        That would convert 
+        '/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/Support64'
+        to 
+        'Z:\\home\\burny\\Games\\battlenet\\drive_c\\Program Files (x86)\\StarCraft II\\Support64'
+        """
+        return [runner_file, "start", "/d", cwd, "/unix"]
     return []
 
 
@@ -82,18 +131,7 @@ class _MetaPaths(type):
             exit(1)
 
         try:
-            base = os.environ.get("SC2PATH")
-            if base is None and USERPATH[PF] is not None:
-                einfo = str(Path.home().expanduser()) + USERPATH[PF]
-                if os.path.isfile(einfo):
-                    with open(einfo) as f:
-                        content = f.read()
-                    if content:
-                        base = re.search(r" = (.*)Versions", content).group(1)
-                        if not os.path.exists(base):
-                            base = None
-            if base is None:
-                base = BASEDIR[PF]
+            base = os.environ.get("SC2PATH") or get_user_sc2_install() or BASEDIR[PF]
             self.BASE = Path(base).expanduser()
             self.EXECUTABLE = latest_executeble(self.BASE / "Versions")
             self.CWD = self.BASE / CWD[PF] if CWD[PF] else None

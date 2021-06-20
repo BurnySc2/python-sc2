@@ -10,7 +10,7 @@ test_requirements = convert_deps_to_pip(pfile["dev-packages"], r=False)
 setup(
     name="burnysc2",
     packages=find_packages(exclude=["examples*", "examples"]),
-    version="4.11.11",
+    version="5.0.11",
     description="A StarCraft II API Client for Python 3",
     license="MIT",
     author="BurnySc2",
@@ -20,7 +20,7 @@ setup(
     setup_requires=["pipenv"],
     install_requires=requirements,
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
@@ -28,9 +28,13 @@ setup(
         "Topic :: Games/Entertainment :: Real Time Strategy",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: MacOS :: MacOS X",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
 )

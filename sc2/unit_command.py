@@ -33,7 +33,7 @@ class UnitCommand:
 
     @property
     def combining_tuple(self):
-        return (self.ability, self.target, self.queue, self.ability in COMBINEABLE_ABILITIES)
+        return self.ability, self.target, self.queue, self.ability in COMBINEABLE_ABILITIES
 
     def __repr__(self):
         return f"UnitCommand({self.ability}, {self.unit}, {self.target}, {self.queue})"

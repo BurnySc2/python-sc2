@@ -10,14 +10,14 @@ jobs:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         # Python 3.6 fails due to: https://www.python.org/dev/peps/pep-0563/
         # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python-version: [3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9]
 
     steps:
       - uses: actions/checkout@v1
@@ -98,12 +98,38 @@ jobs:
           path: htmlcov
 
 
+  run_radon:
+    # Output a cyclomatic complexity report of the project
+    name: Run radon
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install pipenv
+          pipenv install --dev --python ${{ matrix.python-version }}
+
+      - name: Run pipenv radon
+        run: |
+          pipenv run radon cc sc2/ -a -nb
+
 
   run_autotest_bot:
     # Run test bots that download the SC2 linux client and run it
     name: Run testbots linux
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       # Do not allow this test to cancel. Finish all jobs regardless of error
       fail-fast: false
@@ -144,7 +170,12 @@ jobs:
         docker exec -i app3 bash -c "tree"
         docker rm -f app3
 
-
+    - name: Run queries_test_bot.py
+      run: |
+        docker run -it -d --name app4 test_image
+        docker exec -i app4 bash -c "python test/travis_test_script.py test/queries_test_bot.py"
+        docker exec -i app4 bash -c "tree"
+        docker rm -f app4
 
   # https://github.com/JamesIves/github-pages-deploy-action
   release_to_github_pages:
@@ -171,10 +202,10 @@ jobs:
           echo ${{github.ref}}
           python -m pip install pipenv
           pipenv install --dev --python ${{ matrix.python-version }}
-          rm -r docs
 
       - name: Build docs from scratch
         run: |
+          mkdir -p docs
           cd docs_generate
           pipenv run sphinx-build -a -E -b html . ../docs
           cd ..

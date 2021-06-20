@@ -1,8 +1,18 @@
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
+
 import random
 
 import sc2
 from sc2 import Race, Difficulty
-from sc2.constants import *
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.ids.buff_id import BuffId
+from sc2.unit import Unit
+from sc2.units import Units
+from sc2.position import Point2
 from sc2.player import Bot, Computer
 
 
@@ -14,46 +24,46 @@ class CannonRushBot(sc2.BotAI):
         if not self.townhalls:
             # Attack with all workers if we don't have any nexuses left, attack-move on enemy spawn (doesn't work on 4 player map) so that probes auto attack on the way
             for worker in self.workers:
-                self.do(worker.attack(self.enemy_start_locations[0]))
+                worker.attack(self.enemy_start_locations[0])
             return
         else:
             nexus = self.townhalls.random
 
         # Make probes until we have 16 total
         if self.supply_workers < 16 and nexus.is_idle:
-            if self.can_afford(PROBE):
-                self.do(nexus.train(PROBE), subtract_cost=True, subtract_supply=True)
+            if self.can_afford(UnitTypeId.PROBE):
+                nexus.train(UnitTypeId.PROBE)
 
         # If we have no pylon, build one near starting nexus
-        elif not self.structures(PYLON) and self.already_pending(PYLON) == 0:
-            if self.can_afford(PYLON):
-                await self.build(PYLON, near=nexus)
+        elif not self.structures(UnitTypeId.PYLON) and self.already_pending(UnitTypeId.PYLON) == 0:
+            if self.can_afford(UnitTypeId.PYLON):
+                await self.build(UnitTypeId.PYLON, near=nexus)
 
         # If we have no forge, build one near the pylon that is closest to our starting nexus
-        elif not self.structures(FORGE):
-            pylon_ready = self.structures(PYLON).ready
+        elif not self.structures(UnitTypeId.FORGE):
+            pylon_ready = self.structures(UnitTypeId.PYLON).ready
             if pylon_ready:
-                if self.can_afford(FORGE):
-                    await self.build(FORGE, near=pylon_ready.closest_to(nexus))
+                if self.can_afford(UnitTypeId.FORGE):
+                    await self.build(UnitTypeId.FORGE, near=pylon_ready.closest_to(nexus))
 
         # If we have less than 2 pylons, build one at the enemy base
-        elif self.structures(PYLON).amount < 2:
-            if self.can_afford(PYLON):
+        elif self.structures(UnitTypeId.PYLON).amount < 2:
+            if self.can_afford(UnitTypeId.PYLON):
                 pos = self.enemy_start_locations[0].towards(self.game_info.map_center, random.randrange(8, 15))
-                await self.build(PYLON, near=pos)
+                await self.build(UnitTypeId.PYLON, near=pos)
 
         # If we have no cannons but at least 2 completed pylons, automatically find a placement location and build them near enemy start location
-        elif not self.structures(PHOTONCANNON):
-            if self.structures(PYLON).ready.amount >= 2 and self.can_afford(PHOTONCANNON):
-                pylon = self.structures(PYLON).closer_than(20, self.enemy_start_locations[0]).random
-                await self.build(PHOTONCANNON, near=pylon)
+        elif not self.structures(UnitTypeId.PHOTONCANNON):
+            if self.structures(UnitTypeId.PYLON).ready.amount >= 2 and self.can_afford(UnitTypeId.PHOTONCANNON):
+                pylon = self.structures(UnitTypeId.PYLON).closer_than(20, self.enemy_start_locations[0]).random
+                await self.build(UnitTypeId.PHOTONCANNON, near=pylon)
 
         # Decide if we should make pylon or cannons, then build them at random location near enemy spawn
-        elif self.can_afford(PYLON) and self.can_afford(PHOTONCANNON):
+        elif self.can_afford(UnitTypeId.PYLON) and self.can_afford(UnitTypeId.PHOTONCANNON):
             # Ensure "fair" decision
             for _ in range(20):
                 pos = self.enemy_start_locations[0].random_on_distance(random.randrange(5, 12))
-                building = PHOTONCANNON if self.state.psionic_matrix.covers(pos) else PYLON
+                building = UnitTypeId.PHOTONCANNON if self.state.psionic_matrix.covers(pos) else UnitTypeId.PYLON
                 await self.build(building, near=pos)
 
 

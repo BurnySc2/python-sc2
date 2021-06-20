@@ -124,32 +124,7 @@ def test_bot_ai():
     bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
     assert bot.main_base_ramp  # Test if any ramp was found
 
-    # Clear cache for expansion locations, recalculate and time it
-    if hasattr(bot, "_cache_expansion_locations"):
-        delattr(bot, "_cache_expansion_locations")
-    t0 = time.perf_counter()
-    bot.expansion_locations
-    t1 = time.perf_counter()
-    print(f"Time to calculate expansion locations: {t1-t0} s")
-
-    # TODO: Cache all expansion positions for a map and check if it is the same
-    assert len(bot.expansion_locations) >= 10, f"Too few expansions found: {len(bot.expansion_locations)}"
-    # Honorgrounds LE has 24
-    assert len(bot.expansion_locations) <= 24, f"Too many expansions found: {len(bot.expansion_locations)}"
-    # On N player maps, it is expected that there are N*X bases because of symmetry, at least for 1vs1 maps
-    assert (
-        len(bot.expansion_locations) % (len(bot.enemy_start_locations) + 1) == 0
-    ), f"{set(bot.expansion_locations.keys())}"
-    # Test if bot start location is in expansion locations
-    assert bot.townhalls.random.position in set(
-        bot.expansion_locations.keys()
-    ), f'This error might occur if you are running the tests locally using command "pytest test/", possibly because you are using an outdated cache.py version, but it should not occur when using docker and pipenv.\n{bot.townhalls.random.position}, {set(bot.expansion_locations.keys())}'
-    # Test if enemy start locations are in expansion locations
-    for location in bot.enemy_start_locations:
-        assert location in set(bot.expansion_locations.keys()), f"{location}, {bot.expansion_locations.keys()}"
-
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
-    assert bot.owned_expansions == {bot.townhalls.first.position: bot.townhalls.first}
     assert bot.can_feed(UnitTypeId.MARINE)
     assert bot.can_feed(UnitTypeId.SIEGETANK)
     assert not bot.can_feed(UnitTypeId.THOR)
@@ -402,12 +377,10 @@ def test_bot_ai():
     assert bot.calculate_cost(UnitTypeId.SPIRE) == Cost(200, 200)
     assert bot.calculate_cost(UnitTypeId.ARCHON) == bot.calculate_unit_value(UnitTypeId.ARCHON)
 
-    # The following are morph abilities that may need a fix
-    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
-    assert_cost(UnitTypeId.BROODLORD, Cost(300, 250))
-    assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(100, 100))
-    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(300, 250))
-    assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(50, 25))
+    assert_cost(AbilityId.MORPHTOBROODLORD_BROODLORD, Cost(150, 150))
+    assert_cost(AbilityId.MORPHTORAVAGER_RAVAGER, Cost(25, 75))
+    assert_cost(AbilityId.MORPH_LURKER, Cost(50, 100))
+    assert_cost(AbilityId.MORPHZERGLINGTOBANELING_BANELING, Cost(25, 25))
 
     assert Cost(100, 50) == 2 * Cost(50, 25)
     assert Cost(100, 50) == Cost(50, 25) * 2
@@ -998,6 +971,8 @@ def test_position_rect(x, y, w, h):
     assert rect.y == y
     assert rect.width == w
     assert rect.height == h
+    assert rect.right == x + w
+    assert rect.top == y + h
     assert rect.size == Size((w, h))
     assert rect.center == Point2((rect.x + rect.width / 2, rect.y + rect.height / 2))
     assert rect.offset((1, 1)) == Rect((x + 1, y + 1, w, h))

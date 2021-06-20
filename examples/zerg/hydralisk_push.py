@@ -1,93 +1,130 @@
-from functools import reduce
-from operator import or_
+import sys, os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
+
 import random
 
 import sc2
 from sc2 import Race, Difficulty
-from sc2.constants import *
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.unit import Unit
+from sc2.units import Units
+from sc2.position import Point2
 from sc2.player import Bot, Computer
 from sc2.data import race_townhalls
 
-import enum
-
 
 class Hydralisk(sc2.BotAI):
-    def select_target(self):
-        if self.enemy_structures.exists:
+    def select_target(self) -> Point2:
+        if self.enemy_structures:
             return random.choice(self.enemy_structures).position
-
         return self.enemy_start_locations[0]
 
     async def on_step(self, iteration):
-        larvae = self.larva
-        forces = self.units(ZERGLING) | self.units(HYDRALISK)
+        larvae: Units = self.larva
+        forces: Units = self.units.of_type({UnitTypeId.ZERGLING, UnitTypeId.HYDRALISK})
 
-        if self.units(HYDRALISK).amount > 10 and iteration % 50 == 0:
+        # Send all idle lings + hydras to attack-move if we have at least 10 hydras, every 400th frame
+        if self.units(UnitTypeId.HYDRALISK).amount >= 10 and iteration % 50 == 0:
             for unit in forces.idle:
-                self.do(unit.attack(self.select_target()))
+                unit.attack(self.select_target())
 
-        if self.supply_left < 2:
-            if self.can_afford(OVERLORD) and larvae.exists:
-                self.do(larvae.random.train(OVERLORD))
-                return
+        # If supply is low, train overlords
+        if self.supply_left < 2 and larvae and self.can_afford(UnitTypeId.OVERLORD):
+            larvae.random.train(UnitTypeId.OVERLORD)
+            return
 
-        if self.structures(HYDRALISKDEN).ready.exists:
-            if self.can_afford(HYDRALISK) and larvae.exists:
-                self.do(larvae.random.train(HYDRALISK))
-                return
+        # If hydra den is ready and idle, research upgrades
+        hydra_dens = self.structures(UnitTypeId.HYDRALISKDEN)
+        if hydra_dens:
+            for hydra_den in hydra_dens.ready.idle:
+                if self.already_pending_upgrade(UpgradeId.EVOLVEGROOVEDSPINES) == 0 and self.can_afford(
+                    UpgradeId.EVOLVEGROOVEDSPINES
+                ):
+                    hydra_den.research(UpgradeId.EVOLVEGROOVEDSPINES)
+                elif self.already_pending_upgrade(UpgradeId.EVOLVEMUSCULARAUGMENTS) == 0 and self.can_afford(
+                    UpgradeId.EVOLVEMUSCULARAUGMENTS
+                ):
+                    hydra_den.research(UpgradeId.EVOLVEMUSCULARAUGMENTS)
 
-        if not self.townhalls.exists:
-            for unit in self.workers | self.units(QUEEN) | forces:
-                self.do(unit.attack(self.enemy_start_locations[0]))
+        # If hydra den is ready, train hydra
+        if larvae and self.can_afford(UnitTypeId.HYDRALISK) and self.structures(UnitTypeId.HYDRALISKDEN).ready:
+            larvae.random.train(UnitTypeId.HYDRALISK)
+            return
+
+        # If all our townhalls are dead, send all our units to attack
+        if not self.townhalls:
+            for unit in self.units.of_type(
+                {UnitTypeId.DRONE, UnitTypeId.QUEEN, UnitTypeId.ZERGLING, UnitTypeId.HYDRALISK}
+            ):
+                unit.attack(self.enemy_start_locations[0])
             return
         else:
-            hq = self.townhalls.first
+            hq: Unit = self.townhalls.first
 
-        for queen in self.units(QUEEN).idle:
-            abilities = await self.get_available_abilities(queen)
-            if AbilityId.EFFECT_INJECTLARVA in abilities:
-                self.do(queen(EFFECT_INJECTLARVA, hq))
+        # Send idle queens with >=25 energy to inject
+        for queen in self.units(UnitTypeId.QUEEN).idle:
+            # The following checks if the inject ability is in the queen abilitys - basically it checks if we have enough energy and if the ability is off-cooldown
+            # abilities = await self.get_available_abilities(queen)
+            # if AbilityId.EFFECT_INJECTLARVA in abilities:
+            if queen.energy >= 25:
+                queen(AbilityId.EFFECT_INJECTLARVA, hq)
 
-        if not (self.structures(SPAWNINGPOOL).exists or self.already_pending(SPAWNINGPOOL)):
-            if self.can_afford(SPAWNINGPOOL):
-                await self.build(SPAWNINGPOOL, near=hq)
+        # Build spawning pool
+        if self.structures(UnitTypeId.SPAWNINGPOOL).amount + self.already_pending(UnitTypeId.SPAWNINGPOOL) == 0:
+            if self.can_afford(UnitTypeId.SPAWNINGPOOL):
+                await self.build(UnitTypeId.SPAWNINGPOOL, near=hq.position.towards(self.game_info.map_center, 5))
 
-        if self.structures(SPAWNINGPOOL).ready.exists:
-            if not self.townhalls(LAIR).exists and hq.is_idle:
-                if self.can_afford(LAIR):
-                    self.do(hq.build(LAIR))
+        # Upgrade to lair if spawning pool is complete
+        if self.structures(UnitTypeId.SPAWNINGPOOL).ready:
+            if hq.is_idle and not self.townhalls(UnitTypeId.LAIR):
+                if self.can_afford(UnitTypeId.LAIR):
+                    hq.build(UnitTypeId.LAIR)
 
-        if self.townhalls(LAIR).ready.exists:
-            if not (self.structures(HYDRALISKDEN).exists or self.already_pending(HYDRALISKDEN)):
-                if self.can_afford(HYDRALISKDEN):
-                    await self.build(HYDRALISKDEN, near=hq)
+        # If lair is ready and we have no hydra den on the way: build hydra den
+        if self.townhalls(UnitTypeId.LAIR).ready:
+            if self.structures(UnitTypeId.HYDRALISKDEN).amount + self.already_pending(UnitTypeId.HYDRALISKDEN) == 0:
+                if self.can_afford(UnitTypeId.HYDRALISKDEN):
+                    await self.build(UnitTypeId.HYDRALISKDEN, near=hq.position.towards(self.game_info.map_center, 5))
 
-        if self.gas_buildings.amount < 2 and not self.already_pending(EXTRACTOR):
-            if self.can_afford(EXTRACTOR):
-                drone = self.workers.random
-                target = self.vespene_geyser.closest_to(drone.position)
-                err = self.do(drone.build(EXTRACTOR, target))
+        # If we dont have both extractors: build them
+        if (
+            self.structures(UnitTypeId.SPAWNINGPOOL)
+            and self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) < 2
+        ):
+            if self.can_afford(UnitTypeId.EXTRACTOR):
+                # May crash if we dont have any drones
+                for vg in self.vespene_geyser.closer_than(10, hq):
+                    drone: Unit = self.workers.random
+                    drone.build_gas(vg)
+                    break
 
-        if hq.assigned_harvesters < hq.ideal_harvesters:
-            if self.can_afford(DRONE) and larvae.exists:
-                larva = larvae.random
-                self.do(larva.train(DRONE))
+        # If we have less than 22 drones, build drones
+        if self.supply_workers + self.already_pending(UnitTypeId.DRONE) < 22:
+            if larvae and self.can_afford(UnitTypeId.DRONE):
+                larva: Unit = larvae.random
+                larva.train(UnitTypeId.DRONE)
                 return
 
+        # Saturate gas
         for a in self.gas_buildings:
             if a.assigned_harvesters < a.ideal_harvesters:
-                w = self.workers.closer_than(20, a)
-                if w.exists:
-                    self.do(w.random.gather(a))
+                w: Units = self.workers.closer_than(10, a)
+                if w:
+                    w.random.gather(a)
 
-        if self.structures(SPAWNINGPOOL).ready.exists:
-            if not self.units(QUEEN).exists and hq.is_ready and hq.is_idle:
-                if self.can_afford(QUEEN):
-                    self.do(hq.train(QUEEN))
+        # Build queen once the pool is done
+        if self.structures(UnitTypeId.SPAWNINGPOOL).ready:
+            if not self.units(UnitTypeId.QUEEN) and hq.is_idle:
+                if self.can_afford(UnitTypeId.QUEEN):
+                    hq.train(UnitTypeId.QUEEN)
 
-        if self.units(ZERGLING).amount < 20 and self.minerals > 1000:
-            if larvae.exists and self.can_afford(ZERGLING):
-                self.do(larvae.random.train(ZERGLING))
+        # Train zerglings if we have much more minerals than vespene (not enough gas for hydras)
+        if self.units(UnitTypeId.ZERGLING).amount < 20 and self.minerals > 1000:
+            if larvae and self.can_afford(UnitTypeId.ZERGLING):
+                larvae.random.train(UnitTypeId.ZERGLING)
 
 
 def main():

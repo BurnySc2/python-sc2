@@ -1,13 +1,13 @@
 import asyncio
 
-import logging
 import sys
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
+from aiohttp import ClientWebSocketResponse
 
 from .data import Status
 
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 class ProtocolError(Exception):
@@ -23,11 +23,12 @@ class ConnectionAlreadyClosed(ProtocolError):
 class Protocol:
     def __init__(self, ws):
         """
-        :param ws:
+        A class for communicating with an SCII application.
+        :param ws: the websocket (type: aiohttp.ClientWebSocketResponse) used to communicate with a specific SCII app
         """
         assert ws
-        self._ws = ws
-        self._status = None
+        self._ws: ClientWebSocketResponse = ws
+        self._status: Status = None
 
     async def __request(self, request):
         logger.debug(f"Sending request: {request !r}")
@@ -42,10 +43,12 @@ class Protocol:
         try:
             response_bytes = await self._ws.receive_bytes()
         except TypeError:
-            # logger.exception("Cannot receive: Connection already closed.")
-            # raise ConnectionAlreadyClosed("Connection already closed.")
-            logger.info("Cannot receive: Connection already closed.")
-            sys.exit(2)
+            if self._status == Status.ended:
+                logger.info("Cannot receive: Game has already ended.")
+                raise ConnectionAlreadyClosed("Game has already ended")
+            else:
+                logger.error("Cannot receive: Connection already closed.")
+                raise ConnectionAlreadyClosed("Connection already closed.")
         except asyncio.CancelledError:
             # If request is sent, the response must be received before reraising cancel
             try:
@@ -62,9 +65,7 @@ class Protocol:
     async def _execute(self, **kwargs):
         assert len(kwargs) == 1, "Only one request allowed"
 
-        request = sc_pb.Request(**kwargs)
-
-        response = await self.__request(request)
+        response = await self.__request(sc_pb.Request(**kwargs))
 
         new_status = Status(response.status)
         if new_status != self._status:
