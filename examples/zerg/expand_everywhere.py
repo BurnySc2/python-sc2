@@ -3,7 +3,6 @@ from contextlib import suppress
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
-import numpy as np
 from sc2.position import Point2, Point3
 
 import sc2
@@ -76,7 +75,7 @@ class ExpandEverywhere(sc2.BotAI):
 
 def main():
     sc2.run_game(
-        sc2.maps.get("AcropolisLE"),
+        sc2.maps.get("2000AtmospheresAIE"),
         [Bot(Race.Zerg, ExpandEverywhere()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         save_replay_as="ZvT.SC2Replay",

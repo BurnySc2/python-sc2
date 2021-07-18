@@ -133,6 +133,14 @@ class MyBot(sc2.BotAI):
         self.raw_affects_selection = True
 ```
 
+### `enable_feature_layer`
+Setting this to true allows interaction with the UI
+```python
+class MyBot(sc2.BotAI):
+    def __init__(self):
+        self.enable_feature_layer = True
+```
+
 ### `distance_calculation_method`
 The distance calculation method:
 - 0 for raw python
