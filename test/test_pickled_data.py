@@ -72,7 +72,7 @@ random_bot_object: BotAI = next(bot_object_generator)
 
 
 def test_bot_ai():
-    bot: BotAI = random_bot_object
+    bot: BotAI = next(bot_object_generator)
     # Test initial bot attributes at game start
 
     # Properties from _prepare_start
