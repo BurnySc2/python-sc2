@@ -1,4 +1,5 @@
 import sys, os
+from pathlib import Path
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -23,7 +24,7 @@ from sc2.data import Race
 import pickle, pytest, random, math, lzma
 from hypothesis import given, event, settings, strategies as st
 
-from typing import Iterable
+from typing import Iterable, List
 import time
 
 
@@ -37,42 +38,29 @@ It will load the pickle files, recreate the bot object from scratch and tests mo
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
 
-from sc2.constants import TARGET_GROUND, TARGET_AIR, TARGET_BOTH, IS_LIGHT, IS_ARMORED, IS_MECHANICAL, IS_BIOLOGICAL
-from sc2.data import TargetType
-from sc2.data import Attribute
 
+MAPS: List[Path] = [map_path for map_path in (Path(__file__).parent/"pickle_data").iterdir() if map_path.suffix == ".xz"]
 
-def get_map_specific_bots() -> Iterable[BotAI]:
-    folder = os.path.dirname(__file__)
-    subfolder_name = "pickle_data"
-    pickle_folder_path = os.path.join(folder, subfolder_name)
-    files = os.listdir(pickle_folder_path)
-    for file in (f for f in files if f.endswith(".xz")):
-        with lzma.open(os.path.join(folder, subfolder_name, file), "rb") as f:
-            raw_game_data, raw_game_info, raw_observation = pickle.load(f)
+def get_map_specific_bot(map_path: Path) -> BotAI:
+    assert map_path in MAPS
+    with lzma.open(str(map_path.absolute()), "rb") as f:
+        raw_game_data, raw_game_info, raw_observation = pickle.load(f)
 
-        # Build fresh bot object, and load the pickle'd data into the bot object
-        bot = BotAI()
-        game_data = GameData(raw_game_data.data)
-        game_info = GameInfo(raw_game_info.game_info)
-        game_state = GameState(raw_observation)
-        bot._initialize_variables()
-        bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
-        bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
+    # Build fresh bot object, and load the pickle'd data into the bot object
+    bot = BotAI()
+    game_data = GameData(raw_game_data.data)
+    game_info = GameInfo(raw_game_info.game_info)
+    game_state = GameState(raw_observation)
+    bot._initialize_variables()
+    bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
+    bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
 
-        yield bot
+    return bot
 
-
-# Global bot object that is used in TestClass.test_position_*
-bot_object_generator = get_map_specific_bots()
-random_bot_object: BotAI = next(bot_object_generator)
-# Always pick acropolis to get same test results
-# while random_bot_object.game_info.map_name != "Acropolis LE":
-#     random_bot_object = next(bot_object_generator)
 
 
 def test_bot_ai():
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     # Test initial bot attributes at game start
 
     # Properties from _prepare_start
@@ -401,7 +389,7 @@ def test_bot_ai():
 
 
 def test_game_info():
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
     # Test if main base ramp works
     game_info: GameInfo = bot._game_info
@@ -425,7 +413,7 @@ def test_game_info():
 
 
 def test_game_data():
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     game_data = bot._game_data
     assert game_data.abilities
     assert game_data.units
@@ -434,7 +422,7 @@ def test_game_data():
 
 
 def test_game_state():
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     state = bot.state
 
     assert not state.actions
@@ -455,20 +443,21 @@ def test_game_state():
 
 
 def test_pixelmap():
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     # TODO
     pass
 
 
 def test_score():
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     # TODO
     pass
 
 
 def test_unit():
-    scv: Unit = random_bot_object.workers.random
-    townhall: Unit = random_bot_object.townhalls.first
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+    scv: Unit = bot.workers.random
+    townhall: Unit = bot.townhalls.first
 
     assert scv.name
     assert scv.race
@@ -669,8 +658,8 @@ def test_unit():
 
     # TODO create one of each unit in the pickle tests to do damage calculations without having to create a mock class for each unit
 
-    # marauder1 = Unit(marauder_proto, random_bot_object)
-    # marauder_15_hp = Unit(marauder_proto, random_bot_object)
+    # marauder1 = Unit(marauder_proto, bot)
+    # marauder_15_hp = Unit(marauder_proto, bot)
     # marauder_15_hp._proto.health = 15
     # # Marauder1 should deal now 10+10vs_armored = 20 damage, but other marauder has 1 armor, so resulting damage should be 19
     # assert marauder1.calculate_damage_vs_target(marauder_15_hp)[0] == 19
@@ -688,7 +677,7 @@ def test_unit():
 
 
 def test_units():
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     scvs = bot.workers
     townhalls = bot.townhalls
 
@@ -792,7 +781,7 @@ def test_dicts():
     except:
         print(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
 
-    bot: BotAI = random_bot_object
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
 
     unit_id: UnitTypeId
     data: dict
