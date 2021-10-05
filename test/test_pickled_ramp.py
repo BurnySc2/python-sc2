@@ -1,4 +1,5 @@
 import sys, os
+from pathlib import Path
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -23,7 +24,7 @@ from sc2.data import Race
 import pickle, pytest, random, math, lzma
 from hypothesis import given, event, settings, strategies as st
 
-from typing import Iterable
+from typing import Iterable, List
 import time
 
 
@@ -37,26 +38,23 @@ It will load the pickle files, recreate the bot object from scratch and tests mo
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
 
+MAPS: List[Path] = [map_path for map_path in (Path(__file__).parent/"pickle_data").iterdir() if map_path.suffix == ".xz"]
 
-def get_map_specific_bots() -> Iterable[BotAI]:
-    folder = os.path.dirname(__file__)
-    subfolder_name = "pickle_data"
-    pickle_folder_path = os.path.join(folder, subfolder_name)
-    files = os.listdir(pickle_folder_path)
-    for file in (f for f in files if f.endswith(".xz")):
-        with lzma.open(os.path.join(folder, subfolder_name, file), "rb") as f:
-            raw_game_data, raw_game_info, raw_observation = pickle.load(f)
+def get_map_specific_bot(map_path: Path) -> BotAI:
+    assert map_path in MAPS
+    with lzma.open(str(map_path.absolute()), "rb") as f:
+        raw_game_data, raw_game_info, raw_observation = pickle.load(f)
 
-        # Build fresh bot object, and load the pickle'd data into the bot object
-        bot = BotAI()
-        game_data = GameData(raw_game_data.data)
-        game_info = GameInfo(raw_game_info.game_info)
-        game_state = GameState(raw_observation)
-        bot._initialize_variables()
-        bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
-        bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
+    # Build fresh bot object, and load the pickle'd data into the bot object
+    bot = BotAI()
+    game_data = GameData(raw_game_data.data)
+    game_info = GameInfo(raw_game_info.game_info)
+    game_state = GameState(raw_observation)
+    bot._initialize_variables()
+    bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
+    bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
 
-        yield bot
+    return bot
 
 
 # From https://docs.pytest.org/en/latest/example/parametrize.html#a-quick-port-of-testscenarios
@@ -73,12 +71,13 @@ def pytest_generate_tests(metafunc):
 
 class TestClass:
     # Load all pickle files and convert them into bot objects from raw data (game_data, game_info, game_state)
-    scenarios = [(bot_obj.game_info.map_name, {"bot": bot_obj}) for bot_obj in get_map_specific_bots()]
+    scenarios = [(map_path.name, {"map_path": map_path}) for map_path in MAPS]
 
-    def test_main_base_ramp(self, bot: BotAI):
+    def test_main_base_ramp(self, map_path: Path):
+        bot = get_map_specific_bot(map_path)
         bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
         # Test if main ramp works for all spawns
-        game_info: GameInfo = bot._game_info
+        _game_info: GameInfo = bot._game_info
 
         for spawn in bot._game_info.start_locations + [bot.townhalls.random.position]:
             # Remove cached ramp
@@ -116,18 +115,17 @@ class TestClass:
             assert ramp.upper
             assert ramp.lower
             # Test if ramp was detected far away
+            print(ramp.top_center)
             distance = ramp.top_center.distance_to(bot._game_info.player_start_location)
             assert (
                 distance < 30
             ), f"Distance from spawn to main ramp was detected as {distance:.2f}, which is too far. Spawn: {spawn}, Ramp: {ramp.top_center}"
 
-    def test_bot_ai(self, bot: BotAI):
+    def test_bot_ai(self, map_path: Path):
+        bot = get_map_specific_bot(map_path)
         bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
-        assert bot.main_base_ramp  # Test if any ramp was found
 
-        # Clear cache for expansion locations, recalculate and time it
-        if hasattr(bot, "_cache_expansion_locations"):
-            delattr(bot, "_cache_expansion_locations")
+        # Recalculate and time expansion locations
         t0 = time.perf_counter()
         bot._find_expansion_locations()
         t1 = time.perf_counter()
