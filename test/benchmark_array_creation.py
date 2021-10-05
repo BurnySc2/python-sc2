@@ -150,4 +150,4 @@ def test_numpy_ones(benchmark):
 
 
 # Run this file using
-# pipenv run pytest test/test_benchmark_array_creation.py --benchmark-compare
+# poetry run pytest test/test_benchmark_array_creation.py --benchmark-compare

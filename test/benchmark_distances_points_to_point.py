@@ -196,4 +196,4 @@ def test_distance_math_hypot(benchmark):
 
 
 # Run this file using
-# pipenv run pytest test/test_benchmark_distances_points_to_point.py --benchmark-compare
+# poetry run pytest test/test_benchmark_distances_points_to_point.py --benchmark-compare

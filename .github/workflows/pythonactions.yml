@@ -29,34 +29,34 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install pipenv
-          pipenv install --dev --python ${{ matrix.python-version }}
+          python -m pip install poetry
+          poetry install
 
       # Run tests
-      - name: Run pipenv pytest tests on pickle files
+      - name: Run poetry pytest tests on pickle files
         run: |
-          pipenv run pytest test/
+          poetry run pytest test/
 
       # Run benchmarks
       - name: Run benchmark benchmark_array_creation
         run: |
-          pipenv run pytest test/benchmark_array_creation.py
+          poetry run pytest test/benchmark_array_creation.py
 
       - name: Run benchmark benchmark_distance_two_points
         run: |
-          pipenv run pytest test/benchmark_distance_two_points.py
+          poetry run pytest test/benchmark_distance_two_points.py
 
       - name: Run benchmark benchmark_distances_cdist
         run: |
-          pipenv run pytest test/benchmark_distances_cdist.py
+          poetry run pytest test/benchmark_distances_cdist.py
 
       - name: Run benchmark benchmark_distances_points_to_point
         run: |
-          pipenv run pytest test/benchmark_distances_points_to_point.py
+          poetry run pytest test/benchmark_distances_points_to_point.py
 
       - name: Run benchmark benchmark_distances_units
         run: |
-          pipenv run pytest test/benchmark_distances_units.py
+          poetry run pytest test/benchmark_distances_units.py
 
 
 
@@ -80,16 +80,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install pipenv
-          pipenv install --dev --python ${{ matrix.python-version }}
+          python -m pip install poetry
+          poetry install
 
-      - name: Run pipenv coverage
+      - name: Run poetry coverage
         run: |
-          pipenv run pytest --cov=./
+          poetry run pytest --cov=./
 
       - name: Generate html coverage files in htmlcov/ folder
         run: |
-          pipenv run coverage html
+          poetry run coverage html
 
       - name: Upload htmlcov/ folder as artifact
         uses: actions/upload-artifact@v1
@@ -117,12 +117,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install pipenv
-          pipenv install --dev --python ${{ matrix.python-version }}
+          python -m pip install poetry
+          poetry install
 
-      - name: Run pipenv radon
+      - name: Run poetry radon
         run: |
-          pipenv run radon cc sc2/ -a -nb
+          poetry run radon cc sc2/ -a -nb
 
 
   run_autotest_bot:
@@ -148,7 +148,7 @@ jobs:
         docker build -t test_image -f test/Dockerfile_3.7 .
 
     - name: Run autotest_bot.py
-      # docker exec -i app bash -c "cd /root/template && pipenv run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
+      # docker exec -i app bash -c "cd /root/template && poetry run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
                                                                                              # Run bot and list resulting files (replay file, stable_id.json)
       run: |
         docker run -it -d --name app1 test_image
@@ -199,15 +199,14 @@ jobs:
       - name: Remove docs and prepare to build
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
         run: |
-          echo ${{github.ref}}
-          python -m pip install pipenv
-          pipenv install --dev --python ${{ matrix.python-version }}
+          python -m pip install poetry
+          poetry install --dev --python ${{ matrix.python-version }}
 
       - name: Build docs from scratch
         run: |
           mkdir -p docs
           cd docs_generate
-          pipenv run sphinx-build -a -E -b html . ../docs
+          poetry run sphinx-build -a -E -b html . ../docs
           cd ..
 
       - name: Publish to Github Pages
@@ -227,7 +226,7 @@ jobs:
     timeout-minutes: 3
     strategy:
       matrix:
-        python-version: [3.7]
+        python-version: [3.9]
 
     # Required jobs to succeed before this job is run
     needs: [run_pytest_tests, run_autotest_bot]
@@ -242,25 +241,16 @@ jobs:
       - name: Update dependencies
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
         run: |
-          pip install --upgrade pipenv
-          pip install --upgrade setuptools wheel
-          pip install --upgrade twine
+          pip install poetry
 
       - name: Build package
         # Builds package to dist/* directory
         run: |
-          python setup.py sdist bdist_wheel
+          poetry build
 
-      - name: Publish package
-        # continue-on-error: true
-        # Upload files in dist/* directory
-        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-        env:
-          # Set env variables, 'twine' then uses these to upload to pypi
-          TWINE_PASSWORD: ${{ secrets.pypi_password }}
-          TWINE_USERNAME: ${{ secrets.pypi_username }}
-        # --skip-existing will not make twine error when package version already exists
-        run: |
-          twine upload dist/* --verbose --skip-existing
-
+      # Publish package on pypi
+    - name: Publish
+      continue-on-error: true
+      run: |
+        poetry publish --username ${{ secrets.pypi_username }} --password ${{ secrets.pypi_password }}
 

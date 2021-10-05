@@ -188,4 +188,4 @@ def test_distance_sum_squared(benchmark):
 
 
 # Run this file using
-# pipenv run pytest test/test_benchmark_distance_two_points.py --benchmark-compare
+# poetry run pytest test/test_benchmark_distance_two_points.py --benchmark-compare

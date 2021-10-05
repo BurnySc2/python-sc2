@@ -135,4 +135,4 @@ def test_distance_matrix_scipy_pdist_squared(benchmark):
 
 
 # Run this file using
-# pipenv run pytest test/test_benchmark_distances_units.py --benchmark-compare
+# poetry run pytest test/test_benchmark_distances_units.py --benchmark-compare

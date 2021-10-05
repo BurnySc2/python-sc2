@@ -10,7 +10,7 @@ docker build -t test_image -f test/Dockerfile .
 docker run test_image -c "python test/travis_test_script.py test/autotest_bot.py"
 
 Or if you want to run from windows:
-pipenv run python test/travis_test_script.py test/autotest_bot.py
+poetry run python test/travis_test_script.py test/autotest_bot.py
 """
 
 retries = 3

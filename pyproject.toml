@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "burnysc2"
+version = "5.0.12"
+description = "A StarCraft II API Client for Python 3"
+authors = ["BurnySc2 <gamingburny@gmail.com>"]
+license = "MIT"
+homepage = "https://github.com/Burnysc2/python-sc2"
+documentation = "https://burnysc2.github.io/python-sc2/docs/index.html"
+keywords = ["StarCraft", "StarCraft 2", "StarCraft II", "AI", "Bot"]
+classifiers=[
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Topic :: Games/Entertainment",
+    "Topic :: Games/Entertainment :: Real Time Strategy",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS :: MacOS X",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+packages = [
+    { include = "sc2/*.py" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7, <3.10"
+portpicker = "^1.4.0"
+s2clientprotocol = "^5.0.7"
+pyglet = "^1.5.21"
+numpy = "<=1.19.3"
+scipy = "^1.7.1"
+mpyq = "^0.2.5"
+aiohttp = "^3.7.4"
+typing-extensions = "^3.10.0"
+loguru = "^0.5.3"
+win32-setctime = "^1.0.3"
+importlib-metadata = "<=2.1.0"
+
+[tool.poetry.dev-dependencies]
+atomicwrites = "^1.4.0"
+pytest = "^6.2.5"
+pytest-asyncio = "^0.15.1"
+Pillow = "^8.3.2"
+hypothesis = "^6.23.1"
+pytest-benchmark = "^3.4.1"
+Sphinx = "^4.2.0"
+sphinx-autodoc-typehints = "^1.12.0"
+pytest-cov = "^3.0.0"
+coverage = "^6.0"
+codecov = "^2.1.12"
+matplotlib = "^3.4.3"
+radon = "^5.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

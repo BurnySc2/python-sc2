@@ -2,4 +2,4 @@
 
 cd ..
 
-pipenv run pytest test
+poetry run pytest test
