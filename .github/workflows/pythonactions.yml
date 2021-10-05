@@ -125,57 +125,57 @@ jobs:
           pipenv run radon cc sc2/ -a -nb
 
 
-  run_autotest_bot:
-    # Run test bots that download the SC2 linux client and run it
-    name: Run testbots linux
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      # Do not allow this test to cancel. Finish all jobs regardless of error
-      fail-fast: false
-    steps:
-    # Copy data from repository
-    - uses: actions/checkout@v1
-
-    - name: Print directories and files
-      run: |
-        sudo apt-get install tree
-        tree
-
-    - name: Load and build docker image
-      # Build docker image from Dockerfile using python 3.7
-      run: |
-        docker build -t test_image -f test/Dockerfile_3.7 .
-
-    - name: Run autotest_bot.py
-      # docker exec -i app bash -c "cd /root/template && pipenv run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
-                                                                                             # Run bot and list resulting files (replay file, stable_id.json)
-      run: |
-        docker run -it -d --name app1 test_image
-        docker exec -i app1 bash -c "python test/travis_test_script.py test/autotest_bot.py"
-        docker exec -i app1 bash -c "tree"
-        docker rm -f app1
-
-    - name: Run upgradestest_bot.py
-      run: |
-        docker run -it -d --name app2 test_image
-        docker exec -i app2 bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
-        docker exec -i app2 bash -c "tree"
-        docker rm -f app2
-
-    - name: Run damagetest_bot.py
-      run: |
-        docker run -it -d --name app3 test_image
-        docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
-        docker exec -i app3 bash -c "tree"
-        docker rm -f app3
-
-    - name: Run queries_test_bot.py
-      run: |
-        docker run -it -d --name app4 test_image
-        docker exec -i app4 bash -c "python test/travis_test_script.py test/queries_test_bot.py"
-        docker exec -i app4 bash -c "tree"
-        docker rm -f app4
+#  run_autotest_bot:
+#    # Run test bots that download the SC2 linux client and run it
+#    name: Run testbots linux
+#    runs-on: ubuntu-latest
+#    timeout-minutes: 20
+#    strategy:
+#      # Do not allow this test to cancel. Finish all jobs regardless of error
+#      fail-fast: false
+#    steps:
+#    # Copy data from repository
+#    - uses: actions/checkout@v1
+#
+#    - name: Print directories and files
+#      run: |
+#        sudo apt-get install tree
+#        tree
+#
+#    - name: Load and build docker image
+#      # Build docker image from Dockerfile using python 3.7
+#      run: |
+#        docker build -t test_image -f test/Dockerfile_3.7 .
+#
+#    - name: Run autotest_bot.py
+#      # docker exec -i app bash -c "cd /root/template && pipenv run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
+#                                                                                             # Run bot and list resulting files (replay file, stable_id.json)
+#      run: |
+#        docker run -it -d --name app1 test_image
+#        docker exec -i app1 bash -c "python test/travis_test_script.py test/autotest_bot.py"
+#        docker exec -i app1 bash -c "tree"
+#        docker rm -f app1
+#
+#    - name: Run upgradestest_bot.py
+#      run: |
+#        docker run -it -d --name app2 test_image
+#        docker exec -i app2 bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+#        docker exec -i app2 bash -c "tree"
+#        docker rm -f app2
+#
+#    - name: Run damagetest_bot.py
+#      run: |
+#        docker run -it -d --name app3 test_image
+#        docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
+#        docker exec -i app3 bash -c "tree"
+#        docker rm -f app3
+#
+#    - name: Run queries_test_bot.py
+#      run: |
+#        docker run -it -d --name app4 test_image
+#        docker exec -i app4 bash -c "python test/travis_test_script.py test/queries_test_bot.py"
+#        docker exec -i app4 bash -c "tree"
+#        docker rm -f app4
 
   # https://github.com/JamesIves/github-pages-deploy-action
   release_to_github_pages:
@@ -187,7 +187,7 @@ jobs:
         python-version: [3.7]
 
     # Required jobs to succeed before this job is run
-    needs: [run_pytest_tests, run_autotest_bot]
+    needs: [run_pytest_tests]
     steps:
       - uses: actions/checkout@v1
 
@@ -230,7 +230,7 @@ jobs:
         python-version: [3.7]
 
     # Required jobs to succeed before this job is run
-    needs: [run_pytest_tests, run_autotest_bot]
+    needs: [run_pytest_tests]
     steps:
       - uses: actions/checkout@v1
 
