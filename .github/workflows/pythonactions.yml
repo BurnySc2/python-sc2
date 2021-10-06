@@ -183,7 +183,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7]
-    needs: [run_pytest_tests]
+    needs: [run_pytest_tests, run_autotest_bot]
 
     steps:
     - uses: actions/checkout@v1
@@ -197,7 +197,7 @@ jobs:
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
       run: |
         python -m pip install poetry
-        poetry install --dev --python ${{ matrix.python-version }}
+        poetry install
 
     - name: Build docs from scratch
       run: |
@@ -222,7 +222,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    needs: [run_pytest_tests]
+    needs: [run_pytest_tests, run_autotest_bot]
 
     steps:
     - uses: actions/checkout@v1
@@ -244,6 +244,7 @@ jobs:
 
       # Publish package on pypi
     - name: Publish
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
       continue-on-error: true
       run: |
         poetry publish --username ${{ secrets.pypi_username }} --password ${{ secrets.pypi_password }}

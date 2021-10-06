@@ -1,18 +1,17 @@
 import os
 import sys
 
-from sc2 import maps
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from loguru import logger
 
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Race
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.effect_id import EffectId
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot
 from sc2.position import Point2
 from sc2.unit import Unit
