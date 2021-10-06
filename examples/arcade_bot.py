@@ -1,18 +1,3 @@
-import sc2
-from sc2 import Race
-from sc2.player import Bot
-
-from sc2.units import Units
-from sc2.unit import Unit
-from sc2.position import Point2, Point3
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.ability_id import AbilityId
-
-from typing import List, Dict, Set, Tuple, Any, Optional, Union  # mypy type checking
-
 """
 To play an arcade map, you need to download the map first.
 
@@ -34,9 +19,22 @@ Improvements that could be made:
 - Make marines constantly run if they have a ling/bane very close to them
 - Split marines before engaging
 """
+from typing import Union  # mypy type checking
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.buff_id import BuffId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.main import run_game
+from sc2.player import Bot
+from sc2.position import Point2, Point3
+from sc2.unit import Unit
 
 
-class MarineSplitChallenge(sc2.BotAI):
+class MarineSplitChallenge(BotAI):
     async def on_step(self, iteration):
         # do marine micro vs zerglings
         for unit in self.units(UnitTypeId.MARINE):
@@ -52,8 +50,7 @@ class MarineSplitChallenge(sc2.BotAI):
                         # Use stimpack
                         if (
                             self.already_pending_upgrade(UpgradeId.STIMPACK) == 1
-                            and not unit.has_buff(BuffId.STIMPACK)
-                            and unit.health > 10
+                            and not unit.has_buff(BuffId.STIMPACK) and unit.health > 10
                         ):
                             unit(AbilityId.EFFECT_STIM)
 
@@ -105,8 +102,7 @@ class MarineSplitChallenge(sc2.BotAI):
         pos = pos.position.rounded
         positions = {
             pos.offset(Point2((x, y)))
-            for x in range(-distance, distance + 1, step_size)
-            for y in range(-distance, distance + 1, step_size)
+            for x in range(-distance, distance + 1, step_size) for y in range(-distance, distance + 1, step_size)
             if (x, y) != (0, 0)
         }
         # filter positions outside map size
@@ -120,8 +116,8 @@ class MarineSplitChallenge(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("Marine Split Challenge"),
+    run_game(
+        maps.get("Marine Split Challenge"),
         [Bot(Race.Terran, MarineSplitChallenge())],
         realtime=False,
         save_replay_as="Example.SC2Replay",

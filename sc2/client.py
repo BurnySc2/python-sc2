@@ -1,24 +1,24 @@
 from __future__ import annotations
+
 from typing import Dict, Iterable, List, Optional, Set, Tuple, Union
 
+from loguru import logger
 from s2clientprotocol import debug_pb2 as debug_pb
 from s2clientprotocol import query_pb2 as query_pb
 from s2clientprotocol import raw_pb2 as raw_pb
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-from .action import combine_actions
-from .data import ActionResult, ChatChannel, Race, Result, Status
-from .game_data import AbilityData, GameData
-from .game_info import GameInfo
-from .ids.ability_id import AbilityId
-from .ids.unit_typeid import UnitTypeId
-from .position import Point2, Point3
-from .protocol import Protocol, ProtocolError
-from .renderer import Renderer
-from .unit import Unit
-from .units import Units
-
-from loguru import logger
+from sc2.action import combine_actions
+from sc2.data import ActionResult, ChatChannel, Race, Result, Status
+from sc2.game_data import AbilityData, GameData
+from sc2.game_info import GameInfo
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.position import Point2, Point3
+from sc2.protocol import Protocol, ProtocolError
+from sc2.renderer import Renderer
+from sc2.unit import Unit
+from sc2.units import Units
 
 
 class Client(Protocol):
@@ -196,9 +196,8 @@ class Client(Protocol):
         else:
             return [ActionResult(r) for r in res.action.result if ActionResult(r) != ActionResult.Success]
 
-    async def query_pathing(
-        self, start: Union[Unit, Point2, Point3], end: Union[Point2, Point3]
-    ) -> Optional[Union[int, float]]:
+    async def query_pathing(self, start: Union[Unit, Point2, Point3],
+                            end: Union[Point2, Point3]) -> Optional[Union[int, float]]:
         """Caution: returns "None" when path not found
         Try to combine queries with the function below because the pathing query is generally slow.
 
@@ -261,7 +260,10 @@ class Client(Protocol):
         return [p.result == 1 for p in result.query.placements]
 
     async def query_building_placement(
-        self, ability: AbilityData, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
+        self,
+        ability: AbilityData,
+        positions: List[Union[Point2, Point3]],
+        ignore_resources: bool = True
     ) -> List[ActionResult]:
         """This function might be deleted in favor of the function above (_query_building_placement_fast).
 
@@ -340,9 +342,8 @@ class Client(Protocol):
                 actions=[
                     sc_pb.Action(
                         action_raw=raw_pb.ActionRaw(
-                            toggle_autocast=raw_pb.ActionRawToggleAutocast(
-                                ability_id=ability.value, unit_tags=(u.tag for u in units)
-                            )
+                            toggle_autocast=raw_pb.
+                            ActionRawToggleAutocast(ability_id=ability.value, unit_tags=(u.tag for u in units))
                         )
                     )
                 ]
@@ -373,8 +374,7 @@ class Client(Protocol):
                             pos=position.as_Point2D,
                             quantity=amount_of_units,
                         )
-                    )
-                    for unit_type, amount_of_units, position, owner_id in unit_spawn_commands
+                    ) for unit_type, amount_of_units, position, owner_id in unit_spawn_commands
                 )
             )
         )
@@ -593,13 +593,11 @@ class Client(Protocol):
                             debug_pb.DebugCommand(
                                 draw=debug_pb.DebugDraw(
                                     text=[text.to_proto() for text in self._debug_texts] if self._debug_texts else None,
-                                    lines=[line.to_proto() for line in self._debug_lines]
-                                    if self._debug_lines
-                                    else None,
+                                    lines=[line.to_proto()
+                                           for line in self._debug_lines] if self._debug_lines else None,
                                     boxes=[box.to_proto() for box in self._debug_boxes] if self._debug_boxes else None,
-                                    spheres=[sphere.to_proto() for sphere in self._debug_spheres]
-                                    if self._debug_spheres
-                                    else None,
+                                    spheres=[sphere.to_proto()
+                                             for sphere in self._debug_spheres] if self._debug_spheres else None,
                                 )
                             )
                         ]
@@ -647,11 +645,9 @@ class Client(Protocol):
             debug=sc_pb.RequestDebug(
                 debug=(
                     debug_pb.DebugCommand(
-                        unit_value=debug_pb.DebugSetUnitValue(
-                            unit_value=unit_value, value=float(value), unit_tag=unit_tag
-                        )
-                    )
-                    for unit_tag in unit_tags
+                        unit_value=debug_pb.
+                        DebugSetUnitValue(unit_value=unit_value, value=float(value), unit_tag=unit_tag)
+                    ) for unit_tag in unit_tags
                 )
             )
         )

@@ -1,5 +1,4 @@
 from pathlib import Path
-from .control_group import ControlGroup
 
 
 def is_submodule(path):

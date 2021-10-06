@@ -1,21 +1,24 @@
-import sys, os
+import os
+import sys
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.ids.ability_id import AbilityId
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
-from typing import Tuple, List
+from typing import List, Tuple
 
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
+from sc2.ids.unit_typeid import UnitTypeId
 from sc2.player import Bot, Computer
-from sc2.player import Human
+from sc2.position import Point2, Point3
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.position import Point2, Point3
-from sc2.ids.unit_typeid import UnitTypeId
 
 
-class BCRushBot(sc2.BotAI):
+class BCRushBot(BotAI):
     def select_target(self) -> Tuple[Point2, bool]:
         """ Select an enemy target the units should attack. """
         targets: Units = self.enemy_structures
@@ -103,9 +106,8 @@ class BCRushBot(sc2.BotAI):
                 # Build starport once we can build starports, up to 2
                 elif (
                     factories.ready
-                    and self.structures.of_type({UnitTypeId.STARPORT, UnitTypeId.STARPORTFLYING}).ready.amount
-                    + self.already_pending(UnitTypeId.STARPORT)
-                    < 2
+                    and self.structures.of_type({UnitTypeId.STARPORT, UnitTypeId.STARPORTFLYING}).ready.amount +
+                    self.already_pending(UnitTypeId.STARPORT) < 2
                 ):
                     if self.can_afford(UnitTypeId.STARPORT):
                         await self.build(
@@ -128,10 +130,8 @@ class BCRushBot(sc2.BotAI):
             if not sp.has_add_on and self.can_afford(UnitTypeId.STARPORTTECHLAB):
                 addon_points = starport_points_to_build_addon(sp.position)
                 if all(
-                    self.in_map_bounds(addon_point)
-                    and self.in_placement_grid(addon_point)
-                    and self.in_pathing_grid(addon_point)
-                    for addon_point in addon_points
+                    self.in_map_bounds(addon_point) and self.in_placement_grid(addon_point)
+                    and self.in_pathing_grid(addon_point) for addon_point in addon_points
                 ):
                     sp.build(UnitTypeId.STARPORTTECHLAB)
                 else:
@@ -146,15 +146,15 @@ class BCRushBot(sc2.BotAI):
         for sp in self.structures(UnitTypeId.STARPORTFLYING).idle:
             possible_land_positions_offset = sorted(
                 (Point2((x, y)) for x in range(-10, 10) for y in range(-10, 10)),
-                key=lambda point: point.x ** 2 + point.y ** 2,
+                key=lambda point: point.x**2 + point.y**2,
             )
             offset_point: Point2 = Point2((-0.5, -0.5))
             possible_land_positions = (sp.position.rounded + offset_point + p for p in possible_land_positions_offset)
             for target_land_position in possible_land_positions:
                 land_and_addon_points: List[Point2] = starport_land_positions(target_land_position)
                 if all(
-                    self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos) and self.in_pathing_grid(land_pos)
-                    for land_pos in land_and_addon_points
+                    self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos)
+                    and self.in_pathing_grid(land_pos) for land_pos in land_and_addon_points
                 ):
                     sp(AbilityId.LAND, target_land_position)
                     break
@@ -184,8 +184,8 @@ class BCRushBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+    run_game(
+        maps.get("(2)CatalystLE"),
         [
             # Human(Race.Terran),
             Bot(Race.Terran, BCRushBot()),

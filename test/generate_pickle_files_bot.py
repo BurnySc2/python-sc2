@@ -1,41 +1,30 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import sc2
-from sc2 import Race
-from sc2.player import Bot
-
-from sc2.units import Units
-from sc2.unit import Unit
-from sc2.position import Point2, Point3
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.ability_id import AbilityId
-
-from sc2.player import Bot, Computer
-from sc2.data import Difficulty
-
-from sc2.game_data import GameData
-from sc2.game_info import GameInfo
-from sc2.game_state import GameState
-
-from sc2.protocol import ProtocolError
-
-from typing import List, Dict, Set, Tuple, Any, Optional, Union
-
-from s2clientprotocol import sc2api_pb2 as sc_pb
-import pickle, os, sys, traceback, lzma
-
-from loguru import logger
-
-
 """
 This "bot" will loop over several available ladder maps and generate the pickle file in the "/test/pickle_data/" subfolder.
 These will then be used to run tests from the test script "test_pickled_data.py"
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+import lzma
+import os
+import pickle
+import sys
+from typing import Set
+
+from loguru import logger
+from s2clientprotocol import sc2api_pb2 as sc_pb
+
+import sc2
+from sc2 import Race
+from sc2.data import Difficulty
+from sc2.game_data import GameData
+from sc2.game_info import GameInfo
+from sc2.game_state import GameState
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.player import Bot, Computer
+from sc2.protocol import ProtocolError
 
 
 class ExporterBot(sc2.BotAI):
@@ -96,8 +85,8 @@ class ExporterBot(sc2.BotAI):
             for unit_id, data in self.game_data.units.items()
             if data._proto.race != Race.NoRace and data._proto.race != Race.Random and data._proto.available
             # Dont cloak units
-            and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP
-            and (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
+            and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP and
+            (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
         }
 
         # Create units for self

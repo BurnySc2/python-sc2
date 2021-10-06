@@ -1,21 +1,24 @@
-import sys, os
+import os
+import sys
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 import random
 
-import sc2
-from sc2 import Race, Difficulty
-from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.player import Bot, Computer
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.position import Point2
-from sc2.player import Bot, Computer
-from sc2.data import race_townhalls
 
 
-class BroodlordBot(sc2.BotAI):
+class BroodlordBot(BotAI):
     def select_target(self) -> Point2:
         if self.enemy_structures:
             return random.choice(self.enemy_structures).position
@@ -129,8 +132,8 @@ class BroodlordBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("AcropolisLE"),
+    run_game(
+        maps.get("AcropolisLE"),
         [Bot(Race.Zerg, BroodlordBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         save_replay_as="ZvT.SC2Replay",

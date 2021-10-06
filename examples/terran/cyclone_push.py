@@ -1,19 +1,21 @@
-import sys, os
+import os
+import sys
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
-import sc2
-from sc2 import Race, Difficulty
-from sc2.player import Bot, Computer
-from sc2.player import Human
 from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
+from sc2.player import Bot, Computer
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.position import Point2
 
 
-class CyclonePush(sc2.BotAI):
+class CyclonePush(BotAI):
     def select_target(self) -> Point2:
         # Pick a random enemy structure's position
         targets = self.enemy_structures
@@ -60,8 +62,7 @@ class CyclonePush(sc2.BotAI):
         # While we have less than 22 workers: build more
         # Check if we can afford them (by minerals and by supply)
         if (
-            self.can_afford(UnitTypeId.SCV)
-            and self.supply_workers + self.already_pending(UnitTypeId.SCV) < 22
+            self.can_afford(UnitTypeId.SCV) and self.supply_workers + self.already_pending(UnitTypeId.SCV) < 22
             and cc.is_idle
         ):
             cc.train(UnitTypeId.SCV)
@@ -125,8 +126,8 @@ class CyclonePush(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+    run_game(
+        maps.get("(2)CatalystLE"),
         [
             # Human(Race.Terran),
             Bot(Race.Terran, CyclonePush()),

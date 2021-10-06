@@ -1,44 +1,37 @@
-import sys, os
+import os
+import sys
+
+from sc2 import maps
+from sc2.data import Race
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-import random
-import math
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.player import Bot, Computer
-from sc2.data import Alliance
-
-from sc2.position import Pointlike, Point2, Point3
-from sc2.units import Units
-from sc2.unit import Unit
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.effect_id import EffectId
-
-from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
-
-from typing import List, Set, Dict, Optional, Union
+from typing import Dict, List
 
 from loguru import logger
 
+import sc2
+from sc2.bot_ai import BotAI
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.player import Bot
+from sc2.position import Point2
+from sc2.unit import Unit
+from sc2.units import Units
 
-class TestBot(sc2.BotAI):
+
+class TestBot(BotAI):
     def __init__(self):
-        sc2.BotAI.__init__(self)
+        BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
 
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}")
-            for index in range(4000)
+            getattr(self, f"test_botai_actions{index}") for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_done_by_name = set()
@@ -94,8 +87,8 @@ class TestBot(sc2.BotAI):
     async def test_botai_actions1(self):
         map_center: Point2 = self._game_info.map_center
 
-        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
 
         structure_types: List[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
         upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM.keys())
@@ -204,7 +197,7 @@ class EmptyBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(sc2.maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
 
 
 if __name__ == "__main__":

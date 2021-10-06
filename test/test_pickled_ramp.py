@@ -1,33 +1,3 @@
-import sys, os
-from pathlib import Path
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-from sc2.game_data import GameData
-from sc2.game_info import GameInfo
-from sc2.game_info import Ramp
-from sc2.game_state import GameState
-from sc2.bot_ai import BotAI
-from sc2.units import Units
-from sc2.unit import Unit
-from sc2.position import Point2, Point3, Size, Rect
-from sc2.game_data import Cost
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.effect_id import EffectId
-
-from sc2.data import Race
-
-import pickle, pytest, random, math, lzma
-from hypothesis import given, event, settings, strategies as st
-
-from typing import Iterable, List
-import time
-
-
 """
 You can execute this test running the following command from the root python-sc2 folder:
 poetry run pytest test/test_pickled_ramp.py
@@ -37,8 +7,28 @@ This test/script uses the pickle files located in "python-sc2/test/pickle_data" 
 It will load the pickle files, recreate the bot object from scratch and tests most of the bot properties and functions.
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
+import os
+import sys
 
-MAPS: List[Path] = [map_path for map_path in (Path(__file__).parent/"pickle_data").iterdir() if map_path.suffix == ".xz"]
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import lzma
+import pickle
+import time
+from pathlib import Path
+from typing import List
+
+from sc2.bot_ai import BotAI
+from sc2.game_data import GameData
+from sc2.game_info import GameInfo, Ramp
+from sc2.game_state import GameState
+from sc2.position import Point2
+from sc2.unit import Unit
+from sc2.units import Units
+
+MAPS: List[Path] = [
+    map_path for map_path in (Path(__file__).parent / "pickle_data").iterdir() if map_path.suffix == ".xz"
+]
+
 
 def get_map_specific_bot(map_path: Path) -> BotAI:
     assert map_path in MAPS

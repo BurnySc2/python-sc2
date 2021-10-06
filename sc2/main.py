@@ -1,32 +1,31 @@
 import asyncio
-from aiohttp import ClientWebSocketResponse, ClientSession
-import time
-import six
 import json
-import mpyq
 import os
-import sys
 import platform
-import portpicker
 import signal
-import async_timeout
+import sys
+import time
 from dataclasses import dataclass
 from typing import Dict, List, Union
 
+import async_timeout
+import mpyq
+import portpicker
+import six
+from aiohttp import ClientSession, ClientWebSocketResponse
+from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-from .client import Client
-from .controller import Controller
-from .data import CreateGameError, Result, Status
-from .game_state import GameState
-from .maps import Map
-from .player import AbstractPlayer, Bot, BotProcess, Human
-from .portconfig import Portconfig
-from .protocol import ConnectionAlreadyClosed, ProtocolError
-from .proxy import Proxy
-from .sc2process import SC2Process, kill_switch
-
-from loguru import logger
+from sc2.client import Client
+from sc2.controller import Controller
+from sc2.data import CreateGameError, Result, Status
+from sc2.game_state import GameState
+from sc2.maps import Map
+from sc2.player import AbstractPlayer, Bot, BotProcess, Human
+from sc2.portconfig import Portconfig
+from sc2.protocol import ConnectionAlreadyClosed, ProtocolError
+from sc2.proxy import Proxy
+from sc2.sc2process import SC2Process, kill_switch
 
 # Set the global logging level
 logger.remove()
@@ -63,7 +62,7 @@ class GameMatch:
                 self.sc2_config = [{}]
             while len(self.sc2_config) < len(self.players):
                 self.sc2_config += self.sc2_config
-            self.sc2_config = self.sc2_config[: len(self.players)]
+            self.sc2_config = self.sc2_config[:len(self.players)]
 
     @property
     def needed_sc2_count(self) -> int:
@@ -95,7 +94,7 @@ class SlidingTimeWindow:
         self.window = []
 
     def push(self, value: float):
-        self.window = (self.window + [value])[-self.window_size :]
+        self.window = (self.window + [value])[-self.window_size:]
 
     def clear(self):
         self.window = []
@@ -266,9 +265,9 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                         except asyncio.TimeoutError:
                             step_time = time.monotonic() - step_start
                             logger.warning(
-                                f"Running AI step: out of budget; "
-                                + f"budget={budget:.2f}, steptime={step_time:.2f}, "
-                                + f"window={time_window.available_fmt}"
+                                f"Running AI step: out of budget; " +
+                                f"budget={budget:.2f}, steptime={step_time:.2f}, " +
+                                f"window={time_window.available_fmt}"
                             )
                             out_of_budget = True
                         step_time = time.monotonic() - step_start
@@ -318,7 +317,13 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
 
 async def _play_game(
-    player, client: Client, realtime, portconfig, step_time_limit=None, game_time_limit=None, rgb_render_config=None
+    player,
+    client: Client,
+    realtime,
+    portconfig,
+    step_time_limit=None,
+    game_time_limit=None,
+    rgb_render_config=None
 ) -> Result:
     assert isinstance(realtime, bool), repr(realtime)
 

@@ -1,18 +1,13 @@
 import argparse
-
-import sys
 import asyncio
+
 import aiohttp
+from loguru import logger
 
 import sc2
-from sc2 import Race, Difficulty
-from sc2.player import Bot, Computer
+from sc2.client import Client
 from sc2.protocol import ConnectionAlreadyClosed
 
-from sc2.sc2process import SC2Process
-from sc2.client import Client
-
-from loguru import logger
 
 # Run ladder game
 # This lets python-sc2 connect to a LadderManager game: https://github.com/Cryptyc/Sc2LadderServer

@@ -1,6 +1,6 @@
-from .paths import Paths
-
 from loguru import logger
+
+from sc2.paths import Paths
 
 
 def get(name=None):

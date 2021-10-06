@@ -2,7 +2,7 @@ from typing import Callable, FrozenSet, List, Set
 
 import numpy as np
 
-from .position import Point2
+from sc2.position import Point2
 
 
 class PixelMap:

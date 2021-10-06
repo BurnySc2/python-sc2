@@ -1,21 +1,25 @@
-import pytest, sys, os
+import os
+import sys
+
+import pytest
+
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import sc2
-from sc2 import Race, Difficulty
-from sc2.player import Bot, Computer
-
-from examples.terran.proxy_rax import ProxyRaxBot
-from examples.terran.ramp_wall import RampWallBot
 from examples.protoss.cannon_rush import CannonRushBot
 from examples.protoss.warpgate_push import WarpGateBot
-from examples.zerg.zerg_rush import ZergRushBot
+from examples.terran.proxy_rax import ProxyRaxBot
+from examples.terran.ramp_wall import RampWallBot
 from examples.zerg.onebase_broodlord import BroodlordBot
+from examples.zerg.zerg_rush import ZergRushBot
+from sc2.player import Bot, Computer
 
 
 def run_example(caplog, race, bot):
-    result = sc2.run_game(
+    result = run_game(
         sc2.maps.get("Sequencer LE"), [Bot(race, bot), Computer(Race.Terran, Difficulty.Easy)], realtime=False
     )
 

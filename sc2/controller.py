@@ -1,12 +1,11 @@
-from s2clientprotocol import sc2api_pb2 as sc_pb
-
-from .player import Computer
-from .protocol import Protocol
-
-from pathlib import Path
 import platform
+from pathlib import Path
 
 from loguru import logger
+from s2clientprotocol import sc2api_pb2 as sc_pb
+
+from sc2.player import Computer
+from sc2.protocol import Protocol
 
 
 class Controller(Protocol):

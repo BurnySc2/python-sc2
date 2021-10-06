@@ -1,22 +1,20 @@
-import sys, os
+import os
+import sys
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 import random
 
-import sc2
-from sc2 import Race, Difficulty
 from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.buff_id import BuffId
-from sc2.unit import Unit
-from sc2.units import Units
-from sc2.position import Point2
 from sc2.player import Bot, Computer
 
 
-class CannonRushBot(sc2.BotAI):
+class CannonRushBot(BotAI):
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(probe)(pylon)(cannon)(cannon)(gg)")
@@ -68,9 +66,10 @@ class CannonRushBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
-        [Bot(Race.Protoss, CannonRushBot(), name="CheeseCannon"), Computer(Race.Protoss, Difficulty.Medium)],
+    run_game(
+        maps.get("(2)CatalystLE"),
+        [Bot(Race.Protoss, CannonRushBot(), name="CheeseCannon"),
+         Computer(Race.Protoss, Difficulty.Medium)],
         realtime=False,
     )
 

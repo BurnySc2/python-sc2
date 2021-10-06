@@ -20,43 +20,43 @@ jobs:
         python-version: [3.7, 3.8, 3.9]
 
     steps:
-      - uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install poetry
-          poetry install
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
 
       # Run tests
-      - name: Run poetry pytest tests on pickle files
-        run: |
-          poetry run pytest test/
+    - name: Run poetry pytest tests on pickle files
+      run: |
+        poetry run pytest test/
 
       # Run benchmarks
-      - name: Run benchmark benchmark_array_creation
-        run: |
-          poetry run pytest test/benchmark_array_creation.py
+    - name: Run benchmark benchmark_array_creation
+      run: |
+        poetry run pytest test/benchmark_array_creation.py
 
-      - name: Run benchmark benchmark_distance_two_points
-        run: |
-          poetry run pytest test/benchmark_distance_two_points.py
+    - name: Run benchmark benchmark_distance_two_points
+      run: |
+        poetry run pytest test/benchmark_distance_two_points.py
 
-      - name: Run benchmark benchmark_distances_cdist
-        run: |
-          poetry run pytest test/benchmark_distances_cdist.py
+    - name: Run benchmark benchmark_distances_cdist
+      run: |
+        poetry run pytest test/benchmark_distances_cdist.py
 
-      - name: Run benchmark benchmark_distances_points_to_point
-        run: |
-          poetry run pytest test/benchmark_distances_points_to_point.py
+    - name: Run benchmark benchmark_distances_points_to_point
+      run: |
+        poetry run pytest test/benchmark_distances_points_to_point.py
 
-      - name: Run benchmark benchmark_distances_units
-        run: |
-          poetry run pytest test/benchmark_distances_units.py
+    - name: Run benchmark benchmark_distances_units
+      run: |
+        poetry run pytest test/benchmark_distances_units.py
 
 
 
@@ -71,31 +71,31 @@ jobs:
         python-version: [3.7]
 
     steps:
-      - uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install poetry
-          poetry install
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
 
-      - name: Run poetry coverage
-        run: |
-          poetry run pytest --cov=./
+    - name: Run poetry coverage
+      run: |
+        poetry run pytest --cov=./
 
-      - name: Generate html coverage files in htmlcov/ folder
-        run: |
-          poetry run coverage html
+    - name: Generate html coverage files in htmlcov/ folder
+      run: |
+        poetry run coverage html
 
-      - name: Upload htmlcov/ folder as artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: Coverage_report
-          path: htmlcov
+    - name: Upload htmlcov/ folder as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: Coverage_report
+        path: htmlcov
 
 
   run_radon:
@@ -108,22 +108,21 @@ jobs:
         python-version: [3.7]
 
     steps:
-      - uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install poetry
-          poetry install
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
 
-      - name: Run poetry radon
-        run: |
-          poetry run radon cc sc2/ -a -nb
-
+    - name: Run poetry radon
+      run: |
+        poetry run radon cc sc2/ -a -nb
 
 #  run_autotest_bot:
 #    # Run test bots that download the SC2 linux client and run it
@@ -148,7 +147,7 @@ jobs:
 #        docker build -t test_image -f test/Dockerfile_3.7 .
 #
 #    - name: Run autotest_bot.py
-#      # docker exec -i app bash -c "cd /root/template && pipenv run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
+#      # docker exec -i app bash -c "cd /root/template && poetry run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
 #                                                                                             # Run bot and list resulting files (replay file, stable_id.json)
 #      run: |
 #        docker run -it -d --name app1 test_image
@@ -189,36 +188,34 @@ jobs:
     # Required jobs to succeed before this job is run
     needs: [run_pytest_tests]
     steps:
-      - uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Remove docs and prepare to build
+    - name: Remove docs and prepare to build
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
-        run: |
-          python -m pip install poetry
-          poetry install --dev --python ${{ matrix.python-version }}
+      run: |
+        python -m pip install poetry
+        poetry install --dev --python ${{ matrix.python-version }}
 
-      - name: Build docs from scratch
-        run: |
-          mkdir -p docs
-          cd docs_generate
-          poetry run sphinx-build -a -E -b html . ../docs
-          cd ..
+    - name: Build docs from scratch
+      run: |
+        mkdir -p docs
+        cd docs_generate
+        poetry run sphinx-build -a -E -b html . ../docs
+        cd ..
 
-      - name: Publish to Github Pages
-        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BASE_BRANCH: develop # The branch the action should deploy from.
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: . # The folder the action should deploy.
-
-
+    - name: Publish to Github Pages
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: develop   # The branch the action should deploy from.
+        BRANCH: gh-pages   # The branch the action should deploy to.
+        FOLDER: .   # The folder the action should deploy.
 
   release_to_pypi:
     name: Pypi
@@ -231,22 +228,22 @@ jobs:
     # Required jobs to succeed before this job is run
     needs: [run_pytest_tests]
     steps:
-      - uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Update dependencies
+    - name: Update dependencies
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
-        run: |
-          pip install poetry
+      run: |
+        pip install poetry
 
-      - name: Build package
+    - name: Build package
         # Builds package to dist/* directory
-        run: |
-          poetry build
+      run: |
+        poetry build
 
       # Publish package on pypi
     - name: Publish
