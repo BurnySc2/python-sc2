@@ -1,22 +1,3 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.unit import Unit
-from sc2.units import Units
-from sc2.position import Point2
-from sc2.player import Bot, Computer
-from sc2.data import race_townhalls
-
-from loguru import logger
-
-from typing import Dict, List, Set
-
-
 """
 This bot attempts to stack workers 'perfectly'.
 This is only a demo that works on game start, but does not work when adding more workers or bases.
@@ -31,9 +12,26 @@ Task for the user who wants to enhance this bot:
 - Re-assign workers when mineral patch mines out
 - Re-assign workers when gas mines out
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+from typing import Dict, Set
+
+from loguru import logger
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
+from sc2.player import Bot, Computer
+from sc2.position import Point2
+from sc2.unit import Unit
+from sc2.units import Units
 
 
-class WorkerStackBot(sc2.BotAI):
+class WorkerStackBot(BotAI):
     def __init__(self):
         self.worker_to_mineral_patch_dict: Dict[int, int] = {}
         self.mineral_patch_to_list_of_workers: Dict[int, Set[int]] = {}
@@ -48,9 +46,10 @@ class WorkerStackBot(sc2.BotAI):
         await self.assign_workers()
 
     async def assign_workers(self):
-        self.minerals_sorted_by_distance = self.mineral_field.closer_than(
-            10, self.start_location
-        ).sorted_by_distance_to(self.start_location)
+        self.minerals_sorted_by_distance = self.mineral_field.closer_than(10,
+                                                                          self.start_location).sorted_by_distance_to(
+                                                                              self.start_location
+                                                                          )
 
         # Assign workers to mineral patch, start with the mineral patch closest to base
         for mineral in self.minerals_sorted_by_distance:
@@ -108,9 +107,10 @@ class WorkerStackBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, WorkerStackBot()), Computer(Race.Terran, Difficulty.Medium)],
+    run_game(
+        maps.get("AcropolisLE"),
+        [Bot(Race.Protoss, WorkerStackBot()),
+         Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         random_seed=0,
     )

@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import Union, List
+from typing import List, Union
 
-from .bot_ai import BotAI
-from .data import AIBuild, Difficulty, PlayerType, Race
+from sc2.bot_ai import BotAI
+from sc2.data import AIBuild, Difficulty, PlayerType, Race
 
 
 class AbstractPlayer:
@@ -79,7 +79,7 @@ class Observer(AbstractPlayer):
         super().__init__(PlayerType.Observer)
 
     def __str__(self):
-        return f"Observer"
+        return "Observer"
 
 
 class Player(AbstractPlayer):
@@ -120,7 +120,6 @@ class BotProcess(AbstractPlayer):
     e.g. to call a bot capable of running on the bot ladders:
         BotProcess(os.getcwd(), "python run.py", Race.Terran, "INnoVation")
     """
-
     def __init__(
         self,
         path: Union[str, Path],
@@ -151,12 +150,13 @@ class BotProcess(AbstractPlayer):
     def __repr__(self):
         if self.name is not None:
             return f"Bot {self.name}({self.race.name} from {self.launch_list})"
-        else:
-            return f"Bot({self.race.name} from {self.launch_list})"
+        return f"Bot({self.race.name} from {self.launch_list})"
 
-    def cmd_line(
-        self, sc2port: Union[int, str], matchport: Union[int, str], hostaddress: str, realtime: bool = False
-    ) -> List[str]:
+    def cmd_line(self,
+                 sc2port: Union[int, str],
+                 matchport: Union[int, str],
+                 hostaddress: str,
+                 realtime: bool = False) -> List[str]:
         """
 
         :param sc2port: the port that the launched sc2 instance listens to

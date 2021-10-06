@@ -4,12 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Introduction &#8212; python-sc2  documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -41,26 +42,26 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="introduction">
+  <section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <p>This is an overview to the BurnySc2/python-sc2 library which can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2">https://github.com/BurnySc2/python-sc2</a></p>
-<div class="section" id="requirements">
+<section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Python 3.7 or newer</p></li>
 <li><p>StarCraft 2 Client installation in the <strong>default installation path</strong> which should be <code class="docutils literal notranslate"><span class="pre">C:\Program</span> <span class="pre">Files</span> <span class="pre">(x86)\StarCraft</span> <span class="pre">II</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="installation">
+</section>
+<section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>Install through pip using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">burnysc2</span></code> if Python is in your environment path, or go into your python installation folder and run through console <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">burnysc2</span></code>.</p>
 <p>Alternatively (of if the command above doesn’t work) you can install a specific branch directly from github, here the develop branch:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pipenv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">poetry</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">force</span><span class="o">-</span><span class="n">reinstall</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">BurnySc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">develop</span><span class="o">.</span><span class="n">zip</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="creating-a-bot">
+</section>
+<section id="creating-a-bot">
 <h2>Creating a bot<a class="headerlink" href="#creating-a-bot" title="Permalink to this headline">¶</a></h2>
 <p>A basic bot can be made by creating a new file <cite>my_bot.py</cite> and filling it with the following contents:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sc2</span>
@@ -80,8 +81,8 @@
 </div>
 <p>You can now run the file using command <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">my_bot.py</span></code> or double clicking the file.</p>
 <p>A SC2 window should open and your bot should print the text several times per second to the console. Your bot will not do anything else because no orders are issued to your units.</p>
-</div>
-<div class="section" id="available-information-in-the-game">
+</section>
+<section id="available-information-in-the-game">
 <h2>Available information in the game<a class="headerlink" href="#available-information-in-the-game" title="Permalink to this headline">¶</a></h2>
 <p>Information about your bot:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Resources and supply</span>
@@ -155,11 +156,11 @@
 <span class="bp">self</span><span class="o">.</span><span class="n">time_formatted</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># The current game time properly formatted in &#39;min:sec&#39;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="possible-bot-actions">
+</section>
+<section id="possible-bot-actions">
 <h2>Possible bot actions<a class="headerlink" href="#possible-bot-actions" title="Permalink to this headline">¶</a></h2>
 <p>The game has started and now you want to build stuff with your mined resources. I assume you played at least one game of SC2 and know the basics, for example where you build drones (from larva) and SCVs and probes (from command center and nexus respectively).</p>
-<div class="section" id="training-a-unit">
+<section id="training-a-unit">
 <h3>Training a unit<a class="headerlink" href="#training-a-unit" title="Permalink to this headline">¶</a></h3>
 <p>Assuming you picked zerg for your bot and want to build a drone. Your larva is available in <code class="docutils literal notranslate"><span class="pre">self.larva</span></code>. Your bot starts with 3 larva. To choose which of the larva you want to issue the command to train a drone, you need to pick one. The simplest you can do is <code class="docutils literal notranslate"><span class="pre">my_larva</span> <span class="pre">=</span> <span class="pre">self.larva.random</span></code>. Now you have to issue a command to the larva: morph to drone.</p>
 <p>You can issue commands using the __call__ function: <code class="docutils literal notranslate"><span class="pre">unit(ability)</span></code>. You have to import ability ids before you can use them. <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">sc2.ids.ability_id</span> <span class="pre">import</span> <span class="pre">AbilityId</span></code>. Here, the action can be <code class="docutils literal notranslate"><span class="pre">my_larva(AbilityId.LARVATRAIN_DRONE)</span></code>. In total, this results in:</p>
@@ -210,8 +211,8 @@
         <span class="k">break</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="building-a-structure">
+</section>
+<section id="building-a-structure">
 <h3>Building a structure<a class="headerlink" href="#building-a-structure" title="Permalink to this headline">¶</a></h3>
 <p>Nearly the same procedure is when you want to build a structure. All that is needed is</p>
 <ul class="simple">
@@ -262,9 +263,9 @@
     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPAWNINGPOOL</span><span class="p">,</span> <span class="n">near</span><span class="o">=</span><span class="n">position_towards_map_center</span><span class="p">,</span> <span class="n">placement_step</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -306,7 +307,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -334,7 +335,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

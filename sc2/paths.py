@@ -1,12 +1,11 @@
 import os
 import platform
 import re
-import subprocess
 from pathlib import Path
 
-import sc2.wsl as wsl
-
 from loguru import logger
+
+import sc2.wsl as wsl
 
 BASEDIR = {
     "Windows": "C:/Program Files (x86)/StarCraft II",
@@ -124,7 +123,6 @@ def latest_executeble(versions_dir, base_build=None):
 
 class _MetaPaths(type):
     """"Lazily loads paths to allow importing the library even if SC2 isn't installed."""
-
     def __setup(self):
         if PF not in BASEDIR:
             logger.critical(f"Unsupported platform '{PF}'")

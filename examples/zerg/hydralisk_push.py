@@ -1,22 +1,25 @@
-import sys, os
+import os
+import sys
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 import random
 
-import sc2
-from sc2 import Race, Difficulty
-from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
+from sc2.player import Bot, Computer
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.position import Point2
-from sc2.player import Bot, Computer
-from sc2.data import race_townhalls
 
 
-class Hydralisk(sc2.BotAI):
+class Hydralisk(BotAI):
     def select_target(self) -> Point2:
         if self.enemy_structures:
             return random.choice(self.enemy_structures).position
@@ -40,13 +43,11 @@ class Hydralisk(sc2.BotAI):
         hydra_dens = self.structures(UnitTypeId.HYDRALISKDEN)
         if hydra_dens:
             for hydra_den in hydra_dens.ready.idle:
-                if self.already_pending_upgrade(UpgradeId.EVOLVEGROOVEDSPINES) == 0 and self.can_afford(
-                    UpgradeId.EVOLVEGROOVEDSPINES
-                ):
+                if self.already_pending_upgrade(UpgradeId.EVOLVEGROOVEDSPINES
+                                                ) == 0 and self.can_afford(UpgradeId.EVOLVEGROOVEDSPINES):
                     hydra_den.research(UpgradeId.EVOLVEGROOVEDSPINES)
-                elif self.already_pending_upgrade(UpgradeId.EVOLVEMUSCULARAUGMENTS) == 0 and self.can_afford(
-                    UpgradeId.EVOLVEMUSCULARAUGMENTS
-                ):
+                elif self.already_pending_upgrade(UpgradeId.EVOLVEMUSCULARAUGMENTS
+                                                  ) == 0 and self.can_afford(UpgradeId.EVOLVEMUSCULARAUGMENTS):
                     hydra_den.research(UpgradeId.EVOLVEMUSCULARAUGMENTS)
 
         # If hydra den is ready, train hydra
@@ -128,8 +129,8 @@ class Hydralisk(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+    run_game(
+        maps.get("(2)CatalystLE"),
         [Bot(Race.Zerg, Hydralisk()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         save_replay_as="ZvT.SC2Replay",

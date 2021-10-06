@@ -1,16 +1,17 @@
 from __future__ import annotations
+
 import itertools
 import math
 import random
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Iterable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable, List, Set, Tuple, Union
 
 from s2clientprotocol import common_pb2 as common_pb
 
 if TYPE_CHECKING:
-    from .unit import Unit
-    from .units import Units
+    from sc2.unit import Unit
+    from sc2.units import Units
 
-EPSILON = 10 ** -8
+EPSILON = 10**-8
 
 
 def _sign(num):
@@ -41,7 +42,7 @@ class Pointlike(tuple):
         This is to speed up the sorting process.
 
         :param p2:"""
-        return (self[0] - p2[0]) ** 2 + (self[1] - p2[1]) ** 2
+        return (self[0] - p2[0])**2 + (self[1] - p2[1])**2
 
     def is_closer_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:
         """Check if another point (or unit) is closer than the given distance.
@@ -111,14 +112,14 @@ class Pointlike(tuple):
 
         :param p:
         """
-        return self.__class__(a + b for a, b in itertools.zip_longest(self, p[: len(self)], fillvalue=0))
+        return self.__class__(a + b for a, b in itertools.zip_longest(self, p[:len(self)], fillvalue=0))
 
     def unit_axes_towards(self, p):
         """
 
         :param p:
         """
-        return self.__class__(_sign(b - a) for a, b in itertools.zip_longest(self, p[: len(self)], fillvalue=0))
+        return self.__class__(_sign(b - a) for a, b in itertools.zip_longest(self, p[:len(self)], fillvalue=0))
 
     def towards(self, p: Union[Unit, Pointlike], distance: Union[int, float] = 1, limit: bool = False) -> Pointlike:
         """
@@ -137,7 +138,7 @@ class Pointlike(tuple):
         if limit:
             distance = min(d, distance)
         return self.__class__(
-            a + (b - a) / d * distance for a, b in itertools.zip_longest(self, p[: len(self)], fillvalue=0)
+            a + (b - a) / d * distance for a, b in itertools.zip_longest(self, p[:len(self)], fillvalue=0)
         )
 
     def __eq__(self, other):
@@ -234,7 +235,7 @@ class Point2(Pointlike):
         distanceBetweenPoints = self.distance_to(p)
         assert r >= distanceBetweenPoints / 2
         # remaining distance from center towards the intersection, using pythagoras
-        remainingDistanceFromCenter = (r ** 2 - (distanceBetweenPoints / 2) ** 2) ** 0.5
+        remainingDistanceFromCenter = (r**2 - (distanceBetweenPoints / 2)**2)**0.5
         # center of both points
         offsetToCenter = Point2(((p.x - self.x) / 2, (p.y - self.y) / 2))
         center = self.offset(offsetToCenter)

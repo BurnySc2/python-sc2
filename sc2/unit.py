@@ -1,75 +1,65 @@
 from __future__ import annotations
-import warnings
-import math
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 
-from .cache import property_immutable_cache, property_mutable_cache
-from .constants import (
-    transforming,
-    DAMAGE_BONUS_PER_UPGRADE,
-    IS_STRUCTURE,
-    IS_LIGHT,
-    IS_ARMORED,
-    IS_BIOLOGICAL,
-    IS_MECHANICAL,
-    IS_MASSIVE,
-    IS_PSIONIC,
-    UNIT_BATTLECRUISER,
-    UNIT_ORACLE,
-    TARGET_GROUND,
-    TARGET_AIR,
-    TARGET_BOTH,
-    IS_SNAPSHOT,
-    IS_VISIBLE,
-    IS_PLACEHOLDER,
-    IS_MINE,
-    IS_ENEMY,
-    IS_CLOAKED,
-    IS_REVEALED,
+import math
+import warnings
+from typing import TYPE_CHECKING, List, Optional, Set, Tuple, Union
+
+from sc2.cache import property_immutable_cache, property_mutable_cache
+from sc2.constants import (
     CAN_BE_ATTACKED,
-    IS_CARRYING_MINERALS,
-    IS_CARRYING_VESPENE,
-    IS_CARRYING_RESOURCES,
+    DAMAGE_BONUS_PER_UPGRADE,
+    IS_ARMORED,
     IS_ATTACKING,
-    IS_PATROLLING,
-    IS_GATHERING,
-    IS_RETURNING,
+    IS_BIOLOGICAL,
+    IS_CARRYING_MINERALS,
+    IS_CARRYING_RESOURCES,
+    IS_CARRYING_VESPENE,
+    IS_CLOAKED,
     IS_COLLECTING,
     IS_CONSTRUCTING_SCV,
-    IS_REPAIRING,
     IS_DETECTOR,
-    UNIT_PHOTONCANNON,
-    UNIT_COLOSSUS,
-    SPEED_INCREASE_DICT,
-    SPEED_UPGRADE_DICT,
-    SPEED_INCREASE_ON_CREEP_DICT,
-    OFF_CREEP_SPEED_UPGRADE_DICT,
+    IS_ENEMY,
+    IS_GATHERING,
+    IS_LIGHT,
+    IS_MASSIVE,
+    IS_MECHANICAL,
+    IS_MINE,
+    IS_PATROLLING,
+    IS_PLACEHOLDER,
+    IS_PSIONIC,
+    IS_REPAIRING,
+    IS_RETURNING,
+    IS_REVEALED,
+    IS_SNAPSHOT,
+    IS_STRUCTURE,
+    IS_VISIBLE,
     OFF_CREEP_SPEED_INCREASE_DICT,
+    OFF_CREEP_SPEED_UPGRADE_DICT,
     SPEED_ALTERING_BUFFS,
+    SPEED_INCREASE_DICT,
+    SPEED_INCREASE_ON_CREEP_DICT,
+    SPEED_UPGRADE_DICT,
+    TARGET_AIR,
+    TARGET_BOTH,
+    TARGET_GROUND,
     TARGET_HELPER,
+    UNIT_BATTLECRUISER,
+    UNIT_COLOSSUS,
+    UNIT_ORACLE,
+    UNIT_PHOTONCANNON,
+    transforming,
 )
-from .data import (
-    Alliance,
-    Attribute,
-    CloakState,
-    DisplayType,
-    Race,
-    TargetType,
-    warpgate_abilities,
-    TargetType,
-    Target,
-    race_gas,
-)
-from .ids.ability_id import AbilityId
-from .ids.buff_id import BuffId
-from .ids.upgrade_id import UpgradeId
-from .ids.unit_typeid import UnitTypeId
-from .position import Point2, Point3
-from .unit_command import UnitCommand
+from sc2.data import Alliance, Attribute, CloakState, Race, Target, race_gas, warpgate_abilities
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.buff_id import BuffId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.position import Point2, Point3
+from sc2.unit_command import UnitCommand
 
 if TYPE_CHECKING:
-    from .bot_ai import BotAI
-    from .game_data import AbilityData, UnitTypeData
+    from sc2.bot_ai import BotAI
+    from sc2.game_data import AbilityData, UnitTypeData
 
 
 class UnitOrder:
@@ -535,7 +525,7 @@ class Unit:
 
         :param p:"""
         if isinstance(p, Unit):
-            return self._bot_object._distance_squared_unit_to_unit(self, p) ** 0.5
+            return self._bot_object._distance_squared_unit_to_unit(self, p)**0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
     def distance_to_squared(self, p: Union[Unit, Point2, Point3]) -> float:
@@ -561,8 +551,8 @@ class Unit:
         else:
             return False
         return (
-            self._bot_object._distance_squared_unit_to_unit(self, target)
-            <= (self.radius + target.radius + unit_attack_range + bonus_distance) ** 2
+            self._bot_object._distance_squared_unit_to_unit(self, target) <=
+            (self.radius + target.radius + unit_attack_range + bonus_distance)**2
         )
 
     def in_ability_cast_range(
@@ -579,21 +569,23 @@ class Unit:
         # For casting abilities that target other units, like transfuse, feedback, snipe, yamato
         if ability_target_type in {Target.Unit.value, Target.PointOrUnit.value} and isinstance(target, Unit):
             return (
-                self._bot_object._distance_squared_unit_to_unit(self, target)
-                <= (cast_range + self.radius + target.radius + bonus_distance) ** 2
+                self._bot_object._distance_squared_unit_to_unit(self, target) <=
+                (cast_range + self.radius + target.radius + bonus_distance)**2
             )
         # For casting abilities on the ground, like queen creep tumor, ravager bile, HT storm
-        if ability_target_type in {Target.Point.value, Target.PointOrUnit.value} and isinstance(
-            target, (Point2, tuple)
-        ):
+        if ability_target_type in {Target.Point.value, Target.PointOrUnit.value
+                                   } and isinstance(target, (Point2, tuple)):
             return (
-                self._bot_object._distance_pos_to_pos(self.position_tuple, target)
-                <= cast_range + self.radius + bonus_distance
+                self._bot_object._distance_pos_to_pos(self.position_tuple, target) <=
+                cast_range + self.radius + bonus_distance
             )
         return False
 
     def calculate_damage_vs_target(
-        self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
+        self,
+        target: Unit,
+        ignore_armor: bool = False,
+        include_overkill_damage: bool = True
     ) -> Tuple[float, float, float]:
         """
         Returns a tuple of: [potential damage against target, attack speed, attack range]
@@ -633,8 +625,7 @@ class Unit:
             enemy_shield_armor: float = target.shield_upgrade_level
             # Ultralisk armor upgrade, only works if target belongs to the bot calling this function
             if (
-                target.type_id in {UnitTypeId.ULTRALISK, UnitTypeId.ULTRALISKBURROWED}
-                and target.is_mine
+                target.type_id in {UnitTypeId.ULTRALISK, UnitTypeId.ULTRALISKBURROWED} and target.is_mine
                 and UpgradeId.CHITINOUSPLATING in target._bot_object.state.upgrades
             ):
                 enemy_armor += 2
@@ -668,10 +659,7 @@ class Unit:
 
         required_target_type: Set[int] = (
             TARGET_BOTH
-            if target.type_id == UnitTypeId.COLOSSUS
-            else TARGET_GROUND
-            if not target.is_flying
-            else TARGET_AIR
+            if target.type_id == UnitTypeId.COLOSSUS else TARGET_GROUND if not target.is_flying else TARGET_AIR
         )
         # Contains total damage, attack speed and attack range
         damages: List[Tuple[float, float, float]] = []
@@ -684,9 +672,8 @@ class Unit:
             weapon_speed: float = weapon.speed
             weapon_range: float = weapon.range
             bonus_damage_per_upgrade = (
-                0
-                if not self.attack_upgrade_level
-                else DAMAGE_BONUS_PER_UPGRADE.get(self.type_id, {}).get(weapon.type, {}).get(None, 1)
+                0 if not self.attack_upgrade_level else
+                DAMAGE_BONUS_PER_UPGRADE.get(self.type_id, {}).get(weapon.type, {}).get(None, 1)
             )
             damage_per_attack: float = weapon.damage + self.attack_upgrade_level * bonus_damage_per_upgrade
             # Remaining damage after all damage is dealt to shield
@@ -699,14 +686,12 @@ class Unit:
                 # More about damage bonus https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L55
                 if bonus.attribute in target._type_data.attributes:
                     bonus_damage_per_upgrade = (
-                        0
-                        if not self.attack_upgrade_level
-                        else DAMAGE_BONUS_PER_UPGRADE.get(self.type_id, {}).get(weapon.type, {}).get(bonus.attribute, 0)
+                        0 if not self.attack_upgrade_level else
+                        DAMAGE_BONUS_PER_UPGRADE.get(self.type_id, {}).get(weapon.type, {}).get(bonus.attribute, 0)
                     )
                     # Hardcode blueflame damage bonus from hellions
                     if (
-                        bonus.attribute == IS_LIGHT
-                        and self.type_id == UnitTypeId.HELLION
+                        bonus.attribute == IS_LIGHT and self.type_id == UnitTypeId.HELLION
                         and UpgradeId.HIGHCAPACITYBARRELS in self._bot_object.state.upgrades
                     ):
                         bonus_damage_per_upgrade += 5
@@ -762,16 +747,13 @@ class Unit:
                 if (
                     self.type_id == UnitTypeId.ZERGLING
                     # Attack speed calculation only works for our unit
-                    and self.is_mine
-                    and UpgradeId.ZERGLINGATTACKSPEED in upgrades
+                    and self.is_mine and UpgradeId.ZERGLINGATTACKSPEED in upgrades
                 ):
                     # 0.696044921875 for zerglings divided through 1.4 equals (+40% attack speed bonus from the upgrade):
                     weapon_speed /= 1.4
                 elif (
                     # Adept ereceive 45% attack speed bonus from glaives
-                    self.type_id == UnitTypeId.ADEPT
-                    and self.is_mine
-                    and UpgradeId.ADEPTPIERCINGATTACK in upgrades
+                    self.type_id == UnitTypeId.ADEPT and self.is_mine and UpgradeId.ADEPTPIERCINGATTACK in upgrades
                 ):
                     # TODO next patch: if self.type_id is adept: check if attack speed buff is active, instead of upgrade
                     weapon_speed /= 1.45
@@ -782,17 +764,14 @@ class Unit:
                     weapon_speed /= 1.5
                 elif (
                     # TODO always assume that the enemy has the range upgrade researched
-                    self.type_id == UnitTypeId.HYDRALISK
-                    and self.is_mine
-                    and UpgradeId.EVOLVEGROOVEDSPINES in upgrades
+                    self.type_id == UnitTypeId.HYDRALISK and self.is_mine and UpgradeId.EVOLVEGROOVEDSPINES in upgrades
                 ):
                     weapon_range += 1
                 elif self.type_id == UnitTypeId.PHOENIX and self.is_mine and UpgradeId.PHOENIXRANGEUPGRADE in upgrades:
                     weapon_range += 2
                 elif (
                     self.type_id in {UnitTypeId.PLANETARYFORTRESS, UnitTypeId.MISSILETURRET, UnitTypeId.AUTOTURRET}
-                    and self.is_mine
-                    and UpgradeId.HISECAUTOTRACKING in upgrades
+                    and self.is_mine and UpgradeId.HISECAUTOTRACKING in upgrades
                 ):
                     weapon_range += 1
 
@@ -809,9 +788,8 @@ class Unit:
         self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
     ) -> float:
         """ Returns the DPS against the given target. """
-        calc_tuple: Tuple[float, float, float] = self.calculate_damage_vs_target(
-            target, ignore_armor, include_overkill_damage
-        )
+        calc_tuple: Tuple[float, float,
+                          float] = self.calculate_damage_vs_target(target, ignore_armor, include_overkill_damage)
         # TODO fix for real time? The result may have to be multiplied by 1.4 because of game_speed=normal
         if calc_tuple[1] == 0:
             return 0
@@ -1276,9 +1254,10 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def build_gas(
-        self, target_geysir: Unit, queue: bool = False, can_afford_check: bool = False
-    ) -> Union[UnitCommand, bool]:
+    def build_gas(self,
+                  target_geysir: Unit,
+                  queue: bool = False,
+                  can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """Orders unit to build another 'unit' at 'position'.
         Usage::
 
@@ -1300,9 +1279,10 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def research(
-        self, upgrade: UpgradeId, queue: bool = False, can_afford_check: bool = False
-    ) -> Union[UnitCommand, bool]:
+    def research(self,
+                 upgrade: UpgradeId,
+                 queue: bool = False,
+                 can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """Orders unit to research 'upgrade'.
         Requires UpgradeId to be passed instead of AbilityId.
 
@@ -1316,9 +1296,10 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def warp_in(
-        self, unit: UnitTypeId, position: Union[Point2, Point3], can_afford_check: bool = False
-    ) -> Union[UnitCommand, bool]:
+    def warp_in(self,
+                unit: UnitTypeId,
+                position: Union[Point2, Point3],
+                can_afford_check: bool = False) -> Union[UnitCommand, bool]:
         """Orders Warpgate to warp in 'unit' at 'position'.
 
         :param unit:

@@ -1,23 +1,24 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
 from itertools import chain
+from typing import List, Optional, Set, Union
+
 from loguru import logger
 
-from .cache import property_cache_forever
-from .constants import FakeEffectID, FakeEffectRadii, IS_MINE, IS_ENEMY
-from .data import Alliance, DisplayType
-from .ids.effect_id import EffectId
-from .ids.ability_id import AbilityId
-from .ids.upgrade_id import UpgradeId
-from .pixel_map import PixelMap
-from .position import Point2, Point3
-from .power_source import PsionicMatrix
-from .score import ScoreDetails
+from sc2.cache import property_cache_forever
+from sc2.constants import IS_ENEMY, IS_MINE, FakeEffectID, FakeEffectRadii
+from sc2.data import Alliance, DisplayType
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.effect_id import EffectId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.pixel_map import PixelMap
+from sc2.position import Point2, Point3
+from sc2.power_source import PsionicMatrix
+from sc2.score import ScoreDetails
 
 try:
-    from .dicts.generic_redirect_abilities import GENERIC_REDIRECT_ABILITIES
+    from sc2.dicts.generic_redirect_abilities import GENERIC_REDIRECT_ABILITIES
 except ImportError:
     logger.info(f'Unable to import "GENERIC_REDIRECT_ABILITIES"')
     GENERIC_REDIRECT_ABILITIES = {}
@@ -237,7 +238,8 @@ class GameState:
         _dead_units = {dead_unit_tag for dead_unit_tag in self.observation_raw.event.dead_units}
         if self.previous_observation:
             return _dead_units | {
-                dead_unit_tag for dead_unit_tag in self.previous_observation.observation.raw_data.event.dead_units
+                dead_unit_tag
+                for dead_unit_tag in self.previous_observation.observation.raw_data.event.dead_units
             }
         return _dead_units
 

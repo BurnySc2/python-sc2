@@ -1,4 +1,4 @@
-from .position import Point2
+from sc2.position import Point2
 
 
 class PowerSource:

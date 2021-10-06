@@ -1,42 +1,30 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import random
-import math
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.player import Bot, Computer
-from sc2.data import Alliance
-
-from sc2.position import Pointlike, Point2, Point3
-from sc2.units import Units
-from sc2.unit import Unit
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.effect_id import EffectId
-
-from typing import List, Set, Dict, Optional, Union
-
-from loguru import logger
-
-
 """
 This testbot's purpose is to test the query behavior of the API.
 These query functions are:
 self.can_place (RequestQueryBuildingPlacement)
 TODO: self.client.query_pathing (RequestQueryPathing)
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+from typing import List, Union
+
+from loguru import logger
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot
+from sc2.position import Point2
 
 
-class TestBot(sc2.BotAI):
+class TestBot(BotAI):
     def __init__(self):
-        sc2.BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
 
@@ -52,7 +40,7 @@ class TestBot(sc2.BotAI):
         await self.test_can_place_expect_false()
 
         # await self.client.leave()
-        exit(0)
+        sys.exit(0)
 
     async def clear_map_center(self):
         """ Spawn observer in map center, remove all enemy units, remove all own units. """
@@ -205,14 +193,14 @@ class TestBot(sc2.BotAI):
         # TODO Check if a moving invisible unit is blocking (patroulling dark templar, patroulling burrowed roach)
 
 
-class EmptyBot(sc2.BotAI):
+class EmptyBot(BotAI):
     async def on_step(self, iteration: int):
         for unit in self.units:
             unit.hold_position()
 
 
 def main():
-    sc2.run_game(sc2.maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
 import os
-import subprocess
 import re
+import subprocess
 from pathlib import Path, PureWindowsPath
+
 from loguru import logger
 
 ## This file is used for compatibility with WSL and shouldn't need to be

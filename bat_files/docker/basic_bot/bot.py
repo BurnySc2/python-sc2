@@ -1,16 +1,14 @@
-import numpy as np
-from sc2.position import Point2, Point3
-
-import sc2
-from sc2.data import Result
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.player import Bot, Computer
+from sc2.bot_ai import BotAI
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.buff_id import BuffId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
 
 
-class CompetitiveBot(sc2.BotAI):
+class CompetitiveBot(BotAI):
     async def on_start(self):
         self.client.game_step = 2
 
@@ -52,9 +50,8 @@ class CompetitiveBot(sc2.BotAI):
                     drone.gather(mineral, queue=True)
 
         # If we have 100 vespene, this will try to research zergling speed once the spawning pool is at 100% completion
-        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(
-            UpgradeId.ZERGLINGMOVEMENTSPEED
-        ):
+        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED
+                                        ) == 0 and self.can_afford(UpgradeId.ZERGLINGMOVEMENTSPEED):
             spawning_pools_ready: Units = self.structures(UnitTypeId.SPAWNINGPOOL).ready
             if spawning_pools_ready:
                 self.research(UpgradeId.ZERGLINGMOVEMENTSPEED)
@@ -65,8 +62,7 @@ class CompetitiveBot(sc2.BotAI):
 
         # While we have less than 88 vespene mined: send drones into extractor one frame at a time
         if (
-            self.gas_buildings.ready
-            and self.vespene < 88
+            self.gas_buildings.ready and self.vespene < 88
             and self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0
         ):
             extractor: Unit = self.gas_buildings.first
@@ -92,8 +88,7 @@ class CompetitiveBot(sc2.BotAI):
         # If we have no extractor, build extractor
         if (
             self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) == 0
-            and self.can_afford(UnitTypeId.EXTRACTOR)
-            and self.workers
+            and self.can_afford(UnitTypeId.EXTRACTOR) and self.workers
         ):
             drone: Unit = self.workers.random
             target: Unit = self.vespene_geyser.closest_to(drone)

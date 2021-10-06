@@ -1,0 +1,103 @@
+repos:
+# Check yaml files like this one and github actions if they are valid
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.0.1
+  hooks:
+  - id: check-yaml
+
+# Autoformat yaml files
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.1.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2']
+
+# Check github action workflow files
+- repo: https://github.com/sirosen/check-jsonschema
+  rev: 0.3.2
+  hooks:
+  - id: check-github-workflows
+
+# Check toml files like pyproject.toml if it is valid
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.0.1
+  hooks:
+  - id: check-toml
+
+# Remove unused imports
+- repo: https://github.com/hadialqattan/pycln
+  rev: v1.0.3
+  hooks:
+  - id: pycln
+    args: [--config=pyproject.toml]
+
+# Convert relative to absolute imports
+- repo: https://github.com/MarcoGorelli/absolufy-imports
+  rev: v0.3.0
+  hooks:
+  - id: absolufy-imports
+
+# Sort imports
+- repo: https://github.com/pycqa/isort
+  rev: 5.5.4
+  hooks:
+  - id: isort
+    files: \.(py)$
+    args: [--settings-path=pyproject.toml]
+
+# Autoformat code
+- repo: local
+  hooks:
+  - id: yapf
+    name: yapf
+    stages: [commit]
+    language: system
+    entry: poetry run yapf -i
+    types: [python]
+    exclude: setup.py
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.0.1
+  hooks:
+  # Check if python files are vlaid
+  - id: check-ast
+  - id: check-builtin-literals
+  - id: check-docstring-first
+  - id: debug-statements
+
+- repo: https://github.com/pre-commit/pygrep-hooks
+  rev: v1.9.0
+  hooks:
+  # Check for bad code
+  - id: python-no-eval
+  - id: python-no-log-warn
+  # Enforce type annotation instead of comment annotation
+  - id: python-use-type-annotations
+
+- repo: local
+  hooks:
+# TODO too many problems require change
+#  - id: pylint
+#    name: pylint
+#    stages: [commit]
+#    language: system
+#    entry: poetry run pylint
+#    types: [python]
+
+# TODO Types before enabling this
+#  # Run mypy type checks
+#  - id: mypy
+#    name: mypy
+#    stages: [commit]
+#    language: system
+#    entry: poetry run mypy .
+#    types: [python]
+#    pass_filenames: false
+
+  # Run tests
+  - id: pytest
+    name: pytest
+    stages: [commit]
+    language: system
+    entry: poetry run pytest test
+    pass_filenames: false

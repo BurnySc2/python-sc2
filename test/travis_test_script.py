@@ -1,5 +1,3 @@
-import sys, subprocess, time
-
 """
 This script is made as a wrapper for sc2 bots to set a timeout to the bots (in case they can't find the last enemy structure or the game is ending in a draw)
 Ideally this script should be done with a bot that terminates on its own after certain things have been achieved, e.g. testing if the bot can expand at all, and then terminates after it has successfully expanded.
@@ -10,14 +8,16 @@ docker build -t test_image -f test/Dockerfile .
 docker run test_image -c "python test/travis_test_script.py test/autotest_bot.py"
 
 Or if you want to run from windows:
-pipenv run python test/travis_test_script.py test/autotest_bot.py
+poetry run python test/travis_test_script.py test/autotest_bot.py
 """
+import subprocess
+import sys
+import time
 
 retries = 3
 # My maxout bot (reaching 200 supply in sc2) took 110 - 140 real seconds for 7 minutes in game time
 # How long the script should run before it will be killed:
 timeout_time = 8 * 60  # 8 minutes real time
-
 
 if len(sys.argv) > 1:
     # Attempt to run process with retries and timeouts
@@ -64,7 +64,7 @@ if len(sys.argv) > 1:
         print(
             f"Exiting with exit code 5, error: Attempted to launch script {sys.argv[1]} timed out after {time_taken} seconds. Retries completed: {i}"
         )
-        exit(5)
+        sys.exit(5)
 
     # process.returncode will always return 0 if the game was run successfully or if there was a python error (in this case it returns as defeat)
     print("Returncode: {}".format(process.returncode))
@@ -74,14 +74,14 @@ if len(sys.argv) > 1:
             # This will throw an error even if a bot is called Traceback
             if "Traceback " in line:
                 print("Exiting with exit code 3")
-                exit(3)
+                sys.exit(3)
         print("Exiting with exit code 0")
-        exit(0)
+        sys.exit(0)
 
     # Exit code 1: game crashed I think
     print("Exiting with exit code 1")
-    exit(1)
+    sys.exit(1)
 
 # Exit code 2: bot was not launched
 print("Exiting with exit code 2")
-exit(2)
+sys.exit(2)

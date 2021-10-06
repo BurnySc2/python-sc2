@@ -1,21 +1,3 @@
-import json, os, subprocess
-import lzma, pickle
-from pathlib import Path
-from typing import Dict, Set, List, Union, Optional
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.effect_id import EffectId
-from sc2.game_data import GameData
-
-from collections import OrderedDict
-
-from loguru import logger
-
-# from ordered_set import OrderedSet
-
 """
 Script requirements:
 pip install black
@@ -34,6 +16,21 @@ json viewers to inspect the data.json manually:
 http://jsonviewer.stack.hu/
 https://jsonformatter.org/json-viewer
 """
+import json
+import lzma
+import os
+import pickle
+import subprocess
+from collections import OrderedDict
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Union
+
+from loguru import logger
+
+from sc2.game_data import GameData
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
 
 
 def get_map_file_path() -> Path:
@@ -47,9 +44,9 @@ class OrderedDict2(OrderedDict):
         if not self:
             return "{}"
         return (
-            "{"
-            + ", ".join(f"{repr(key)}: {repr(value)}" for key, value in sorted(self.items(), key=lambda u: u[0].name))
-            + "}"
+            "{" +
+            ", ".join(f"{repr(key)}: {repr(value)}"
+                      for key, value in sorted(self.items(), key=lambda u: u[0].name)) + "}"
         )
 
 
@@ -130,9 +127,7 @@ def get_unit_train_build_abilities(data):
         # Collect larva morph abilities, and one way morphs (exclude burrow, hellbat morph, siege tank siege)
         # Also doesnt include building addons
         if not train_unit_type_id_value and (
-            "LARVATRAIN_" in ability_id.name
-            or ability_id
-            in {
+            "LARVATRAIN_" in ability_id.name or ability_id in {
                 AbilityId.MORPHTOBROODLORD_BROODLORD,
                 AbilityId.MORPHZERGLINGTOBANELING_BANELING,
                 AbilityId.MORPHTORAVAGER_RAVAGER,
@@ -173,7 +168,6 @@ def get_unit_train_build_abilities(data):
                 ability_requires_placement.add(ability_id)
 
             ability_to_unittypeid_dict[ability_id] = created_unit_type_id
-
     """
     unit_train_abilities = {
         UnitTypeId.GATEWAY: {
@@ -208,7 +202,6 @@ def get_unit_train_build_abilities(data):
                 required_building: Optional[UnitTypeId] = None
                 requires_placement_position: bool = False
                 requires_power: bool = False
-
                 """
                 requirements = [
                     {
@@ -264,7 +257,6 @@ def get_upgrade_abilities(data):
     upgrade_data = data["Upgrade"]
 
     ability_to_upgrade_dict: Dict[AbilityId, UpgradeId] = OrderedDict2()
-
     """
     We want to be able to research an upgrade by doing
     await self.can_research(UpgradeId, return_idle_structures=True) -> returns list of idle structures that can research it
@@ -284,7 +276,6 @@ def get_upgrade_abilities(data):
             upgrade_id: UpgradeId = UpgradeId(upgrade_id_value)
 
             ability_to_upgrade_dict[ability_id] = upgrade_id
-
     """
     unit_research_abilities = {
         UnitTypeId.ENGINEERINGBAY: {
@@ -560,7 +551,8 @@ from typing import Dict, Set, Union
         unit_research_abilities_dict_path,
         dict_name="RESEARCH_INFO",
         file_header=file_header,
-        dict_type_annotation=": Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId, UpgradeId]]]]",
+        dict_type_annotation=
+        ": Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId, UpgradeId]]]]",
     )
     dump_dict_to_file(
         unit_trained_from,

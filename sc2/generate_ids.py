@@ -1,15 +1,16 @@
+import importlib
 import json
 import platform
 import subprocess
-import importlib
 import sys
 from pathlib import Path
 
 from loguru import logger
-from .game_data import AbilityData, UnitTypeData, UpgradeData, GameData
+
+from sc2.game_data import AbilityData, GameData, UnitTypeData, UpgradeData
 
 try:
-    from .ids.id_version import ID_VERSION_STRING
+    from sc2.ids.id_version import ID_VERSION_STRING
 except ImportError:
     ID_VERSION_STRING = "4.11.4.78285"
 
@@ -192,41 +193,38 @@ class IdGenerator:
 
         # Reload the newly written "id" files
         # TODO This only re-imports modules, but if they haven't been imported, it will yield an error
-        from .ids.ability_id import AbilityId
+        from sc2.ids.ability_id import AbilityId
 
         importlib.reload(sys.modules["sc2.ids.ability_id"])
-        from .ids.unit_typeid import UnitTypeId
 
         importlib.reload(sys.modules["sc2.ids.unit_typeid"])
-        from .ids.upgrade_id import UpgradeId
 
         importlib.reload(sys.modules["sc2.ids.upgrade_id"])
-        from .ids.effect_id import EffectId
 
         importlib.reload(sys.modules["sc2.ids.effect_id"])
-        from .ids.buff_id import BuffId
 
         importlib.reload(sys.modules["sc2.ids.buff_id"])
 
         # importlib.reload(sys.modules["sc2.ids.id_version"])
-        from . import constants
 
         importlib.reload(sys.modules["sc2.constants"])
 
     def update_game_data(self):
         """Re-generate the dicts from self.game_data.
         This should be done after the ids have been reimported."""
-        from .ids.ability_id import AbilityId
+        from sc2.ids.ability_id import AbilityId
 
         ids = set(a.value for a in AbilityId if a.value != 0)
         self.game_data.abilities = {
-            a.ability_id: AbilityData(self.game_data, a) for a in self.game_data._proto.abilities if a.ability_id in ids
+            a.ability_id: AbilityData(self.game_data, a)
+            for a in self.game_data._proto.abilities if a.ability_id in ids
         }
         # self.game_data.abilities = {
         #     a.ability_id: AbilityData(self.game_data, a) for a in self.game_data._proto.abilities
         # }
         self.game_data.units = {
-            u.unit_id: UnitTypeData(self.game_data, u) for u in self.game_data._proto.units if u.available
+            u.unit_id: UnitTypeData(self.game_data, u)
+            for u in self.game_data._proto.units if u.available
         }
         self.game_data.upgrades = {u.upgrade_id: UpgradeData(self.game_data, u) for u in self.game_data._proto.upgrades}
         self.game_data.unit_types = {}

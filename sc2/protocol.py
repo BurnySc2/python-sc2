@@ -1,13 +1,11 @@
 import asyncio
-
 import sys
 
-from s2clientprotocol import sc2api_pb2 as sc_pb
 from aiohttp import ClientWebSocketResponse
-
-from .data import Status
-
 from loguru import logger
+from s2clientprotocol import sc2api_pb2 as sc_pb
+
+from sc2.data import Status
 
 
 class ProtocolError(Exception):
@@ -37,7 +35,7 @@ class Protocol:
         except TypeError:
             logger.exception("Cannot send: Connection already closed.")
             raise ConnectionAlreadyClosed("Connection already closed.")
-        logger.debug(f"Request sent")
+        logger.debug("Request sent")
 
         response = sc_pb.Response()
         try:
@@ -59,7 +57,7 @@ class Protocol:
             raise
 
         response.ParseFromString(response_bytes)
-        logger.debug(f"Response received")
+        logger.debug("Response received")
         return response
 
     async def _execute(self, **kwargs):

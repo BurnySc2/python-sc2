@@ -1,21 +1,26 @@
-import sys, os
+import os
+import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
-import random, numpy as np
+import random
+from typing import Set
 
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
+import numpy as np
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.position import Point2, Point3
 from sc2.unit import Unit
 from sc2.units import Units
 
-from typing import List, Set
 
-
-class RampWallBot(sc2.BotAI):
+class RampWallBot(BotAI):
     def __init__(self):
         self.unit_command_uses_self_do = False
 
@@ -83,7 +88,8 @@ class RampWallBot(sc2.BotAI):
         # Filter locations close to finished supply depots
         if depots:
             depot_placement_positions: Set[Point2] = {
-                d for d in depot_placement_positions if depots.closest_distance_to(d) > 1
+                d
+                for d in depot_placement_positions if depots.closest_distance_to(d) > 1
             }
 
         # Build depots
@@ -276,8 +282,8 @@ def main():
         ]
     )
     map = "PillarsofGoldLE"
-    sc2.run_game(
-        sc2.maps.get(map),
+    run_game(
+        maps.get(map),
         [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)],
         realtime=True,
         # sc2_version="4.10.1",
