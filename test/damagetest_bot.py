@@ -317,7 +317,7 @@ class TestBot(BotAI):
         logger.warning("Action test 1001 successful.")
 
 
-class EmptyBot(sc2.BotAI):
+class EmptyBot(BotAI):
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)

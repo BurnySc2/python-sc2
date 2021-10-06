@@ -7,7 +7,6 @@ from typing import Dict, List
 
 from loguru import logger
 
-import sc2
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race
@@ -175,7 +174,7 @@ class TestBot(BotAI):
         logger.warning("Action test 1 successful.")
 
 
-class EmptyBot(sc2.BotAI):
+class EmptyBot(BotAI):
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
