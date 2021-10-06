@@ -12,17 +12,17 @@ python generate_id_constants_from_stableid.py
 
 TIMEOUT 1
 
-:: Next commands require pipenv, set up dev and update Pipfile.lock
-pip install --upgrade pipenv
-pipenv install --dev
-pipenv update
+:: Next commands require poetry, set up dev and update Pipfile.lock
+pip install --upgrade poetry
+poetry install --dev
+poetry update
 
 TIMEOUT 1
 
 :: Remove previous pickle data
 :: RD /Q /S .\test\pickle_data
 :: Re-generate them
-pipenv run ".\test\generate_pickle_files_bot.py"
+poetry run ".\test\generate_pickle_files_bot.py"
 
 TIMEOUT 1
 
@@ -36,4 +36,4 @@ RD /Q /S docs
 :: Generate documentation
 :: Use this before merging from dev branch to gh-pages branch
 cd docs_generate
-pipenv run sphinx-build -a -E -b html . ../docs
+poetry run sphinx-build -a -E -b html . ../docs

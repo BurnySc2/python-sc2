@@ -1,26 +1,25 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import sc2
-from sc2.position import Point2, Point3
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.data import Result
-from sc2.player import Bot, Computer
-from sc2.unit import Unit
-from sc2.units import Units
-
-import asyncio
-
 """
 This bot tests if on 'realtime=True' any nexus has more than 1 probe in the queue.
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import asyncio
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race, Result
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot, Computer
+from sc2.unit import Unit
 
 on_end_was_called: bool = False
 
 
-class RealTimeTestBot(sc2.BotAI):
+class RealTimeTestBot(BotAI):
     async def on_before_start(self):
         mf = self.mineral_field
         for w in self.workers:
@@ -84,7 +83,7 @@ class RealTimeTestBot(sc2.BotAI):
             await self.client.debug_kill_unit(self.enemy_units)
 
         if self.supply_used >= 199 or self.time > 7 * 60:
-            print(f"Test successful, bot reached 199 supply without queueing two probes at once")
+            print("Test successful, bot reached 199 supply without queueing two probes at once")
             await self.client.leave()
 
     async def on_building_construction_complete(self, unit: Unit):
@@ -99,9 +98,10 @@ class RealTimeTestBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, RealTimeTestBot()), Computer(Race.Terran, Difficulty.Medium)],
+    run_game(
+        maps.get("AcropolisLE"),
+        [Bot(Race.Protoss, RealTimeTestBot()),
+         Computer(Race.Terran, Difficulty.Medium)],
         realtime=True,
         disable_fog=True,
     )

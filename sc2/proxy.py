@@ -1,18 +1,17 @@
 import asyncio
-from aiohttp import web, WSMsgType
 import os
 import platform
 import subprocess
 import time
 import traceback
 
+from aiohttp import WSMsgType, web
+from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-from .controller import Controller
-from .data import Result, Status
-from .player import BotProcess
-
-from loguru import logger
+from sc2.controller import Controller
+from sc2.data import Result, Status
+from sc2.player import BotProcess
 
 
 class Proxy:
@@ -20,7 +19,6 @@ class Proxy:
     Class for handling communication between sc2 and an external bot.
     This "middleman" is needed for enforcing time limits, collecting results, and closing things properly.
     """
-
     def __init__(
         self,
         controller: Controller,

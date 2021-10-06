@@ -1,21 +1,15 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import time
-import math
-import random
-
-import numpy as np
-import scipy as sp
-
-import pytest
-from hypothesis import strategies as st, given, settings
-from typing import List, Dict, Set, Tuple, Any, Optional, Union
-
 """
 Testing what the fastest way is to create a 1D Array with 2 values
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+import random
+
+import numpy as np
+
 x, y = random.uniform(0, 300), random.uniform(0, 300)
 
 
@@ -150,4 +144,4 @@ def test_numpy_ones(benchmark):
 
 
 # Run this file using
-# pipenv run pytest test/test_benchmark_array_creation.py --benchmark-compare
+# poetry run pytest test/test_benchmark_array_creation.py --benchmark-compare

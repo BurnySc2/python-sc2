@@ -1,102 +1,102 @@
-from .data import Alliance, Attribute, CloakState, DisplayType, TargetType
-from .ids.ability_id import *
-from .ids.buff_id import *
-from .ids.effect_id import *
-from .ids.unit_typeid import *
-from .ids.upgrade_id import *
 from collections import defaultdict
 from typing import Dict, Set
 
+from sc2.data import Alliance, Attribute, CloakState, DisplayType, TargetType
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.buff_id import BuffId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+
 mineral_ids: Set[int] = {
-    RICHMINERALFIELD.value,
-    RICHMINERALFIELD750.value,
-    MINERALFIELD.value,
-    MINERALFIELD450.value,
-    MINERALFIELD750.value,
-    LABMINERALFIELD.value,
-    LABMINERALFIELD750.value,
-    PURIFIERRICHMINERALFIELD.value,
-    PURIFIERRICHMINERALFIELD750.value,
-    PURIFIERMINERALFIELD.value,
-    PURIFIERMINERALFIELD750.value,
-    BATTLESTATIONMINERALFIELD.value,
-    BATTLESTATIONMINERALFIELD750.value,
-    MINERALFIELDOPAQUE.value,
-    MINERALFIELDOPAQUE900.value,
+    UnitTypeId.RICHMINERALFIELD.value,
+    UnitTypeId.RICHMINERALFIELD750.value,
+    UnitTypeId.MINERALFIELD.value,
+    UnitTypeId.MINERALFIELD450.value,
+    UnitTypeId.MINERALFIELD750.value,
+    UnitTypeId.LABMINERALFIELD.value,
+    UnitTypeId.LABMINERALFIELD750.value,
+    UnitTypeId.PURIFIERRICHMINERALFIELD.value,
+    UnitTypeId.PURIFIERRICHMINERALFIELD750.value,
+    UnitTypeId.PURIFIERMINERALFIELD.value,
+    UnitTypeId.PURIFIERMINERALFIELD750.value,
+    UnitTypeId.BATTLESTATIONMINERALFIELD.value,
+    UnitTypeId.BATTLESTATIONMINERALFIELD750.value,
+    UnitTypeId.MINERALFIELDOPAQUE.value,
+    UnitTypeId.MINERALFIELDOPAQUE900.value,
 }
 geyser_ids: Set[int] = {
-    VESPENEGEYSER.value,
-    SPACEPLATFORMGEYSER.value,
-    RICHVESPENEGEYSER.value,
-    PROTOSSVESPENEGEYSER.value,
-    PURIFIERVESPENEGEYSER.value,
-    SHAKURASVESPENEGEYSER.value,
+    UnitTypeId.VESPENEGEYSER.value,
+    UnitTypeId.SPACEPLATFORMGEYSER.value,
+    UnitTypeId.RICHVESPENEGEYSER.value,
+    UnitTypeId.PROTOSSVESPENEGEYSER.value,
+    UnitTypeId.PURIFIERVESPENEGEYSER.value,
+    UnitTypeId.SHAKURASVESPENEGEYSER.value,
 }
 transforming: Dict[UnitTypeId, AbilityId] = {
     # Terran structures
-    BARRACKS: LAND_BARRACKS,
-    BARRACKSFLYING: LAND_BARRACKS,
-    COMMANDCENTER: LAND_COMMANDCENTER,
-    COMMANDCENTERFLYING: LAND_COMMANDCENTER,
-    ORBITALCOMMAND: LAND_ORBITALCOMMAND,
-    ORBITALCOMMANDFLYING: LAND_ORBITALCOMMAND,
-    FACTORY: LAND_FACTORY,
-    FACTORYFLYING: LAND_FACTORY,
-    STARPORT: LAND_STARPORT,
-    STARPORTFLYING: LAND_STARPORT,
-    SUPPLYDEPOT: MORPH_SUPPLYDEPOT_RAISE,
-    SUPPLYDEPOTLOWERED: MORPH_SUPPLYDEPOT_LOWER,
+    UnitTypeId.BARRACKS: AbilityId.LAND_BARRACKS,
+    UnitTypeId.BARRACKSFLYING: AbilityId.LAND_BARRACKS,
+    UnitTypeId.COMMANDCENTER: AbilityId.LAND_COMMANDCENTER,
+    UnitTypeId.COMMANDCENTERFLYING: AbilityId.LAND_COMMANDCENTER,
+    UnitTypeId.ORBITALCOMMAND: AbilityId.LAND_ORBITALCOMMAND,
+    UnitTypeId.ORBITALCOMMANDFLYING: AbilityId.LAND_ORBITALCOMMAND,
+    UnitTypeId.FACTORY: AbilityId.LAND_FACTORY,
+    UnitTypeId.FACTORYFLYING: AbilityId.LAND_FACTORY,
+    UnitTypeId.STARPORT: AbilityId.LAND_STARPORT,
+    UnitTypeId.STARPORTFLYING: AbilityId.LAND_STARPORT,
+    UnitTypeId.SUPPLYDEPOT: AbilityId.MORPH_SUPPLYDEPOT_RAISE,
+    UnitTypeId.SUPPLYDEPOTLOWERED: AbilityId.MORPH_SUPPLYDEPOT_LOWER,
     # Terran units
-    HELLION: MORPH_HELLION,
-    HELLIONTANK: MORPH_HELLBAT,
-    LIBERATOR: MORPH_LIBERATORAAMODE,
-    LIBERATORAG: MORPH_LIBERATORAGMODE,
-    SIEGETANK: UNSIEGE_UNSIEGE,
-    SIEGETANKSIEGED: SIEGEMODE_SIEGEMODE,
-    THOR: MORPH_THOREXPLOSIVEMODE,
-    THORAP: MORPH_THORHIGHIMPACTMODE,
-    VIKINGASSAULT: MORPH_VIKINGASSAULTMODE,
-    VIKINGFIGHTER: MORPH_VIKINGFIGHTERMODE,
-    WIDOWMINE: BURROWUP,
-    WIDOWMINEBURROWED: BURROWDOWN,
+    UnitTypeId.HELLION: AbilityId.MORPH_HELLION,
+    UnitTypeId.HELLIONTANK: AbilityId.MORPH_HELLBAT,
+    UnitTypeId.LIBERATOR: AbilityId.MORPH_LIBERATORAAMODE,
+    UnitTypeId.LIBERATORAG: AbilityId.MORPH_LIBERATORAGMODE,
+    UnitTypeId.SIEGETANK: AbilityId.UNSIEGE_UNSIEGE,
+    UnitTypeId.SIEGETANKSIEGED: AbilityId.SIEGEMODE_SIEGEMODE,
+    UnitTypeId.THOR: AbilityId.MORPH_THOREXPLOSIVEMODE,
+    UnitTypeId.THORAP: AbilityId.MORPH_THORHIGHIMPACTMODE,
+    UnitTypeId.VIKINGASSAULT: AbilityId.MORPH_VIKINGASSAULTMODE,
+    UnitTypeId.VIKINGFIGHTER: AbilityId.MORPH_VIKINGFIGHTERMODE,
+    UnitTypeId.WIDOWMINE: AbilityId.BURROWUP,
+    UnitTypeId.WIDOWMINEBURROWED: AbilityId.BURROWDOWN,
     # Protoss structures
-    GATEWAY: MORPH_GATEWAY,
-    WARPGATE: MORPH_WARPGATE,
+    UnitTypeId.GATEWAY: AbilityId.MORPH_GATEWAY,
+    UnitTypeId.WARPGATE: AbilityId.MORPH_WARPGATE,
     # Protoss units
-    OBSERVER: MORPH_OBSERVERMODE,
-    OBSERVERSIEGEMODE: MORPH_SURVEILLANCEMODE,
-    WARPPRISM: MORPH_WARPPRISMTRANSPORTMODE,
-    WARPPRISMPHASING: MORPH_WARPPRISMPHASINGMODE,
+    UnitTypeId.OBSERVER: AbilityId.MORPH_OBSERVERMODE,
+    UnitTypeId.OBSERVERSIEGEMODE: AbilityId.MORPH_SURVEILLANCEMODE,
+    UnitTypeId.WARPPRISM: AbilityId.MORPH_WARPPRISMTRANSPORTMODE,
+    UnitTypeId.WARPPRISMPHASING: AbilityId.MORPH_WARPPRISMPHASINGMODE,
     # Zerg structures
-    SPINECRAWLER: SPINECRAWLERROOT_SPINECRAWLERROOT,
-    SPINECRAWLERUPROOTED: SPINECRAWLERUPROOT_SPINECRAWLERUPROOT,
-    SPORECRAWLER: SPORECRAWLERROOT_SPORECRAWLERROOT,
-    SPORECRAWLERUPROOTED: SPORECRAWLERUPROOT_SPORECRAWLERUPROOT,
+    UnitTypeId.SPINECRAWLER: AbilityId.SPINECRAWLERROOT_SPINECRAWLERROOT,
+    UnitTypeId.SPINECRAWLERUPROOTED: AbilityId.SPINECRAWLERUPROOT_SPINECRAWLERUPROOT,
+    UnitTypeId.SPORECRAWLER: AbilityId.SPORECRAWLERROOT_SPORECRAWLERROOT,
+    UnitTypeId.SPORECRAWLERUPROOTED: AbilityId.SPORECRAWLERUPROOT_SPORECRAWLERUPROOT,
     # Zerg units
-    BANELING: BURROWUP_BANELING,
-    BANELINGBURROWED: BURROWDOWN_BANELING,
-    DRONE: BURROWUP_DRONE,
-    DRONEBURROWED: BURROWDOWN_DRONE,
-    HYDRALISK: BURROWUP_HYDRALISK,
-    HYDRALISKBURROWED: BURROWDOWN_HYDRALISK,
-    INFESTOR: BURROWUP_INFESTOR,
-    INFESTORBURROWED: BURROWDOWN_INFESTOR,
-    INFESTORTERRAN: BURROWUP_INFESTORTERRAN,
-    INFESTORTERRANBURROWED: BURROWDOWN_INFESTORTERRAN,
-    LURKERMP: BURROWUP_LURKER,
-    LURKERMPBURROWED: BURROWDOWN_LURKER,
-    OVERSEER: MORPH_OVERSEERMODE,
-    OVERSEERSIEGEMODE: MORPH_OVERSIGHTMODE,
-    QUEEN: BURROWUP_QUEEN,
-    QUEENBURROWED: BURROWDOWN_QUEEN,
-    ROACH: BURROWUP_ROACH,
-    ROACHBURROWED: BURROWDOWN_ROACH,
-    SWARMHOSTBURROWEDMP: BURROWDOWN_SWARMHOST,
-    SWARMHOSTMP: BURROWUP_SWARMHOST,
-    ULTRALISK: BURROWUP_ULTRALISK,
-    ULTRALISKBURROWED: BURROWDOWN_ULTRALISK,
-    ZERGLING: BURROWUP_ZERGLING,
-    ZERGLINGBURROWED: BURROWDOWN_ZERGLING,
+    UnitTypeId.BANELING: AbilityId.BURROWUP_BANELING,
+    UnitTypeId.BANELINGBURROWED: AbilityId.BURROWDOWN_BANELING,
+    UnitTypeId.DRONE: AbilityId.BURROWUP_DRONE,
+    UnitTypeId.DRONEBURROWED: AbilityId.BURROWDOWN_DRONE,
+    UnitTypeId.HYDRALISK: AbilityId.BURROWUP_HYDRALISK,
+    UnitTypeId.HYDRALISKBURROWED: AbilityId.BURROWDOWN_HYDRALISK,
+    UnitTypeId.INFESTOR: AbilityId.BURROWUP_INFESTOR,
+    UnitTypeId.INFESTORBURROWED: AbilityId.BURROWDOWN_INFESTOR,
+    UnitTypeId.INFESTORTERRAN: AbilityId.BURROWUP_INFESTORTERRAN,
+    UnitTypeId.INFESTORTERRANBURROWED: AbilityId.BURROWDOWN_INFESTORTERRAN,
+    UnitTypeId.LURKERMP: AbilityId.BURROWUP_LURKER,
+    UnitTypeId.LURKERMPBURROWED: AbilityId.BURROWDOWN_LURKER,
+    UnitTypeId.OVERSEER: AbilityId.MORPH_OVERSEERMODE,
+    UnitTypeId.OVERSEERSIEGEMODE: AbilityId.MORPH_OVERSIGHTMODE,
+    UnitTypeId.QUEEN: AbilityId.BURROWUP_QUEEN,
+    UnitTypeId.QUEENBURROWED: AbilityId.BURROWDOWN_QUEEN,
+    UnitTypeId.ROACH: AbilityId.BURROWUP_ROACH,
+    UnitTypeId.ROACHBURROWED: AbilityId.BURROWDOWN_ROACH,
+    UnitTypeId.SWARMHOSTBURROWEDMP: AbilityId.BURROWDOWN_SWARMHOST,
+    UnitTypeId.SWARMHOSTMP: AbilityId.BURROWUP_SWARMHOST,
+    UnitTypeId.ULTRALISK: AbilityId.BURROWUP_ULTRALISK,
+    UnitTypeId.ULTRALISKBURROWED: AbilityId.BURROWDOWN_ULTRALISK,
+    UnitTypeId.ZERGLING: AbilityId.BURROWUP_ZERGLING,
+    UnitTypeId.ZERGLINGBURROWED: AbilityId.BURROWDOWN_ZERGLING,
 }
 # For now only contains units that cost supply, used in bot_ai.do()
 abilityid_to_unittypeid: Dict[AbilityId, UnitTypeId] = {
@@ -362,86 +362,86 @@ TERRAN_STRUCTURES_REQUIRE_SCV: Set[UnitTypeId] = {
 }
 
 
-def return_NOTAUNIT():
+def return_NOTAUNIT() -> UnitTypeId:
     # NOTAUNIT = 0
-    return NOTAUNIT
+    return UnitTypeId.NOTAUNIT
 
 
 # Hotfix for structures and units as the API does not seem to return the correct values, e.g. ghost and thor have None in the requirements
 TERRAN_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
     return_NOTAUNIT,
     {
-        MISSILETURRET: ENGINEERINGBAY,
-        SENSORTOWER: ENGINEERINGBAY,
-        PLANETARYFORTRESS: ENGINEERINGBAY,
-        BARRACKS: SUPPLYDEPOT,
-        ORBITALCOMMAND: BARRACKS,
-        BUNKER: BARRACKS,
-        GHOST: GHOSTACADEMY,
-        GHOSTACADEMY: BARRACKS,
-        FACTORY: BARRACKS,
-        ARMORY: FACTORY,
-        HELLIONTANK: ARMORY,
-        THOR: ARMORY,
-        STARPORT: FACTORY,
-        FUSIONCORE: STARPORT,
-        BATTLECRUISER: FUSIONCORE,
+        UnitTypeId.MISSILETURRET: UnitTypeId.ENGINEERINGBAY,
+        UnitTypeId.SENSORTOWER: UnitTypeId.ENGINEERINGBAY,
+        UnitTypeId.PLANETARYFORTRESS: UnitTypeId.ENGINEERINGBAY,
+        UnitTypeId.BARRACKS: UnitTypeId.SUPPLYDEPOT,
+        UnitTypeId.ORBITALCOMMAND: UnitTypeId.BARRACKS,
+        UnitTypeId.BUNKER: UnitTypeId.BARRACKS,
+        UnitTypeId.GHOST: UnitTypeId.GHOSTACADEMY,
+        UnitTypeId.GHOSTACADEMY: UnitTypeId.BARRACKS,
+        UnitTypeId.FACTORY: UnitTypeId.BARRACKS,
+        UnitTypeId.ARMORY: UnitTypeId.FACTORY,
+        UnitTypeId.HELLIONTANK: UnitTypeId.ARMORY,
+        UnitTypeId.THOR: UnitTypeId.ARMORY,
+        UnitTypeId.STARPORT: UnitTypeId.FACTORY,
+        UnitTypeId.FUSIONCORE: UnitTypeId.STARPORT,
+        UnitTypeId.BATTLECRUISER: UnitTypeId.FUSIONCORE,
     },
 )
 PROTOSS_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
     return_NOTAUNIT,
     {
-        PHOTONCANNON: FORGE,
-        CYBERNETICSCORE: GATEWAY,
-        SENTRY: CYBERNETICSCORE,
-        STALKER: CYBERNETICSCORE,
-        ADEPT: CYBERNETICSCORE,
-        TWILIGHTCOUNCIL: CYBERNETICSCORE,
-        SHIELDBATTERY: CYBERNETICSCORE,
-        TEMPLARARCHIVE: TWILIGHTCOUNCIL,
-        DARKSHRINE: TWILIGHTCOUNCIL,
-        HIGHTEMPLAR: TEMPLARARCHIVE,
-        DARKTEMPLAR: DARKSHRINE,
-        STARGATE: CYBERNETICSCORE,
-        TEMPEST: FLEETBEACON,
-        CARRIER: FLEETBEACON,
-        MOTHERSHIP: FLEETBEACON,
-        ROBOTICSFACILITY: CYBERNETICSCORE,
-        ROBOTICSBAY: ROBOTICSFACILITY,
-        COLOSSUS: ROBOTICSBAY,
-        DISRUPTOR: ROBOTICSBAY,
+        UnitTypeId.PHOTONCANNON: UnitTypeId.FORGE,
+        UnitTypeId.CYBERNETICSCORE: UnitTypeId.GATEWAY,
+        UnitTypeId.SENTRY: UnitTypeId.CYBERNETICSCORE,
+        UnitTypeId.STALKER: UnitTypeId.CYBERNETICSCORE,
+        UnitTypeId.ADEPT: UnitTypeId.CYBERNETICSCORE,
+        UnitTypeId.TWILIGHTCOUNCIL: UnitTypeId.CYBERNETICSCORE,
+        UnitTypeId.SHIELDBATTERY: UnitTypeId.CYBERNETICSCORE,
+        UnitTypeId.TEMPLARARCHIVE: UnitTypeId.TWILIGHTCOUNCIL,
+        UnitTypeId.DARKSHRINE: UnitTypeId.TWILIGHTCOUNCIL,
+        UnitTypeId.HIGHTEMPLAR: UnitTypeId.TEMPLARARCHIVE,
+        UnitTypeId.DARKTEMPLAR: UnitTypeId.DARKSHRINE,
+        UnitTypeId.STARGATE: UnitTypeId.CYBERNETICSCORE,
+        UnitTypeId.TEMPEST: UnitTypeId.FLEETBEACON,
+        UnitTypeId.CARRIER: UnitTypeId.FLEETBEACON,
+        UnitTypeId.MOTHERSHIP: UnitTypeId.FLEETBEACON,
+        UnitTypeId.ROBOTICSFACILITY: UnitTypeId.CYBERNETICSCORE,
+        UnitTypeId.ROBOTICSBAY: UnitTypeId.ROBOTICSFACILITY,
+        UnitTypeId.COLOSSUS: UnitTypeId.ROBOTICSBAY,
+        UnitTypeId.DISRUPTOR: UnitTypeId.ROBOTICSBAY,
     },
 )
 ZERG_TECH_REQUIREMENT: Dict[UnitTypeId, UnitTypeId] = defaultdict(
     return_NOTAUNIT,
     {
-        ZERGLING: SPAWNINGPOOL,
-        QUEEN: SPAWNINGPOOL,
-        ROACHWARREN: SPAWNINGPOOL,
-        BANELINGNEST: SPAWNINGPOOL,
-        SPINECRAWLER: SPAWNINGPOOL,
-        SPORECRAWLER: SPAWNINGPOOL,
-        ROACH: ROACHWARREN,
-        BANELING: BANELINGNEST,
-        LAIR: SPAWNINGPOOL,
-        OVERSEER: LAIR,
-        OVERLORDTRANSPORT: LAIR,
-        INFESTATIONPIT: LAIR,
-        INFESTOR: INFESTATIONPIT,
-        SWARMHOSTMP: INFESTATIONPIT,
-        HYDRALISKDEN: LAIR,
-        HYDRALISK: HYDRALISKDEN,
-        LURKERDENMP: HYDRALISKDEN,
-        LURKERMP: LURKERDENMP,
-        SPIRE: LAIR,
-        MUTALISK: SPIRE,
-        CORRUPTOR: SPIRE,
-        NYDUSNETWORK: LAIR,
-        HIVE: INFESTATIONPIT,
-        VIPER: HIVE,
-        ULTRALISKCAVERN: HIVE,
-        GREATERSPIRE: HIVE,
-        BROODLORD: GREATERSPIRE,
+        UnitTypeId.ZERGLING: UnitTypeId.SPAWNINGPOOL,
+        UnitTypeId.QUEEN: UnitTypeId.SPAWNINGPOOL,
+        UnitTypeId.ROACHWARREN: UnitTypeId.SPAWNINGPOOL,
+        UnitTypeId.BANELINGNEST: UnitTypeId.SPAWNINGPOOL,
+        UnitTypeId.SPINECRAWLER: UnitTypeId.SPAWNINGPOOL,
+        UnitTypeId.SPORECRAWLER: UnitTypeId.SPAWNINGPOOL,
+        UnitTypeId.ROACH: UnitTypeId.ROACHWARREN,
+        UnitTypeId.BANELING: UnitTypeId.BANELINGNEST,
+        UnitTypeId.LAIR: UnitTypeId.SPAWNINGPOOL,
+        UnitTypeId.OVERSEER: UnitTypeId.LAIR,
+        UnitTypeId.OVERLORDTRANSPORT: UnitTypeId.LAIR,
+        UnitTypeId.INFESTATIONPIT: UnitTypeId.LAIR,
+        UnitTypeId.INFESTOR: UnitTypeId.INFESTATIONPIT,
+        UnitTypeId.SWARMHOSTMP: UnitTypeId.INFESTATIONPIT,
+        UnitTypeId.HYDRALISKDEN: UnitTypeId.LAIR,
+        UnitTypeId.HYDRALISK: UnitTypeId.HYDRALISKDEN,
+        UnitTypeId.LURKERDENMP: UnitTypeId.HYDRALISKDEN,
+        UnitTypeId.LURKERMP: UnitTypeId.LURKERDENMP,
+        UnitTypeId.SPIRE: UnitTypeId.LAIR,
+        UnitTypeId.MUTALISK: UnitTypeId.SPIRE,
+        UnitTypeId.CORRUPTOR: UnitTypeId.SPIRE,
+        UnitTypeId.NYDUSNETWORK: UnitTypeId.LAIR,
+        UnitTypeId.HIVE: UnitTypeId.INFESTATIONPIT,
+        UnitTypeId.VIPER: UnitTypeId.HIVE,
+        UnitTypeId.ULTRALISKCAVERN: UnitTypeId.HIVE,
+        UnitTypeId.GREATERSPIRE: UnitTypeId.HIVE,
+        UnitTypeId.BROODLORD: UnitTypeId.GREATERSPIRE,
     },
 )
 # Required in 'tech_requirement_progress' bot_ai.py function
@@ -495,71 +495,189 @@ ALL_GAS: Set[UnitTypeId] = {
     UnitTypeId.EXTRACTOR,
     UnitTypeId.EXTRACTORRICH,
 }
-"""
-How much damage a unit gains per weapon upgrade per attack
-E.g. marauder receives +1 normal damage and +1 vs armored, so we have to list +1 vs armored here - the +1 normal damage is assumed
-E.g. stalker receives +1 normal damage but does not increment at all vs armored, so we don't list it here
-Updated using unit stats: https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void)
-
-Default will be assumed as 1, or 0 against specific armor tags, if it is not listed:
-MyUnitType: {
-    TargetType.Ground.value: {
-        # Bonus damage per weapon upgrade against ground targets
-        None: 1,
-        # Bonus damage per weapon upgrade against ground targets with specific armor tag
-        some_armor_tag: 0
-    }
-    # Same for Air and Any (=both)
-}    
-"""
 DAMAGE_BONUS_PER_UPGRADE: Dict[int, UnitTypeId] = {
     #
     # Protoss
     #
-    UnitTypeId.PROBE: {TargetType.Ground.value: {None: 0}},
+    UnitTypeId.PROBE: {
+        TargetType.Ground.value: {
+            None: 0
+        }
+    },
     # Gateway Units
-    UnitTypeId.ADEPT: {TargetType.Ground.value: {IS_LIGHT: 1}},
-    UnitTypeId.STALKER: {TargetType.Any.value: {IS_ARMORED: 1}},
-    UnitTypeId.DARKTEMPLAR: {TargetType.Ground.value: {None: 5}},
-    UnitTypeId.ARCHON: {TargetType.Any.value: {None: 3, IS_BIOLOGICAL: 1}},
+    UnitTypeId.ADEPT: {
+        TargetType.Ground.value: {
+            IS_LIGHT: 1
+        }
+    },
+    UnitTypeId.STALKER: {
+        TargetType.Any.value: {
+            IS_ARMORED: 1
+        }
+    },
+    UnitTypeId.DARKTEMPLAR: {
+        TargetType.Ground.value: {
+            None: 5
+        }
+    },
+    UnitTypeId.ARCHON: {
+        TargetType.Any.value: {
+            None: 3,
+            IS_BIOLOGICAL: 1
+        }
+    },
     # Robo Units
-    UnitTypeId.IMMORTAL: {TargetType.Ground.value: {None: 2, IS_ARMORED: 3}},
-    UnitTypeId.COLOSSUS: {TargetType.Ground.value: {IS_LIGHT: 1}},
+    UnitTypeId.IMMORTAL: {
+        TargetType.Ground.value: {
+            None: 2,
+            IS_ARMORED: 3
+        }
+    },
+    UnitTypeId.COLOSSUS: {
+        TargetType.Ground.value: {
+            IS_LIGHT: 1
+        }
+    },
     # Stargate Units
-    UnitTypeId.ORACLE: {TargetType.Ground.value: {None: 0}},
-    UnitTypeId.TEMPEST: {TargetType.Ground.value: {None: 4}, TargetType.Air.value: {None: 3, IS_MASSIVE: 2}},
+    UnitTypeId.ORACLE: {
+        TargetType.Ground.value: {
+            None: 0
+        }
+    },
+    UnitTypeId.TEMPEST: {
+        TargetType.Ground.value: {
+            None: 4
+        },
+        TargetType.Air.value: {
+            None: 3,
+            IS_MASSIVE: 2
+        }
+    },
     #
     # Terran
     #
-    UnitTypeId.SCV: {TargetType.Ground.value: {None: 0}},
+    UnitTypeId.SCV: {
+        TargetType.Ground.value: {
+            None: 0
+        }
+    },
     # Barracks Units
-    UnitTypeId.MARAUDER: {TargetType.Ground.value: {IS_ARMORED: 1}},
-    UnitTypeId.GHOST: {TargetType.Any.value: {IS_LIGHT: 1}},
+    UnitTypeId.MARAUDER: {
+        TargetType.Ground.value: {
+            IS_ARMORED: 1
+        }
+    },
+    UnitTypeId.GHOST: {
+        TargetType.Any.value: {
+            IS_LIGHT: 1
+        }
+    },
     # Factory Units
-    UnitTypeId.HELLION: {TargetType.Ground.value: {IS_LIGHT: 1}},
-    UnitTypeId.HELLIONTANK: {TargetType.Ground.value: {None: 2, IS_LIGHT: 1}},
-    UnitTypeId.CYCLONE: {TargetType.Any.value: {None: 2}},
-    UnitTypeId.SIEGETANK: {TargetType.Ground.value: {None: 2, IS_ARMORED: 1}},
-    UnitTypeId.SIEGETANKSIEGED: {TargetType.Ground.value: {None: 4, IS_ARMORED: 1}},
-    UnitTypeId.THOR: {TargetType.Ground.value: {None: 3}, TargetType.Air.value: {IS_LIGHT: 1}},
-    UnitTypeId.THORAP: {TargetType.Ground.value: {None: 3}, TargetType.Air.value: {None: 3, IS_MASSIVE: 1}},
+    UnitTypeId.HELLION: {
+        TargetType.Ground.value: {
+            IS_LIGHT: 1
+        }
+    },
+    UnitTypeId.HELLIONTANK: {
+        TargetType.Ground.value: {
+            None: 2,
+            IS_LIGHT: 1
+        }
+    },
+    UnitTypeId.CYCLONE: {
+        TargetType.Any.value: {
+            None: 2
+        }
+    },
+    UnitTypeId.SIEGETANK: {
+        TargetType.Ground.value: {
+            None: 2,
+            IS_ARMORED: 1
+        }
+    },
+    UnitTypeId.SIEGETANKSIEGED: {
+        TargetType.Ground.value: {
+            None: 4,
+            IS_ARMORED: 1
+        }
+    },
+    UnitTypeId.THOR: {
+        TargetType.Ground.value: {
+            None: 3
+        },
+        TargetType.Air.value: {
+            IS_LIGHT: 1
+        }
+    },
+    UnitTypeId.THORAP: {
+        TargetType.Ground.value: {
+            None: 3
+        },
+        TargetType.Air.value: {
+            None: 3,
+            IS_MASSIVE: 1
+        }
+    },
     # Starport Units
-    UnitTypeId.VIKINGASSAULT: {TargetType.Ground.value: {IS_MECHANICAL: 1}},
-    UnitTypeId.LIBERATORAG: {TargetType.Ground.value: {None: 5}},
+    UnitTypeId.VIKINGASSAULT: {
+        TargetType.Ground.value: {
+            IS_MECHANICAL: 1
+        }
+    },
+    UnitTypeId.LIBERATORAG: {
+        TargetType.Ground.value: {
+            None: 5
+        }
+    },
     #
     # Zerg
     #
-    UnitTypeId.DRONE: {TargetType.Ground.value: {None: 0}},
+    UnitTypeId.DRONE: {
+        TargetType.Ground.value: {
+            None: 0
+        }
+    },
     # Hatch Tech Units (Queen, Ling, Bane, Roach, Ravager)
-    UnitTypeId.BANELING: {TargetType.Ground.value: {None: 2, IS_LIGHT: 2, IS_STRUCTURE: 3}},
-    UnitTypeId.ROACH: {TargetType.Ground.value: {None: 2}},
-    UnitTypeId.RAVAGER: {TargetType.Ground.value: {None: 2}},
+    UnitTypeId.BANELING: {
+        TargetType.Ground.value: {
+            None: 2,
+            IS_LIGHT: 2,
+            IS_STRUCTURE: 3
+        }
+    },
+    UnitTypeId.ROACH: {
+        TargetType.Ground.value: {
+            None: 2
+        }
+    },
+    UnitTypeId.RAVAGER: {
+        TargetType.Ground.value: {
+            None: 2
+        }
+    },
     # Lair Tech Units (Hydra, Lurker, Ultra)
-    UnitTypeId.LURKERMPBURROWED: {TargetType.Ground.value: {None: 2, IS_ARMORED: 1}},
-    UnitTypeId.ULTRALISK: {TargetType.Ground.value: {None: 3}},
+    UnitTypeId.LURKERMPBURROWED: {
+        TargetType.Ground.value: {
+            None: 2,
+            IS_ARMORED: 1
+        }
+    },
+    UnitTypeId.ULTRALISK: {
+        TargetType.Ground.value: {
+            None: 3
+        }
+    },
     # Spire Units (Muta, Corruptor, BL)
-    UnitTypeId.CORRUPTOR: {TargetType.Air.value: {IS_MASSIVE: 1}},
-    UnitTypeId.BROODLORD: {TargetType.Ground.value: {None: 2}},
+    UnitTypeId.CORRUPTOR: {
+        TargetType.Air.value: {
+            IS_MASSIVE: 1
+        }
+    },
+    UnitTypeId.BROODLORD: {
+        TargetType.Ground.value: {
+            None: 2
+        }
+    },
 }
 TARGET_HELPER = {
     1: "no target",

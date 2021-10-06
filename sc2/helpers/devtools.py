@@ -15,9 +15,8 @@ def time_this(label):
 # Use like this
 if __name__ == "__main__":
     with time_this("square rooting"):
-        for n in range(10 ** 7):
-            x = n ** 0.5
-
+        for n in range(10**7):
+            x = n**0.5
 
 # returns:
 # TIME square rooting: 2.307249782 sec

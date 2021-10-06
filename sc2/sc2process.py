@@ -7,21 +7,16 @@ import subprocess
 import sys
 import tempfile
 import time
-import json
-import re
-from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import aiohttp
 import portpicker
-
-from .controller import Controller
-from .paths import Paths
-from sc2 import paths
-from sc2 import wsl
-
-from sc2.versions import VERSIONS
-
 from loguru import logger
+
+from sc2 import paths, wsl
+from sc2.controller import Controller
+from sc2.paths import Paths
+from sc2.versions import VERSIONS
 
 
 class kill_switch:
@@ -54,7 +49,6 @@ class SC2Process:
     :param base_build:
     :param data_hash:
     """
-
     def __init__(
         self,
         host: Optional[str] = None,

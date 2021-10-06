@@ -1,10 +1,13 @@
-import sc2, sys
+import sys
+
 from __init__ import run_ladder_game
-from sc2 import Race, Difficulty
-from sc2.player import Bot, Computer
 
 # Load bot
 from bot import CompetitiveBot
+
+import sc2
+from sc2 import Difficulty, Race
+from sc2.player import Bot, Computer
 
 bot = Bot(Race.Zerg, CompetitiveBot())
 

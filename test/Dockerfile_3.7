@@ -6,8 +6,9 @@ ADD . /root/python-sc2
 
 # Install the python-sc2 library and its requirements (s2clientprotocol etc.) to python
 WORKDIR /root/python-sc2
-RUN python -m pip install --upgrade pip
-RUN python -m pip install .
+RUN pip install poetry
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
+RUN pip install -r requirements.txt
 
 # This will be executed during the container run instead:
 # docker run test_image -c "python examples/protoss/cannon_rush.py"

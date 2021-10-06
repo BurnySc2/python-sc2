@@ -10,9 +10,3 @@ def is_submodule(path):
 
 
 __all__ = [p.stem for p in Path(__file__).parent.iterdir() if is_submodule(p)]
-
-from . import maps
-from . import helpers
-from .data import *
-from .bot_ai import BotAI
-from .main import run_game, run_replay

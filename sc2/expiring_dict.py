@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from threading import RLock
-from typing import Dict, Iterable, List, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable, Union
 
 if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
@@ -26,7 +26,6 @@ class ExpiringDict(OrderedDict):
                 if "test" not in my_dict:
                     print("test is not anymore in dict")
     """
-
     def __init__(self, bot: "BotAI", max_age_frames: int = 1):
         assert max_age_frames >= -1
         assert bot

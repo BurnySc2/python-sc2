@@ -1,20 +1,18 @@
-from sc2.position import Point2
+import math
+import warnings
+from math import pow
+
+import numpy as np
+
+from sc2.game_state import GameState
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.game_state import GameState
-
-from loguru import logger
-
-import math
-from math import pow
-import numpy as np
-import warnings
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     from scipy.spatial.distance import pdist, cdist
 
-from typing import Dict, Tuple, Iterable, Generator
+from typing import Generator, Iterable, Tuple
 
 
 class DistanceCalculation:
@@ -49,9 +47,8 @@ class DistanceCalculation:
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float, count=2 * self._units_count).reshape(
-            (self._units_count, 2)
-        )
+        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float,
+                                                  count=2 * self._units_count).reshape((self._units_count, 2))
         assert len(positions_array) == self._units_count
         # See performance benchmarks
         self._cached_pdist = pdist(positions_array, "sqeuclidean")
@@ -63,9 +60,8 @@ class DistanceCalculation:
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float, count=2 * self._units_count).reshape(
-            (self._units_count, 2)
-        )
+        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float,
+                                                  count=2 * self._units_count).reshape((self._units_count, 2))
         assert len(positions_array) == self._units_count
         # See performance benchmarks
         self._cached_cdist = cdist(positions_array, positions_array, "sqeuclidean")
@@ -76,9 +72,8 @@ class DistanceCalculation:
         """ Nearly same as above, but without asserts"""
         self._generated_frame2 = self.state.game_loop
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float, count=2 * self._units_count).reshape(
-            (-1, 2)
-        )
+        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float,
+                                                  count=2 * self._units_count).reshape((-1, 2))
         # See performance benchmarks
         self._cached_cdist = cdist(positions_array, positions_array, "sqeuclidean")
 
@@ -136,9 +131,8 @@ class DistanceCalculation:
         """ This function does not scale well, if len(units) > 100 it gets fairly slow """
         return (self.distance_math_hypot(u.position_tuple, pos) for u in units)
 
-    def _distance_unit_to_points(
-        self, unit: Unit, points: Iterable[Tuple[float, float]]
-    ) -> Generator[float, None, None]:
+    def _distance_unit_to_points(self, unit: Unit, points: Iterable[Tuple[float,
+                                                                          float]]) -> Generator[float, None, None]:
         """ This function does not scale well, if len(points) > 100 it gets fairly slow """
         pos = unit.position_tuple
         return (self.distance_math_hypot(p, pos) for p in points)

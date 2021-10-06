@@ -1,23 +1,23 @@
-import sys, os
+import os
+import sys
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
-import sc2
-from sc2 import Race, Difficulty
-from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.ability_id import AbilityId
-from sc2.ids.upgrade_id import UpgradeId
 from sc2.ids.buff_id import BuffId
-from sc2.unit import Unit
-from sc2.units import Units
-from sc2.position import Point2
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
 from sc2.player import Bot, Computer
 
 
-class WarpGateBot(sc2.BotAI):
+class WarpGateBot(BotAI):
     def __init__(self):
         # Initialize inherited class
-        sc2.BotAI.__init__(self)
         self.proxy_built = False
 
     async def warp_new_units(self, proxy):
@@ -92,8 +92,7 @@ class WarpGateBot(sc2.BotAI):
 
         # Research warp gate if cybercore is completed
         if (
-            self.structures(UnitTypeId.CYBERNETICSCORE).ready
-            and self.can_afford(AbilityId.RESEARCH_WARPGATE)
+            self.structures(UnitTypeId.CYBERNETICSCORE).ready and self.can_afford(AbilityId.RESEARCH_WARPGATE)
             and self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 0
         ):
             ccore = self.structures(UnitTypeId.CYBERNETICSCORE).ready.first
@@ -119,8 +118,7 @@ class WarpGateBot(sc2.BotAI):
 
         # Build proxy pylon
         if (
-            self.structures(UnitTypeId.CYBERNETICSCORE).amount >= 1
-            and not self.proxy_built
+            self.structures(UnitTypeId.CYBERNETICSCORE).amount >= 1 and not self.proxy_built
             and self.can_afford(UnitTypeId.PYLON)
         ):
             p = self.game_info.map_center.towards(self.enemy_start_locations[0], 20)
@@ -140,8 +138,8 @@ class WarpGateBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+    run_game(
+        maps.get("(2)CatalystLE"),
         [Bot(Race.Protoss, WarpGateBot()), Computer(Race.Protoss, Difficulty.Easy)],
         realtime=False,
     )

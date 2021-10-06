@@ -1,13 +1,14 @@
 from __future__ import annotations
+
 from collections import deque
-from typing import Any, Deque, Dict, FrozenSet, Generator, List, Optional, Sequence, Set, Tuple, Union, TYPE_CHECKING
+from typing import Deque, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from .cache import property_immutable_cache, property_mutable_cache
-from .pixel_map import PixelMap
-from .player import Player, Race
-from .position import Point2, Rect, Size
+from sc2.cache import property_immutable_cache, property_mutable_cache
+from sc2.pixel_map import PixelMap
+from sc2.player import Player, Race
+from sc2.position import Point2, Rect, Size
 
 
 class Ramp:
@@ -104,7 +105,7 @@ class Ramp:
             p1 = points.pop().offset((self.x_offset, self.y_offset))
             p2 = points.pop().offset((self.x_offset, self.y_offset))
             # Offset from top point to barracks center is (2, 1)
-            intersects = p1.circle_intersection(p2, 5 ** 0.5)
+            intersects = p1.circle_intersection(p2, 5**0.5)
             anyLowerPoint = next(iter(self.lower))
             return max(intersects, key=lambda p: p.distance_to_point2(anyLowerPoint))
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
@@ -120,7 +121,7 @@ class Ramp:
             p2 = points.pop().offset((self.x_offset, self.y_offset))
             # Offset from top point to depot center is (1.5, 0.5)
             try:
-                intersects = p1.circle_intersection(p2, 2.5 ** 0.5)
+                intersects = p1.circle_intersection(p2, 2.5**0.5)
             except AssertionError:
                 # Returns None when no placement was found, this is the case on the map Honorgrounds LE with an exceptionally large main base ramp
                 return None
@@ -142,7 +143,7 @@ class Ramp:
             if depotPosition is None:
                 return set()
             # Offset from middle depot to corner depots is (2, 1)
-            intersects = center.circle_intersection(depotPosition, 5 ** 0.5)
+            intersects = center.circle_intersection(depotPosition, 5**0.5)
             return intersects
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
@@ -238,7 +239,8 @@ class GameInfo:
         self.map_ramps: List[Ramp] = None  # Filled later by BotAI._prepare_first_step
         self.vision_blockers: Set[Point2] = None  # Filled later by BotAI._prepare_first_step
         self.player_races: Dict[int, Race] = {
-            p.player_id: p.race_actual or p.race_requested for p in self._proto.player_info
+            p.player_id: p.race_actual or p.race_requested
+            for p in self._proto.player_info
         }
         self.start_locations: List[Point2] = [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
         self.player_start_location: Point2 = None  # Filled later by BotAI._prepare_first_step
@@ -247,21 +249,17 @@ class GameInfo:
         """Calculate points that are pathable but not placeable.
         Then divide them into ramp points if not all points around the points are equal height
         and into vision blockers if they are."""
-
         def equal_height_around(tile):
             # mask to slice array 1 around tile
-            sliced = self.terrain_height.data_numpy[tile[1] - 1 : tile[1] + 2, tile[0] - 1 : tile[0] + 2]
+            sliced = self.terrain_height.data_numpy[tile[1] - 1:tile[1] + 2, tile[0] - 1:tile[0] + 2]
             return len(np.unique(sliced)) == 1
 
         map_area = self.playable_area
         # all points in the playable area that are pathable but not placable
         points = [
-            Point2((a, b))
-            for (b, a), value in np.ndenumerate(self.pathing_grid.data_numpy)
-            if value == 1
-            and map_area.x <= a < map_area.x + map_area.width
-            and map_area.y <= b < map_area.y + map_area.height
-            and self.placement_grid[(a, b)] == 0
+            Point2((a, b)) for (b, a), value in np.ndenumerate(self.pathing_grid.data_numpy)
+            if value == 1 and map_area.x <= a < map_area.x + map_area.width and map_area.y <= b < map_area.y +
+            map_area.height and self.placement_grid[(a, b)] == 0
         ]
         # divide points into ramp points and vision blockers
         rampPoints = [point for point in points if not equal_height_around(point)]
