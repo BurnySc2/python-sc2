@@ -1,7 +1,7 @@
-import sc2
+from sc2.bot_ai import BotAI
 
 
-class CompetitiveBot(sc2.BotAI):
+class CompetitiveBot(BotAI):
     async def on_start(self):
         print("Game started")
         # Do things here before the game starts

@@ -1,12 +1,13 @@
-import sc2
 from examples.protoss.cannon_rush import CannonRushBot
-from sc2 import Difficulty, Race
+from sc2 import maps
+from sc2.data import Race, Difficulty
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("Abyssal Reef LE"),
+    run_game(
+        maps.get("Abyssal Reef LE"),
         [Bot(Race.Protoss, CannonRushBot()),
          Computer(Race.Protoss, Difficulty.Medium)],
         realtime=True,
