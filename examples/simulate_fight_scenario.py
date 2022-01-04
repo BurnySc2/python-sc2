@@ -36,7 +36,7 @@ class FightBot(BotAI):
             # destroy command center
             await self._client.debug_kill_unit([cc.tag])
             # destroy all workers
-            for w in self.units(UnitTypeId.SCV):
+            for w in self.workers:
                 await self._client.debug_kill_unit([w.tag])
             # create marines
             await self._client.debug_create_unit([[UnitTypeId.MARINE, 4, p, me]])
