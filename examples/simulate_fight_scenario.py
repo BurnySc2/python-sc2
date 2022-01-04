@@ -25,6 +25,7 @@ class FightBot(BotAI):
         if iteration > 0 and self.enemy_units and not self.control_received:
             # prepare my side
             me = 1
+
             cc = self.townhalls.first
             p = cc.position.towards(self.game_info.map_center, 4)
             # create supply
@@ -32,8 +33,8 @@ class FightBot(BotAI):
             # destroy command center
             await self._client.debug_kill_unit([cc.tag])
             # destroy all workers
-            for w in self.workers:
-                await self._client.debug_kill_unit([w.tag])
+            await self._client.debug_kill_unit([w.tag for w in self.workers])
+
             # create marines
             await self._client.debug_create_unit([[UnitTypeId.MARINE, 4, p, me]])
 
@@ -46,8 +47,7 @@ class FightBot(BotAI):
             # destroy command center
             await self._client.debug_kill_unit([cc.tag])
             # destroy all workers
-            for w in self.enemy_units(UnitTypeId.SCV):
-                await self._client.debug_kill_unit([w.tag])
+            await self._client.debug_kill_unit([w.tag for w in self.enemy_units(UnitTypeId.SCV)])
             # create marines
             await self._client.debug_create_unit([[UnitTypeId.MARINE, 4, p, pc]])
             logger.info("control received")
