@@ -10,23 +10,20 @@ from loguru import logger
 class FightBot(BotAI):
     def __init__(self):
         super().__init__()
-        self.control_requested = False
         self.control_received = False
         self.fight_started = False
         self.supplies_been_damaged = False
 
     async def on_step(self, iteration):
-        # prepare the level
-        if not self.control_requested:
-            # we need this one for `self.enemy_units` to "see" all units
+        # before everything else - retrieve control
+        if iteration == 0:
+            # we need this one for `self.enemy_units` to "see" all units on the map
             await self._client.debug_show_map()
-            # this one will allow us to do something like: `self.enemy_units.first.attack(self.townhalls.first)`
+            # this one will allow us to do something like: `self.enemy_units.first.attack(self._game_info.map_center)`
             await self._client.debug_control_enemy()
-            logger.info("control requested")
-            # await self.chat_send("control requested")
-            self.control_requested = True
 
-        if self.control_requested and self.enemy_units and not self.control_received:
+        # wait till control retrieved
+        if iteration > 0 and self.enemy_units and not self.control_received:
             # prepare my side
             me = 1
             cc = self.townhalls.first
@@ -60,9 +57,9 @@ class FightBot(BotAI):
 
         # to speedup, we are going damage both supplies
         if not self.supplies_been_damaged and self.structures(UnitTypeId.SUPPLYDEPOT) and self.enemy_structures(UnitTypeId.SUPPLYDEPOT):
-            for s in self.structures:
+            for s in self.structures(UnitTypeId.SUPPLYDEPOT):
                 await self._client.debug_set_unit_value([s.tag], 2, 100)
-            for s in self.enemy_structures:
+            for s in self.enemy_structures(UnitTypeId.SUPPLYDEPOT):
                 await self._client.debug_set_unit_value([s.tag], 2, 100)
             logger.info("supplies damaged")
             # await self.chat_send("supplies damaged")
