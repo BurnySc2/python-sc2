@@ -12,7 +12,6 @@ class FightBot(BotAI):
         super().__init__()
         self.control_received = False
         self.fight_started = False
-        self.supplies_been_damaged = False
 
     async def on_step(self, iteration):
         # before everything else - retrieve control
@@ -54,16 +53,6 @@ class FightBot(BotAI):
             logger.info("control received")
             # await self.chat_send("control received")
             self.control_received = True
-
-        # to speedup, we are going damage both supplies
-        if not self.supplies_been_damaged and self.structures(UnitTypeId.SUPPLYDEPOT) and self.enemy_structures(UnitTypeId.SUPPLYDEPOT):
-            for s in self.structures(UnitTypeId.SUPPLYDEPOT):
-                await self._client.debug_set_unit_value([s.tag], 2, 100)
-            for s in self.enemy_structures(UnitTypeId.SUPPLYDEPOT):
-                await self._client.debug_set_unit_value([s.tag], 2, 100)
-            logger.info("supplies damaged")
-            # await self.chat_send("supplies damaged")
-            self.supplies_been_damaged = True
 
         # note: we should wait till workers will be destroyed
         if not self.fight_started and self.control_received and self.enemy_units and not self.enemy_units(UnitTypeId.SCV) and not self.units(UnitTypeId.SCV):
