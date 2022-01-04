@@ -39,8 +39,6 @@ class FightBot(BotAI):
         if not self.fight_started and self.enemy_location and not self.enemy_units(UnitTypeId.SCV) and not self.units(UnitTypeId.SCV):
             for u in self.enemy_units:
                 u.attack(self.start_location)
-            for u in self.units:
-                u.attack(self.enemy_location)
             self.fight_started = True
 
         # in case of no units left - do not wait for game to finish
@@ -49,12 +47,12 @@ class FightBot(BotAI):
             await self._client.quit()  # or reset level
 
         for u in self.units(UnitTypeId.MARINE):
-            u.attack(self.enemy_structures.first.position)
+            u.attack(self.enemy_location)
             # TODO: implement your fight logic here
             # if u.weapon_cooldown:
-            #     u.move(u.position.towards(self.structures.first.position))
+            #     u.move(u.position.towards(self.start_location))
             # else:
-            #     u.attack(self.enemy_structures.first.position)
+            #     u.attack(self.enemy_location)
             # pass
 
 
