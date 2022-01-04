@@ -35,22 +35,18 @@ class FightBot(BotAI):
                 [UnitTypeId.MARINE, 4, self.start_location.towards(self.enemy_location, 8), ME]
             ])
 
-        # note: we should wait till workers will be destroyed
+        # wait till workers will be destroyed and start the fight
         if not self.fight_started and self.enemy_location and not self.enemy_units(UnitTypeId.SCV) and not self.units(UnitTypeId.SCV):
-            # start fight
             for u in self.enemy_units:
-                u.attack(self.structures.first.position)
+                u.attack(self.start_location)
             for u in self.units:
-                u.attack(self.enemy_structures.first.position)
-            # await self._client.move_camera(self._game_info.map_center)
-            logger.info("fight started")
-            # await self.chat_send("fight started")
+                u.attack(self.enemy_location)
             self.fight_started = True
 
         # in case of no units left - do not wait for game to finish
         if self.fight_started and (not self.units or not self.enemy_units):
             logger.info("LOSE" if not self.units else "WIN")
-            await self._client.quit()  # await self._client.debug_leave() # or reset level
+            await self._client.quit()  # or reset level
 
         for u in self.units(UnitTypeId.MARINE):
             u.attack(self.enemy_structures.first.position)
