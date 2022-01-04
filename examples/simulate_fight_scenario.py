@@ -14,7 +14,7 @@ class FightBot(BotAI):
         self.fight_started = False
 
     async def on_step(self, iteration):
-        # before everything else - retrieve control
+        # retrieve control by enabling enemy control and showing whole map
         if iteration == 0:
             # we need this one for `self.enemy_units` to "see" all units on the map
             await self._client.debug_show_map()
@@ -26,7 +26,7 @@ class FightBot(BotAI):
             # prepare my side
             me = 1
             cc = self.townhalls.first
-            p = cc.position.towards(self.game_info.map_center, 3)
+            p = cc.position.towards(self.game_info.map_center, 4)
             # create supply
             await self._client.debug_create_unit([[UnitTypeId.SUPPLYDEPOT, 1, p, me]])
             # destroy command center
@@ -40,7 +40,7 @@ class FightBot(BotAI):
             # prepare opponent side
             pc = 2
             cc = self.enemy_structures.first
-            p = cc.position.towards(self.game_info.map_center, 3)
+            p = cc.position.towards(self.game_info.map_center, 4)
             # create supply
             await self._client.debug_create_unit([[UnitTypeId.SUPPLYDEPOT, 1, p, pc]])
             # destroy command center
@@ -66,6 +66,11 @@ class FightBot(BotAI):
             # await self.chat_send("fight started")
             self.fight_started = True
 
+        # in case of no units left - do not wait for game to finish
+        if self.fight_started and (not self.units or not self.enemy_units):
+            logger.info("LOSE" if not self.units else "WIN")
+            await self._client.quit()  # await self._client.debug_leave() # or reset level
+
         for u in self.units(UnitTypeId.MARINE):
             u.attack(self.enemy_structures.first.position)
             # TODO: implement your fight logic here
@@ -75,19 +80,11 @@ class FightBot(BotAI):
             #     u.attack(self.enemy_structures.first.position)
             # pass
 
-        # in case of no units left - do not wait for game to finish
-        if self.fight_started:
-            if not self.units or not self.enemy_units:
-                if not self.units:
-                    logger.error("LOSE")
-                else:
-                    logger.success("WIN")
-                await self._client.quit()  # await self._client.debug_leave() # or reset level
-
 
 def main():
     run_game(
         maps.get("Flat64"),
+        # NOTE: you can have to bots fighting with each other here
         [Bot(Race.Terran, FightBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=True
     )
