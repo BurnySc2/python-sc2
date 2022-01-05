@@ -59,7 +59,7 @@ class FightBot(BotAI):
 def main():
     run_game(
         maps.get("Flat64"),
-        # NOTE: you can have to bots fighting with each other here
+        # NOTE: you can have two bots fighting with each other here
         [Bot(Race.Terran, FightBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=True
     )
