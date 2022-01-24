@@ -5,20 +5,21 @@ These will then be used to run tests from the test script "test_pickled_data.py"
 import os
 import sys
 
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.main import run_game
+
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import lzma
 import os
 import pickle
-import sys
 from typing import Set
 
 from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-import sc2
-from sc2 import Race
-from sc2.data import Difficulty
+from sc2.data import Difficulty, Race
 from sc2.game_data import GameData
 from sc2.game_info import GameInfo
 from sc2.game_state import GameState
@@ -27,9 +28,9 @@ from sc2.player import Bot, Computer
 from sc2.protocol import ProtocolError
 
 
-class ExporterBot(sc2.BotAI):
+class ExporterBot(BotAI):
     def __init__(self):
-        sc2.BotAI.__init__(self)
+        BotAI.__init__(self)
         self.map_name: str = None
 
     async def on_step(self, iteration):
@@ -60,9 +61,9 @@ class ExporterBot(sc2.BotAI):
         raw_observation = self.state.response_observation
 
         # To test if this data is convertable in the first place
-        game_data = GameData(raw_game_data.data)
-        game_info = GameInfo(raw_game_info.game_info)
-        game_state = GameState(raw_observation)
+        _game_data = GameData(raw_game_data.data)
+        _game_info = GameInfo(raw_game_info.game_info)
+        _game_state = GameState(raw_observation)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with lzma.open(file_path, "wb") as f:
@@ -107,7 +108,7 @@ class ExporterBot(sc2.BotAI):
 
 def main():
 
-    maps = [
+    maps_ = [
         "16-BitLE",
         "2000AtmospheresAIE",
         "AbiogenesisLE",
@@ -122,6 +123,7 @@ def main():
         "Bandwidth",
         "BattleontheBoardwalkLE",
         "BelShirVestigeLE",
+        "BerlingradAIE",
         "BlackburnAIE",
         "BlackpinkLE",
         "BlueshiftLE",
@@ -129,6 +131,7 @@ def main():
         "CatalystLE",
         "CeruleanFallLE",
         "CrystalCavern",
+        "CuriousMindsAIE",
         "CyberForestLE",
         "DarknessSanctuaryLE",
         "DeathAura506",
@@ -146,8 +149,10 @@ def main():
         "EverDreamLE",
         "FractureLE",
         "FrostLE",
+        "GlitteringAshesAIE",
         "GoldenWall506",
         "GoldenWallLE",
+        "HardwireAIE",
         "HonorgroundsLE",
         "IceandChrome506",
         "IceandChromeLE",
@@ -192,7 +197,7 @@ def main():
         "ZenLE",
     ]
 
-    for map_ in maps:
+    for map_ in maps_:
         try:
             bot = ExporterBot()
             bot.map_name = map_
@@ -202,14 +207,12 @@ def main():
                     f"Pickle file for map {map_} was already generated. Skipping. If you wish to re-generate files, please remove them first."
                 )
                 continue
-            sc2.run_game(
-                sc2.maps.get(map_), [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)], realtime=False
-            )
+            run_game(maps.get(map_), [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)], realtime=False)
         except ProtocolError:
             # ProtocolError appears after a leave game request
             pass
         except Exception as e:
-            logger.warning(
+            logger.error(
                 f"Map {map_} could not be found, so pickle files for that map could not be generated. Error: {e}"
             )
             # traceback.print_exc()
