@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "burnysc2"
-version = "5.0.12"
+version = "5.0.13"
 description = "A StarCraft II API Client for Python 3"
 authors = ["BurnySc2 <gamingburny@gmail.com>"]
 license = "MIT"
@@ -24,15 +24,16 @@ classifiers=[
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
 ]
 packages = [
     { include = "sc2/*.py" },
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7, <3.10"
+python = ">=3.7, <3.11"
 s2clientprotocol = "^5.0.7"
-numpy = "<=1.19.3"
+numpy = "^1.19.3"
 scipy = "^1.7.1"
 aiohttp = "^3.7.4"
 loguru = "^0.5.3"
@@ -58,8 +59,8 @@ Pillow = "^8.3.2"
 matplotlib = "^3.4.3"
 radon = "^5.1.0"
 pre-commit = "^2.15.0"
-yapf = "^0.31.0"
-mypy = "^0.910"
+yapf = "^0.32.0"
+mypy = "^0.931"
 pylint = "^2.11.1"
 
 [build-system]
