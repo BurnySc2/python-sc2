@@ -49,10 +49,10 @@
 <p>TODO: Replace this with info about this file</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.unit.Unit">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sc2.unit.</span></span><span class="sig-name descname"><span class="pre">Unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_calculation_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.unit.</span></span><span class="sig-name descname"><span class="pre">Unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_calculation_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.add_on_land_position">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">add_on_land_position</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_land_position" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_on_land_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_land_position" title="Permalink to this definition">¶</a></dt>
 <dd><p>If this unit is an addon (techlab, reactor), returns the position
 where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to this addon.</p>
 <p>Why offset (-2.5, 0.5)? See description in ‘add_on_position’</p>
@@ -65,7 +65,7 @@ where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to 
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.add_on_position">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">add_on_position</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_position" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_on_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_position" title="Permalink to this definition">¶</a></dt>
 <dd><p>If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
 this property returns the position of where the addon should be, if it should build one or has one attached.</p>
 <p>Why offset (2.5, -0.5)?
@@ -82,7 +82,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.add_on_tag">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">add_on_tag</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.add_on_tag" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_on_tag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.add_on_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the tag of the addon of unit. If the unit has no addon, returns 0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -93,7 +93,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.age">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">age</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.age" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">age</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.age" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how old the unit object data is (in game seconds). This age does not reflect when the unit was created / trained / morphed!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -104,7 +104,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.age_in_frames">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">age_in_frames</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.age_in_frames" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">age_in_frames</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.age_in_frames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how old the unit object data is (in game frames). This age does not reflect the unit was created / trained / morphed!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -115,7 +115,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.air_dps">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">air_dps</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.air_dps" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">air_dps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.air_dps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dps against air units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -126,7 +126,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.air_range">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">air_range</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.air_range" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">air_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.air_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the range against air units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -137,7 +137,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.alliance">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">alliance</span></span><em class="property"><span class="pre">:</span> <span class="pre">sc2.data.Alliance</span></em><a class="headerlink" href="#sc2.unit.Unit.alliance" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alliance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sc2.data.Alliance</span></em><a class="headerlink" href="#sc2.unit.Unit.alliance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the team the unit belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -148,7 +148,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.armor">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">armor</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.armor" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">armor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.armor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the armor of the unit. Does not include upgrades</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -159,7 +159,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.armor_upgrade_level">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">armor_upgrade_level</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.armor_upgrade_level" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">armor_upgrade_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.armor_upgrade_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upgrade level of the units armor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -170,7 +170,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.assigned_harvesters">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">assigned_harvesters</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.assigned_harvesters" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assigned_harvesters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.assigned_harvesters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of workers currently gathering resources at a geyser or mining base.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -199,7 +199,7 @@ Attacking a position will make the unit move there and attack everything on its 
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.attack_upgrade_level">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">attack_upgrade_level</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.attack_upgrade_level" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attack_upgrade_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.attack_upgrade_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upgrade level of the units attack.
 # NOTE: Returns 0 for units without a weapon.</p>
 <dl class="field-list simple">
@@ -211,14 +211,14 @@ Attacking a position will make the unit move there and attack everything on its 
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.bonus_damage">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bonus_damage</span></span><a class="headerlink" href="#sc2.unit.Unit.bonus_damage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bonus_damage</span></span><a class="headerlink" href="#sc2.unit.Unit.bonus_damage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a tuple of form ‘(bonus damage, armor type)’ if unit does ‘bonus damage’ against ‘armor type’.
 Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechanical’, ‘Psionic’, ‘Massive’, ‘Structure’.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.buff_duration_max">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">buff_duration_max</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.buff_duration_max" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">buff_duration_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.buff_duration_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum amount of frames of the visible timer bar.
 # NOTE: Returns 0 for units without a timer bar.</p>
 <dl class="field-list simple">
@@ -230,7 +230,7 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.buff_duration_remain">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">buff_duration_remain</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.buff_duration_remain" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">buff_duration_remain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.buff_duration_remain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of remaining frames of the visible timer bar.
 # NOTE: Returns 0 for units without a timer bar.</p>
 <dl class="field-list simple">
@@ -242,7 +242,7 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.buffs">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">buffs</span></span><em class="property"><span class="pre">:</span> <span class="pre">Set</span></em><a class="headerlink" href="#sc2.unit.Unit.buffs" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">buffs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span></em><a class="headerlink" href="#sc2.unit.Unit.buffs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the set of current buffs the unit has.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -299,7 +299,7 @@ Usage:</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.build_progress">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">build_progress</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.build_progress" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.build_progress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns completion in range [0,1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -362,7 +362,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.can_attack">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">can_attack</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_attack</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can attack at all.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -373,7 +373,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.can_attack_air">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">can_attack_air</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack_air" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_attack_air</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack_air" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can air attack at all. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -384,7 +384,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.can_attack_both">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">can_attack_both</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack_both" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_attack_both</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack_both" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can attack both ground and air units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -395,7 +395,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.can_attack_ground">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">can_attack_ground</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack_ground" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_attack_ground</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_attack_ground" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit can attack ground units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -406,7 +406,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.can_be_attacked">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">can_be_attacked</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_be_attacked" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_be_attacked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.can_be_attacked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is revealed or not cloaked and therefore can be attacked.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -417,7 +417,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.cargo_left">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cargo_left</span></span><em class="property"><span class="pre">:</span> <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_left" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cargo_left</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_left" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how much cargo space is currently left in the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -428,7 +428,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.cargo_max">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cargo_max</span></span><em class="property"><span class="pre">:</span> <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_max" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cargo_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>How much cargo space is available at maximum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -439,7 +439,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.cargo_size">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cargo_size</span></span><em class="property"><span class="pre">:</span> <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_size" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cargo_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of cargo space the unit needs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -450,7 +450,7 @@ Note: Upgrades only work with own units. Use “upgrades” param to set expecte
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.cargo_used">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cargo_used</span></span><em class="property"><span class="pre">:</span> <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_used" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cargo_used</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.cargo_used" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns how much cargo space is currently used in the unit.
 Note that some units take up more than one space.</p>
 <dl class="field-list simple">
@@ -462,7 +462,7 @@ Note that some units take up more than one space.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.cloak">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cloak</span></span><em class="property"><span class="pre">:</span> <span class="pre">sc2.data.CloakState</span></em><a class="headerlink" href="#sc2.unit.Unit.cloak" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cloak</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sc2.data.CloakState</span></em><a class="headerlink" href="#sc2.unit.Unit.cloak" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns cloak state.
 See <a class="reference external" href="https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95">https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95</a></p>
 <dl class="field-list simple">
@@ -474,7 +474,7 @@ See <a class="reference external" href="https://github.com/Blizzard/s2client-api
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.detect_range">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">detect_range</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.detect_range" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">detect_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.detect_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the detection distance of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -485,7 +485,7 @@ See <a class="reference external" href="https://github.com/Blizzard/s2client-api
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.distance_per_step">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">distance_per_step</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.distance_per_step" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distance_per_step</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.distance_per_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>The distance a unit can move in one step. This does not take acceleration into account.
 Useful for micro-retreat/pathfinding</p>
 <dl class="field-list simple">
@@ -527,7 +527,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.distance_to_weapon_ready">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">distance_to_weapon_ready</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.distance_to_weapon_ready" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distance_to_weapon_ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.distance_to_weapon_ready" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distance a unit can travel before it’s weapon is ready to be fired again.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -538,7 +538,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.energy">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">energy</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.energy" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of energy the unit has. Returns 0 for units without energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -549,7 +549,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.energy_max">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">energy_max</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.energy_max" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.energy_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum amount of energy the unit can have. Returns 0 for units without energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -560,7 +560,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.energy_percentage">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">energy_percentage</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.energy_percentage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_percentage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.energy_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of amount of energy the unit has. Returns 0 for units without energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -571,7 +571,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.facing">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">facing</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.facing" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">facing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.facing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -582,7 +582,7 @@ To calculate the 3d distance, use unit.position3d.distance_to(p)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.footprint_radius">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">footprint_radius</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.footprint_radius" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">footprint_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.footprint_radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>For structures only.
 For townhalls this returns 2.5
 For barracks, spawning pool, gateway, this returns 1.5
@@ -617,7 +617,7 @@ For rich vespene buildings, flying terran buildings, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.ground_dps">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ground_dps</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.ground_dps" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ground_dps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.ground_dps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dps against ground units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -628,7 +628,7 @@ For rich vespene buildings, flying terran buildings, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.ground_range">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ground_range</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.ground_range" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ground_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.ground_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the range against ground units. Does not include upgrades.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -639,7 +639,7 @@ For rich vespene buildings, flying terran buildings, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.has_add_on">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">has_add_on</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_add_on" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_add_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_add_on" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if unit has an addon attached.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -661,7 +661,7 @@ For rich vespene buildings, flying terran buildings, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.has_cargo">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">has_cargo</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_cargo" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_cargo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_cargo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this unit has any units loaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -672,7 +672,7 @@ For rich vespene buildings, flying terran buildings, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.has_reactor">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">has_reactor</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_reactor" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_reactor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_reactor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a structure is connected to a reactor addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -683,7 +683,7 @@ For rich vespene buildings, flying terran buildings, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.has_techlab">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">has_techlab</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_techlab" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_techlab</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_techlab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a structure is connected to a techlab addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -694,7 +694,7 @@ For rich vespene buildings, flying terran buildings, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.has_vespene">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">has_vespene</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_vespene" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_vespene</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.has_vespene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a geyser has any gas remaining.
 You can’t build extractors on empty geysers.</p>
 <dl class="field-list simple">
@@ -706,7 +706,7 @@ You can’t build extractors on empty geysers.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.health">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">health</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.health" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">health</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.health" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the health of the unit. Does not include shields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -717,7 +717,7 @@ You can’t build extractors on empty geysers.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.health_max">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">health_max</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.health_max" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">health_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.health_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum health of the unit. Does not include shields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -728,7 +728,7 @@ You can’t build extractors on empty geysers.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.health_percentage">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">health_percentage</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.health_percentage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">health_percentage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.health_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of health the unit has. Does not include shields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -753,7 +753,7 @@ You can’t build extractors on empty geysers.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.ideal_harvesters">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ideal_harvesters</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.ideal_harvesters" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ideal_harvesters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.ideal_harvesters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the ideal harverster count for unit.
 3 for gas buildings, 2*n for n mineral patches on that base.</p>
 <dl class="field-list simple">
@@ -783,7 +783,7 @@ You can’t build extractors on empty geysers.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_active">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_active</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_active" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_active</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_active" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has an order (e.g. unit is currently moving or attacking, structure is currently training or researching).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -794,7 +794,7 @@ You can’t build extractors on empty geysers.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_armored">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_armored</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_armored" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_armored</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_armored" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘armored’ attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -805,7 +805,7 @@ You can’t build extractors on empty geysers.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_attacking">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_attacking</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_attacking" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_attacking</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_attacking" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is attacking.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -817,7 +817,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_biological">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_biological</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_biological" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_biological</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_biological" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘biological’ attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -828,7 +828,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_blip">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_blip</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_blip" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_blip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_blip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is detected by a sensor tower.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -839,7 +839,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_burrowed">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_burrowed</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_burrowed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_burrowed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_burrowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is burrowed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -850,7 +850,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_carrying_minerals">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_carrying_minerals</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_carrying_minerals" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_carrying_minerals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_carrying_minerals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a worker or MULE is carrying (gold-)minerals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -861,7 +861,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_carrying_resource">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_carrying_resource</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_carrying_resource" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_carrying_resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_carrying_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a worker is carrying a resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -872,7 +872,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_carrying_vespene">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_carrying_vespene</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_carrying_vespene" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_carrying_vespene</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_carrying_vespene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a worker is carrying vespene gas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -883,7 +883,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_cloaked">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_cloaked</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_cloaked" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_cloaked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_cloaked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is cloaked.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -894,7 +894,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_collecting">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_collecting</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_collecting" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_collecting</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_collecting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is gathering or returning.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -906,7 +906,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_constructing_scv">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_constructing_scv</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_constructing_scv" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_constructing_scv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_constructing_scv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is an SCV that is currently building.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -918,7 +918,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_detector">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_detector</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_detector" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_detector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_detector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a detector. Has to be completed
 in order to detect and Photoncannons also need to be powered.</p>
 <dl class="field-list simple">
@@ -930,7 +930,7 @@ in order to detect and Photoncannons also need to be powered.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_enemy">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_enemy</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_enemy" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_enemy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_enemy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is hostile.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -958,7 +958,7 @@ in order to detect and Photoncannons also need to be powered.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_flying">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_flying</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_flying" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_flying</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_flying" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is flying.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -969,7 +969,7 @@ in order to detect and Photoncannons also need to be powered.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_gathering">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_gathering</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_gathering" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_gathering</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_gathering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is on its way to a mineral field or vespene geyser to mine.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -981,7 +981,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_hallucination">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_hallucination</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_hallucination" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_hallucination</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_hallucination" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the unit is your own hallucination or detected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -992,7 +992,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_idle">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_idle</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_idle" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_idle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_idle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if unit is idle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1003,7 +1003,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_light">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_light</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_light" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_light</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_light" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘light’ attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1014,7 +1014,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_massive">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_massive</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_massive" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_massive</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_massive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘massive’ attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1025,7 +1025,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_mechanical">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_mechanical</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_mechanical" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_mechanical</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_mechanical" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘mechanical’ attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1036,7 +1036,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_memory">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_memory</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_memory" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_memory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_memory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if this Unit object is referenced from the future and is outdated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1047,7 +1047,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_mine">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_mine</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_mine" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_mine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_mine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is controlled by the bot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1058,7 +1058,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_mineral_field">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_mineral_field</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_mineral_field" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_mineral_field</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_mineral_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a mineral field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1069,7 +1069,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_moving">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_moving</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_moving" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_moving</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_moving" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is moving.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -1081,7 +1081,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_on_screen">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_on_screen</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_on_screen" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_on_screen</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_on_screen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is on the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1092,7 +1092,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_patrolling">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_patrolling</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_patrolling" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_patrolling</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_patrolling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is patrolling.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -1104,7 +1104,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_placeholder">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_placeholder</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_placeholder" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_placeholder</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_placeholder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a placerholder for the bot.
 Raw information about placeholders:</p>
 <blockquote>
@@ -1131,7 +1131,7 @@ is_on_screen: false</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_powered">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_powered</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_powered" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_powered</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_powered" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is powered by a pylon or warppism.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1142,7 +1142,7 @@ is_on_screen: false</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_psionic">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_psionic</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_psionic" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_psionic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_psionic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit has the ‘psionic’ attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1153,7 +1153,7 @@ is_on_screen: false</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_ready">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_ready</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_ready" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_ready" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is completed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1164,7 +1164,7 @@ is_on_screen: false</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_repairing">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_repairing</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_repairing" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_repairing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_repairing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is an SCV or MULE that is currently repairing.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -1176,7 +1176,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_returning">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_returning</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_returning" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_returning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_returning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a unit is returning from mineral field or vespene geyser to deliver resources to townhall.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -1188,7 +1188,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_revealed">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_revealed</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_revealed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_revealed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_revealed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is revealed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1199,7 +1199,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_selected">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_selected</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_selected" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_selected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_selected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is currently selected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1210,7 +1210,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_snapshot">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_snapshot</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_snapshot" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_snapshot</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_snapshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is only available as a snapshot for the bot.
 Enemy buildings that have been scouted and are in the fog of war or
 attacking enemy units on higher, not visible ground appear this way.</p>
@@ -1223,7 +1223,7 @@ attacking enemy units on higher, not visible ground appear this way.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_structure">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_structure</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_structure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_structure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1234,7 +1234,7 @@ attacking enemy units on higher, not visible ground appear this way.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_transforming">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_transforming</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_transforming" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_transforming</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_transforming" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit transforming.
 Only works for own units.</p>
 <dl class="field-list simple">
@@ -1258,7 +1258,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_vespene_geyser">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_vespene_geyser</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_vespene_geyser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_vespene_geyser</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_vespene_geyser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is a non-empty vespene geyser or gas extraction building.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1269,7 +1269,7 @@ Only works for own units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.is_visible">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_visible</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_visible" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_visible</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.is_visible" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is visible for the bot.
 NOTE: This means the bot has vision of the position of the unit!
 It does not give any information about the cloak status of the unit.</p>
@@ -1282,7 +1282,7 @@ It does not give any information about the cloak status of the unit.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.mineral_contents">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">mineral_contents</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.mineral_contents" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mineral_contents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.mineral_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of minerals remaining in a mineral field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1311,7 +1311,7 @@ Target can be a Unit (to follow that unit) or Point2.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.movement_speed">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">movement_speed</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.movement_speed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">movement_speed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.movement_speed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the movement speed of the unit.
 This is the unit movement speed on game speed ‘normal’. To convert it to ‘faster’ movement speed, multiply it by a factor of ‘1.4’. E.g. reaper movement speed is listed here as 3.75, but should actually be 5.25.
 Does not include upgrades or buffs.</p>
@@ -1324,7 +1324,7 @@ Does not include upgrades or buffs.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.name">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#sc2.unit.Unit.name" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.unit.Unit.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1335,7 +1335,7 @@ Does not include upgrades or buffs.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.noqueue">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">noqueue</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.noqueue" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">noqueue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.noqueue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the unit is idle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1346,7 +1346,7 @@ Does not include upgrades or buffs.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.order_target">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">order_target</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.order_target" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">order_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.order_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the target tag (if it is a Unit) or Point2 (if it is a Position)
 from the first order, returns None if the unit is idle</p>
 <dl class="field-list simple">
@@ -1358,7 +1358,7 @@ from the first order, returns None if the unit is idle</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.orders">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">orders</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">sc2.unit.UnitOrder</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.orders" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">sc2.unit.UnitOrder</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.orders" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the a list of the current orders.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1369,7 +1369,7 @@ from the first order, returns None if the unit is idle</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.owner_id">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">owner_id</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.owner_id" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">owner_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.owner_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the owner of the unit. This is a value of 1 or 2 in a two player game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1380,7 +1380,7 @@ from the first order, returns None if the unit is idle</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.passengers">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">passengers</span></span><em class="property"><span class="pre">:</span> <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">sc2.unit.Unit</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.passengers" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">passengers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">sc2.unit.Unit</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.passengers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1391,7 +1391,7 @@ from the first order, returns None if the unit is idle</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.passengers_tags">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">passengers_tags</span></span><em class="property"><span class="pre">:</span> <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.passengers_tags" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">passengers_tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.passengers_tags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the tags of the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1421,7 +1421,7 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.position">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the 2d position of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1432,7 +1432,7 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.position3d">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">position3d</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><span class="pre">sc2.position.Point3</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position3d" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position3d</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><span class="pre">sc2.position.Point3</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position3d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the 3d position of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1443,7 +1443,7 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.position_tuple">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">position_tuple</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.position_tuple" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position_tuple</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.position_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the 2d position of the unit as tuple without conversion to Point2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1454,7 +1454,7 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.race">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">race</span></span><em class="property"><span class="pre">:</span> <span class="pre">sc2.data.Race</span></em><a class="headerlink" href="#sc2.unit.Unit.race" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">race</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sc2.data.Race</span></em><a class="headerlink" href="#sc2.unit.Unit.race" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the race of the unit</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1465,7 +1465,7 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.radius">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.radius" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>Half of unit size. See <a class="reference external" href="https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void">https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void</a>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1476,7 +1476,7 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.real_speed">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">real_speed</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.real_speed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">real_speed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.real_speed" title="Permalink to this definition">¶</a></dt>
 <dd><p>See ‘calculate_speed’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1550,7 +1550,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.shield">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">shield</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shield</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the shield points the unit has. Returns 0 for non-protoss units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1561,7 +1561,7 @@ Requires UpgradeId to be passed instead of AbilityId.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.shield_health_percentage">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">shield_health_percentage</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_health_percentage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shield_health_percentage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_health_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of combined shield + hp points the unit has.
 Also takes build progress into account.</p>
 <dl class="field-list simple">
@@ -1573,7 +1573,7 @@ Also takes build progress into account.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.shield_max">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">shield_max</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_max" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shield_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_max" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the maximum shield points the unit can have. Returns 0 for non-protoss units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1584,7 +1584,7 @@ Also takes build progress into account.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.shield_percentage">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">shield_percentage</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_percentage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shield_percentage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_percentage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the percentage of shield points the unit has. Returns 0 for non-protoss units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1595,7 +1595,7 @@ Also takes build progress into account.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.shield_upgrade_level">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">shield_upgrade_level</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_upgrade_level" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shield_upgrade_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.shield_upgrade_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upgrade level of the units shield.
 # NOTE: Returns 0 for units without a shield.</p>
 <dl class="field-list simple">
@@ -1607,7 +1607,7 @@ Also takes build progress into account.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.sight_range">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sight_range</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.sight_range" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sight_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.sight_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the sight range of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1651,7 +1651,7 @@ units need the space.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.surplus_harvesters">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">surplus_harvesters</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.surplus_harvesters" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">surplus_harvesters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.surplus_harvesters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a positive int if unit has too many harvesters mining,
 a negative int if it has too few mining.
 Will only works on townhalls, and gas buildings.</p>
@@ -1664,7 +1664,7 @@ Will only works on townhalls, and gas buildings.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.tag">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">tag</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.tag" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the unique tag of the unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1693,7 +1693,7 @@ Includes the target’s radius when calculating distance to target.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.tech_alias">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.tech_alias" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.tech_alias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
 For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]
 For SCV, this returns None</p>
@@ -1724,7 +1724,7 @@ Usage: COMMANDCENTER.train(SCV)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.type_id">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">type_id</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a></em><a class="headerlink" href="#sc2.unit.Unit.type_id" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a></em><a class="headerlink" href="#sc2.unit.Unit.type_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>UnitTypeId found in sc2/ids/unit_typeid.
 Caches all type_ids of the same unit type.</p>
 <dl class="field-list simple">
@@ -1736,7 +1736,7 @@ Caches all type_ids of the same unit type.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.unit_alias">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.unit_alias" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.unit_alias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building type equality, e.g. FlyingOrbitalCommand is the same as OrbitalCommand
 For flying OrbitalCommand, this returns UnitTypeId.OrbitalCommand
 For SCV, this returns None</p>
@@ -1749,7 +1749,7 @@ For SCV, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.vespene_contents">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">vespene_contents</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.vespene_contents" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vespene_contents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.unit.Unit.vespene_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the amount of gas remaining in a geyser.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1777,7 +1777,7 @@ For SCV, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.weapon_cooldown">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">weapon_cooldown</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.weapon_cooldown" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weapon_cooldown</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.unit.Unit.weapon_cooldown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the time until the unit can fire again,
 returns -1 for units that can’t attack.
 Usage:
@@ -1800,7 +1800,7 @@ if unit.weapon_cooldown == 0:</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.weapon_ready">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">weapon_ready</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.weapon_ready" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weapon_ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.unit.Unit.weapon_ready" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the weapon is ready to be fired.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1865,7 +1865,7 @@ if unit.weapon_cooldown == 0:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>
 </html>
