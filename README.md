@@ -93,11 +93,13 @@ You can find your Windows IP using `ipconfig /all` from `PowerShell.exe` or `CMD
 As promised, worker rush in less than twenty lines:
 
 ```python
-import sc2
-from sc2 import run_game, maps, Race, Difficulty
+from sc2 import maps
 from sc2.player import Bot, Computer
+from sc2.main import run_game
+from sc2.data import Race, Difficulty
+from sc2.bot_ai import BotAI
 
-class WorkerRushBot(sc2.BotAI):
+class WorkerRushBot(BotAI):
     async def on_step(self, iteration: int):
         if iteration == 0:
             for worker in self.workers:
