@@ -122,7 +122,9 @@ The API supports a number of options for configuring how it operates.
 ### `unit_command_uses_self_do`
 Set this to 'True' if your bot is issueing commands using `self.do(Unit(Ability, Target))` instead of `Unit(Ability, Target)`.
 ```python
-class MyBot(sc2.BotAI):
+from sc2.bot_ai import BotAI
+
+class MyBot(BotAI):
     def __init__(self):
         self.unit_command_uses_self_do = True
 ```
@@ -130,7 +132,9 @@ class MyBot(sc2.BotAI):
 ### `raw_affects_selection`
 Setting this to true improves bot performance by a little bit.
 ```python
-class MyBot(sc2.BotAI):
+from sc2.bot_ai import BotAI
+
+class MyBot(BotAI):
     def __init__(self):
         self.raw_affects_selection = True
 ```
@@ -141,7 +145,9 @@ The distance calculation method:
 - 1 for scipy pdist
 - 2 for scipy cdist
 ```python
-class MyBot(sc2.BotAI):
+from sc2.bot_ai import BotAI
+
+class MyBot(BotAI):
     def __init__(self):
         self.distance_calculation_method: int = 2
 ```
@@ -150,7 +156,9 @@ class MyBot(sc2.BotAI):
 On game start or in any frame actually, you can set the game step. This controls how often your bot's `step` method is called.  
 __Do not set this in the \_\_init\_\_ function as the client will not have been initialized yet!__
 ```python
-class MyBot(sc2.BotAI):
+from sc2.bot_ai import BotAI
+
+class MyBot(BotAI):
     def __init__(self):
         pass  # don't set it here!
 
