@@ -40,6 +40,7 @@ def get_map_file_path() -> Path:
 # Custom repr function so that the output is always the same and only changes when there were changes in the data.json tech tree file
 # The output just needs to be ordered (sorted by enum name), but it does not matter anymore if the bot then imports an unordered dict and set
 class OrderedDict2(OrderedDict):
+
     def __repr__(self):
         if not self:
             return "{}"
@@ -51,6 +52,7 @@ class OrderedDict2(OrderedDict):
 
 
 class OrderedSet2(set):
+
     def __repr__(self):
         if not self:
             return "set()"

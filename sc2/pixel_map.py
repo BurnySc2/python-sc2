@@ -6,6 +6,7 @@ from sc2.position import Point2
 
 
 class PixelMap:
+
     def __init__(self, proto, in_bits: bool = False, mirrored: bool = False):
         """
         :param proto:

@@ -6,6 +6,7 @@ from sc2.data import AIBuild, Difficulty, PlayerType, Race
 
 
 class AbstractPlayer:
+
     def __init__(self, p_type, race=None, name=None, difficulty=None, ai_build=None, fullscreen=False):
         assert isinstance(p_type, PlayerType), f"p_type is of type {type(p_type)}"
         assert name is None or isinstance(name, str), f"name is of type {type(name)}"
@@ -39,6 +40,7 @@ class AbstractPlayer:
 
 
 class Human(AbstractPlayer):
+
     def __init__(self, race, name=None, fullscreen=False):
         super().__init__(PlayerType.Participant, race, name=name, fullscreen=fullscreen)
 
@@ -50,6 +52,7 @@ class Human(AbstractPlayer):
 
 
 class Bot(AbstractPlayer):
+
     def __init__(self, race, ai, name=None, fullscreen=False):
         """
         AI can be None if this player object is just used to inform the
@@ -67,6 +70,7 @@ class Bot(AbstractPlayer):
 
 
 class Computer(AbstractPlayer):
+
     def __init__(self, race, difficulty=Difficulty.Easy, ai_build=AIBuild.RandomBuild):
         super().__init__(PlayerType.Computer, race, difficulty=difficulty, ai_build=ai_build)
 
@@ -75,6 +79,7 @@ class Computer(AbstractPlayer):
 
 
 class Observer(AbstractPlayer):
+
     def __init__(self):
         super().__init__(PlayerType.Observer)
 
@@ -83,6 +88,7 @@ class Observer(AbstractPlayer):
 
 
 class Player(AbstractPlayer):
+
     @classmethod
     def from_proto(cls, proto):
         if PlayerType(proto.type) == PlayerType.Observer:
@@ -120,6 +126,7 @@ class BotProcess(AbstractPlayer):
     e.g. to call a bot capable of running on the bot ladders:
         BotProcess(os.getcwd(), "python run.py", Race.Terran, "INnoVation")
     """
+
     def __init__(
         self,
         path: Union[str, Path],

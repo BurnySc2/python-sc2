@@ -11,6 +11,7 @@ from arenaclient.proxy.server import run_server
 
 
 class RunLocal:
+
     def __init__(self):
         self.server_process = None
         # Realtime and visualize setting, e.g. {"Realtime": False, "Visualize": False}

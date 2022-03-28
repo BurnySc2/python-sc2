@@ -19,6 +19,7 @@ from sc2.unit import Unit
 
 
 class ExpandEverywhere(BotAI):
+
     async def on_start(self):
         self.client.game_step = 50
         await self.client.debug_show_map()

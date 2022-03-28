@@ -16,6 +16,7 @@ except ImportError:
 
 
 class IdGenerator:
+
     def __init__(self, game_data: GameData = None, game_version: str = None, verbose: bool = False):
         self.game_data: GameData = game_data
         self.game_version = game_version

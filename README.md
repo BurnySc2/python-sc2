@@ -170,3 +170,9 @@ If you have any issues, ideas or feedback, please create [a new issue](https://g
 ## Contributing & style guidelines
 
 Git commit messages use [imperative-style messages](https://stackoverflow.com/a/3580764/2867076), start with capital letter and do not have trailing commas.
+
+To run pre-commit hooks (which run autoformatting and autosort imports) you can run
+```
+poetry run pre-commit install
+poetry run pre-commit run --all-files
+```

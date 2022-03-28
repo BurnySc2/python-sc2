@@ -21,6 +21,7 @@ from sc2.units import Units
 
 
 class ZergRushBot(BotAI):
+
     async def on_start(self):
         self.client.game_step = 2
 

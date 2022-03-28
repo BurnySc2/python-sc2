@@ -87,6 +87,7 @@ class GameMatch:
 
 
 class SlidingTimeWindow:
+
     def __init__(self, size: int):
         assert size > 0
 

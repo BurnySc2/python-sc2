@@ -9,6 +9,7 @@ from sc2.units import Units
 
 
 class CompetitiveBot(BotAI):
+
     async def on_start(self):
         self.client.game_step = 2
 

@@ -21,6 +21,7 @@ from sc2.units import Units
 
 
 class RampWallBot(BotAI):
+
     def __init__(self):
         self.unit_command_uses_self_do = False
 

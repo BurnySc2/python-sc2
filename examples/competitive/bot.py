@@ -2,6 +2,7 @@ from sc2.bot_ai import BotAI
 
 
 class CompetitiveBot(BotAI):
+
     async def on_start(self):
         print("Game started")
         # Do things here before the game starts

@@ -29,6 +29,7 @@ from sc2.protocol import ProtocolError
 
 
 class ExporterBot(BotAI):
+
     def __init__(self):
         BotAI.__init__(self)
         self.map_name: str = None

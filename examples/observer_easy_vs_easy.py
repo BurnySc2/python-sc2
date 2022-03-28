@@ -1,6 +1,6 @@
 from examples.protoss.cannon_rush import CannonRushBot
 from sc2 import maps
-from sc2.data import Race, Difficulty
+from sc2.data import Difficulty, Race
 from sc2.main import run_game
 from sc2.player import Bot, Computer
 

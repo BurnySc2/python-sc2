@@ -16,6 +16,7 @@ from sc2.player import Bot, Computer
 
 
 class WarpGateBot(BotAI):
+
     def __init__(self):
         # Initialize inherited class
         self.proxy_built = False

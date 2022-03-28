@@ -19,6 +19,7 @@ from sc2.units import Units
 
 
 class BCRushBot(BotAI):
+
     def select_target(self) -> Tuple[Point2, bool]:
         """ Select an enemy target the units should attack. """
         targets: Units = self.enemy_structures

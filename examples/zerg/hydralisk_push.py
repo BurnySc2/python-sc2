@@ -20,6 +20,7 @@ from sc2.units import Units
 
 
 class Hydralisk(BotAI):
+
     def select_target(self) -> Point2:
         if self.enemy_structures:
             return random.choice(self.enemy_structures).position

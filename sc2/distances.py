@@ -16,6 +16,7 @@ from typing import Generator, Iterable, Tuple
 
 
 class DistanceCalculation:
+
     def __init__(self):
         self.state: GameState = None
         # self._generated_frame = -100

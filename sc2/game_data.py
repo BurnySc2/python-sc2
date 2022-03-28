@@ -17,6 +17,7 @@ FREE_ABILITIES = {"Lower", "Raise", "Land", "Lift", "Hold", "Harvest"}
 
 
 class GameData:
+
     def __init__(self, data):
         """
         :param data:
@@ -126,6 +127,7 @@ class AbilityData:
 
 
 class UnitTypeData:
+
     def __init__(self, game_data: GameData, proto):
         """
         :param game_data:
@@ -273,6 +275,7 @@ class UnitTypeData:
 
 
 class UpgradeData:
+
     def __init__(self, game_data: GameData, proto):
         """
         :param game_data:
@@ -306,6 +309,7 @@ class Cost:
     The cost of an action, a structure, a unit or a research upgrade.
     The time is given in frames (22.4 frames per game second).
     """
+
     def __init__(self, minerals: int, vespene: int, time: float = None):
         """
         :param minerals:
