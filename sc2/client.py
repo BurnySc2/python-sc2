@@ -23,13 +23,14 @@ from sc2.units import Units
 
 class Client(Protocol):
 
-    def __init__(self, ws):
+    def __init__(self, ws, save_replay_path: str = None):
         """
         :param ws:
         """
         super().__init__(ws)
         # How many frames will be waited between iterations before the next one is called
         self.game_step: int = 8
+        self.save_replay_path: Optional[str] = save_replay_path
         self._player_id = None
         self._game_result = None
         # Store a hash value of all the debug requests to prevent sending the same ones again if they haven't changed last frame
@@ -108,6 +109,9 @@ class Client(Protocol):
             self._game_result = {self._player_id: Result.Defeat}
 
         try:
+            if self.save_replay_path is not None:
+                await self.save_replay(self.save_replay_path)
+                self.save_replay_path = None
             await self._execute(leave_game=sc_pb.RequestLeaveGame())
         except ProtocolError:
             if is_resign:
@@ -588,22 +592,27 @@ class Client(Protocol):
             if debug_hash != self._debug_hash_tuple_last_iteration:
                 # Something has changed, either more or less is to be drawn, or a position of a drawing changed (e.g. when drawing on a moving unit)
                 self._debug_hash_tuple_last_iteration = debug_hash
-                await self._execute(
-                    debug=sc_pb.RequestDebug(
-                        debug=[
-                            debug_pb.DebugCommand(
-                                draw=debug_pb.DebugDraw(
-                                    text=[text.to_proto() for text in self._debug_texts] if self._debug_texts else None,
-                                    lines=[line.to_proto()
-                                           for line in self._debug_lines] if self._debug_lines else None,
-                                    boxes=[box.to_proto() for box in self._debug_boxes] if self._debug_boxes else None,
-                                    spheres=[sphere.to_proto()
-                                             for sphere in self._debug_spheres] if self._debug_spheres else None,
+                try:
+                    await self._execute(
+                        debug=sc_pb.RequestDebug(
+                            debug=[
+                                debug_pb.DebugCommand(
+                                    draw=debug_pb.DebugDraw(
+                                        text=[text.to_proto()
+                                              for text in self._debug_texts] if self._debug_texts else None,
+                                        lines=[line.to_proto()
+                                               for line in self._debug_lines] if self._debug_lines else None,
+                                        boxes=[box.to_proto()
+                                               for box in self._debug_boxes] if self._debug_boxes else None,
+                                        spheres=[sphere.to_proto()
+                                                 for sphere in self._debug_spheres] if self._debug_spheres else None,
+                                    )
                                 )
-                            )
-                        ]
+                            ]
+                        )
                     )
-                )
+                except ProtocolError:
+                    return
             self._debug_draw_last_frame = True
             self._debug_texts.clear()
             self._debug_lines.clear()

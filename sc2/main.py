@@ -441,7 +441,9 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
         iteration += 1
 
 
-async def _setup_host_game(server: Controller, map_settings, players, realtime, random_seed=None, disable_fog=None):
+async def _setup_host_game(
+    server: Controller, map_settings, players, realtime, random_seed=None, disable_fog=None, save_replay_as=None
+):
     r = await server.create_game(map_settings, players, realtime, random_seed, disable_fog)
     if r.create_game.HasField("error"):
         err = f"Could not create game: {CreateGameError(r.create_game.error)}"
@@ -450,7 +452,7 @@ async def _setup_host_game(server: Controller, map_settings, players, realtime, 
         logger.critical(err)
         raise RuntimeError(err)
 
-    return Client(server._ws)
+    return Client(server._ws, save_replay_as)
 
 
 async def _host_game(
@@ -476,7 +478,9 @@ async def _host_game(
     ) as server:
         await server.ping()
 
-        client = await _setup_host_game(server, map_settings, players, realtime, random_seed, disable_fog)
+        client = await _setup_host_game(
+            server, map_settings, players, realtime, random_seed, disable_fog, save_replay_as
+        )
         # Bot can decide if it wants to launch with 'raw_affects_selection=True'
         if not isinstance(players[0], Human) and getattr(players[0].ai, "raw_affects_selection", None) is not None:
             client.raw_affects_selection = players[0].ai.raw_affects_selection
@@ -485,8 +489,8 @@ async def _host_game(
             result = await _play_game(
                 players[0], client, realtime, portconfig, step_time_limit, game_time_limit, rgb_render_config
             )
-            if save_replay_as is not None:
-                await client.save_replay(save_replay_as)
+            if client.save_replay_path is not None:
+                await client.save_replay(client.save_replay_path)
             await client.leave()
             await client.quit()
         except ConnectionAlreadyClosed:
