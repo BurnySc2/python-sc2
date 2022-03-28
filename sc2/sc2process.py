@@ -49,6 +49,7 @@ class SC2Process:
     :param base_build:
     :param data_hash:
     """
+
     def __init__(
         self,
         host: Optional[str] = None,

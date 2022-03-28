@@ -25,6 +25,7 @@ def get(name=None):
 
 
 class Map:
+
     def __init__(self, path):
         self.path = path
 

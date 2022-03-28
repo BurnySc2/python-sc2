@@ -19,6 +19,7 @@ if TYPE_CHECKING:
 
 class Units(list):
     """A collection of Unit objects. Makes it easy to select units by selectors."""
+
     @classmethod
     def from_proto(cls, units, bot_object: BotAI):
         return cls((Unit(u, bot_object=bot_object) for u in units))
@@ -704,6 +705,7 @@ class Units(list):
 
 
 class UnitSelection(Units):
+
     def __init__(self, parent, selection=None):
         if isinstance(selection, (UnitTypeId)):
             super().__init__((unit for unit in parent if unit.type_id == selection), parent._bot_object)

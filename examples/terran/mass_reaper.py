@@ -26,6 +26,7 @@ from sc2.units import Units
 
 
 class MassReaperBot(BotAI):
+
     def __init__(self):
         # Select distance calculation method 0, which is the pure python distance calculation without caching or indexing, using math.hypot(), for more info see distances.py _distances_override_functions() function
         self.distance_calculation_method = 3

@@ -19,6 +19,7 @@ def _sign(num):
 
 
 class Pointlike(tuple):
+
     @property
     def position(self) -> Pointlike:
         return self
@@ -152,6 +153,7 @@ class Pointlike(tuple):
 
 
 class Point2(Pointlike):
+
     @classmethod
     def from_proto(cls, data) -> Point2:
         """
@@ -329,6 +331,7 @@ class Point2(Pointlike):
 
 
 class Point3(Point2):
+
     @classmethod
     def from_proto(cls, data):
         """
@@ -359,6 +362,7 @@ class Point3(Point2):
 
 
 class Size(Point2):
+
     @property
     def width(self) -> float:
         return self[0]
@@ -369,6 +373,7 @@ class Size(Point2):
 
 
 class Rect(tuple):
+
     @classmethod
     def from_proto(cls, data):
         """

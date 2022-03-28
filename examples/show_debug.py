@@ -7,6 +7,7 @@ from sc2.player import Bot, Computer
 
 
 class MyBot(BotAI):
+
     async def on_step(self, iteration):
         for structure in self.structures:
             self._client.debug_text_world(

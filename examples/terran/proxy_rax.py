@@ -14,6 +14,7 @@ from sc2.units import Units
 
 
 class ProxyRaxBot(BotAI):
+
     async def on_step(self, iteration):
         # If we don't have a townhall anymore, send all units to attack
         ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)

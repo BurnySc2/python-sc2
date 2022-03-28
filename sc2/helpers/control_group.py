@@ -1,4 +1,5 @@
 class ControlGroup(set):
+
     def __init__(self, units):
         super().__init__({unit.tag for unit in units})
 

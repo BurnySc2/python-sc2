@@ -35,6 +35,7 @@ from sc2.unit import Unit
 
 
 class MarineSplitChallenge(BotAI):
+
     async def on_step(self, iteration):
         # do marine micro vs zerglings
         for unit in self.units(UnitTypeId.MARINE):

@@ -19,6 +19,7 @@ class Proxy:
     Class for handling communication between sc2 and an external bot.
     This "middleman" is needed for enforcing time limits, collecting results, and closing things properly.
     """
+
     def __init__(
         self,
         controller: Controller,

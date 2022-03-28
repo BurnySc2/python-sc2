@@ -2,6 +2,7 @@ class ScoreDetails:
     """Accessable in self.state.score during step function
     For more information, see https://github.com/Blizzard/s2client-proto/blob/master/s2clientprotocol/score.proto
     """
+
     def __init__(self, proto):
         self._data = proto
         self._proto = proto.score_details

@@ -19,6 +19,7 @@ from sc2.units import Units
 
 
 class TestBot(BotAI):
+
     def __init__(self):
         BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
@@ -485,6 +486,7 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
+
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)

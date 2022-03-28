@@ -63,6 +63,7 @@ if TYPE_CHECKING:
 
 
 class UnitOrder:
+
     @classmethod
     def from_proto(cls, proto, bot_object: BotAI):
         return cls(
@@ -87,6 +88,7 @@ class UnitOrder:
 
 
 class Unit:
+
     def __init__(self, proto_data, bot_object: BotAI, distance_calculation_index: int = -1, base_build: int = -1):
         """
         :param proto_data:

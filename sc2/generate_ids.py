@@ -16,6 +16,7 @@ except ImportError:
 
 
 class IdGenerator:
+
     def __init__(self, game_data: GameData = None, game_version: str = None, verbose: bool = False):
         self.game_data: GameData = game_data
         self.game_version = game_version
@@ -163,10 +164,10 @@ class IdGenerator:
 
             # Apply formatting]
             try:
-                subprocess.run(["black", "--line-length", "120", ids_file_path])
+                subprocess.run(["poetry", "run", "yapf", ids_file_path, "-i"])
             except FileNotFoundError:
                 print(
-                    f"Black is not installed. Please use 'pip install black' to install black formatter.\nCould not autoformat file {ids_file_path}"
+                    f"Yapf is not installed. Please use 'pip install yapf' to install yapf formatter.\nCould not autoformat file {ids_file_path}"
                 )
 
         if self.game_version is not None:

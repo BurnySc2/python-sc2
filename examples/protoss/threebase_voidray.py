@@ -15,6 +15,7 @@ from sc2.player import Bot, Computer
 
 
 class ThreebaseVoidrayBot(BotAI):
+
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(glhf)")

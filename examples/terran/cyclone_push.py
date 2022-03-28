@@ -16,6 +16,7 @@ from sc2.units import Units
 
 
 class CyclonePush(BotAI):
+
     def select_target(self) -> Point2:
         # Pick a random enemy structure's position
         targets = self.enemy_structures

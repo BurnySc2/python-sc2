@@ -22,6 +22,7 @@ from sc2.units import Units
 
 
 class Client(Protocol):
+
     def __init__(self, ws):
         """
         :param ws:
@@ -724,6 +725,7 @@ class Client(Protocol):
 
 
 class DrawItem:
+
     @staticmethod
     def to_debug_color(color: Union[tuple, Point3]):
         """ Helper function for color conversion """
@@ -746,6 +748,7 @@ class DrawItem:
 
 
 class DrawItemScreenText(DrawItem):
+
     def __init__(self, start_point: Point2 = None, color: Point3 = None, text: str = "", font_size: int = 8):
         self._start_point: Point2 = start_point
         self._color: Point3 = color
@@ -766,6 +769,7 @@ class DrawItemScreenText(DrawItem):
 
 
 class DrawItemWorldText(DrawItem):
+
     def __init__(self, start_point: Point3 = None, color: Point3 = None, text: str = "", font_size: int = 8):
         self._start_point: Point3 = start_point
         self._color: Point3 = color
@@ -786,6 +790,7 @@ class DrawItemWorldText(DrawItem):
 
 
 class DrawItemLine(DrawItem):
+
     def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None):
         self._start_point: Point3 = start_point
         self._end_point: Point3 = end_point
@@ -802,6 +807,7 @@ class DrawItemLine(DrawItem):
 
 
 class DrawItemBox(DrawItem):
+
     def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None):
         self._start_point: Point3 = start_point
         self._end_point: Point3 = end_point
@@ -819,6 +825,7 @@ class DrawItemBox(DrawItem):
 
 
 class DrawItemSphere(DrawItem):
+
     def __init__(self, start_point: Point3 = None, radius: float = None, color: Point3 = None):
         self._start_point: Point3 = start_point
         self._radius: float = radius

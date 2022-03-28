@@ -18,6 +18,7 @@ from sc2.player import Bot, Computer
 
 
 class BatteryOverchargeBot(BotAI):
+
     async def on_start(self):
         """ Spawn requires structures. """
         await self.client.debug_create_unit(

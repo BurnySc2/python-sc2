@@ -26,6 +26,7 @@ class ExpiringDict(OrderedDict):
                 if "test" not in my_dict:
                     print("test is not anymore in dict")
     """
+
     def __init__(self, bot: "BotAI", max_age_frames: int = 1):
         assert max_age_frames >= -1
         assert bot

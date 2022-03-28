@@ -20,6 +20,7 @@ on_end_was_called: bool = False
 
 
 class RealTimeTestBot(BotAI):
+
     async def on_before_start(self):
         mf = self.mineral_field
         for w in self.workers:

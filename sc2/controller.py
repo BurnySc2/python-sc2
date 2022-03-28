@@ -9,6 +9,7 @@ from sc2.protocol import Protocol
 
 
 class Controller(Protocol):
+
     def __init__(self, ws, process):
         super().__init__(ws)
         self._process = process

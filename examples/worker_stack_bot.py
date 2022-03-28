@@ -32,6 +32,7 @@ from sc2.units import Units
 
 
 class WorkerStackBot(BotAI):
+
     def __init__(self):
         self.worker_to_mineral_patch_dict: Dict[int, int] = {}
         self.mineral_patch_to_list_of_workers: Dict[int, Set[int]] = {}

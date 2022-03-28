@@ -16,6 +16,7 @@ from sc2.unit import Unit
 
 
 class TestBot(BotAI):
+
     def __init__(self):
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
@@ -318,6 +319,7 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
+
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)

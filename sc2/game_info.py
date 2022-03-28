@@ -12,6 +12,7 @@ from sc2.position import Point2, Rect, Size
 
 
 class Ramp:
+
     def __init__(self, points: Set[Point2], game_info: GameInfo):
         """
         :param points:
@@ -221,6 +222,7 @@ class Ramp:
 
 
 class GameInfo:
+
     def __init__(self, proto):
         self._proto = proto
         self.players: List[Player] = [Player.from_proto(p) for p in self._proto.player_info]
@@ -249,6 +251,7 @@ class GameInfo:
         """Calculate points that are pathable but not placeable.
         Then divide them into ramp points if not all points around the points are equal height
         and into vision blockers if they are."""
+
         def equal_height_around(tile):
             # mask to slice array 1 around tile
             sliced = self.terrain_height.data_numpy[tile[1] - 1:tile[1] + 2, tile[0] - 1:tile[0] + 2]

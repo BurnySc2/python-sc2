@@ -25,6 +25,7 @@ except ImportError:
 
 
 class Blip:
+
     def __init__(self, proto):
         """
         :param proto:
@@ -91,6 +92,7 @@ class Common:
 
 
 class EffectData:
+
     def __init__(self, proto, fake=False):
         """
         :param proto:
@@ -151,6 +153,7 @@ class ChatMessage:
 
 @dataclass
 class AbilityLookupTemplateClass:
+
     @property
     def exact_id(self) -> AbilityId:
         return AbilityId(self.ability_id)
@@ -194,6 +197,7 @@ class ActionError(AbilityLookupTemplateClass):
 
 
 class GameState:
+
     def __init__(self, response_observation, previous_observation=None):
         """
         :param response_observation:
