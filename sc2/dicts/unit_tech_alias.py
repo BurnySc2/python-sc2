@@ -40,5 +40,5 @@ UNIT_TECH_ALIAS: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.VIKINGFIGHTER: {UnitTypeId.VIKING},
     UnitTypeId.WARPGATE: {UnitTypeId.GATEWAY},
     UnitTypeId.WARPPRISMPHASING: {UnitTypeId.WARPPRISM},
-    UnitTypeId.WIDOWMINEBURROWED: {UnitTypeId.WIDOWMINE},
+    UnitTypeId.WIDOWMINEBURROWED: {UnitTypeId.WIDOWMINE}
 }
