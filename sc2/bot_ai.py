@@ -1271,7 +1271,7 @@ class BotAI(DistanceCalculation):
                 # Structure has to be completed to be able to train
                 and structure.build_progress == 1
                 # If structure is protoss, it needs to be powered to train
-                and (not is_protoss or structure.is_powered)
+                and (not is_protoss or structure.is_powered or structure.type_id == UnitTypeId.NEXUS)
                 # Either parameter "train_only_idle_buildings" is False or structure is idle or structure has less than 2 orders and has reactor
                 and (
                     not train_only_idle_buildings
