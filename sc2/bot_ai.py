@@ -947,7 +947,13 @@ class BotAI(DistanceCalculation):
         assert isinstance(upgrade_type, UpgradeId), f"{upgrade_type} is no UpgradeId"
         if upgrade_type in self.state.upgrades:
             return 1
-        creationAbilityID = self._game_data.upgrades[upgrade_type.value].research_ability.exact_id
+        upgrade_data = self._game_data.upgrades[upgrade_type.value]
+        if upgrade_data is None:
+            return 0
+        research_ability = upgrade_data.research_ability
+        if research_ability is None:
+            return 0
+        creationAbilityID = research_ability.exact_id
         for structure in self.structures.filter(lambda unit: unit.is_ready):
             for order in structure.orders:
                 if order.ability.exact_id == creationAbilityID:
