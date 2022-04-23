@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 from __future__ import annotations
 
 import math
@@ -87,6 +88,7 @@ class UnitOrder:
         return f"UnitOrder({self.ability}, {self.target}, {self.progress})"
 
 
+# pylint: disable=R0904
 class Unit:
 
     def __init__(self, proto_data, bot_object: BotAI, distance_calculation_index: int = -1, base_build: int = -1):
@@ -107,14 +109,16 @@ class Unit:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
         return f"Unit(name={self.name !r}, tag={self.tag})"
 
-    @property_immutable_cache
+    @property
     def type_id(self) -> UnitTypeId:
         """UnitTypeId found in sc2/ids/unit_typeid.
         Caches all type_ids of the same unit type."""
-        unit_type = self._proto.unit_type
-        if unit_type not in self._bot_object._game_data.unit_types:
-            self._bot_object._game_data.unit_types[unit_type] = UnitTypeId(unit_type)
-        return self._bot_object._game_data.unit_types[unit_type]
+        if "type_id" not in self.cache:
+            unit_type = self._proto.unit_type
+            if unit_type not in self._bot_object._game_data.unit_types:
+                self._bot_object._game_data.unit_types[unit_type] = UnitTypeId(unit_type)
+            self.cache["type_id"] = self._bot_object._game_data.unit_types[unit_type]
+        return self.cache["type_id"]
 
     @property_immutable_cache
     def _type_data(self) -> UnitTypeData:
@@ -190,15 +194,12 @@ class Unit:
         For SCV, this returns None"""
         return self._type_data.unit_alias
 
-    @property_immutable_cache
+    @property
     def _weapons(self):
         """ Returns the weapons of the unit. """
-        try:
-            return self._type_data._proto.weapons
-        except:
-            return None
+        return self._type_data._proto.weapons
 
-    @property_immutable_cache
+    @property
     def can_attack(self) -> bool:
         """ Checks if the unit can attack at all. """
         # TODO BATTLECRUISER doesnt have weapons in proto?!
@@ -209,45 +210,56 @@ class Unit:
         """ Checks if the unit can attack both ground and air units. """
         return self.can_attack_ground and self.can_attack_air
 
-    @property_immutable_cache
+    @property
     def can_attack_ground(self) -> bool:
         """ Checks if the unit can attack ground units. """
-        if self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}:
-            return True
-        if self._weapons:
-            return any(weapon.type in TARGET_GROUND for weapon in self._weapons)
-        return False
+        if "can_attack_ground" not in self.cache:
+            if self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}:
+                self.cache["can_attack_ground"] = True
+            elif self._weapons:
+                self.cache["can_attack_ground"] = any(weapon.type in TARGET_GROUND for weapon in self._weapons)
+            else:
+                self.cache["can_attack_ground"] = False
+        return self.cache["can_attack_ground"]
 
-    @property_immutable_cache
+    @property
     def ground_dps(self) -> float:
         """ Returns the dps against ground units. Does not include upgrades. """
-        if self.can_attack_ground:
-            weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
-            if weapon:
-                return (weapon.damage * weapon.attacks) / weapon.speed
-        return 0
+        if "ground_dps" not in self.cache:
+            dps = 0
+            if self.can_attack_ground:
+                weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
+                if weapon:
+                    dps = (weapon.damage * weapon.attacks) / weapon.speed
+            self.cache["ground_dps"] = dps
+        return self.cache["ground_dps"]
 
-    @property_immutable_cache
+    @property
     def ground_range(self) -> float:
         """ Returns the range against ground units. Does not include upgrades. """
-        if self.type_id == UNIT_ORACLE:
-            return 4
-        if self.type_id == UNIT_BATTLECRUISER:
-            return 6
-        if self.can_attack_ground:
-            weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
-            if weapon:
-                return weapon.range
-        return 0
+        if "ground_range" not in self.cache:
+            self.cache["ground_range"] = 0
+            if self.type_id == UNIT_ORACLE:
+                self.cache["ground_range"] = 4
+            elif self.type_id == UNIT_BATTLECRUISER:
+                self.cache["ground_range"] = 6
+            elif self.can_attack_ground:
+                weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
+                if weapon:
+                    self.cache["ground_range"] = weapon.range
+        return self.cache["ground_range"]
 
     @property_immutable_cache
     def can_attack_air(self) -> bool:
         """ Checks if the unit can air attack at all. Does not include upgrades. """
-        if self.type_id == UNIT_BATTLECRUISER:
-            return True
-        if self._weapons:
-            return any(weapon.type in TARGET_AIR for weapon in self._weapons)
-        return False
+        if "can_attack_air" not in self.cache:
+            if self.type_id == UNIT_BATTLECRUISER:
+                self.cache["can_attack_air"] = True
+            elif self._weapons:
+                self.cache["can_attack_air"] = any(weapon.type in TARGET_AIR for weapon in self._weapons)
+            else:
+                self.cache["can_attack_air"] = False
+        return self.cache["can_attack_air"]
 
     @property_immutable_cache
     def air_dps(self) -> float:
@@ -279,8 +291,7 @@ class Unit:
                 if weapon.damage_bonus:
                     b = weapon.damage_bonus[0]
                     return (b.bonus, Attribute(b.attribute).name)
-        else:
-            return None
+        return None
 
     @property
     def armor(self) -> float:
@@ -410,10 +421,12 @@ class Unit:
     def shield_health_percentage(self) -> float:
         """Returns the percentage of combined shield + hp points the unit has.
         Also takes build progress into account."""
-        max_ = (self._proto.shield_max + self._proto.health_max) * self.build_progress
-        if not max_:
-            return 0
-        return (self._proto.shield + self._proto.health) / max_
+        if "shield_health_percentage" not in self.cache:
+            max_ = (self._proto.shield_max + self._proto.health_max) * self.build_progress
+            if not max_:
+                self.cache["shield_health_percentage"] = 0
+            self.cache["shield_health_percentage"] = (self._proto.shield + self._proto.health) / max_
+        return self.cache["shield_health_percentage"]
 
     @property
     def energy(self) -> float:
@@ -447,28 +460,32 @@ class Unit:
         """ Returns True if this Unit object is referenced from the future and is outdated. """
         return self.game_loop != self._bot_object.state.game_loop
 
-    @property_immutable_cache
+    @property
     def is_snapshot(self) -> bool:
         """Checks if the unit is only available as a snapshot for the bot.
         Enemy buildings that have been scouted and are in the fog of war or
         attacking enemy units on higher, not visible ground appear this way."""
-        if self.base_build >= 82457:
-            return self._proto.display_type == IS_SNAPSHOT
-        # TODO: Fixed in version 5.0.4, remove if a new linux binary is released: https://github.com/Blizzard/s2client-proto/issues/167
-        position = self.position.rounded
-        return self._bot_object.state.visibility.data_numpy[position[1], position[0]] != 2
+        if "is_snapshot" not in self.cache:
+            if self.base_build >= 82457:
+                self.cache["is_snapshot"] = self._proto.display_type == IS_SNAPSHOT
+            # TODO: Fixed in version 5.0.4, remove if a new linux binary is released: https://github.com/Blizzard/s2client-proto/issues/167
+            position = self.position.rounded
+            self.cache["is_snapshot"] = self._bot_object.state.visibility.data_numpy[position[1], position[0]] != 2
+        return self.cache["is_snapshot"]
 
-    @property_immutable_cache
+    @property
     def is_visible(self) -> bool:
         """Checks if the unit is visible for the bot.
         NOTE: This means the bot has vision of the position of the unit!
         It does not give any information about the cloak status of the unit."""
-        if self.base_build >= 82457:
-            return self._proto.display_type == IS_VISIBLE
-        # TODO: Remove when a new linux binary (5.0.4 or newer) is released
-        return self._proto.display_type == IS_VISIBLE and not self.is_snapshot
+        if "is_visible" not in self.cache:
+            if self.base_build >= 82457:
+                return self._proto.display_type == IS_VISIBLE
+            # TODO: Remove when a new linux binary (5.0.4 or newer) is released
+            self.cache["is_visible"] = self._proto.display_type == IS_VISIBLE and not self.is_snapshot
+        return self.cache["is_visible"]
 
-    @property_immutable_cache
+    @property
     def is_placeholder(self) -> bool:
         """Checks if the unit is a placerholder for the bot.
         Raw information about placeholders:
@@ -511,15 +528,19 @@ class Unit:
         """ Returns the 2d position of the unit as tuple without conversion to Point2. """
         return self._proto.pos.x, self._proto.pos.y
 
-    @property_immutable_cache
+    @property
     def position(self) -> Point2:
         """ Returns the 2d position of the unit. """
-        return Point2.from_proto(self._proto.pos)
+        if "position" not in self.cache:
+            self.cache["position"] = Point2.from_proto(self._proto.pos)
+        return self.cache["position"]
 
-    @property_immutable_cache
+    @property
     def position3d(self) -> Point3:
         """ Returns the 3d position of the unit. """
-        return Point3.from_proto(self._proto.pos)
+        if "position3d" not in self.cache:
+            self.cache["position3d"] = Point3.from_proto(self._proto.pos)
+        return self.cache["position3d"]
 
     def distance_to(self, p: Union[Unit, Point2, Point3]) -> float:
         """Using the 2d distance between self and p.
@@ -583,6 +604,7 @@ class Unit:
             )
         return False
 
+    # pylint: disable=R0912,R0911
     def calculate_damage_vs_target(
         self,
         target: Unit,
@@ -655,9 +677,7 @@ class Unit:
                     # Expect fully loaded bunker with marines
                     return (24, 0.854, 6)
                 return (0, 0, 0)
-            else:
-                # TODO if bunker belongs to us, use passengers and upgrade level to calculate damage
-                pass
+            # TODO if bunker belongs to us, use passengers and upgrade level to calculate damage
 
         required_target_type: Set[int] = (
             TARGET_BOTH
@@ -864,10 +884,12 @@ class Unit:
         """ Checks if the unit is revealed or not cloaked and therefore can be attacked. """
         return self._proto.cloak in CAN_BE_ATTACKED
 
-    @property_immutable_cache
-    def buffs(self) -> Set:
+    @property
+    def buffs(self) -> Set[BuffId]:
         """ Returns the set of current buffs the unit has. """
-        return {BuffId(buff_id) for buff_id in self._proto.buff_ids}
+        if "buffs" not in self.cache:
+            self.cache["buffs"] = {BuffId(buff_id) for buff_id in self._proto.buff_ids}
+        return self.cache["buffs"]
 
     @property_immutable_cache
     def is_carrying_minerals(self) -> bool:
@@ -988,11 +1010,13 @@ class Unit:
 
     # PROPERTIES BELOW THIS COMMENT ARE NOT POPULATED FOR ENEMIES
 
-    @property_mutable_cache
+    @property
     def orders(self) -> List[UnitOrder]:
         """ Returns the a list of the current orders. """
         # TODO: add examples on how to use unit orders
-        return [UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders]
+        if "orders" not in self.cache:
+            self.cache["orders"] = [UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders]
+        return self.cache["orders"]
 
     @property_immutable_cache
     def order_target(self) -> Optional[Union[int, Point2]]:
@@ -1002,8 +1026,7 @@ class Unit:
             target = self.orders[0].target
             if isinstance(target, int):
                 return target
-            else:
-                return Point2.from_proto(target)
+            return Point2.from_proto(target)
         return None
 
     @property
@@ -1179,7 +1202,7 @@ class Unit:
         """
         return self._proto.assigned_harvesters - self._proto.ideal_harvesters
 
-    @property_immutable_cache
+    @property
     def weapon_cooldown(self) -> float:
         """Returns the time until the unit can fire again,
         returns -1 for units that can't attack.
@@ -1247,7 +1270,7 @@ class Unit:
         if unit in {UnitTypeId.EXTRACTOR, UnitTypeId.ASSIMILATOR, UnitTypeId.REFINERY}:
             assert isinstance(
                 position, Unit
-            ), f"When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
+            ), "When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
         return self(
             self._bot_object._game_data.units[unit.value].creation_ability.id,
             target=position,
@@ -1272,7 +1295,7 @@ class Unit:
         gas_structure_type_id: UnitTypeId = race_gas[self._bot_object.race]
         assert isinstance(
             target_geysir, Unit
-        ), f"When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
+        ), "When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir."
         return self(
             self._bot_object._game_data.units[gas_structure_type_id.value].creation_ability.id,
             target=target_geysir,
@@ -1400,11 +1423,8 @@ class Unit:
     def __hash__(self):
         return self.tag
 
-    def __eq__(self, other):
-        try:
-            return self.tag == other.tag
-        except:
-            return False
+    def __eq__(self, other: Unit):
+        return self.tag == getattr(other, "tag", -1)
 
     def __call__(
         self,

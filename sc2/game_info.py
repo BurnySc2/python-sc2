@@ -23,7 +23,6 @@ class Ramp:
         # Tested by printing actual building locations vs calculated depot positions
         self.x_offset = 0.5
         self.y_offset = 0.5
-        # Can this be removed?
         self.cache = {}
 
     @property_immutable_cache
@@ -45,19 +44,21 @@ class Ramp:
     def points(self) -> Set[Point2]:
         return self._points.copy()
 
-    @property_mutable_cache
+    @property
     def upper(self) -> Set[Point2]:
         """ Returns the upper points of a ramp. """
-        current_max = -10000
-        result = set()
-        for p in self._points:
-            height = self.height_at(p)
-            if height > current_max:
-                current_max = height
-                result = {p}
-            elif height == current_max:
-                result.add(p)
-        return result
+        if "upper" not in self.cache:
+            current_max = -10000
+            result = set()
+            for p in self._points:
+                height = self.height_at(p)
+                if height > current_max:
+                    current_max = height
+                    result = {p}
+                elif height == current_max:
+                    result.add(p)
+            self.cache["upper"] = result
+        return self.cache["upper"]
 
     @property_mutable_cache
     def upper2_for_ramp_wall(self) -> Set[Point2]:
@@ -76,18 +77,20 @@ class Ramp:
         pos = Point2((sum(p.x for p in upper) / length, sum(p.y for p in upper) / length))
         return pos
 
-    @property_mutable_cache
+    @property
     def lower(self) -> Set[Point2]:
-        current_min = 10000
-        result = set()
-        for p in self._points:
-            height = self.height_at(p)
-            if height < current_min:
-                current_min = height
-                result = {p}
-            elif height == current_min:
-                result.add(p)
-        return result
+        if "lower" not in self.cache:
+            current_min = 10000
+            result = set()
+            for p in self._points:
+                height = self.height_at(p)
+                if height < current_min:
+                    current_min = height
+                    result = {p}
+                elif height == current_min:
+                    result.add(p)
+            self.cache["lower"] = result
+        return self.cache["lower"]
 
     @property_immutable_cache
     def bottom_center(self) -> Point2:
@@ -164,8 +167,7 @@ class Ramp:
         if len(self.upper2_for_ramp_wall) == 2:
             if self.barracks_can_fit_addon:
                 return self.barracks_in_middle
-            else:
-                return self.barracks_in_middle.offset((-2, 0))
+            return self.barracks_in_middle.offset((-2, 0))
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @property_immutable_cache

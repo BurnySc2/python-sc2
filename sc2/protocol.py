@@ -46,9 +46,8 @@ class Protocol:
             if self._status == Status.ended:
                 logger.info("Cannot receive: Game has already ended.")
                 raise ConnectionAlreadyClosed("Game has already ended")
-            else:
-                logger.error("Cannot receive: Connection already closed.")
-                raise ConnectionAlreadyClosed("Connection already closed.")
+            logger.error("Cannot receive: Connection already closed.")
+            raise ConnectionAlreadyClosed("Connection already closed.")
         except asyncio.CancelledError:
             # If request is sent, the response must be received before reraising cancel
             try:

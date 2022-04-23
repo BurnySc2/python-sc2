@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 from __future__ import annotations
 
 from bisect import bisect_left
@@ -235,8 +236,7 @@ class UnitTypeData:
             # print(a)
             # print(vars(a))
             return Cost(self._proto.mineral_cost - 50, self._proto.vespene_cost, self._proto.build_time)
-        else:
-            return self.cost
+        return self.cost
 
     @property
     def morph_cost(self) -> Optional[Cost]:

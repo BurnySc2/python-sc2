@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 import asyncio
 import os
 import platform
@@ -105,7 +106,7 @@ class Proxy:
                 ):
                     self.result = {i: Result.Tie for i in range(1, 3)}
                     logger.info(f"Proxy({self.player.name}) timing out")
-                    act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message=f"Proxy: Timing out"))]
+                    act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message="Proxy: Timing out"))]
                     await self.controller._execute(action=sc_pb.RequestAction(actions=act))
         return response
 
@@ -158,6 +159,7 @@ class Proxy:
             self.done = True
         return bot_ws
 
+    # pylint: disable=R0912
     async def play_with_proxy(self, startport):
         logger.info(f"Proxy({self.port}): Starting app")
         app = web.Application()
@@ -198,7 +200,7 @@ class Proxy:
 
         # cleanup
         logger.info(f"({self.port}): cleaning up {self.player !r}")
-        for i in range(3):
+        for _i in range(3):
             if isinstance(bot_process, subprocess.Popen):
                 if bot_process.stdout and not bot_process.stdout.closed:  # should not run anymore
                     logger.info(f"==================output for player {self.player.name}")
@@ -221,5 +223,4 @@ class Proxy:
         if isinstance(self.result, dict):
             self.result[None] = None
             return self.result[self.player_id]
-        else:
-            return self.result
+        return self.result

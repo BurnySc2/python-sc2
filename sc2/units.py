@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 from __future__ import annotations
 
 import random
@@ -17,6 +18,7 @@ if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
 
 
+# pylint: disable=R0904
 class Units(list):
     """A collection of Unit objects. Makes it easy to select units by selectors."""
 
@@ -109,8 +111,7 @@ class Units(list):
     def take(self, n: int) -> Units:
         if n >= self.amount:
             return self
-        else:
-            return self.subgroup(self[:n])
+        return self.subgroup(self[:n])
 
     @property
     def random(self) -> Unit:
@@ -124,10 +125,9 @@ class Units(list):
         """ Returns self if n >= self.amount. """
         if n < 1:
             return Units([], self._bot_object)
-        elif n >= self.amount:
+        if n >= self.amount:
             return self
-        else:
-            return self.subgroup(random.sample(self, n))
+        return self.subgroup(random.sample(self, n))
 
     def in_attack_range_of(self, unit: Unit, bonus_distance: Union[int, float] = 0) -> Units:
         """
@@ -373,8 +373,7 @@ class Units(list):
                 for target in other_units
             ):
                 return self
-            else:
-                return self.subgroup([])
+            return self.subgroup([])
 
         return self.subgroup(
             self_unit for self_unit in self if any(
@@ -554,7 +553,7 @@ class Units(list):
         :param other:
         """
         assert isinstance(other, set), (
-            f"Please use a set as this filter function is already fairly slow. For example" +
+            "Please use a set as this filter function is already fairly slow. For example" +
             " 'self.units.same_tech({UnitTypeId.LAIR})'"
         )
         tech_alias_types: Set[int] = {u.value for u in other}
@@ -603,7 +602,7 @@ class Units(list):
     @property
     def center(self) -> Point2:
         """ Returns the central position of all units. """
-        assert self, f"Units object is empty"
+        assert self, "Units object is empty"
         amount = self.amount
         return Point2(
             (
@@ -710,11 +709,11 @@ class UnitSelection(Units):
         if isinstance(selection, (UnitTypeId)):
             super().__init__((unit for unit in parent if unit.type_id == selection), parent._bot_object)
         elif isinstance(selection, set):
-            assert all(isinstance(t, UnitTypeId) for t in selection), f"Not all ids in selection are of type UnitTypeId"
+            assert all(isinstance(t, UnitTypeId) for t in selection), "Not all ids in selection are of type UnitTypeId"
             super().__init__((unit for unit in parent if unit.type_id in selection), parent._bot_object)
         elif selection is None:
             super().__init__((unit for unit in parent), parent._bot_object)
         else:
             assert isinstance(
                 selection, (UnitTypeId, set)
-            ), f"selection is not None or of type UnitTypeId or Set[UnitTypeId]"
+            ), "selection is not None or of type UnitTypeId or Set[UnitTypeId]"

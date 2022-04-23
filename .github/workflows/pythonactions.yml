@@ -207,10 +207,10 @@ jobs:
 
     - name: Build docs from scratch
       run: |
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=./docs/index.html\" />" > index.html
         mkdir -p docs
         cd docs_generate
         poetry run sphinx-build -a -E -b html . ../docs
-        cd ..
 
     - name: Publish to Github Pages
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'

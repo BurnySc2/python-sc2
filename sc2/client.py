@@ -7,6 +7,7 @@ from s2clientprotocol import debug_pb2 as debug_pb
 from s2clientprotocol import query_pb2 as query_pb
 from s2clientprotocol import raw_pb2 as raw_pb
 from s2clientprotocol import sc2api_pb2 as sc_pb
+from s2clientprotocol import spatial_pb2 as spatial_pb
 
 from sc2.action import combine_actions
 from sc2.data import ActionResult, ChatChannel, Race, Result, Status
@@ -21,6 +22,7 @@ from sc2.unit import Unit
 from sc2.units import Units
 
 
+# pylint: disable=R0904
 class Client(Protocol):
 
     def __init__(self, ws):
@@ -114,7 +116,7 @@ class Client(Protocol):
                 raise
 
     async def save_replay(self, path):
-        logger.debug(f"Requesting replay from server")
+        logger.debug("Requesting replay from server")
         result = await self._execute(save_replay=sc_pb.RequestSaveReplay())
         with open(path, "wb") as f:
             f.write(result.save_replay.data)
@@ -182,7 +184,7 @@ class Client(Protocol):
     async def actions(self, actions, return_successes=False):
         if not actions:
             return None
-        elif not isinstance(actions, list):
+        if not isinstance(actions, list):
             actions = [actions]
 
         # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
@@ -190,12 +192,11 @@ class Client(Protocol):
             res = await self._execute(
                 action=sc_pb.RequestAction(actions=(sc_pb.Action(action_raw=a) for a in combine_actions(actions)))
             )
-        except ProtocolError as e:
+        except ProtocolError:
             return []
         if return_successes:
             return [ActionResult(r) for r in res.action.result]
-        else:
-            return [ActionResult(r) for r in res.action.result if ActionResult(r) != ActionResult.Success]
+        return [ActionResult(r) for r in res.action.result if ActionResult(r) != ActionResult.Success]
 
     async def query_pathing(self, start: Union[Unit, Point2, Point3],
                             end: Union[Point2, Point3]) -> Optional[Union[int, float]]:
@@ -436,8 +437,6 @@ class Client(Protocol):
         """Moves camera to the target position using the spatial aciton interface
 
         :param position:"""
-        from s2clientprotocol import spatial_pb2 as spatial_pb
-
         assert isinstance(position, (Point2, Point3))
         action = sc_pb.Action(
             action_render=spatial_pb.ActionSpatial(
@@ -732,19 +731,18 @@ class DrawItem:
         if color is None:
             return debug_pb.Color(r=255, g=255, b=255)
         # Need to check if not of type Point3 because Point3 inherits from tuple
-        elif isinstance(color, (tuple, list)) and not isinstance(color, Point3) and len(color) == 3:
+        if isinstance(color, (tuple, list)) and not isinstance(color, Point3) and len(color) == 3:
             return debug_pb.Color(r=color[0], g=color[1], b=color[2])
         # In case color is of type Point3
-        else:
-            r = getattr(color, "r", getattr(color, "x", 255))
-            g = getattr(color, "g", getattr(color, "y", 255))
-            b = getattr(color, "b", getattr(color, "z", 255))
-            if max(r, g, b) <= 1:
-                r *= 255
-                g *= 255
-                b *= 255
+        r = getattr(color, "r", getattr(color, "x", 255))
+        g = getattr(color, "g", getattr(color, "y", 255))
+        b = getattr(color, "b", getattr(color, "z", 255))
+        if max(r, g, b) <= 1:
+            r *= 255
+            g *= 255
+            b *= 255
 
-            return debug_pb.Color(r=int(r), g=int(g), b=int(b))
+        return debug_pb.Color(r=int(r), g=int(g), b=int(b))
 
 
 class DrawItemScreenText(DrawItem):

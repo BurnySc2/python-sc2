@@ -32,7 +32,7 @@ class ExpiringDict(OrderedDict):
         assert bot
 
         OrderedDict.__init__(self)
-        self.bot: BotAI = bot
+        self.bot: "BotAI" = bot
         self.max_age: Union[int, float] = max_age_frames
         self.lock: RLock = RLock()
 
@@ -48,8 +48,7 @@ class ExpiringDict(OrderedDict):
                 item = OrderedDict.__getitem__(self, key)
                 if self.frame - item[1] < self.max_age:
                     return True
-                else:
-                    del self[key]
+                del self[key]
         return False
 
     def __getitem__(self, key, with_age=False) -> any:
@@ -117,7 +116,7 @@ class ExpiringDict(OrderedDict):
                 del self[key]
             if default is None:
                 raise KeyError(key)
-            elif with_age:
+            if with_age:
                 return default, self.frame
             return default
 
@@ -132,9 +131,10 @@ class ExpiringDict(OrderedDict):
                     return item[0]
             if default is None:
                 raise KeyError(key)
-            elif with_age:
+            if with_age:
                 return default, self.frame
-            return
+            return None
+        return None
 
     def update(self, other_dict: dict):
         with self.lock:

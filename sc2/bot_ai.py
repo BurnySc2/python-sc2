@@ -1,3 +1,4 @@
+# pylint: disable=W0212,R0916,W0201,R0904
 from __future__ import annotations
 
 import itertools
@@ -241,8 +242,9 @@ class BotAI(DistanceCalculation):
 
         Example: See terran ramp wall bot
         """
-        if hasattr(self, "cached_main_base_ramp"):
-            return self.cached_main_base_ramp
+        cached_main_base_ramp = getattr(self, "cached_main_base_ramp", None)
+        if cached_main_base_ramp is not None:
+            return cached_main_base_ramp
         # The reason for len(ramp.upper) in {2, 5} is:
         # ParaSite map has 5 upper points, and most other maps have 2 upper points at the main ramp.
         # The map Acolyte has 4 upper points at the wrong ramp (which is closest to the start position).
@@ -264,7 +266,7 @@ class BotAI(DistanceCalculation):
         """ Returns a list of expansion positions, not sorted in any way. """
         assert (
             self._expansion_positions_list
-        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        ), "self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
         return self._expansion_positions_list
 
     @property_cache_once_per_frame
@@ -277,7 +279,7 @@ class BotAI(DistanceCalculation):
         """
         assert (
             self._expansion_positions_list
-        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        ), "self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
         expansion_locations: Dict[Point2, Units] = {pos: Units([], self) for pos in self._expansion_positions_list}
         for resource in self.resources:
             # It may be that some resources are not mapped to an expansion location
@@ -293,9 +295,9 @@ class BotAI(DistanceCalculation):
         """ Same as the function above. """
         assert (
             self._expansion_positions_list
-        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        ), "self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
         warnings.warn(
-            f"You are using 'self.expansion_locations', please use 'self.expansion_locations_list' (fast) or 'self.expansion_locations_dict' (slow) instead.",
+            "You are using 'self.expansion_locations', please use 'self.expansion_locations_list' (fast) or 'self.expansion_locations_dict' (slow) instead.",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -308,7 +310,6 @@ class BotAI(DistanceCalculation):
 
         # Distance we group resources by
         resource_spread_threshold: float = 8.5
-        geysers: Units = self.vespene_geyser
         # Create a group for every resource
         resource_groups: List[List[Unit]] = [
             [resource] for resource in self.resources
@@ -361,7 +362,7 @@ class BotAI(DistanceCalculation):
             )
             # Choose best fitting point
             result: Point2 = min(
-                possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources)
+                possible_points, key=lambda point: sum(point.distance_to(resource_) for resource_ in resources)
             )
             centers[result] = resources
             # Put all expansion locations in a list
@@ -478,6 +479,7 @@ class BotAI(DistanceCalculation):
 
         return closest
 
+    # pylint: disable=R0912
     async def distribute_workers(self, resource_ratio: float = 2):
         """
         Distributes workers across all the bases taken.
@@ -495,7 +497,7 @@ class BotAI(DistanceCalculation):
         :param resource_ratio:"""
         if not self.mineral_field or not self.workers or not self.townhalls.ready:
             return
-        worker_pool = [worker for worker in self.workers.idle]
+        worker_pool = self.workers.idle
         bases = self.townhalls.ready
         gas_buildings = self.gas_buildings.ready
 
@@ -613,7 +615,7 @@ class BotAI(DistanceCalculation):
         :param unit_type:"""
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
-        unit_supply_cost = self._game_data.units[unit_type.value]._proto.food_required
+        unit_supply_cost = self.game_data.units[unit_type.value]._proto.food_required
         if unit_supply_cost > 0 and unit_type in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[unit_type]) == 1:
             producer: UnitTypeId
             for producer in UNIT_TRAINED_FROM[unit_type]:
@@ -688,15 +690,15 @@ class BotAI(DistanceCalculation):
             if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB, UnitTypeId.ARCHON}:
                 if item_id == UnitTypeId.REACTOR:
                     return Cost(50, 50)
-                elif item_id == UnitTypeId.TECHLAB:
+                if item_id == UnitTypeId.TECHLAB:
                     return Cost(50, 25)
-                elif item_id == UnitTypeId.ARCHON:
+                if item_id == UnitTypeId.ARCHON:
                     return self.calculate_unit_value(UnitTypeId.ARCHON)
             unit_data = self._game_data.units[item_id.value]
             # Cost of morphs is automatically correctly calculated by 'calculate_ability_cost'
             return self._game_data.calculate_ability_cost(unit_data.creation_ability)
 
-        elif isinstance(item_id, UpgradeId):
+        if isinstance(item_id, UpgradeId):
             cost = self._game_data.upgrades[item_id.value].cost
         else:
             # Is already AbilityId
@@ -773,13 +775,13 @@ class BotAI(DistanceCalculation):
             ):  # cant replace 1 with "Target.None.value" because ".None" doesnt seem to be a valid enum name
                 return True
             # Check if able to use ability on a unit
-            elif (
+            if (
                 ability_target in {Target.Unit.value, Target.PointOrUnit.value} and isinstance(target, Unit)
                 and unit.distance_to(target) <= unit.radius + target.radius + cast_range
             ):
                 return True
             # Check if able to use ability on a position
-            elif (
+            if (
                 ability_target in {Target.Point.value, Target.PointOrUnit.value} and isinstance(target, Point2)
                 and unit.distance_to(target) <= unit.radius + cast_range
             ):
@@ -811,6 +813,7 @@ class BotAI(DistanceCalculation):
                     return worker
 
             return workers.random if force else None
+        return None
 
     async def can_place_single(self, building: Union[AbilityId, UnitTypeId], position: Point2) -> bool:
         """ Checks the placement for only one position. """
@@ -852,12 +855,10 @@ class BotAI(DistanceCalculation):
                 stacklevel=2,
             )
             return await self.can_place_single(building, positions)
-        else:
-            assert isinstance(positions, list), f"Expected an iterable (list, tuple), but was: {positions}"
-            assert isinstance(
-                positions[0], Point2
-            ), f"List is expected to have Point2, but instead had: {positions[0]} {type(positions[0])}"
-
+        assert isinstance(positions, list), f"Expected an iterable (list, tuple), but was: {positions}"
+        assert isinstance(
+            positions[0], Point2
+        ), f"List is expected to have Point2, but instead had: {positions[0]} {type(positions[0])}"
         return await self._client._query_building_placement_fast(building, positions)
 
     async def find_placement(
@@ -924,8 +925,7 @@ class BotAI(DistanceCalculation):
 
             if random_alternative:
                 return random.choice(possible)
-            else:
-                return min(possible, key=lambda p: p.distance_to_point2(near))
+            return min(possible, key=lambda p: p.distance_to_point2(near))
         return None
 
     # TODO: improve using cache per frame
@@ -1225,9 +1225,7 @@ class BotAI(DistanceCalculation):
             }
             unit_info_id = race_dict[self.race][unit_type]
             logger.warning(
-                "{} Trying to produce unit {} in self.train() but tech requirement is not met: {}".format(
-                    self.time_formatted, unit_type, unit_info_id
-                )
+                f"{self.time_formatted} Trying to produce unit {unit_type} in self.train() but tech requirement is not met: {unit_info_id}"
             )
             return 0
 
@@ -1246,6 +1244,7 @@ class BotAI(DistanceCalculation):
         is_protoss = self.race == Race.Protoss
         is_terran = self.race == Race.Terran
         can_have_addons = any(
+            # pylint: disable=C0208
             u in train_structure_type for u in {UnitTypeId.BARRACKS, UnitTypeId.FACTORY, UnitTypeId.STARPORT}
         )
         # Sort structures closest to a point
@@ -1506,7 +1505,8 @@ class BotAI(DistanceCalculation):
         result = await self._client.actions(actions)
         return result
 
-    def prevent_double_actions(self, action) -> bool:
+    @staticmethod
+    def prevent_double_actions(action) -> bool:
         """
         :param action:
         """
@@ -1517,7 +1517,7 @@ class BotAI(DistanceCalculation):
             # action: UnitCommand
             # current_action: UnitOrder
             current_action = action.unit.orders[0]
-            if current_action.ability.id != action.ability and current_action.ability.exact_id != action.ability:
+            if action.ability not in {current_action.ability.id, current_action.ability.exact_id}:
                 # Different action, return True
                 return True
             with suppress(AttributeError):
@@ -1558,7 +1558,7 @@ class BotAI(DistanceCalculation):
         Caution: terrain height is different from a unit's z-coordinate.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self._game_info.terrain_height[pos]
 
@@ -1566,7 +1566,7 @@ class BotAI(DistanceCalculation):
         """Returns terrain z-height at a position.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return -16 + 32 * self._game_info.terrain_height[pos] / 255
 
@@ -1576,7 +1576,7 @@ class BotAI(DistanceCalculation):
         Caution: some x and y offset might be required, see ramp code in game_info.py
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self._game_info.placement_grid[pos] == 1
 
@@ -1584,7 +1584,7 @@ class BotAI(DistanceCalculation):
         """Returns True if a ground unit can pass through a grid point.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self._game_info.pathing_grid[pos] == 1
 
@@ -1593,7 +1593,7 @@ class BotAI(DistanceCalculation):
 
         :param pos:"""
         # more info: https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/spatial.proto#L19
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self.state.visibility[pos] == 2
 
@@ -1601,7 +1601,7 @@ class BotAI(DistanceCalculation):
         """Returns True if there is creep on the grid point.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self.state.creep[pos] == 1
 
@@ -1634,7 +1634,7 @@ class BotAI(DistanceCalculation):
         if self.townhalls:
             self._game_info.player_start_location = self.townhalls.first.position
             # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
-            _ = self._find_expansion_locations()
+            self._find_expansion_locations()
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
         self._time_before_step: float = time.perf_counter()
 
@@ -1742,7 +1742,7 @@ class BotAI(DistanceCalculation):
                 # Alliance.Self.value = 1
                 elif alliance == 1:
                     self.all_own_units.append(unit_obj)
-                    unit_id = unit_obj.type_id
+                    unit_id: UnitTypeId = unit_obj.type_id
                     if unit_obj.is_structure:
                         self.structures.append(unit_obj)
                         if unit_id in race_townhalls[self.race]:

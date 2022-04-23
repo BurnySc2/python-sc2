@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 import asyncio
 import json
 import os
@@ -127,6 +128,7 @@ async def _play_game_human(client, player_id, realtime, game_time_limit):
             await client.step()
 
 
+# pylint: disable=R0912,R0911
 async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_time_limit):
     if realtime:
         assert step_time_limit is None
@@ -184,9 +186,9 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         await ai.on_before_start()
         ai._prepare_first_step()
         await ai.on_start()
-    except Exception as e:
-        logger.exception(f"AI on_start threw an error")
-        logger.error(f"resigning due to previous error")
+    except Exception:
+        logger.exception("AI on_start threw an error")
+        logger.error("resigning due to previous error")
         await ai.on_end(Result.Defeat)
         return Result.Defeat
 
@@ -202,7 +204,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     state = await client.observation(requested_step)
                     # If the bot took too long in the previous observation, request another observation one frame after
                     if state.observation.observation.game_loop > requested_step:
-                        logger.debug(f"Skipped a step in realtime=True")
+                        logger.debug("Skipped a step in realtime=True")
                         previous_state_observation = state.observation
                         state = await client.observation(state.observation.observation.game_loop + 1)
                 except ProtocolError:
@@ -254,7 +256,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     ai.time_budget_available = budget
 
                     if budget < 0:
-                        logger.warning(f"Running AI step: out of budget before step")
+                        logger.warning("Running AI step: out of budget before step")
                         step_time = 0.0
                         out_of_budget = True
                     else:
@@ -266,7 +268,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                         except asyncio.TimeoutError:
                             step_time = time.monotonic() - step_start
                             logger.warning(
-                                f"Running AI step: out of budget; " +
+                                "Running AI step: out of budget; " +
                                 f"budget={budget:.2f}, steptime={step_time:.2f}, " +
                                 f"window={time_window.available_fmt}"
                             )
@@ -278,9 +280,8 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                     if out_of_budget and time_penalty is not None:
                         if time_penalty == "resign":
                             raise RuntimeError("Out of time")
-                        else:
-                            time_penalty_cooldown = int(time_penalty)
-                            time_window.clear()
+                        time_penalty_cooldown = int(time_penalty)
+                        time_window.clear()
 
                     await ai._after_step()
         except Exception as e:
@@ -294,9 +295,9 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                 await ai.on_end(result)
                 return result
             # NOTE: this message is caught by pytest suite
-            logger.exception(f"AI step threw an error")  # DO NOT EDIT!
+            logger.exception("AI step threw an error")  # DO NOT EDIT!
             logger.error(f"Error: {e}")
-            logger.error(f"Resigning due to previous error")
+            logger.error("Resigning due to previous error")
             try:
                 await ai.on_end(Result.Defeat)
             except TypeError as error:
@@ -305,7 +306,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                 return Result.Defeat
             return Result.Defeat
 
-        logger.debug(f"Running AI step: done")
+        logger.debug("Running AI step: done")
 
         if not realtime:
             if not client.in_game:  # Client left (resigned) the game
@@ -346,6 +347,7 @@ async def _play_game(
     return result
 
 
+# pylint: disable=R0912,0911
 async def _play_replay(client, ai, realtime=False, player_id=0):
     ai._initialize_variables()
 
@@ -369,9 +371,9 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
     ai._prepare_first_step()
     try:
         await ai.on_start()
-    except Exception as e:
-        logger.exception(f"AI on_start threw an error")
-        logger.error(f"resigning due to previous error")
+    except Exception:
+        logger.exception("AI on_start threw an error")
+        logger.error("resigning due to previous error")
         await ai.on_end(Result.Defeat)
         return Result.Defeat
 
@@ -388,7 +390,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
             if client._game_result:
                 try:
                     await ai.on_end(client._game_result[player_id])
-                except TypeError as error:
+                except TypeError:
                     # print(f"caught type error {error}")
                     # print(f"return {client._game_result[player_id]}")
                     return client._game_result[player_id]
@@ -418,9 +420,9 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
                 await ai.on_end(Result.Victory)
                 return None
             # NOTE: this message is caught by pytest suite
-            logger.exception(f"AI step threw an error")  # DO NOT EDIT!
+            logger.exception("AI step threw an error")  # DO NOT EDIT!
             logger.error(f"Error: {e}")
-            logger.error(f"Resigning due to previous error")
+            logger.error("Resigning due to previous error")
             try:
                 await ai.on_end(Result.Defeat)
             except TypeError as error:
@@ -429,7 +431,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
                 return Result.Defeat
             return Result.Defeat
 
-        logger.debug(f"Running AI step: done")
+        logger.debug("Running AI step: done")
 
         if not realtime:
             if not client.in_game:  # Client left (resigned) the game
@@ -490,7 +492,7 @@ async def _host_game(
             await client.leave()
             await client.quit()
         except ConnectionAlreadyClosed:
-            logger.error(f"Connection was closed before the game ended")
+            logger.error("Connection was closed before the game ended")
             return None
 
         return result
@@ -524,7 +526,7 @@ async def _host_game_aiter(
                     await client.save_replay(save_replay_as)
                 await client.leave()
             except ConnectionAlreadyClosed:
-                logger.error(f"Connection was closed before the game ended")
+                logger.error("Connection was closed before the game ended")
                 return
 
             new_players = yield result
@@ -562,7 +564,7 @@ async def _join_game(
             await client.leave()
             await client.quit()
         except ConnectionAlreadyClosed:
-            logger.error(f"Connection was closed before the game ended")
+            logger.error("Connection was closed before the game ended")
             return None
 
         return result
@@ -573,10 +575,8 @@ async def _setup_replay(server, replay_path, realtime, observed_id):
     return Client(server._ws)
 
 
-async def _host_replay(replay_path, ai, realtime, portconfig, base_build, data_version, observed_id):
+async def _host_replay(replay_path, ai, realtime, _portconfig, base_build, data_version, observed_id):
     async with SC2Process(fullscreen=False, base_build=base_build, data_hash=data_version) as server:
-        response = await server.ping()
-
         client = await _setup_replay(server, replay_path, realtime, observed_id)
         result = await _play_replay(client, ai, realtime)
         return result
@@ -650,7 +650,7 @@ async def play_from_websocket(
         if save_replay_as is not None:
             await client.save_replay(save_replay_as)
     except ConnectionAlreadyClosed:
-        logger.error(f"Connection was closed before the game ended")
+        logger.error("Connection was closed before the game ended")
         return None
     finally:
         if should_close:
@@ -728,6 +728,7 @@ def process_results(players, async_results):
     return result
 
 
+# pylint: disable=R0912
 async def maintain_SCII_count(count: int, controllers: List[Controller], proc_args: List[Dict] = None):
     """Modifies the given list of controllers to reflect the desired amount of SCII processes"""
     # kill unhealthy ones.
@@ -765,7 +766,7 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
             index = 0
         extra = [SC2Process(**proc_args[(index + _) % len(proc_args)]) for _ in range(needed)]
         logger.info(f"Creating {needed} more SC2 Processes")
-        for k in range(3):  # try thrice
+        for _ in range(3):  # try thrice
             if platform.system() == "Linux":
                 # Works on linux: start one client after the other
                 new_controllers = [await asyncio.wait_for(sc.__aenter__(), timeout=50) for sc in extra]

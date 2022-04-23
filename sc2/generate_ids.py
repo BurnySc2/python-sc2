@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 import importlib
 import json
 import platform
@@ -8,6 +9,7 @@ from pathlib import Path
 from loguru import logger
 
 from sc2.game_data import AbilityData, GameData, UnitTypeData, UpgradeData
+from sc2.ids.ability_id import AbilityId
 
 try:
     from sc2.ids.id_version import ID_VERSION_STRING
@@ -154,7 +156,7 @@ class IdGenerator:
                 "\n",
                 f"for item in {class_name}:",
                 # f"    assert not item.name in globals()",
-                f"    globals()[item.name] = item",
+                "    globals()[item.name] = item",
                 "",
             ]
 
@@ -194,8 +196,6 @@ class IdGenerator:
 
         # Reload the newly written "id" files
         # TODO This only re-imports modules, but if they haven't been imported, it will yield an error
-        from sc2.ids.ability_id import AbilityId
-
         importlib.reload(sys.modules["sc2.ids.ability_id"])
 
         importlib.reload(sys.modules["sc2.ids.unit_typeid"])
@@ -213,8 +213,6 @@ class IdGenerator:
     def update_game_data(self):
         """Re-generate the dicts from self.game_data.
         This should be done after the ids have been reimported."""
-        from sc2.ids.ability_id import AbilityId
-
         ids = set(a.value for a in AbilityId if a.value != 0)
         self.game_data.abilities = {
             a.ability_id: AbilityData(self.game_data, a)

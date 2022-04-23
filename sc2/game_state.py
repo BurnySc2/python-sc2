@@ -20,7 +20,7 @@ from sc2.score import ScoreDetails
 try:
     from sc2.dicts.generic_redirect_abilities import GENERIC_REDIRECT_ABILITIES
 except ImportError:
-    logger.info(f'Unable to import "GENERIC_REDIRECT_ABILITIES"')
+    logger.info('Unable to import "GENERIC_REDIRECT_ABILITIES"')
     GENERIC_REDIRECT_ABILITIES = {}
 
 
@@ -106,15 +106,13 @@ class EffectData:
         if self.fake:
             # Returns the string from constants.py, e.g. "KD8CHARGE"
             return FakeEffectID[self._proto.unit_type]
-        else:
-            return EffectId(self._proto.effect_id)
+        return EffectId(self._proto.effect_id)
 
     @property
     def positions(self) -> Set[Point2]:
         if self.fake:
             return {Point2.from_proto(self._proto.pos)}
-        else:
-            return {Point2.from_proto(p) for p in self._proto.pos}
+        return {Point2.from_proto(p) for p in self._proto.pos}
 
     @property
     def alliance(self) -> Alliance:
@@ -138,8 +136,7 @@ class EffectData:
     def radius(self) -> float:
         if self.fake:
             return FakeEffectRadii[self._proto.unit_type]
-        else:
-            return self._proto.radius
+        return self._proto.radius
 
     def __repr__(self) -> str:
         return f"{self.id} with radius {self.radius} at {self.positions}"
@@ -239,12 +236,9 @@ class GameState:
     @property_cache_forever
     def dead_units(self) -> Set[int]:
         """ A set of unit tags that died this frame """
-        _dead_units = {dead_unit_tag for dead_unit_tag in self.observation_raw.event.dead_units}
+        _dead_units = set(self.observation_raw.event.dead_units)
         if self.previous_observation:
-            return _dead_units | {
-                dead_unit_tag
-                for dead_unit_tag in self.previous_observation.observation.raw_data.event.dead_units
-            }
+            return _dead_units | set(self.previous_observation.observation.raw_data.event.dead_units)
         return _dead_units
 
     @property_cache_forever

@@ -1,6 +1,6 @@
+# pylint: disable=W0201
 import math
 import warnings
-from math import pow
 
 import numpy as np
 
@@ -90,16 +90,19 @@ class DistanceCalculation:
             i, j = j, i
         return self._units_count * j - j * (j + 1) // 2 + i - 1 - j
 
-    def convert_tuple_to_numpy_array(self, pos: Tuple[float, float]) -> np.ndarray:
+    @staticmethod
+    def convert_tuple_to_numpy_array(pos: Tuple[float, float]) -> np.ndarray:
         """ Converts a single position to a 2d numpy array with 1 row and 2 columns. """
         return np.fromiter(pos, dtype=float, count=2).reshape((1, 2))
 
     # Fast and simple calculation functions
 
-    def distance_math_hypot(self, p1: Tuple[float, float], p2: Tuple[float, float]):
+    @staticmethod
+    def distance_math_hypot(p1: Tuple[float, float], p2: Tuple[float, float]):
         return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
 
-    def distance_math_hypot_squared(self, p1: Tuple[float, float], p2: Tuple[float, float]):
+    @staticmethod
+    def distance_math_hypot_squared(p1: Tuple[float, float], p2: Tuple[float, float]):
         return pow(p1[0] - p2[0], 2) + pow(p1[1] - p2[1], 2)
 
     def _distance_squared_unit_to_unit_method0(self, unit1: Unit, unit2: Unit) -> float:

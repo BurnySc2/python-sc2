@@ -6,6 +6,8 @@ from sc2.position import Point2
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
+from loguru import logger
+
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
@@ -13,7 +15,6 @@ from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.main import run_game
 from sc2.player import Bot, Computer
-from loguru import logger
 
 
 class FindAdeptShadesBot(BotAI):

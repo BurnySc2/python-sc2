@@ -31,6 +31,7 @@ class kill_switch:
     def kill_all(cls):
         logger.info(f"kill_switch: Process cleanup for {len(cls._to_kill)} processes")
         for p in cls._to_kill:
+            # pylint: disable=W0212
             p._clean()
 
 
@@ -94,7 +95,7 @@ class SC2Process:
     async def __aenter__(self) -> Controller:
         kill_switch.add(self)
 
-        def signal_handler(*args):
+        def signal_handler(*_args):
             # unused arguments: signal handling library expects all signal
             # callback handlers to accept two positional arguments
             kill_switch.kill_all()
@@ -132,6 +133,7 @@ class SC2Process:
         for version in self.versions:
             if version["label"] == target_sc2_version:
                 return version["data-hash"]
+        return None
 
     def _launch(self):
         if self._base_build:
@@ -237,7 +239,7 @@ class SC2Process:
         logger.info("Cleaning up...")
 
         if self._process is not None:
-            if paths.PF == "WSL1" or paths.PF == "WSL2":
+            if paths.PF in {"WSL1", "WSL2"}:
                 if wsl.kill(self._process):
                     logger.error("KILLED")
             elif self._process.poll() is None:
@@ -251,10 +253,10 @@ class SC2Process:
                 self._process.wait()
                 logger.error("KILLED")
             # Try to kill wineserver on linux
-            if paths.PF == "Linux" or paths.PF == "WineLinux":
+            if paths.PF in {"Linux", "WineLinux"}:
                 try:
-                    p = subprocess.Popen(["wineserver", "-k"])
-                    p.wait()
+                    with subprocess.Popen(["wineserver", "-k"]) as p:
+                        p.wait()
                 # Command wineserver not detected
                 except FileNotFoundError:
                     pass

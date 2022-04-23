@@ -1,3 +1,4 @@
+# pylint: disable=W0201,W0212
 from __future__ import annotations
 
 from collections import Counter
@@ -216,10 +217,10 @@ class ObserverAI(DistanceCalculation):
             self._game_info.player_start_location = self.townhalls.first.position
         self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
 
-    def _prepare_step(self, state, proto_game_info):
+    def _prepare_step(self, state, _proto_game_info):
         """
         :param state:
-        :param proto_game_info:
+        :param _proto_game_info:
         """
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
@@ -259,7 +260,6 @@ class ObserverAI(DistanceCalculation):
             if unit.is_blip:
                 self.blips.add(Blip(unit))
             else:
-                unit_type: int = unit.unit_type
                 # Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
                 unit_obj = Unit(unit, self)
                 self.units.append(unit_obj)
