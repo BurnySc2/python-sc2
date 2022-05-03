@@ -48,7 +48,7 @@ class DistanceCalculation:
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float,
+        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float64,
                                                   count=2 * self._units_count).reshape((self._units_count, 2))
         assert len(positions_array) == self._units_count
         # See performance benchmarks
@@ -61,7 +61,7 @@ class DistanceCalculation:
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float,
+        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float64,
                                                   count=2 * self._units_count).reshape((self._units_count, 2))
         assert len(positions_array) == self._units_count
         # See performance benchmarks
@@ -73,7 +73,7 @@ class DistanceCalculation:
         """ Nearly same as above, but without asserts"""
         self._generated_frame2 = self.state.game_loop
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float,
+        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float64,
                                                   count=2 * self._units_count).reshape((-1, 2))
         # See performance benchmarks
         self._cached_cdist = cdist(positions_array, positions_array, "sqeuclidean")
