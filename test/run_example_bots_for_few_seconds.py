@@ -18,7 +18,6 @@ from sc2.player import Bot, Computer
 
 game_time_limit = 60  # 60 seconds in game time
 
-root_path = Path(__file__).parents[2]
 bot_paths = [
     # Protoss
     {
