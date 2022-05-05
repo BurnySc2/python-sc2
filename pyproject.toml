@@ -42,6 +42,8 @@ typing-extensions = "^4.1.1"
 win32-setctime = "^1.0.3"
 importlib-metadata = "<=2.1.0"
 loguru = "^0.6.0"
+# Required for windows
+six = "^1.16.0"
 
 [tool.poetry.dev-dependencies]
 atomicwrites = "^1.4.0"

@@ -1,6 +1,5 @@
 import datetime
 
-from pyglet.image import ImageData
 from pyglet.text import Label
 from pyglet.window import Window
 from s2clientprotocol import score_pb2 as score_pb
@@ -26,6 +25,9 @@ class Renderer:
         self._text_time = None
 
     async def render(self, observation):
+        # pylint: disable=C0415
+        from pyglet.image import ImageData
+
         render_data = observation.observation.render_data
 
         map_size = render_data.map.size
