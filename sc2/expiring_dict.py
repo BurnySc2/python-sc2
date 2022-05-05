@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from threading import RLock
-from typing import TYPE_CHECKING, Iterable, Union
+from typing import TYPE_CHECKING, Any, Iterable, Union
 
 if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
@@ -51,20 +51,16 @@ class ExpiringDict(OrderedDict):
                 del self[key]
         return False
 
-    def __getitem__(self, key, with_age=False) -> any:
+    def __getitem__(self, key, with_age=False) -> Any:
         """ Return the item of the dict using d[key] """
         with self.lock:
-            try:
-                # Each item is a list of [value, frame time]
-                item = OrderedDict.__getitem__(self, key)
-                if self.frame - item[1] < self.max_age:
-                    if with_age:
-                        return item[0], item[1]
-                    return item[0]
-                else:
-                    del self[key]
-            except:
-                pass
+            # Each item is a list of [value, frame time]
+            item = OrderedDict.__getitem__(self, key)
+            if self.frame - item[1] < self.max_age:
+                if with_age:
+                    return item[0], item[1]
+                return item[0]
+            OrderedDict.__delitem__(self, key)
         raise KeyError(key)
 
     def __setitem__(self, key, value):
@@ -78,10 +74,7 @@ class ExpiringDict(OrderedDict):
         with self.lock:
             for key, value in OrderedDict.items(self):
                 if self.frame - value[1] < self.max_age:
-                    try:
-                        print_list.append(f"{repr(key)}: {repr(value)}")
-                    except:
-                        print_list.append(f"{key}: {value}")
+                    print_list.append(f"{repr(key)}: {repr(value)}")
         print_str = ", ".join(print_list)
         return f"ExpiringDict({print_str})"
 

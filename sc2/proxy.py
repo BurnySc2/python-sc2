@@ -57,6 +57,8 @@ class Proxy:
             request.join_game.player_name = self.player.name
         await self.controller._ws.send_bytes(request.SerializeToString())
 
+    # TODO Catching too general exception Exception (broad-except)
+    # pylint: disable=W0703
     async def get_response(self):
         response_bytes = None
         try:
@@ -117,6 +119,8 @@ class Proxy:
                 res = await self.controller._execute(observation=sc_pb.RequestObservation())
                 if res.HasField("observation") and res.observation.player_result:
                     self.result = {pr.player_id: Result(pr.result) for pr in res.observation.player_result}
+        # pylint: disable=W0703
+        # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             tb = traceback.format_exc()
             logger.error(f"Obs-check: {e}, traceback: {tb}")
@@ -143,9 +147,11 @@ class Proxy:
                     logger.error("Client shutdown")
                 else:
                     logger.error("Incorrect message type")
+        # pylint: disable=W0703
+        # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
-            IGNORED_ERRORS = {ConnectionError, asyncio.CancelledError}
-            if not any([isinstance(e, E) for E in IGNORED_ERRORS]):
+            ignored_errors = {ConnectionError, asyncio.CancelledError}
+            if not any(isinstance(e, E) for E in ignored_errors):
                 tb = traceback.format_exc()
                 logger.info(f"Proxy({self.player.name}): Caught {e} traceback: {tb}")
         finally:
@@ -153,9 +159,11 @@ class Proxy:
                 if self.controller._status in {Status.in_game, Status.in_replay}:
                     await self.controller._execute(leave_game=sc_pb.RequestLeaveGame())
                 await bot_ws.close()
-            except Exception as ee:
+            # pylint: disable=W0703
+            # TODO Catching too general exception Exception (broad-except)
+            except Exception as e:
                 tbb = traceback.format_exc()
-                logger.info(f"Proxy({self.player.name}): Caught during Surrender", ee, "traceback:", tbb)
+                logger.info(f"Proxy({self.player.name}): Caught during Surrender", e, "traceback:", tbb)
             self.done = True
         return bot_ws
 
@@ -218,6 +226,8 @@ class Proxy:
             bot_process.wait()
         try:
             await apprunner.cleanup()
+        # pylint: disable=W0703
+        # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             logger.error(f"cleaning error {e}")
         if isinstance(self.result, dict):

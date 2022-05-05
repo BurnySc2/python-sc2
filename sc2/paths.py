@@ -117,7 +117,7 @@ def latest_executeble(versions_dir, base_build=None):
     version, path = latest
 
     if version < 55958:
-        logger.critical(f"Your SC2 binary is too old. Upgrade to 3.16.1 or newer.")
+        logger.critical("Your SC2 binary is too old. Upgrade to 3.16.1 or newer.")
         sys.exit(1)
     return path / BINPATH[PF]
 
@@ -125,6 +125,7 @@ def latest_executeble(versions_dir, base_build=None):
 class _MetaPaths(type):
     """"Lazily loads paths to allow importing the library even if SC2 isn't installed."""
 
+    # pylint: disable=C0203
     def __setup(self):
         if PF not in BASEDIR:
             logger.critical(f"Unsupported platform '{PF}'")
@@ -146,7 +147,9 @@ class _MetaPaths(type):
             logger.critical(f"SC2 installation not found: File '{e.filename}' does not exist.")
             sys.exit(1)
 
+    # pylint: disable=C0203
     def __getattr__(self, attr):
+        # pylint: disable=E1120
         self.__setup()
         return getattr(self, attr)
 

@@ -16,8 +16,9 @@ jobs:
       matrix:
         # Python 3.6 fails due to: https://www.python.org/dev/peps/pep-0563/
         # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
+        # Python 3.7 support has been dropped due to missing cached_property https://docs.python.org/3/library/functools.html#functools.cached_property
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10']
 
     steps:
     - uses: actions/checkout@v1
@@ -38,10 +39,16 @@ jobs:
         python -m pip install poetry
         poetry install
 
+      # Run pylint
+      # TODO: Run pylint on example bots and other files
+    - name: Run pylint on sc2 subfolder
+      run: |
+        poetry run pylint sc2
+
       # Run tests
     - name: Run poetry pytest tests on pickle files
       run: |
-        poetry run pytest test/
+        poetry run pytest test
 
       # Run benchmarks
     - name: Run benchmark benchmark_array_creation
@@ -147,40 +154,45 @@ jobs:
         tree
 
     - name: Load and build docker image
-      # Build docker image from Dockerfile using python 3.7
+      # Build docker image from Dockerfile using python 3.8
       run: |
-        docker build -t test_image -f test/Dockerfile_3.7 .
+        docker build -t test_image -f test/Dockerfile_3.8 .
 
     - name: Run autotest_bot.py
-      # docker exec -i app bash -c "cd /root/template && poetry run pytest test/benchmark_distances_points_to_point.py --benchmark-compare"
-
       # Run bot and list resulting files (replay file, stable_id.json)
       run: |
-        docker run -it -d --name app1 test_image
-        docker exec -i app1 bash -c "python test/travis_test_script.py test/autotest_bot.py"
-        docker exec -i app1 bash -c "tree"
-        docker rm -f app1
+        docker run -it -d --name my_container test_image
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/autotest_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
 
     - name: Run upgradestest_bot.py
       run: |
-        docker run -it -d --name app2 test_image
-        docker exec -i app2 bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
-        docker exec -i app2 bash -c "tree"
-        docker rm -f app2
+        docker run -it -d --name my_container test_image
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
 
     - name: Run damagetest_bot.py
       run: |
-        docker run -it -d --name app3 test_image
-        docker exec -i app3 bash -c "python test/travis_test_script.py test/damagetest_bot.py"
-        docker exec -i app3 bash -c "tree"
-        docker rm -f app3
+        docker run -it -d --name my_container test_image
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/damagetest_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
 
     - name: Run queries_test_bot.py
       run: |
-        docker run -it -d --name app4 test_image
-        docker exec -i app4 bash -c "python test/travis_test_script.py test/queries_test_bot.py"
-        docker exec -i app4 bash -c "tree"
-        docker rm -f app4
+        docker run -it -d --name my_container test_image
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/queries_test_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
+
+    - name: Run example bots for a short period
+      run: |
+        docker run -it -d --name my_container test_image
+        docker exec -i my_container bash -c "python test/run_example_bots_for_few_seconds.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
 
   release_to_github_pages:
     name: GitHub Pages

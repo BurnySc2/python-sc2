@@ -189,7 +189,7 @@ class SC2Process:
 
         sc2_cwd = str(Paths.CWD) if Paths.CWD else None
 
-        if paths.PF == "WSL1" or paths.PF == "WSL2":
+        if paths.PF in {"WSL1", "WSL2"}:
             return wsl.run(args, sc2_cwd)
 
         return subprocess.Popen(

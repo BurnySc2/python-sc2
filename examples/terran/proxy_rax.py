@@ -1,7 +1,3 @@
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race

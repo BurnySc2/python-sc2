@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Tuple, Union
 
 from sc2.constants import COMBINEABLE_ABILITIES
 from sc2.ids.ability_id import AbilityId
@@ -35,7 +35,7 @@ class UnitCommand:
         self.queue = queue
 
     @property
-    def combining_tuple(self):
+    def combining_tuple(self) -> Tuple[AbilityId, Union[Unit, Point2], bool, bool]:
         return self.ability, self.target, self.queue, self.ability in COMBINEABLE_ABILITIES
 
     def __repr__(self):

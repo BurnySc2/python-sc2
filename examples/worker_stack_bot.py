@@ -12,10 +12,6 @@ Task for the user who wants to enhance this bot:
 - Re-assign workers when mineral patch mines out
 - Re-assign workers when gas mines out
 """
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from typing import Dict, Set
 

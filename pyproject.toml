@@ -21,7 +21,6 @@ classifiers=[
     "Operating System :: MacOS :: MacOS X",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -31,18 +30,18 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7, <3.11"
+python = ">=3.8, <3.11"
 s2clientprotocol = "^5.0.7"
 numpy = "^1.19.3"
 scipy = "^1.7.1"
 aiohttp = "^3.7.4"
-loguru = "^0.6.0"
 portpicker = "^1.4.0"
 pyglet = "^1.5.21"
 mpyq = "^0.2.5"
 typing-extensions = "^4.1.1"
 win32-setctime = "^1.0.3"
 importlib-metadata = "<=2.1.0"
+loguru = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 atomicwrites = "^1.4.0"
@@ -68,7 +67,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-python_version = "3.7"
+python_version = "3.8"
 ignore_missing_imports = true
 
 [tool.pycln]

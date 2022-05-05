@@ -4,10 +4,7 @@ at game start without having to use 'synchronous_do()'.
 This is especially important when your bot runs on realtime=True and
 you want your bot to be reliable against Human opponents.
 """
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 import asyncio
 
 from sc2 import maps

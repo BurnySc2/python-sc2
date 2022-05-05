@@ -51,7 +51,8 @@ class IdGenerator:
             "Effects": "effect_id",
         }
 
-    def make_key(self, key):
+    @staticmethod
+    def make_key(key):
         if key[0].isdigit():
             key = "_" + key
         # In patch 5.0, the key has "@" character in it which is not possible with python enums
@@ -78,7 +79,7 @@ class IdGenerator:
                 if v["friendlyname"] != "":
                     key = v["friendlyname"]
                 else:
-                    exit(f"Not mapped: {v !r}")
+                    sys.exit(f"Not mapped: {v !r}")
 
             key = key.upper().replace(" ", "_").replace("@", "")
 
@@ -166,7 +167,7 @@ class IdGenerator:
 
             # Apply formatting]
             try:
-                subprocess.run(["poetry", "run", "yapf", ids_file_path, "-i"])
+                subprocess.run(["poetry", "run", "yapf", ids_file_path, "-i"], check=True)
             except FileNotFoundError:
                 print(
                     f"Yapf is not installed. Please use 'pip install yapf' to install yapf formatter.\nCould not autoformat file {ids_file_path}"
@@ -183,16 +184,19 @@ class IdGenerator:
                 logger.info(
                     f"Game version is different (Old: {self.game_version}, new: {ID_VERSION_STRING}. Updating ids to match game version"
                 )
-            with open(self.DATA_JSON[self.PF], encoding="utf-8") as data_file:
+            stable_id_path = Path(self.DATA_JSON[self.PF])
+            assert stable_id_path.is_file()
+            with stable_id_path.open(encoding="utf-8") as data_file:
                 data = json.loads(data_file.read())
-                self.generate_python_code(self.parse_data(data))
+            self.generate_python_code(self.parse_data(data))
 
             # Update game_data if this is a live game
             if self.game_data is not None:
                 self.reimport_ids()
                 self.update_game_data()
 
-    def reimport_ids(self):
+    @staticmethod
+    def reimport_ids():
 
         # Reload the newly written "id" files
         # TODO This only re-imports modules, but if they haven't been imported, it will yield an error

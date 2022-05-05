@@ -1,17 +1,11 @@
-import os
-import sys
+from typing import List, Tuple
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-from typing import List, Tuple
-
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.position import Point2, Point3
 from sc2.unit import Unit

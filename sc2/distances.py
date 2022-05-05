@@ -5,6 +5,7 @@ import warnings
 import numpy as np
 
 from sc2.game_state import GameState
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
 
@@ -12,7 +13,7 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     from scipy.spatial.distance import pdist, cdist
 
-from typing import Generator, Iterable, Tuple
+from typing import Generator, Iterable, Tuple, Union
 
 
 class DistanceCalculation:
@@ -61,7 +62,7 @@ class DistanceCalculation:
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=np.float,
+        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=float,
                                                   count=2 * self._units_count).reshape((self._units_count, 2))
         assert len(positions_array) == self._units_count
         # See performance benchmarks
@@ -98,11 +99,11 @@ class DistanceCalculation:
     # Fast and simple calculation functions
 
     @staticmethod
-    def distance_math_hypot(p1: Tuple[float, float], p2: Tuple[float, float]):
+    def distance_math_hypot(p1: Union[Tuple[float, float], Point2], p2: Union[Tuple[float, float], Point2]):
         return math.hypot(p1[0] - p2[0], p1[1] - p2[1])
 
     @staticmethod
-    def distance_math_hypot_squared(p1: Tuple[float, float], p2: Tuple[float, float]):
+    def distance_math_hypot_squared(p1: Union[Tuple[float, float], Point2], p2: Union[Tuple[float, float], Point2]):
         return pow(p1[0] - p2[0], 2) + pow(p1[1] - p2[1], 2)
 
     def _distance_squared_unit_to_unit_method0(self, unit1: Unit, unit2: Unit) -> float:
@@ -128,10 +129,13 @@ class DistanceCalculation:
 
     # Distance calculation using the fastest distance calculation functions
 
-    def _distance_pos_to_pos(self, pos1: Tuple[float, float], pos2: Tuple[float, float]) -> float:
+    def _distance_pos_to_pos(
+        self, pos1: Union[Tuple[float, float], Point2], pos2: Union[Tuple[float, float], Point2]
+    ) -> float:
         return self.distance_math_hypot(pos1, pos2)
 
-    def _distance_units_to_pos(self, units: Units, pos: Tuple[float, float]) -> Generator[float, None, None]:
+    def _distance_units_to_pos(self, units: Units, pos: Union[Tuple[float, float],
+                                                              Point2]) -> Generator[float, None, None]:
         """ This function does not scale well, if len(units) > 100 it gets fairly slow """
         return (self.distance_math_hypot(u.position_tuple, pos) for u in units)
 

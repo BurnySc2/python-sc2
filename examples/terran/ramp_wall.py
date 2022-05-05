@@ -1,10 +1,5 @@
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
 import random
-from typing import Set
+from typing import FrozenSet, Set
 
 import numpy as np
 
@@ -35,7 +30,7 @@ class RampWallBot(BotAI):
         await self.distribute_workers()
 
         if self.can_afford(UnitTypeId.SCV) and self.workers.amount < 16 and cc.is_idle:
-            self.do(cc.train(UnitTypeId.SCV))
+            cc.train(UnitTypeId.SCV)
 
         # Raise depos when enemies are nearby
         for depo in self.structures(UnitTypeId.SUPPLYDEPOT).ready:
@@ -76,7 +71,7 @@ class RampWallBot(BotAI):
         # Draw if two selected units are facing each other - green if this guy is facing the other, red if he is not
         # self.draw_facing_units()
 
-        depot_placement_positions: Set[Point2] = self.main_base_ramp.corner_depots
+        depot_placement_positions: FrozenSet[Point2] = self.main_base_ramp.corner_depots
         # Uncomment the following if you want to build 3 supply depots in the wall instead of a barracks in the middle + 2 depots in the corner
         # depot_placement_positions = self.main_base_ramp.corner_depots | {self.main_base_ramp.depot_in_middle}
 
@@ -102,7 +97,7 @@ class RampWallBot(BotAI):
             workers: Units = self.workers.gathering
             if workers:  # if workers were found
                 worker: Unit = workers.random
-                self.do(worker.build(UnitTypeId.SUPPLYDEPOT, target_depot_location))
+                worker.build(UnitTypeId.SUPPLYDEPOT, target_depot_location)
 
         # Build barracks
         if depots.ready and self.can_afford(UnitTypeId.BARRACKS) and self.already_pending(UnitTypeId.BARRACKS) == 0:
@@ -131,23 +126,23 @@ class RampWallBot(BotAI):
                     color = Point3((0, 255, 255))
                 if p in ramp.lower:
                     color = Point3((0, 0, 255))
-                self._client.debug_box2_out(pos + Point2((0.5, 0.5)), half_vertex_length=0.25, color=color)
+                self.client.debug_box2_out(pos + Point2((0.5, 0.5)), half_vertex_length=0.25, color=color)
                 # Identical to above:
                 # p0 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z + 0.25))
                 # p1 = Point3((pos.x + 0.75, pos.y + 0.75, pos.z - 0.25))
                 # print(f"Drawing {p0} to {p1}")
-                # self._client.debug_box_out(p0, p1, color=color)
+                # self.client.debug_box_out(p0, p1, color=color)
 
     def draw_expansions(self):
         green = Point3((0, 255, 0))
         for expansion_pos in self.expansion_locations_list:
             height = self.get_terrain_z_height(expansion_pos)
             expansion_pos3 = Point3((*expansion_pos, height))
-            self._client.debug_box2_out(expansion_pos3, half_vertex_length=2.5, color=green)
+            self.client.debug_box2_out(expansion_pos3, half_vertex_length=2.5, color=green)
 
     def draw_pathing_grid(self):
-        map_area = self._game_info.playable_area
-        for (b, a), value in np.ndenumerate(self._game_info.pathing_grid.data_numpy):
+        map_area = self.game_info.playable_area
+        for (b, a), value in np.ndenumerate(self.game_info.pathing_grid.data_numpy):
             if value == 0:
                 continue
             # Skip values outside of playable map area
@@ -162,11 +157,11 @@ class RampWallBot(BotAI):
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((0, 255, 0))
-            self._client.debug_box_out(p0, p1, color=color)
+            self.client.debug_box_out(p0, p1, color=color)
 
     def draw_placement_grid(self):
-        map_area = self._game_info.playable_area
-        for (b, a), value in np.ndenumerate(self._game_info.placement_grid.data_numpy):
+        map_area = self.game_info.playable_area
+        for (b, a), value in np.ndenumerate(self.game_info.placement_grid.data_numpy):
             if value == 0:
                 continue
             # Skip values outside of playable map area
@@ -181,7 +176,7 @@ class RampWallBot(BotAI):
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((0, 255, 0))
-            self._client.debug_box_out(p0, p1, color=color)
+            self.client.debug_box_out(p0, p1, color=color)
 
     def draw_vision_blockers(self):
         for p in self.game_info.vision_blockers:
@@ -191,7 +186,7 @@ class RampWallBot(BotAI):
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
             # print(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
-            self._client.debug_box_out(p0, p1, color=color)
+            self.client.debug_box_out(p0, p1, color=color)
 
     def draw_visibility_pixelmap(self):
         for (y, x), value in np.ndenumerate(self.state.visibility.data_numpy):
@@ -205,7 +200,7 @@ class RampWallBot(BotAI):
             # If value == 2: show green (= we have vision on that point)
             if value == 2:
                 color = Point3((0, 255, 0))
-            self._client.debug_box_out(p0, p1, color=color)
+            self.client.debug_box_out(p0, p1, color=color)
 
     def draw_example(self):
         # Draw green boxes around SCVs if they are gathering, yellow if they are returning cargo, red the rest
@@ -220,7 +215,7 @@ class RampWallBot(BotAI):
                 color = Point3((0, 255, 0))
             elif scv.is_returning:
                 color = Point3((255, 255, 0))
-            self._client.debug_box_out(p0, p1, color=color)
+            self.client.debug_box_out(p0, p1, color=color)
 
         # Draw lines from structures to command center
         if self.townhalls:
@@ -235,7 +230,7 @@ class RampWallBot(BotAI):
                 p1 = structure.position3d
                 # Red
                 color = Point3((255, 0, 0))
-                self._client.debug_line_out(p0, p1, color=color)
+                self.client.debug_line_out(p0, p1, color=color)
 
             # Draw text on barracks
             if structure.type_id == UnitTypeId.BARRACKS:
@@ -243,11 +238,11 @@ class RampWallBot(BotAI):
                 color = Point3((0, 0, 255))
                 pos = structure.position3d + Point3((0, 0, 0.5))
                 # TODO: Why is this text flickering
-                self._client.debug_text_world(text="MY RAX", pos=pos, color=color, size=16)
+                self.client.debug_text_world(text="MY RAX", pos=pos, color=color, size=16)
 
         # Draw text in top left of screen
-        self._client.debug_text_screen(text="Hello world!", pos=Point2((0, 0)), color=None, size=16)
-        self._client.debug_text_simple(text="Hello world2!")
+        self.client.debug_text_screen(text="Hello world!", pos=Point2((0, 0)), color=None, size=16)
+        self.client.debug_text_simple(text="Hello world2!")
 
     def draw_facing_units(self):
         """ Draws green box on top of selected_unit2, if selected_unit2 is facing selected_unit1 """
@@ -260,9 +255,9 @@ class RampWallBot(BotAI):
                 if selected_unit1 == selected_unit2:
                     continue
                 if selected_unit2.is_facing_unit(selected_unit1):
-                    self._client.debug_box2_out(selected_unit2, half_vertex_length=0.25, color=green)
+                    self.client.debug_box2_out(selected_unit2, half_vertex_length=0.25, color=green)
                 else:
-                    self._client.debug_box2_out(selected_unit2, half_vertex_length=0.25, color=red)
+                    self.client.debug_box2_out(selected_unit2, half_vertex_length=0.25, color=red)
 
 
 def main():

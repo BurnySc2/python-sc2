@@ -46,7 +46,7 @@ class Client(Protocol):
         self.raw_affects_selection = False
 
     @property
-    def in_game(self):
+    def in_game(self) -> bool:
         return self._status in {Status.in_game, Status.in_replay}
 
     async def join_game(self, name=None, race=None, observed_player_id=None, portconfig=None, rgb_render_config=None):

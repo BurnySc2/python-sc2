@@ -175,7 +175,7 @@ class ObserverAI(DistanceCalculation):
 
         :param units:
         :param ignore_resource_requirements:"""
-        return await self._client.query_available_abilities(units, ignore_resource_requirements)
+        return await self.client.query_available_abilities(units, ignore_resource_requirements)
 
     @property_cache_once_per_frame
     def _abilities_all_units(self) -> Counter:
@@ -268,7 +268,7 @@ class ObserverAI(DistanceCalculation):
         """ Executed by main.py after each on_step function. """
         self.unit_tags_received_action.clear()
         # Commit debug queries
-        await self._client._send_debug()
+        await self.client._send_debug()
         return self.state.game_loop
 
     async def issue_events(self):

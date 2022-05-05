@@ -81,8 +81,7 @@ def detect():
 
     try:
         wsl_proc = subprocess.run(["wsl.exe", "--list", "--running", "--verbose"], capture_output=True)
-    except Exception:
-        # TODO More specific exception catching
+    except (OSError, ValueError):
         return None
     if wsl_proc.returncode != 0:
         return None

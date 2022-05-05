@@ -101,11 +101,11 @@ def test_bot_ai():
     assert bot.time == 0
     assert bot.time_formatted in {"0:00", "00:00"}
     assert bot.start_location is None  # Is populated by main.py
-    bot._game_info.player_start_location = bot.townhalls.random.position
+    bot.game_info.player_start_location = bot.townhalls.random.position
     assert bot.townhalls.random.position not in bot.enemy_start_locations
     assert bot.enemy_units == Units([], bot)
     assert bot.enemy_structures == Units([], bot)
-    bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
+    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     assert bot.main_base_ramp  # Test if any ramp was found
 
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
@@ -386,11 +386,11 @@ def test_bot_ai():
 
 def test_game_info():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
-    bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
+    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     # Test if main base ramp works
-    game_info: GameInfo = bot._game_info
+    game_info: GameInfo = bot.game_info
 
-    bot._game_info.player_start_location = bot.townhalls.random.position
+    bot.game_info.player_start_location = bot.townhalls.random.position
 
     # Test game info object
     assert len(game_info.players) == 2
@@ -410,7 +410,7 @@ def test_game_info():
 
 def test_game_data():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
-    game_data = bot._game_data
+    game_data = bot.game_data
     assert game_data.abilities
     assert game_data.units
     assert game_data.upgrades
@@ -783,7 +783,7 @@ def test_dicts():
         upgrade_id: UpgradeId
         for upgrade_id, upgrade_data in data.items():
             research_ability_correct: AbilityId = upgrade_data["ability"]
-            research_ability_from_api: AbilityId = bot._game_data.upgrades[upgrade_id.value].research_ability.exact_id
+            research_ability_from_api: AbilityId = bot.game_data.upgrades[upgrade_id.value].research_ability.exact_id
             if upgrade_id.value in {116, 117, 118}:
                 # Research abilities for armory armor plating are mapped incorrectly in the API
                 continue

@@ -251,7 +251,7 @@ class TestBot(BotAI):
 
         while 1:
             if self.units(UnitTypeId.REAPER).amount < 10:
-                await self._client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
 
             for reaper in self.units(UnitTypeId.REAPER):
                 reaper(AbilityId.KD8CHARGE_KD8CHARGE, center)
@@ -266,7 +266,7 @@ class TestBot(BotAI):
             if len(self.state.effects) != 0:
                 break
 
-        await self._client.debug_kill_unit(self.units(UnitTypeId.REAPER))
+        await self.client.debug_kill_unit(self.units(UnitTypeId.REAPER))
         # Wait for effectts to time out
         await self._advance_steps(100)
         logger.warning("Action test 06 successful.")
@@ -277,7 +277,7 @@ class TestBot(BotAI):
         center = self._game_info.map_center
         while 1:
             if self.units(UnitTypeId.RAVAGER).amount < 10:
-                await self._client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
             for ravager in self.units(UnitTypeId.RAVAGER):
                 ravager(AbilityId.EFFECT_CORROSIVEBILE, center)
 
@@ -291,7 +291,7 @@ class TestBot(BotAI):
             if len(self.state.effects) != 0:
                 break
         # Cleanup
-        await self._client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
+        await self.client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
         # Wait for effectts to time out
         await self._advance_steps(100)
         logger.warning("Action test 07 successful.")
@@ -299,15 +299,15 @@ class TestBot(BotAI):
 
     # Test if train function works on hatchery, lair, hive
     async def test_botai_actions8(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
         if not self.structures(UnitTypeId.HIVE):
-            await self._client.debug_create_unit([[UnitTypeId.HIVE, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.HIVE, 1, center, 1]])
         if not self.structures(UnitTypeId.LAIR):
-            await self._client.debug_create_unit([[UnitTypeId.LAIR, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.LAIR, 1, center, 1]])
         if not self.structures(UnitTypeId.HATCHERY):
-            await self._client.debug_create_unit([[UnitTypeId.HATCHERY, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.HATCHERY, 1, center, 1]])
         if not self.structures(UnitTypeId.SPAWNINGPOOL):
-            await self._client.debug_create_unit([[UnitTypeId.SPAWNINGPOOL, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.SPAWNINGPOOL, 1, center, 1]])
 
         while 1:
             townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
@@ -325,7 +325,7 @@ class TestBot(BotAI):
         townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
         queens = self.units(UnitTypeId.QUEEN)
         pool = self.structures(UnitTypeId.SPAWNINGPOOL)
-        await self._client.debug_kill_unit(townhalls | queens | pool)
+        await self.client.debug_kill_unit(townhalls | queens | pool)
         await self._advance_steps(2)
         logger.warning("Action test 08 successful.")
         return
@@ -340,7 +340,7 @@ class TestBot(BotAI):
         while 1:
             HTs = self.units(UnitTypeId.HIGHTEMPLAR)
             if HTs.amount < target_amount:
-                await self._client.debug_create_unit([[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]])
 
             else:
                 for ht in HTs:
@@ -355,9 +355,9 @@ class TestBot(BotAI):
 
         # Cleanup
         if archons:
-            await self._client.debug_kill_unit(archons)
+            await self.client.debug_kill_unit(archons)
         if HTs:
-            await self._client.debug_kill_unit(HTs)
+            await self.client.debug_kill_unit(HTs)
         await self._advance_steps(2)
         logger.warning("Action test 09 successful.")
         return
@@ -382,9 +382,9 @@ class TestBot(BotAI):
 
             # Spawn units
             if not bane_nests:
-                await self._client.debug_create_unit([[UnitTypeId.BANELINGNEST, 1, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.BANELINGNEST, 1, center, 1]])
             if banes.amount + bane_cocoons.amount + lings.amount < target_amount:
-                await self._client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]])
 
             if lings.amount >= target_amount and self.minerals >= 10_000 and self.vespene >= 10_000:
                 for ling in lings:
@@ -400,7 +400,7 @@ class TestBot(BotAI):
                 break
 
         # Cleanup
-        await self._client.debug_kill_unit(lings | banes | bane_nests | bane_cocoons)
+        await self.client.debug_kill_unit(lings | banes | bane_nests | bane_cocoons)
         await self._advance_steps(2)
         logger.warning("Action test 10 successful.")
         return

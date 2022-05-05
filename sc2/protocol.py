@@ -34,20 +34,20 @@ class Protocol:
         logger.debug(f"Sending request: {request !r}")
         try:
             await self._ws.send_bytes(request.SerializeToString())
-        except TypeError:
+        except TypeError as exc:
             logger.exception("Cannot send: Connection already closed.")
-            raise ConnectionAlreadyClosed("Connection already closed.")
+            raise ConnectionAlreadyClosed("Connection already closed.") from exc
         logger.debug("Request sent")
 
         response = sc_pb.Response()
         try:
             response_bytes = await self._ws.receive_bytes()
-        except TypeError:
+        except TypeError as exc:
             if self._status == Status.ended:
                 logger.info("Cannot receive: Game has already ended.")
-                raise ConnectionAlreadyClosed("Game has already ended")
+                raise ConnectionAlreadyClosed("Game has already ended") from exc
             logger.error("Cannot receive: Connection already closed.")
-            raise ConnectionAlreadyClosed("Connection already closed.")
+            raise ConnectionAlreadyClosed("Connection already closed.") from exc
         except asyncio.CancelledError:
             # If request is sent, the response must be received before reraising cancel
             try:

@@ -6,10 +6,6 @@ Bot has a chance to win against elite (=Difficulty.VeryHard) zerg AI
 Bot made by Burny
 """
 
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 import random
 from typing import Set
 
@@ -121,7 +117,7 @@ class MassReaperBot(BotAI):
                         if workers:  # same condition as above
                             worker: Unit = workers.closest_to(vg)
                             # Caution: the target for the refinery has to be the vespene geyser, not its position!
-                            worker.build(UnitTypeId.REFINERY, vg)
+                            worker.build_gas(vg)
 
                             # Dont build more than one each frame
                             break
@@ -180,7 +176,7 @@ class MassReaperBot(BotAI):
                 continue  # Continue for loop, dont execute any of the following
 
             # Attack is on cooldown, check if grenade is on cooldown, if not then throw it to furthest enemy in range 5
-            reaperGrenadeRange: float = self._game_data.abilities[AbilityId.KD8CHARGE_KD8CHARGE.value]._proto.cast_range
+            reaperGrenadeRange: float = self.game_data.abilities[AbilityId.KD8CHARGE_KD8CHARGE.value]._proto.cast_range
             enemyGroundUnitsInGrenadeRange: Units = enemies_can_attack.filter(
                 lambda unit: not unit.is_structure and not unit.is_flying and unit.type_id not in
                 {UnitTypeId.LARVA, UnitTypeId.EGG} and unit.distance_to(r) < reaperGrenadeRange

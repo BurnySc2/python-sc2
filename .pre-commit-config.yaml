@@ -59,7 +59,7 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.0.1
   hooks:
-  # Check if python files are vlaid
+  # Check if python files are valid
   - id: check-ast
   - id: check-builtin-literals
   - id: check-docstring-first
@@ -76,13 +76,14 @@ repos:
 
 - repo: local
   hooks:
-# TODO too many problems require change
-#  - id: pylint
-#    name: pylint
-#    stages: [commit]
-#    language: system
-#    entry: poetry run pylint
-#    types: [python]
+# TODO Fix problems in examples subfolder
+  - id: pylint
+    name: pylint
+    stages: [commit]
+    language: system
+    entry: poetry run pylint sc2
+    types: [python]
+    pass_filenames: false
 
 # TODO Types before enabling this
 #  # Run mypy type checks

@@ -128,7 +128,7 @@ async def _play_game_human(client, player_id, realtime, game_time_limit):
             await client.step()
 
 
-# pylint: disable=R0912,R0911
+# pylint: disable=R0912,R0911,R0914
 async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_time_limit):
     if realtime:
         assert step_time_limit is None
@@ -170,7 +170,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
     game_info = await client.get_game_info()
     ping_response = await client.ping()
 
-    # This game_data will become self._game_data in botAI
+    # This game_data will become self.game_data in botAI
     ai._prepare_start(
         client, player_id, game_info, game_data, realtime=realtime, base_build=ping_response.ping.base_build
     )
@@ -186,6 +186,8 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
         await ai.on_before_start()
         ai._prepare_first_step()
         await ai.on_start()
+    # TODO Catching too general exception Exception (broad-except)
+    # pylint: disable=W0703
     except Exception:
         logger.exception("AI on_start threw an error")
         logger.error("resigning due to previous error")
@@ -195,6 +197,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
     iteration = 0
     # Only used in realtime=True
     previous_state_observation = None
+    # pylint: disable=R1702
     while True:
         if iteration != 0:
             if realtime:
@@ -215,9 +218,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
             if client._game_result:
                 try:
                     await ai.on_end(client._game_result[player_id])
-                except TypeError as error:
-                    # print(f"caught type error {error}")
-                    # print(f"return {client._game_result[player_id]}")
+                except TypeError:
                     return client._game_result[player_id]
                 return client._game_result[player_id]
             gs = GameState(state.observation, previous_state_observation)
@@ -284,6 +285,8 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
                         time_window.clear()
 
                     await ai._after_step()
+        # TODO Catching too general exception Exception (broad-except)
+        # pylint: disable=W0703
         except Exception as e:
             if isinstance(e, ProtocolError) and e.is_game_over_error:
                 if realtime:
@@ -300,9 +303,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
             logger.error("Resigning due to previous error")
             try:
                 await ai.on_end(Result.Defeat)
-            except TypeError as error:
-                # print(f"caught type error {error}")
-                # print(f"return {Result.Defeat}")
+            except TypeError:
                 return Result.Defeat
             return Result.Defeat
 
@@ -319,7 +320,7 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
 
 
 async def _play_game(
-    player,
+    player: AbstractPlayer,
     client: Client,
     realtime,
     portconfig,
@@ -347,7 +348,6 @@ async def _play_game(
     return result
 
 
-# pylint: disable=R0912,0911
 async def _play_replay(client, ai, realtime=False, player_id=0):
     ai._initialize_variables()
 
@@ -371,6 +371,8 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
     ai._prepare_first_step()
     try:
         await ai.on_start()
+    # TODO Catching too general exception Exception (broad-except)
+    # pylint: disable=W0703
     except Exception:
         logger.exception("AI on_start threw an error")
         logger.error("resigning due to previous error")
@@ -409,14 +411,12 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
             await ai.on_step(iteration)
             await ai._after_step()
 
+        # pylint: disable=W0703
+        # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             if isinstance(e, ProtocolError) and e.is_game_over_error:
                 if realtime:
                     return None
-                # result = client._game_result[player_id]
-                # if result is None:
-                #     logger.error("Game over, but no results gathered")
-                #     raise
                 await ai.on_end(Result.Victory)
                 return None
             # NOTE: this message is caught by pytest suite
@@ -425,9 +425,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
             logger.error("Resigning due to previous error")
             try:
                 await ai.on_end(Result.Defeat)
-            except TypeError as error:
-                # print(f"caught type error {error}")
-                # print(f"return {Result.Defeat}")
+            except TypeError:
                 return Result.Defeat
             return Result.Defeat
 
@@ -802,6 +800,8 @@ def run_multiple_games(matches: List[GameMatch]):
     return asyncio.get_event_loop().run_until_complete(a_run_multiple_games(matches))
 
 
+# TODO Catching too general exception Exception (broad-except)
+# pylint: disable=W0703
 async def a_run_multiple_games(matches: List[GameMatch]):
     """Run multiple matches.
     Non-python bots are supported.
@@ -821,6 +821,7 @@ async def a_run_multiple_games(matches: List[GameMatch]):
         except SystemExit as e:
             logger.info(f"Game exit'ed as {e} during match {m}")
         except Exception as e:
+            # pylint: disable=W0703
             logger.info(f"Exception {e} thrown in match {m}")
         finally:
             if dont_restart:  # Keeping them alive after a non-computer match can cause crashes
@@ -830,6 +831,8 @@ async def a_run_multiple_games(matches: List[GameMatch]):
     return results
 
 
+# TODO Catching too general exception Exception (broad-except)
+# pylint: disable=W0703
 async def a_run_multiple_games_nokill(matches: List[GameMatch]):
     """Run multiple matches while reusing SCII processes.
     Prone to crashes and stalls
@@ -857,6 +860,8 @@ async def a_run_multiple_games_nokill(matches: List[GameMatch]):
                     await c.ping()
                     if c._status != Status.launched:
                         await c._execute(leave_game=sc_pb.RequestLeaveGame())
+                # pylint: disable=W0703
+                # TODO Catching too general exception Exception (broad-except)
                 except Exception as e:
                     if not (isinstance(e, ProtocolError) and e.is_game_over_error):
                         logger.info(f"controller {c.__dict__} threw {e}")

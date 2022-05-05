@@ -3,8 +3,9 @@ from __future__ import annotations
 
 import random
 import warnings
+from functools import cached_property
 from itertools import chain
-from typing import TYPE_CHECKING, Any, Dict, Generator, List, Optional, Set, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, Generator, Iterable, List, Optional, Set, Tuple, Union
 
 import numpy as np
 
@@ -24,7 +25,8 @@ class Units(list):
 
     @classmethod
     def from_proto(cls, units, bot_object: BotAI):
-        return cls((Unit(u, bot_object=bot_object) for u in units))
+        # pylint: disable=E1120
+        return cls((Unit(raw_unit, bot_object=bot_object) for raw_unit in units))
 
     def __init__(self, units, bot_object: BotAI):
         """
@@ -557,7 +559,7 @@ class Units(list):
             " 'self.units.same_tech({UnitTypeId.LAIR})'"
         )
         tech_alias_types: Set[int] = {u.value for u in other}
-        unit_data = self._bot_object._game_data.units
+        unit_data = self._bot_object.game_data.units
         for unitType in other:
             for same in unit_data[unitType.value]._proto.tech_alias:
                 tech_alias_types.add(same)
@@ -566,7 +568,7 @@ class Units(list):
             any(same in tech_alias_types for same in unit._type_data._proto.tech_alias)
         )
 
-    def same_unit(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
+    def same_unit(self, other: Union[UnitTypeId, Iterable[UnitTypeId]]) -> Units:
         """
         Returns all units that have the same base unit while being in different modes.
 
@@ -590,7 +592,7 @@ class Units(list):
         if isinstance(other, UnitTypeId):
             other = {other}
         unit_alias_types: Set[int] = {u.value for u in other}
-        unit_data = self._bot_object._game_data.units
+        unit_data = self._bot_object.game_data.units
         for unitType in other:
             unit_alias_types.add(unit_data[unitType.value]._proto.unit_alias)
         unit_alias_types.discard(0)
@@ -599,7 +601,7 @@ class Units(list):
             unit_alias_types
         )
 
-    @property
+    @cached_property
     def center(self) -> Point2:
         """ Returns the central position of all units. """
         assert self, "Units object is empty"

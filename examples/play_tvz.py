@@ -1,3 +1,7 @@
+"""
+This script let's you play as human against a simple zerg rush bot.
+"""
+
 from examples.zerg.zerg_rush import ZergRushBot
 from sc2 import maps
 from sc2.data import Race
