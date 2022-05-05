@@ -1,6 +1,10 @@
 """
 This script makes sure to run all bots in the examples folder to check if they can launch.
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from importlib import import_module
 from pathlib import Path

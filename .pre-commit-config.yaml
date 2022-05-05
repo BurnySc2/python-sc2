@@ -45,17 +45,6 @@ repos:
     files: \.(py)$
     args: [--settings-path=pyproject.toml]
 
-# Autoformat code
-- repo: local
-  hooks:
-  - id: yapf
-    name: yapf
-    stages: [commit]
-    language: system
-    entry: poetry run yapf -i
-    types: [python]
-    exclude: setup.py
-
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.0.1
   hooks:
@@ -76,7 +65,16 @@ repos:
 
 - repo: local
   hooks:
-# TODO Fix problems in examples subfolder
+  # Autoformat code
+  - id: yapf
+    name: yapf
+    stages: [commit]
+    language: system
+    entry: poetry run yapf -i
+    types: [python]
+    exclude: setup.py
+
+  # TODO Fix problems in examples subfolder
   - id: pylint
     name: pylint
     stages: [commit]
