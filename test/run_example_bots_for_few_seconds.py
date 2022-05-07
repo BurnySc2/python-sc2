@@ -3,6 +3,7 @@ This script makes sure to run all bots in the examples folder to check if they c
 """
 import os
 import sys
+from itertools import combinations
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -131,30 +132,29 @@ for bot_info in bot_infos:
         assert result == Result.Tie, f"{result} in bot vs computer: {bot_class} in realtime={realtime}"
 
 # Run bots against each other
-for bot_info1 in bot_infos:
+for bot_info1, bot_info2 in combinations(bot_infos, 2):
     bot_race1: Race = bot_info1["race"]
     bot_path: str = bot_info1["path"]
     bot_class_name: str = bot_info1["bot_class_name"]
     module = import_module(bot_path)
     bot_class1: Type[BotAI] = getattr(module, bot_class_name)
 
-    for bot_info2 in bot_infos:
-        bot_race2: Race = bot_info2["race"]
-        bot_path: str = bot_info2["path"]
-        bot_class_name: str = bot_info2["bot_class_name"]
-        module = import_module(bot_path)
-        bot_class2: Type[BotAI] = getattr(module, bot_class_name)
+    bot_race2: Race = bot_info2["race"]
+    bot_path: str = bot_info2["path"]
+    bot_class_name: str = bot_info2["bot_class_name"]
+    module = import_module(bot_path)
+    bot_class2: Type[BotAI] = getattr(module, bot_class_name)
 
-        for realtime in [True, False]:
-            result: Result = run_game(
-                maps.get("Acropolis"),
-                [
-                    Bot(bot_race1, bot_class1()),
-                    Bot(bot_race2, bot_class2()),
-                ],
-                realtime=realtime,
-                game_time_limit=game_time_limit_bot_vs_bot_realtime if realtime else game_time_limit_bot_vs_bot,
-            )
-            assert result == [
-                Result.Tie, Result.Tie
-            ], f"{result} in bot vs bot: {bot_class1} vs {bot_class2} in realtime={realtime}"
+    for realtime in [True, False]:
+        result: Result = run_game(
+            maps.get("Acropolis"),
+            [
+                Bot(bot_race1, bot_class1()),
+                Bot(bot_race2, bot_class2()),
+            ],
+            realtime=realtime,
+            game_time_limit=game_time_limit_bot_vs_bot_realtime if realtime else game_time_limit_bot_vs_bot,
+        )
+        assert result == [
+            Result.Tie, Result.Tie
+        ], f"{result} in bot vs bot: {bot_class1} vs {bot_class2} in realtime={realtime}"

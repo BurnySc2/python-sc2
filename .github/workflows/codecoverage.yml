@@ -1,0 +1,75 @@
+# If you change the name, change the link on  the README.md for the badge too
+name: Code coverage and radon
+
+# Only run if files in the given path have changed
+on:
+  push:
+    paths:
+    - sc2/**
+  pull_request:
+    paths:
+    - sc2/**
+
+jobs:
+  run_coverage:
+    # Run and upload coverage report using python 3.9
+    # This coverage test does not cover the whole testing range, check /bat_files/rune_code_coverage.bat
+    name: Run coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: ['3.9']
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
+
+    - name: Run poetry coverage
+      run: |
+        poetry run pytest --cov=./
+
+    - name: Generate html coverage files in htmlcov/ folder
+      run: |
+        poetry run coverage html
+
+    - name: Upload htmlcov/ folder as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: Coverage_report
+        path: htmlcov
+
+  run_radon:
+    # Output a cyclomatic complexity report of the project
+    name: Run radon
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        python-version: ['3.9']
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
+
+    - name: Run poetry radon
+      run: |
+        poetry run radon cc sc2/ -a -nb
