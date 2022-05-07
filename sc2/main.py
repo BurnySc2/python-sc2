@@ -7,7 +7,7 @@ import signal
 import sys
 import time
 from dataclasses import dataclass
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 import async_timeout
 import mpyq
@@ -591,20 +591,24 @@ def get_replay_version(replay_path):
         return metadata["BaseBuild"], metadata["DataVersion"]
 
 
-def run_game(map_settings, players, **kwargs):
+def run_game(map_settings, players, **kwargs) -> Union[Result, List[Optional[Result]]]:
+    """
+    Returns a single Result enum if the game was against the built-in computer.
+    Returns a list of two Result enums if the game was "Human vs Bot" or "Bot vs Bot".
+    """
     if sum(isinstance(p, (Human, Bot)) for p in players) > 1:
         host_only_args = ["save_replay_as", "rgb_render_config", "random_seed", "sc2_version", "disable_fog"]
         join_kwargs = {k: v for k, v in kwargs.items() if k not in host_only_args}
 
         portconfig = Portconfig()
-        result = asyncio.get_event_loop().run_until_complete(
+        result: List[Result] = asyncio.get_event_loop().run_until_complete(
             asyncio.gather(
                 _host_game(map_settings, players, **kwargs, portconfig=portconfig),
                 _join_game(players, **join_kwargs, portconfig=portconfig),
             )
         )
     else:
-        result = asyncio.get_event_loop().run_until_complete(_host_game(map_settings, players, **kwargs))
+        result: Result = asyncio.get_event_loop().run_until_complete(_host_game(map_settings, players, **kwargs))
     return result
 
 
