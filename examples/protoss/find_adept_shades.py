@@ -1,7 +1,5 @@
 import math
 
-from loguru import logger
-
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
@@ -37,7 +35,8 @@ class FindAdeptShadesBot(BotAI):
                 adept = self.units.find_by_tag(adept_tag)
                 shade = self.units.find_by_tag(shade_tag)
                 if shade:
-                    logger.info(f"Remaining shade time: {shade.buff_duration_remain} / {shade.buff_duration_max}")
+                    # logger.info(f"Remaining shade time: {shade.buff_duration_remain} / {shade.buff_duration_max}")
+                    pass
                 if adept and shade:
                     self.client.debug_line_out(adept, shade, (0, 255, 0))
             # logger.info(self.shades_mapping)

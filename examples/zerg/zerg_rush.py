@@ -16,6 +16,9 @@ from sc2.units import Units
 
 class ZergRushBot(BotAI):
 
+    def __init__(self):
+        self.on_end_called = False
+
     async def on_start(self):
         self.client.game_step = 2
 
@@ -131,6 +134,7 @@ class ZergRushBot(BotAI):
             self.client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
     async def on_end(self, game_result: Result):
+        self.on_end_called = True
         print(f"{self.time_formatted} On end was called")
 
 

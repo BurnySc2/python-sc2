@@ -82,7 +82,7 @@ class GameMatch:
         p1 = p1.name if p1.name else p1
         p2 = self.players[1]
         p2 = p2.name if p2.name else p2
-        return f"Map: {self.map_sc2.name}, {p1} vs {p2}, realtime:{self.realtime}, seed={self.random_seed}"
+        return f"Map: {self.map_sc2.name}, {p1} vs {p2}, realtime={self.realtime}, seed={self.random_seed}"
 
 
 class SlidingTimeWindow:
@@ -198,7 +198,6 @@ async def _play_game_ai(client, player_id, ai, realtime, game_time_limit):
 
         logger.debug(f"Running AI step, it={iteration} {gs.game_loop / 22.4:.2f}s")
 
-        # try:
         # Issue event like unit created or unit destroyed
         await ai.issue_events()
         await ai.on_step(iteration)
@@ -485,6 +484,7 @@ def get_replay_version(replay_path):
         return metadata["BaseBuild"], metadata["DataVersion"]
 
 
+# TODO Deprecate run_game function in favor of a_run_multiple_games and a_run_multiple_games_nokill
 def run_game(map_settings, players, **kwargs) -> Union[Result, List[Optional[Result]]]:
     """
     Returns a single Result enum if the game was against the built-in computer.
@@ -700,13 +700,13 @@ def run_multiple_games(matches: List[GameMatch]):
 
 # TODO Catching too general exception Exception (broad-except)
 # pylint: disable=W0703
-async def a_run_multiple_games(matches: List[GameMatch]):
+async def a_run_multiple_games(matches: List[GameMatch]) -> List[Dict[AbstractPlayer, Result]]:
     """Run multiple matches.
     Non-python bots are supported.
     When playing bot vs bot, this is less likely to fatally crash than repeating run_game()
     """
     if not matches:
-        return
+        return []
 
     results = []
     controllers = []
@@ -719,7 +719,6 @@ async def a_run_multiple_games(matches: List[GameMatch]):
         except SystemExit as e:
             logger.info(f"Game exit'ed as {e} during match {m}")
         except Exception as e:
-            # pylint: disable=W0703
             logger.info(f"Exception {e} thrown in match {m}")
         finally:
             if dont_restart:  # Keeping them alive after a non-computer match can cause crashes
@@ -731,19 +730,19 @@ async def a_run_multiple_games(matches: List[GameMatch]):
 
 # TODO Catching too general exception Exception (broad-except)
 # pylint: disable=W0703
-async def a_run_multiple_games_nokill(matches: List[GameMatch]):
+async def a_run_multiple_games_nokill(matches: List[GameMatch]) -> List[Dict[AbstractPlayer, Result]]:
     """Run multiple matches while reusing SCII processes.
     Prone to crashes and stalls
     """
     # FIXME: check whether crashes between bot-vs-bot are avoidable or not
     if not matches:
-        return
+        return []
 
     # Start the matches
     results = []
     controllers = []
     for m in matches:
-        logger.info(f"Starting match {1 + len(results)}: {m}")
+        logger.info(f"Starting match {1 + len(results)} / {len(matches)}: {m}")
         result = None
         try:
             await maintain_SCII_count(m.needed_sc2_count, controllers, m.sc2_config)
@@ -758,8 +757,6 @@ async def a_run_multiple_games_nokill(matches: List[GameMatch]):
                     await c.ping()
                     if c._status != Status.launched:
                         await c._execute(leave_game=sc_pb.RequestLeaveGame())
-                # pylint: disable=W0703
-                # TODO Catching too general exception Exception (broad-except)
                 except Exception as e:
                     if not (isinstance(e, ProtocolError) and e.is_game_over_error):
                         logger.info(f"controller {c.__dict__} threw {e}")
