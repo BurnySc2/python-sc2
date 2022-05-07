@@ -7,7 +7,6 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from importlib import import_module
-from pathlib import Path
 from typing import Type
 
 from sc2 import maps
@@ -124,4 +123,4 @@ for bot_info in bot_paths:
         realtime=False,
         game_time_limit=game_time_limit,
     )
-    assert result == Result.Tie
+    assert result == Result.Tie, f"{result}"

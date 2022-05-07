@@ -40,7 +40,7 @@ pyglet = "^1.5.21"
 mpyq = "^0.2.5"
 typing-extensions = "^4.1.1"
 win32-setctime = "^1.0.3"
-importlib-metadata = "<=2.1.0"
+importlib-metadata = "^4.10"
 loguru = "^0.6.0"
 # Required for windows
 six = "^1.16.0"
@@ -54,14 +54,14 @@ pytest-cov = "^3.0.0"
 coverage = "^6.0"
 codecov = "^2.1.12"
 hypothesis = "^6.23.1"
-Sphinx = "^4.2.0"
-sphinx-autodoc-typehints = "^1.12.0"
+Sphinx = "^4.5"
+sphinx-autodoc-typehints = "^1.18"
 Pillow = "^8.3.2"
 matplotlib = "^3.4.3"
 radon = "^5.1.0"
 pre-commit = "^2.15.0"
 yapf = "^0.32.0"
-mypy = "^0.942"
+mypy = "^0.950"
 pylint = "^2.11.1"
 
 [build-system]
@@ -114,3 +114,4 @@ based_on_style = "pep8"
 column_limit = 120
 split_arguments_when_comma_terminated = true
 dedent_closing_brackets = true
+allow_split_before_dict_value = false

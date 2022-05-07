@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections import OrderedDict
 from threading import RLock
 from typing import TYPE_CHECKING, Any, Iterable, Union
@@ -27,12 +29,12 @@ class ExpiringDict(OrderedDict):
                     print("test is not anymore in dict")
     """
 
-    def __init__(self, bot: "BotAI", max_age_frames: int = 1):
+    def __init__(self, bot: BotAI, max_age_frames: int = 1):
         assert max_age_frames >= -1
         assert bot
 
         OrderedDict.__init__(self)
-        self.bot: "BotAI" = bot
+        self.bot: BotAI = bot
         self.max_age: Union[int, float] = max_age_frames
         self.lock: RLock = RLock()
 
