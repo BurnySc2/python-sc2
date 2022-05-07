@@ -84,5 +84,5 @@ class Protocol:
     async def quit(self):
         try:
             await self._execute(quit=sc_pb.RequestQuit())
-        except ConnectionAlreadyClosed:
+        except (ConnectionAlreadyClosed, ConnectionResetError):
             pass

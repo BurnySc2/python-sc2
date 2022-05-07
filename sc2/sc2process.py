@@ -32,7 +32,7 @@ class kill_switch:
         logger.info(f"kill_switch: Process cleanup for {len(cls._to_kill)} processes")
         for p in cls._to_kill:
             # pylint: disable=W0212
-            p._clean()
+            p._clean(verbose=False)
 
 
 class SC2Process:
@@ -235,8 +235,10 @@ class SC2Process:
         if self._session is not None:
             await self._session.close()
 
-    def _clean(self):
-        logger.info("Cleaning up...")
+    # pylint: disable=R0912
+    def _clean(self, verbose=True):
+        if verbose:
+            logger.info("Cleaning up...")
 
         if self._process is not None:
             if paths.PF in {"WSL1", "WSL2"}:
@@ -269,4 +271,5 @@ class SC2Process:
         if self._used_portpicker and self._port is not None:
             portpicker.return_port(self._port)
             self._port = None
-        logger.info("Cleanup complete")
+        if verbose:
+            logger.info("Cleanup complete")

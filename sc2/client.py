@@ -16,7 +16,7 @@ from sc2.game_info import GameInfo
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.position import Point2, Point3
-from sc2.protocol import Protocol, ProtocolError
+from sc2.protocol import ConnectionAlreadyClosed, Protocol, ProtocolError
 from sc2.renderer import Renderer
 from sc2.unit import Unit
 from sc2.units import Units
@@ -102,7 +102,7 @@ class Client(Protocol):
         return result.join_game.player_id
 
     async def leave(self):
-        """ You can use 'await self._client.leave()' to surrender midst game. """
+        """ You can use 'await self.client.leave()' to surrender midst game. """
         is_resign = self._game_result is None
 
         if is_resign:
@@ -115,7 +115,7 @@ class Client(Protocol):
                 await self.save_replay(self.save_replay_path)
                 self.save_replay_path = None
             await self._execute(leave_game=sc_pb.RequestLeaveGame())
-        except ProtocolError:
+        except (ProtocolError, ConnectionAlreadyClosed):
             if is_resign:
                 raise
 

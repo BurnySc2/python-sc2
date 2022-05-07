@@ -5,11 +5,9 @@ import os
 import platform
 import signal
 import sys
-import time
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Union
 
-import async_timeout
 import mpyq
 import portpicker
 import six
@@ -120,8 +118,8 @@ async def _play_game_human(client, player_id, realtime, game_time_limit):
         if client._game_result:
             return client._game_result[player_id]
 
-        if game_time_limit and (state.observation.observation.game_loop * 0.725 * (1 / 16)) > game_time_limit:
-            print(state.observation.game_loop, state.observation.game_loop * 0.14)
+        if game_time_limit and state.observation.observation.game_loop / 22.4 > game_time_limit:
+            print(state.observation.game_loop, state.observation.game_loop * (1 / 22.4))
             return Result.Tie
 
         if not realtime:
@@ -129,40 +127,7 @@ async def _play_game_human(client, player_id, realtime, game_time_limit):
 
 
 # pylint: disable=R0912,R0911,R0914
-async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_time_limit):
-    if realtime:
-        assert step_time_limit is None
-
-    # step_time_limit works like this:
-    # * If None, then step time is not limited
-    # * If given integer or float, the bot will simpy resign if any step takes longer than that
-    # * Otherwise step_time_limit must be an object, with following settings:
-    #
-    # Key         | Value      | Description
-    # ------------|------------|-------------
-    # penalty     | None       | No penalty, the bot can continue on next step
-    # penalty     | N: int     | Cooldown penalty, BotAI.on_step will not be called for N steps
-    # penalty     | "resign"   | Bot resigns when going over time limit
-    # time_limit  | int/float  | Time limit for a single step
-    # window_size | N: int     | The time limit will be used for last N steps, instad of 1
-    #
-    # Cooldown is a harsh penalty. The both loses the ability to act, but even worse,
-    # the observation data from skipped steps is also lost. It's like falling asleep in
-    # a middle of the game.
-    time_penalty_cooldown = 0
-    if step_time_limit is None:
-        time_limit = None
-        time_window = None
-        time_penalty = None
-    elif isinstance(step_time_limit, (int, float)):
-        time_limit = float(step_time_limit)
-        time_window = SlidingTimeWindow(1)
-        time_penalty = "resign"
-    else:
-        assert isinstance(step_time_limit, dict)
-        time_penalty = step_time_limit.get("penalty", None)
-        time_window = SlidingTimeWindow(int(step_time_limit.get("window_size", 1)))
-        time_limit = float(step_time_limit.get("time_limit", None))
+async def _play_game_ai(client, player_id, ai, realtime, game_time_limit):
 
     ai._initialize_variables()
 
@@ -225,89 +190,22 @@ async def _play_game_ai(client, player_id, ai, realtime, step_time_limit, game_t
             previous_state_observation = None
             logger.debug(f"Score: {gs.score.score}")
 
-            if game_time_limit and (gs.game_loop * 0.725 * (1 / 16)) > game_time_limit:
+            if game_time_limit and gs.game_loop / 22.4 > game_time_limit:
                 await ai.on_end(Result.Tie)
                 return Result.Tie
             proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
             ai._prepare_step(gs, proto_game_info)
 
-        logger.debug(f"Running AI step, it={iteration} {gs.game_loop * 0.725 * (1 / 16):.2f}s")
+        logger.debug(f"Running AI step, it={iteration} {gs.game_loop / 22.4:.2f}s")
 
-        try:
-            if realtime:
-                # Issue event like unit created or unit destroyed
-                await ai.issue_events()
-                await ai.on_step(iteration)
-                await ai._after_step()
-            else:
-                if time_penalty_cooldown > 0:
-                    time_penalty_cooldown -= 1
-                    logger.warning(f"Running AI step: penalty cooldown: {time_penalty_cooldown}")
-                    iteration -= 1  # Do not increment the iteration on this round
-                elif time_limit is None:
-                    # Issue event like unit created or unit destroyed
-                    await ai.issue_events()
-                    await ai.on_step(iteration)
-                    await ai._after_step()
-                else:
-                    out_of_budget = False
-                    budget = time_limit - time_window.available
-
-                    # Tell the bot how much time it has left attribute
-                    ai.time_budget_available = budget
-
-                    if budget < 0:
-                        logger.warning("Running AI step: out of budget before step")
-                        step_time = 0.0
-                        out_of_budget = True
-                    else:
-                        step_start = time.monotonic()
-                        try:
-                            async with async_timeout.timeout(budget):
-                                await ai.issue_events()
-                                await ai.on_step(iteration)
-                        except asyncio.TimeoutError:
-                            step_time = time.monotonic() - step_start
-                            logger.warning(
-                                "Running AI step: out of budget; " +
-                                f"budget={budget:.2f}, steptime={step_time:.2f}, " +
-                                f"window={time_window.available_fmt}"
-                            )
-                            out_of_budget = True
-                        step_time = time.monotonic() - step_start
-
-                    time_window.push(step_time)
-
-                    if out_of_budget and time_penalty is not None:
-                        if time_penalty == "resign":
-                            raise RuntimeError("Out of time")
-                        time_penalty_cooldown = int(time_penalty)
-                        time_window.clear()
-
-                    await ai._after_step()
-        # TODO Catching too general exception Exception (broad-except)
-        # pylint: disable=W0703
-        except Exception as e:
-            if isinstance(e, ProtocolError) and e.is_game_over_error:
-                if realtime:
-                    return None
-                result = client._game_result[player_id]
-                if result is None:
-                    logger.error("Game over, but no results gathered")
-                    raise
-                await ai.on_end(result)
-                return result
-            # NOTE: this message is caught by pytest suite
-            logger.exception("AI step threw an error")  # DO NOT EDIT!
-            logger.error(f"Error: {e}")
-            logger.error("Resigning due to previous error")
-            try:
-                await ai.on_end(Result.Defeat)
-            except TypeError:
-                return Result.Defeat
-            return Result.Defeat
+        # try:
+        # Issue event like unit created or unit destroyed
+        await ai.issue_events()
+        await ai.on_step(iteration)
+        await ai._after_step()
 
         logger.debug("Running AI step: done")
+        # TODO call await ai.on_end(Result.Defeat) or await ai.on_end(result)
 
         if not realtime:
             if not client.in_game:  # Client left (resigned) the game
@@ -324,7 +222,6 @@ async def _play_game(
     client: Client,
     realtime,
     portconfig,
-    step_time_limit=None,
     game_time_limit=None,
     rgb_render_config=None
 ) -> Result:
@@ -338,7 +235,7 @@ async def _play_game(
     if isinstance(player, Human):
         result = await _play_game_human(client, player_id, realtime, game_time_limit)
     else:
-        result = await _play_game_ai(client, player_id, player.ai, realtime, step_time_limit, game_time_limit)
+        result = await _play_game_ai(client, player_id, player.ai, realtime, game_time_limit)
 
     logger.info(
         f"Result for player {player_id} - {player.name if player.name else str(player)}: "
@@ -461,7 +358,6 @@ async def _host_game(
     realtime=False,
     portconfig=None,
     save_replay_as=None,
-    step_time_limit=None,
     game_time_limit=None,
     rgb_render_config=None,
     random_seed=None,
@@ -485,17 +381,14 @@ async def _host_game(
         if not isinstance(players[0], Human) and getattr(players[0].ai, "raw_affects_selection", None) is not None:
             client.raw_affects_selection = players[0].ai.raw_affects_selection
 
+        result = await _play_game(players[0], client, realtime, portconfig, game_time_limit, rgb_render_config)
+        if client.save_replay_path is not None:
+            await client.save_replay(client.save_replay_path)
         try:
-            result = await _play_game(
-                players[0], client, realtime, portconfig, step_time_limit, game_time_limit, rgb_render_config
-            )
-            if client.save_replay_path is not None:
-                await client.save_replay(client.save_replay_path)
             await client.leave()
-            await client.quit()
         except ConnectionAlreadyClosed:
             logger.error("Connection was closed before the game ended")
-            return None
+        await client.quit()
 
         return result
 
@@ -506,7 +399,6 @@ async def _host_game_aiter(
     realtime,
     portconfig=None,
     save_replay_as=None,
-    step_time_limit=None,
     game_time_limit=None,
 ):
     assert players, "Can't create a game without players"
@@ -522,7 +414,7 @@ async def _host_game_aiter(
                 client.raw_affects_selection = players[0].ai.raw_affects_selection
 
             try:
-                result = await _play_game(players[0], client, realtime, portconfig, step_time_limit, game_time_limit)
+                result = await _play_game(players[0], client, realtime, portconfig, game_time_limit)
 
                 if save_replay_as is not None:
                     await client.save_replay(save_replay_as)
@@ -548,7 +440,6 @@ async def _join_game(
     realtime,
     portconfig,
     save_replay_as=None,
-    step_time_limit=None,
     game_time_limit=None,
 ):
     async with SC2Process(fullscreen=players[1].fullscreen) as server:
@@ -559,15 +450,14 @@ async def _join_game(
         if not isinstance(players[1], Human) and getattr(players[1].ai, "raw_affects_selection", None) is not None:
             client.raw_affects_selection = players[1].ai.raw_affects_selection
 
+        result = await _play_game(players[1], client, realtime, portconfig, game_time_limit)
+        if save_replay_as is not None:
+            await client.save_replay(save_replay_as)
         try:
-            result = await _play_game(players[1], client, realtime, portconfig, step_time_limit, game_time_limit)
-            if save_replay_as is not None:
-                await client.save_replay(save_replay_as)
             await client.leave()
-            await client.quit()
         except ConnectionAlreadyClosed:
             logger.error("Connection was closed before the game ended")
-            return None
+        await client.quit()
 
         return result
 
@@ -739,7 +629,7 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
     """Modifies the given list of controllers to reflect the desired amount of SCII processes"""
     # kill unhealthy ones.
     if controllers:
-        toRemove = []
+        to_remove = []
         alive = await asyncio.wait_for(
             asyncio.gather(*(c.ping() for c in controllers if not c._ws.closed), return_exceptions=True), timeout=20
         )
@@ -748,16 +638,16 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
             if controller._ws.closed:
                 if not controller._process._session.closed:
                     await controller._process._session.close()
-                toRemove.append(controller)
+                to_remove.append(controller)
             else:
                 if not isinstance(alive[i], sc_pb.Response):
                     try:
                         await controller._process._close_connection()
                     finally:
-                        toRemove.append(controller)
+                        to_remove.append(controller)
                 i += 1
-        for c in toRemove:
-            c._process._clean()
+        for c in to_remove:
+            c._process._clean(verbose=False)
             if c._process in kill_switch._to_kill:
                 kill_switch._to_kill.remove(c._process)
             controllers.remove(c)
@@ -772,7 +662,7 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
             index = 0
         extra = [SC2Process(**proc_args[(index + _) % len(proc_args)]) for _ in range(needed)]
         logger.info(f"Creating {needed} more SC2 Processes")
-        for _ in range(3):  # try thrice
+        for _ in range(3):
             if platform.system() == "Linux":
                 # Works on linux: start one client after the other
                 new_controllers = [await asyncio.wait_for(sc.__aenter__(), timeout=50) for sc in extra]
@@ -799,7 +689,7 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
         proc = proc._process
         logger.info(f"Removing SCII listening to {proc._port}")
         await proc._close_connection()
-        proc._clean()
+        proc._clean(verbose=False)
         if proc in kill_switch._to_kill:
             kill_switch._to_kill.remove(proc)
 

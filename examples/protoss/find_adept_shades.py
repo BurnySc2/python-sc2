@@ -21,7 +21,7 @@ class FindAdeptShadesBot(BotAI):
     async def on_start(self):
         self.client.game_step = 2
         await self.client.debug_create_unit(
-            [[UnitTypeId.ADEPT, 10, self.townhalls[0].position.towards(self._game_info.map_center, 5), 1]]
+            [[UnitTypeId.ADEPT, 10, self.townhalls[0].position.towards(self.game_info.map_center, 5), 1]]
         )
 
     async def on_step(self, iteration: int):

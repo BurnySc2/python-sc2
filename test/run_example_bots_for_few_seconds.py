@@ -15,8 +15,11 @@ from sc2.data import Difficulty, Race, Result
 from sc2.main import run_game
 from sc2.player import Bot, Computer
 
-game_time_limit_vs_computer = 30  # 30 seconds in game time
+# Time limit given in seconds of total in game time
+game_time_limit_vs_computer = 30
+game_time_limit_vs_computer_realtime = 5
 game_time_limit_bot_vs_bot = 10
+game_time_limit_bot_vs_bot_realtime = 5
 
 bot_infos = [
     # Protoss
@@ -112,19 +115,20 @@ bot_infos = [
 
 # Run example bots
 for bot_info in bot_infos:
-    bot_race: Race = bot_info["race"]
-    bot_path: str = bot_info["path"]
-    bot_class_name: str = bot_info["bot_class_name"]
-    module = import_module(bot_path)
-    bot_class: Type[BotAI] = getattr(module, bot_class_name)
+    for realtime in [True, False]:
+        bot_race: Race = bot_info["race"]
+        bot_path: str = bot_info["path"]
+        bot_class_name: str = bot_info["bot_class_name"]
+        module = import_module(bot_path)
+        bot_class: Type[BotAI] = getattr(module, bot_class_name)
 
-    result: Result = run_game(
-        maps.get("Acropolis"),
-        [Bot(bot_race, bot_class()), Computer(Race.Protoss, Difficulty.Easy)],
-        realtime=False,
-        game_time_limit=game_time_limit_vs_computer,
-    )
-    assert result == Result.Tie, f"{result}"
+        result: Result = run_game(
+            maps.get("Acropolis"),
+            [Bot(bot_race, bot_class()), Computer(Race.Protoss, Difficulty.Easy)],
+            realtime=realtime,
+            game_time_limit=game_time_limit_vs_computer_realtime if realtime else game_time_limit_vs_computer,
+        )
+        assert result == Result.Tie, f"{result} in bot vs computer: {bot_class} in realtime={realtime}"
 
 # Run bots against each other
 for bot_info1 in bot_infos:
@@ -141,13 +145,16 @@ for bot_info1 in bot_infos:
         module = import_module(bot_path)
         bot_class2: Type[BotAI] = getattr(module, bot_class_name)
 
-        result: Result = run_game(
-            maps.get("Acropolis"),
-            [
-                Bot(bot_race1, bot_class1()),
-                Bot(bot_race2, bot_class2()),
-            ],
-            realtime=False,
-            game_time_limit=game_time_limit_bot_vs_bot,
-        )
-        assert result == [Result.Tie, Result.Tie], f"{result}"
+        for realtime in [True, False]:
+            result: Result = run_game(
+                maps.get("Acropolis"),
+                [
+                    Bot(bot_race1, bot_class1()),
+                    Bot(bot_race2, bot_class2()),
+                ],
+                realtime=realtime,
+                game_time_limit=game_time_limit_bot_vs_bot_realtime if realtime else game_time_limit_bot_vs_bot,
+            )
+            assert result == [
+                Result.Tie, Result.Tie
+            ], f"{result} in bot vs bot: {bot_class1} vs {bot_class2} in realtime={realtime}"
