@@ -11,7 +11,7 @@ from sc2.units import Units
 
 class ProxyRaxBot(BotAI):
 
-    def on_start(self):
+    async def on_start(self):
         self.client.game_step = 2
 
     async def on_step(self, iteration):

@@ -34,7 +34,7 @@ jobs:
         python -m pip install poetry
         poetry install
 
-    - name: Run poetry coverage
+    - name: Run pytest with coverage
       run: |
         poetry run pytest --cov=./
 
