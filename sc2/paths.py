@@ -2,6 +2,7 @@ import os
 import platform
 import re
 import sys
+from contextlib import suppress
 from pathlib import Path
 
 from loguru import logger
@@ -103,13 +104,11 @@ def latest_executeble(versions_dir, base_build=None):
     latest = None
 
     if base_build is not None:
-        try:
+        with suppress(ValueError):
             latest = (
                 int(base_build[4:]),
                 max(p for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith(str(base_build))),
             )
-        except ValueError:
-            pass
 
     if base_build is None or latest is None:
         latest = max((int(p.name[4:]), p) for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith("Base"))

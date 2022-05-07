@@ -1,5 +1,6 @@
 import asyncio
 import sys
+from contextlib import suppress
 
 from aiohttp import ClientWebSocketResponse
 from loguru import logger
@@ -62,7 +63,7 @@ class Protocol:
         return response
 
     async def _execute(self, **kwargs):
-        assert len(kwargs) == 1, "Only one request allowed"
+        assert len(kwargs) == 1, "Only one request allowed by the API"
 
         response = await self.__request(sc_pb.Request(**kwargs))
 
@@ -82,7 +83,5 @@ class Protocol:
         return result
 
     async def quit(self):
-        try:
+        with suppress(ConnectionAlreadyClosed, ConnectionResetError):
             await self._execute(quit=sc_pb.RequestQuit())
-        except (ConnectionAlreadyClosed, ConnectionResetError):
-            pass

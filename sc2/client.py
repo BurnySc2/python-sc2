@@ -126,7 +126,7 @@ class Client(Protocol):
             f.write(result.save_replay.data)
         logger.info(f"Saved replay to {path}")
 
-    async def observation(self, game_loop=None):
+    async def observation(self, game_loop: int = None):
         if game_loop is not None:
             result = await self._execute(observation=sc_pb.RequestObservation(game_loop=game_loop))
         else:

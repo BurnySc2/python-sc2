@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from contextlib import suppress
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import aiohttp
@@ -256,12 +257,10 @@ class SC2Process:
                 logger.error("KILLED")
             # Try to kill wineserver on linux
             if paths.PF in {"Linux", "WineLinux"}:
-                try:
+                # Command wineserver not detected
+                with suppress(FileNotFoundError):
                     with subprocess.Popen(["wineserver", "-k"]) as p:
                         p.wait()
-                # Command wineserver not detected
-                except FileNotFoundError:
-                    pass
 
         if os.path.exists(self._tmp_dir):
             shutil.rmtree(self._tmp_dir)

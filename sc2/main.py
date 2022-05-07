@@ -1,10 +1,13 @@
 # pylint: disable=W0212
+from __future__ import annotations
+
 import asyncio
 import json
 import os
 import platform
 import signal
 import sys
+from contextlib import suppress
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Union
 
@@ -15,6 +18,7 @@ from aiohttp import ClientSession, ClientWebSocketResponse
 from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
+from sc2.bot_ai import BotAI
 from sc2.client import Client
 from sc2.controller import Controller
 from sc2.data import CreateGameError, Result, Status
@@ -85,33 +89,6 @@ class GameMatch:
         return f"Map: {self.map_sc2.name}, {p1} vs {p2}, realtime={self.realtime}, seed={self.random_seed}"
 
 
-class SlidingTimeWindow:
-
-    def __init__(self, size: int):
-        assert size > 0
-
-        self.window_size = size
-        self.window = []
-
-    def push(self, value: float):
-        self.window = (self.window + [value])[-self.window_size:]
-
-    def clear(self):
-        self.window = []
-
-    @property
-    def sum(self) -> float:
-        return sum(self.window)
-
-    @property
-    def available(self) -> float:
-        return sum(self.window[1:])
-
-    @property
-    def available_fmt(self) -> float:
-        return ",".join(f"{w:.2f}" for w in self.window[1:])
-
-
 async def _play_game_human(client, player_id, realtime, game_time_limit):
     while True:
         state = await client.observation()
@@ -119,7 +96,7 @@ async def _play_game_human(client, player_id, realtime, game_time_limit):
             return client._game_result[player_id]
 
         if game_time_limit and state.observation.observation.game_loop / 22.4 > game_time_limit:
-            print(state.observation.game_loop, state.observation.game_loop * (1 / 22.4))
+            logger.info(state.observation.game_loop, state.observation.game_loop / 22.4)
             return Result.Tie
 
         if not realtime:
@@ -127,7 +104,7 @@ async def _play_game_human(client, player_id, realtime, game_time_limit):
 
 
 # pylint: disable=R0912,R0911,R0914
-async def _play_game_ai(client, player_id, ai, realtime, game_time_limit):
+async def _play_game_ai(client: Client, player_id: int, ai: BotAI, realtime: bool, game_time_limit: Optional[int]):
 
     ai._initialize_variables()
 
@@ -155,7 +132,7 @@ async def _play_game_ai(client, player_id, ai, realtime, game_time_limit):
     # pylint: disable=W0703
     except Exception:
         logger.exception("AI on_start threw an error")
-        logger.error("resigning due to previous error")
+        logger.error("Resigning due to previous error")
         await ai.on_end(Result.Defeat)
         return Result.Defeat
 
@@ -167,7 +144,7 @@ async def _play_game_ai(client, player_id, ai, realtime, game_time_limit):
         if iteration != 0:
             if realtime:
                 # On realtime=True, might get an error here: sc2.protocol.ProtocolError: ['Not in a game']
-                try:
+                with suppress(ProtocolError):
                     requested_step = gs.game_loop + client.game_step
                     state = await client.observation(requested_step)
                     # If the bot took too long in the previous observation, request another observation one frame after
@@ -175,16 +152,12 @@ async def _play_game_ai(client, player_id, ai, realtime, game_time_limit):
                         logger.debug("Skipped a step in realtime=True")
                         previous_state_observation = state.observation
                         state = await client.observation(state.observation.observation.game_loop + 1)
-                except ProtocolError:
-                    pass
             else:
                 state = await client.observation()
             # check game result every time we get the observation
             if client._game_result:
-                try:
+                with suppress(TypeError):
                     await ai.on_end(client._game_result[player_id])
-                except TypeError:
-                    return client._game_result[player_id]
                 return client._game_result[player_id]
             gs = GameState(state.observation, previous_state_observation)
             previous_state_observation = None
@@ -204,14 +177,25 @@ async def _play_game_ai(client, player_id, ai, realtime, game_time_limit):
         await ai._after_step()
 
         logger.debug("Running AI step: done")
-        # TODO call await ai.on_end(Result.Defeat) or await ai.on_end(result)
 
         if not realtime:
             if not client.in_game:  # Client left (resigned) the game
                 await ai.on_end(client._game_result[player_id])
                 return client._game_result[player_id]
 
+            # TODO Find fix
+            # If the other bot ends the game, this bot gets stuck in requesting an observation
+            logger.info(f"REMOVEME {player_id} requesting step")
             await client.step()
+            # try:
+            #     await asyncio.wait({asyncio.create_task(client.step())}, timeout=5)
+            # except asyncio.TimeoutError:
+            #     return Result.Defeat
+            # try:
+            #     await asyncio.wait_for(client.step(), timeout=5)
+            # except asyncio.TimeoutError:
+            #     return Result.Defeat
+            logger.info(f"REMOVEME {player_id} requested step")
 
         iteration += 1
 
@@ -574,7 +558,7 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
     proxies = []
     coros = []
     i = 0
-    for player in match.players:
+    for i, player in enumerate(match.players):
         if player.needs_sc2:
             if isinstance(player, BotProcess):
                 pport = portpicker.pick_unused_port()
@@ -595,7 +579,12 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
             i += 1
 
     # async_results = await asyncio.wait_for(asyncio.gather(*coros, return_exceptions=True), timeout=None)
-    async_results = await asyncio.gather(*coros, return_exceptions=True)
+    # TODO Undo
+    # async_results = await asyncio.gather(*coros, return_exceptions=True)
+    async_results = []
+    for task in asyncio.as_completed(coros):
+        result = await task
+        async_results.append(result)
 
     if not isinstance(async_results, list):
         async_results = [async_results]
@@ -606,7 +595,7 @@ async def run_match(controllers: List[Controller], match: GameMatch, close_ws=Tr
     return process_results(match.players, async_results)
 
 
-def process_results(players, async_results):
+def process_results(players: List[AbstractPlayer], async_results: List[Result]):
     opp_res = {Result.Victory: Result.Defeat, Result.Defeat: Result.Victory, Result.Tie: Result.Tie}
     result: Dict[AbstractPlayer, Result] = {}
     i = 0
