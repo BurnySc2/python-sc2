@@ -122,9 +122,9 @@ jobs:
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
 
-  run_examples_bots:
-    # Run test bots that download the SC2 linux client and run it
-    name: Run testbots linux
+  run_example_bots:
+    # Run example bots against computer
+    name: Run example bots against computer
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     strategy:
@@ -155,7 +155,7 @@ jobs:
 
 # TODO Fix in main.py "run_multiple_games" or "a_run_multiple_games" or "a_run_multiple_games_nokill"
 #  run_bot_vs_bot:
-#    # Run test bots that download the SC2 linux client and run it
+#    # Run bot vs bot
 #    name: Run example bots against each other
 #    runs-on: ${{ matrix.os }}
 #    timeout-minutes: 30
