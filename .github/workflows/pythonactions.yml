@@ -192,7 +192,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    needs: [run_pytest_tests, run_test_bots, run_examples_bots]
+    needs: [run_pytest_tests, run_test_bots, run_example_bots]
 
     steps:
     - uses: actions/checkout@v1
@@ -231,7 +231,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    needs: [run_pytest_tests, run_test_bots, run_examples_bots]
+    needs: [run_pytest_tests, run_test_bots, run_example_bots]
 
     steps:
     - uses: actions/checkout@v1
