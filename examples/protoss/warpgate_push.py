@@ -1,3 +1,5 @@
+from loguru import logger
+
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
@@ -25,7 +27,7 @@ class WarpGateBot(BotAI):
                 placement = await self.find_placement(AbilityId.WARPGATETRAIN_STALKER, pos, placement_step=1)
                 if placement is None:
                     # return ActionResult.CantFindPlacementLocation
-                    print("can't place")
+                    logger.info("can't place")
                     return
                 warpgate.warp_in(UnitTypeId.STALKER, placement)
 

@@ -5,6 +5,7 @@ import itertools
 import math
 import time
 import warnings
+from abc import ABC
 from collections import Counter
 from contextlib import suppress
 from typing import TYPE_CHECKING, Any, Dict, Generator, Iterable, List, Set, Tuple, Union, final
@@ -43,7 +44,7 @@ if TYPE_CHECKING:
     from sc2.game_info import GameInfo
 
 
-class BotAIInternal:
+class BotAIInternal(ABC):
     """Base class for bots."""
 
     @final
@@ -56,7 +57,7 @@ class BotAIInternal:
             # Prevent overwriting the opponent_id which is set here https://github.com/Hannessa/python-sc2-ladderbot/blob/master/__init__.py#L40
             # otherwise set it to None
             self.opponent_id: str = None
-        # Select distance calculation method, see distances.py: _distances_override_functions function
+        # Select distance calculation method, see _distances_override_functions function
         if not hasattr(self, "distance_calculation_method"):
             self.distance_calculation_method: int = 2
         # Select if the Unit.command should return UnitCommand objects. Set this to True if your bot uses 'self.do(unit(ability, target))'
@@ -775,8 +776,11 @@ class BotAIInternal:
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=float,
-                                                  count=2 * self._units_count).reshape((self._units_count, 2))
+        positions_array: np.ndarray = np.fromiter(
+            flat_positions,
+            dtype=float,
+            count=2 * self._units_count,
+        ).reshape((self._units_count, 2))
         assert len(positions_array) == self._units_count
         # See performance benchmarks
         self._cached_pdist = pdist(positions_array, "sqeuclidean")
@@ -789,8 +793,11 @@ class BotAIInternal:
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=float,
-                                                  count=2 * self._units_count).reshape((self._units_count, 2))
+        positions_array: np.ndarray = np.fromiter(
+            flat_positions,
+            dtype=float,
+            count=2 * self._units_count,
+        ).reshape((self._units_count, 2))
         assert len(positions_array) == self._units_count
         # See performance benchmarks
         self._cached_cdist = cdist(positions_array, positions_array, "sqeuclidean")
@@ -802,8 +809,11 @@ class BotAIInternal:
         """ Nearly same as above, but without asserts"""
         self._generated_frame = self.state.game_loop
         flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
-        positions_array: np.ndarray = np.fromiter(flat_positions, dtype=float,
-                                                  count=2 * self._units_count).reshape((-1, 2))
+        positions_array: np.ndarray = np.fromiter(
+            flat_positions,
+            dtype=float,
+            count=2 * self._units_count,
+        ).reshape((-1, 2))
         # See performance benchmarks
         self._cached_cdist = cdist(positions_array, positions_array, "sqeuclidean")
 

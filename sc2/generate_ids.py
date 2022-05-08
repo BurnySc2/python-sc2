@@ -93,11 +93,11 @@ class IdGenerator:
                 key = "_" + key
 
             if key in abilities and v["index"] == 0:
-                print(f"{key} has value 0 and id {v['id']}, overwriting {key}: {abilities[key]}")
+                logger.info(f"{key} has value 0 and id {v['id']}, overwriting {key}: {abilities[key]}")
                 # Commented out to try to fix: 3670 is not a valid AbilityId
                 abilities[key] = v["id"]
             elif key in abilities:
-                print(f"{key} has appeared a second time with id={v['id']}")
+                logger.info(f"{key} has appeared a second time with id={v['id']}")
             else:
                 abilities[key] = v["id"]
 
@@ -169,7 +169,7 @@ class IdGenerator:
             try:
                 subprocess.run(["poetry", "run", "yapf", ids_file_path, "-i"], check=True)
             except FileNotFoundError:
-                print(
+                logger.info(
                     f"Yapf is not installed. Please use 'pip install yapf' to install yapf formatter.\nCould not autoformat file {ids_file_path}"
                 )
 

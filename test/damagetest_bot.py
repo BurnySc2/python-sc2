@@ -53,7 +53,7 @@ class TestBot(BotAI):
 
         # Exit bot
         if iteration > 100:
-            print("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
             exit(0)
 
     async def clean_up_center(self):
@@ -178,8 +178,8 @@ class TestBot(BotAI):
             my_units = self.units | self.structures
             enemy_units = self.enemy_units | self.enemy_structures
             if not my_units or not enemy_units:
-                # print("my units:", my_units)
-                # print("enemy units:",enemy_units)
+                # logger.info("my units:", my_units)
+                # logger.info("enemy units:",enemy_units)
                 return None, None
             attacker: Unit = my_units.closest_to(map_center)
             defender: Unit = enemy_units.closest_to(map_center)
@@ -270,7 +270,7 @@ class TestBot(BotAI):
                         await self._advance_steps(1)
                         attacker, defender = get_attacker_and_defender()
                         # TODO check if shield calculation is correct by setting shield of enemy unit
-                    # print(f"Attacker: {attacker}, defender: {defender}")
+                    # logger.info(f"Attacker: {attacker}, defender: {defender}")
                     do_some_unit_property_tests(attacker, defender)
 
                     # Units have spawned, calculate expected damage
@@ -299,7 +299,7 @@ class TestBot(BotAI):
                         real_damage = math.ceil(
                             defender.health_max + defender.shield_max - defender.health - defender.shield
                         )
-                        # print(
+                        # logger.info(
                         #     f"Attacker type: {attacker_type}, defender health: {defender.health} / {defender.health_max}, defender shield: {defender.shield} / {defender.shield_max}, expected damage: {expected_damage}, real damage so far: {real_damage}, attacker weapon cooldown: {attacker.weapon_cooldown}"
                         # )
                         max_steps -= 1

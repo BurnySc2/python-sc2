@@ -70,7 +70,7 @@ class TestBot(BotAI):
 
         # Exit bot
         if iteration > 100:
-            print("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
             exit(0)
 
     async def clean_up_center(self):
@@ -256,9 +256,9 @@ class TestBot(BotAI):
             for reaper in self.units(UnitTypeId.REAPER):
                 reaper(AbilityId.KD8CHARGE_KD8CHARGE, center)
 
-            # print(f"Effects: {self.state.effects}")
+            # logger.info(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
-                # print(f"Effect: {effect}")
+                # logger.info(f"Effect: {effect}")
                 pass
             # Cleanup
             await self._advance_steps(2)
@@ -281,9 +281,9 @@ class TestBot(BotAI):
             for ravager in self.units(UnitTypeId.RAVAGER):
                 ravager(AbilityId.EFFECT_CORROSIVEBILE, center)
 
-            # print(f"Effects: {self.state.effects}")
+            # logger.info(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
-                # print(f"Effect: {effect}")
+                # logger.info(f"Effect: {effect}")
                 if effect.id == EffectId.RAVAGERCORROSIVEBILECP:
                     success = True
             await self._advance_steps(2)
@@ -432,7 +432,7 @@ class TestBot(BotAI):
             await self._advance_steps(2)
             enemy = self.enemy_units(UnitTypeId.INFESTOR)[0]
             if enemy.buffs:
-                # print(enemy.buffs, enemy.buff_duration_remain, enemy.buff_duration_max)
+                # logger.info(enemy.buffs, enemy.buff_duration_remain, enemy.buff_duration_max)
                 break
 
         logger.warning("Action test 11 successful.")

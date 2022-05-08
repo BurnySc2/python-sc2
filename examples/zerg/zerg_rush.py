@@ -1,4 +1,5 @@
 import numpy as np
+from loguru import logger
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
@@ -137,7 +138,7 @@ class ZergRushBot(BotAI):
 
     async def on_end(self, game_result: Result):
         self.on_end_called = True
-        print(f"{self.time_formatted} On end was called")
+        logger.info(f"{self.time_formatted} On end was called")
 
 
 def main():

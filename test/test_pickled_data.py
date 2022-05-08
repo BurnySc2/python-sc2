@@ -11,7 +11,6 @@ import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
 import lzma
 import pickle
 import random
@@ -20,6 +19,7 @@ from typing import List
 
 from hypothesis import given, settings
 from hypothesis import strategies as st
+from loguru import logger
 
 from sc2.bot_ai import BotAI
 from sc2.data import Race
@@ -773,7 +773,7 @@ def test_dicts():
     try:
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
     except:
-        print(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
+        logger.info(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
 
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
 

@@ -17,6 +17,8 @@ import time
 from pathlib import Path
 from typing import List
 
+from loguru import logger
+
 from sc2.bot_ai import BotAI
 from sc2.game_data import GameData
 from sc2.game_info import GameInfo, Ramp
@@ -85,7 +87,7 @@ class TestClass:
             assert ramp.upper
             assert ramp.lower
             # Test if ramp was detected far away
-            print(ramp.top_center)
+            logger.info(ramp.top_center)
             distance = ramp.top_center.distance_to(bot.game_info.player_start_location)
             assert (
                 distance < 30
@@ -120,7 +122,7 @@ class TestClass:
         t0 = time.perf_counter()
         bot._find_expansion_locations()
         t1 = time.perf_counter()
-        print(f"Time to calculate expansion locations: {t1-t0} s")
+        logger.info(f"Time to calculate expansion locations: {t1-t0} s")
 
         # TODO: Cache all expansion positions for a map and check if it is the same
         # BelShirVestigeLE has only 10 bases - perhaps it should be removed since it was a WOL / HOTS map

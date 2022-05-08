@@ -2,6 +2,7 @@ import random
 from typing import FrozenSet, Set
 
 import numpy as np
+from loguru import logger
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
@@ -111,10 +112,10 @@ class RampWallBot(BotAI):
                 worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
 
     async def on_building_construction_started(self, unit: Unit):
-        print(f"Construction of building {unit} started at {unit.position}.")
+        logger.info(f"Construction of building {unit} started at {unit.position}.")
 
     async def on_building_construction_complete(self, unit: Unit):
-        print(f"Construction of building {unit} completed at {unit.position}.")
+        logger.info(f"Construction of building {unit} completed at {unit.position}.")
 
     def draw_ramp_points(self):
         for ramp in self.game_info.map_ramps:
@@ -132,7 +133,7 @@ class RampWallBot(BotAI):
                 # Identical to above:
                 # p0 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z + 0.25))
                 # p1 = Point3((pos.x + 0.75, pos.y + 0.75, pos.z - 0.25))
-                # print(f"Drawing {p0} to {p1}")
+                # logger.info(f"Drawing {p0} to {p1}")
                 # self.client.debug_box_out(p0, p1, color=color)
 
     def draw_expansions(self):
@@ -157,7 +158,7 @@ class RampWallBot(BotAI):
             pos = Point3((p.x, p.y, h2))
             p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
-            # print(f"Drawing {p0} to {p1}")
+            # logger.info(f"Drawing {p0} to {p1}")
             color = Point3((0, 255, 0))
             self.client.debug_box_out(p0, p1, color=color)
 
@@ -176,7 +177,7 @@ class RampWallBot(BotAI):
             pos = Point3((p.x, p.y, h2))
             p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
-            # print(f"Drawing {p0} to {p1}")
+            # logger.info(f"Drawing {p0} to {p1}")
             color = Point3((0, 255, 0))
             self.client.debug_box_out(p0, p1, color=color)
 
@@ -186,7 +187,7 @@ class RampWallBot(BotAI):
             pos = Point3((p.x, p.y, h2))
             p0 = Point3((pos.x - 0.25, pos.y - 0.25, pos.z + 0.25)) + Point2((0.5, 0.5))
             p1 = Point3((pos.x + 0.25, pos.y + 0.25, pos.z - 0.25)) + Point2((0.5, 0.5))
-            # print(f"Drawing {p0} to {p1}")
+            # logger.info(f"Drawing {p0} to {p1}")
             color = Point3((255, 0, 0))
             self.client.debug_box_out(p0, p1, color=color)
 

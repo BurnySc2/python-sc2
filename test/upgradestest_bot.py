@@ -64,7 +64,7 @@ class TestBot(BotAI):
 
         # Exit bot
         if iteration > 100:
-            print("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
             exit(0)
 
     async def clean_up_center(self):
@@ -123,7 +123,7 @@ class TestBot(BotAI):
                     or self.game_data.upgrades[upgrade_id.value].research_ability is None
                     or self.game_data.upgrades[upgrade_id.value].research_ability.exact_id != research_ability
                 ):
-                    print(
+                    logger.info(
                         f"Could not find upgrade {upgrade_id} or research ability {research_ability} in self.game_data - potential version mismatch (balance upgrade - windows vs linux SC2 client"
                     )
                     continue
@@ -137,19 +137,19 @@ class TestBot(BotAI):
                     spawn_structures.append(required_building)
 
                 await self.client.debug_create_unit([[structure, 1, map_center, 1] for structure in spawn_structures])
-                print(
+                logger.info(
                     f"Spawning {structure_type} to research upgrade {upgrade_id} via research ability {research_ability}"
                 )
                 await self._advance_steps(2)
 
                 # Wait for the structure to spawn
                 while not self.structures(structure_type):
-                    # print(f"Waiting for structure {structure_type} to spawn, structures close to center so far: {self.structures.closer_than(20, map_center)}")
+                    # logger.info(f"Waiting for structure {structure_type} to spawn, structures close to center so far: {self.structures.closer_than(20, map_center)}")
                     await self._advance_steps(2)
 
                 # If cannot afford to research: cheat money
                 while not self.can_afford(upgrade_id):
-                    # print(f"Cheating money to be able to afford {upgrade_id}, cost: {self.calculate_cost(upgrade_id)}")
+                    # logger.info(f"Cheating money to be able to afford {upgrade_id}, cost: {self.calculate_cost(upgrade_id)}")
                     await self.client.debug_all_resources()
                     await self._advance_steps(2)
 
@@ -165,7 +165,7 @@ class TestBot(BotAI):
                     if upgrader_structures:
                         upgrader_structure: Unit = upgrader_structures.closest_to(map_center)
                         if upgrader_structure.is_idle:
-                            # print(f"Making {upgrader_structure} research upgrade {upgrade_id}")
+                            # logger.info(f"Making {upgrader_structure} research upgrade {upgrade_id}")
                             upgrader_structure.research(upgrade_id)
                         await self._advance_steps(2)
                         if upgrade_id in self.state.upgrades:

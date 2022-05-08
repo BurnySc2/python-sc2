@@ -21,6 +21,8 @@ Improvements that could be made:
 """
 from typing import Union
 
+from loguru import logger
+
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race
@@ -91,7 +93,7 @@ class MarineSplitChallenge(BotAI):
                         unit.move(retreat_position)
 
                     else:
-                        print(f"No retreat positions detected for unit {unit} at {unit.position.rounded}.")
+                        logger.info(f"No retreat positions detected for unit {unit} at {unit.position.rounded}.")
 
     def position_around_unit(
         self,

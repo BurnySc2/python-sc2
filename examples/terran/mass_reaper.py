@@ -25,13 +25,13 @@ from sc2.units import Units
 class MassReaperBot(BotAI):
 
     def __init__(self):
-        # Select distance calculation method 0, which is the pure python distance calculation without caching or indexing, using math.hypot(), for more info see distances.py _distances_override_functions() function
+        # Select distance calculation method 0, which is the pure python distance calculation without caching or indexing, using math.hypot(), for more info see bot_ai_internal.py _distances_override_functions() function
         self.distance_calculation_method = 3
 
     # pylint: disable=R0912,R0914
     async def on_step(self, iteration):
         # Benchmark and print duration time of the on_step method based on "self.distance_calculation_method" value
-        # print(self.time_formatted, self.supply_used, self.step_time[1])
+        # logger.info(self.time_formatted, self.supply_used, self.step_time[1])
         """
         - build depots when low on remaining supply
         - townhalls contains commandcenter and orbitalcommand

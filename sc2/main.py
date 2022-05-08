@@ -269,8 +269,6 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
                 try:
                     await ai.on_end(client._game_result[player_id])
                 except TypeError:
-                    # print(f"caught type error {error}")
-                    # print(f"return {client._game_result[player_id]}")
                     return client._game_result[player_id]
                 return client._game_result[player_id]
             gs = GameState(state.observation)
@@ -475,14 +473,17 @@ def run_game(map_settings, players, **kwargs) -> Union[Result, List[Optional[Res
         join_kwargs = {k: v for k, v in kwargs.items() if k not in host_only_args}
 
         portconfig = Portconfig()
-        result: List[Result] = asyncio.get_event_loop().run_until_complete(
+        result: List[Result] = asyncio.run(
             asyncio.gather(
                 _host_game(map_settings, players, **kwargs, portconfig=portconfig),
                 _join_game(players, **join_kwargs, portconfig=portconfig),
             )
         )
+        assert isinstance(result, list)
+        assert isinstance(result[0], Result)
     else:
-        result: Result = asyncio.get_event_loop().run_until_complete(_host_game(map_settings, players, **kwargs))
+        result: Result = asyncio.run(_host_game(map_settings, players, **kwargs))
+        assert isinstance(result, Result)
     return result
 
 
