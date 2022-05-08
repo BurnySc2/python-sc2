@@ -120,8 +120,8 @@ class TestBot(BotAI):
             assert (await self.can_place(UnitTypeId.COMMANDCENTER, [location]))[0]
             assert (await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location]))[0]
             # TODO Remove the following two lines if can_place function gets fully converted to only accept list of positions
-            assert await self.can_place(UnitTypeId.COMMANDCENTER, location)
-            assert await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, location)
+            assert await self.can_place(UnitTypeId.COMMANDCENTER, [location])
+            assert await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location])
             assert await self.can_place_single(UnitTypeId.COMMANDCENTER, location)
             assert await self.can_place_single(AbilityId.TERRANBUILD_COMMANDCENTER, location)
             await self.find_placement(UnitTypeId.COMMANDCENTER, location)
@@ -140,9 +140,9 @@ class TestBot(BotAI):
 
     # Test self._game_info variables
     async def test_game_info_static_variables(self):
-        assert len(self._game_info.players) == 2, self._game_info.players
-        assert len(self._game_info.map_ramps) >= 2, self._game_info.map_ramps
-        assert len(self._game_info.player_races) == 2, self._game_info.player_races
+        assert len(self.game_info.players) == 2, self.game_info.players
+        assert len(self.game_info.map_ramps) >= 2, self.game_info.map_ramps
+        assert len(self.game_info.player_races) == 2, self.game_info.player_races
         self.tests_done_by_name.add("test_game_info_static_variables")
 
     # Test BotAI action: train SCV
@@ -158,7 +158,7 @@ class TestBot(BotAI):
 
     # Test BotAI action: move all SCVs to center of map
     async def test_botai_actions2(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         def temp_filter(unit: Unit):
             return (
@@ -191,7 +191,7 @@ class TestBot(BotAI):
 
     # Test BotAI action: move some scvs to the center, some to minerals
     async def test_botai_actions3(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         while self.units.filter(lambda x: x.is_moving).amount < 6 and self.units.gathering.amount >= 6:
             scvs = self.workers
@@ -247,7 +247,7 @@ class TestBot(BotAI):
 
     # Test if reaper grenade shows up in effects
     async def test_botai_actions6(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         while 1:
             if self.units(UnitTypeId.REAPER).amount < 10:
@@ -274,7 +274,7 @@ class TestBot(BotAI):
 
     # Test ravager effects
     async def test_botai_actions7(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
         while 1:
             if self.units(UnitTypeId.RAVAGER).amount < 10:
                 await self.client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
@@ -332,7 +332,7 @@ class TestBot(BotAI):
 
     # Morph an archon from 2 high templars
     async def test_botai_actions9(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
         target_amount = 2
         HTs = self.units(UnitTypeId.HIGHTEMPLAR)
         archons = self.units(UnitTypeId.ARCHON)
@@ -364,7 +364,7 @@ class TestBot(BotAI):
 
     # Morph 400 banelings from 400 lings in the same frame
     async def test_botai_actions10(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         target_amount = 400
         while 1:
@@ -440,7 +440,7 @@ class TestBot(BotAI):
 
     # Test if structures_without_construction_SCVs works after killing the scv
     async def test_botai_actions12(self):
-        map_center: Point2 = self._game_info.map_center
+        map_center: Point2 = self.game_info.map_center
 
         # Wait till can afford depot
         while not self.can_afford(UnitTypeId.SUPPLYDEPOT):

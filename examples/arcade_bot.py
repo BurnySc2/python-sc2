@@ -113,7 +113,7 @@ class MarineSplitChallenge(BotAI):
             positions = {
                 p
                 for p in positions
-                if 0 <= p[0] < self.game_info.pathing_grid.width and 0 <= p[1] < self._game_info.pathing_grid.height
+                if 0 <= p[0] < self.game_info.pathing_grid.width and 0 <= p[1] < self.game_info.pathing_grid.height
             }
         return positions
 

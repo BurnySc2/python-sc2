@@ -473,14 +473,17 @@ def run_game(map_settings, players, **kwargs) -> Union[Result, List[Optional[Res
         join_kwargs = {k: v for k, v in kwargs.items() if k not in host_only_args}
 
         portconfig = Portconfig()
-        result: List[Result] = asyncio.run(
-            asyncio.gather(
+
+        async def run_host_and_join():
+            return await asyncio.gather(
                 _host_game(map_settings, players, **kwargs, portconfig=portconfig),
                 _join_game(players, **join_kwargs, portconfig=portconfig),
+                return_exceptions=True
             )
-        )
+
+        result: List[Result] = asyncio.run(run_host_and_join())
         assert isinstance(result, list)
-        assert isinstance(result[0], Result)
+        assert all(isinstance(r, Result) for r in result)
     else:
         result: Result = asyncio.run(_host_game(map_settings, players, **kwargs))
         assert isinstance(result, Result)

@@ -84,7 +84,7 @@ class TestBot(BotAI):
 
     # Create all upgrade research structures and research each possible upgrade
     async def test_botai_actions1(self):
-        map_center: Point2 = self._game_info.map_center
+        map_center: Point2 = self.game_info.map_center
 
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
         from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
