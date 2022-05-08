@@ -18,8 +18,7 @@ from sc2.main import GameMatch, a_run_multiple_games_nokill
 from sc2.player import Bot, Computer
 
 # Time limit given in seconds of total in game time
-game_time_limit_vs_computer = 30
-game_time_limit_vs_computer_realtime = 2
+game_time_limit_vs_computer = 120
 
 bot_infos = [
     # Protoss
@@ -117,26 +116,24 @@ matches: List[GameMatch] = []
 
 # Run example bots
 for bot_info in bot_infos:
-    for realtime in [True, False]:
-        bot_race: Race = bot_info["race"]
-        bot_path: str = bot_info["path"]
-        bot_class_name: str = bot_info["bot_class_name"]
-        module = import_module(bot_path)
-        bot_class: Type[BotAI] = getattr(module, bot_class_name)
+    bot_race: Race = bot_info["race"]
+    bot_path: str = bot_info["path"]
+    bot_class_name: str = bot_info["bot_class_name"]
+    module = import_module(bot_path)
+    bot_class: Type[BotAI] = getattr(module, bot_class_name)
 
-        limit_match_duration = game_time_limit_vs_computer_realtime if realtime else game_time_limit_vs_computer
-        if bot_class_name == "SlowBot":
-            limit_match_duration = 2
+    limit_match_duration = game_time_limit_vs_computer
+    if bot_class_name == "SlowBot":
+        limit_match_duration = 2
 
-        matches.append(
-            GameMatch(
-                map_sc2=maps.get("Acropolis"),
-                players=[Bot(bot_race, bot_class()),
-                         Computer(Race.Protoss, Difficulty.Easy)],
-                realtime=realtime,
-                game_time_limit=limit_match_duration,
-            )
+    matches.append(
+        GameMatch(
+            map_sc2=maps.get("Acropolis"),
+            players=[Bot(bot_race, bot_class()), Computer(Race.Protoss, Difficulty.Easy)],
+            realtime=False,
+            game_time_limit=limit_match_duration,
         )
+    )
 
 
 async def main():

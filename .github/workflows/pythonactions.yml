@@ -122,6 +122,30 @@ jobs:
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
 
+  run_examples_bots:
+    # Run test bots that download the SC2 linux client and run it
+    name: Run testbots linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      # Do not allow this test to cancel. Finish all jobs regardless of error
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+    # Copy data from repository
+    - uses: actions/checkout@v1
+
+    - name: Print directories and files
+      run: |
+        sudo apt-get install tree
+        tree
+
+    - name: Load and build docker image
+      # Build docker image from Dockerfile using python 3.8
+      run: |
+        docker build -t test_image -f test/Dockerfile_3.8 .
+
     - name: Run example bots vs computer
       run: |
         docker run -it -d --name my_container test_image
@@ -168,7 +192,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    needs: [run_pytest_tests, run_test_bots]
+    needs: [run_pytest_tests, run_test_bots, run_examples_bots]
 
     steps:
     - uses: actions/checkout@v1
@@ -207,7 +231,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    needs: [run_pytest_tests, run_test_bots]
+    needs: [run_pytest_tests, run_test_bots, run_examples_bots]
 
     steps:
     - uses: actions/checkout@v1
