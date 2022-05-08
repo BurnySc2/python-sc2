@@ -54,6 +54,7 @@ class WarpGateBot(BotAI):
             if self.can_afford(UnitTypeId.PYLON):
                 await self.build(UnitTypeId.PYLON, near=nexus.position.towards(self.game_info.map_center, 5))
 
+        proxy = None
         if self.structures(UnitTypeId.PYLON).ready:
             proxy = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
             pylon = self.structures(UnitTypeId.PYLON).ready.random
@@ -98,7 +99,7 @@ class WarpGateBot(BotAI):
             if self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 1:
                 gateway(AbilityId.MORPH_WARPGATE)
 
-        if self.proxy_built:
+        if self.proxy_built and proxy:
             await self.warp_new_units(proxy)
 
         # Make stalkers attack either closest enemy unit or enemy spawn location

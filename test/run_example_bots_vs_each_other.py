@@ -1,5 +1,5 @@
 """
-This script makes sure to run all bots in the examples folder to check if they can launch.
+This script makes sure to run all bots in the examples folder to check if they can launch against each other.
 """
 import os
 import sys
@@ -109,21 +109,18 @@ for bot_info1, bot_info2 in combinations(bot_infos, 2):
     module = import_module(bot_path)
     bot_class2: Type[BotAI] = getattr(module, bot_class_name)
 
-    # TODO Undo
-    # for realtime in [True, False]:
-    matches.append(
-        GameMatch(
-            map_sc2=maps.get("Acropolis"),
-            players=[
-                Bot(bot_race1, bot_class1()),
-                Bot(bot_race2, bot_class2()),
-            ],
-            realtime=False,
-            # TODO Undo
-            # game_time_limit=game_time_limit_bot_vs_bot_realtime if realtime else game_time_limit_bot_vs_bot,
-            game_time_limit=1,
+    for realtime in [True, False]:
+        matches.append(
+            GameMatch(
+                map_sc2=maps.get("Acropolis"),
+                players=[
+                    Bot(bot_race1, bot_class1()),
+                    Bot(bot_race2, bot_class2()),
+                ],
+                realtime=False,
+                game_time_limit=game_time_limit_bot_vs_bot_realtime if realtime else game_time_limit_bot_vs_bot,
+            )
         )
-    )
 
 
 async def main():
