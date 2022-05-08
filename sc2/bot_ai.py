@@ -35,8 +35,6 @@ from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
 from sc2.distances import DistanceCalculation
 from sc2.game_data import AbilityData, Cost, GameData
-
-# Imports for mypy and pycharm autocomplete as well as sphinx autodocumentation
 from sc2.game_state import Blip, EffectData, GameState
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId

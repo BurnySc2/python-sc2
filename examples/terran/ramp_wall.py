@@ -17,15 +17,17 @@ from sc2.units import Units
 
 class RampWallBot(BotAI):
 
+    # pylint: disable=W0231
     def __init__(self):
         self.unit_command_uses_self_do = False
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         if not ccs:
             return
-        else:
-            cc: Unit = ccs.first
+
+        cc: Unit = ccs.first
 
         await self.distribute_workers()
 
@@ -146,9 +148,9 @@ class RampWallBot(BotAI):
             if value == 0:
                 continue
             # Skip values outside of playable map area
-            if not (map_area.x <= a < map_area.x + map_area.width):
+            if not map_area.x <= a < map_area.x + map_area.width:
                 continue
-            if not (map_area.y <= b < map_area.y + map_area.height):
+            if not map_area.y <= b < map_area.y + map_area.height:
                 continue
             p = Point2((a, b))
             h2 = self.get_terrain_z_height(p)
@@ -165,9 +167,9 @@ class RampWallBot(BotAI):
             if value == 0:
                 continue
             # Skip values outside of playable map area
-            if not (map_area.x <= a < map_area.x + map_area.width):
+            if not map_area.x <= a < map_area.x + map_area.width:
                 continue
-            if not (map_area.y <= b < map_area.y + map_area.height):
+            if not map_area.y <= b < map_area.y + map_area.height:
                 continue
             p = Point2((a, b))
             h2 = self.get_terrain_z_height(p)
@@ -261,7 +263,7 @@ class RampWallBot(BotAI):
 
 
 def main():
-    map = random.choice(
+    _map = random.choice(
         [
             # Most maps have 2 upper points at the ramp (len(self.main_base_ramp.upper) == 2)
             "AutomatonLE",
@@ -277,9 +279,9 @@ def main():
             "HonorgroundsLE",  # Has 4 or 9 upper points at the large main base ramp
         ]
     )
-    map = "PillarsofGoldLE"
+    _map = "PillarsofGoldLE"
     run_game(
-        maps.get(map),
+        maps.get(_map),
         [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)],
         realtime=True,
         # sc2_version="4.10.1",

@@ -6,7 +6,7 @@ https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188f
 https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_data.h
 """
 import enum
-from typing import Dict, Set  # mypy type checking
+from typing import Dict, Set
 
 from s2clientprotocol import common_pb2 as common_pb
 from s2clientprotocol import data_pb2 as data_pb

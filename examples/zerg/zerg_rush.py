@@ -14,6 +14,7 @@ from sc2.unit import Unit
 from sc2.units import Units
 
 
+# pylint: disable=W0231
 class ZergRushBot(BotAI):
 
     def __init__(self):
@@ -22,6 +23,7 @@ class ZergRushBot(BotAI):
     async def on_start(self):
         self.client.game_step = 2
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(glhf)")

@@ -74,12 +74,11 @@ repos:
     types: [python]
     exclude: setup.py
 
-  # TODO Fix problems in examples subfolder
   - id: pylint
     name: pylint
     stages: [commit]
     language: system
-    entry: poetry run pylint sc2
+    entry: poetry run pylint sc2 examples
     types: [python]
     pass_filenames: false
 

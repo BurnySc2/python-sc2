@@ -10,6 +10,7 @@ from sc2.player import Bot, Computer
 
 class CannonRushBot(BotAI):
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(probe)(pylon)(cannon)(cannon)(gg)")
@@ -19,8 +20,8 @@ class CannonRushBot(BotAI):
             for worker in self.workers:
                 worker.attack(self.enemy_start_locations[0])
             return
-        else:
-            nexus = self.townhalls.random
+
+        nexus = self.townhalls.random
 
         # Make probes until we have 16 total
         if self.supply_workers < 16 and nexus.is_idle:

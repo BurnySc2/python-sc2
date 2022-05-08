@@ -8,8 +8,6 @@ from sc2.cache import property_cache_once_per_frame
 from sc2.data import Alert, Race, Result
 from sc2.distances import DistanceCalculation
 from sc2.game_data import GameData
-
-# Imports for mypy and pycharm autocomplete as well as sphinx autodocumentation
 from sc2.game_state import Blip, GameState
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.upgrade_id import UpgradeId

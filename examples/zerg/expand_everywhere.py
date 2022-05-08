@@ -54,7 +54,7 @@ class ExpandEverywhere(BotAI):
                     for drone in self.workers.collecting:
                         drone: Unit
                         drone.build(UnitTypeId.HATCHERY, exp_pos)
-                        assert False, f"Break out of 2 for loops"
+                        assert False, "Break out of 2 for loops"
 
         # Kill all enemy units in vision / sight
         if self.enemy_units:

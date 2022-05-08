@@ -38,10 +38,10 @@ jobs:
         poetry install
 
       # Run pylint
-      # TODO: Run pylint on example bots and other files
-    - name: Run pylint on sc2 subfolder
+    - name: Run pylint
       run: |
         poetry run pylint sc2
+        poetry run pylint examples
 
       # Run tests
     - name: Run poetry pytest tests on pickle files

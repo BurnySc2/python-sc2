@@ -1,4 +1,5 @@
 from sc2.bot_ai import BotAI
+from sc2.data import Result
 
 
 class CompetitiveBot(BotAI):
@@ -11,6 +12,6 @@ class CompetitiveBot(BotAI):
         # Populate this function with whatever your bot should do!
         pass
 
-    def on_end(self, result):
+    async def on_end(self, game_result: Result):
         print("Game ended.")
         # Do things here after the game ends

@@ -29,6 +29,7 @@ class BCRushBot(BotAI):
 
         return self.mineral_field.random.position, False
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         ccs: Units = self.townhalls
         # If we no longer have townhalls, attack with all workers
@@ -38,8 +39,8 @@ class BCRushBot(BotAI):
                 if not unit.is_attacking:
                     unit.attack(target)
             return
-        else:
-            cc: Unit = ccs.random
+
+        cc: Unit = ccs.random
 
         # Send all BCs to attack a target.
         bcs: Units = self.units(UnitTypeId.BATTLECRUISER)
@@ -89,7 +90,7 @@ class BCRushBot(BotAI):
                         if worker is None:
                             break
 
-                        worker.build(UnitTypeId.REFINERY, vg)
+                        worker.build_gas(vg)
                         break
 
             # Build factory if we dont have one

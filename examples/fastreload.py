@@ -1,7 +1,6 @@
 from importlib import reload
 
-from zerg import zerg_rush
-
+from examples.zerg import zerg_rush
 from sc2 import maps
 from sc2.data import Difficulty, Race
 from sc2.main import _host_game_iter
@@ -13,7 +12,7 @@ def main():
 
     gen = _host_game_iter(maps.get("Abyssal Reef LE"), player_config, realtime=False)
 
-    r = next(gen)
+    _r = next(gen)
     while True:
         input("Press enter to reload ")
 

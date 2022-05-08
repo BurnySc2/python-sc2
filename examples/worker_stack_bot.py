@@ -27,6 +27,7 @@ from sc2.unit import Unit
 from sc2.units import Units
 
 
+# pylint: disable=W0231
 class WorkerStackBot(BotAI):
 
     def __init__(self):
@@ -72,7 +73,7 @@ class WorkerStackBot(BotAI):
 
             for worker in self.workers:
                 if not self.townhalls:
-                    logger.error(f"All townhalls died - can't return resources")
+                    logger.error("All townhalls died - can't return resources")
                     break
 
                 worker: Unit

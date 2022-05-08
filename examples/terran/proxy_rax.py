@@ -14,6 +14,7 @@ class ProxyRaxBot(BotAI):
     async def on_start(self):
         self.client.game_step = 2
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         # If we don't have a townhall anymore, send all units to attack
         ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
@@ -22,8 +23,8 @@ class ProxyRaxBot(BotAI):
             for unit in self.workers | self.units(UnitTypeId.MARINE):
                 unit.attack(target)
             return
-        else:
-            cc: Unit = ccs.first
+
+        cc: Unit = ccs.first
 
         # Send marines in waves of 15, each time 15 are idle, send them to their death
         marines: Units = self.units(UnitTypeId.MARINE).idle

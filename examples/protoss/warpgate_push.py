@@ -9,6 +9,7 @@ from sc2.main import run_game
 from sc2.player import Bot, Computer
 
 
+# pylint: disable=W0231
 class WarpGateBot(BotAI):
 
     def __init__(self):
@@ -28,6 +29,7 @@ class WarpGateBot(BotAI):
                     return
                 warpgate.warp_in(UnitTypeId.STALKER, placement)
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         await self.distribute_workers()
 
@@ -36,8 +38,8 @@ class WarpGateBot(BotAI):
             for worker in self.workers:
                 worker.attack(self.enemy_start_locations[0])
             return
-        else:
-            nexus = self.townhalls.ready.random
+
+        nexus = self.townhalls.ready.random
 
         # Build pylon when on low supply
         if self.supply_left < 2 and self.already_pending(UnitTypeId.PYLON) == 0:
@@ -83,7 +85,7 @@ class WarpGateBot(BotAI):
                 if worker is None:
                     break
                 if not self.gas_buildings or not self.gas_buildings.closer_than(1, vg):
-                    worker.build(UnitTypeId.ASSIMILATOR, vg)
+                    worker.build_gas(vg)
                     worker.stop(queue=True)
 
         # Research warp gate if cybercore is completed

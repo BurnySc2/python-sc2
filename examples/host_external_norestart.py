@@ -1,6 +1,5 @@
-from zerg.zerg_rush import ZergRushBot
-
 import sc2
+from examples.zerg.zerg_rush import ZergRushBot
 from sc2 import maps
 from sc2.data import Race
 from sc2.main import _host_game_iter

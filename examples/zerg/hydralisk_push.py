@@ -20,6 +20,7 @@ class Hydralisk(BotAI):
             return random.choice(self.enemy_structures).position
         return self.enemy_start_locations[0]
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         larvae: Units = self.larva
         forces: Units = self.units.of_type({UnitTypeId.ZERGLING, UnitTypeId.HYDRALISK})
@@ -57,8 +58,8 @@ class Hydralisk(BotAI):
             ):
                 unit.attack(self.enemy_start_locations[0])
             return
-        else:
-            hq: Unit = self.townhalls.first
+
+        hq: Unit = self.townhalls.first
 
         # Send idle queens with >=25 energy to inject
         for queen in self.units(UnitTypeId.QUEEN).idle:
