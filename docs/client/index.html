@@ -49,7 +49,7 @@
 <p>TODO: Replace this with info about this file</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.client.Client">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.client.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.client.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_replay_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="sc2.client.Client.chat_send">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_only</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.chat_send" title="Permalink to this definition">¶</a></dt>
@@ -277,7 +277,7 @@ await self._client.dump_data()</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.client.Client.leave">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leave</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.leave" title="Permalink to this definition">¶</a></dt>
-<dd><p>You can use ‘await self._client.leave()’ to surrender midst game.</p>
+<dd><p>You can use ‘await self.client.leave()’ to surrender midst game.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -439,12 +439,16 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../game_state/index.html"
-                        title="previous chapter">game_state.py</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../position/index.html"
-                        title="next chapter">position.py</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../game_state/index.html"
+                          title="previous chapter">game_state.py</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../position/index.html"
+                          title="next chapter">position.py</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -484,7 +488,7 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

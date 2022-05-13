@@ -1,21 +1,16 @@
-import os
-import sys
+import random
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import random
-
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 
 
 class CannonRushBot(BotAI):
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(probe)(pylon)(cannon)(cannon)(gg)")
@@ -25,8 +20,8 @@ class CannonRushBot(BotAI):
             for worker in self.workers:
                 worker.attack(self.enemy_start_locations[0])
             return
-        else:
-            nexus = self.townhalls.random
+
+        nexus = self.townhalls.random
 
         # Make probes until we have 16 total
         if self.supply_workers < 16 and nexus.is_idle:

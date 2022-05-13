@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, Set
+from typing import Any, Dict, Set
 
 from sc2.data import Alliance, Attribute, CloakState, DisplayType, TargetType
 from sc2.ids.ability_id import AbilityId
@@ -495,7 +495,7 @@ ALL_GAS: Set[UnitTypeId] = {
     UnitTypeId.EXTRACTOR,
     UnitTypeId.EXTRACTORRICH,
 }
-DAMAGE_BONUS_PER_UPGRADE: Dict[int, UnitTypeId] = {
+DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[TargetType, Any]] = {
     #
     # Protoss
     #

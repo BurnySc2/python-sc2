@@ -1,14 +1,8 @@
-import os
-import sys
-
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.position import Point2
 from sc2.unit import Unit
@@ -35,6 +29,7 @@ class CyclonePush(BotAI):
         # Pick a random mineral field on the map
         return self.mineral_field.random.position
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         CCs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         # If no command center exists, attack-move with all workers and cyclones
@@ -43,9 +38,9 @@ class CyclonePush(BotAI):
             for unit in self.workers | self.units(UnitTypeId.CYCLONE):
                 unit.attack(target)
             return
-        else:
-            # Otherwise, grab the first command center from the list of command centers
-            cc: Unit = CCs.first
+
+        # Otherwise, grab the first command center from the list of command centers
+        cc: Unit = CCs.first
 
         # Every 50 iterations (here: every 50*8 = 400 frames)
         if iteration % 50 == 0 and self.units(UnitTypeId.CYCLONE).amount > 2:

@@ -1,3 +1,4 @@
+from abc import ABC
 from pathlib import Path
 from typing import List, Union
 
@@ -5,9 +6,17 @@ from sc2.bot_ai import BotAI
 from sc2.data import AIBuild, Difficulty, PlayerType, Race
 
 
-class AbstractPlayer:
+class AbstractPlayer(ABC):
 
-    def __init__(self, p_type, race=None, name=None, difficulty=None, ai_build=None, fullscreen=False):
+    def __init__(
+        self,
+        p_type: PlayerType,
+        race: Race = None,
+        name: str = None,
+        difficulty=None,
+        ai_build=None,
+        fullscreen=False
+    ):
         assert isinstance(p_type, PlayerType), f"p_type is of type {type(p_type)}"
         assert name is None or isinstance(name, str), f"name is of type {type(name)}"
 
@@ -47,8 +56,7 @@ class Human(AbstractPlayer):
     def __str__(self):
         if self.name is not None:
             return f"Human({self.race._name_}, name={self.name !r})"
-        else:
-            return f"Human({self.race._name_})"
+        return f"Human({self.race._name_})"
 
 
 class Bot(AbstractPlayer):
@@ -65,8 +73,7 @@ class Bot(AbstractPlayer):
     def __str__(self):
         if self.name is not None:
             return f"Bot {self.ai.__class__.__name__}({self.race._name_}), name={self.name !r})"
-        else:
-            return f"Bot {self.ai.__class__.__name__}({self.race._name_})"
+        return f"Bot {self.ai.__class__.__name__}({self.race._name_})"
 
 
 class Computer(AbstractPlayer):
@@ -89,6 +96,11 @@ class Observer(AbstractPlayer):
 
 class Player(AbstractPlayer):
 
+    def __init__(self, player_id, p_type, requested_race, difficulty=None, actual_race=None, name=None, ai_build=None):
+        super().__init__(p_type, requested_race, difficulty=difficulty, name=name, ai_build=ai_build)
+        self.id: int = player_id
+        self.actual_race: Race = actual_race
+
     @classmethod
     def from_proto(cls, proto):
         if PlayerType(proto.type) == PlayerType.Observer:
@@ -101,11 +113,6 @@ class Player(AbstractPlayer):
             Race(proto.race_actual) if proto.HasField("race_actual") else None,
             proto.player_name if proto.HasField("player_name") else None,
         )
-
-    def __init__(self, player_id, p_type, requested_race, difficulty=None, actual_race=None, name=None, ai_build=None):
-        super().__init__(p_type, requested_race, difficulty=difficulty, name=name, ai_build=ai_build)
-        self.id: int = player_id
-        self.actual_race: Race = actual_race
 
 
 class BotProcess(AbstractPlayer):
@@ -140,10 +147,7 @@ class BotProcess(AbstractPlayer):
         other_args: str = None,
         stdout: str = None,
     ):
-        self.race = race
-        self.type = PlayerType.Participant
-        self.name = name
-
+        super().__init__(PlayerType.Participant, race, name=name)
         assert Path(path).exists()
         self.path = path
         self.launch_list = launch_list

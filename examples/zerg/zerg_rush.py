@@ -1,30 +1,30 @@
-import os
-import sys
+import numpy as np
+from loguru import logger
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race, Result
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
 from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import numpy as np
-
-from sc2.data import Difficulty, Race, Result
 from sc2.player import Bot, Computer
 from sc2.position import Point2, Point3
 from sc2.unit import Unit
 from sc2.units import Units
 
 
+# pylint: disable=W0231
 class ZergRushBot(BotAI):
+
+    def __init__(self):
+        self.on_end_called = False
 
     async def on_start(self):
         self.client.game_step = 2
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(glhf)")
@@ -96,7 +96,7 @@ class ZergRushBot(BotAI):
 
         # If our spawningpool is completed, start making zerglings
         if self.structures(UnitTypeId.SPAWNINGPOOL).ready and self.larva and self.can_afford(UnitTypeId.ZERGLING):
-            amount_trained: int = self.train(UnitTypeId.ZERGLING, self.larva.amount)
+            _amount_trained: int = self.train(UnitTypeId.ZERGLING, self.larva.amount)
 
         # If we have no extractor, build extractor
         if (
@@ -134,10 +134,11 @@ class ZergRushBot(BotAI):
             if value == 1:
                 # Green if there is creep
                 color = Point3((0, 255, 0))
-            self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
+            self.client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
     async def on_end(self, game_result: Result):
-        print(f"{self.time_formatted} On end was called")
+        self.on_end_called = True
+        logger.info(f"{self.time_formatted} On end was called")
 
 
 def main():

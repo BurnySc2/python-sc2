@@ -53,11 +53,11 @@ class ExporterBot(BotAI):
 
     async def store_data_to_file(self, file_path: str):
         # Grab all raw data from observation
-        raw_game_data = await self._client._execute(
+        raw_game_data = await self.client._execute(
             data=sc_pb.RequestData(ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True)
         )
 
-        raw_game_info = await self._client._execute(game_info=sc_pb.RequestGameInfo())
+        raw_game_info = await self.client._execute(game_info=sc_pb.RequestGameInfo())
 
         raw_observation = self.state.response_observation
 
@@ -103,7 +103,7 @@ class ExporterBot(BotAI):
         file_path = self.get_combat_file_path()
         await self.store_data_to_file(file_path)
 
-        await self._client.leave()
+        await self.client.leave()
         return
 
 

@@ -1,9 +1,11 @@
+# pylint: disable=W0212
 from __future__ import annotations
 
 import random
 import warnings
+from functools import cached_property
 from itertools import chain
-from typing import TYPE_CHECKING, Any, Dict, Generator, List, Optional, Set, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, Generator, Iterable, List, Optional, Set, Tuple, Union
 
 import numpy as np
 
@@ -17,12 +19,14 @@ if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
 
 
+# pylint: disable=R0904
 class Units(list):
     """A collection of Unit objects. Makes it easy to select units by selectors."""
 
     @classmethod
     def from_proto(cls, units, bot_object: BotAI):
-        return cls((Unit(u, bot_object=bot_object) for u in units))
+        # pylint: disable=E1120
+        return cls((Unit(raw_unit, bot_object=bot_object) for raw_unit in units))
 
     def __init__(self, units, bot_object: BotAI):
         """
@@ -109,8 +113,7 @@ class Units(list):
     def take(self, n: int) -> Units:
         if n >= self.amount:
             return self
-        else:
-            return self.subgroup(self[:n])
+        return self.subgroup(self[:n])
 
     @property
     def random(self) -> Unit:
@@ -124,10 +127,9 @@ class Units(list):
         """ Returns self if n >= self.amount. """
         if n < 1:
             return Units([], self._bot_object)
-        elif n >= self.amount:
+        if n >= self.amount:
             return self
-        else:
-            return self.subgroup(random.sample(self, n))
+        return self.subgroup(random.sample(self, n))
 
     def in_attack_range_of(self, unit: Unit, bonus_distance: Union[int, float] = 0) -> Units:
         """
@@ -373,8 +375,7 @@ class Units(list):
                 for target in other_units
             ):
                 return self
-            else:
-                return self.subgroup([])
+            return self.subgroup([])
 
         return self.subgroup(
             self_unit for self_unit in self if any(
@@ -554,11 +555,11 @@ class Units(list):
         :param other:
         """
         assert isinstance(other, set), (
-            f"Please use a set as this filter function is already fairly slow. For example" +
+            "Please use a set as this filter function is already fairly slow. For example" +
             " 'self.units.same_tech({UnitTypeId.LAIR})'"
         )
         tech_alias_types: Set[int] = {u.value for u in other}
-        unit_data = self._bot_object._game_data.units
+        unit_data = self._bot_object.game_data.units
         for unitType in other:
             for same in unit_data[unitType.value]._proto.tech_alias:
                 tech_alias_types.add(same)
@@ -567,7 +568,7 @@ class Units(list):
             any(same in tech_alias_types for same in unit._type_data._proto.tech_alias)
         )
 
-    def same_unit(self, other: Union[UnitTypeId, Set[UnitTypeId], List[UnitTypeId], Dict[UnitTypeId, Any]]) -> Units:
+    def same_unit(self, other: Union[UnitTypeId, Iterable[UnitTypeId]]) -> Units:
         """
         Returns all units that have the same base unit while being in different modes.
 
@@ -591,7 +592,7 @@ class Units(list):
         if isinstance(other, UnitTypeId):
             other = {other}
         unit_alias_types: Set[int] = {u.value for u in other}
-        unit_data = self._bot_object._game_data.units
+        unit_data = self._bot_object.game_data.units
         for unitType in other:
             unit_alias_types.add(unit_data[unitType.value]._proto.unit_alias)
         unit_alias_types.discard(0)
@@ -600,10 +601,10 @@ class Units(list):
             unit_alias_types
         )
 
-    @property
+    @cached_property
     def center(self) -> Point2:
         """ Returns the central position of all units. """
-        assert self, f"Units object is empty"
+        assert self, "Units object is empty"
         amount = self.amount
         return Point2(
             (
@@ -710,11 +711,11 @@ class UnitSelection(Units):
         if isinstance(selection, (UnitTypeId)):
             super().__init__((unit for unit in parent if unit.type_id == selection), parent._bot_object)
         elif isinstance(selection, set):
-            assert all(isinstance(t, UnitTypeId) for t in selection), f"Not all ids in selection are of type UnitTypeId"
+            assert all(isinstance(t, UnitTypeId) for t in selection), "Not all ids in selection are of type UnitTypeId"
             super().__init__((unit for unit in parent if unit.type_id in selection), parent._bot_object)
         elif selection is None:
             super().__init__((unit for unit in parent), parent._bot_object)
         else:
             assert isinstance(
                 selection, (UnitTypeId, set)
-            ), f"selection is not None or of type UnitTypeId or Set[UnitTypeId]"
+            ), "selection is not None or of type UnitTypeId or Set[UnitTypeId]"

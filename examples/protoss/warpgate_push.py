@@ -1,20 +1,17 @@
-import os
-import sys
+from loguru import logger
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 
 
+# pylint: disable=W0231
 class WarpGateBot(BotAI):
 
     def __init__(self):
@@ -30,10 +27,11 @@ class WarpGateBot(BotAI):
                 placement = await self.find_placement(AbilityId.WARPGATETRAIN_STALKER, pos, placement_step=1)
                 if placement is None:
                     # return ActionResult.CantFindPlacementLocation
-                    print("can't place")
+                    logger.info("can't place")
                     return
                 warpgate.warp_in(UnitTypeId.STALKER, placement)
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         await self.distribute_workers()
 
@@ -42,8 +40,8 @@ class WarpGateBot(BotAI):
             for worker in self.workers:
                 worker.attack(self.enemy_start_locations[0])
             return
-        else:
-            nexus = self.townhalls.ready.random
+
+        nexus = self.townhalls.ready.random
 
         # Build pylon when on low supply
         if self.supply_left < 2 and self.already_pending(UnitTypeId.PYLON) == 0:
@@ -60,6 +58,7 @@ class WarpGateBot(BotAI):
             if self.can_afford(UnitTypeId.PYLON):
                 await self.build(UnitTypeId.PYLON, near=nexus.position.towards(self.game_info.map_center, 5))
 
+        proxy = None
         if self.structures(UnitTypeId.PYLON).ready:
             proxy = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
             pylon = self.structures(UnitTypeId.PYLON).ready.random
@@ -88,7 +87,7 @@ class WarpGateBot(BotAI):
                 if worker is None:
                     break
                 if not self.gas_buildings or not self.gas_buildings.closer_than(1, vg):
-                    worker.build(UnitTypeId.ASSIMILATOR, vg)
+                    worker.build_gas(vg)
                     worker.stop(queue=True)
 
         # Research warp gate if cybercore is completed
@@ -104,7 +103,7 @@ class WarpGateBot(BotAI):
             if self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 1:
                 gateway(AbilityId.MORPH_WARPGATE)
 
-        if self.proxy_built:
+        if self.proxy_built and proxy:
             await self.warp_new_units(proxy)
 
         # Make stalkers attack either closest enemy unit or enemy spawn location

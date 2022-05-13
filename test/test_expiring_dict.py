@@ -1,5 +1,6 @@
 import os
 import sys
+from contextlib import suppress
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -42,10 +43,8 @@ def test_class():
     assert result == "its me mario"
 
     # Get item that doesnt exist
-    try:
+    with suppress(KeyError):
         result = test["doesnt_exist"]
-    except KeyError:
-        pass
     assert result == test["hello"]
 
     # Set new item

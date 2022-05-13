@@ -1,18 +1,12 @@
-import os
-import sys
+import random
 from contextlib import suppress
+from typing import Set
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import random
-from typing import Set
-
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.position import Point2
 from sc2.unit import Unit
@@ -60,7 +54,7 @@ class ExpandEverywhere(BotAI):
                     for drone in self.workers.collecting:
                         drone: Unit
                         drone.build(UnitTypeId.HATCHERY, exp_pos)
-                        assert False, f"Break out of 2 for loops"
+                        assert False, "Break out of 2 for loops"
 
         # Kill all enemy units in vision / sight
         if self.enemy_units:

@@ -1,130 +1,45 @@
+# pylint: disable=W0212,R0916,R0904
 from __future__ import annotations
 
-import itertools
 import math
 import random
-import time
 import warnings
 from collections import Counter
-from contextlib import suppress
+from functools import cached_property
 from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union
 
 from loguru import logger
-from s2clientprotocol import sc2api_pb2 as sc_pb
 
-from sc2.cache import property_cache_once_per_frame, property_cache_once_per_frame_no_copy
+from sc2.bot_ai_internal import BotAIInternal
+from sc2.cache import property_cache_once_per_frame
 from sc2.constants import (
-    ALL_GAS,
     EQUIVALENTS_FOR_TECH_PROGRESS,
-    IS_PLACEHOLDER,
     PROTOSS_TECH_REQUIREMENT,
     TERRAN_STRUCTURES_REQUIRE_SCV,
     TERRAN_TECH_REQUIREMENT,
     ZERG_TECH_REQUIREMENT,
-    FakeEffectID,
-    abilityid_to_unittypeid,
-    geyser_ids,
-    mineral_ids,
 )
-from sc2.data import ActionResult, Alert, Race, Result, Target, race_townhalls
+from sc2.data import Alert, Race, Result, Target
 from sc2.dicts.unit_research_abilities import RESEARCH_INFO
 from sc2.dicts.unit_train_build_abilities import TRAIN_INFO
 from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
-from sc2.distances import DistanceCalculation
-from sc2.game_data import AbilityData, Cost, GameData
-
-# Imports for mypy and pycharm autocomplete as well as sphinx autodocumentation
-from sc2.game_state import Blip, EffectData, GameState
+from sc2.game_data import AbilityData, Cost
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
-from sc2.pixel_map import PixelMap
 from sc2.position import Point2
 from sc2.unit import Unit
-from sc2.unit_command import UnitCommand
 from sc2.units import Units
 
 if TYPE_CHECKING:
-    from sc2.client import Client
-    from sc2.game_info import GameInfo, Ramp
+    from sc2.game_info import Ramp
 
 
-class BotAI(DistanceCalculation):
+class BotAI(BotAIInternal):
     """Base class for bots."""
 
     EXPANSION_GAP_THRESHOLD = 15
-
-    def _initialize_variables(self):
-        """ Called from main.py internally """
-        DistanceCalculation.__init__(self)
-        # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://aiarena.net
-        # The bot ID will stay the same each game so your bot can "adapt" to the opponent
-        if not hasattr(self, "opponent_id"):
-            # Prevent overwriting the opponent_id which is set here https://github.com/Hannessa/python-sc2-ladderbot/blob/master/__init__.py#L40
-            # otherwise set it to None
-            self.opponent_id: str = None
-        # Select distance calculation method, see distances.py: _distances_override_functions function
-        if not hasattr(self, "distance_calculation_method"):
-            self.distance_calculation_method: int = 2
-        # Select if the Unit.command should return UnitCommand objects. Set this to True if your bot uses 'self.do(unit(ability, target))'
-        if not hasattr(self, "unit_command_uses_self_do"):
-            self.unit_command_uses_self_do: bool = False
-        # This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)
-        self.realtime: bool = False
-        self.base_build: int = -1
-        self.all_units: Units = Units([], self)
-        self.units: Units = Units([], self)
-        self.workers: Units = Units([], self)
-        self.larva: Units = Units([], self)
-        self.structures: Units = Units([], self)
-        self.townhalls: Units = Units([], self)
-        self.gas_buildings: Units = Units([], self)
-        self.all_own_units: Units = Units([], self)
-        self.enemy_units: Units = Units([], self)
-        self.enemy_structures: Units = Units([], self)
-        self.all_enemy_units: Units = Units([], self)
-        self.resources: Units = Units([], self)
-        self.destructables: Units = Units([], self)
-        self.watchtowers: Units = Units([], self)
-        self.mineral_field: Units = Units([], self)
-        self.vespene_geyser: Units = Units([], self)
-        self.placeholders: Units = Units([], self)
-        self.techlab_tags: Set[int] = set()
-        self.reactor_tags: Set[int] = set()
-        self.minerals: int = 50
-        self.vespene: int = 0
-        self.supply_army: float = 0
-        self.supply_workers: float = 12  # Doesn't include workers in production
-        self.supply_cap: float = 15
-        self.supply_used: float = 12
-        self.supply_left: float = 3
-        self.idle_worker_count: int = 0
-        self.army_count: int = 0
-        self.warp_gate_count: int = 0
-        self.actions: List[UnitCommand] = []
-        self.blips: Set[Blip] = set()
-        self.race: Race = None
-        self.enemy_race: Race = None
-        self._units_created: Counter = Counter()
-        self._unit_tags_seen_this_game: Set[int] = set()
-        self._units_previous_map: Dict[int, Unit] = {}
-        self._structures_previous_map: Dict[int, Unit] = {}
-        self._enemy_units_previous_map: Dict[int, Unit] = {}
-        self._enemy_structures_previous_map: Dict[int, Unit] = {}
-        self._all_units_previous_map: Dict[int, Unit] = {}
-        self._previous_upgrades: Set[UpgradeId] = set()
-        self._expansion_positions_list: List[Point2] = []
-        self._resource_location_to_expansion_position_dict: Dict[Point2, Point2] = {}
-        self._time_before_step: float = None
-        self._time_after_step: float = None
-        self._min_step_time: float = math.inf
-        self._max_step_time: float = 0
-        self._last_step_step_time: float = 0
-        self._total_time_in_on_step: float = 0
-        self._total_steps_iterations: int = 0
-        # Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame
-        self.unit_tags_received_action: Set[int] = set()
 
     @property
     def time(self) -> float:
@@ -154,31 +69,6 @@ class BotAI(DistanceCalculation):
             self._max_step_time * 1000,
             self._last_step_step_time * 1000,
         )
-
-    @property
-    def game_info(self) -> GameInfo:
-        """ See game_info.py """
-        return self._game_info
-
-    @property
-    def game_data(self) -> GameData:
-        """ See game_data.py """
-        return self._game_data
-
-    @property
-    def client(self) -> Client:
-        """ See client.py """
-        return self._client
-
-    @property
-    def larva_count(self):
-        """ Replacement for self.state.common.larva_count https://github.com/Blizzard/s2client-proto/blob/d3d18392f9d7c646067d447df0c936a8ca57d587/s2clientprotocol/sc2api.proto#L614 """
-        warnings.warn(
-            "self.larva_count will be removed soon, please use len(self.larva) or self.larva.amount instead",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return len(self.larva)
 
     def alert(self, alert_code: Alert) -> bool:
         """
@@ -227,44 +117,42 @@ class BotAI(DistanceCalculation):
         Returns the spawn location of the bot, using the position of the first created townhall.
         This will be None if the bot is run on an arcade or custom map that does not feature townhalls at game start.
         """
-        return self._game_info.player_start_location
+        return self.game_info.player_start_location
 
     @property
     def enemy_start_locations(self) -> List[Point2]:
         """Possible start locations for enemies."""
-        return self._game_info.start_locations
+        return self.game_info.start_locations
 
-    @property
+    @cached_property
     def main_base_ramp(self) -> Ramp:
         """Returns the Ramp instance of the closest main-ramp to start location.
         Look in game_info.py for more information about the Ramp class
 
         Example: See terran ramp wall bot
         """
-        if hasattr(self, "cached_main_base_ramp"):
-            return self.cached_main_base_ramp
         # The reason for len(ramp.upper) in {2, 5} is:
         # ParaSite map has 5 upper points, and most other maps have 2 upper points at the main ramp.
         # The map Acolyte has 4 upper points at the wrong ramp (which is closest to the start position).
         try:
-            self.cached_main_base_ramp = min(
+            found_main_base_ramp = min(
                 (ramp for ramp in self.game_info.map_ramps if len(ramp.upper) in {2, 5}),
                 key=lambda r: self.start_location.distance_to(r.top_center),
             )
         except ValueError:
             # Hardcoded hotfix for Honorgrounds LE map, as that map has a large main base ramp with inbase natural
-            self.cached_main_base_ramp = min(
+            found_main_base_ramp = min(
                 (ramp for ramp in self.game_info.map_ramps if len(ramp.upper) in {4, 9}),
                 key=lambda r: self.start_location.distance_to(r.top_center),
             )
-        return self.cached_main_base_ramp
+        return found_main_base_ramp
 
     @property_cache_once_per_frame
     def expansion_locations_list(self) -> List[Point2]:
         """ Returns a list of expansion positions, not sorted in any way. """
         assert (
             self._expansion_positions_list
-        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        ), "self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
         return self._expansion_positions_list
 
     @property_cache_once_per_frame
@@ -277,7 +165,7 @@ class BotAI(DistanceCalculation):
         """
         assert (
             self._expansion_positions_list
-        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
+        ), "self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
         expansion_locations: Dict[Point2, Units] = {pos: Units([], self) for pos in self._expansion_positions_list}
         for resource in self.resources:
             # It may be that some resources are not mapped to an expansion location
@@ -287,91 +175,8 @@ class BotAI(DistanceCalculation):
                 expansion_locations[exp_position].append(resource)
         return expansion_locations
 
-    # Deprecated
-    @property_cache_once_per_frame
-    def expansion_locations(self) -> Dict[Point2, Units]:
-        """ Same as the function above. """
-        assert (
-            self._expansion_positions_list
-        ), f"self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
-        warnings.warn(
-            f"You are using 'self.expansion_locations', please use 'self.expansion_locations_list' (fast) or 'self.expansion_locations_dict' (slow) instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self.expansion_locations_dict
-
-    def _find_expansion_locations(self):
-        """ Ran once at the start of the game to calculate expansion locations. """
-        # Idea: create a group for every resource, then merge these groups if
-        # any resource in a group is closer than a threshold to any resource of another group
-
-        # Distance we group resources by
-        resource_spread_threshold: float = 8.5
-        geysers: Units = self.vespene_geyser
-        # Create a group for every resource
-        resource_groups: List[List[Unit]] = [
-            [resource] for resource in self.resources
-            if resource.name != "MineralField450"  # dont use low mineral count patches
-        ]
-        # Loop the merging process as long as we change something
-        merged_group = True
-        while merged_group:
-            merged_group = False
-            # Check every combination of two groups
-            for group_a, group_b in itertools.combinations(resource_groups, 2):
-                # Check if any pair of resource of these groups is closer than threshold together
-                if any(
-                    resource_a.distance_to(resource_b) <= resource_spread_threshold
-                    for resource_a, resource_b in itertools.product(group_a, group_b)
-                ):
-                    # Remove the single groups and add the merged group
-                    resource_groups.remove(group_a)
-                    resource_groups.remove(group_b)
-                    resource_groups.append(group_a + group_b)
-                    merged_group = True
-                    break
-        # Distance offsets we apply to center of each resource group to find expansion position
-        offset_range = 7
-        offsets = [
-            (x, y) for x, y in itertools.product(range(-offset_range, offset_range + 1), repeat=2)
-            if 4 < math.hypot(x, y) <= 8
-        ]
-        # Dict we want to return
-        centers = {}
-        # For every resource group:
-        for resources in resource_groups:
-            # Possible expansion points
-            amount = len(resources)
-            # Calculate center, round and add 0.5 because expansion location will have (x.5, y.5)
-            # coordinates because bases have size 5.
-            center_x = int(sum(resource.position.x for resource in resources) / amount) + 0.5
-            center_y = int(sum(resource.position.y for resource in resources) / amount) + 0.5
-            possible_points = (Point2((offset[0] + center_x, offset[1] + center_y)) for offset in offsets)
-            # Filter out points that are too near
-            possible_points = (
-                point for point in possible_points
-                # Check if point can be built on
-                if self._game_info.placement_grid[point.rounded] == 1
-                # Check if all resources have enough space to point
-                and all(
-                    point.distance_to(resource) >= (7 if resource._proto.unit_type in geyser_ids else 6)
-                    for resource in resources
-                )
-            )
-            # Choose best fitting point
-            result: Point2 = min(
-                possible_points, key=lambda point: sum(point.distance_to(resource) for resource in resources)
-            )
-            centers[result] = resources
-            # Put all expansion locations in a list
-            self._expansion_positions_list.append(result)
-            # Maps all resource positions to the expansion position
-            for resource in resources:
-                self._resource_location_to_expansion_position_dict[resource.position] = result
-
     @property
-    def units_created(self) -> Counter:
+    def units_created(self) -> Counter[UnitTypeId, int]:
         """Returns a Counter for all your units and buildings you have created so far.
 
         This may be used for statistics (at the end of the game) or for strategic decision making.
@@ -390,24 +195,6 @@ class BotAI(DistanceCalculation):
         """
         return self._units_created
 
-    def _correct_zerg_supply(self):
-        """The client incorrectly rounds zerg supply down instead of up (see
-        https://github.com/Blizzard/s2client-proto/issues/123), so self.supply_used
-        and friends return the wrong value when there are an odd number of zerglings
-        and banelings. This function corrects the bad values."""
-        # TODO: remove when Blizzard/sc2client-proto#123 gets fixed.
-        half_supply_units = {
-            UnitTypeId.ZERGLING,
-            UnitTypeId.ZERGLINGBURROWED,
-            UnitTypeId.BANELING,
-            UnitTypeId.BANELINGBURROWED,
-            UnitTypeId.BANELINGCOCOON,
-        }
-        correction = self.units(half_supply_units).amount % 2
-        self.supply_used += correction
-        self.supply_army += correction
-        self.supply_left -= correction
-
     async def get_available_abilities(
         self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
     ) -> List[List[AbilityId]]:
@@ -423,7 +210,7 @@ class BotAI(DistanceCalculation):
 
         :param units:
         :param ignore_resource_requirements:"""
-        return await self._client.query_available_abilities(units, ignore_resource_requirements)
+        return await self.client.query_available_abilities(units, ignore_resource_requirements)
 
     async def expand_now(
         self, building: UnitTypeId = None, max_distance: float = 10, location: Optional[Point2] = None
@@ -467,8 +254,8 @@ class BotAI(DistanceCalculation):
                 # already taken
                 continue
 
-            startp = self._game_info.player_start_location
-            d = await self._client.query_pathing(startp, el)
+            startp = self.game_info.player_start_location
+            d = await self.client.query_pathing(startp, el)
             if d is None:
                 continue
 
@@ -478,6 +265,7 @@ class BotAI(DistanceCalculation):
 
         return closest
 
+    # pylint: disable=R0912
     async def distribute_workers(self, resource_ratio: float = 2):
         """
         Distributes workers across all the bases taken.
@@ -495,7 +283,7 @@ class BotAI(DistanceCalculation):
         :param resource_ratio:"""
         if not self.mineral_field or not self.workers or not self.townhalls.ready:
             return
-        worker_pool = [worker for worker in self.workers.idle]
+        worker_pool = self.workers.idle
         bases = self.townhalls.ready
         gas_buildings = self.gas_buildings.ready
 
@@ -583,9 +371,9 @@ class BotAI(DistanceCalculation):
                 # so dont move him
                 pass
 
-    @property
+    @property_cache_once_per_frame
     def owned_expansions(self) -> Dict[Point2, Unit]:
-        """List of expansions owned by the player."""
+        """Dict of expansions owned by the player with mapping {expansion_location: townhall_structure}."""
         owned = {}
         for el in self.expansion_locations_list:
 
@@ -613,7 +401,7 @@ class BotAI(DistanceCalculation):
         :param unit_type:"""
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
-        unit_supply_cost = self._game_data.units[unit_type.value]._proto.food_required
+        unit_supply_cost = self.game_data.units[unit_type.value]._proto.food_required
         if unit_supply_cost > 0 and unit_type in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[unit_type]) == 1:
             producer: UnitTypeId
             for producer in UNIT_TRAINED_FROM[unit_type]:
@@ -688,19 +476,19 @@ class BotAI(DistanceCalculation):
             if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB, UnitTypeId.ARCHON}:
                 if item_id == UnitTypeId.REACTOR:
                     return Cost(50, 50)
-                elif item_id == UnitTypeId.TECHLAB:
+                if item_id == UnitTypeId.TECHLAB:
                     return Cost(50, 25)
-                elif item_id == UnitTypeId.ARCHON:
+                if item_id == UnitTypeId.ARCHON:
                     return self.calculate_unit_value(UnitTypeId.ARCHON)
-            unit_data = self._game_data.units[item_id.value]
+            unit_data = self.game_data.units[item_id.value]
             # Cost of morphs is automatically correctly calculated by 'calculate_ability_cost'
-            return self._game_data.calculate_ability_cost(unit_data.creation_ability)
+            return self.game_data.calculate_ability_cost(unit_data.creation_ability)
 
-        elif isinstance(item_id, UpgradeId):
-            cost = self._game_data.upgrades[item_id.value].cost
+        if isinstance(item_id, UpgradeId):
+            cost = self.game_data.upgrades[item_id.value].cost
         else:
             # Is already AbilityId
-            cost = self._game_data.calculate_ability_cost(item_id)
+            cost = self.game_data.calculate_ability_cost(item_id)
         return cost
 
     def can_afford(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId], check_supply_cost: bool = True) -> bool:
@@ -764,8 +552,8 @@ class BotAI(DistanceCalculation):
         if ability_id in abilities:
             if only_check_energy_and_cooldown:
                 return True
-            cast_range = self._game_data.abilities[ability_id.value]._proto.cast_range
-            ability_target = self._game_data.abilities[ability_id.value]._proto.target
+            cast_range = self.game_data.abilities[ability_id.value]._proto.cast_range
+            ability_target = self.game_data.abilities[ability_id.value]._proto.target
             # Check if target is in range (or is a self cast like stimpack)
             if (
                 ability_target == 1 or ability_target == Target.PointOrNone.value and isinstance(target, Point2)
@@ -773,13 +561,13 @@ class BotAI(DistanceCalculation):
             ):  # cant replace 1 with "Target.None.value" because ".None" doesnt seem to be a valid enum name
                 return True
             # Check if able to use ability on a unit
-            elif (
+            if (
                 ability_target in {Target.Unit.value, Target.PointOrUnit.value} and isinstance(target, Unit)
                 and unit.distance_to(target) <= unit.radius + target.radius + cast_range
             ):
                 return True
             # Check if able to use ability on a position
-            elif (
+            if (
                 ability_target in {Target.Point.value, Target.PointOrUnit.value} and isinstance(target, Point2)
                 and unit.distance_to(target) <= unit.radius + cast_range
             ):
@@ -811,13 +599,14 @@ class BotAI(DistanceCalculation):
                     return worker
 
             return workers.random if force else None
+        return None
 
     async def can_place_single(self, building: Union[AbilityId, UnitTypeId], position: Point2) -> bool:
         """ Checks the placement for only one position. """
         if isinstance(building, UnitTypeId):
-            creation_ability = self._game_data.units[building.value].creation_ability.id
-            return (await self._client._query_building_placement_fast(creation_ability, [position]))[0]
-        return (await self._client._query_building_placement_fast(building, [position]))[0]
+            creation_ability = self.game_data.units[building.value].creation_ability.id
+            return (await self.client._query_building_placement_fast(creation_ability, [position]))[0]
+        return (await self.client._query_building_placement_fast(building, [position]))[0]
 
     async def can_place(self, building: Union[AbilityData, AbilityId, UnitTypeId],
                         positions: List[Point2]) -> List[bool]:
@@ -836,7 +625,7 @@ class BotAI(DistanceCalculation):
         building_type = type(building)
         assert type(building) in {AbilityData, AbilityId, UnitTypeId}, f"{building}, {building_type}"
         if building_type == UnitTypeId:
-            building = self._game_data.units[building.value].creation_ability.id
+            building = self.game_data.units[building.value].creation_ability.id
         elif building_type == AbilityData:
             warnings.warn(
                 "Using AbilityData is deprecated and may be removed soon. Please use AbilityId or UnitTypeId instead.",
@@ -852,13 +641,11 @@ class BotAI(DistanceCalculation):
                 stacklevel=2,
             )
             return await self.can_place_single(building, positions)
-        else:
-            assert isinstance(positions, list), f"Expected an iterable (list, tuple), but was: {positions}"
-            assert isinstance(
-                positions[0], Point2
-            ), f"List is expected to have Point2, but instead had: {positions[0]} {type(positions[0])}"
-
-        return await self._client._query_building_placement_fast(building, positions)
+        assert isinstance(positions, list), f"Expected an iterable (list, tuple), but was: {positions}"
+        assert isinstance(
+            positions[0], Point2
+        ), f"List is expected to have Point2, but instead had: {positions[0]} {type(positions[0])}"
+        return await self.client._query_building_placement_fast(building, positions)
 
     async def find_placement(
         self,
@@ -888,7 +675,7 @@ class BotAI(DistanceCalculation):
         assert isinstance(near, Point2), f"{near} is no Point2 object"
 
         if isinstance(building, UnitTypeId):
-            building = self._game_data.units[building.value].creation_ability.id
+            building = self.game_data.units[building.value].creation_ability.id
 
         if await self.can_place_single(
             building, near
@@ -907,13 +694,13 @@ class BotAI(DistanceCalculation):
                     [(distance, dy) for dy in range(-distance, distance + 1, placement_step)]
                 )
             ]
-            res = await self._client._query_building_placement_fast(building, possible_positions)
+            res = await self.client._query_building_placement_fast(building, possible_positions)
             # Filter all positions if building can be placed
             possible = [p for r, p in zip(res, possible_positions) if r]
 
             if addon_place:
                 # Filter remaining positions if addon can be placed
-                res = await self._client._query_building_placement_fast(
+                res = await self.client._query_building_placement_fast(
                     AbilityId.TERRANBUILDDROP_SUPPLYDEPOTDROP,
                     [p.offset((2.5, -0.5)) for p in possible],
                 )
@@ -924,8 +711,7 @@ class BotAI(DistanceCalculation):
 
             if random_alternative:
                 return random.choice(possible)
-            else:
-                return min(possible, key=lambda p: p.distance_to_point2(near))
+            return min(possible, key=lambda p: p.distance_to_point2(near))
         return None
 
     # TODO: improve using cache per frame
@@ -947,34 +733,12 @@ class BotAI(DistanceCalculation):
         assert isinstance(upgrade_type, UpgradeId), f"{upgrade_type} is no UpgradeId"
         if upgrade_type in self.state.upgrades:
             return 1
-        creationAbilityID = self._game_data.upgrades[upgrade_type.value].research_ability.exact_id
+        creationAbilityID = self.game_data.upgrades[upgrade_type.value].research_ability.exact_id
         for structure in self.structures.filter(lambda unit: unit.is_ready):
             for order in structure.orders:
                 if order.ability.exact_id == creationAbilityID:
                     return order.progress
         return 0
-
-    @property_cache_once_per_frame_no_copy
-    def _abilities_all_units(self) -> Tuple[Counter, Dict[UnitTypeId, float]]:
-        """Cache for the already_pending function, includes protoss units warping in,
-        all units in production and all structures, and all morphs"""
-        abilities_amount = Counter()
-        max_build_progress: Dict[UnitTypeId, float] = {}
-        unit: Unit
-        for unit in self.units + self.structures:
-            for order in unit.orders:
-                abilities_amount[order.ability] += 1
-            if not unit.is_ready:
-                if self.race != Race.Terran or not unit.is_structure:
-                    # If an SCV is constructing a building, already_pending would count this structure twice
-                    # (once from the SCV order, and once from "not structure.is_ready")
-                    creation_ability: AbilityData = self._game_data.units[unit.type_id.value].creation_ability
-                    abilities_amount[creation_ability] += 1
-                    max_build_progress[creation_ability] = max(
-                        max_build_progress.get(creation_ability, 0), unit.build_progress
-                    )
-
-        return abilities_amount, max_build_progress
 
     def structure_type_build_progress(self, structure_type: Union[UnitTypeId, int]) -> float:
         """
@@ -1016,10 +780,10 @@ class BotAI(DistanceCalculation):
             s_type.value
             for s_type in EQUIVALENTS_FOR_TECH_PROGRESS.get(structure_type, set())
         }
-        # SUPPLYDEPOTDROP is not in self._game_data.units, so bot_ai should not check the build progress via creation ability (worker abilities)
-        if structure_type_value not in self._game_data.units:
+        # SUPPLYDEPOTDROP is not in self.game_data.units, so bot_ai should not check the build progress via creation ability (worker abilities)
+        if structure_type_value not in self.game_data.units:
             return max([s.build_progress for s in self.structures if s._proto.unit_type in equiv_values], default=0)
-        creation_ability: AbilityData = self._game_data.units[structure_type_value].creation_ability
+        creation_ability: AbilityData = self.game_data.units[structure_type_value].creation_ability
         max_value = max(
             [s.build_progress for s in self.structures if s._proto.unit_type in equiv_values] +
             [self._abilities_all_units[1].get(creation_ability, 0)],
@@ -1057,7 +821,7 @@ class BotAI(DistanceCalculation):
         unit_info_id = race_dict[self.race][structure_type]
         unit_info_id_value = unit_info_id.value
         # The following commented out line is unreliable for ghost / thor as they return 0 which is incorrect
-        # unit_info_id_value = self._game_data.units[structure_type.value]._proto.tech_requirement
+        # unit_info_id_value = self.game_data.units[structure_type.value]._proto.tech_requirement
         if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
         progresses: List[float] = [self.structure_type_build_progress(unit_info_id_value)]
@@ -1082,45 +846,20 @@ class BotAI(DistanceCalculation):
         """
         if isinstance(unit_type, UpgradeId):
             return self.already_pending_upgrade(unit_type)
-        ability = self._game_data.units[unit_type.value].creation_ability
+        ability = self.game_data.units[unit_type.value].creation_ability
         return self._abilities_all_units[0][ability]
-
-    @property_cache_once_per_frame_no_copy
-    def _worker_orders(self) -> Counter:
-        """ This function is used internally, do not use! It is to store all worker abilities. """
-        abilities_amount = Counter()
-        structures_in_production: Set[Union[Point2, int]] = set()
-        for structure in self.structures:
-            if structure.type_id in TERRAN_STRUCTURES_REQUIRE_SCV:
-                structures_in_production.add(structure.position)
-                structures_in_production.add(structure.tag)
-        for worker in self.workers:
-            for order in worker.orders:
-                # Skip if the SCV is constructing (not isinstance(order.target, int))
-                # or resuming construction (isinstance(order.target, int))
-                is_int = isinstance(order.target, int)
-                if (
-                    is_int and order.target in structures_in_production
-                    or not is_int and Point2.from_proto(order.target) in structures_in_production
-                ):
-                    continue
-                abilities_amount[order.ability] += 1
-        return abilities_amount
 
     def worker_en_route_to_build(self, unit_type: UnitTypeId) -> float:
         """This function counts how many workers are on the way to start the construction a building.
-        Warning: this function may change its name in the future!
-        New function. Please report any bugs!
 
         :param unit_type:"""
-        ability = self._game_data.units[unit_type.value].creation_ability
+        ability = self.game_data.units[unit_type.value].creation_ability
         return self._worker_orders[ability]
 
     @property_cache_once_per_frame
     def structures_without_construction_SCVs(self) -> Units:
         """Returns all structures that do not have an SCV constructing it.
-        Warning: this function may move to become a Units filter.
-        New function. Please report any bugs!"""
+        Warning: this function may move to become a Units filter."""
         worker_targets: Set[Union[int, Point2]] = set()
         for worker in self.workers:
             # Ignore repairing workers
@@ -1178,6 +917,7 @@ class BotAI(DistanceCalculation):
         if builder is None:
             return False
         if building in gas_buildings:
+            assert isinstance(near, Unit)
             builder.build_gas(near)
             return True
         self.do(builder.build(building, p), subtract_cost=True, ignore_warning=True)
@@ -1225,9 +965,7 @@ class BotAI(DistanceCalculation):
             }
             unit_info_id = race_dict[self.race][unit_type]
             logger.warning(
-                "{} Trying to produce unit {} in self.train() but tech requirement is not met: {}".format(
-                    self.time_formatted, unit_type, unit_info_id
-                )
+                f"{self.time_formatted} Trying to produce unit {unit_type} in self.train() but tech requirement is not met: {unit_info_id}"
             )
             return 0
 
@@ -1246,6 +984,7 @@ class BotAI(DistanceCalculation):
         is_protoss = self.race == Race.Protoss
         is_terran = self.race == Race.Terran
         can_have_addons = any(
+            # pylint: disable=C0208
             u in train_structure_type for u in {UnitTypeId.BARRACKS, UnitTypeId.FACTORY, UnitTypeId.STARPORT}
         )
         # Sort structures closest to a point
@@ -1402,135 +1141,6 @@ class BotAI(DistanceCalculation):
                 return successful_action
         return False
 
-    def do(
-        self,
-        action: UnitCommand,
-        subtract_cost: bool = False,
-        subtract_supply: bool = False,
-        can_afford_check: bool = False,
-        ignore_warning: bool = False,
-    ) -> bool:
-        """Adds a unit action to the 'self.actions' list which is then executed at the end of the frame.
-
-        Training a unit::
-
-            # Train an SCV from a random idle command center
-            cc = self.townhalls.idle.random_or(None)
-            # self.townhalls can be empty or there are no idle townhalls
-            if cc and self.can_afford(UnitTypeId.SCV):
-                cc.train(UnitTypeId.SCV)
-
-        Building a building::
-
-            # Building a barracks at the main ramp, requires 150 minerals and a depot
-            worker = self.workers.random_or(None)
-            barracks_placement_position = self.main_base_ramp.barracks_correct_placement
-            if worker and self.can_afford(UnitTypeId.BARRACKS):
-                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)
-
-        Moving a unit::
-
-            # Move a random worker to the center of the map
-            worker = self.workers.random_or(None)
-            # worker can be None if all are dead
-            if worker:
-                worker.move(self.game_info.map_center)
-
-        :param action:
-        :param subtract_cost:
-        :param subtract_supply:
-        :param can_afford_check:
-        """
-        if not self.unit_command_uses_self_do and isinstance(action, bool):
-            if not ignore_warning:
-                warnings.warn(
-                    "You have used self.do(). Please consider putting 'self.unit_command_uses_self_do = True' in your bot __init__() function or removing self.do().",
-                    DeprecationWarning,
-                    stacklevel=2,
-                )
-            return action
-
-        assert isinstance(
-            action, UnitCommand
-        ), f"Given unit command is not a command, but instead of type {type(action)}"
-        if subtract_cost:
-            cost: Cost = self._game_data.calculate_ability_cost(action.ability)
-            if can_afford_check and not (self.minerals >= cost.minerals and self.vespene >= cost.vespene):
-                # Dont do action if can't afford
-                return False
-            self.minerals -= cost.minerals
-            self.vespene -= cost.vespene
-        if subtract_supply and action.ability in abilityid_to_unittypeid:
-            unit_type = abilityid_to_unittypeid[action.ability]
-            required_supply = self.calculate_supply_cost(unit_type)
-            # Overlord has -8
-            if required_supply > 0:
-                self.supply_used += required_supply
-                self.supply_left -= required_supply
-        self.actions.append(action)
-        self.unit_tags_received_action.add(action.unit.tag)
-        return True
-
-    # TODO remove again, because you can just use 'self.do()' and execute '_do_actions' and 'self.actions.clear()' afterwards?
-    async def synchronous_do(self, action: UnitCommand):
-        """
-        Not recommended. Use self.do instead to reduce lag.
-        This function is only useful for realtime=True in the first frame of the game to instantly produce a worker
-        and split workers on the mineral patches.
-        """
-        assert isinstance(
-            action, UnitCommand
-        ), f"Given unit command is not a command, but instead of type {type(action)}"
-        if not self.can_afford(action.ability):
-            logger.warning(f"Cannot afford action {action}")
-            return ActionResult.Error
-        r = await self._client.actions(action)
-        if not r:  # success
-            cost = self._game_data.calculate_ability_cost(action.ability)
-            self.minerals -= cost.minerals
-            self.vespene -= cost.vespene
-            self.unit_tags_received_action.add(action.unit.tag)
-        else:
-            logger.error(f"Error: {r} (action: {action})")
-        return r
-
-    async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
-        """Used internally by main.py automatically, use self.do() instead!
-
-        :param actions:
-        :param prevent_double:"""
-        if not actions:
-            return None
-        if prevent_double:
-            actions = list(filter(self.prevent_double_actions, actions))
-        result = await self._client.actions(actions)
-        return result
-
-    def prevent_double_actions(self, action) -> bool:
-        """
-        :param action:
-        """
-        # Always add actions if queued
-        if action.queue:
-            return True
-        if action.unit.orders:
-            # action: UnitCommand
-            # current_action: UnitOrder
-            current_action = action.unit.orders[0]
-            if current_action.ability.id != action.ability and current_action.ability.exact_id != action.ability:
-                # Different action, return True
-                return True
-            with suppress(AttributeError):
-                if current_action.target == action.target.tag:
-                    # Same action, remove action if same target unit
-                    return False
-            with suppress(AttributeError):
-                if action.target.x == current_action.target.x and action.target.y == current_action.target.y:
-                    # Same action, remove action if same target position
-                    return False
-            return True
-        return True
-
     async def chat_send(self, message: str, team_only: bool = False):
         """Send a chat message to the SC2 Client.
 
@@ -1541,15 +1151,15 @@ class BotAI(DistanceCalculation):
         :param message:
         :param team_only:"""
         assert isinstance(message, str), f"{message} is not a string"
-        await self._client.chat_send(message, team_only)
+        await self.client.chat_send(message, team_only)
 
     def in_map_bounds(self, pos: Union[Point2, tuple, list]) -> bool:
         """Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
         :param pos:"""
         return (
-            self._game_info.playable_area.x <= pos[0] <
-            self._game_info.playable_area.x + self.game_info.playable_area.width and self._game_info.playable_area.y <=
-            pos[1] < self._game_info.playable_area.y + self.game_info.playable_area.height
+            self.game_info.playable_area.x <= pos[0] <
+            self.game_info.playable_area.x + self.game_info.playable_area.width and self.game_info.playable_area.y <=
+            pos[1] < self.game_info.playable_area.y + self.game_info.playable_area.height
         )
 
     # For the functions below, make sure you are inside the boundaries of the map size.
@@ -1558,17 +1168,17 @@ class BotAI(DistanceCalculation):
         Caution: terrain height is different from a unit's z-coordinate.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
-        return self._game_info.terrain_height[pos]
+        return self.game_info.terrain_height[pos]
 
     def get_terrain_z_height(self, pos: Union[Point2, Unit]) -> float:
         """Returns terrain z-height at a position.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
-        return -16 + 32 * self._game_info.terrain_height[pos] / 255
+        return -16 + 32 * self.game_info.terrain_height[pos] / 255
 
     def in_placement_grid(self, pos: Union[Point2, Unit]) -> bool:
         """Returns True if you can place something at a position.
@@ -1576,24 +1186,24 @@ class BotAI(DistanceCalculation):
         Caution: some x and y offset might be required, see ramp code in game_info.py
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
-        return self._game_info.placement_grid[pos] == 1
+        return self.game_info.placement_grid[pos] == 1
 
     def in_pathing_grid(self, pos: Union[Point2, Unit]) -> bool:
         """Returns True if a ground unit can pass through a grid point.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
-        return self._game_info.pathing_grid[pos] == 1
+        return self.game_info.pathing_grid[pos] == 1
 
     def is_visible(self, pos: Union[Point2, Unit]) -> bool:
         """Returns True if you have vision on a grid point.
 
         :param pos:"""
         # more info: https://github.com/Blizzard/s2client-proto/blob/9906df71d6909511907d8419b33acc1a3bd51ec0/s2clientprotocol/spatial.proto#L19
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self.state.visibility[pos] == 2
 
@@ -1601,310 +1211,9 @@ class BotAI(DistanceCalculation):
         """Returns True if there is creep on the grid point.
 
         :param pos:"""
-        assert isinstance(pos, (Point2, Unit)), f"pos is not of type Point2 or Unit"
+        assert isinstance(pos, (Point2, Unit)), "pos is not of type Point2 or Unit"
         pos = pos.position.rounded
         return self.state.creep[pos] == 1
-
-    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False, base_build: int = -1):
-        """
-        Ran until game start to set game and player data.
-
-        :param client:
-        :param player_id:
-        :param game_info:
-        :param game_data:
-        :param realtime:
-        """
-        self._client: Client = client
-        self.player_id: int = player_id
-        self._game_info: GameInfo = game_info
-        self._game_data: GameData = game_data
-        self.realtime: bool = realtime
-        self.base_build: int = base_build
-
-        self.race: Race = Race(self._game_info.player_races[self.player_id])
-
-        if len(self._game_info.player_races) == 2:
-            self.enemy_race: Race = Race(self._game_info.player_races[3 - self.player_id])
-
-        self._distances_override_functions(self.distance_calculation_method)
-
-    def _prepare_first_step(self):
-        """First step extra preparations. Must not be called before _prepare_step."""
-        if self.townhalls:
-            self._game_info.player_start_location = self.townhalls.first.position
-            # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
-            _ = self._find_expansion_locations()
-        self._game_info.map_ramps, self._game_info.vision_blockers = self._game_info._find_ramps_and_vision_blockers()
-        self._time_before_step: float = time.perf_counter()
-
-    def _prepare_step(self, state, proto_game_info):
-        """
-        :param state:
-        :param proto_game_info:
-        """
-        # Set attributes from new state before on_step."""
-        self.state: GameState = state  # See game_state.py
-        # update pathing grid, which unfortunately is in GameInfo instead of GameState
-        self._game_info.pathing_grid: PixelMap = PixelMap(
-            proto_game_info.game_info.start_raw.pathing_grid, in_bits=True, mirrored=False
-        )
-        # Required for events, needs to be before self.units are initialized so the old units are stored
-        self._units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.units}
-        self._structures_previous_map: Dict[int, Unit] = {structure.tag: structure for structure in self.structures}
-        self._enemy_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.enemy_units}
-        self._enemy_structures_previous_map: Dict[int, Unit] = {
-            structure.tag: structure
-            for structure in self.enemy_structures
-        }
-        self._all_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.all_units}
-
-        self._prepare_units()
-        self.minerals: int = state.common.minerals
-        self.vespene: int = state.common.vespene
-        self.supply_army: int = state.common.food_army
-        self.supply_workers: int = state.common.food_workers  # Doesn't include workers in production
-        self.supply_cap: int = state.common.food_cap
-        self.supply_used: int = state.common.food_used
-        self.supply_left: int = self.supply_cap - self.supply_used
-
-        if self.race == Race.Zerg:
-            # Workaround Zerg supply rounding bug
-            self._correct_zerg_supply()
-        elif self.race == Race.Protoss:
-            self.warp_gate_count: int = state.common.warp_gate_count
-
-        self.idle_worker_count: int = state.common.idle_worker_count
-        self.army_count: int = state.common.army_count
-        self._time_before_step: float = time.perf_counter()
-
-        if self.enemy_race == Race.Random and self.all_enemy_units:
-            self.enemy_race = Race(self.all_enemy_units.first.race)
-
-    def _prepare_units(self):
-        # Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units
-        self.blips: Set[Blip] = set()
-        self.all_units: Units = Units([], self)
-        self.units: Units = Units([], self)
-        self.workers: Units = Units([], self)
-        self.larva: Units = Units([], self)
-        self.structures: Units = Units([], self)
-        self.townhalls: Units = Units([], self)
-        self.gas_buildings: Units = Units([], self)
-        self.all_own_units: Units = Units([], self)
-        self.enemy_units: Units = Units([], self)
-        self.enemy_structures: Units = Units([], self)
-        self.all_enemy_units: Units = Units([], self)
-        self.resources: Units = Units([], self)
-        self.destructables: Units = Units([], self)
-        self.watchtowers: Units = Units([], self)
-        self.mineral_field: Units = Units([], self)
-        self.vespene_geyser: Units = Units([], self)
-        self.placeholders: Units = Units([], self)
-        self.techlab_tags: Set[int] = set()
-        self.reactor_tags: Set[int] = set()
-
-        worker_types: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
-
-        index: int = 0
-        for unit in self.state.observation_raw.units:
-            if unit.is_blip:
-                self.blips.add(Blip(unit))
-            else:
-                unit_type: int = unit.unit_type
-                # Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
-                if unit_type in FakeEffectID:
-                    self.state.effects.add(EffectData(unit, fake=True))
-                    continue
-                unit_obj = Unit(unit, self, distance_calculation_index=index, base_build=self.base_build)
-                index += 1
-                self.all_units.append(unit_obj)
-                if unit.display_type == IS_PLACEHOLDER:
-                    self.placeholders.append(unit_obj)
-                    continue
-                alliance = unit.alliance
-                # Alliance.Neutral.value = 3
-                if alliance == 3:
-                    # XELNAGATOWER = 149
-                    if unit_type == 149:
-                        self.watchtowers.append(unit_obj)
-                    # mineral field enums
-                    elif unit_type in mineral_ids:
-                        self.mineral_field.append(unit_obj)
-                        self.resources.append(unit_obj)
-                    # geyser enums
-                    elif unit_type in geyser_ids:
-                        self.vespene_geyser.append(unit_obj)
-                        self.resources.append(unit_obj)
-                    # all destructable rocks
-                    else:
-                        self.destructables.append(unit_obj)
-                # Alliance.Self.value = 1
-                elif alliance == 1:
-                    self.all_own_units.append(unit_obj)
-                    unit_id = unit_obj.type_id
-                    if unit_obj.is_structure:
-                        self.structures.append(unit_obj)
-                        if unit_id in race_townhalls[self.race]:
-                            self.townhalls.append(unit_obj)
-                        elif unit_id in ALL_GAS or unit_obj.vespene_contents:
-                            # TODO: remove "or unit_obj.vespene_contents" when a new linux client newer than version 4.10.0 is released
-                            self.gas_buildings.append(unit_obj)
-                        elif unit_id in {
-                            UnitTypeId.TECHLAB,
-                            UnitTypeId.BARRACKSTECHLAB,
-                            UnitTypeId.FACTORYTECHLAB,
-                            UnitTypeId.STARPORTTECHLAB,
-                        }:
-                            self.techlab_tags.add(unit_obj.tag)
-                        elif unit_id in {
-                            UnitTypeId.REACTOR,
-                            UnitTypeId.BARRACKSREACTOR,
-                            UnitTypeId.FACTORYREACTOR,
-                            UnitTypeId.STARPORTREACTOR,
-                        }:
-                            self.reactor_tags.add(unit_obj.tag)
-                    else:
-                        self.units.append(unit_obj)
-                        if unit_id in worker_types:
-                            self.workers.append(unit_obj)
-                        elif unit_id == UnitTypeId.LARVA:
-                            self.larva.append(unit_obj)
-                # Alliance.Enemy.value = 4
-                elif alliance == 4:
-                    self.all_enemy_units.append(unit_obj)
-                    if unit_obj.is_structure:
-                        self.enemy_structures.append(unit_obj)
-                    else:
-                        self.enemy_units.append(unit_obj)
-
-        # Force distance calculation and caching on all units using scipy pdist or cdist
-        if self.distance_calculation_method == 1:
-            _ = self._pdist
-        elif self.distance_calculation_method in {2, 3}:
-            _ = self._cdist
-
-    async def _after_step(self) -> int:
-        """ Executed by main.py after each on_step function. """
-        # Keep track of the bot on_step duration
-        self._time_after_step: float = time.perf_counter()
-        step_duration = self._time_after_step - self._time_before_step
-        self._min_step_time = min(step_duration, self._min_step_time)
-        self._max_step_time = max(step_duration, self._max_step_time)
-        self._last_step_step_time = step_duration
-        self._total_time_in_on_step += step_duration
-        self._total_steps_iterations += 1
-        # Commit and clear bot actions
-        if self.actions:
-            await self._do_actions(self.actions)
-            self.actions.clear()
-        # Clear set of unit tags that were given an order this frame by self.do()
-        self.unit_tags_received_action.clear()
-        # Commit debug queries
-        await self._client._send_debug()
-
-        return self.state.game_loop
-
-    async def _advance_steps(self, steps: int):
-        """Advances the game loop by amount of 'steps'. This function is meant to be used as a debugging and testing tool only.
-        If you are using this, please be aware of the consequences, e.g. 'self.units' will be filled with completely new data."""
-        await self._after_step()
-        # Advance simulation by exactly "steps" frames
-        await self.client.step(steps)
-        state = await self.client.observation()
-        gs = GameState(state.observation)
-        proto_game_info = await self.client._execute(game_info=sc_pb.RequestGameInfo())
-        self._prepare_step(gs, proto_game_info)
-        await self.issue_events()
-        # await self.on_step(-1)
-
-    async def issue_events(self):
-        """This function will be automatically run from main.py and triggers the following functions:
-        - on_unit_created
-        - on_unit_destroyed
-        - on_building_construction_started
-        - on_building_construction_complete
-        - on_upgrade_complete
-        """
-        await self._issue_unit_dead_events()
-        await self._issue_unit_added_events()
-        await self._issue_building_events()
-        await self._issue_upgrade_events()
-        await self._issue_vision_events()
-
-    async def _issue_unit_added_events(self):
-        for unit in self.units:
-            if unit.tag not in self._units_previous_map and unit.tag not in self._unit_tags_seen_this_game:
-                self._unit_tags_seen_this_game.add(unit.tag)
-                self._units_created[unit.type_id] += 1
-                await self.on_unit_created(unit)
-            elif unit.tag in self._units_previous_map:
-                previous_frame_unit: Unit = self._units_previous_map[unit.tag]
-                # Check if a unit took damage this frame and then trigger event
-                if unit.health < previous_frame_unit.health or unit.shield < previous_frame_unit.shield:
-                    damage_amount = previous_frame_unit.health - unit.health + previous_frame_unit.shield - unit.shield
-                    await self.on_unit_took_damage(unit, damage_amount)
-                # Check if a unit type has changed
-                if previous_frame_unit.type_id != unit.type_id:
-                    await self.on_unit_type_changed(unit, previous_frame_unit.type_id)
-
-    async def _issue_upgrade_events(self):
-        difference = self.state.upgrades - self._previous_upgrades
-        for upgrade_completed in difference:
-            await self.on_upgrade_complete(upgrade_completed)
-        self._previous_upgrades = self.state.upgrades
-
-    async def _issue_building_events(self):
-        for structure in self.structures:
-            if structure.tag not in self._structures_previous_map:
-                if structure.build_progress < 1:
-                    await self.on_building_construction_started(structure)
-                else:
-                    # Include starting townhall
-                    self._units_created[structure.type_id] += 1
-                    await self.on_building_construction_complete(structure)
-            elif structure.tag in self._structures_previous_map:
-                # Check if a structure took damage this frame and then trigger event
-                previous_frame_structure: Unit = self._structures_previous_map[structure.tag]
-                if (
-                    structure.health < previous_frame_structure.health
-                    or structure.shield < previous_frame_structure.shield
-                ):
-                    damage_amount = (
-                        previous_frame_structure.health - structure.health + previous_frame_structure.shield -
-                        structure.shield
-                    )
-                    await self.on_unit_took_damage(structure, damage_amount)
-                # Check if a structure changed its type
-                if previous_frame_structure.type_id != structure.type_id:
-                    await self.on_unit_type_changed(structure, previous_frame_structure.type_id)
-                # Check if structure completed
-                if structure.build_progress == 1 and previous_frame_structure.build_progress < 1:
-                    self._units_created[structure.type_id] += 1
-                    await self.on_building_construction_complete(structure)
-
-    async def _issue_vision_events(self):
-        # Call events for enemy unit entered vision
-        for enemy_unit in self.enemy_units:
-            if enemy_unit.tag not in self._enemy_units_previous_map:
-                await self.on_enemy_unit_entered_vision(enemy_unit)
-        for enemy_structure in self.enemy_structures:
-            if enemy_structure.tag not in self._enemy_structures_previous_map:
-                await self.on_enemy_unit_entered_vision(enemy_structure)
-
-        # Call events for enemy unit left vision
-        enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map.keys()) - self.enemy_units.tags
-        for enemy_unit_tag in enemy_units_left_vision:
-            await self.on_enemy_unit_left_vision(enemy_unit_tag)
-        enemy_structures_left_vision: Set[int] = (
-            set(self._enemy_structures_previous_map.keys()) - self.enemy_structures.tags
-        )
-        for enemy_structure_tag in enemy_structures_left_vision:
-            await self.on_enemy_unit_left_vision(enemy_structure_tag)
-
-    async def _issue_unit_dead_events(self):
-        for unit_tag in self.state.dead_units & set(self._all_units_previous_map.keys()):
-            await self.on_unit_destroyed(unit_tag)
 
     async def on_unit_destroyed(self, unit_tag: int):
         """

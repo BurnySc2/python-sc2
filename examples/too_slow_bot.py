@@ -20,7 +20,6 @@ def main():
         maps.get("Abyssal Reef LE"),
         [Bot(Race.Terran, SlowBot()), Computer(Race.Protoss, Difficulty.Medium)],
         realtime=False,
-        step_time_limit=0.2,
     )
 
 

@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 from __future__ import annotations
 
 from bisect import bisect_left
@@ -231,12 +232,8 @@ class UnitTypeData:
     def cost_zerg_corrected(self) -> Cost:
         """ This returns 25 for extractor and 200 for spawning pool instead of 75 and 250 respectively """
         if self.race == Race.Zerg and Attribute.Structure.value in self.attributes:
-            # a = self._game_data.units(UnitTypeId.ZERGLING)
-            # print(a)
-            # print(vars(a))
             return Cost(self._proto.mineral_cost - 50, self._proto.vespene_cost, self._proto.build_time)
-        else:
-            return self.cost
+        return self.cost
 
     @property
     def morph_cost(self) -> Optional[Cost]:

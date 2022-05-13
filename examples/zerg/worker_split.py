@@ -4,11 +4,10 @@ at game start without having to use 'synchronous_do()'.
 This is especially important when your bot runs on realtime=True and
 you want your bot to be reliable against Human opponents.
 """
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 import asyncio
+
+from loguru import logger
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
@@ -38,7 +37,7 @@ class WorkerSplitBot(BotAI):
         # In realtime=False, this should print "8*x" and "x" if
         # self.client.game_step is set to 8 (default value)
         # But if your bot takes too long, it will skip game loops.
-        print(f"Bot's game loop is {self.state.game_loop} and iteration {iteration}")
+        logger.info(f"Bot's game loop is {self.state.game_loop} and iteration {iteration}")
 
 
 def main():
