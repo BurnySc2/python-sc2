@@ -1,10 +1,4 @@
 import math
-import os
-import sys
-
-from sc2.position import Point2
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
@@ -13,9 +7,10 @@ from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.main import run_game
 from sc2.player import Bot, Computer
-from loguru import logger
+from sc2.position import Point2
 
 
+# pylint: disable=W0231
 class FindAdeptShadesBot(BotAI):
 
     def __init__(self):
@@ -24,8 +19,8 @@ class FindAdeptShadesBot(BotAI):
 
     async def on_start(self):
         self.client.game_step = 2
-        await self._client.debug_create_unit(
-            [[UnitTypeId.ADEPT, 10, self.townhalls[0].position.towards(self._game_info.map_center, 5), 1]]
+        await self.client.debug_create_unit(
+            [[UnitTypeId.ADEPT, 10, self.townhalls[0].position.towards(self.game_info.map_center, 5), 1]]
         )
 
     async def on_step(self, iteration: int):
@@ -33,7 +28,7 @@ class FindAdeptShadesBot(BotAI):
         if adepts and not self.shaded:
             # Wait for adepts to spawn and then cast ability
             for adept in adepts:
-                adept(AbilityId.ADEPTPHASESHIFT_ADEPTPHASESHIFT, self._game_info.map_center)
+                adept(AbilityId.ADEPTPHASESHIFT_ADEPTPHASESHIFT, self.game_info.map_center)
             self.shaded = True
         elif self.shades_mapping:
             # Debug log and draw a line between the two units
@@ -41,10 +36,11 @@ class FindAdeptShadesBot(BotAI):
                 adept = self.units.find_by_tag(adept_tag)
                 shade = self.units.find_by_tag(shade_tag)
                 if shade:
-                    logger.info(f"Remaining shade time: {shade.buff_duration_remain} / {shade.buff_duration_max}")
+                    # logger.info(f"Remaining shade time: {shade.buff_duration_remain} / {shade.buff_duration_max}")
+                    pass
                 if adept and shade:
                     self.client.debug_line_out(adept, shade, (0, 255, 0))
-            logger.info(self.shades_mapping)
+            # logger.info(self.shades_mapping)
         elif self.shaded:
             # Find shades
             shades = self.units(UnitTypeId.ADEPTPHASESHIFT)

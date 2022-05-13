@@ -19,7 +19,9 @@ Improvements that could be made:
 - Make marines constantly run if they have a ling/bane very close to them
 - Split marines before engaging
 """
-from typing import Union  # mypy type checking
+from typing import Union
+
+from loguru import logger
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
@@ -36,6 +38,10 @@ from sc2.unit import Unit
 
 class MarineSplitChallenge(BotAI):
 
+    async def on_start(self):
+        await self.chat_send("Edit this message for automatic chat commands.")
+        self.client.game_step = 2
+
     async def on_step(self, iteration):
         # do marine micro vs zerglings
         for unit in self.units(UnitTypeId.MARINE):
@@ -43,8 +49,8 @@ class MarineSplitChallenge(BotAI):
             if self.enemy_units:
 
                 # attack (or move towards) zerglings / banelings
-                if unit.weapon_cooldown <= self._client.game_step / 2:
-                    enemies_in_range = self.enemy_units.filter(lambda u: unit.target_in_range(u))
+                if unit.weapon_cooldown <= self.client.game_step / 2:
+                    enemies_in_range = self.enemy_units.filter(unit.target_in_range)
 
                     # attack lowest hp enemy if any enemy is in range
                     if enemies_in_range:
@@ -87,11 +93,7 @@ class MarineSplitChallenge(BotAI):
                         unit.move(retreat_position)
 
                     else:
-                        print("No retreat positions detected for unit {} at {}.".format(unit, unit.position.rounded))
-
-    async def on_start(self):
-        await self.chat_send("Edit this message for automatic chat commands.")
-        self._client.game_step = 4  # do actions every X frames instead of every 8th
+                        logger.info(f"No retreat positions detected for unit {unit} at {unit.position.rounded}.")
 
     def position_around_unit(
         self,
@@ -111,7 +113,7 @@ class MarineSplitChallenge(BotAI):
             positions = {
                 p
                 for p in positions
-                if 0 <= p[0] < self._game_info.pathing_grid.width and 0 <= p[1] < self._game_info.pathing_grid.height
+                if 0 <= p[0] < self.game_info.pathing_grid.width and 0 <= p[1] < self.game_info.pathing_grid.height
             }
         return positions
 

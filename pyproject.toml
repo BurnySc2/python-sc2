@@ -21,7 +21,6 @@ classifiers=[
     "Operating System :: MacOS :: MacOS X",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -31,21 +30,16 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7, <3.11"
+python = ">=3.8, <3.11"
 s2clientprotocol = "^5.0.7"
 numpy = "^1.19.3"
 scipy = "^1.7.1"
 aiohttp = "^3.7.4"
-loguru = "^0.6.0"
 portpicker = "^1.4.0"
-pyglet = "^1.5.21"
 mpyq = "^0.2.5"
-typing-extensions = "^4.1.1"
-win32-setctime = "^1.0.3"
-importlib-metadata = "<=2.1.0"
+loguru = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
-atomicwrites = "^1.4.0"
 pytest = "^7.1.1"
 pytest-asyncio = "^0.18.3"
 pytest-benchmark = "^3.4.1"
@@ -53,22 +47,23 @@ pytest-cov = "^3.0.0"
 coverage = "^6.0"
 codecov = "^2.1.12"
 hypothesis = "^6.23.1"
-Sphinx = "^4.2.0"
-sphinx-autodoc-typehints = "^1.12.0"
+Sphinx = "^4.5"
+sphinx-autodoc-typehints = "^1.18"
 Pillow = "^8.3.2"
 matplotlib = "^3.4.3"
 radon = "^5.1.0"
 pre-commit = "^2.15.0"
 yapf = "^0.32.0"
-mypy = "^0.942"
+mypy = "^0.950"
 pylint = "^2.11.1"
+pyglet = "^1.5.21"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-python_version = "3.7"
+python_version = "3.8"
 ignore_missing_imports = true
 
 [tool.pycln]
@@ -101,10 +96,16 @@ max-line-length = 120
 # C0103 variable name does not conform snake case naming style
 # R0903: Too few public methods of a class
 # E1101: Class 'SqlMetaclass' has no '__annotations__' member (no-member)
-disable = "C0301,E501, C0114, C0115, C0116, R0913, C0413, C0411, W0511, W0105, R0801, W0621, C0103, R0903, E1101"
+# C0302: Too many lines in module (2027/1000) (too-many-lines)
+# R0902: Too many instance attributes (62/7) (too-many-instance-attributes)
+# R0915: Too many statements (61/50) (too-many-statements)
+# W0640: Cell variable mining_place defined in loop (cell-var-from-loop)
+# W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+disable = "C0301, E501, C0114, C0115, C0116, R0913, C0413, C0411, W0511, W0105, R0801, W0621, C0103, R0903, E1101, C0302, R0902, R0915, W0640, W1514"
 
 [tool.yapf]
 based_on_style = "pep8"
 column_limit = 120
 split_arguments_when_comma_terminated = true
 dedent_closing_brackets = true
+allow_split_before_dict_value = false

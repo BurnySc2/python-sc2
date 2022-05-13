@@ -1,86 +1,39 @@
-from functools import wraps
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Callable, TypeVar
+
+if TYPE_CHECKING:
+    from sc2.bot_ai import BotAI
+
+T = TypeVar("T")
 
 
-def property_cache_forever(f):
-
-    @wraps(f)
-    def inner(self):
-        property_cache = "_cache_" + f.__name__
-        cache_updated = hasattr(self, property_cache)
-        if not cache_updated:
-            setattr(self, property_cache, f(self))
-        cache = getattr(self, property_cache)
-        return cache
-
-    return property(inner)
-
-
-def property_cache_once_per_frame(f):
-    """This decorator caches the return value for one game loop,
-    then clears it if it is accessed in a different game loop.
-    Only works on properties of the bot object, because it requires
-    access to self.state.game_loop"""
-
-    @wraps(f)
-    def inner(self):
-        property_cache = "_cache_" + f.__name__
-        state_cache = "_frame_" + f.__name__
-        cache_updated = getattr(self, state_cache, -1) == self.state.game_loop
-        if not cache_updated:
-            setattr(self, property_cache, f(self))
-            setattr(self, state_cache, self.state.game_loop)
-
-        cache = getattr(self, property_cache)
-        should_copy = callable(getattr(cache, "copy", None))
-        if should_copy:
-            return cache.copy()
-        return cache
-
-    return property(inner)
-
-
-def property_cache_once_per_frame_no_copy(f):
+class property_cache_once_per_frame(property):
     """This decorator caches the return value for one game loop,
     then clears it if it is accessed in a different game loop.
     Only works on properties of the bot object, because it requires
     access to self.state.game_loop
 
-    This decorator compared to the above runs a little faster, however you should only use this decorator if you are sure that you do not modify the mutable once it is calculated and cached."""
+    This decorator compared to the above runs a little faster, however you should only use this decorator if you are sure that you do not modify the mutable once it is calculated and cached.
 
-    @wraps(f)
-    def inner(self):
-        property_cache = "_cache_" + f.__name__
-        state_cache = "_frame_" + f.__name__
-        cache_updated = getattr(self, state_cache, -1) == self.state.game_loop
-        if not cache_updated:
-            setattr(self, property_cache, f(self))
-            setattr(self, state_cache, self.state.game_loop)
+    Copied and modified from https://tedboy.github.io/flask/_modules/werkzeug/utils.html#cached_property
+    # """
 
-        cache = getattr(self, property_cache)
-        return cache
+    def __init__(self, func: Callable[[BotAI], T], name=None):
+        # pylint: disable=W0231
+        self.__name__ = name or func.__name__
+        self.__frame__ = f"__frame__{self.__name__}"
+        self.func = func
 
-    return property(inner)
+    def __set__(self, obj: BotAI, value: T):
+        obj.cache[self.__name__] = value
+        obj.cache[self.__frame__] = obj.state.game_loop
 
-
-def property_immutable_cache(f):
-    """ This cache should only be used on properties that return an immutable object (bool, str, int, float, tuple, Unit, Point2, Point3) """
-
-    @wraps(f)
-    def inner(self):
-        if f.__name__ not in self.cache:
-            self.cache[f.__name__] = f(self)
-        return self.cache[f.__name__]
-
-    return property(inner)
-
-
-def property_mutable_cache(f):
-    """ This cache should only be used on properties that return a mutable object (Units, list, set, dict, Counter) """
-
-    @wraps(f)
-    def inner(self):
-        if f.__name__ not in self.cache:
-            self.cache[f.__name__] = f(self)
-        return self.cache[f.__name__].copy()
-
-    return property(inner)
+    def __get__(self, obj: BotAI, _type=None) -> T:
+        value = obj.cache.get(self.__name__, None)
+        bot_frame = obj.state.game_loop
+        if value is None or obj.cache[self.__frame__] < bot_frame:
+            value = self.func(obj)
+            obj.cache[self.__name__] = value
+            obj.cache[self.__frame__] = bot_frame
+        return value

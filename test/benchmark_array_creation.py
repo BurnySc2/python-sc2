@@ -15,32 +15,32 @@ x, y = random.uniform(0, 300), random.uniform(0, 300)
 
 def numpy_array(x, y):
     # Calculate distances between each of the points
-    return np.array((x, y), dtype=np.float)
+    return np.array((x, y), dtype=float)
 
 
 def numpy_array_tuple(my_tuple):
     # Calculate distances between each of the points
-    return np.array(my_tuple, dtype=np.float)
+    return np.array(my_tuple, dtype=float)
 
 
 def numpy_asarray(x, y):
     # Calculate distances between each of the points
-    return np.asarray((x, y), dtype=np.float)
+    return np.asarray((x, y), dtype=float)
 
 
 def numpy_asarray_tuple(my_tuple):
     # Calculate distances between each of the points
-    return np.asarray(my_tuple, dtype=np.float)
+    return np.asarray(my_tuple, dtype=float)
 
 
 def numpy_asanyarray(x, y):
     # Calculate distances between each of the points
-    return np.asanyarray((x, y), dtype=np.float)
+    return np.asanyarray((x, y), dtype=float)
 
 
 def numpy_asanyarray_tuple(my_tuple):
     # Calculate distances between each of the points
-    return np.asanyarray(my_tuple, dtype=np.float)
+    return np.asanyarray(my_tuple, dtype=float)
 
 
 def numpy_fromiter(x, y):
@@ -55,17 +55,17 @@ def numpy_fromiter_tuple(my_tuple):
 
 def numpy_fromiter_np_float(x, y):
     # Calculate distances between each of the points
-    return np.fromiter((x, y), dtype=np.float, count=2)
+    return np.fromiter((x, y), dtype=float, count=2)
 
 
 def numpy_fromiter_np_float_tuple(my_tuple):
     # Calculate distances between each of the points
-    return np.fromiter(my_tuple, dtype=np.float, count=2)
+    return np.fromiter(my_tuple, dtype=float, count=2)
 
 
 def numpy_zeros(x, y):
     # Calculate distances between each of the points
-    a = np.zeros(2, dtype=np.float)
+    a = np.zeros(2, dtype=float)
     a[0] = x
     a[1] = y
     return a
@@ -73,7 +73,7 @@ def numpy_zeros(x, y):
 
 def numpy_ones(x, y):
     # Calculate distances between each of the points
-    a = np.ones(2, dtype=np.float)
+    a = np.ones(2, dtype=float)
     a[0] = x
     a[1] = y
     return a

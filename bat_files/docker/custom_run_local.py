@@ -6,7 +6,10 @@ from multiprocessing import Process
 from pathlib import Path
 from typing import List, Set
 
+# pylint: disable=E0401
 from arenaclient.proxy.frontend import GameRunner
+
+# pylint: disable=E0401
 from arenaclient.proxy.server import run_server
 
 
@@ -42,6 +45,7 @@ class RunLocal:
         for game in games:
             self.games_queue.append(game)
 
+    # pylint: disable=R0201
     def read_ladderbots(self, directory: Path, exclude_names: Set[str]):
         botdir: Path
         bots: List[str] = []
@@ -60,6 +64,7 @@ class RunLocal:
                             break
         return bots
 
+    # pylint: disable=R0201
     def generate_games_list(self, bot1_list: List[str], bot2_list: List[str], map_list: List[str]) -> List[str]:
         """
         Generates games list, every bot from 'bot1_list' will be matched against every bot from 'bot2_list' on every map in 'map_list'.

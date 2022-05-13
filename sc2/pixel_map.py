@@ -108,13 +108,15 @@ class PixelMap:
 
     def save_image(self, filename):
         data = [(0, 0, self[x, y]) for y in range(self.height) for x in range(self.width)]
+        # pylint: disable=C0415
         from PIL import Image
 
         im = Image.new("RGB", (self.width, self.height))
-        im.putdata(data)
+        im.putdata(data)  # type: ignore
         im.save(filename)
 
     def plot(self):
+        # pylint: disable=C0415
         import matplotlib.pyplot as plt
 
         plt.imshow(self.data_numpy, origin="lower")

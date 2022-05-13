@@ -1,3 +1,4 @@
+# pylint: disable=W0212
 import asyncio
 import os
 import platform
@@ -56,6 +57,8 @@ class Proxy:
             request.join_game.player_name = self.player.name
         await self.controller._ws.send_bytes(request.SerializeToString())
 
+    # TODO Catching too general exception Exception (broad-except)
+    # pylint: disable=W0703
     async def get_response(self):
         response_bytes = None
         try:
@@ -105,7 +108,7 @@ class Proxy:
                 ):
                     self.result = {i: Result.Tie for i in range(1, 3)}
                     logger.info(f"Proxy({self.player.name}) timing out")
-                    act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message=f"Proxy: Timing out"))]
+                    act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message="Proxy: Timing out"))]
                     await self.controller._execute(action=sc_pb.RequestAction(actions=act))
         return response
 
@@ -116,6 +119,8 @@ class Proxy:
                 res = await self.controller._execute(observation=sc_pb.RequestObservation())
                 if res.HasField("observation") and res.observation.player_result:
                     self.result = {pr.player_id: Result(pr.result) for pr in res.observation.player_result}
+        # pylint: disable=W0703
+        # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             tb = traceback.format_exc()
             logger.error(f"Obs-check: {e}, traceback: {tb}")
@@ -142,9 +147,11 @@ class Proxy:
                     logger.error("Client shutdown")
                 else:
                     logger.error("Incorrect message type")
+        # pylint: disable=W0703
+        # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
-            IGNORED_ERRORS = {ConnectionError, asyncio.CancelledError}
-            if not any([isinstance(e, E) for E in IGNORED_ERRORS]):
+            ignored_errors = {ConnectionError, asyncio.CancelledError}
+            if not any(isinstance(e, E) for E in ignored_errors):
                 tb = traceback.format_exc()
                 logger.info(f"Proxy({self.player.name}): Caught {e} traceback: {tb}")
         finally:
@@ -152,12 +159,15 @@ class Proxy:
                 if self.controller._status in {Status.in_game, Status.in_replay}:
                     await self.controller._execute(leave_game=sc_pb.RequestLeaveGame())
                 await bot_ws.close()
-            except Exception as ee:
+            # pylint: disable=W0703
+            # TODO Catching too general exception Exception (broad-except)
+            except Exception as e:
                 tbb = traceback.format_exc()
-                logger.info(f"Proxy({self.player.name}): Caught during Surrender", ee, "traceback:", tbb)
+                logger.info(f"Proxy({self.player.name}): Caught during Surrender", e, "traceback:", tbb)
             self.done = True
         return bot_ws
 
+    # pylint: disable=R0912
     async def play_with_proxy(self, startport):
         logger.info(f"Proxy({self.port}): Starting app")
         app = web.Application()
@@ -198,7 +208,7 @@ class Proxy:
 
         # cleanup
         logger.info(f"({self.port}): cleaning up {self.player !r}")
-        for i in range(3):
+        for _i in range(3):
             if isinstance(bot_process, subprocess.Popen):
                 if bot_process.stdout and not bot_process.stdout.closed:  # should not run anymore
                     logger.info(f"==================output for player {self.player.name}")
@@ -216,10 +226,11 @@ class Proxy:
             bot_process.wait()
         try:
             await apprunner.cleanup()
+        # pylint: disable=W0703
+        # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             logger.error(f"cleaning error {e}")
         if isinstance(self.result, dict):
             self.result[None] = None
             return self.result[self.player_id]
-        else:
-            return self.result
+        return self.result

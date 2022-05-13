@@ -1,9 +1,16 @@
 repos:
-# Check yaml files like this one and github actions if they are valid
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.2.0
   hooks:
+    # Check yaml files like this one and github actions if they are valid
   - id: check-yaml
+    # Check toml files like pyproject.toml if it is valid
+  - id: check-toml
+    # Check if python files are valid
+  - id: check-ast
+  - id: check-builtin-literals
+  - id: check-docstring-first
+  - id: debug-statements
 
 # Autoformat yaml files
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
@@ -14,26 +21,20 @@ repos:
 
 # Check github action workflow files
 - repo: https://github.com/sirosen/check-jsonschema
-  rev: 0.3.2
+  rev: 0.14.3
   hooks:
   - id: check-github-workflows
 
-# Check toml files like pyproject.toml if it is valid
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
-  hooks:
-  - id: check-toml
-
 # Remove unused imports
 - repo: https://github.com/hadialqattan/pycln
-  rev: v1.0.3
+  rev: v1.3.1
   hooks:
   - id: pycln
     args: [--config=pyproject.toml]
 
 # Convert relative to absolute imports
 - repo: https://github.com/MarcoGorelli/absolufy-imports
-  rev: v0.3.0
+  rev: v0.3.1
   hooks:
   - id: absolufy-imports
 
@@ -44,26 +45,6 @@ repos:
   - id: isort
     files: \.(py)$
     args: [--settings-path=pyproject.toml]
-
-# Autoformat code
-- repo: local
-  hooks:
-  - id: yapf
-    name: yapf
-    stages: [commit]
-    language: system
-    entry: poetry run yapf -i
-    types: [python]
-    exclude: setup.py
-
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
-  hooks:
-  # Check if python files are vlaid
-  - id: check-ast
-  - id: check-builtin-literals
-  - id: check-docstring-first
-  - id: debug-statements
 
 - repo: https://github.com/pre-commit/pygrep-hooks
   rev: v1.9.0
@@ -76,13 +57,24 @@ repos:
 
 - repo: local
   hooks:
-# TODO too many problems require change
-#  - id: pylint
-#    name: pylint
-#    stages: [commit]
-#    language: system
-#    entry: poetry run pylint
-#    types: [python]
+  # Autoformat code
+  - id: yapf
+    name: format python code
+    stages: [commit]
+    language: system
+    entry: poetry run yapf --in-place
+    files: ^.*\.py$
+    pass_filenames: true
+    require_serial: true
+
+  - id: pylint
+    name: pylint
+    stages: [commit]
+    language: system
+    entry: poetry run pylint sc2 examples
+    types: [python]
+    pass_filenames: false
+    require_serial: true
 
 # TODO Types before enabling this
 #  # Run mypy type checks
@@ -101,3 +93,4 @@ repos:
     language: system
     entry: poetry run pytest test
     pass_filenames: false
+    require_serial: true

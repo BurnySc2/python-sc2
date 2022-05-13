@@ -1,3 +1,4 @@
+# pylint: disable=R0911,W1510
 import os
 import re
 import subprocess
@@ -80,7 +81,7 @@ def detect():
 
     try:
         wsl_proc = subprocess.run(["wsl.exe", "--list", "--running", "--verbose"], capture_output=True)
-    except Exception:
+    except (OSError, ValueError):
         return None
     if wsl_proc.returncode != 0:
         return None

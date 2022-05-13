@@ -1,8 +1,9 @@
-import sc2
+from sc2.bot_ai import BotAI
+from sc2.data import Result
 
 
-class CompetitiveBot(sc2.BotAI):
-
+class CompetitiveBot(BotAI):
+    # pylint: disable=R0201
     async def on_start(self):
         print("Game started")
         # Do things here before the game starts
@@ -11,6 +12,7 @@ class CompetitiveBot(sc2.BotAI):
         # Populate this function with whatever your bot should do!
         pass
 
-    def on_end(self, result):
+    # pylint: disable=R0201
+    def on_end(self, _result: Result):
         print("Game ended.")
         # Do things here after the game ends

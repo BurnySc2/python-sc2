@@ -17,6 +17,8 @@ import time
 from pathlib import Path
 from typing import List
 
+from loguru import logger
+
 from sc2.bot_ai import BotAI
 from sc2.game_data import GameData
 from sc2.game_info import GameInfo, Ramp
@@ -65,18 +67,31 @@ class TestClass:
 
     def test_main_base_ramp(self, map_path: Path):
         bot = get_map_specific_bot(map_path)
-        bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
-        # Test if main ramp works for all spawns
-        _game_info: GameInfo = bot._game_info
+        bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
 
-        for spawn in bot._game_info.start_locations + [bot.townhalls.random.position]:
-            # Remove cached ramp
-            if hasattr(bot, "cached_main_base_ramp"):
-                del bot.cached_main_base_ramp
+        # Test if main ramp works for all spawns
+        for spawn in bot.game_info.start_locations + [bot.townhalls[0].position]:
+            # Remove cached precalculated ramp
+            if hasattr(bot, "main_base_ramp"):
+                del bot.main_base_ramp
+
             # Set start location as one of the opponent spawns
-            bot._game_info.player_start_location = spawn
+            bot.game_info.player_start_location = spawn
+
             # Find main base ramp for opponent
             ramp: Ramp = bot.main_base_ramp
+            assert ramp.top_center
+            assert ramp.bottom_center
+            assert ramp.size
+            assert ramp.points
+            assert ramp.upper
+            assert ramp.lower
+            # Test if ramp was detected far away
+            logger.info(ramp.top_center)
+            distance = ramp.top_center.distance_to(bot.game_info.player_start_location)
+            assert (
+                distance < 30
+            ), f"Distance from spawn to main ramp was detected as {distance:.2f}, which is too far. Spawn: {spawn}, Ramp: {ramp.top_center}"
             # On the map HonorgroundsLE, the main base is large and it would take a bit of effort to fix, so it returns None or empty set
             if len(ramp.upper) in {2, 5}:
                 assert ramp.upper2_for_ramp_wall
@@ -98,28 +113,16 @@ class TestClass:
                 assert ramp.protoss_wall_pylon is None
                 assert ramp.protoss_wall_buildings == []
                 assert ramp.protoss_wall_warpin is None
-            assert ramp.top_center
-            assert ramp.bottom_center
-            assert ramp.size
-            assert ramp.points
-            assert ramp.upper
-            assert ramp.lower
-            # Test if ramp was detected far away
-            print(ramp.top_center)
-            distance = ramp.top_center.distance_to(bot._game_info.player_start_location)
-            assert (
-                distance < 30
-            ), f"Distance from spawn to main ramp was detected as {distance:.2f}, which is too far. Spawn: {spawn}, Ramp: {ramp.top_center}"
 
     def test_bot_ai(self, map_path: Path):
         bot = get_map_specific_bot(map_path)
-        bot._game_info.map_ramps, bot._game_info.vision_blockers = bot._game_info._find_ramps_and_vision_blockers()
+        bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
 
         # Recalculate and time expansion locations
         t0 = time.perf_counter()
         bot._find_expansion_locations()
         t1 = time.perf_counter()
-        print(f"Time to calculate expansion locations: {t1-t0} s")
+        logger.info(f"Time to calculate expansion locations: {t1-t0} s")
 
         # TODO: Cache all expansion positions for a map and check if it is the same
         # BelShirVestigeLE has only 10 bases - perhaps it should be removed since it was a WOL / HOTS map

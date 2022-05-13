@@ -1,17 +1,11 @@
-import os
-import sys
+from typing import List, Tuple
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-from typing import List, Tuple
-
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.position import Point2, Point3
 from sc2.unit import Unit
@@ -35,6 +29,7 @@ class BCRushBot(BotAI):
 
         return self.mineral_field.random.position, False
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         ccs: Units = self.townhalls
         # If we no longer have townhalls, attack with all workers
@@ -44,8 +39,8 @@ class BCRushBot(BotAI):
                 if not unit.is_attacking:
                     unit.attack(target)
             return
-        else:
-            cc: Unit = ccs.random
+
+        cc: Unit = ccs.random
 
         # Send all BCs to attack a target.
         bcs: Units = self.units(UnitTypeId.BATTLECRUISER)
@@ -95,7 +90,7 @@ class BCRushBot(BotAI):
                         if worker is None:
                             break
 
-                        worker.build(UnitTypeId.REFINERY, vg)
+                        worker.build_gas(vg)
                         break
 
             # Build factory if we dont have one

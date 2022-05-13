@@ -1,17 +1,11 @@
-import os
-import sys
+import random
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import random
-
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.position import Point2
 from sc2.unit import Unit
@@ -25,6 +19,7 @@ class BroodlordBot(BotAI):
             return random.choice(self.enemy_structures).position
         return self.enemy_start_locations[0]
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         larvae: Units = self.larva
         forces: Units = self.units.of_type({UnitTypeId.ZERGLING, UnitTypeId.CORRUPTOR, UnitTypeId.BROODLORD})
@@ -56,8 +51,8 @@ class BroodlordBot(BotAI):
             for unit in all_attack_units:
                 unit.attack(self.enemy_start_locations[0])
             return
-        else:
-            hq: Unit = self.townhalls.first
+
+        hq: Unit = self.townhalls.first
 
         # Make idle queens inject
         for queen in self.units(UnitTypeId.QUEEN).idle:

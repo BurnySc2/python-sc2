@@ -16,6 +16,7 @@ class Controller(Protocol):
 
     @property
     def running(self):
+        # pylint: disable=W0212
         return self._process._process is not None
 
     async def create_game(self, game_map, players, realtime: bool, random_seed=None, disable_fog=None):

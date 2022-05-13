@@ -51,7 +51,7 @@ e.g. `install-dir/Maps/AcropolisLE.SC2Map`
 After installing the library, a StarCraft II executable, and some maps, you're ready to get started. Simply run a bot file to fire up an instance of StarCraft II with the bot running. For example:
 
 ```python
-python3 examples/protoss/cannon_rush.py
+python examples/protoss/cannon_rush.py
 ```
 
 #### WINE and Lutris
@@ -60,11 +60,11 @@ If you installed StarCraft II on Linux with Wine or Lutris, set the following en
 
 ```sh
 SC2PF=WineLinux
-WINE=usr/bin/wine
+WINE=/usr/bin/wine
 # Or a wine binary from lutris:
 # WINE=/home/burny/.local/share/lutris/runners/wine/lutris-4.20-x86_64/bin/wine64
 # Default Lutris StarCraftII Installation path:
-SC2PATH=/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
+SC2PATH='/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/'
 ```
 
 #### WSL
