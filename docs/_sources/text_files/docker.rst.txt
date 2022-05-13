@@ -12,9 +12,9 @@ Requirements
 
 Pulling the Docker image
 ------------------------
-The SC2 AI community has decided to stay on Python3.7 for a while. I'll try to update the docker image as soon as a new linux binary is released, or create a pull request at https://github.com/BurnySc2/python-sc2-docker ::
+The SC2 AI community has decided to stay on Python3.8 for a while. I'll try to update the docker image as soon as a new linux binary is released, or create a pull request at https://github.com/BurnySc2/python-sc2-docker ::
 
-    docker pull burnysc2/python-sc2-docker:release-python_3.7-sc2_4.10_arenaclient_burny
+    docker pull burnysc2/python-sc2-docker:release-python_3.8-sc2_4.10_arenaclient_burny
 
 Deleting previous containers
 -----------------------------
@@ -26,7 +26,7 @@ Launching a new container
 --------------------------
 The following command launches a new container in interactive mode, which means it will not shut down once it is done running::
 
-    docker run -it -d --name app burnysc2/python-sc2-docker:release-python_3.7-sc2_4.10_arenaclient_burny
+    docker run -it -d --name app burnysc2/python-sc2-docker:release-python_3.8-sc2_4.10_arenaclient_burny
 
 Install bot requirements
 -------------------------
@@ -49,7 +49,7 @@ https://github.com/BurnySc2/python-sc2/tree/develop/examples/competitive or http
 Copying the runner to the container
 ------------------------------------
 You will have to configure the ``custom_run_local.py`` file (ctrl+f for ``def main()``).
-It can be found here: https://github.com/BurnySc2/python-sc2/tree/develop/bat_files/docker/custom_run_local.py
+It can be found here: https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/custom_run_local.py
 
 You may also customize the arenaclient ``settings.json`` (e.g. max game time) which is located under ``/root/aiarena-client/arenaclient/proxy/settings.json``
 Click here to check which settings are available: https://github.com/BurnySc2/aiarena-client/blob/a1cd2e9314e7fd2accd0e69aa77d89a9978e619c/arenaclient/proxy/server.py#L164-L170
@@ -68,19 +68,19 @@ Copying the replay from container to host machine
 --------------------------------------------------------------
 To copy the ``results.json`` to the host machine to analyse the results, use::
 
-    mkdir -p bat_files/temp
-    docker cp app:/root/aiarena-client/arenaclient/proxy/results.json bat_files/temp/results.json
+    mkdir -p temp
+    docker cp app:/root/aiarena-client/arenaclient/proxy/results.json temp/results.json
 
 To copy all newly generated replays from the container, use::
 
-    mkdir -p bat_files/temp/replays
-    docker cp app:/root/StarCraftII/Replays/. bat_files/temp/replays
+    mkdir -p temp/replays
+    docker cp app:/root/StarCraftII/Replays/. temp/replays
 
 Summary using a shell script
 -----------------------------
 For a full runner script, see:
 
-https://github.com/BurnySc2/python-sc2/tree/develop/bat_files/docker/docker_run_bots.sh
+https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/docker_run_bots.sh
 
 Docker cleanup
 ---------------

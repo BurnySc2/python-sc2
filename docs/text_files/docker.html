@@ -56,8 +56,8 @@ For a quick summary of commands, scroll to the bottom.</p>
 </section>
 <section id="pulling-the-docker-image">
 <h2>Pulling the Docker image<a class="headerlink" href="#pulling-the-docker-image" title="Permalink to this headline">¶</a></h2>
-<p>The SC2 AI community has decided to stay on Python3.7 for a while. I’ll try to update the docker image as soon as a new linux binary is released, or create a pull request at <a class="reference external" href="https://github.com/BurnySc2/python-sc2-docker">https://github.com/BurnySc2/python-sc2-docker</a></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.7</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
+<p>The SC2 AI community has decided to stay on Python3.8 for a while. I’ll try to update the docker image as soon as a new linux binary is released, or create a pull request at <a class="reference external" href="https://github.com/BurnySc2/python-sc2-docker">https://github.com/BurnySc2/python-sc2-docker</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.8</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
 </pre></div>
 </div>
 </section>
@@ -71,7 +71,7 @@ For a quick summary of commands, scroll to the bottom.</p>
 <section id="launching-a-new-container">
 <h2>Launching a new container<a class="headerlink" href="#launching-a-new-container" title="Permalink to this headline">¶</a></h2>
 <p>The following command launches a new container in interactive mode, which means it will not shut down once it is done running:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">name</span> <span class="n">app</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.7</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">name</span> <span class="n">app</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.8</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
 </pre></div>
 </div>
 </section>
@@ -92,7 +92,7 @@ Don’t forget to copy the python-sc2/sc2 folder, or else an older version might
 <section id="copying-the-runner-to-the-container">
 <h2>Copying the runner to the container<a class="headerlink" href="#copying-the-runner-to-the-container" title="Permalink to this headline">¶</a></h2>
 <p>You will have to configure the <code class="docutils literal notranslate"><span class="pre">custom_run_local.py</span></code> file (ctrl+f for <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">main()</span></code>).
-It can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2/tree/develop/bat_files/docker/custom_run_local.py">https://github.com/BurnySc2/python-sc2/tree/develop/bat_files/docker/custom_run_local.py</a></p>
+It can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/custom_run_local.py">https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/custom_run_local.py</a></p>
 <p>You may also customize the arenaclient <code class="docutils literal notranslate"><span class="pre">settings.json</span></code> (e.g. max game time) which is located under <code class="docutils literal notranslate"><span class="pre">/root/aiarena-client/arenaclient/proxy/settings.json</span></code>
 Click here to check which settings are available: <a class="reference external" href="https://github.com/BurnySc2/aiarena-client/blob/a1cd2e9314e7fd2accd0e69aa77d89a9978e619c/arenaclient/proxy/server.py#L164-L170">https://github.com/BurnySc2/aiarena-client/blob/a1cd2e9314e7fd2accd0e69aa77d89a9978e619c/arenaclient/proxy/server.py#L164-L170</a></p>
 <p>After you are done customizing which matches should be played, run the following to finalize your setup:</p>
@@ -110,20 +110,20 @@ Click here to check which settings are available: <a class="reference external" 
 <section id="copying-the-replay-from-container-to-host-machine">
 <h2>Copying the replay from container to host machine<a class="headerlink" href="#copying-the-replay-from-container-to-host-machine" title="Permalink to this headline">¶</a></h2>
 <p>To copy the <code class="docutils literal notranslate"><span class="pre">results.json</span></code> to the host machine to analyse the results, use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">bat_files</span><span class="o">/</span><span class="n">temp</span>
-<span class="n">docker</span> <span class="n">cp</span> <span class="n">app</span><span class="p">:</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span> <span class="n">bat_files</span><span class="o">/</span><span class="n">temp</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">temp</span>
+<span class="n">docker</span> <span class="n">cp</span> <span class="n">app</span><span class="p">:</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span> <span class="n">temp</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>To copy all newly generated replays from the container, use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">bat_files</span><span class="o">/</span><span class="n">temp</span><span class="o">/</span><span class="n">replays</span>
-<span class="n">docker</span> <span class="n">cp</span> <span class="n">app</span><span class="p">:</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">StarCraftII</span><span class="o">/</span><span class="n">Replays</span><span class="o">/.</span> <span class="n">bat_files</span><span class="o">/</span><span class="n">temp</span><span class="o">/</span><span class="n">replays</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">temp</span><span class="o">/</span><span class="n">replays</span>
+<span class="n">docker</span> <span class="n">cp</span> <span class="n">app</span><span class="p">:</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">StarCraftII</span><span class="o">/</span><span class="n">Replays</span><span class="o">/.</span> <span class="n">temp</span><span class="o">/</span><span class="n">replays</span>
 </pre></div>
 </div>
 </section>
 <section id="summary-using-a-shell-script">
 <h2>Summary using a shell script<a class="headerlink" href="#summary-using-a-shell-script" title="Permalink to this headline">¶</a></h2>
 <p>For a full runner script, see:</p>
-<p><a class="reference external" href="https://github.com/BurnySc2/python-sc2/tree/develop/bat_files/docker/docker_run_bots.sh">https://github.com/BurnySc2/python-sc2/tree/develop/bat_files/docker/docker_run_bots.sh</a></p>
+<p><a class="reference external" href="https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/docker_run_bots.sh">https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/docker_run_bots.sh</a></p>
 </section>
 <section id="docker-cleanup">
 <h2>Docker cleanup<a class="headerlink" href="#docker-cleanup" title="Permalink to this headline">¶</a></h2>
