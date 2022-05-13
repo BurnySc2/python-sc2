@@ -88,6 +88,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        python-version: ['3.7', '3.8', '3.9', '3.10']
+        sc2-version: ['4.10']
+
     steps:
     # Copy data from repository
     - uses: actions/checkout@v1
@@ -98,9 +101,9 @@ jobs:
         tree
 
     - name: Load and build docker image
-      # Build docker image from Dockerfile using python 3.8
+      # Build docker image from Dockerfile using specific python and sc2 version
       run: |
-        docker build -t test_image -f test/Dockerfile_3.8 .
+        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} .
 
     - name: Run autotest_bot.py
       # Run bot and list resulting files (replay file, stable_id.json)
@@ -141,6 +144,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        python-version: ['3.10']
+        sc2-version: ['4.10']
     steps:
     # Copy data from repository
     - uses: actions/checkout@v1
@@ -153,7 +158,7 @@ jobs:
     - name: Load and build docker image
       # Build docker image from Dockerfile using python 3.8
       run: |
-        docker build -t test_image -f test/Dockerfile_3.8 .
+        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} .
 
     - name: Run example bots vs computer
       run: |
@@ -173,6 +178,8 @@ jobs:
 #      fail-fast: false
 #      matrix:
 #        os: [ubuntu-latest]
+#        python-version: ['3.10']
+#        sc2-version: ['4.10']
 #    steps:
 #    # Copy data from repository
 #    - uses: actions/checkout@v1
@@ -185,7 +192,7 @@ jobs:
 #    - name: Load and build docker image
 #      # Build docker image from Dockerfile using python 3.8
 #      run: |
-#        docker build -t test_image -f test/Dockerfile_3.8 .
+#        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} .
 #
 #    - name: Run example bots vs each other
 #      run: |
