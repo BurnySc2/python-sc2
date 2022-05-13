@@ -9,11 +9,12 @@ import signal
 import sys
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Union
+from io import BytesIO
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Union
 
 import mpyq
 import portpicker
-import six
 from aiohttp import ClientSession, ClientWebSocketResponse
 from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
@@ -451,10 +452,10 @@ async def _host_replay(replay_path, ai, realtime, _portconfig, base_build, data_
         return result
 
 
-def get_replay_version(replay_path):
-    with open(replay_path, "rb") as f:
+def get_replay_version(replay_path: Union[str, Path]) -> Tuple[str, str]:
+    with open(replay_path, 'rb') as f:
         replay_data = f.read()
-        replay_io = six.BytesIO()
+        replay_io = BytesIO()
         replay_io.write(replay_data)
         replay_io.seek(0)
         archive = mpyq.MPQArchive(replay_io).extract()
