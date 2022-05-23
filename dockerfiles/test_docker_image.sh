@@ -13,19 +13,19 @@ docker rm -f test_container
 
 # Start container, override the default entrypoint
 # https://docs.docker.com/storage/bind-mounts/#use-a-read-only-bind-mount
-docker run -it -d \
+docker run -i -d \
   --name test_container \
   --mount type=bind,source="$(pwd)",destination=/root/python-sc2,readonly \
   --entrypoint /bin/bash \
   burnysc2/python-sc2-docker:latest
 
 # Install python-sc2, via mount the python-sc2 folder will be available
-docker exec -it test_container bash -c "pip install poetry \
+docker exec -i test_container bash -c "pip install poetry \
     && cd python-sc2 && poetry install --no-dev"
 
 # Run various test bots
-docker exec -it test_container bash -c "cd python-sc2 && poetry run python test/travis_test_script.py test/autotest_bot.py"
-docker exec -it test_container bash -c "cd python-sc2 && poetry run python test/run_example_bots_vs_computer.py"
+docker exec -i test_container bash -c "cd python-sc2 && poetry run python test/travis_test_script.py test/autotest_bot.py"
+docker exec -i test_container bash -c "cd python-sc2 && poetry run python test/run_example_bots_vs_computer.py"
 
 # Command for entering the container to debug if something went wrong:
 # docker exec -it test_container bash
