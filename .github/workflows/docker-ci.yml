@@ -6,6 +6,10 @@ on:
     paths:
     - dockerfiles/**
     - .github/workflows/docker-ci.yml
+  pull_request:
+    branches:
+    - master
+    - develop
 
 env:
   VERSION_NUMBER: 1.0.1
