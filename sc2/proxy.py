@@ -74,11 +74,9 @@ class Proxy:
                 if response_bytes is None:
                     response_bytes = x
             except (asyncio.CancelledError, asyncio.TimeoutError, Exception) as e:
-                tb = traceback.format_exc()
-                logger.error(f"Exception {e}: {tb}")
+                logger.exception(f"Exception {e}")
         except Exception as e:
-            tb = traceback.format_exc()
-            logger.error(f"Exception {e}: {tb}")
+            logger.exception(f"Caught unknown exception: {e}")
         return response_bytes
 
     async def parse_response(self, response_bytes):
@@ -122,8 +120,7 @@ class Proxy:
         # pylint: disable=W0703
         # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
-            tb = traceback.format_exc()
-            logger.error(f"Obs-check: {e}, traceback: {tb}")
+            logger.exception(f"Caught unknown exception: {e}")
 
     async def proxy_handler(self, request):
         bot_ws = web.WebSocketResponse(receive_timeout=30)
@@ -150,6 +147,7 @@ class Proxy:
         # pylint: disable=W0703
         # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
+            logger.exception(f"Caught unknown exception: {e}")
             ignored_errors = {ConnectionError, asyncio.CancelledError}
             if not any(isinstance(e, E) for E in ignored_errors):
                 tb = traceback.format_exc()
@@ -162,8 +160,7 @@ class Proxy:
             # pylint: disable=W0703
             # TODO Catching too general exception Exception (broad-except)
             except Exception as e:
-                tbb = traceback.format_exc()
-                logger.info(f"Proxy({self.player.name}): Caught during Surrender", e, "traceback:", tbb)
+                logger.exception(f"Caught unknown exception during surrender: {e}")
             self.done = True
         return bot_ws
 
@@ -229,7 +226,7 @@ class Proxy:
         # pylint: disable=W0703
         # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
-            logger.error(f"cleaning error {e}")
+            logger.exception(f"Caught unknown exception during cleaning: {e}")
         if isinstance(self.result, dict):
             self.result[None] = None
             return self.result[self.player_id]

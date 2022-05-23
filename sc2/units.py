@@ -7,8 +7,6 @@ from functools import cached_property
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Callable, Generator, Iterable, List, Optional, Set, Tuple, Union
 
-import numpy as np
-
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.position import Point2
 from sc2.unit import Unit
@@ -28,7 +26,7 @@ class Units(list):
         # pylint: disable=E1120
         return cls((Unit(raw_unit, bot_object=bot_object) for raw_unit in units))
 
-    def __init__(self, units, bot_object: BotAI):
+    def __init__(self, units: Iterable[Unit], bot_object: BotAI):
         """
         :param units:
         :param bot_object:
@@ -36,12 +34,12 @@ class Units(list):
         super().__init__(units)
         self._bot_object = bot_object
 
-    def __call__(self, units: Iterable[Unit]) -> Units:
+    def __call__(self, unit_types: Union[UnitTypeId, Iterable[UnitTypeId]]) -> Units:
         """Creates a new mutable Units object from Units or list object.
 
-        :param units:
+        :param unit_types:
         """
-        return Units(units, self._bot_object)
+        return self.of_type(unit_types)
 
     def __iter__(self) -> Generator[Unit]:
         return (item for item in super().__iter__())
@@ -165,7 +163,7 @@ class Units(list):
             return self
         return self.subgroup(random.sample(self, n))
 
-    def in_attack_range_of(self, unit: Unit, bonus_distance: Union[int, float] = 0) -> Units:
+    def in_attack_range_of(self, unit: Unit, bonus_distance: float = 0) -> Units:
         """Filters units that are in attack range of the given unit.
         This uses the unit and target unit.radius when calculating the distance, so it should be accurate.
         Caution: This may not work well for static structures (bunker, sieged tank, planetary fortress, photon cannon, spine and spore crawler) because it seems attack ranges differ for static / immovable units.
@@ -272,7 +270,7 @@ class Units(list):
         distances = self._bot_object._distance_units_to_pos(self, position)
         return max(((unit, dist) for unit, dist in zip(self, distances)), key=lambda my_tuple: my_tuple[1])[0]
 
-    def closer_than(self, distance: Union[int, float], position: Union[Unit, Point2]) -> Units:
+    def closer_than(self, distance: float, position: Union[Unit, Point2]) -> Units:
         """Returns all units (from this Units object) that are closer than 'distance' away from target unit or position.
 
         Example::
@@ -297,7 +295,7 @@ class Units(list):
         distances = self._bot_object._distance_units_to_pos(self, position)
         return self.subgroup(unit for unit, dist in zip(self, distances) if dist < distance)
 
-    def further_than(self, distance: Union[int, float], position: Union[Unit, Point2]) -> Units:
+    def further_than(self, distance: float, position: Union[Unit, Point2]) -> Units:
         """Returns all units (from this Units object) that are further than 'distance' away from target unit or position.
 
         Example::
@@ -369,7 +367,7 @@ class Units(list):
             return self
         return self.subgroup(self._list_sorted_by_distance_to(position)[:n])
 
-    def furthest_n_units(self, position: Union[Unit, Point2, np.ndarray], n: int) -> Units:
+    def furthest_n_units(self, position: Union[Unit, Point2], n: int) -> Units:
         """Returns the n furhest units in distance to position.
 
         Example::
@@ -444,7 +442,7 @@ class Units(list):
         unit_dist_dict = {unit.tag: dist for unit, dist in zip(self, distances)}
         return sorted(self, key=lambda unit2: abs(unit_dist_dict[unit2.tag] - distance), reverse=True)
 
-    def n_closest_to_distance(self, position: Point2, distance: Union[int, float], n: int) -> Units:
+    def n_closest_to_distance(self, position: Point2, distance: float, n: int) -> Units:
         """Returns n units that are the closest to distance away.
         For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7] to position,
         the units with distance [4, 5, 6] will be returned
@@ -454,7 +452,7 @@ class Units(list):
         """
         return self.subgroup(self._list_sorted_closest_to_distance(position=position, distance=distance)[:n])
 
-    def n_furthest_to_distance(self, position: Point2, distance: Union[int, float], n: int) -> Units:
+    def n_furthest_to_distance(self, position: Point2, distance: float, n: int) -> Units:
         """Inverse of the function 'n_closest_to_distance', returns the furthest units instead
 
         :param position:

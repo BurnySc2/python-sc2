@@ -91,10 +91,18 @@ class UnitOrder:
 # pylint: disable=R0904
 class Unit:
 
-    def __init__(self, proto_data, bot_object: BotAI, distance_calculation_index: int = -1, base_build: int = -1):
+    def __init__(
+        self,
+        proto_data,
+        bot_object: BotAI,
+        distance_calculation_index: int = -1,
+        base_build: int = -1,
+    ):
         """
         :param proto_data:
         :param bot_object:
+        :param distance_calculation_index:
+        :param base_build:
         """
         self._proto = proto_data
         self._bot_object: BotAI = bot_object
