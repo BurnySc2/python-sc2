@@ -1,60 +1,98 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>bot_ai.py &#8212; python-sc2  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
-    
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bot_ai.py &mdash; python-sc2  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="unit.py" href="../unit/index.html" />
     <link rel="prev" title="Using docker to run SC2 bots" href="../text_files/docker.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../unit/index.html" title="unit.py"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../text_files/docker.html" title="Using docker to run SC2 bots"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">bot_ai.py</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> python-sc2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distances/index.html">distances.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">python-sc2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>bot_ai.py</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/bot_ai/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <div class="toctree-wrapper compound">
 </div>
 <section id="bot-ai-py">
-<h1>bot_ai.py<a class="headerlink" href="#bot-ai-py" title="Permalink to this headline">¶</a></h1>
+<h1>bot_ai.py<a class="headerlink" href="#bot-ai-py" title="Permalink to this headline"></a></h1>
 <p>This basic bot class contains a few helper functions, basic properties and variables to get a simple bot started.</p>
 <p>How to use this information is shown in the bot examples (with comments).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.bot_ai.</span></span><span class="sig-name descname"><span class="pre">BotAI</span></span><a class="headerlink" href="#sc2.bot_ai.BotAI" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.bot_ai.</span></span><span class="sig-name descname"><span class="pre">BotAI</span></span><a class="headerlink" href="#sc2.bot_ai.BotAI" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for bots.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.alert">
-<span class="sig-name descname"><span class="pre">alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alert_code</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.alert" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alert_code</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.alert" title="Permalink to this definition"></a></dt>
 <dd><p>Check if alert is triggered in the current step.
 Possible alerts are listed here <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702">https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702</a></p>
 <p>Example use:</p>
@@ -100,7 +138,7 @@ Possible alerts are listed here <a class="reference external" href="https://gith
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.already_pending">
-<span class="sig-name descname"><span class="pre">already_pending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.already_pending" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">already_pending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.already_pending" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a number of buildings or units already in progress, or if a
 worker is en route to build it. This also includes queued orders for
 workers and build queues of buildings.</p>
@@ -122,7 +160,7 @@ workers and build queues of buildings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.already_pending_upgrade">
-<span class="sig-name descname"><span class="pre">already_pending_upgrade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upgrade_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.already_pending_upgrade" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">already_pending_upgrade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upgrade_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.already_pending_upgrade" title="Permalink to this definition"></a></dt>
 <dd><p>Check if an upgrade is being researched</p>
 <p>Returns values are:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span> <span class="c1"># not started</span>
@@ -146,7 +184,7 @@ workers and build queues of buildings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.build">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">near</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_worker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placement_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.build" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">near</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_worker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placement_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.build" title="Permalink to this definition"></a></dt>
 <dd><p>Not recommended as this function checks many positions if it “can place” on them until it found a valid
 position. Also if the given position is not placeable, this function tries to find a nearby position to place
 the structure. Then uses ‘self.do’ to give the worker the order to start the construction.</p>
@@ -169,7 +207,7 @@ the structure. Then uses ‘self.do’ to give the worker the order to start the
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.calculate_cost">
-<span class="sig-name descname"><span class="pre">calculate_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_cost" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_cost" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the required build, train or morph cost of a unit. It is recommended to use the UnitTypeId instead of the ability to create the unit.
 The total cost to create a ravager is 100/100, but the actual morph cost from roach to ravager is only 25/75, so this function returns 25/75.</p>
 <p>It is adviced to use the UnitTypeId instead of the AbilityId. Instead of:</p>
@@ -207,7 +245,7 @@ The total cost to create a ravager is 100/100, but the actual morph cost from ro
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.calculate_supply_cost">
-<span class="sig-name descname"><span class="pre">calculate_supply_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_supply_cost" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_supply_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_supply_cost" title="Permalink to this definition"></a></dt>
 <dd><p>This function calculates the required supply to train or morph a unit.
 The total supply of a baneling is 0.5, but a zergling already uses up 0.5 supply, so the morph supply cost is 0.
 The total supply of a ravager is 3, but a roach already uses up 2 supply, so the morph supply cost is 1.
@@ -230,7 +268,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.calculate_unit_value">
-<span class="sig-name descname"><span class="pre">calculate_unit_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_unit_value" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_unit_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.calculate_unit_value" title="Permalink to this definition"></a></dt>
 <dd><p>Unlike the function below, this function returns the value of a unit given by the API (e.g. the resources lost value on kill).</p>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_value</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span> <span class="o">==</span> <span class="n">Cost</span><span class="p">(</span><span class="mi">550</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -250,7 +288,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.can_afford">
-<span class="sig-name descname"><span class="pre">can_afford</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_supply_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_afford" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">can_afford</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_supply_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_afford" title="Permalink to this definition"></a></dt>
 <dd><p>Tests if the player has enough resources to build a unit or structure.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">idle</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
@@ -280,7 +318,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.can_cast">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_cast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ability_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_check_energy_and_cooldown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cached_abilities_of_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_cast" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_cast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ability_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_check_energy_and_cooldown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cached_abilities_of_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_cast" title="Permalink to this definition"></a></dt>
 <dd><p>Tests if a unit has an ability available and enough energy to cast it.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stalkers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">STALKER</span><span class="p">)</span>
@@ -306,7 +344,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.can_feed">
-<span class="sig-name descname"><span class="pre">can_feed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_feed" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">can_feed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_feed" title="Permalink to this definition"></a></dt>
 <dd><p>Checks if you have enough free supply to build the unit</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">idle</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
@@ -327,7 +365,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.can_place">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_place</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_place</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place" title="Permalink to this definition"></a></dt>
 <dd><p>Tests if a building can be placed in the given locations.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">barracks_placement_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_base_ramp</span><span class="o">.</span><span class="n">barracks_correct_placement</span>
@@ -352,7 +390,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.can_place_single">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_place_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place_single" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_place_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place_single" title="Permalink to this definition"></a></dt>
 <dd><p>Checks the placement for only one position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -363,7 +401,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.chat_send">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.chat_send" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.chat_send" title="Permalink to this definition"></a></dt>
 <dd><p>Send a chat message to the SC2 Client.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">chat_send</span><span class="p">(</span><span class="s2">&quot;Hello, this is a message from my bot!&quot;</span><span class="p">)</span>
@@ -381,7 +419,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.distribute_workers">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distribute_workers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.distribute_workers" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distribute_workers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.distribute_workers" title="Permalink to this definition"></a></dt>
 <dd><p>Distributes workers across all the bases taken.
 Keyword <cite>resource_ratio</cite> takes a float. If the current minerals to gas
 ratio is bigger than <cite>resource_ratio</cite>, this function prefer filling gas_buildings
@@ -400,7 +438,7 @@ are not being handled.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.enemy_start_locations">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enemy_start_locations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.enemy_start_locations" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enemy_start_locations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.enemy_start_locations" title="Permalink to this definition"></a></dt>
 <dd><p>Possible start locations for enemies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -411,7 +449,7 @@ are not being handled.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.expand_now">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expand_now</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.expand_now" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expand_now</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.expand_now" title="Permalink to this definition"></a></dt>
 <dd><p>Finds the next possible expansion via ‘self.get_next_expansion()’. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -426,7 +464,7 @@ are not being handled.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.find_placement">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_placement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">near</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placement_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addon_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.find_placement" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_placement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">near</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_alternative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placement_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addon_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.find_placement" title="Permalink to this definition"></a></dt>
 <dd><p>Finds a placement location for building.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="p">:</span>
@@ -453,7 +491,7 @@ are not being handled.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.get_available_abilities">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_available_abilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_resource_requirements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_available_abilities" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_available_abilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_resource_requirements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_available_abilities" title="Permalink to this definition"></a></dt>
 <dd><p>Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.</p>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">units_abilities</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_abilities</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
@@ -478,7 +516,7 @@ are not being handled.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.get_next_expansion">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_next_expansion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_next_expansion" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_next_expansion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_next_expansion" title="Permalink to this definition"></a></dt>
 <dd><p>Find next expansion location.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -489,7 +527,7 @@ are not being handled.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.get_terrain_height">
-<span class="sig-name descname"><span class="pre">get_terrain_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_terrain_height" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_terrain_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_terrain_height" title="Permalink to this definition"></a></dt>
 <dd><p>Returns terrain height at a position.
 Caution: terrain height is different from a unit’s z-coordinate.</p>
 <dl class="field-list simple">
@@ -504,7 +542,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.get_terrain_z_height">
-<span class="sig-name descname"><span class="pre">get_terrain_z_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_terrain_z_height" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_terrain_z_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_terrain_z_height" title="Permalink to this definition"></a></dt>
 <dd><p>Returns terrain z-height at a position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -518,7 +556,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.has_creep">
-<span class="sig-name descname"><span class="pre">has_creep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.has_creep" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">has_creep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.has_creep" title="Permalink to this definition"></a></dt>
 <dd><p>Returns True if there is creep on the grid point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -532,7 +570,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.in_map_bounds">
-<span class="sig-name descname"><span class="pre">in_map_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_map_bounds" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">in_map_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_map_bounds" title="Permalink to this definition"></a></dt>
 <dd><p>Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
 :type pos: <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]
 :param pos:</p>
@@ -545,7 +583,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.in_pathing_grid">
-<span class="sig-name descname"><span class="pre">in_pathing_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_pathing_grid" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">in_pathing_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_pathing_grid" title="Permalink to this definition"></a></dt>
 <dd><p>Returns True if a ground unit can pass through a grid point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -559,7 +597,7 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.in_placement_grid">
-<span class="sig-name descname"><span class="pre">in_placement_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_placement_grid" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">in_placement_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_placement_grid" title="Permalink to this definition"></a></dt>
 <dd><p>Returns True if you can place something at a position.
 Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
 Caution: some x and y offset might be required, see ramp code in game_info.py</p>
@@ -575,7 +613,7 @@ Caution: some x and y offset might be required, see ramp code in game_info.py</p
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.is_visible">
-<span class="sig-name descname"><span class="pre">is_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.is_visible" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">is_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.is_visible" title="Permalink to this definition"></a></dt>
 <dd><p>Returns True if you have vision on a grid point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -589,7 +627,7 @@ Caution: some x and y offset might be required, see ramp code in game_info.py</p
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.main_base_ramp">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">main_base_ramp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../game_info/index.html#sc2.game_info.Ramp" title="sc2.game_info.Ramp"><span class="pre">sc2.game_info.Ramp</span></a></em><a class="headerlink" href="#sc2.bot_ai.BotAI.main_base_ramp" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">main_base_ramp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../game_info/index.html#sc2.game_info.Ramp" title="sc2.game_info.Ramp"><span class="pre">sc2.game_info.Ramp</span></a></em><a class="headerlink" href="#sc2.bot_ai.BotAI.main_base_ramp" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the Ramp instance of the closest main-ramp to start location.
 Look in game_info.py for more information about the Ramp class</p>
 <p>Example: See terran ramp wall bot</p>
@@ -597,7 +635,7 @@ Look in game_info.py for more information about the Ramp class</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_before_start">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_before_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_before_start" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_before_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_before_start" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called before “on_start”
 and before “prepare_first_step” that calculates expansion locations.
 Not all data is available yet.
@@ -606,7 +644,7 @@ This function is useful in realtime=True mode to split your workers or start pro
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_building_construction_complete">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_building_construction_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_building_construction_complete" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_building_construction_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_building_construction_complete" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when a building
 construction is completed.</p>
 <dl class="field-list simple">
@@ -618,7 +656,7 @@ construction is completed.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_building_construction_started">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_building_construction_started</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_building_construction_started" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_building_construction_started</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_building_construction_started" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class.
 This function is called when a building construction has started.</p>
 <dl class="field-list simple">
@@ -630,7 +668,7 @@ This function is called when a building construction has started.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_end">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_end" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_end" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called at the end of a game.
 Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</p>
 <dl class="field-list simple">
@@ -642,7 +680,7 @@ Unsure if this function will be called on the laddermanager client as the bot pr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_enemy_unit_entered_vision">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_enemy_unit_entered_vision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_entered_vision" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_enemy_unit_entered_vision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_entered_vision" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when an enemy unit (unit or structure) entered vision (which was not visible last frame).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -653,7 +691,7 @@ Unsure if this function will be called on the laddermanager client as the bot pr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_enemy_unit_left_vision">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_enemy_unit_left_vision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_left_vision" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_enemy_unit_left_vision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_left_vision" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
 Same as the self.on_unit_destroyed event, this function is called with the unit’s tag because the unit is no longer visible anymore.
 If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.</p>
@@ -671,14 +709,14 @@ If you want to store a snapshot of the unit, use self._enemy_units_previous_map[
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_start">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_start" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_start" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class.
 At this point, game_data, game_info and the first iteration of game_state (self.state) are available.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_step">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_step" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_step" title="Permalink to this definition"></a></dt>
 <dd><p>You need to implement this function!
 Override this in your bot class.
 This function is called on every game step (looped in realtime mode).</p>
@@ -691,7 +729,7 @@ This function is called on every game step (looped in realtime mode).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_unit_created">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_created</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_created" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_created</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_created" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when a unit is created.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -702,7 +740,7 @@ This function is called on every game step (looped in realtime mode).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_unit_destroyed">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_destroyed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_destroyed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_destroyed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_destroyed" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class.
 Note that this function uses unit tags and not the unit objects
 because the unit does not exist any more.
@@ -717,7 +755,7 @@ For enemy units, this only works if the enemy unit was in vision on death.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_unit_took_damage">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_took_damage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount_damage_taken</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_took_damage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_took_damage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount_damage_taken</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_took_damage" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when your own unit (unit or structure) took damage.
 It will not be called if the unit died this frame.</p>
 <p>This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep,
@@ -736,7 +774,7 @@ TODO: If there is a demand for it, then I can add a similar event for when enemy
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_unit_type_changed">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_type_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_type_changed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_type_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_type_changed" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use ‘unit.type_id’</p>
 <p>This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair,
 a corruptor morphed to broodlordcocoon, etc..</p>
@@ -756,7 +794,7 @@ a corruptor morphed to broodlordcocoon, etc..</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.on_upgrade_complete">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_upgrade_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upgrade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_upgrade_complete" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_upgrade_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upgrade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_upgrade_complete" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -767,7 +805,7 @@ a corruptor morphed to broodlordcocoon, etc..</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.research">
-<span class="sig-name descname"><span class="pre">research</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upgrade_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.research" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">research</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upgrade_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.research" title="Permalink to this definition"></a></dt>
 <dd><p>Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).
 Returns True if the research was started.
 Return False if the requirement was not met, or the bot did not have enough resources to start the upgrade,
@@ -795,7 +833,7 @@ or the building to research the upgrade was missing or not idle.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.select_build_worker">
-<span class="sig-name descname"><span class="pre">select_build_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.select_build_worker" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">select_build_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.select_build_worker" title="Permalink to this definition"></a></dt>
 <dd><p>Select a worker to build a building with.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">barracks_placement_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_base_ramp</span><span class="o">.</span><span class="n">barracks_correct_placement</span>
@@ -820,7 +858,7 @@ or the building to research the upgrade was missing or not idle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.start_location">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.bot_ai.BotAI.start_location" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.bot_ai.BotAI.start_location" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the spawn location of the bot, using the position of the first created townhall.
 This will be None if the bot is run on an arcade or custom map that does not feature townhalls at game start.</p>
 <dl class="field-list simple">
@@ -832,7 +870,7 @@ This will be None if the bot is run on an arcade or custom map that does not fea
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.step_time">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">step_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.step_time" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">step_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.step_time" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a tuple of step duration in milliseconds.
 First value is the minimum step duration - the shortest the bot ever took
 Second value is the average step duration
@@ -848,7 +886,7 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.structure_type_build_progress">
-<span class="sig-name descname"><span class="pre">structure_type_build_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.structure_type_build_progress" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">structure_type_build_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.structure_type_build_progress" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the build progress of a structure type.</p>
 <dl class="simple">
 <dt>Return range: 0 &lt;= x &lt;= 1 where</dt><dd><p>0: no such structure exists
@@ -884,7 +922,7 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.tech_requirement_progress">
-<span class="sig-name descname"><span class="pre">tech_requirement_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.tech_requirement_progress" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">tech_requirement_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.tech_requirement_progress" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the tech requirement progress for a specific building</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Current state: supply depot is at 50% completion</span>
@@ -916,7 +954,7 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.time">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.time" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.time" title="Permalink to this definition"></a></dt>
 <dd><p>Returns time in seconds, assumes the game is played on ‘faster’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -927,7 +965,7 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.time_formatted">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time_formatted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.time_formatted" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time_formatted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.time_formatted" title="Permalink to this definition"></a></dt>
 <dd><p>Returns time as string in min:sec format</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -938,7 +976,7 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_only_idle_buildings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.train" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_only_idle_buildings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.train" title="Permalink to this definition"></a></dt>
 <dd><p>Trains a specified number of units. Trains only one if amount is not specified.
 Warning: currently has issues with warp gate warp ins</p>
 <p>New function. Please report any bugs!</p>
@@ -975,7 +1013,7 @@ Warning: currently has issues with warp gate warp ins</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.units_created">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">units_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.Counter</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.units_created" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">units_created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.Counter</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.units_created" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a Counter for all your units and buildings you have created so far.</p>
 <p>This may be used for statistics (at the end of the game) or for strategic decision making.</p>
 <p>CAUTION: This does not properly work at the moment for morphing units and structures. Please use the ‘on_unit_type_changed’ event to add these morphing unit types manually to ‘self._units_created’.
@@ -998,7 +1036,7 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.worker_en_route_to_build">
-<span class="sig-name descname"><span class="pre">worker_en_route_to_build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.worker_en_route_to_build" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">worker_en_route_to_build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.worker_en_route_to_build" title="Permalink to this definition"></a></dt>
 <dd><p>This function counts how many workers are on the way to start the construction a building.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1012,65 +1050,129 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.bot_ai_internal.</span></span><span class="sig-name descname"><span class="pre">BotAIInternal</span></span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for bots.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array">
+<em class="property"><span class="pre">final</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convert_tuple_to_numpy_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a single position to a 2d numpy array with 1 row and 2 columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal.do">
+<em class="property"><span class="pre">final</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">do</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtract_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtract_supply</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">can_afford_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_warning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.do" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a unit action to the ‘self.actions’ list which is then executed at the end of the frame.</p>
+<p>Training a unit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train an SCV from a random idle command center</span>
+<span class="n">cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">idle</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="c1"># self.townhalls can be empty or there are no idle townhalls</span>
+<span class="k">if</span> <span class="n">cc</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">):</span>
+    <span class="n">cc</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Building a building:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Building a barracks at the main ramp, requires 150 minerals and a depot</span>
+<span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">barracks_placement_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_base_ramp</span><span class="o">.</span><span class="n">barracks_correct_placement</span>
+<span class="k">if</span> <span class="n">worker</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">):</span>
+    <span class="n">worker</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKS</span><span class="p">,</span> <span class="n">barracks_placement_position</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Moving a unit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Move a random worker to the center of the map</span>
+<span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">random_or</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="c1"># worker can be None if all are dead</span>
+<span class="k">if</span> <span class="n">worker</span><span class="p">:</span>
+    <span class="n">worker</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">map_center</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>action</strong> (<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>) – </p></li>
+<li><p><strong>subtract_cost</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+<li><p><strong>subtract_supply</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+<li><p><strong>can_afford_check</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal.issue_events">
+<em class="property"><span class="pre">final</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">issue_events</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.issue_events" title="Permalink to this definition"></a></dt>
+<dd><p>This function will be automatically run from main.py and triggers the following functions:
+- on_unit_created
+- on_unit_destroyed
+- on_building_construction_started
+- on_building_construction_complete
+- on_upgrade_complete</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal.prevent_double_actions">
+<em class="property"><span class="pre">final</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prevent_double_actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.prevent_double_actions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal.synchronous_do">
+<em class="property"><span class="pre">final</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">synchronous_do</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.synchronous_do" title="Permalink to this definition"></a></dt>
+<dd><p>Not recommended. Use self.do instead to reduce lag.
+This function is only useful for realtime=True in the first frame of the game to instantly produce a worker
+and split workers on the mineral patches.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../text_files/docker.html" class="btn btn-neutral float-left" title="Using docker to run SC2 bots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../unit/index.html" class="btn btn-neutral float-right" title="unit.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, tweakimp BurnySc2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../text_files/docker.html"
-                          title="previous chapter">Using docker to run SC2 bots</a></p>
+    </section>
   </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../unit/index.html"
-                          title="next chapter">unit.py</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/bot_ai/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../unit/index.html" title="unit.py"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../text_files/docker.html" title="Using docker to run SC2 bots"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">bot_ai.py</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
-    </div>
-  </body>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

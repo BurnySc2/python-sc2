@@ -1,65 +1,102 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>units.py &#8212; python-sc2  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
-    
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>units.py &mdash; python-sc2  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="game_data.py" href="../game_data/index.html" />
     <link rel="prev" title="unit.py" href="../unit/index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../game_data/index.html" title="game_data.py"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../unit/index.html" title="unit.py"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">units.py</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> python-sc2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distances/index.html">distances.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">python-sc2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>units.py</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/units/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <div class="toctree-wrapper compound">
 </div>
 <section id="units-py">
-<h1>units.py<a class="headerlink" href="#units-py" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Replace this with info about this file</p>
+<h1>units.py<a class="headerlink" href="#units-py" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.units.Units">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.units.</span></span><span class="sig-name descname"><span class="pre">Units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.units.</span></span><span class="sig-name descname"><span class="pre">Units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units" title="Permalink to this definition"></a></dt>
 <dd><p>A collection of Unit objects. Makes it easy to select units by selectors.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.center">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.units.Units.center" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.units.Units.center" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the central position of all units.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.closer_than">
-<span class="sig-name descname"><span class="pre">closer_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closer_than" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">closer_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closer_than" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units (from this Units object) that are closer than ‘distance’ away from target unit or position.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -84,7 +121,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.closest_distance_to">
-<span class="sig-name descname"><span class="pre">closest_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closest_distance_to" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">closest_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closest_distance_to" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the distance between the closest unit from this group to the target unit.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -106,7 +143,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.closest_n_units">
-<span class="sig-name descname"><span class="pre">closest_n_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closest_n_units" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">closest_n_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closest_n_units" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the n closest units in distance to position.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -131,7 +168,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.closest_to">
-<span class="sig-name descname"><span class="pre">closest_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closest_to" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">closest_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.closest_to" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the closest unit (from this Units object) to the target unit or position.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -153,7 +190,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.collecting">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collecting</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.collecting" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collecting</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.collecting" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all workers that are mining or returning resources.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -164,13 +201,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.copy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.copy" title="Permalink to this definition"></a></dt>
 <dd><p>Return a shallow copy of the list.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.enemy">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enemy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.enemy" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enemy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.enemy" title="Permalink to this definition"></a></dt>
 <dd><p>Deprecated: All enemy units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -181,7 +218,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.exclude_type">
-<span class="sig-name descname"><span class="pre">exclude_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.exclude_type" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">exclude_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.exclude_type" title="Permalink to this definition"></a></dt>
 <dd><p>Filters all units that are not of a specific type</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a set instead of lists in the argument</span>
@@ -200,7 +237,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.filter">
-<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.filter" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.filter" title="Permalink to this definition"></a></dt>
 <dd><p>Filters the current Units object and returns a new Units object.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="kn">import</span> <span class="n">UnitTypeId</span>
@@ -228,7 +265,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.flying">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flying</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.flying" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flying</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.flying" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units that are flying.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -239,7 +276,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.further_than">
-<span class="sig-name descname"><span class="pre">further_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.further_than" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">further_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.further_than" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units (from this Units object) that are further than ‘distance’ away from target unit or position.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -264,7 +301,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.furthest_distance_to">
-<span class="sig-name descname"><span class="pre">furthest_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.furthest_distance_to" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">furthest_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.furthest_distance_to" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the distance between the furthest unit from this group to the target unit</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -286,7 +323,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.furthest_n_units">
-<span class="sig-name descname"><span class="pre">furthest_n_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.furthest_n_units" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">furthest_n_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.furthest_n_units" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the n furhest units in distance to position.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -311,7 +348,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.furthest_to">
-<span class="sig-name descname"><span class="pre">furthest_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.furthest_to" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">furthest_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.furthest_to" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the furhest unit (from this Units object) to the target unit or position.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -333,7 +370,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.gathering">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gathering</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.gathering" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gathering</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.gathering" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all workers that are mining minerals or vespene (gather command).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -344,7 +381,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.idle">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">idle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.idle" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">idle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.idle" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units or structures that are doing nothing (unit is standing still, structure is doing nothing).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -355,7 +392,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.in_attack_range_of">
-<span class="sig-name descname"><span class="pre">in_attack_range_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bonus_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_attack_range_of" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">in_attack_range_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bonus_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_attack_range_of" title="Permalink to this definition"></a></dt>
 <dd><p>Filters units that are in attack range of the given unit.
 This uses the unit and target unit.radius when calculating the distance, so it should be accurate.
 Caution: This may not work well for static structures (bunker, sieged tank, planetary fortress, photon cannon, spine and spore crawler) because it seems attack ranges differ for static / immovable units.</p>
@@ -389,7 +426,7 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.in_closest_distance_to_group">
-<span class="sig-name descname"><span class="pre">in_closest_distance_to_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_closest_distance_to_group" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">in_closest_distance_to_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_closest_distance_to_group" title="Permalink to this definition"></a></dt>
 <dd><p>Returns unit in shortest distance from any unit in self to any unit in group.</p>
 <p>Loops over all units in self, then loops over all units in other_units and calculates the shortest distance. Returns the units that is closest to any unit of ‘other_units’.</p>
 <dl class="field-list simple">
@@ -404,7 +441,7 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.in_distance_between">
-<span class="sig-name descname"><span class="pre">in_distance_between</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_distance_between" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">in_distance_between</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_distance_between" title="Permalink to this definition"></a></dt>
 <dd><p>Returns units that are further than distance1 and closer than distance2 to unit or position.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
@@ -430,7 +467,7 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.in_distance_of_group">
-<span class="sig-name descname"><span class="pre">in_distance_of_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_distance_of_group" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">in_distance_of_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.in_distance_of_group" title="Permalink to this definition"></a></dt>
 <dd><p>Returns units that are closer than distance from any unit in the other units object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -447,7 +484,7 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.mineral_field">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mineral_field</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.mineral_field" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mineral_field</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.mineral_field" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units that are mineral fields.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -458,7 +495,7 @@ Caution: This may not work well for static structures (bunker, sieged tank, plan
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.n_closest_to_distance">
-<span class="sig-name descname"><span class="pre">n_closest_to_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.n_closest_to_distance" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">n_closest_to_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.n_closest_to_distance" title="Permalink to this definition"></a></dt>
 <dd><p>Returns n units that are the closest to distance away.
 For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7] to position,
 the units with distance [4, 5, 6] will be returned</p>
@@ -471,7 +508,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.n_furthest_to_distance">
-<span class="sig-name descname"><span class="pre">n_furthest_to_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.n_furthest_to_distance" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">n_furthest_to_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.n_furthest_to_distance" title="Permalink to this definition"></a></dt>
 <dd><p>Inverse of the function ‘n_closest_to_distance’, returns the furthest units instead</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -482,7 +519,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.not_flying">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_flying</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_flying" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_flying</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_flying" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units that not are flying.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -493,7 +530,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.not_ready">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_ready" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_ready" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all structures that are not ready (construction not complete).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -504,7 +541,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.not_structure">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_structure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_structure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_structure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_structure" title="Permalink to this definition"></a></dt>
 <dd><p>Deprecated: All units that are not structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -515,7 +552,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.of_type">
-<span class="sig-name descname"><span class="pre">of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.of_type" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.of_type" title="Permalink to this definition"></a></dt>
 <dd><p>Filters all units that are of a specific type</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a set instead of lists in the argument</span>
@@ -534,7 +571,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.owned">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">owned</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.owned" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">owned</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.owned" title="Permalink to this definition"></a></dt>
 <dd><p>Deprecated: All your units.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -545,7 +582,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.prefer_idle">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prefer_idle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.prefer_idle" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prefer_idle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.prefer_idle" title="Permalink to this definition"></a></dt>
 <dd><p>Sorts units based on if they are idle. Idle units come first.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -556,7 +593,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.random_group_of">
-<span class="sig-name descname"><span class="pre">random_group_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.random_group_of" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">random_group_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.random_group_of" title="Permalink to this definition"></a></dt>
 <dd><p>Returns self if n &gt;= self.amount.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -567,7 +604,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.ready">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.ready" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.ready" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all structures that are ready (construction complete).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -578,7 +615,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.returning">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.returning" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.returning" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all workers that are carrying minerals or vespene and are returning to a townhall.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -589,7 +626,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.same_tech">
-<span class="sig-name descname"><span class="pre">same_tech</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.same_tech" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">same_tech</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.same_tech" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all structures that have the same base structure.</p>
 <p>Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and others</p>
 <p>Example:</p>
@@ -620,7 +657,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.same_unit">
-<span class="sig-name descname"><span class="pre">same_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.same_unit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">same_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.same_unit" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units that have the same base unit while being in different modes.</p>
 <p>Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit</p>
 <p>Example:</p>
@@ -648,7 +685,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.selected">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">selected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.selected" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">selected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.selected" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units that are selected by the human player.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -659,7 +696,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.sorted_by_distance_to">
-<span class="sig-name descname"><span class="pre">sorted_by_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.sorted_by_distance_to" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sorted_by_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.sorted_by_distance_to" title="Permalink to this definition"></a></dt>
 <dd><p>This function should be a bit faster than using units.sorted(key=lambda u: u.distance_to(position))</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -670,7 +707,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.structure">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">structure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.structure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">structure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.structure" title="Permalink to this definition"></a></dt>
 <dd><p>Deprecated: All structures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -681,7 +718,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.subgroup">
-<span class="sig-name descname"><span class="pre">subgroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.subgroup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">subgroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.subgroup" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new mutable Units object from Units or list object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -692,7 +729,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.tags">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.units.Units.tags" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.units.Units.tags" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all unit tags as a set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -703,7 +740,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.tags_in">
-<span class="sig-name descname"><span class="pre">tags_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.tags_in" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">tags_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.tags_in" title="Permalink to this definition"></a></dt>
 <dd><p>Filters all units that have their tags in the ‘other’ set/list/dict</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_inject_queens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">tags_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
@@ -724,7 +761,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.units.Units.tags_not_in">
-<span class="sig-name descname"><span class="pre">tags_not_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.tags_not_in" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">tags_not_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.units.Units.tags_not_in" title="Permalink to this definition"></a></dt>
 <dd><p>Filters all units that have their tags not in the ‘other’ set/list/dict</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_non_inject_queens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">tags_not_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
@@ -745,7 +782,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.vespene_geyser">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vespene_geyser</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.vespene_geyser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vespene_geyser</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.vespene_geyser" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units that are vespene geysers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -756,7 +793,7 @@ the units with distance [4, 5, 6] will be returned</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.units.Units.visible">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">visible</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.visible" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">visible</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">sc2.units.Units</span></a></em><a class="headerlink" href="#sc2.units.Units.visible" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all units or structures that are visible.
 TODO: add proper description on which units are exactly visible (not snapshots?)</p>
 <dl class="field-list simple">
@@ -771,62 +808,34 @@ TODO: add proper description on which units are exactly visible (not snapshots?)
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../unit/index.html" class="btn btn-neutral float-left" title="unit.py" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../game_data/index.html" class="btn btn-neutral float-right" title="game_data.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, tweakimp BurnySc2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../unit/index.html"
-                          title="previous chapter">unit.py</a></p>
+    </section>
   </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../game_data/index.html"
-                          title="next chapter">game_data.py</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/units/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../game_data/index.html" title="game_data.py"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../unit/index.html" title="unit.py"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">units.py</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
-    </div>
-  </body>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

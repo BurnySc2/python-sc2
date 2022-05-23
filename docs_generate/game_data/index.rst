@@ -5,8 +5,6 @@
 game_data.py
 ********************************************************
 
-TODO: Replace this with info about this file
-
 .. autoclass:: sc2.game_data.GameData
    :members:
 .. autoclass:: sc2.game_data.AbilityData

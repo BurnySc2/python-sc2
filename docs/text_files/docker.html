@@ -1,53 +1,104 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Using docker to run SC2 bots &#8212; python-sc2  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
-    
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using docker to run SC2 bots &mdash; python-sc2  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="bot_ai.py" href="../bot_ai/index.html" />
     <link rel="prev" title="Introduction" href="introduction.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../bot_ai/index.html" title="bot_ai.py"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="introduction.html" title="Introduction"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Using docker to run SC2 bots</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> python-sc2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using docker to run SC2 bots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pulling-the-docker-image">Pulling the Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deleting-previous-containers">Deleting previous containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#launching-a-new-container">Launching a new container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-bot-requirements">Install bot requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copying-bots-to-the-container">Copying Bots to the container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copying-the-runner-to-the-container">Copying the runner to the container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-match-es">Running the match(es)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copying-the-replay-from-container-to-host-machine">Copying the replay from container to host machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary-using-a-shell-script">Summary using a shell script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-cleanup">Docker cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distances/index.html">distances.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">python-sc2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Using docker to run SC2 bots</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/text_files/docker.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="using-docker-to-run-sc2-bots">
-<h1>Using docker to run SC2 bots<a class="headerlink" href="#using-docker-to-run-sc2-bots" title="Permalink to this headline">¶</a></h1>
+<h1>Using docker to run SC2 bots<a class="headerlink" href="#using-docker-to-run-sc2-bots" title="Permalink to this headline"></a></h1>
 <p>This is a small overview on how to use docker to run 2 bots (here: python-sc2 bots) against each other using the linux binary SC2 client.
 For a quick summary of commands, scroll to the bottom.</p>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>Docker installed and running</p></li>
 <li><p>Internet</p></li>
@@ -55,34 +106,34 @@ For a quick summary of commands, scroll to the bottom.</p>
 </ul>
 </section>
 <section id="pulling-the-docker-image">
-<h2>Pulling the Docker image<a class="headerlink" href="#pulling-the-docker-image" title="Permalink to this headline">¶</a></h2>
+<h2>Pulling the Docker image<a class="headerlink" href="#pulling-the-docker-image" title="Permalink to this headline"></a></h2>
 <p>The SC2 AI community has decided to stay on Python3.8 for a while. I’ll try to update the docker image as soon as a new linux binary is released, or create a pull request at <a class="reference external" href="https://github.com/BurnySc2/python-sc2-docker">https://github.com/BurnySc2/python-sc2-docker</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.8</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
 </pre></div>
 </div>
 </section>
 <section id="deleting-previous-containers">
-<h2>Deleting previous containers<a class="headerlink" href="#deleting-previous-containers" title="Permalink to this headline">¶</a></h2>
+<h2>Deleting previous containers<a class="headerlink" href="#deleting-previous-containers" title="Permalink to this headline"></a></h2>
 <p>To remove the previously used <code class="docutils literal notranslate"><span class="pre">app</span></code> container:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">name</span> <span class="n">app</span> <span class="n">test_image</span>
 </pre></div>
 </div>
 </section>
 <section id="launching-a-new-container">
-<h2>Launching a new container<a class="headerlink" href="#launching-a-new-container" title="Permalink to this headline">¶</a></h2>
+<h2>Launching a new container<a class="headerlink" href="#launching-a-new-container" title="Permalink to this headline"></a></h2>
 <p>The following command launches a new container in interactive mode, which means it will not shut down once it is done running:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">name</span> <span class="n">app</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.8</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
 </pre></div>
 </div>
 </section>
 <section id="install-bot-requirements">
-<h2>Install bot requirements<a class="headerlink" href="#install-bot-requirements" title="Permalink to this headline">¶</a></h2>
+<h2>Install bot requirements<a class="headerlink" href="#install-bot-requirements" title="Permalink to this headline"></a></h2>
 <p>The command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-i</span> <span class="pre">app</span> <span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">&quot;burnysc2&gt;=0.12.12&quot;</span></code> installs the <code class="docutils literal notranslate"><span class="pre">burnysc2</span></code> dependencies in the docker container. Add more libraries as needed. You can also create your custom docker image so you do not have to re-install the dependencies every time you create a new container.</p>
 <p>Since the linux SC2 binary is usually outdated (last update as of this writing was summer of 2019), you will likely have to replace your IDs with older IDs, which can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2/tree/linux-4.10/sc2/ids">https://github.com/BurnySc2/python-sc2/tree/linux-4.10/sc2/ids</a></p>
 <p>If you want your bots to play against a compiled bot (<code class="docutils literal notranslate"><span class="pre">.exe</span></code>), you will have to install <code class="docutils literal notranslate"><span class="pre">wine</span></code>. I have not included wine in the docker image to keep the image as small as possible.</p>
 </section>
 <section id="copying-bots-to-the-container">
-<h2>Copying Bots to the container<a class="headerlink" href="#copying-bots-to-the-container" title="Permalink to this headline">¶</a></h2>
+<h2>Copying Bots to the container<a class="headerlink" href="#copying-bots-to-the-container" title="Permalink to this headline"></a></h2>
 <p>The bots in the container need to be located under <code class="docutils literal notranslate"><span class="pre">app:/root/StarCraftII/Bots/&lt;bot_name&gt;</span></code>
 A copy command could be <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">cp</span> <span class="pre">examples/competetive/.</span> <span class="pre">app:/root/StarCraftII/Bots/my_bot</span></code> if you are in the main <code class="docutils literal notranslate"><span class="pre">python-sc2`</span> <span class="pre">directory,</span> <span class="pre">which</span> <span class="pre">copies</span> <span class="pre">the</span> <span class="pre">competetive</span> <span class="pre">example</span> <span class="pre">bot</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">container.</span> <span class="pre">The</span> <span class="pre">bots</span> <span class="pre">will</span> <span class="pre">be</span> <span class="pre">launched</span> <span class="pre">via</span> <span class="pre">``run.py</span></code>. The <code class="docutils literal notranslate"><span class="pre">ladderbots.json</span></code> might not be needed.
 Don’t forget to copy the python-sc2/sc2 folder, or else an older version might be used (on import) and your bot might not work correctly.</p>
@@ -90,7 +141,7 @@ Don’t forget to copy the python-sc2/sc2 folder, or else an older version might
 <p><a class="reference external" href="https://github.com/BurnySc2/python-sc2/tree/develop/examples/competitive">https://github.com/BurnySc2/python-sc2/tree/develop/examples/competitive</a> or <a class="reference external" href="https://eschamp.discourse.group/t/simple-starcraft-2-bot-template-to-get-started/155">https://eschamp.discourse.group/t/simple-starcraft-2-bot-template-to-get-started/155</a></p>
 </section>
 <section id="copying-the-runner-to-the-container">
-<h2>Copying the runner to the container<a class="headerlink" href="#copying-the-runner-to-the-container" title="Permalink to this headline">¶</a></h2>
+<h2>Copying the runner to the container<a class="headerlink" href="#copying-the-runner-to-the-container" title="Permalink to this headline"></a></h2>
 <p>You will have to configure the <code class="docutils literal notranslate"><span class="pre">custom_run_local.py</span></code> file (ctrl+f for <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">main()</span></code>).
 It can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/custom_run_local.py">https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/custom_run_local.py</a></p>
 <p>You may also customize the arenaclient <code class="docutils literal notranslate"><span class="pre">settings.json</span></code> (e.g. max game time) which is located under <code class="docutils literal notranslate"><span class="pre">/root/aiarena-client/arenaclient/proxy/settings.json</span></code>
@@ -101,14 +152,14 @@ Click here to check which settings are available: <a class="reference external" 
 </div>
 </section>
 <section id="running-the-match-es">
-<h2>Running the match(es)<a class="headerlink" href="#running-the-match-es" title="Permalink to this headline">¶</a></h2>
+<h2>Running the match(es)<a class="headerlink" href="#running-the-match-es" title="Permalink to this headline"></a></h2>
 <p>Now you are ready to let docker run your matches (headless):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">i</span> <span class="n">app</span> <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">run_local</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </section>
 <section id="copying-the-replay-from-container-to-host-machine">
-<h2>Copying the replay from container to host machine<a class="headerlink" href="#copying-the-replay-from-container-to-host-machine" title="Permalink to this headline">¶</a></h2>
+<h2>Copying the replay from container to host machine<a class="headerlink" href="#copying-the-replay-from-container-to-host-machine" title="Permalink to this headline"></a></h2>
 <p>To copy the <code class="docutils literal notranslate"><span class="pre">results.json</span></code> to the host machine to analyse the results, use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">temp</span>
 <span class="n">docker</span> <span class="n">cp</span> <span class="n">app</span><span class="p">:</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span> <span class="n">temp</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span>
@@ -121,12 +172,12 @@ Click here to check which settings are available: <a class="reference external" 
 </div>
 </section>
 <section id="summary-using-a-shell-script">
-<h2>Summary using a shell script<a class="headerlink" href="#summary-using-a-shell-script" title="Permalink to this headline">¶</a></h2>
+<h2>Summary using a shell script<a class="headerlink" href="#summary-using-a-shell-script" title="Permalink to this headline"></a></h2>
 <p>For a full runner script, see:</p>
 <p><a class="reference external" href="https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/docker_run_bots.sh">https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/docker_run_bots.sh</a></p>
 </section>
 <section id="docker-cleanup">
-<h2>Docker cleanup<a class="headerlink" href="#docker-cleanup" title="Permalink to this headline">¶</a></h2>
+<h2>Docker cleanup<a class="headerlink" href="#docker-cleanup" title="Permalink to this headline"></a></h2>
 <p>See also: <a class="reference external" href="https://docs.docker.com/config/pruning/">https://docs.docker.com/config/pruning/</a>
 Force removing all containers (including running):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker rm -f $(docker ps -aq)
@@ -144,82 +195,34 @@ Force removing all containers (including running):</p>
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Using docker to run SC2 bots</a><ul>
-<li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li><a class="reference internal" href="#pulling-the-docker-image">Pulling the Docker image</a></li>
-<li><a class="reference internal" href="#deleting-previous-containers">Deleting previous containers</a></li>
-<li><a class="reference internal" href="#launching-a-new-container">Launching a new container</a></li>
-<li><a class="reference internal" href="#install-bot-requirements">Install bot requirements</a></li>
-<li><a class="reference internal" href="#copying-bots-to-the-container">Copying Bots to the container</a></li>
-<li><a class="reference internal" href="#copying-the-runner-to-the-container">Copying the runner to the container</a></li>
-<li><a class="reference internal" href="#running-the-match-es">Running the match(es)</a></li>
-<li><a class="reference internal" href="#copying-the-replay-from-container-to-host-machine">Copying the replay from container to host machine</a></li>
-<li><a class="reference internal" href="#summary-using-a-shell-script">Summary using a shell script</a></li>
-<li><a class="reference internal" href="#docker-cleanup">Docker cleanup</a></li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bot_ai/index.html" class="btn btn-neutral float-right" title="bot_ai.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, tweakimp BurnySc2.</p>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="introduction.html"
-                          title="previous chapter">Introduction</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../bot_ai/index.html"
-                          title="next chapter">bot_ai.py</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/text_files/docker.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../bot_ai/index.html" title="bot_ai.py"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="introduction.html" title="Introduction"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Using docker to run SC2 bots</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

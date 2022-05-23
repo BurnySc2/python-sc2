@@ -1,58 +1,95 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>position.py &#8212; python-sc2  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
-    
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>position.py &mdash; python-sc2  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pixel_map.py" href="../pixel_map/index.html" />
     <link rel="prev" title="client.py" href="../client/index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../pixel_map/index.html" title="pixel_map.py"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../client/index.html" title="client.py"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">position.py</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> python-sc2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distances/index.html">distances.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">python-sc2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>position.py</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/position/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <div class="toctree-wrapper compound">
 </div>
 <section id="position-py">
-<h1>position.py<a class="headerlink" href="#position-py" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Replace this with info about this file</p>
+<h1>position.py<a class="headerlink" href="#position-py" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.position.Pointlike">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Pointlike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Pointlike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.closest">
-<span class="sig-name descname"><span class="pre">closest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.closest" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">closest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.closest" title="Permalink to this definition"></a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -66,7 +103,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.distance_to">
-<span class="sig-name descname"><span class="pre">distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate a single distance from a point or unit to another point or unit</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -80,7 +117,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.distance_to_closest">
-<span class="sig-name descname"><span class="pre">distance_to_closest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_closest" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">distance_to_closest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_closest" title="Permalink to this definition"></a></dt>
 <dd><p>This function assumes the 2d distance is meant
 :type ps: <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]]
 :param ps:</p>
@@ -93,7 +130,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.distance_to_furthest">
-<span class="sig-name descname"><span class="pre">distance_to_furthest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_furthest" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">distance_to_furthest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_furthest" title="Permalink to this definition"></a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -107,7 +144,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.distance_to_point2">
-<span class="sig-name descname"><span class="pre">distance_to_point2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_point2" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">distance_to_point2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_point2" title="Permalink to this definition"></a></dt>
 <dd><p>Same as the function above, but should be a bit faster because of the dropped asserts
 and conversion.</p>
 <dl class="field-list simple">
@@ -122,7 +159,7 @@ and conversion.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.furthest">
-<span class="sig-name descname"><span class="pre">furthest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.furthest" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">furthest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.furthest" title="Permalink to this definition"></a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -136,7 +173,7 @@ and conversion.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.is_closer_than">
-<span class="sig-name descname"><span class="pre">is_closer_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_closer_than" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">is_closer_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_closer_than" title="Permalink to this definition"></a></dt>
 <dd><p>Check if another point (or unit) is closer than the given distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -153,7 +190,7 @@ and conversion.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.is_further_than">
-<span class="sig-name descname"><span class="pre">is_further_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_further_than" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">is_further_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.is_further_than" title="Permalink to this definition"></a></dt>
 <dd><p>Check if another point (or unit) is further than the given distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -170,7 +207,7 @@ and conversion.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.offset">
-<span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.offset" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.offset" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>p</strong> – </p>
@@ -183,7 +220,7 @@ and conversion.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.sort_by_distance">
-<span class="sig-name descname"><span class="pre">sort_by_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.sort_by_distance" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sort_by_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.sort_by_distance" title="Permalink to this definition"></a></dt>
 <dd><p>This returns the target points sorted as list.
 You should not pass a set or dict since those are not sortable.
 If you want to sort your units towards a point, use ‘units.sorted_by_distance_to(point)’ instead.</p>
@@ -199,7 +236,7 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.towards">
-<span class="sig-name descname"><span class="pre">towards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.towards" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">towards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.towards" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -216,7 +253,7 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Pointlike.unit_axes_towards">
-<span class="sig-name descname"><span class="pre">unit_axes_towards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.unit_axes_towards" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">unit_axes_towards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.unit_axes_towards" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>p</strong> – </p>
@@ -228,10 +265,10 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.position.Point2">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Point2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Point2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2" title="Permalink to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.position.Point2.as_PointI">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">as_PointI</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">s2clientprotocol.common_pb2.PointI</span></em><a class="headerlink" href="#sc2.position.Point2.as_PointI" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">as_PointI</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">s2clientprotocol.common_pb2.PointI</span></em><a class="headerlink" href="#sc2.position.Point2.as_PointI" title="Permalink to this definition"></a></dt>
 <dd><p>Represents points on the minimap. Values must be between 0 and 64.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -242,7 +279,7 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.center">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units_or_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.center" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units_or_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.center" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the central point for points in list</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -256,7 +293,7 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.circle_intersection">
-<span class="sig-name descname"><span class="pre">circle_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.circle_intersection" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">circle_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.circle_intersection" title="Permalink to this definition"></a></dt>
 <dd><p>self is point1, p is point2, r is the radius for circles originating in both points
 Used in ramp finding</p>
 <dl class="field-list simple">
@@ -274,7 +311,7 @@ Used in ramp finding</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.direction_vector">
-<span class="sig-name descname"><span class="pre">direction_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.direction_vector" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">direction_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.direction_vector" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a vector to a direction that can face vertically, horizontally or diagonal or be zero, e.g. (0, 0), (1, -1), (1, 0)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -285,7 +322,7 @@ Used in ramp finding</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.from_proto">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.from_proto" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.from_proto" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data</strong> – </p>
@@ -298,7 +335,7 @@ Used in ramp finding</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.position.Point2.length">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Point2.length" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Point2.length" title="Permalink to this definition"></a></dt>
 <dd><p>This property exists in case Point2 is used as a vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -309,7 +346,7 @@ Used in ramp finding</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.manhattan_distance">
-<span class="sig-name descname"><span class="pre">manhattan_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.manhattan_distance" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">manhattan_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.manhattan_distance" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p>
@@ -322,7 +359,7 @@ Used in ramp finding</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.position.Point2.normalized">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normalized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.position.Point2.normalized" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normalized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.position.Point2.normalized" title="Permalink to this definition"></a></dt>
 <dd><p>This property exists in case Point2 is used as a vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -333,7 +370,7 @@ Used in ramp finding</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.offset">
-<span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.offset" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.offset" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>p</strong> (<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p>
@@ -345,10 +382,10 @@ Used in ramp finding</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.position.Point3">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Point3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point3" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Point3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point3" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point3.from_proto">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point3.from_proto" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point3.from_proto" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data</strong> – </p>
@@ -363,15 +400,15 @@ Used in ramp finding</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.position.Size">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Size" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Size" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.position.Rect">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Rect" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.position.</span></span><span class="sig-name descname"><span class="pre">Rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Rect" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Rect.from_proto">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Rect.from_proto" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Rect.from_proto" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data</strong> – </p>
@@ -381,7 +418,7 @@ Used in ramp finding</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.position.Rect.right">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Rect.right" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Rect.right" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the x-coordinate of the rectangle of its right side.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -392,7 +429,7 @@ Used in ramp finding</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.position.Rect.top">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Rect.top" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Rect.top" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the y-coordinate of the rectangle of its top side.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -406,62 +443,34 @@ Used in ramp finding</p>
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../client/index.html" class="btn btn-neutral float-left" title="client.py" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pixel_map/index.html" class="btn btn-neutral float-right" title="pixel_map.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, tweakimp BurnySc2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../client/index.html"
-                          title="previous chapter">client.py</a></p>
+    </section>
   </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../pixel_map/index.html"
-                          title="next chapter">pixel_map.py</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/position/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../pixel_map/index.html" title="pixel_map.py"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../client/index.html" title="client.py"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">position.py</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
-    </div>
-  </body>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

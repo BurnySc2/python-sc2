@@ -1,59 +1,108 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Introduction &#8212; python-sc2  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
-    
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction &mdash; python-sc2  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using docker to run SC2 bots" href="docker.html" />
     <link rel="prev" title="Welcome to python-sc2’s documentation!" href="../index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="docker.html" title="Using docker to run SC2 bots"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to python-sc2’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Introduction</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> python-sc2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-bot">Creating a bot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#available-information-in-the-game">Available information in the game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#possible-bot-actions">Possible bot actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#training-a-unit">Training a unit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-a-structure">Building a structure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distances/index.html">distances.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">python-sc2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/text_files/introduction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h1>
 <p>This is an overview to the BurnySc2/python-sc2 library which can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2">https://github.com/BurnySc2/python-sc2</a></p>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>Python 3.8 or newer</p></li>
 <li><p>StarCraft 2 Client installation in the <strong>default installation path</strong> which should be <code class="docutils literal notranslate"><span class="pre">C:\Program</span> <span class="pre">Files</span> <span class="pre">(x86)\StarCraft</span> <span class="pre">II</span></code></p></li>
 </ul>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
 <p>Install through pip using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">burnysc2</span></code> if Python is in your environment path, or go into your python installation folder and run through console <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">burnysc2</span></code>.</p>
 <p>Alternatively (of if the command above doesn’t work) you can install a specific branch directly from github, here the develop branch:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">poetry</span>
@@ -62,7 +111,7 @@
 </div>
 </section>
 <section id="creating-a-bot">
-<h2>Creating a bot<a class="headerlink" href="#creating-a-bot" title="Permalink to this headline">¶</a></h2>
+<h2>Creating a bot<a class="headerlink" href="#creating-a-bot" title="Permalink to this headline"></a></h2>
 <p>A basic bot can be made by creating a new file <cite>my_bot.py</cite> and filling it with the following contents:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sc2</span>
 <span class="kn">from</span> <span class="nn">sc2.bot_ai</span> <span class="kn">import</span> <span class="n">BotAI</span>
@@ -83,7 +132,7 @@
 <p>A SC2 window should open and your bot should print the text several times per second to the console. Your bot will not do anything else because no orders are issued to your units.</p>
 </section>
 <section id="available-information-in-the-game">
-<h2>Available information in the game<a class="headerlink" href="#available-information-in-the-game" title="Permalink to this headline">¶</a></h2>
+<h2>Available information in the game<a class="headerlink" href="#available-information-in-the-game" title="Permalink to this headline"></a></h2>
 <p>Information about your bot:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Resources and supply</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">minerals</span><span class="p">:</span> <span class="nb">int</span>
@@ -158,10 +207,10 @@
 </div>
 </section>
 <section id="possible-bot-actions">
-<h2>Possible bot actions<a class="headerlink" href="#possible-bot-actions" title="Permalink to this headline">¶</a></h2>
+<h2>Possible bot actions<a class="headerlink" href="#possible-bot-actions" title="Permalink to this headline"></a></h2>
 <p>The game has started and now you want to build stuff with your mined resources. I assume you played at least one game of SC2 and know the basics, for example where you build drones (from larva) and SCVs and probes (from command center and nexus respectively).</p>
 <section id="training-a-unit">
-<h3>Training a unit<a class="headerlink" href="#training-a-unit" title="Permalink to this headline">¶</a></h3>
+<h3>Training a unit<a class="headerlink" href="#training-a-unit" title="Permalink to this headline"></a></h3>
 <p>Assuming you picked zerg for your bot and want to build a drone. Your larva is available in <code class="docutils literal notranslate"><span class="pre">self.larva</span></code>. Your bot starts with 3 larva. To choose which of the larva you want to issue the command to train a drone, you need to pick one. The simplest you can do is <code class="docutils literal notranslate"><span class="pre">my_larva</span> <span class="pre">=</span> <span class="pre">self.larva.random</span></code>. Now you have to issue a command to the larva: morph to drone.</p>
 <p>You can issue commands using the __call__ function: <code class="docutils literal notranslate"><span class="pre">unit(ability)</span></code>. You have to import ability ids before you can use them. <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">sc2.ids.ability_id</span> <span class="pre">import</span> <span class="pre">AbilityId</span></code>. Here, the action can be <code class="docutils literal notranslate"><span class="pre">my_larva(AbilityId.LARVATRAIN_DRONE)</span></code>. In total, this results in:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.ids.ability_id</span> <span class="kn">import</span> <span class="n">AbilityId</span>
@@ -213,7 +262,7 @@
 </div>
 </section>
 <section id="building-a-structure">
-<h3>Building a structure<a class="headerlink" href="#building-a-structure" title="Permalink to this headline">¶</a></h3>
+<h3>Building a structure<a class="headerlink" href="#building-a-structure" title="Permalink to this headline"></a></h3>
 <p>Nearly the same procedure is when you want to build a structure. All that is needed is</p>
 <ul class="simple">
 <li><p>Which building type should be built</p></li>
@@ -268,80 +317,34 @@
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Introduction</a><ul>
-<li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#creating-a-bot">Creating a bot</a></li>
-<li><a class="reference internal" href="#available-information-in-the-game">Available information in the game</a></li>
-<li><a class="reference internal" href="#possible-bot-actions">Possible bot actions</a><ul>
-<li><a class="reference internal" href="#training-a-unit">Training a unit</a></li>
-<li><a class="reference internal" href="#building-a-structure">Building a structure</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to python-sc2’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="docker.html" class="btn btn-neutral float-right" title="Using docker to run SC2 bots" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, tweakimp BurnySc2.</p>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../index.html"
-                          title="previous chapter">Welcome to python-sc2’s documentation!</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="docker.html"
-                          title="next chapter">Using docker to run SC2 bots</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/text_files/introduction.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="docker.html" title="Using docker to run SC2 bots"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to python-sc2’s documentation!"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">python-sc2  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Introduction</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, tweakimp BurnySc2.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>
