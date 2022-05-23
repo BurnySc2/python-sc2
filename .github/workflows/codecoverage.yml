@@ -31,7 +31,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install poetry
+        pip install poetry
         poetry install
 
     - name: Run pytest with coverage

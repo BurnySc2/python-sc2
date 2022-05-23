@@ -48,7 +48,7 @@ jobs:
 
     - name: Install Poetry
       run: |
-        python -m pip install poetry
+        pip install poetry
 
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
@@ -226,7 +226,7 @@ jobs:
     timeout-minutes: 3
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: ['3.10']
     needs: [run_pytest_tests, run_test_bots, run_example_bots]
 
     steps:
@@ -237,10 +237,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Remove docs and prepare to build
+    - name: Install poetry
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
+        # https://github.com/readthedocs/readthedocs.org/issues/4912#issuecomment-1110189914
       run: |
-        python -m pip install poetry
+        pip install poetry
+        poetry config virtualenvs.create false
+
+    - name: Install dependencies
+      run: |
         poetry install
 
     - name: Build docs from scratch
@@ -249,6 +254,11 @@ jobs:
         mkdir -p docs
         cd docs_generate
         poetry run sphinx-build -a -E -b html . ../docs
+
+    - name: Remove files unrelated to docs
+      run: |
+        rm -rf data dockerfiles docs_generate examples sc2 test
+        rm poetry.lock
 
     - name: Publish to Github Pages
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
