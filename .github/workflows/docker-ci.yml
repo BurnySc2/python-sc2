@@ -1,0 +1,89 @@
+name: Build and push Dockerfile
+
+# Only run if Dockerfile or docker-ci.yml changed
+on:
+  push:
+    paths:
+    - dockerfiles/**
+    - .github/workflows/docker-ci.yml
+  pull_request:
+    branches:
+    - master
+    - develop
+
+env:
+  VERSION_NUMBER: 1.0.1
+  LATEST_PYTHON_VERSION: '3.10'
+  LATEST_SC2_VERSION: '4.10'
+
+jobs:
+  run_test_docker_image:
+    name: Run test_docker_image.sh
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Run shell script
+      run: |
+        export VERSION_NUMBER=${{ env.VERSION_NUMBER }}
+        export PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }}
+        export SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
+        sh dockerfiles/test_docker_image.sh
+
+  docker_build:
+    name: Build docker image
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.7', '3.8', '3.9', '3.10']
+        sc2-version: ['4.10']
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build docker image
+      run: |
+        docker build -f dockerfiles/Dockerfile -t burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }} --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} .
+
+    - name: Run test bots
+      if: matrix.python-version != '3.7'
+      run: |
+        echo "Start container, override the default entrypoint"
+        docker run -i -d \
+          --name test_container \
+          --mount type=bind,source="$(pwd)",destination=/root/python-sc2,readonly \
+          --entrypoint /bin/bash \
+          burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}
+        echo "Install python-sc2"
+        docker exec -i test_container bash -c "pip install poetry \
+            && cd python-sc2 && poetry install --no-dev"
+        echo "Run various test bots"
+        docker exec -i test_container bash -c "cd python-sc2 && poetry run python test/travis_test_script.py test/autotest_bot.py"
+        docker exec -i test_container bash -c "cd python-sc2 && poetry run python test/run_example_bots_vs_computer.py"
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Upload docker image
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+      run: |
+        docker push burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}
+
+    - name: Upload docker image with latest tag
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push' && matrix.python-version == env.LATEST_PYTHON_VERSION && matrix.sc2-version == env.LATEST_SC2_VERSION
+      run: |
+        docker tag burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }} burnysc2/python-sc2-docker:latest
+        docker push burnysc2/python-sc2-docker:latest
+

@@ -46,8 +46,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # http://www.sphinx-doc.org/en/stable/theming.html
 # https://www.writethedocs.org/guide/tools/sphinx-themes/
 # https://sphinx-themes.org/
-html_theme = "classic"
-# html_theme = 'alabaster'
+html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
