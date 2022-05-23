@@ -11,7 +11,7 @@ Requirements
 
 Installation
 -------------
-Install through pip using ``pip install burnysc2`` if Python is in your environment path, or go into your python installation folder and run through console ``python -m pip install burnysc2``.
+Install through pip using ``pip install burnysc2`` if Python is in your environment path, or go into your python installation folder and run through console ``pip install burnysc2``.
 
 Alternatively (of if the command above doesn't work) you can install a specific branch directly from github, here the develop branch::
 
