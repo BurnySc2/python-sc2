@@ -1,58 +1,78 @@
+from loguru import logger
+
 from sc2 import maps
 from sc2.bot_ai import BotAI
-from sc2.data import Race, Difficulty
+from sc2.data import Difficulty, Race
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.main import run_game
 from sc2.player import Bot, Computer
-from loguru import logger
+from sc2.position import Point2
 
-ME = 1
-PC = 2
+MY_PLAYER_ID = 1
+OPPONENT_PLAYER_ID = 2
 
 
 class FightBot(BotAI):
+
     def __init__(self):
         super().__init__()
-        self.enemy_location = None
+        self.enemy_location: Point2 = None
         self.fight_started = False
 
+    async def on_start(self):
+        # Retrieve control by enabling enemy control and showing whole map
+        await self.client.debug_show_map()
+        await self.client.debug_control_enemy()
+
     async def on_step(self, iteration):
-        # retrieve control by enabling enemy control and showing whole map
-        if iteration == 0:
-            await self._client.debug_show_map()
-            await self._client.debug_control_enemy()
-
-        # wait till control retrieved, destroy all starting units, recreate the world
+        # Wait till control retrieved, destroy all starting units, recreate the world
         if iteration > 0 and self.enemy_units and not self.enemy_location:
-            self.enemy_location = self.enemy_structures(UnitTypeId.COMMANDCENTER).first.position.closest(self.enemy_start_locations)
-            await self._client.debug_kill_unit([u.tag for u in self.units + self.structures + self.enemy_units + self.enemy_structures])
-            await self._client.debug_create_unit([
-                [UnitTypeId.SUPPLYDEPOT, 1, self.enemy_location, PC],
-                [UnitTypeId.MARINE, 4, self.enemy_location.towards(self.start_location, 8), PC]
-            ])
-            await self._client.debug_create_unit([
-                [UnitTypeId.SUPPLYDEPOT, 1, self.start_location, ME],
-                [UnitTypeId.MARINE, 4, self.start_location.towards(self.enemy_location, 8), ME]
-            ])
+            await self.reset_arena()
 
-        # wait till workers will be destroyed and start the fight
-        if not self.fight_started and self.enemy_location and not self.enemy_units(UnitTypeId.SCV) and not self.units(UnitTypeId.SCV):
-            for u in self.enemy_units:
-                u.attack(self.start_location)
+        if (self.units or self.structures) and (self.enemy_units or self.enemy_structures):
+            self.enemy_location = (self.enemy_units + self.enemy_structures).center
             self.fight_started = True
 
-        # in case of no units left - do not wait for game to finish
+        await self.manage_enemy_units()
+        await self.manage_own_units()
+
+        # In case of no units left - do not wait for game to finish
         if self.fight_started and (not self.units or not self.enemy_units):
             logger.info("LOSE" if not self.units else "WIN")
-            await self._client.quit()  # or reset level
+            await self.client.quit()  # or reset level
+            return
 
-        for u in self.units(UnitTypeId.MARINE):
-            u.attack(self.enemy_location)
+    async def reset_arena(self):
+        await self.client.debug_kill_unit(self.all_units)
+
+        await self.client.debug_create_unit(
+            [
+                [UnitTypeId.SUPPLYDEPOT, 1, self.enemy_location, OPPONENT_PLAYER_ID],
+                [UnitTypeId.MARINE, 4,
+                 self.enemy_location.towards(self.start_location, 8), OPPONENT_PLAYER_ID]
+            ]
+        )
+
+        await self.client.debug_create_unit(
+            [
+                [UnitTypeId.SUPPLYDEPOT, 1, self.start_location, MY_PLAYER_ID],
+                [UnitTypeId.MARINE, 4,
+                 self.start_location.towards(self.enemy_location, 8), MY_PLAYER_ID]
+            ]
+        )
+
+    async def manage_enemy_units(self):
+        for unit in self.enemy_units:
+            unit.attack(self.start_location)
+
+    async def manage_own_units(self):
+        for unit in self.units(UnitTypeId.MARINE):
+            unit.attack(self.enemy_location)
             # TODO: implement your fight logic here
-            # if u.weapon_cooldown:
-            #     u.move(u.position.towards(self.start_location))
+            # if unit.weapon_cooldown != 0:
+            #     unit.move(u.position.towards(self.start_location))
             # else:
-            #     u.attack(self.enemy_location)
+            #     unit.attack(self.enemy_location)
             # pass
 
 
