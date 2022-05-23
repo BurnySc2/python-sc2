@@ -5,8 +5,6 @@
 game_state.py
 ********************************************************
 
-TODO: Replace this with info about this file
-
 .. autoclass:: sc2.game_state.GameState
    :members:
 .. autoclass:: sc2.game_state.Blip

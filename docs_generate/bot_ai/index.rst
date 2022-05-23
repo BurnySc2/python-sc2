@@ -12,3 +12,5 @@ How to use this information is shown in the bot examples (with comments).
 
 .. autoclass:: sc2.bot_ai.BotAI
    :members:
+.. autoclass:: sc2.bot_ai_internal.BotAIInternal
+   :members:
