@@ -305,7 +305,8 @@ class Unit:
         """Calculates the movement speed of the unit including buffs and upgrades.
         Note: Upgrades only work with own units. Use "upgrades" param to set expected enemy upgrades.
 
-        :param upgrades:"""
+        :param upgrades:
+        """
         speed: float = self.movement_speed
         unit_type: UnitTypeId = self.type_id
 
@@ -518,20 +519,22 @@ class Unit:
         """ Returns the 3d position of the unit. """
         return Point3.from_proto(self._proto.pos)
 
-    def distance_to(self, p: Union[Unit, Point2, Point3]) -> float:
+    def distance_to(self, p: Union[Unit, Point2]) -> float:
         """Using the 2d distance between self and p.
         To calculate the 3d distance, use unit.position3d.distance_to(p)
 
-        :param p:"""
+        :param p:
+        """
         if isinstance(p, Unit):
             return self._bot_object._distance_squared_unit_to_unit(self, p)**0.5
         return self._bot_object.distance_math_hypot(self.position_tuple, p)
 
-    def distance_to_squared(self, p: Union[Unit, Point2, Point3]) -> float:
+    def distance_to_squared(self, p: Union[Unit, Point2]) -> float:
         """Using the 2d distance squared between self and p. Slightly faster than distance_to, so when filtering a lot of units, this function is recommended to be used.
         To calculate the 3d distance, use unit.position3d.distance_to(p)
 
-        :param p:"""
+        :param p:
+        """
         if isinstance(p, Unit):
             return self._bot_object._distance_squared_unit_to_unit(self, p)
         return self._bot_object.distance_math_hypot_squared(self.position_tuple, p)
@@ -541,7 +544,8 @@ class Unit:
         Includes the target's radius when calculating distance to target.
 
         :param target:
-        :param bonus_distance:"""
+        :param bonus_distance:
+        """
         # TODO: Fix this because immovable units (sieged tank, planetary fortress etc.) have a little lower range than this formula
         if self.can_attack_ground and not target.is_flying:
             unit_attack_range = self.ground_range
@@ -561,7 +565,8 @@ class Unit:
 
         :param ability_id:
         :param target:
-        :param bonus_distance:"""
+        :param bonus_distance:
+        """
         cast_range = self._bot_object.game_data.abilities[ability_id.value]._proto.cast_range
         assert cast_range > 0, f"Checking for an ability ({ability_id}) that has no cast range"
         ability_target_type = self._bot_object.game_data.abilities[ability_id.value]._proto.target
@@ -590,10 +595,9 @@ class Unit:
         self,
         target: Unit,
         ignore_armor: bool = False,
-        include_overkill_damage: bool = True
+        include_overkill_damage: bool = True,
     ) -> Tuple[float, float, float]:
-        """
-        Returns a tuple of: [potential damage against target, attack speed, attack range]
+        """Returns a tuple of: [potential damage against target, attack speed, attack range]
         Returns the properly calculated damage per full-attack against the target unit.
         Returns (0, 0, 0) if this unit can't attack the target unit.
 
@@ -788,9 +792,17 @@ class Unit:
         return max(damages, key=lambda damage_tuple: damage_tuple[0])
 
     def calculate_dps_vs_target(
-        self, target: Unit, ignore_armor: bool = False, include_overkill_damage: bool = True
+        self,
+        target: Unit,
+        ignore_armor: bool = False,
+        include_overkill_damage: bool = True,
     ) -> float:
-        """ Returns the DPS against the given target. """
+        """Returns the DPS against the given target.
+
+        :param target:
+        :param ignore_armor:
+        :param include_overkill_damage:
+        """
         calc_tuple: Tuple[float, float,
                           float] = self.calculate_damage_vs_target(target, ignore_armor, include_overkill_damage)
         # TODO fix for real time? The result may have to be multiplied by 1.4 because of game_speed=normal
@@ -800,14 +812,15 @@ class Unit:
 
     @property
     def facing(self) -> float:
-        """ Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
+        """Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
         return self._proto.facing
 
     def is_facing(self, other_unit: Unit, angle_error: float = 0.05) -> bool:
         """Check if this unit is facing the target unit. If you make angle_error too small, there might be rounding errors. If you make angle_error too big, this function might return false positives.
 
         :param other_unit:
-        :param angle_error:"""
+        :param angle_error:
+        """
         # TODO perhaps return default True for units that cannot 'face' another unit? e.g. structures (planetary fortress, bunker, missile turret, photon cannon, spine, spore) or sieged tanks
         angle = math.atan2(
             other_unit.position_tuple[1] - self.position_tuple[1], other_unit.position_tuple[0] - self.position_tuple[0]
@@ -847,7 +860,8 @@ class Unit:
     @property
     def cloak(self) -> CloakState:
         """Returns cloak state.
-        See https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95"""
+        See https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95
+        """
         return self._proto.cloak
 
     @property
@@ -1007,12 +1021,6 @@ class Unit:
         return None
 
     @property
-    def noqueue(self) -> bool:
-        """ Checks if the unit is idle. """
-        warnings.warn("noqueue will be removed soon, please use is_idle instead", DeprecationWarning, stacklevel=2)
-        return self.is_idle
-
-    @property
     def is_idle(self) -> bool:
         """ Checks if unit is idle. """
         return not self._proto.orders
@@ -1082,7 +1090,7 @@ class Unit:
 
     @property
     def add_on_tag(self) -> int:
-        """ Returns the tag of the addon of unit. If the unit has no addon, returns 0. """
+        """Returns the tag of the addon of unit. If the unit has no addon, returns 0."""
         return self._proto.add_on_tag
 
     @property
@@ -1092,18 +1100,17 @@ class Unit:
 
     @cached_property
     def has_techlab(self) -> bool:
-        """ Check if a structure is connected to a techlab addon. This should only ever return True for BARRACKS, FACTORY, STARPORT. """
+        """Check if a structure is connected to a techlab addon. This should only ever return True for BARRACKS, FACTORY, STARPORT. """
         return self.add_on_tag in self._bot_object.techlab_tags
 
     @cached_property
     def has_reactor(self) -> bool:
-        """ Check if a structure is connected to a reactor addon. This should only ever return True for BARRACKS, FACTORY, STARPORT. """
+        """Check if a structure is connected to a reactor addon. This should only ever return True for BARRACKS, FACTORY, STARPORT. """
         return self.add_on_tag in self._bot_object.reactor_tags
 
     @cached_property
     def add_on_land_position(self) -> Point2:
-        """
-        If this unit is an addon (techlab, reactor), returns the position
+        """If this unit is an addon (techlab, reactor), returns the position
         where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to this addon.
 
         Why offset (-2.5, 0.5)? See description in 'add_on_position'
@@ -1112,8 +1119,7 @@ class Unit:
 
     @cached_property
     def add_on_position(self) -> Point2:
-        """
-        If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
+        """If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
         this property returns the position of where the addon should be, if it should build one or has one attached.
 
         Why offset (2.5, -0.5)?
@@ -1135,7 +1141,7 @@ class Unit:
         return {unit.tag for unit in self._proto.passengers}
 
     @property
-    def cargo_used(self) -> Union[float, int]:
+    def cargo_used(self) -> int:
         """Returns how much cargo space is currently used in the unit.
         Note that some units take up more than one space."""
         return self._proto.cargo_space_taken
@@ -1146,17 +1152,17 @@ class Unit:
         return bool(self._proto.cargo_space_taken)
 
     @property
-    def cargo_size(self) -> Union[float, int]:
+    def cargo_size(self) -> int:
         """ Returns the amount of cargo space the unit needs. """
         return self._type_data.cargo_size
 
     @property
-    def cargo_max(self) -> Union[float, int]:
+    def cargo_max(self) -> int:
         """ How much cargo space is available at maximum. """
         return self._proto.cargo_space_max
 
     @property
-    def cargo_left(self) -> Union[float, int]:
+    def cargo_left(self) -> int:
         """ Returns how much cargo space is currently left in the unit. """
         return self._proto.cargo_space_max - self._proto.cargo_space_taken
 
@@ -1196,7 +1202,7 @@ class Unit:
 
     @property
     def weapon_ready(self) -> bool:
-        """ Checks if the weapon is ready to be fired. """
+        """Checks if the weapon is ready to be fired."""
         return self.weapon_cooldown == 0
 
     @property
@@ -1209,16 +1215,26 @@ class Unit:
     # Unit functions
 
     def has_buff(self, buff: BuffId) -> bool:
-        """ Checks if unit has buff 'buff'. """
+        """Checks if unit has buff 'buff'.
+
+        :param buff:
+        """
         assert isinstance(buff, BuffId), f"{buff} is no BuffId"
         return buff in self.buffs
 
-    def train(self, unit: UnitTypeId, queue: bool = False, can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+    def train(
+        self,
+        unit: UnitTypeId,
+        queue: bool = False,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
         """Orders unit to train another 'unit'.
         Usage: COMMANDCENTER.train(SCV)
 
         :param unit:
-        :param queue:"""
+        :param queue:
+        :param can_afford_check:
+        """
         return self(
             self._bot_object.game_data.units[unit.value].creation_ability.id,
             queue=queue,
@@ -1229,7 +1245,7 @@ class Unit:
     def build(
         self,
         unit: UnitTypeId,
-        position: Union[Point2, Point3] = None,
+        position: Point2 = None,
         queue: bool = False,
         can_afford_check: bool = False,
     ) -> Union[UnitCommand, bool]:
@@ -1243,6 +1259,7 @@ class Unit:
         :param unit:
         :param position:
         :param queue:
+        :param can_afford_check:
         """
         if unit in {UnitTypeId.EXTRACTOR, UnitTypeId.ASSIMILATOR, UnitTypeId.REFINERY}:
             assert isinstance(
@@ -1256,10 +1273,12 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def build_gas(self,
-                  target_geysir: Unit,
-                  queue: bool = False,
-                  can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+    def build_gas(
+        self,
+        target_geysir: Unit,
+        queue: bool = False,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
         """Orders unit to build another 'unit' at 'position'.
         Usage::
 
@@ -1268,6 +1287,7 @@ class Unit:
 
         :param target_geysir:
         :param queue:
+        :param can_afford_check:
         """
         gas_structure_type_id: UnitTypeId = race_gas[self._bot_object.race]
         assert isinstance(
@@ -1281,15 +1301,18 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def research(self,
-                 upgrade: UpgradeId,
-                 queue: bool = False,
-                 can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+    def research(
+        self,
+        upgrade: UpgradeId,
+        queue: bool = False,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
         """Orders unit to research 'upgrade'.
         Requires UpgradeId to be passed instead of AbilityId.
 
         :param upgrade:
         :param queue:
+        :param can_afford_check:
         """
         return self(
             self._bot_object.game_data.upgrades[upgrade.value].research_ability.exact_id,
@@ -1298,14 +1321,17 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def warp_in(self,
-                unit: UnitTypeId,
-                position: Union[Point2, Point3],
-                can_afford_check: bool = False) -> Union[UnitCommand, bool]:
+    def warp_in(
+        self,
+        unit: UnitTypeId,
+        position: Point2,
+        can_afford_check: bool = False,
+    ) -> Union[UnitCommand, bool]:
         """Orders Warpgate to warp in 'unit' at 'position'.
 
         :param unit:
         :param queue:
+        :param can_afford_check:
         """
         normal_creation_ability = self._bot_object.game_data.units[unit.value].creation_ability.id
         return self(
@@ -1316,7 +1342,7 @@ class Unit:
             can_afford_check=can_afford_check,
         )
 
-    def attack(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
+    def attack(self, target: Union[Unit, Point2], queue: bool = False) -> Union[UnitCommand, bool]:
         """Orders unit to attack. Target can be a Unit or Point2.
         Attacking a position will make the unit move there and attack everything on its way.
 
@@ -1325,7 +1351,7 @@ class Unit:
         """
         return self(AbilityId.ATTACK, target=target, queue=queue)
 
-    def smart(self, target: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
+    def smart(self, target: Union[Unit, Point2], queue: bool = False) -> Union[UnitCommand, bool]:
         """Orders the smart command. Equivalent to a right-click order.
 
         :param target:
@@ -1350,7 +1376,7 @@ class Unit:
         """
         return self(AbilityId.HARVEST_RETURN, target=target, queue=queue)
 
-    def move(self, position: Union[Unit, Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
+    def move(self, position: Union[Unit, Point2], queue: bool = False) -> Union[UnitCommand, bool]:
         """Orders the unit to move to 'position'.
         Target can be a Unit (to follow that unit) or Point2.
 
@@ -1358,10 +1384,6 @@ class Unit:
         :param queue:
         """
         return self(AbilityId.MOVE_MOVE, target=position, queue=queue)
-
-    def scan_move(self, *args, **kwargs) -> Union[UnitCommand, bool]:
-        """ Deprecated: This ability redirects to 'AbilityId.ATTACK' """
-        return self(AbilityId.SCAN_MOVE, *args, **kwargs)
 
     def hold_position(self, queue: bool = False) -> Union[UnitCommand, bool]:
         """Orders a unit to stop moving. It will not move until it gets new orders.
@@ -1379,7 +1401,7 @@ class Unit:
         """
         return self(AbilityId.STOP, queue=queue)
 
-    def patrol(self, position: Union[Point2, Point3], queue: bool = False) -> Union[UnitCommand, bool]:
+    def patrol(self, position: Point2, queue: bool = False) -> Union[UnitCommand, bool]:
         """Orders a unit to patrol between position it has when the command starts and the target position.
         Can be queued up to seven patrol points. If the last point is the same as the starting
         point, the unit will patrol in a circle.
@@ -1397,10 +1419,13 @@ class Unit:
         """
         return self(AbilityId.EFFECT_REPAIR, target=repair_target, queue=queue)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return self.tag
 
     def __eq__(self, other: Union[Unit, Any]) -> bool:
+        """
+        :param other:
+        """
         return self.tag == getattr(other, "tag", -1)
 
     def __call__(
@@ -1412,7 +1437,15 @@ class Unit:
         subtract_supply: bool = False,
         can_afford_check: bool = False,
     ) -> Union[UnitCommand, bool]:
-        """ Deprecated: Stop using self.do() - This may be removed in the future. """
+        """ Deprecated: Stop using self.do() - This may be removed in the future.
+
+        :param ability:
+        :param target:
+        :param queue:
+        :param subtract_cost:
+        :param subtract_supply:
+        :param can_afford_check:
+        """
         if self._bot_object.unit_command_uses_self_do:
             return UnitCommand(ability, self, target=target, queue=queue)
         expected_target: int = self._bot_object.game_data.abilities[ability.value]._proto.target
