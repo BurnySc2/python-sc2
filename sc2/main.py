@@ -136,8 +136,8 @@ async def _play_game_ai(
             await ai.on_start()
         # TODO Catching too general exception Exception (broad-except)
         # pylint: disable=W0703
-        except Exception:
-            logger.exception("AI on_start threw an error")
+        except Exception as e:
+            logger.exception(f"Caught unknown exception in AI on_start: {e}")
             logger.error("Resigning due to previous error")
             await ai.on_end(Result.Defeat)
             return Result.Defeat
@@ -151,7 +151,15 @@ async def _play_game_ai(
         logger.debug(f"Running AI step, it={iteration} {gs.game_loop / 22.4:.2f}s")
         # Issue event like unit created or unit destroyed
         await ai.issue_events()
-        await ai.on_step(iteration)
+        # In on_step various errors can occur - log properly
+        try:
+            await ai.on_step(iteration)
+        except (AttributeError, ) as e:
+            logger.exception(f"Caught exception: {e}")
+            raise
+        except Exception as e:
+            logger.exception(f"Caught unknown exception: {e}")
+            raise
         await ai._after_step()
         logger.debug("Running AI step: done")
 
@@ -250,9 +258,8 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
         await ai.on_start()
     # TODO Catching too general exception Exception (broad-except)
     # pylint: disable=W0703
-    except Exception:
-        logger.exception("AI on_start threw an error")
-        logger.error("resigning due to previous error")
+    except Exception as e:
+        logger.exception(f"Caught unknown exception in AI replay on_start: {e}")
         await ai.on_end(Result.Defeat)
         return Result.Defeat
 
@@ -703,6 +710,7 @@ async def a_run_multiple_games(matches: List[GameMatch]) -> List[Dict[AbstractPl
         except SystemExit as e:
             logger.info(f"Game exit'ed as {e} during match {m}")
         except Exception as e:
+            logger.exception(f"Caught unknown exception: {e}")
             logger.info(f"Exception {e} thrown in match {m}")
         finally:
             if dont_restart:  # Keeping them alive after a non-computer match can cause crashes
@@ -734,7 +742,8 @@ async def a_run_multiple_games_nokill(matches: List[GameMatch]) -> List[Dict[Abs
         except SystemExit as e:
             logger.critical(f"Game sys.exit'ed as {e} during match {m}")
         except Exception as e:
-            logger.trace(f"Exception {e} thrown in match {m}")
+            logger.exception(f"Caught unknown exception: {e}")
+            logger.info(f"Exception {e} thrown in match {m}")
         finally:
             for c in controllers:
                 try:
@@ -742,6 +751,7 @@ async def a_run_multiple_games_nokill(matches: List[GameMatch]) -> List[Dict[Abs
                     if c._status != Status.launched:
                         await c._execute(leave_game=sc_pb.RequestLeaveGame())
                 except Exception as e:
+                    logger.exception(f"Caught unknown exception: {e}")
                     if not (isinstance(e, ProtocolError) and e.is_game_over_error):
                         logger.info(f"controller {c.__dict__} threw {e}")
 

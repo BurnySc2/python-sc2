@@ -213,6 +213,7 @@ def main():
             # ProtocolError appears after a leave game request
             pass
         except Exception as e:
+            logger.exception(f"Caught unknown exception: {e}")
             logger.error(
                 f"Map {map_} could not be found, so pickle files for that map could not be generated. Error: {e}"
             )

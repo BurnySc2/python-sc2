@@ -456,7 +456,7 @@ def generate_redirect_abilities_dict(data: dict):
         ability_id_value: int = entry["id"]
         try:
             ability_id: AbilityId = AbilityId(ability_id_value)
-        except Exception as e:
+        except Exception:
             logger.info(f"Error with ability id value {ability_id_value}")
             continue
 

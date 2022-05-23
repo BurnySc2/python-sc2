@@ -180,8 +180,6 @@ class TestBot(BotAI):
                     scv.attack(center)
                 elif action == "hold":
                     scv.hold_position()
-                elif action == "scan_move":
-                    scv.scan_move(center)
 
             await self._advance_steps(2)
 
