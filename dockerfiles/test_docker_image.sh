@@ -3,12 +3,12 @@
 # sh dockerfiles/test_docker_image.sh
 
 # Set which versions to use
-export VERSION_NUMBER=${VERSION_NUMBER:-1.0.0}
+export VERSION_NUMBER=${VERSION_NUMBER:-0.9.9}
 export PYTHON_VERSION=${PYTHON_VERSION:-3.10}
 export SC2_VERSION=${SC2_VERSION:-4.10}
 
 # For better readability, set local variables
-IMAGE_NAME=burnysc2/python-sc2-docker:local
+IMAGE_NAME=burnysc2/python-sc2-docker:py_$PYTHON_VERSION-sc2_$SC2_VERSION-v$VERSION_NUMBER
 BUILD_ARGS="--build-arg PYTHON_VERSION=$PYTHON_VERSION --build-arg SC2_VERSION=$SC2_VERSION"
 
 # Allow image squashing by enabling experimental docker features
