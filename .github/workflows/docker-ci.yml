@@ -29,6 +29,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: Enable experimental docker features
+      run: |
+        sudo cat /etc/docker/daemon.json
+        echo $'{\n    "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+        sudo systemctl restart docker.service
+
     - name: Run shell script
       run: |
         export VERSION_NUMBER=${{ env.VERSION_NUMBER }}
