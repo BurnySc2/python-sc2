@@ -9,7 +9,7 @@ export SC2_VERSION=${SC2_VERSION:-4.10}
 
 # For better readability, set local variables
 IMAGE_NAME=burnysc2/python-sc2-docker:local
-BUILD_ARGS=--build-arg PYTHON_VERSION=$PYTHON_VERSION --build-arg SC2_VERSION=$SC2_VERSION
+BUILD_ARGS="--build-arg PYTHON_VERSION=$PYTHON_VERSION --build-arg SC2_VERSION=$SC2_VERSION"
 
 # Allow image squashing by enabling experimental docker features
 # https://stackoverflow.com/a/21164441/10882657
