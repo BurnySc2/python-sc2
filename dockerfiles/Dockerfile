@@ -29,7 +29,7 @@ WORKDIR /root/
 
 # Download and uncompress StarCraftII from https://github.com/Blizzard/s2client-proto#linux-packages and remove zip file
 # If file is locally available, use this instead:
-#ADD SC2.4.10.zip /root/
+#COPY SC2.4.10.zip /root/
 RUN wget --quiet --show-progress --progress=bar:force http://blzdistsc2-a.akamaihd.net/Linux/SC2.$SC2_VERSION.zip \
     && unzip -q -P iagreetotheeula SC2.$SC2_VERSION.zip \
     && rm SC2.$SC2_VERSION.zip

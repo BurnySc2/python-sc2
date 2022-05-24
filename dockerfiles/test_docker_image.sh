@@ -7,6 +7,10 @@ export VERSION_NUMBER=${VERSION_NUMBER:-1.0.0}
 export PYTHON_VERSION=${PYTHON_VERSION:-3.10}
 export SC2_VERSION=${SC2_VERSION:-4.10}
 
+# For better readability, set local variables
+IMAGE_NAME=burnysc2/python-sc2-docker:local
+BUILD_ARGS=--build-arg PYTHON_VERSION=$PYTHON_VERSION --build-arg SC2_VERSION=$SC2_VERSION
+
 # Allow image squashing by enabling experimental docker features
 # https://stackoverflow.com/a/21164441/10882657
 # https://github.com/actions/virtual-environments/issues/368#issuecomment-582387669
@@ -18,8 +22,9 @@ fi
 
 # Build image without context
 # https://stackoverflow.com/a/54666214/10882657
-docker build -t burnysc2/python-sc2-docker:local --build-arg PYTHON_VERSION=$PYTHON_VERSION --build-arg SC2_VERSION=$SC2_VERSION - < dockerfiles/Dockerfile
-docker build -t burnysc2/python-sc2-docker:local-squashed --squash --build-arg PYTHON_VERSION=$PYTHON_VERSION --build-arg SC2_VERSION=$SC2_VERSION - < dockerfiles/Dockerfile
+docker build -t $IMAGE_NAME $BUILD_ARGS - < dockerfiles/Dockerfile
+# Build squashed image where the layers are combined to one
+#docker build -t $IMAGE_NAME-squashed --squash $BUILD_ARGS - < dockerfiles/Dockerfile
 
 # Delete previous container if it exists
 docker rm -f test_container
@@ -30,7 +35,7 @@ docker run -i -d \
   --name test_container \
   --mount type=bind,source="$(pwd)",destination=/root/python-sc2,readonly \
   --entrypoint /bin/bash \
-  burnysc2/python-sc2-docker:local-squashed
+  $IMAGE_NAME
 
 # Install python-sc2, via mount the python-sc2 folder will be available
 docker exec -i test_container bash -c "pip install poetry \

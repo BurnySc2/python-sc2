@@ -12,7 +12,7 @@ on:
     - develop
 
 env:
-  VERSION_NUMBER: 1.0.1
+  VERSION_NUMBER: '1.0.1'
   LATEST_PYTHON_VERSION: '3.10'
   LATEST_SC2_VERSION: '4.10'
 
@@ -20,7 +20,7 @@ jobs:
   run_test_docker_image:
     name: Run test_docker_image.sh
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -31,34 +31,37 @@ jobs:
 
     - name: Enable experimental docker features
       run: |
-        sudo cat /etc/docker/daemon.json
         echo $'{\n    "experimental": true\n}' | sudo tee /etc/docker/daemon.json
         sudo systemctl restart docker.service
 
     - name: Run shell script
+      env:
+        VERSION_NUMBER: ${{ env.VERSION_NUMBER }}
+        PYTHON_VERSION: ${{ env.LATEST_PYTHON_VERSION }}
+        SC2_VERSION: ${{ env.LATEST_SC2_VERSION }}
       run: |
-        export VERSION_NUMBER=${{ env.VERSION_NUMBER }}
-        export PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }}
-        export SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
         sh dockerfiles/test_docker_image.sh
 
   docker_build:
     name: Build docker image
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
         python-version: ['3.7', '3.8', '3.9', '3.10']
         sc2-version: ['4.10']
+    env:
+      IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}
+      BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
 
     steps:
     - uses: actions/checkout@v1
 
     - name: Build docker image
       run: |
-        docker build -t burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }} --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} - < dockerfiles/Dockerfile
+        docker build -t $IMAGE_NAME $BUILD_ARGS - < dockerfiles/Dockerfile
 
     - name: Enable experimental docker features
       run: |
@@ -67,7 +70,7 @@ jobs:
 
     - name: Build squashed image
       run: |
-        docker build -t burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed --squash --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} - < dockerfiles/Dockerfile
+        docker build -t $IMAGE_NAME-squashed --squash $BUILD_ARGS - < dockerfiles/Dockerfile
 
     - name: Run test bots on squashed image
       if: matrix.python-version != '3.7'
@@ -77,7 +80,7 @@ jobs:
           --name test_container \
           --mount type=bind,source="$(pwd)",destination=/root/python-sc2,readonly \
           --entrypoint /bin/bash \
-          burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed
+          $IMAGE_NAME-squashed
         echo "Install python-sc2"
         docker exec -i test_container bash -c "pip install poetry \
             && cd python-sc2 && poetry install --no-dev"
@@ -94,11 +97,11 @@ jobs:
     - name: Upload docker images
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
       run: |
-        docker push burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}
-        docker push burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed
+        docker push $IMAGE_NAME
+        docker push $IMAGE_NAME-squashed
 
     - name: Upload docker image with latest tag
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push' && matrix.python-version == env.LATEST_PYTHON_VERSION && matrix.sc2-version == env.LATEST_SC2_VERSION
       run: |
-        docker tag burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed burnysc2/python-sc2-docker:latest
+        docker tag $IMAGE_NAME-squashed burnysc2/python-sc2-docker:latest
         docker push burnysc2/python-sc2-docker:latest

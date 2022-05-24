@@ -19,7 +19,7 @@ on:
 env:
   # Docker image version, see https://hub.docker.com/r/burnysc2/python-sc2-docker/tags
   # This version should always lack behind one version behind the docker-ci.yml because it is possible that it doesn't exist
-  VERSION_NUMBER: 1.0.0
+  VERSION_NUMBER: '1.0.0'
   LATEST_PYTHON_VERSION: '3.10'
   LATEST_SC2_VERSION: '4.10'
 
@@ -122,34 +122,37 @@ jobs:
 
     - name: Load and build docker image
       # Build docker image from Dockerfile using specific python and sc2 version
+      env:
+        BASE_IMAGE_NAME: burnysc2/python-sc2:local
+        BASE_BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg ${{ env.LATEST_SC2_VERSION }}
       run: |
-        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+        docker build -f test/Dockerfile -t $BASE_IMAGE_NAME $BASE_BUILD_ARGS .
 
     - name: Run autotest_bot.py
       # Run bot and list resulting files (replay file, stable_id.json)
       run: |
-        docker run -it -d --name my_container test_image
+        docker run -i -d --name my_container test_image
         docker exec -i my_container bash -c "python test/travis_test_script.py test/autotest_bot.py"
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
 
     - name: Run upgradestest_bot.py
       run: |
-        docker run -it -d --name my_container test_image
+        docker run -i -d --name my_container test_image
         docker exec -i my_container bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
 
     - name: Run damagetest_bot.py
       run: |
-        docker run -it -d --name my_container test_image
+        docker run -i -d --name my_container test_image
         docker exec -i my_container bash -c "python test/travis_test_script.py test/damagetest_bot.py"
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
 
     - name: Run queries_test_bot.py
       run: |
-        docker run -it -d --name my_container test_image
+        docker run -i -d --name my_container test_image
         docker exec -i my_container bash -c "python test/travis_test_script.py test/queries_test_bot.py"
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
@@ -175,13 +178,16 @@ jobs:
         tree
 
     - name: Load and build docker image
-      # Build docker image from Dockerfile using python 3.8
+      # Build docker image from Dockerfile using specific python and sc2 version
+      env:
+        BASE_IMAGE_NAME: burnysc2/python-sc2-docker:local
+        BASE_BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg ${{ env.LATEST_SC2_VERSION }}
       run: |
-        docker build -f test/Dockerfile -t test_image --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }} --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+        docker build -f test/Dockerfile -t $BASE_IMAGE_NAME $BASE_BUILD_ARGS .
 
     - name: Run example bots vs computer
       run: |
-        docker run -it -d --name my_container test_image
+        docker run -i -d --name my_container test_image
         docker exec -i my_container bash -c "python test/run_example_bots_vs_computer.py"
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
