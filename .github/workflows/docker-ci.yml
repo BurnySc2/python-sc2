@@ -52,9 +52,18 @@ jobs:
 
     - name: Build docker image
       run: |
-        docker build -f dockerfiles/Dockerfile -t burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }} --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} .
+        docker build -t burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }} --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} - < dockerfiles/Dockerfile
 
-    - name: Run test bots
+    - name: Enable experimental docker features
+      run: |
+        echo $'{\n    "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+        sudo systemctl restart docker.service
+
+    - name: Build squashed image
+      run: |
+        docker build -t burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed --squash --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} - < dockerfiles/Dockerfile
+
+    - name: Run test bots on squashed image
       if: matrix.python-version != '3.7'
       run: |
         echo "Start container, override the default entrypoint"
@@ -62,7 +71,7 @@ jobs:
           --name test_container \
           --mount type=bind,source="$(pwd)",destination=/root/python-sc2,readonly \
           --entrypoint /bin/bash \
-          burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}
+          burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed
         echo "Install python-sc2"
         docker exec -i test_container bash -c "pip install poetry \
             && cd python-sc2 && poetry install --no-dev"
@@ -76,14 +85,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Upload docker image
+    - name: Upload docker images
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
       run: |
         docker push burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}
+        docker push burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed
 
     - name: Upload docker image with latest tag
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push' && matrix.python-version == env.LATEST_PYTHON_VERSION && matrix.sc2-version == env.LATEST_SC2_VERSION
       run: |
-        docker tag burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }} burnysc2/python-sc2-docker:latest
+        docker tag burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}-squashed burnysc2/python-sc2-docker:latest
         docker push burnysc2/python-sc2-docker:latest
-
