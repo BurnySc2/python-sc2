@@ -46,15 +46,15 @@ jobs:
     name: Build docker image
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    env:
-      IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ env.VERSION_NUMBER }}
-      BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
         python-version: ['3.7', '3.8', '3.9', '3.10']
         sc2-version: ['4.10']
+    env:
+      IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ VERSION_NUMBER }}
+      BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
 
     steps:
     - uses: actions/checkout@v1
