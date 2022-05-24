@@ -184,9 +184,9 @@ jobs:
     - name: Load and build docker image
       # Build docker image from Dockerfile using specific python and sc2 version
       env:
-        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
+        BUILD_ARGS: --build-arg PYTHON_VERSION=$LATEST_PYTHON_VERSION --build-arg SC2_VERSION=$LATEST_SC2_VERSION
       run: |
-        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=$VERSION_NUMBER .
 
     - name: Run example bots vs computer
       run: |
@@ -220,7 +220,7 @@ jobs:
 #    - name: Load and build docker image
 #      # Build docker image from Dockerfile using python 3.8
 #      run: |
-#        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+#        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg VERSION_NUMBER=$VERSION_NUMBER .
 #
 #    - name: Run example bots vs each other
 #      run: |
