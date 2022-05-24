@@ -123,10 +123,10 @@ jobs:
     - name: Load and build docker image
       # Build docker image from Dockerfile using specific python and sc2 version
       env:
-        BASE_IMAGE_NAME: burnysc2/python-sc2:local
-        BASE_BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg ${{ env.LATEST_SC2_VERSION }}
+        IMAGE_NAME: burnysc2/python-sc2:local
+        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
       run: |
-        docker build -f test/Dockerfile -t $BASE_IMAGE_NAME $BASE_BUILD_ARGS .
+        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
 
     - name: Run autotest_bot.py
       # Run bot and list resulting files (replay file, stable_id.json)
@@ -180,10 +180,10 @@ jobs:
     - name: Load and build docker image
       # Build docker image from Dockerfile using specific python and sc2 version
       env:
-        BASE_IMAGE_NAME: burnysc2/python-sc2-docker:local
-        BASE_BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg ${{ env.LATEST_SC2_VERSION }}
+        IMAGE_NAME: burnysc2/python-sc2-docker:local
+        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
       run: |
-        docker build -f test/Dockerfile -t $BASE_IMAGE_NAME $BASE_BUILD_ARGS .
+        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
 
     - name: Run example bots vs computer
       run: |

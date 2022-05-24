@@ -53,7 +53,7 @@ jobs:
         python-version: ['3.7', '3.8', '3.9', '3.10']
         sc2-version: ['4.10']
     env:
-      IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}-v${{ VERSION_NUMBER }}
+      IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}
       BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
 
     steps:
@@ -61,7 +61,7 @@ jobs:
 
     - name: Build docker image
       run: |
-        docker build -t $IMAGE_NAME $BUILD_ARGS - < dockerfiles/Dockerfile
+        docker build -t $IMAGE_NAME-v${{ env.VERSION_NUMBER }} $BUILD_ARGS - < dockerfiles/Dockerfile
 
     - name: Enable experimental docker features
       run: |
@@ -70,7 +70,7 @@ jobs:
 
     - name: Build squashed image
       run: |
-        docker build -t $IMAGE_NAME-squashed --squash $BUILD_ARGS - < dockerfiles/Dockerfile
+        docker build -t $IMAGE_NAME-v${{ env.VERSION_NUMBER }}-squashed --squash $BUILD_ARGS - < dockerfiles/Dockerfile
 
     - name: Run test bots on squashed image
       if: matrix.python-version != '3.7'
@@ -80,7 +80,7 @@ jobs:
           --name test_container \
           --mount type=bind,source="$(pwd)",destination=/root/python-sc2,readonly \
           --entrypoint /bin/bash \
-          $IMAGE_NAME-squashed
+          $IMAGE_NAME-v${{ env.VERSION_NUMBER }}-squashed
         echo "Install python-sc2"
         docker exec -i test_container bash -c "pip install poetry \
             && cd python-sc2 && poetry install --no-dev"
@@ -97,8 +97,8 @@ jobs:
     - name: Upload docker images
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
       run: |
-        docker push $IMAGE_NAME
-        docker push $IMAGE_NAME-squashed
+        docker push $IMAGE_NAME-v${{ env.VERSION_NUMBER }}
+        docker push $IMAGE_NAME-v${{ env.VERSION_NUMBER }}-squashed
 
     - name: Upload docker image with latest tag
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push' && matrix.python-version == env.LATEST_PYTHON_VERSION && matrix.sc2-version == env.LATEST_SC2_VERSION
