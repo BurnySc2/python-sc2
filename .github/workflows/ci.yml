@@ -132,7 +132,7 @@ jobs:
     - name: Run autotest_bot.py
       # Run bot and list resulting files (replay file, stable_id.json)
       run: |
-        docker run -i -d --name my_container test_image
+        docker run -i -d --name my_container $IMAGE_NAME
         docker exec -i my_container bash -c "python test/travis_test_script.py test/autotest_bot.py"
         docker exec -i my_container bash -c "tree"
         docker rm -f my_container
@@ -182,9 +182,9 @@ jobs:
       # Build docker image from Dockerfile using specific python and sc2 version
       env:
         IMAGE_NAME: burnysc2/python-sc2-docker:local
-        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
+        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
       run: |
-        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
+        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
 
     - name: Run example bots vs computer
       run: |
