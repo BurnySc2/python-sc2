@@ -11,6 +11,7 @@ on:
     - pyproject.toml
     - poetry.lock
     - README.md
+    - .github/workflows/ci.yml
   pull_request:
     branches:
     - master

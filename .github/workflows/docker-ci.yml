@@ -94,10 +94,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Upload docker images
+    - name: Upload docker image
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
       run: |
         docker push $IMAGE_NAME-v${{ env.VERSION_NUMBER }}
+
+    - name: Upload squashed docker image
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+      run: |
         docker push $IMAGE_NAME-v${{ env.VERSION_NUMBER }}-squashed
 
     - name: Upload docker image with latest tag
