@@ -58,7 +58,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .venv
-        key: ${{ matrix.os }}-${{ matrix.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+        key: ${{ matrix.os }}-$(python --version)-poetry-${{ hashFiles('poetry.lock') }}
 
     - name: Install dependencies
       run: |
