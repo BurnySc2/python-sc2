@@ -37,10 +37,10 @@ jobs:
         # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
         # Python 3.7 support has been dropped due to missing cached_property (new since Python 3.8) https://docs.python.org/3/library/functools.html#functools.cached_property
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python-version: ['3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11.0-beta.1']
+        python-version: ['3.8', '3.9', '3.10']
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -116,7 +116,7 @@ jobs:
 
     steps:
     # Copy data from repository
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Print directories and files
       run: |
@@ -174,7 +174,7 @@ jobs:
 
     steps:
     # Copy data from repository
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Print directories and files
       run: |
@@ -210,7 +210,7 @@ jobs:
 #        sc2-version: ['4.10']
 #    steps:
 #    # Copy data from repository
-#    - uses: actions/checkout@v1
+#    - uses: actions/checkout@v2
 #
 #    - name: Print directories and files
 #      run: |
@@ -236,7 +236,7 @@ jobs:
     needs: [run_pytest_tests, run_test_bots, run_example_bots]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -282,7 +282,7 @@ jobs:
     needs: [run_pytest_tests, run_test_bots, run_example_bots]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2

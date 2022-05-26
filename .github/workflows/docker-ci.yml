@@ -15,6 +15,7 @@ env:
   VERSION_NUMBER: '1.0.1'
   LATEST_PYTHON_VERSION: '3.10'
   LATEST_SC2_VERSION: '4.10'
+  EXPERIMENTAL_PYTHON_VERSION: '3.11.0b1'
 
 jobs:
   run_test_docker_image:
@@ -27,7 +28,7 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Enable experimental docker features
       run: |
@@ -42,6 +43,32 @@ jobs:
       run: |
         sh dockerfiles/test_docker_image.sh
 
+  run_test_new_python_version:
+    name: Run test_new_python_candidate.sh
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Enable experimental docker features
+      run: |
+        echo $'{\n    "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+        sudo systemctl restart docker.service
+
+    - name: Run shell script
+      continue-on-error: true
+      env:
+        VERSION_NUMBER: ${{ env.VERSION_NUMBER }}
+        PYTHON_VERSION: ${{ env.EXPERIMENTAL_PYTHON_VERSION }}
+        SC2_VERSION: ${{ env.LATEST_SC2_VERSION }}
+      run: |
+        sh dockerfiles/test_new_python_candidate.sh
+
   docker_build:
     name: Build docker image
     runs-on: ${{ matrix.os }}
@@ -50,14 +77,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11.0b1']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
         sc2-version: ['4.10']
     env:
       IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}
       BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Build docker image
       run: |
