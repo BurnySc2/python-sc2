@@ -109,7 +109,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11.0b1']
+        python-version: ['3.8', '3.9', '3.10']
         sc2-version: ['4.10']
     env:
       IMAGE_NAME: burnysc2/python-sc2:local
