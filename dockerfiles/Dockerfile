@@ -7,6 +7,10 @@ MAINTAINER Burny <gamingburny@gmail.com>
 
 ARG SC2_VERSION=4.10
 
+# Debugging purposes
+RUN echo $PYTHON_VERSION
+RUN echo $SC2_VERSION
+
 USER root
 
 # Update system
@@ -96,7 +100,7 @@ ENTRYPOINT [ "/bin/bash" ]
 
 # To run a python-sc2 bot:
 # Install python-sc2 and requirements via pip:
-# python -m pip install --upgrade https://github.com/BurnySc2/python-sc2/archive/develop.zip
+# pip install --upgrade https://github.com/BurnySc2/python-sc2/archive/develop.zip
 
 # To run an example bot, copy one to your container and then run it with python:
 # python /your-bot.py
