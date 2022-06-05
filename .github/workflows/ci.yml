@@ -64,6 +64,11 @@ jobs:
       run: |
         poetry install
 
+      # Run format
+    - name: Run pylint on sc2 folder
+      run: |
+        poetry run yapf --in-place --recursive **/*.py
+
       # Run pylint
     - name: Run pylint on sc2 folder
       run: |

@@ -230,7 +230,6 @@ class IdGenerator:
             for u in self.game_data._proto.units if u.available
         }
         self.game_data.upgrades = {u.upgrade_id: UpgradeData(self.game_data, u) for u in self.game_data._proto.upgrades}
-        self.game_data.unit_types = {}
 
 
 if __name__ == "__main__":

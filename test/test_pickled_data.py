@@ -414,7 +414,6 @@ def test_game_data():
     assert game_data.abilities
     assert game_data.units
     assert game_data.upgrades
-    assert len(game_data.unit_types) == 2  # Filled with CC and SCV from previous tests
 
 
 def test_game_state():
@@ -766,6 +765,7 @@ def test_units():
     assert not townhalls.vespene_geyser
     assert scvs.prefer_idle
     assert townhalls.prefer_idle
+    assert len(Unit.class_cache) == 2  # Filled with CC and SCV from previous tests
 
 
 def test_dicts():

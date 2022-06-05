@@ -4,7 +4,7 @@ from __future__ import annotations
 import math
 import warnings
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, FrozenSet, List, Optional, Set, Tuple, Union
+from typing import TYPE_CHECKING, Any, Callable, FrozenSet, List, Optional, Set, Tuple, TypeVar, Union
 
 from sc2.constants import (
     CAN_BE_ATTACKED,
@@ -88,8 +88,22 @@ class UnitOrder:
         return f"UnitOrder({self.ability}, {self.target}, {self.progress})"
 
 
+T = TypeVar("T")
+
+
+class CacheDict(dict):
+
+    def retrieve_and_set(self, key: Any, func: Callable[[], T]) -> T:
+        """ Either return the value at a certain key, or set the return value of a function to that key, then return that value. """
+        if key in self:
+            return self[key]
+        self[key] = func()
+        return self[key]
+
+
 # pylint: disable=R0904
 class Unit:
+    class_cache: CacheDict[Any, Any] = CacheDict()
 
     def __init__(
         self,
@@ -115,14 +129,11 @@ class Unit:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
         return f"Unit(name={self.name !r}, tag={self.tag})"
 
-    @cached_property
+    @property
     def type_id(self) -> UnitTypeId:
-        """UnitTypeId found in sc2/ids/unit_typeid.
-        Caches all type_ids of the same unit type."""
-        unit_type = self._proto.unit_type
-        if unit_type not in self._bot_object.game_data.unit_types:
-            self._bot_object.game_data.unit_types[unit_type] = UnitTypeId(unit_type)
-        return self._bot_object.game_data.unit_types[unit_type]
+        """ UnitTypeId found in sc2/ids/unit_typeid. """
+        unit_type: int = self._proto.unit_type
+        return self.class_cache.retrieve_and_set(unit_type, lambda: UnitTypeId(unit_type))
 
     @cached_property
     def _type_data(self) -> UnitTypeData:
@@ -132,7 +143,7 @@ class Unit:
     @cached_property
     def _creation_ability(self) -> AbilityData:
         """ Provides the AbilityData of the creation ability of this unit. """
-        return self._bot_object.game_data.units[self._proto.unit_type].creation_ability
+        return self._type_data.creation_ability
 
     @property
     def name(self) -> str:
@@ -417,7 +428,7 @@ class Unit:
         """Returns the percentage of combined shield + hp points the unit has.
         Also takes build progress into account."""
         max_ = (self._proto.shield_max + self._proto.health_max) * self.build_progress
-        if not max_:
+        if max_ == 0:
             return 0
         return (self._proto.shield + self._proto.health) / max_
 
@@ -848,7 +859,7 @@ class Unit:
 
         NOTE: This can be None if a building doesn't have a creation ability.
         For rich vespene buildings, flying terran buildings, this returns None"""
-        return self._bot_object.game_data.units[self._proto.unit_type].footprint_radius
+        return self._type_data.footprint_radius
 
     @property
     def radius(self) -> float:
