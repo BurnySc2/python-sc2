@@ -1,14 +1,8 @@
 # If you change the name, change the link on  the README.md for the badge too
 name: Code coverage and radon
 
-# Only run if files in the given path have changed
-on:
-  push:
-    paths:
-    - sc2/**
-  pull_request:
-    paths:
-    - sc2/**
+# Always run
+on: [push, pull_request]
 
 env:
   # Docker image version, see https://hub.docker.com/r/burnysc2/python-sc2-docker/tags
