@@ -103,7 +103,7 @@ class CacheDict(dict):
 
 # pylint: disable=R0904
 class Unit:
-    class_cache: CacheDict[Any, Any] = CacheDict()
+    class_cache = CacheDict()
 
     def __init__(
         self,
