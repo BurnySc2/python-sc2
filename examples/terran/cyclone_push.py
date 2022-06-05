@@ -23,7 +23,7 @@ class CyclonePush(BotAI):
             return targets.random.position
 
         # Pick enemy start location if it has no friendly units nearby
-        if min([unit.distance_to(self.enemy_start_locations[0]) for unit in self.units]) > 5:
+        if min((unit.distance_to(self.enemy_start_locations[0]) for unit in self.units)) > 5:
             return self.enemy_start_locations[0]
 
         # Pick a random mineral field on the map

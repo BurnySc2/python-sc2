@@ -656,11 +656,14 @@ async def maintain_SCII_count(count: int, controllers: List[Controller], proc_ar
         for _ in range(3):
             if platform.system() == "Linux":
                 # Works on linux: start one client after the other
+                # pylint: disable=C2801
                 new_controllers = [await asyncio.wait_for(sc.__aenter__(), timeout=50) for sc in extra]
             else:
                 # Doesnt seem to work on linux: starting 2 clients nearly at the same time
                 new_controllers = await asyncio.wait_for(
-                    asyncio.gather(*[sc.__aenter__() for sc in extra], return_exceptions=True), timeout=50
+                    # pylint: disable=C2801
+                    asyncio.gather(*[sc.__aenter__() for sc in extra], return_exceptions=True),
+                    timeout=50
                 )
 
             controllers.extend(c for c in new_controllers if isinstance(c, Controller))

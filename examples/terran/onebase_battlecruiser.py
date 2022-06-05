@@ -24,7 +24,7 @@ class BCRushBot(BotAI):
         if targets:
             return targets.random.position, True
 
-        if self.units and min([u.position.distance_to(self.enemy_start_locations[0]) for u in self.units]) < 5:
+        if self.units and min((u.position.distance_to(self.enemy_start_locations[0]) for u in self.units)) < 5:
             return self.enemy_start_locations[0].position, False
 
         return self.mineral_field.random.position, False

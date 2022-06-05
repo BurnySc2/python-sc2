@@ -14,6 +14,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -82,7 +83,7 @@
   <div class="toctree-wrapper compound">
 </div>
 <section id="game-data-py">
-<h1>game_data.py<a class="headerlink" href="#game-data-py" title="Permalink to this headline"></a></h1>
+<h1>game_data.py<a class="headerlink" href="#game-data-py" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_data.GameData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">GameData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.GameData" title="Permalink to this definition"></a></dt>
@@ -104,7 +105,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData.exact_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exact_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">sc2.ids.ability_id.AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.exact_id" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exact_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.exact_id" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the exact ID of the ability</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -126,7 +127,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">sc2.ids.ability_id.AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.id" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.id" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the generic remap ID. See sc2/dicts/generic_redirect_abilities.py</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -164,7 +165,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.cost_zerg_corrected">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cost_zerg_corrected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">sc2.game_data.Cost</span></a></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cost_zerg_corrected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">Cost</span></a></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected" title="Permalink to this definition"></a></dt>
 <dd><p>This returns 25 for extractor and 200 for spawning pool instead of 75 and 250 respectively</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -186,7 +187,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.morph_cost">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">morph_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">sc2.game_data.Cost</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.morph_cost" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">morph_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">Cost</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.morph_cost" title="Permalink to this definition"></a></dt>
 <dd><p>This returns 150 minerals for OrbitalCommand instead of 550</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -197,7 +198,7 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.tech_alias">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_alias" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_alias" title="Permalink to this definition"></a></dt>
 <dd><p>Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
 Building tech equality, e.g. Hive is the same as Lair and Hatchery
 For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]
@@ -211,7 +212,7 @@ For SCV, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.tech_requirement">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_requirement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_requirement" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_requirement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_requirement" title="Permalink to this definition"></a></dt>
 <dd><p>Tech-building requirement of buildings - may work for units but unreliably</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -222,7 +223,7 @@ For SCV, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.unit_alias">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.unit_alias" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.unit_alias" title="Permalink to this definition"></a></dt>
 <dd><p>Building type equality, e.g. FlyingOrbitalCommand is the same as OrbitalCommand</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>

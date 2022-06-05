@@ -14,6 +14,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -82,13 +83,13 @@
   <div class="toctree-wrapper compound">
 </div>
 <section id="unit-py">
-<h1>unit.py<a class="headerlink" href="#unit-py" title="Permalink to this headline"></a></h1>
+<h1>unit.py<a class="headerlink" href="#unit-py" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.unit.Unit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.unit.</span></span><span class="sig-name descname"><span class="pre">Unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_calculation_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_build</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.unit.Unit" title="Permalink to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.add_on_land_position">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_on_land_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_land_position" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_on_land_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_land_position" title="Permalink to this definition"></a></dt>
 <dd><p>If this unit is an addon (techlab, reactor), returns the position
 where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to this addon.</p>
 <p>Why offset (-2.5, 0.5)? See description in ‘add_on_position’</p>
@@ -96,7 +97,7 @@ where a terran building (BARRACKS, FACTORY, STARPORT) has to land to connect to 
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.add_on_position">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_on_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_position" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_on_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.add_on_position" title="Permalink to this definition"></a></dt>
 <dd><p>If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),
 this property returns the position of where the addon should be, if it should build one or has one attached.</p>
 <p>Why offset (2.5, -0.5)?
@@ -153,7 +154,7 @@ The distance from center to center on the y-axis is -0.5.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.alliance">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alliance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sc2.data.Alliance</span></em><a class="headerlink" href="#sc2.unit.Unit.alliance" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alliance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Alliance</span></em><a class="headerlink" href="#sc2.unit.Unit.alliance" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the team the unit belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -258,7 +259,7 @@ Possible armor typs are: ‘Light’, ‘Armored’, ‘Biological’, ‘Mechan
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.buffs">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">buffs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.buff_id.BuffId" title="sc2.ids.buff_id.BuffId"><span class="pre">sc2.ids.buff_id.BuffId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.buffs" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">buffs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.buff_id.BuffId" title="sc2.ids.buff_id.BuffId"><span class="pre">BuffId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.buffs" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the set of current buffs the unit has.</p>
 </dd></dl>
 
@@ -467,7 +468,7 @@ Note that some units take up more than one space.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.cloak">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cloak</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sc2.data.CloakState</span></em><a class="headerlink" href="#sc2.unit.Unit.cloak" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cloak</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">CloakState</span></em><a class="headerlink" href="#sc2.unit.Unit.cloak" title="Permalink to this definition"></a></dt>
 <dd><p>Returns cloak state.
 See <a class="reference external" href="https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95">https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95</a></p>
 <dl class="field-list simple">
@@ -1238,14 +1239,14 @@ Does not include upgrades or buffs.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.order_target">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">order_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.order_target" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">order_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.order_target" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the target tag (if it is a Unit) or Point2 (if it is a Position)
 from the first order, returns None if the unit is idle</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.orders">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">sc2.unit.UnitOrder</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.orders" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">UnitOrder</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.orders" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the a list of the current orders.</p>
 </dd></dl>
 
@@ -1262,7 +1263,7 @@ from the first order, returns None if the unit is idle</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.passengers">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">passengers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">sc2.unit.Unit</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.passengers" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">passengers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.passengers" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.</p>
 </dd></dl>
 
@@ -1293,13 +1294,13 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.position">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">sc2.position.Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the 2d position of the unit.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.position3d">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position3d</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><span class="pre">sc2.position.Point3</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position3d" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position3d</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><span class="pre">Point3</span></a></em><a class="headerlink" href="#sc2.unit.Unit.position3d" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the 3d position of the unit.</p>
 </dd></dl>
 
@@ -1316,7 +1317,7 @@ point, the unit will patrol in a circle.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.race">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">race</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sc2.data.Race</span></em><a class="headerlink" href="#sc2.unit.Unit.race" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">race</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Race</span></em><a class="headerlink" href="#sc2.unit.Unit.race" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the race of the unit</p>
 </dd></dl>
 
@@ -1525,7 +1526,7 @@ Includes the target’s radius when calculating distance to target.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.tech_alias">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.tech_alias" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.tech_alias" title="Permalink to this definition"></a></dt>
 <dd><p>Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
 For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]
 For SCV, this returns None</p>
@@ -1552,7 +1553,7 @@ Usage: COMMANDCENTER.train(SCV)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.type_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a></em><a class="headerlink" href="#sc2.unit.Unit.type_id" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a></em><a class="headerlink" href="#sc2.unit.Unit.type_id" title="Permalink to this definition"></a></dt>
 <dd><p>UnitTypeId found in sc2/ids/unit_typeid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -1563,7 +1564,7 @@ Usage: COMMANDCENTER.train(SCV)</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.unit_alias">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">sc2.ids.unit_typeid.UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.unit_alias" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.unit_alias" title="Permalink to this definition"></a></dt>
 <dd><p>Building type equality, e.g. FlyingOrbitalCommand is the same as OrbitalCommand
 For flying OrbitalCommand, this returns UnitTypeId.OrbitalCommand
 For SCV, this returns None</p>
