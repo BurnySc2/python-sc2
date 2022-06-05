@@ -23,7 +23,7 @@ jobs:
     # This coverage test does not cover the whole testing range, check /bat_files/rune_code_coverage.bat
     name: Run coverage
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 30
     strategy:
       matrix:
         os: [ubuntu-latest]
