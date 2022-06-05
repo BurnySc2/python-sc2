@@ -64,22 +64,21 @@ jobs:
       run: |
         poetry install
 
-      # Run autoformat
     - name: Run yapf autoformat
       if: matrix.os != 'windows-latest'
       run: |
-        poetry run yapf --in-place --recursive **/*.py
+        poetry run yapf --in-place $(git ls-files '*.py')
 
-      # Run pylint
     - name: Run pylint on sc2 folder
+      if: matrix.os != 'windows-latest'
       run: |
-        poetry run pylint sc2
+        poetry run pylint $(git ls-files '*.py' | grep -E 'sc2/.*')
 
     - name: Run pylint on examples folder
+      if: matrix.os != 'windows-latest'
       run: |
-        poetry run pylint examples
+        poetry run pylint $(git ls-files '*.py' | grep -E 'examples/.*')
 
-      # Run tests
     - name: Run pytest
       run: |
         poetry run pytest test

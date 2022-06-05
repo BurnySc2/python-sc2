@@ -55,19 +55,15 @@ repos:
     name: format python code
     stages: [commit]
     language: system
-    entry: poetry run yapf --in-place
-    files: ^.*\.py$
-    pass_filenames: true
-    require_serial: true
+    entry: /bin/bash -c "poetry run yapf --in-place $(git ls-files '*.py')"
+    pass_filenames: false
 
   - id: pylint
     name: pylint
     stages: [commit]
     language: system
-    entry: poetry run pylint sc2 examples
-    types: [python]
+    entry: /bin/bash -c "poetry run pylint $(git ls-files '*.py' | grep -E '(sc2)|(examples)/.*')"
     pass_filenames: false
-    require_serial: true
 
 # TODO Types before enabling this
 #  # Run mypy type checks
@@ -75,8 +71,7 @@ repos:
 #    name: mypy
 #    stages: [commit]
 #    language: system
-#    entry: poetry run mypy .
-#    types: [python]
+#    entry: /bin/bash -c "poetry run mypy $(git ls-files '*.py' | grep -E '(sc2)|(examples)/.*')"
 #    pass_filenames: false
 
   # Run tests
@@ -86,4 +81,3 @@ repos:
     language: system
     entry: poetry run pytest test
     pass_filenames: false
-    require_serial: true

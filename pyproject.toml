@@ -83,7 +83,7 @@ ensure_newline_before_comments = true
 max-locals = 25
 [tool.pylint.messages_control]
 max-line-length = 120
-# C0301,E501 2x Line too long
+# C0301 Line too long
 # C0114 module Docstring
 # C0115 missing class docstring
 # C0116 missing function docstring
@@ -102,7 +102,7 @@ max-line-length = 120
 # R0915: Too many statements (61/50) (too-many-statements)
 # W0640: Cell variable mining_place defined in loop (cell-var-from-loop)
 # W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
-disable = "C0301, E501, C0114, C0115, C0116, R0913, C0413, C0411, W0511, W0105, R0801, W0621, C0103, R0903, E1101, C0302, R0902, R0915, W0640, W1514"
+disable = ["C0301", "C0114", "C0115", "C0116", "R0913", "C0413", "C0411", "W0511", "W0105", "R0801", "W0621", "C0103", "R0903", "E1101", "C0302", "R0902", "R0915", "W0640", "W1514"]
 
 [tool.yapf]
 based_on_style = "pep8"
