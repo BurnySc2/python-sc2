@@ -10,6 +10,13 @@ on:
     paths:
     - sc2/**
 
+env:
+  # Docker image version, see https://hub.docker.com/r/burnysc2/python-sc2-docker/tags
+  # This version should always lack behind one version behind the docker-ci.yml because it is possible that it doesn't exist
+  VERSION_NUMBER: '1.0.0'
+  LATEST_PYTHON_VERSION: '3.10'
+  LATEST_SC2_VERSION: '4.10'
+
 jobs:
   run_coverage:
     # Run and upload coverage report using python 3.9
@@ -19,28 +26,58 @@ jobs:
     timeout-minutes: 3
     strategy:
       matrix:
-        python-version: ['3.9']
+        os: [ubuntu-latest]
+    env:
+      IMAGE_NAME: burnysc2/python-sc2-docker:local
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install dependencies
+    - name: Load and build docker image
+      # Build docker image from Dockerfile using specific python and sc2 version
+      env:
+        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
       run: |
-        pip install poetry
-        poetry install
+        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
 
-    - name: Run pytest with coverage
+    - name: Set up container
       run: |
-        poetry run pytest --cov=./
+        mkdir htmlcov
+        docker run -i -d \
+          --mount type=bind,source=$(pwd)/htmlcov,destination=/root/python-sc2/htmlcov \
+          --name my_container \
+          $IMAGE_NAME
+        echo "Install dev requirements because only non dev requirements exist in the docker image at the moment"
+        docker exec -i my_container bash -c "poetry install"
+
+    - name: Run coverage on tests
+      run: |
+        docker exec -i my_container bash -c "poetry run pytest --cov=./"
+
+    - name: Run coverage on autotest_bot.py
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/autotest_bot.py"
+
+    - name: Run coverage on upgradestest_bot.py
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/upgradestest_bot.py"
+
+    - name: Run coverage on damagetest_bot.py
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/damagetest_bot.py"
+
+    - name: Run coverage on queries_test_bot.py
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/queries_test_bot.py"
+
+    - name: Run coverage on example bots
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage run test/run_example_bots_vs_computer.py"
 
     - name: Generate html coverage files in htmlcov/ folder
       run: |
-        poetry run coverage html
+        docker exec -i my_container bash -c "poetry run coverage html"
+        echo "Upload htmlcov folder because it was mounted in container, so it will be available in host machine"
 
     - name: Upload htmlcov/ folder as artifact
       uses: actions/upload-artifact@v1

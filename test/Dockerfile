@@ -21,7 +21,6 @@ WORKDIR /root/python-sc2
 RUN pip install --no-cache-dir poetry \
     # This will not include dev dependencies
     && poetry export -f requirements.txt --output requirements.txt --without-hashes \
-    && pip uninstall -y poetry \
     && pip install --no-cache-dir -r requirements.txt
 
 # This will be executed during the container run instead:
