@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from bisect import bisect_left
 from functools import lru_cache
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from sc2.data import Attribute, Race
 from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
@@ -28,7 +28,6 @@ class GameData:
         self.units = {u.unit_id: UnitTypeData(self, u) for u in data.units if u.available}
         self.upgrades = {u.upgrade_id: UpgradeData(self, u) for u in data.upgrades}
         # Cached UnitTypeIds so that conversion does not take long. This needs to be moved elsewhere if a new GameData object is created multiple times per game
-        self.unit_types: Dict[int, UnitTypeId] = {}
 
     @lru_cache(maxsize=256)
     def calculate_ability_cost(self, ability) -> Cost:

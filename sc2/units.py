@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import random
-import warnings
 from functools import cached_property
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Callable, Generator, Iterable, List, Optional, Set, Tuple, Union
@@ -10,8 +9,6 @@ from typing import TYPE_CHECKING, Any, Callable, Generator, Iterable, List, Opti
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.position import Point2
 from sc2.unit import Unit
-
-warnings.simplefilter("once")
 
 if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
