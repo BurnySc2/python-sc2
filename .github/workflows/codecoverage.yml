@@ -68,6 +68,17 @@ jobs:
       run: |
         docker exec -i my_container bash -c "poetry run coverage run test/run_example_bots_vs_computer.py"
 
+    - name: Generate xml coverage file
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage xml"
+        docker cp my_container:/root/python-sc2/coverage.xml $(pwd)/coverage.xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        files: coverage.xml
+        fail_ci_if_error: true
+
     - name: Generate html coverage files in htmlcov/ folder
       run: |
         docker exec -i my_container bash -c "poetry run coverage html"
