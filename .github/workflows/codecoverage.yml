@@ -77,7 +77,6 @@ jobs:
       uses: codecov/codecov-action@v2
       with:
         files: coverage.xml
-        fail_ci_if_error: true
 
     - name: Generate html coverage files in htmlcov/ folder
       run: |
@@ -85,7 +84,7 @@ jobs:
         echo "Upload htmlcov folder because it was mounted in container, so it will be available in host machine"
 
     - name: Upload htmlcov/ folder as artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: Coverage_report
         path: htmlcov
