@@ -50,23 +50,23 @@ jobs:
 
     - name: Run coverage on autotest_bot.py
       run: |
-        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/autotest_bot.py"
+        docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/autotest_bot.py"
 
     - name: Run coverage on upgradestest_bot.py
       run: |
-        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/upgradestest_bot.py"
+        docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/upgradestest_bot.py"
 
     - name: Run coverage on damagetest_bot.py
       run: |
-        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/damagetest_bot.py"
+        docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/damagetest_bot.py"
 
     - name: Run coverage on queries_test_bot.py
       run: |
-        docker exec -i my_container bash -c "poetry run coverage run test/travis_test_script.py test/queries_test_bot.py"
+        docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/queries_test_bot.py"
 
     - name: Run coverage on example bots
       run: |
-        docker exec -i my_container bash -c "poetry run coverage run test/run_example_bots_vs_computer.py"
+        docker exec -i my_container bash -c "poetry run coverage run -a test/run_example_bots_vs_computer.py"
 
     - name: Generate xml coverage file
       run: |
