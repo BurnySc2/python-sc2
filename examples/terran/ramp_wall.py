@@ -57,22 +57,22 @@ class RampWallBot(BotAI):
         self.draw_expansions()
 
         # # Draw pathing grid
-        # self.draw_pathing_grid()
+        self.draw_pathing_grid()
 
         # Draw placement  grid
-        # self.draw_placement_grid()
+        self.draw_placement_grid()
 
         # Draw vision blockers
-        # self.draw_vision_blockers()
+        self.draw_vision_blockers()
 
         # Draw visibility pixelmap for debugging purposes
-        # self.draw_visibility_pixelmap()
+        self.draw_visibility_pixelmap()
 
         # Draw some example boxes around units, lines towards command center, text on the screen and barracks
-        # self.draw_example()
+        self.draw_example()
 
         # Draw if two selected units are facing each other - green if this guy is facing the other, red if he is not
-        # self.draw_facing_units()
+        self.draw_facing_units()
 
         depot_placement_positions: FrozenSet[Point2] = self.main_base_ramp.corner_depots
         # Uncomment the following if you want to build 3 supply depots in the wall instead of a barracks in the middle + 2 depots in the corner
