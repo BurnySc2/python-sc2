@@ -1,4 +1,5 @@
 [![Actions Status](https://github.com/BurnySc2/python-sc2/workflows/Tests/badge.svg)](https://github.com/BurnySc2/python-sc2/actions)
+[![codecov](https://codecov.io/gh/BurnySc2/python-sc2/branch/develop/graph/badge.svg?token=Pq5XkKw5VC)](https://codecov.io/gh/BurnySc2/python-sc2)
 
 # A StarCraft II API Client for Python 3
 
