@@ -9,6 +9,10 @@ All functions that require some kind of query or interaction with the API direct
 """
 import os
 import sys
+from contextlib import suppress
+
+from sc2.client import Client
+from sc2.pixel_map import PixelMap
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import lzma
@@ -22,7 +26,7 @@ from hypothesis import strategies as st
 from loguru import logger
 
 from sc2.bot_ai import BotAI
-from sc2.data import Race
+from sc2.data import CloakState, Race
 from sc2.game_data import Cost, GameData
 from sc2.game_info import GameInfo
 from sc2.game_state import GameState
@@ -49,7 +53,8 @@ def get_map_specific_bot(map_path: Path) -> BotAI:
     game_info = GameInfo(raw_game_info.game_info)
     game_state = GameState(raw_observation)
     bot._initialize_variables()
-    bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
+    client = Client(True)
+    bot._prepare_start(client=client, player_id=1, game_info=game_info, game_data=game_data)
     bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
 
     return bot
@@ -368,6 +373,10 @@ def test_bot_ai():
 
     assert Cost(100, 50) == 2 * Cost(50, 25)
     assert Cost(100, 50) == Cost(50, 25) * 2
+    assert Cost(50, 25) + Cost(50, 25) == Cost(50, 25) * 2
+    assert Cost(50, 25) + Cost(50, 25) == 2 * Cost(50, 25)
+    assert Cost(50, 25) != Cost(50, 25) * 2
+    assert Cost(100, 50) - Cost(50, 25) == Cost(50, 25)
 
     assert bot.calculate_supply_cost(UnitTypeId.BARRACKS) == 0
     assert bot.calculate_supply_cost(UnitTypeId.HATCHERY) == 0
@@ -411,9 +420,41 @@ def test_game_info():
 def test_game_data():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     game_data = bot.game_data
+
     assert game_data.abilities
+    for ability_data in game_data.abilities.values():
+        assert ability_data.id
+        assert ability_data.exact_id
+        assert ability_data.friendly_name
+        # Doesnt work for all AbilityData (may return empty string or no cost)
+        ability_data.link_name
+        ability_data.button_name
+        ability_data.is_free_morph
+        ability_data.cost
+
     assert game_data.units
+    for unit_data in game_data.units.values():
+        with suppress(ValueError):
+            assert unit_data.id
+        assert unit_data.name
+        unit_data.creation_ability
+        unit_data.footprint_radius
+        unit_data.attributes
+        unit_data.has_minerals
+        unit_data.has_vespene
+        unit_data.cargo_size
+        unit_data.tech_requirement
+        unit_data.tech_alias
+        unit_data.unit_alias
+        assert unit_data.race
+        unit_data.cost_zerg_corrected
+        unit_data.morph_cost
+
     assert game_data.upgrades
+    for upgrade_data in game_data.upgrades.values():
+        upgrade_data.name
+        upgrade_data.research_ability
+        upgrade_data.cost
 
 
 def test_game_state():
@@ -422,6 +463,8 @@ def test_game_state():
 
     assert not state.actions
     assert not state.action_errors
+    assert not state.actions_unit_commands
+    assert not state.actions_toggle_autocast
     assert not state.dead_units
     assert not state.alerts
     assert not state.player_result
@@ -439,12 +482,29 @@ def test_game_state():
 
 def test_pixelmap():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
-    # TODO
+    pathing_grid: PixelMap = bot.game_info.pathing_grid
+    assert pathing_grid.bits_per_pixel
+    assert pathing_grid.bytes_per_pixel == pathing_grid.bits_per_pixel // 8
+    assert not pathing_grid.is_set(Point2((0, 0)))
+    assert pathing_grid.is_empty(Point2((0, 0)))
+    pathing_grid[Point2((0, 0))] = 123
+    assert pathing_grid.is_set(Point2((0, 0)))
+    assert not pathing_grid.is_empty(Point2((0, 0)))
+    pathing_grid.flood_fill_all(lambda i: True)
+    pathing_grid.copy()
+    pathing_grid.print()
+
+
+def test_blip():
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+    # TODO this needs to be done in a test bot that has a sensor tower
+    # blips are enemy dots on the minimap that are out of vision
 
 
 def test_score():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
-    # TODO
+    assert bot.state.score
+    assert bot.state.score.summary
 
 
 def test_unit():
@@ -475,6 +535,8 @@ def test_unit():
     assert townhall.unit_alias is None
     assert scv.can_attack
     assert not townhall.can_attack
+    assert not scv.can_attack_both
+    assert not townhall.can_attack_both
     assert scv.can_attack_ground
     assert not townhall.can_attack_ground
     assert scv.ground_dps
@@ -497,6 +559,10 @@ def test_unit():
     assert scv.real_speed == scv.movement_speed
     assert not townhall.movement_speed
     assert townhall.real_speed == townhall.movement_speed
+    assert abs(scv.distance_per_step - 1.004464) < 1e-3
+    assert not townhall.distance_per_step
+    assert scv.distance_to_weapon_ready == 0
+    assert not townhall.distance_to_weapon_ready
     assert not scv.is_mineral_field
     assert not townhall.is_mineral_field
     assert not scv.is_vespene_geyser
@@ -513,16 +579,26 @@ def test_unit():
     assert not townhall.shield_max
     assert not scv.shield_percentage
     assert not townhall.shield_percentage
+    assert scv.shield_health_percentage == 1
+    assert townhall.shield_health_percentage == 1
     assert not scv.energy
     assert not townhall.energy
     assert not scv.energy_max
     assert not townhall.energy_max
     assert not scv.energy_percentage
     assert not townhall.energy_percentage
+    assert not scv.age_in_frames
+    assert not townhall.age_in_frames
+    assert not scv.age
+    assert not townhall.age
+    assert not scv.is_memory
+    assert not townhall.is_memory
     assert not scv.is_snapshot
     assert not townhall.is_snapshot
     assert scv.is_visible
     assert townhall.is_visible
+    assert not scv.is_placeholder
+    assert not townhall.is_placeholder
     assert scv.alliance
     assert townhall.alliance
     assert scv.is_mine
@@ -545,10 +621,14 @@ def test_unit():
     assert townhall.build_progress
     assert scv.is_ready
     assert townhall.is_ready
-    # assert not scv.cloak
-    # assert not townhall.cloak
+    assert scv.cloak == CloakState.NotCloaked
+    assert townhall.cloak == CloakState.NotCloaked
     assert not scv.is_cloaked
     assert not townhall.is_cloaked
+    assert not scv.is_revealed
+    assert not townhall.is_revealed
+    assert scv.can_be_attacked
+    assert townhall.can_be_attacked
     assert not scv.buffs
     assert not townhall.buffs
     assert not scv.is_carrying_minerals
@@ -583,6 +663,10 @@ def test_unit():
     assert not townhall.is_burrowed
     assert not scv.is_hallucination
     assert not townhall.is_hallucination
+    assert not scv.buff_duration_remain
+    assert not townhall.buff_duration_remain
+    assert not scv.buff_duration_max
+    assert not townhall.buff_duration_max
     assert scv.orders
     assert not townhall.orders
     assert scv.order_target
@@ -605,14 +689,22 @@ def test_unit():
     assert not townhall.is_collecting
     assert not scv.is_constructing_scv
     assert not townhall.is_constructing_scv
+    assert not scv.is_transforming
+    assert not townhall.is_transforming
     assert not scv.is_repairing
     assert not townhall.is_repairing
     assert not scv.add_on_tag
     assert not townhall.add_on_tag
     assert not scv.has_add_on
     assert not townhall.has_add_on
+    assert not scv.has_techlab
+    assert not townhall.has_techlab
+    assert not scv.has_reactor
+    assert not townhall.has_reactor
     assert scv.add_on_land_position
     assert townhall.add_on_land_position
+    assert scv.add_on_position
+    assert townhall.add_on_position
     assert not scv.passengers
     assert not townhall.passengers
     assert not scv.passengers_tags
@@ -635,12 +727,16 @@ def test_unit():
     assert townhall.surplus_harvesters == -4
     assert not scv.weapon_cooldown
     assert townhall.weapon_cooldown == -1
+    assert scv.weapon_ready
+    assert not townhall.weapon_ready
     assert not scv.engaged_target_tag
     assert not townhall.engaged_target_tag
     assert not scv.is_detector
     assert not townhall.is_detector
-    # assert not scv.target_in_range(townhall)
-    assert not townhall.target_in_range(scv)
+    assert scv.distance_to_squared(townhall)
+    assert townhall.distance_to_squared(scv)
+    assert scv.target_in_range(townhall, bonus_distance=5)
+    assert not townhall.target_in_range(scv, bonus_distance=5)
     # assert not scv.has_buff(buff ID)
     # assert not townhall.has_buff(buff ID)
 
@@ -696,17 +792,38 @@ def test_units():
     # assert not scvs.in_attack_range_of(townhalls.first)
     # assert not townhalls.in_attack_range_of(scvs.first)
     assert scvs.closest_distance_to(townhalls.first)
+    assert scvs.closest_distance_to(townhalls.first.position)
     assert townhalls.closest_distance_to(scvs.first)
     assert scvs.furthest_distance_to(townhalls.first)
+    assert scvs.furthest_distance_to(townhalls.first.position)
     assert townhalls.furthest_distance_to(scvs.first)
     assert scvs.closest_to(townhalls.first)
+    assert scvs.closest_to(townhalls.first.position)
     assert townhalls.closest_to(scvs.first)
     assert scvs.furthest_to(townhalls.first)
+    assert scvs.furthest_to(townhalls.first.position)
     assert townhalls.furthest_to(scvs.first)
     assert scvs.closer_than(10, townhalls.first)
+    assert scvs.closer_than(10, townhalls.first.position)
     assert townhalls.closer_than(10, scvs.first)
     assert scvs.further_than(0, townhalls.first)
+    assert scvs.further_than(0, townhalls.first.position)
     assert townhalls.further_than(0, scvs.first)
+    assert townhalls.in_distance_between(scvs.first, 0, 999)
+    assert townhalls.in_distance_between(scvs.first.position, 0, 999)
+    assert townhalls.closest_n_units(scvs.first.position, n=1)
+    assert townhalls.furthest_n_units(scvs.first.position, n=1)
+    assert townhalls.in_distance_of_group(scvs, 999)
+    assert townhalls.in_closest_distance_to_group(scvs)
+    assert townhalls.n_closest_to_distance(scvs.first.position, 0, 1)
+    assert townhalls.n_furthest_to_distance(scvs.first.position, 0, 1)
+    empty_units = Units([], bot_object=bot)
+    assert not empty_units
+    assert not empty_units.closer_than(999, townhalls.first)
+    assert not empty_units.further_than(0, townhalls.first)
+    assert not empty_units.in_distance_between(townhalls.first, 0, 999)
+    assert not empty_units.closest_n_units(townhalls.first, 0)
+    assert not empty_units.furthest_n_units(townhalls.first, 0)
     assert scvs.subgroup(scvs)
     assert townhalls.subgroup(townhalls)
     assert scvs.filter(pred=lambda x: x.type_id == UnitTypeId.SCV)
@@ -720,6 +837,7 @@ def test_units():
     assert not scvs.tags_not_in(scvs.tags)
     assert townhalls.tags_not_in({0, 1, 2})
     assert scvs.of_type(UnitTypeId.SCV)
+    assert scvs.of_type([UnitTypeId.SCV])
     assert townhalls.of_type({UnitTypeId.COMMANDCENTER, UnitTypeId.COMMANDCENTERFLYING})
     assert not scvs.exclude_type(UnitTypeId.SCV)
     assert townhalls.exclude_type({UnitTypeId.COMMANDCENTERFLYING})
@@ -766,6 +884,10 @@ def test_units():
     assert scvs.prefer_idle
     assert townhalls.prefer_idle
     assert len(Unit.class_cache) == 2  # Filled with CC and SCV from previous tests
+    assert len(scvs + townhalls) == 13
+    assert hash(scvs + townhalls)
+    assert scvs.copy()
+    assert scvs.by_tag(scvs[0].tag)
 
 
 def test_dicts():

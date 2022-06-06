@@ -111,7 +111,7 @@ class TestClass:
                 assert ramp.depot_in_middle is None
                 assert ramp.corner_depots == set()
                 assert ramp.protoss_wall_pylon is None
-                assert ramp.protoss_wall_buildings == []
+                assert ramp.protoss_wall_buildings == frozenset()
                 assert ramp.protoss_wall_warpin is None
 
     def test_bot_ai(self, map_path: Path):

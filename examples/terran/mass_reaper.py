@@ -153,35 +153,36 @@ class MassReaperBot(BotAI):
         for r in self.units(UnitTypeId.REAPER):
 
             # Move to range 15 of closest unit if reaper is below 20 hp and not regenerating
-            enemyThreatsClose: Units = enemies_can_attack.filter(
+            enemy_threats_close: Units = enemies_can_attack.filter(
                 lambda unit: unit.distance_to(r) < 15
             )  # Threats that can attack the reaper
 
-            if r.health_percentage < 2 / 5 and enemyThreatsClose:
+            if r.health_percentage < 2 / 5 and enemy_threats_close:
                 retreat_points: Set[Point2] = self.neighbors8(r.position,
                                                               distance=2) | self.neighbors8(r.position, distance=4)
                 # Filter points that are pathable
                 retreat_points: Set[Point2] = {x for x in retreat_points if self.in_pathing_grid(x)}
                 if retreat_points:
-                    closest_enemy: Unit = enemyThreatsClose.closest_to(r)
+                    closest_enemy: Unit = enemy_threats_close.closest_to(r)
                     retreat_point: Unit = closest_enemy.position.furthest(retreat_points)
                     r.move(retreat_point)
                     continue  # Continue for loop, dont execute any of the following
 
             # Reaper is ready to attack, shoot nearest ground unit
-            enemyGroundUnits: Units = enemies.filter(
+            enemy_ground_units: Units = enemies.filter(
                 lambda unit: unit.distance_to(r) < 5 and not unit.is_flying
             )  # Hardcoded attackrange of 5
-            if r.weapon_cooldown == 0 and enemyGroundUnits:
-                enemyGroundUnits: Units = enemyGroundUnits.sorted(lambda x: x.distance_to(r))
-                closest_enemy: Unit = enemyGroundUnits[0]
+            if r.weapon_cooldown == 0 and enemy_ground_units:
+                enemy_ground_units: Units = enemy_ground_units.sorted(lambda x: x.distance_to(r))
+                closest_enemy: Unit = enemy_ground_units[0]
                 r.attack(closest_enemy)
                 continue  # Continue for loop, dont execute any of the following
 
             # Attack is on cooldown, check if grenade is on cooldown, if not then throw it to furthest enemy in range 5
             # pylint: disable=W0212
-            reaper_grenade_range: float = self.game_data.abilities[AbilityId.KD8CHARGE_KD8CHARGE.value
-                                                                   ]._proto.cast_range
+            reaper_grenade_range: float = (
+                self.game_data.abilities[AbilityId.KD8CHARGE_KD8CHARGE.value]._proto.cast_range
+            )
             enemy_ground_units_in_grenade_range: Units = enemies_can_attack.filter(
                 lambda unit: not unit.is_structure and not unit.is_flying and unit.type_id not in
                 {UnitTypeId.LARVA, UnitTypeId.EGG} and unit.distance_to(r) < reaper_grenade_range

@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 import math
 import random
+import warnings
 from typing import TYPE_CHECKING, Iterable, List, Set, Tuple, Union
 
 from s2clientprotocol import common_pb2 as common_pb
@@ -50,6 +51,9 @@ class Pointlike(tuple):
 
         :param distance:
         :param p:"""
+        warnings.warn(
+            'position.is_closer_than is deprecated and will be deleted soon', DeprecationWarning, stacklevel=2
+        )
         p = p.position
         return self.distance_to_point2(p) < distance
 
@@ -58,6 +62,9 @@ class Pointlike(tuple):
 
         :param distance:
         :param p:"""
+        warnings.warn(
+            'position.is_further_than is deprecated and will be deleted soon', DeprecationWarning, stacklevel=2
+        )
         p = p.position
         return self.distance_to_point2(p) > distance
 

@@ -881,7 +881,7 @@ class Unit:
         """Returns cloak state.
         See https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95
         """
-        return self._proto.cloak
+        return CloakState(self._proto.cloak)
 
     @property
     def is_cloaked(self) -> bool:
@@ -891,7 +891,7 @@ class Unit:
     @property
     def is_revealed(self) -> bool:
         """ Checks if the unit is revealed. """
-        return self._proto.cloak is IS_REVEALED
+        return self._proto.cloak == IS_REVEALED
 
     @property
     def can_be_attacked(self) -> bool:
