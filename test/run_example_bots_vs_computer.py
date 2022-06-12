@@ -123,7 +123,7 @@ for bot_info in bot_infos:
     bot_class: Type[BotAI] = getattr(module, bot_class_name)
 
     limit_match_duration = game_time_limit_vs_computer
-    if bot_class_name == "SlowBot":
+    if bot_class_name in {"SlowBot", "RampWallBot"}:
         limit_match_duration = 2
 
     matches.append(
