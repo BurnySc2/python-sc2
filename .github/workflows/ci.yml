@@ -285,13 +285,13 @@ jobs:
   release_to_pypi:
     name: Pypi
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
     needs: [run_pytest_tests, run_test_bots, run_example_bots]
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
