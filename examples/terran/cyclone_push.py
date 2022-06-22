@@ -1,4 +1,3 @@
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.unit_typeid import UnitTypeId
@@ -123,7 +122,7 @@ class CyclonePush(BotAI):
 
 def main():
     run_game(
-        maps.get("(2)CatalystLE"),
+        "(2)CatalystLE",
         [
             # Human(Race.Terran),
             Bot(Race.Terran, CyclonePush()),

@@ -1,4 +1,3 @@
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.unit_typeid import UnitTypeId
@@ -7,7 +6,6 @@ from sc2.player import Bot, Computer
 
 
 class TerranBot(BotAI):
-
     async def on_step(self, iteration):
         await self.distribute_workers()
         await self.build_supply()
@@ -34,7 +32,7 @@ class TerranBot(BotAI):
 
 if __name__ == "__main__":
     run_game(
-        maps.get("Abyssal Reef LE"),
+        "AbyssalReefLE",
         [Bot(Race.Terran, TerranBot()), Computer(Race.Protoss, Difficulty.Medium)],
         realtime=False,
     )

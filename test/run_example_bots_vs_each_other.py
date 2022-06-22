@@ -12,7 +12,7 @@ from typing import List, Type
 
 from loguru import logger
 
-from sc2 import maps
+from sc2 import file_maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race, Result
 from sc2.main import GameMatch, a_run_multiple_games_nokill
@@ -27,69 +27,69 @@ bot_infos = [
     {
         "race": Race.Protoss,
         "path": "examples.protoss.cannon_rush",
-        "bot_class_name": "CannonRushBot"
+        "bot_class_name": "CannonRushBot",
     },
     {
         "race": Race.Protoss,
         "path": "examples.protoss.find_adept_shades",
-        "bot_class_name": "FindAdeptShadesBot"
+        "bot_class_name": "FindAdeptShadesBot",
     },
     {
         "race": Race.Protoss,
         "path": "examples.protoss.threebase_voidray",
-        "bot_class_name": "ThreebaseVoidrayBot"
+        "bot_class_name": "ThreebaseVoidrayBot",
     },
     {
         "race": Race.Protoss,
         "path": "examples.protoss.warpgate_push",
-        "bot_class_name": "WarpGateBot"
+        "bot_class_name": "WarpGateBot",
     },
     # Terran
     {
         "race": Race.Terran,
         "path": "examples.terran.cyclone_push",
-        "bot_class_name": "CyclonePush"
+        "bot_class_name": "CyclonePush",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.mass_reaper",
-        "bot_class_name": "MassReaperBot"
+        "bot_class_name": "MassReaperBot",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.onebase_battlecruiser",
-        "bot_class_name": "BCRushBot"
+        "bot_class_name": "BCRushBot",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.proxy_rax",
-        "bot_class_name": "ProxyRaxBot"
+        "bot_class_name": "ProxyRaxBot",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.ramp_wall",
-        "bot_class_name": "RampWallBot"
+        "bot_class_name": "RampWallBot",
     },
     # Zerg
     {
         "race": Race.Zerg,
         "path": "examples.zerg.expand_everywhere",
-        "bot_class_name": "ExpandEverywhere"
+        "bot_class_name": "ExpandEverywhere",
     },
     {
         "race": Race.Zerg,
         "path": "examples.zerg.hydralisk_push",
-        "bot_class_name": "Hydralisk"
+        "bot_class_name": "Hydralisk",
     },
     {
         "race": Race.Zerg,
         "path": "examples.zerg.onebase_broodlord",
-        "bot_class_name": "BroodlordBot"
+        "bot_class_name": "BroodlordBot",
     },
     {
         "race": Race.Zerg,
         "path": "examples.zerg.zerg_rush",
-        "bot_class_name": "ZergRushBot"
+        "bot_class_name": "ZergRushBot",
     },
 ]
 
@@ -112,13 +112,15 @@ for bot_info1, bot_info2 in combinations(bot_infos, 2):
     for realtime in [True, False]:
         matches.append(
             GameMatch(
-                map_sc2=maps.get("Acropolis"),
+                map_sc2=file_maps.get("Acropolis"),
                 players=[
                     Bot(bot_race1, bot_class1()),
                     Bot(bot_race2, bot_class2()),
                 ],
                 realtime=False,
-                game_time_limit=game_time_limit_bot_vs_bot_realtime if realtime else game_time_limit_bot_vs_bot,
+                game_time_limit=game_time_limit_bot_vs_bot_realtime
+                if realtime
+                else game_time_limit_bot_vs_bot,
             )
         )
 
@@ -138,5 +140,5 @@ async def main():
     logger.info("Checked all results")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())

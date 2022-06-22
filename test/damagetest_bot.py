@@ -6,7 +6,6 @@ import math
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race
 from sc2.ids.unit_typeid import UnitTypeId
@@ -16,7 +15,6 @@ from sc2.unit import Unit
 
 
 class TestBot(BotAI):
-
     def __init__(self):
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
@@ -24,7 +22,8 @@ class TestBot(BotAI):
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}") for index in range(4000)
+            getattr(self, f"test_botai_actions{index}")
+            for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_target = 4
@@ -186,7 +185,7 @@ class TestBot(BotAI):
             return attacker, defender
 
         def do_some_unit_property_tests(attacker: Unit, defender: Unit):
-            """ Some tests that are not covered by test_pickled_data.py """
+            """Some tests that are not covered by test_pickled_data.py"""
             # TODO move unit unrelated tests elsewhere
             self.step_time
             self.units_created
@@ -242,29 +241,37 @@ class TestBot(BotAI):
             for attacker_type in attacker_units:
                 for defender_type in defender_units:
                     # DT, Thor, Tempest one-shots workers, so skip test
-                    if (
-                        attacker_type in {
-                            UnitTypeId.DARKTEMPLAR,
-                            UnitTypeId.TEMPEST,
-                            UnitTypeId.THOR,
-                            UnitTypeId.THORAP,
-                            UnitTypeId.LIBERATORAG,
-                            UnitTypeId.PLANETARYFORTRESS,
-                            UnitTypeId.ARCHON,
-                        } and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}
-                    ):
+                    if attacker_type in {
+                        UnitTypeId.DARKTEMPLAR,
+                        UnitTypeId.TEMPEST,
+                        UnitTypeId.THOR,
+                        UnitTypeId.THORAP,
+                        UnitTypeId.LIBERATORAG,
+                        UnitTypeId.PLANETARYFORTRESS,
+                        UnitTypeId.ARCHON,
+                    } and defender_type in {
+                        UnitTypeId.PROBE,
+                        UnitTypeId.DRONE,
+                        UnitTypeId.SCV,
+                        UnitTypeId.MULE,
+                    }:
                         continue
 
                     # Spawn units
                     await self.client.debug_create_unit(
-                        [[attacker_type, 1, map_center, 1], [defender_type, 1, map_center, 2]]
+                        [
+                            [attacker_type, 1, map_center, 1],
+                            [defender_type, 1, map_center, 2],
+                        ]
                     )
                     await self._advance_steps(1)
 
                     # Wait for units to spawn
                     attacker, defender = get_attacker_and_defender()
                     while (
-                        attacker is None or defender is None or attacker.type_id != attacker_type
+                        attacker is None
+                        or defender is None
+                        or attacker.type_id != attacker_type
                         or defender.type_id != defender_type
                     ):
                         await self._advance_steps(1)
@@ -274,13 +281,18 @@ class TestBot(BotAI):
                     do_some_unit_property_tests(attacker, defender)
 
                     # Units have spawned, calculate expected damage
-                    expected_damage: float = attacker.calculate_damage_vs_target(defender)[0]
+                    expected_damage: float = attacker.calculate_damage_vs_target(
+                        defender
+                    )[0]
                     # If expected damage is zero, it means that the attacker cannot attack the defender: skip test
                     if expected_damage == 0:
                         await self.clean_up_center()
                         continue
                     # Thor antiground seems buggy sometimes and not reliable in tests, skip it
-                    if attacker_type in {UnitTypeId.THOR, UnitTypeId.THORAP} and not defender.is_flying:
+                    if (
+                        attacker_type in {UnitTypeId.THOR, UnitTypeId.THORAP}
+                        and not defender.is_flying
+                    ):
                         await self.clean_up_center()
                         continue
 
@@ -290,14 +302,24 @@ class TestBot(BotAI):
                     while (
                         attacker.weapon_cooldown == 0 or attacker.weapon_cooldown > 3
                     ) and real_damage < expected_damage:
-                        if attacker_type in {UnitTypeId.PROBE, UnitTypeId.SCV, UnitTypeId.DRONE}:
+                        if attacker_type in {
+                            UnitTypeId.PROBE,
+                            UnitTypeId.SCV,
+                            UnitTypeId.DRONE,
+                        }:
                             attacker.attack(defender)
                         await self._advance_steps(1)
                         # Unsure why I have to recalculate this here again but it prevents a bug
                         attacker, defender = get_attacker_and_defender()
-                        expected_damage: float = max(expected_damage, attacker.calculate_damage_vs_target(defender)[0])
+                        expected_damage: float = max(
+                            expected_damage,
+                            attacker.calculate_damage_vs_target(defender)[0],
+                        )
                         real_damage = math.ceil(
-                            defender.health_max + defender.shield_max - defender.health - defender.shield
+                            defender.health_max
+                            + defender.shield_max
+                            - defender.health
+                            - defender.shield
                         )
                         # logger.info(
                         #     f"Attacker type: {attacker_type}, defender health: {defender.health} / {defender.health_max}, defender shield: {defender.shield} / {defender.shield_max}, expected damage: {expected_damage}, real damage so far: {real_damage}, attacker weapon cooldown: {attacker.weapon_cooldown}"
@@ -319,7 +341,6 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
-
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
@@ -340,7 +361,11 @@ class EmptyBot(BotAI):
 
 
 def main():
-    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(
+        "Empty128",
+        [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())],
+        realtime=False,
+    )
 
 
 if __name__ == "__main__":

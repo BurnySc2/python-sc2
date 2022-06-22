@@ -1,6 +1,5 @@
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.unit_typeid import UnitTypeId
@@ -13,7 +12,6 @@ OPPONENT_PLAYER_ID = 2
 
 
 class FightBot(BotAI):
-
     def __init__(self):
         super().__init__()
         self.enemy_location: Point2 = None
@@ -78,10 +76,10 @@ class FightBot(BotAI):
 
 def main():
     run_game(
-        maps.get("Flat64"),
+        "Flat64",
         # NOTE: you can have two bots fighting with each other here
         [Bot(Race.Terran, FightBot()), Computer(Race.Terran, Difficulty.Medium)],
-        realtime=True
+        realtime=True,
     )
 
 

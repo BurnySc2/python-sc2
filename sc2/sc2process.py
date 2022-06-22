@@ -14,9 +14,9 @@ import aiohttp
 import portpicker
 from loguru import logger
 
-from sc2 import paths, wsl
+from sc2 import file_paths, wsl
 from sc2.controller import Controller
-from sc2.paths import Paths
+from sc2.file_paths import Paths
 from sc2.versions import VERSIONS
 
 
@@ -129,7 +129,7 @@ class SC2Process:
         return VERSIONS
 
     def find_data_hash(self, target_sc2_version: str) -> Optional[str]:
-        """ Returns the data hash from the matching version string. """
+        """Returns the data hash from the matching version string."""
         version: dict
         for version in self.versions:
             if version["label"] == target_sc2_version:
@@ -138,13 +138,15 @@ class SC2Process:
 
     def _launch(self):
         if self._base_build:
-            executable = str(paths.latest_executeble(Paths.BASE / "Versions", self._base_build))
+            executable = str(
+                file_paths.latest_executeble(Paths.BASE / "Versions", self._base_build)
+            )
         else:
             executable = str(Paths.EXECUTABLE)
         if self._port is None:
             self._port = portpicker.pick_unused_port()
             self._used_portpicker = True
-        args = paths.get_runner_args(Paths.CWD) + [
+        args = file_paths.get_runner_args(Paths.CWD) + [
             executable,
             "-listen",
             self._serverhost,
@@ -161,7 +163,7 @@ class SC2Process:
         if self._sc2_version:
 
             def special_match(strg: str):
-                """ Tests if the specified version is in the versions.py dict. """
+                """Tests if the specified version is in the versions.py dict."""
                 for version in self.versions:
                     if version["label"] == strg:
                         return True
@@ -190,7 +192,7 @@ class SC2Process:
 
         sc2_cwd = str(Paths.CWD) if Paths.CWD else None
 
-        if paths.PF in {"WSL1", "WSL2"}:
+        if file_paths.PF in {"WSL1", "WSL2"}:
             return wsl.run(args, sc2_cwd)
 
         return subprocess.Popen(
@@ -242,7 +244,7 @@ class SC2Process:
             logger.info("Cleaning up...")
 
         if self._process is not None:
-            if paths.PF in {"WSL1", "WSL2"}:
+            if file_paths.PF in {"WSL1", "WSL2"}:
                 if wsl.kill(self._process):
                     logger.error("KILLED")
             elif self._process.poll() is None:
@@ -256,7 +258,7 @@ class SC2Process:
                 self._process.wait()
                 logger.error("KILLED")
             # Try to kill wineserver on linux
-            if paths.PF in {"Linux", "WineLinux"}:
+            if file_paths.PF in {"Linux", "WineLinux"}:
                 # Command wineserver not detected
                 with suppress(FileNotFoundError):
                     with subprocess.Popen(["wineserver", "-k"]) as p:

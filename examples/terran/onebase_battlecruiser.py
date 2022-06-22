@@ -1,6 +1,5 @@
 from typing import List, Tuple
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
@@ -181,7 +180,7 @@ class BCRushBot(BotAI):
 
 def main():
     run_game(
-        maps.get("(2)CatalystLE"),
+        "(2)CatalystLE",
         [
             # Human(Race.Terran),
             Bot(Race.Terran, BCRushBot()),

@@ -1,6 +1,5 @@
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
@@ -139,7 +138,7 @@ class WarpGateBot(BotAI):
 
 def main():
     run_game(
-        maps.get("(2)CatalystLE"),
+        "(2)CatalystLE",
         [Bot(Race.Protoss, WarpGateBot()), Computer(Race.Protoss, Difficulty.Easy)],
         realtime=False,
     )

@@ -7,7 +7,7 @@ from loguru import logger
 
 from examples.protoss.warpgate_push import WarpGateBot
 from examples.zerg.zerg_rush import ZergRushBot
-from sc2 import maps
+from sc2.file_maps import get as get_maps
 from sc2.data import Race, Result
 from sc2.main import GameMatch, run_game, run_multiple_games
 from sc2.player import Bot
@@ -15,7 +15,7 @@ from sc2.player import Bot
 
 def main_old():
     result: List[Result] = run_game(
-        maps.get("AcropolisLE"),
+        "AcropolisLE",
         [
             Bot(Race.Protoss, WarpGateBot()),
             Bot(Race.Zerg, ZergRushBot()),
@@ -31,7 +31,7 @@ def main():
     result = run_multiple_games(
         [
             GameMatch(
-                map_sc2=maps.get("AcropolisLE"),
+                map_sc2=get_maps.get("AcropolisLE"),
                 players=[
                     Bot(Race.Protoss, WarpGateBot()),
                     Bot(Race.Zerg, ZergRushBot()),

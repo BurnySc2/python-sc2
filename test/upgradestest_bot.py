@@ -7,7 +7,6 @@ from typing import Dict, List
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race
 from sc2.ids.ability_id import AbilityId
@@ -21,7 +20,6 @@ from sc2.units import Units
 
 
 class TestBot(BotAI):
-
     def __init__(self):
         BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
@@ -30,7 +28,8 @@ class TestBot(BotAI):
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}") for index in range(4000)
+            getattr(self, f"test_botai_actions{index}")
+            for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_done_by_name = set()
@@ -89,7 +88,9 @@ class TestBot(BotAI):
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
         from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
 
-        structure_types: List[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
+        structure_types: List[UnitTypeId] = sorted(
+            set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name
+        )
         upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM.keys())
 
         # TODO if *techlab in name -> spawn rax/ fact / starport next to it
@@ -107,7 +108,9 @@ class TestBot(BotAI):
             if "TECHLAB" in structure_type.name:
                 continue
 
-            structure_upgrade_types: Dict[UpgradeId, Dict[str, AbilityId]] = RESEARCH_INFO[structure_type]
+            structure_upgrade_types: Dict[
+                UpgradeId, Dict[str, AbilityId]
+            ] = RESEARCH_INFO[structure_type]
             data: Dict[str, AbilityId]
             for upgrade_id, data in structure_upgrade_types.items():
 
@@ -120,8 +123,12 @@ class TestBot(BotAI):
                 if (
                     research_ability.value not in self.game_data.abilities
                     or upgrade_id.value not in self.game_data.upgrades
-                    or self.game_data.upgrades[upgrade_id.value].research_ability is None
-                    or self.game_data.upgrades[upgrade_id.value].research_ability.exact_id != research_ability
+                    or self.game_data.upgrades[upgrade_id.value].research_ability
+                    is None
+                    or self.game_data.upgrades[
+                        upgrade_id.value
+                    ].research_ability.exact_id
+                    != research_ability
                 ):
                     logger.info(
                         f"Could not find upgrade {upgrade_id} or research ability {research_ability} in self.game_data - potential version mismatch (balance upgrade - windows vs linux SC2 client"
@@ -136,7 +143,9 @@ class TestBot(BotAI):
                 if required_building:
                     spawn_structures.append(required_building)
 
-                await self.client.debug_create_unit([[structure, 1, map_center, 1] for structure in spawn_structures])
+                await self.client.debug_create_unit(
+                    [[structure, 1, map_center, 1] for structure in spawn_structures]
+                )
                 logger.info(
                     f"Spawning {structure_type} to research upgrade {upgrade_id} via research ability {research_ability}"
                 )
@@ -154,8 +163,12 @@ class TestBot(BotAI):
                     await self._advance_steps(2)
 
                 # Research upgrade
-                assert upgrade_id in upgrade_types, f"Given upgrade is not in the list of upgrade types"
-                assert self.structures(structure_type), f"Structure {structure_type} has not been spawned in time"
+                assert (
+                    upgrade_id in upgrade_types
+                ), f"Given upgrade is not in the list of upgrade types"
+                assert self.structures(
+                    structure_type
+                ), f"Structure {structure_type} has not been spawned in time"
 
                 # Try to research the upgrade
                 while 1:
@@ -163,7 +176,9 @@ class TestBot(BotAI):
                     # Upgrade has been researched, break
                     # Hi atira monkaBirthday
                     if upgrader_structures:
-                        upgrader_structure: Unit = upgrader_structures.closest_to(map_center)
+                        upgrader_structure: Unit = upgrader_structures.closest_to(
+                            map_center
+                        )
                         if upgrader_structure.is_idle:
                             # logger.info(f"Making {upgrader_structure} research upgrade {upgrade_id}")
                             upgrader_structure.research(upgrade_id)
@@ -176,7 +191,6 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
-
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
@@ -197,7 +211,11 @@ class EmptyBot(BotAI):
 
 
 def main():
-    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(
+        "Empty128",
+        [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())],
+        realtime=False,
+    )
 
 
 if __name__ == "__main__":

@@ -8,7 +8,18 @@ import warnings
 from abc import ABC
 from collections import Counter
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, Dict, Generator, Iterable, List, Set, Tuple, Union, final
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Dict,
+    Generator,
+    Iterable,
+    List,
+    Set,
+    Tuple,
+    Union,
+    final,
+)
 
 import numpy as np
 from loguru import logger
@@ -49,7 +60,7 @@ class BotAIInternal(ABC):
 
     @final
     def _initialize_variables(self):
-        """ Called from main.py internally """
+        """Called from main.py internally"""
         self.cache: Dict[str, Any] = {}
         # Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://aiarena.net
         # The bot ID will stay the same each game so your bot can "adapt" to the opponent
@@ -76,7 +87,7 @@ class BotAIInternal(ABC):
         self.all_own_units: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
         self.enemy_structures: Units = Units([], self)
-        self.all_enemy_units: Units = Units([], self)
+        self.enemy_all: Units = Units([], self)
         self.resources: Units = Units([], self)
         self.destructables: Units = Units([], self)
         self.watchtowers: Units = Units([], self)
@@ -123,7 +134,7 @@ class BotAIInternal(ABC):
     @final
     @property
     def _game_info(self) -> GameInfo:
-        """ See game_info.py """
+        """See game_info.py"""
         warnings.warn(
             "Using self._game_info is deprecated and may be removed soon. Please use self.game_info directly.",
             DeprecationWarning,
@@ -134,7 +145,7 @@ class BotAIInternal(ABC):
     @final
     @property
     def _game_data(self) -> GameData:
-        """ See game_data.py """
+        """See game_data.py"""
         warnings.warn(
             "Using self._game_data is deprecated and may be removed soon. Please use self.game_data directly.",
             DeprecationWarning,
@@ -145,7 +156,7 @@ class BotAIInternal(ABC):
     @final
     @property
     def _client(self) -> Client:
-        """ See client.py """
+        """See client.py"""
         warnings.warn(
             "Using self._client is deprecated and may be removed soon. Please use self.client directly.",
             DeprecationWarning,
@@ -156,7 +167,7 @@ class BotAIInternal(ABC):
     @final
     @property_cache_once_per_frame
     def expansion_locations(self) -> Dict[Point2, Units]:
-        """ Same as the function above. """
+        """Same as the function above."""
         assert (
             self._expansion_positions_list
         ), "self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless."
@@ -169,7 +180,7 @@ class BotAIInternal(ABC):
 
     @final
     def _find_expansion_locations(self):
-        """ Ran once at the start of the game to calculate expansion locations. """
+        """Ran once at the start of the game to calculate expansion locations."""
         # Idea: create a group for every resource, then merge these groups if
         # any resource in a group is closer than a threshold to any resource of another group
 
@@ -177,7 +188,8 @@ class BotAIInternal(ABC):
         resource_spread_threshold: float = 8.5
         # Create a group for every resource
         resource_groups: List[List[Unit]] = [
-            [resource] for resource in self.resources
+            [resource]
+            for resource in self.resources
             if resource.name != "MineralField450"  # dont use low mineral count patches
         ]
         # Loop the merging process as long as we change something
@@ -200,7 +212,10 @@ class BotAIInternal(ABC):
         # Distance offsets we apply to center of each resource group to find expansion position
         offset_range = 7
         offsets = [
-            (x, y) for x, y in itertools.product(range(-offset_range, offset_range + 1), repeat=2)
+            (x, y)
+            for x, y in itertools.product(
+                range(-offset_range, offset_range + 1), repeat=2
+            )
             if 4 < math.hypot(x, y) <= 8
         ]
         # Dict we want to return
@@ -211,30 +226,44 @@ class BotAIInternal(ABC):
             amount = len(resources)
             # Calculate center, round and add 0.5 because expansion location will have (x.5, y.5)
             # coordinates because bases have size 5.
-            center_x = int(sum(resource.position.x for resource in resources) / amount) + 0.5
-            center_y = int(sum(resource.position.y for resource in resources) / amount) + 0.5
-            possible_points = (Point2((offset[0] + center_x, offset[1] + center_y)) for offset in offsets)
+            center_x = (
+                int(sum(resource.position.x for resource in resources) / amount) + 0.5
+            )
+            center_y = (
+                int(sum(resource.position.y for resource in resources) / amount) + 0.5
+            )
+            possible_points = (
+                Point2((offset[0] + center_x, offset[1] + center_y))
+                for offset in offsets
+            )
             # Filter out points that are too near
             possible_points = (
-                point for point in possible_points
+                point
+                for point in possible_points
                 # Check if point can be built on
                 if self.game_info.placement_grid[point.rounded] == 1
                 # Check if all resources have enough space to point
                 and all(
-                    point.distance_to(resource) >= (7 if resource._proto.unit_type in geyser_ids else 6)
+                    point.distance_to(resource)
+                    >= (7 if resource._proto.unit_type in geyser_ids else 6)
                     for resource in resources
                 )
             )
             # Choose best fitting point
             result: Point2 = min(
-                possible_points, key=lambda point: sum(point.distance_to(resource_) for resource_ in resources)
+                possible_points,
+                key=lambda point: sum(
+                    point.distance_to(resource_) for resource_ in resources
+                ),
             )
             centers[result] = resources
             # Put all expansion locations in a list
             self._expansion_positions_list.append(result)
             # Maps all resource positions to the expansion position
             for resource in resources:
-                self._resource_location_to_expansion_position_dict[resource.position] = result
+                self._resource_location_to_expansion_position_dict[
+                    resource.position
+                ] = result
 
     @final
     def _correct_zerg_supply(self):
@@ -270,7 +299,9 @@ class BotAIInternal(ABC):
                 if self.race != Race.Terran or not unit.is_structure:
                     # If an SCV is constructing a building, already_pending would count this structure twice
                     # (once from the SCV order, and once from "not structure.is_ready")
-                    creation_ability: AbilityData = self.game_data.units[unit.type_id.value].creation_ability
+                    creation_ability: AbilityData = self.game_data.units[
+                        unit.type_id.value
+                    ].creation_ability
                     abilities_amount[creation_ability] += 1
                     max_build_progress[creation_ability] = max(
                         max_build_progress.get(creation_ability, 0), unit.build_progress
@@ -281,7 +312,7 @@ class BotAIInternal(ABC):
     @final
     @property_cache_once_per_frame
     def _worker_orders(self) -> Counter:
-        """ This function is used internally, do not use! It is to store all worker abilities. """
+        """This function is used internally, do not use! It is to store all worker abilities."""
         abilities_amount = Counter()
         structures_in_production: Set[Union[Point2, int]] = set()
         for structure in self.structures:
@@ -294,8 +325,10 @@ class BotAIInternal(ABC):
                 # or resuming construction (isinstance(order.target, int))
                 is_int = isinstance(order.target, int)
                 if (
-                    is_int and order.target in structures_in_production
-                    or not is_int and Point2.from_proto(order.target) in structures_in_production
+                    is_int
+                    and order.target in structures_in_production
+                    or not is_int
+                    and Point2.from_proto(order.target) in structures_in_production
                 ):
                     continue
                 abilities_amount[order.ability] += 1
@@ -355,7 +388,9 @@ class BotAIInternal(ABC):
         ), f"Given unit command is not a command, but instead of type {type(action)}"
         if subtract_cost:
             cost: Cost = self.game_data.calculate_ability_cost(action.ability)
-            if can_afford_check and not (self.minerals >= cost.minerals and self.vespene >= cost.vespene):
+            if can_afford_check and not (
+                self.minerals >= cost.minerals and self.vespene >= cost.vespene
+            ):
                 # Dont do action if can't afford
                 return False
             self.minerals -= cost.minerals
@@ -395,7 +430,9 @@ class BotAIInternal(ABC):
         return r
 
     @final
-    async def _do_actions(self, actions: List[UnitCommand], prevent_double: bool = True):
+    async def _do_actions(
+        self, actions: List[UnitCommand], prevent_double: bool = True
+    ):
         """Used internally by main.py automatically, use self.do() instead!
 
         :param actions:
@@ -420,7 +457,10 @@ class BotAIInternal(ABC):
             # action: UnitCommand
             # current_action: UnitOrder
             current_action = action.unit.orders[0]
-            if action.ability not in {current_action.ability.id, current_action.ability.exact_id}:
+            if action.ability not in {
+                current_action.ability.id,
+                current_action.ability.exact_id,
+            }:
                 # Different action, return True
                 return True
             with suppress(AttributeError):
@@ -428,14 +468,25 @@ class BotAIInternal(ABC):
                     # Same action, remove action if same target unit
                     return False
             with suppress(AttributeError):
-                if action.target.x == current_action.target.x and action.target.y == current_action.target.y:
+                if (
+                    action.target.x == current_action.target.x
+                    and action.target.y == current_action.target.y
+                ):
                     # Same action, remove action if same target position
                     return False
             return True
         return True
 
     @final
-    def _prepare_start(self, client, player_id, game_info, game_data, realtime: bool = False, base_build: int = -1):
+    def _prepare_start(
+        self,
+        client,
+        player_id,
+        game_info,
+        game_data,
+        realtime: bool = False,
+        base_build: int = -1,
+    ):
         """
         Ran until game start to set game and player data.
 
@@ -455,7 +506,9 @@ class BotAIInternal(ABC):
         self.race: Race = Race(self.game_info.player_races[self.player_id])
 
         if len(self.game_info.player_races) == 2:
-            self.enemy_race: Race = Race(self.game_info.player_races[3 - self.player_id])
+            self.enemy_race: Race = Race(
+                self.game_info.player_races[3 - self.player_id]
+            )
 
         self._distances_override_functions(self.distance_calculation_method)
 
@@ -466,7 +519,10 @@ class BotAIInternal(ABC):
             self.game_info.player_start_location = self.townhalls.first.position
             # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
             self._find_expansion_locations()
-        self.game_info.map_ramps, self.game_info.vision_blockers = self.game_info._find_ramps_and_vision_blockers()
+        (
+            self.game_info.map_ramps,
+            self.game_info.vision_blockers,
+        ) = self.game_info._find_ramps_and_vision_blockers()
         self._time_before_step: float = time.perf_counter()
 
     @final
@@ -478,22 +534,33 @@ class BotAIInternal(ABC):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # update pathing grid, which unfortunately is in GameInfo instead of GameState
-        self.game_info.pathing_grid: PixelMap = PixelMap(proto_game_info.game_info.start_raw.pathing_grid, in_bits=True)
+        self.game_info.pathing_grid: PixelMap = PixelMap(
+            proto_game_info.game_info.start_raw.pathing_grid, in_bits=True
+        )
         # Required for events, needs to be before self.units are initialized so the old units are stored
-        self._units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.units}
-        self._structures_previous_map: Dict[int, Unit] = {structure.tag: structure for structure in self.structures}
-        self._enemy_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.enemy_units}
-        self._enemy_structures_previous_map: Dict[int, Unit] = {
-            structure.tag: structure
-            for structure in self.enemy_structures
+        self._units_previous_map: Dict[int, Unit] = {
+            unit.tag: unit for unit in self.units
         }
-        self._all_units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.all_units}
+        self._structures_previous_map: Dict[int, Unit] = {
+            structure.tag: structure for structure in self.structures
+        }
+        self._enemy_units_previous_map: Dict[int, Unit] = {
+            unit.tag: unit for unit in self.enemy_units
+        }
+        self._enemy_structures_previous_map: Dict[int, Unit] = {
+            structure.tag: structure for structure in self.enemy_structures
+        }
+        self._all_units_previous_map: Dict[int, Unit] = {
+            unit.tag: unit for unit in self.all_units
+        }
 
         self._prepare_units()
         self.minerals: int = state.common.minerals
         self.vespene: int = state.common.vespene
         self.supply_army: int = state.common.food_army
-        self.supply_workers: int = state.common.food_workers  # Doesn't include workers in production
+        self.supply_workers: int = (
+            state.common.food_workers
+        )  # Doesn't include workers in production
         self.supply_cap: int = state.common.food_cap
         self.supply_used: int = state.common.food_used
         self.supply_left: int = self.supply_cap - self.supply_used
@@ -508,8 +575,8 @@ class BotAIInternal(ABC):
         self.army_count: int = state.common.army_count
         self._time_before_step: float = time.perf_counter()
 
-        if self.enemy_race == Race.Random and self.all_enemy_units:
-            self.enemy_race = Race(self.all_enemy_units.first.race)
+        if self.enemy_race == Race.Random and self.enemy_all:
+            self.enemy_race = Race(self.enemy_all.first.race)
 
     @final
     def _prepare_units(self):
@@ -525,7 +592,7 @@ class BotAIInternal(ABC):
         self.all_own_units: Units = Units([], self)
         self.enemy_units: Units = Units([], self)
         self.enemy_structures: Units = Units([], self)
-        self.all_enemy_units: Units = Units([], self)
+        self.enemy_all: Units = Units([], self)
         self.resources: Units = Units([], self)
         self.destructables: Units = Units([], self)
         self.watchtowers: Units = Units([], self)
@@ -535,7 +602,12 @@ class BotAIInternal(ABC):
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
 
-        worker_types: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
+        worker_types: Set[UnitTypeId] = {
+            UnitTypeId.DRONE,
+            UnitTypeId.DRONEBURROWED,
+            UnitTypeId.SCV,
+            UnitTypeId.PROBE,
+        }
 
         index: int = 0
         for unit in self.state.observation_raw.units:
@@ -547,7 +619,12 @@ class BotAIInternal(ABC):
                 if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue
-                unit_obj = Unit(unit, self, distance_calculation_index=index, base_build=self.base_build)
+                unit_obj = Unit(
+                    unit,
+                    self,
+                    distance_calculation_index=index,
+                    base_build=self.base_build,
+                )
                 index += 1
                 self.all_units.append(unit_obj)
                 if unit.display_type == IS_PLACEHOLDER:
@@ -603,11 +680,13 @@ class BotAIInternal(ABC):
                             self.larva.append(unit_obj)
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
-                    self.all_enemy_units.append(unit_obj)
+                    self.enemy_all.append(unit_obj)
                     if unit_obj.is_structure:
                         self.enemy_structures.append(unit_obj)
                     else:
                         self.enemy_units.append(unit_obj)
+
+        self.all_enemy_units = self.enemy_all  # deprecated but provides reference for backward compatibility
 
         # Force distance calculation and caching on all units using scipy pdist or cdist
         if self.distance_calculation_method == 1:
@@ -617,7 +696,7 @@ class BotAIInternal(ABC):
 
     @final
     async def _after_step(self) -> int:
-        """ Executed by main.py after each on_step function. """
+        """Executed by main.py after each on_step function."""
         # Keep track of the bot on_step duration
         self._time_after_step: float = time.perf_counter()
         step_duration = self._time_after_step - self._time_before_step
@@ -669,15 +748,26 @@ class BotAIInternal(ABC):
     @final
     async def _issue_unit_added_events(self):
         for unit in self.units:
-            if unit.tag not in self._units_previous_map and unit.tag not in self._unit_tags_seen_this_game:
+            if (
+                unit.tag not in self._units_previous_map
+                and unit.tag not in self._unit_tags_seen_this_game
+            ):
                 self._unit_tags_seen_this_game.add(unit.tag)
                 self._units_created[unit.type_id] += 1
                 await self.on_unit_created(unit)
             elif unit.tag in self._units_previous_map:
                 previous_frame_unit: Unit = self._units_previous_map[unit.tag]
                 # Check if a unit took damage this frame and then trigger event
-                if unit.health < previous_frame_unit.health or unit.shield < previous_frame_unit.shield:
-                    damage_amount = previous_frame_unit.health - unit.health + previous_frame_unit.shield - unit.shield
+                if (
+                    unit.health < previous_frame_unit.health
+                    or unit.shield < previous_frame_unit.shield
+                ):
+                    damage_amount = (
+                        previous_frame_unit.health
+                        - unit.health
+                        + previous_frame_unit.shield
+                        - unit.shield
+                    )
                     await self.on_unit_took_damage(unit, damage_amount)
                 # Check if a unit type has changed
                 if previous_frame_unit.type_id != unit.type_id:
@@ -702,21 +792,30 @@ class BotAIInternal(ABC):
                     await self.on_building_construction_complete(structure)
             elif structure.tag in self._structures_previous_map:
                 # Check if a structure took damage this frame and then trigger event
-                previous_frame_structure: Unit = self._structures_previous_map[structure.tag]
+                previous_frame_structure: Unit = self._structures_previous_map[
+                    structure.tag
+                ]
                 if (
                     structure.health < previous_frame_structure.health
                     or structure.shield < previous_frame_structure.shield
                 ):
                     damage_amount = (
-                        previous_frame_structure.health - structure.health + previous_frame_structure.shield -
-                        structure.shield
+                        previous_frame_structure.health
+                        - structure.health
+                        + previous_frame_structure.shield
+                        - structure.shield
                     )
                     await self.on_unit_took_damage(structure, damage_amount)
                 # Check if a structure changed its type
                 if previous_frame_structure.type_id != structure.type_id:
-                    await self.on_unit_type_changed(structure, previous_frame_structure.type_id)
+                    await self.on_unit_type_changed(
+                        structure, previous_frame_structure.type_id
+                    )
                 # Check if structure completed
-                if structure.build_progress == 1 and previous_frame_structure.build_progress < 1:
+                if (
+                    structure.build_progress == 1
+                    and previous_frame_structure.build_progress < 1
+                ):
                     self._units_created[structure.type_id] += 1
                     await self.on_building_construction_complete(structure)
 
@@ -731,7 +830,9 @@ class BotAIInternal(ABC):
                 await self.on_enemy_unit_entered_vision(enemy_structure)
 
         # Call events for enemy unit left vision
-        enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map.keys()) - self.enemy_units.tags
+        enemy_units_left_vision: Set[int] = (
+            set(self._enemy_units_previous_map.keys()) - self.enemy_units.tags
+        )
         for enemy_unit_tag in enemy_units_left_vision:
             await self.on_enemy_unit_left_vision(enemy_unit_tag)
         enemy_structures_left_vision: Set[int] = (
@@ -742,7 +843,9 @@ class BotAIInternal(ABC):
 
     @final
     async def _issue_unit_dead_events(self):
-        for unit_tag in self.state.dead_units & set(self._all_units_previous_map.keys()):
+        for unit_tag in self.state.dead_units & set(
+            self._all_units_previous_map.keys()
+        ):
             await self.on_unit_destroyed(unit_tag)
 
     # DISTANCE CALCULATION
@@ -755,7 +858,7 @@ class BotAIInternal(ABC):
     @final
     @property
     def _pdist(self) -> np.ndarray:
-        """ As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop. """
+        """As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop."""
         if self._generated_frame != self.state.game_loop:
             return self.calculate_distances()
         return self._cached_pdist
@@ -763,7 +866,7 @@ class BotAIInternal(ABC):
     @final
     @property
     def _cdist(self) -> np.ndarray:
-        """ As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop. """
+        """As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop."""
         if self._generated_frame != self.state.game_loop:
             return self.calculate_distances()
         return self._cached_cdist
@@ -772,7 +875,9 @@ class BotAIInternal(ABC):
     def _calculate_distances_method1(self) -> np.ndarray:
         self._generated_frame = self.state.game_loop
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
-        flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
+        flat_positions = (
+            coord for unit in self.all_units for coord in unit.position_tuple
+        )
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
         positions_array: np.ndarray = np.fromiter(
             flat_positions,
@@ -789,7 +894,9 @@ class BotAIInternal(ABC):
     def _calculate_distances_method2(self) -> np.ndarray:
         self._generated_frame = self.state.game_loop
         # Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]
-        flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
+        flat_positions = (
+            coord for unit in self.all_units for coord in unit.position_tuple
+        )
         # Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]
         positions_array: np.ndarray = np.fromiter(
             flat_positions,
@@ -804,9 +911,11 @@ class BotAIInternal(ABC):
 
     @final
     def _calculate_distances_method3(self) -> np.ndarray:
-        """ Nearly same as above, but without asserts"""
+        """Nearly same as above, but without asserts"""
         self._generated_frame = self.state.game_loop
-        flat_positions = (coord for unit in self.all_units for coord in unit.position_tuple)
+        flat_positions = (
+            coord for unit in self.all_units for coord in unit.position_tuple
+        )
         positions_array: np.ndarray = np.fromiter(
             flat_positions,
             dtype=float,
@@ -823,7 +932,9 @@ class BotAIInternal(ABC):
     def square_to_condensed(self, i, j) -> int:
         # Converts indices of a square matrix to condensed matrix
         # https://stackoverflow.com/a/36867493/10882657
-        assert i != j, "No diagonal elements in condensed matrix! Diagonal elements are zero"
+        assert (
+            i != j
+        ), "No diagonal elements in condensed matrix! Diagonal elements are zero"
         if i < j:
             i, j = j, i
         return self._units_count * j - j * (j + 1) // 2 + i - 1 - j
@@ -831,7 +942,7 @@ class BotAIInternal(ABC):
     @final
     @staticmethod
     def convert_tuple_to_numpy_array(pos: Tuple[float, float]) -> np.ndarray:
-        """ Converts a single position to a 2d numpy array with 1 row and 2 columns. """
+        """Converts a single position to a 2d numpy array with 1 row and 2 columns."""
         return np.fromiter(pos, dtype=float, count=2).reshape((1, 2))
 
     # Fast and simple calculation functions
@@ -854,7 +965,9 @@ class BotAIInternal(ABC):
 
     @final
     def _distance_squared_unit_to_unit_method0(self, unit1: Unit, unit2: Unit) -> float:
-        return self.distance_math_hypot_squared(unit1.position_tuple, unit2.position_tuple)
+        return self.distance_math_hypot_squared(
+            unit1.position_tuple, unit2.position_tuple
+        )
 
     # Distance calculation using the pre-calculated matrix above
 
@@ -864,7 +977,9 @@ class BotAIInternal(ABC):
         if unit1.tag == unit2.tag:
             return 0
         # Calculate index, needs to be after pdist has been calculated and cached
-        condensed_index = self.square_to_condensed(unit1.distance_calculation_index, unit2.distance_calculation_index)
+        condensed_index = self.square_to_condensed(
+            unit1.distance_calculation_index, unit2.distance_calculation_index
+        )
         assert condensed_index < len(
             self._cached_pdist
         ), f"Condensed index is larger than amount of calculated distances: {condensed_index} < {len(self._cached_pdist)}, units that caused the assert error: {unit1} and {unit2}"
@@ -874,7 +989,9 @@ class BotAIInternal(ABC):
     @final
     def _distance_squared_unit_to_unit_method2(self, unit1: Unit, unit2: Unit) -> float:
         # Calculate index, needs to be after cdist has been calculated and cached
-        return self._cdist[unit1.distance_calculation_index, unit2.distance_calculation_index]
+        return self._cdist[
+            unit1.distance_calculation_index, unit2.distance_calculation_index
+        ]
 
     # Distance calculation using the fastest distance calculation functions
 
@@ -892,7 +1009,7 @@ class BotAIInternal(ABC):
         units: Units,
         pos: Union[Tuple[float, float], Point2],
     ) -> Generator[float, None, None]:
-        """ This function does not scale well, if len(units) > 100 it gets fairly slow """
+        """This function does not scale well, if len(units) > 100 it gets fairly slow"""
         return (self.distance_math_hypot(u.position_tuple, pos) for u in units)
 
     @final
@@ -901,7 +1018,7 @@ class BotAIInternal(ABC):
         unit: Unit,
         points: Iterable[Tuple[float, float]],
     ) -> Generator[float, None, None]:
-        """ This function does not scale well, if len(points) > 100 it gets fairly slow """
+        """This function does not scale well, if len(points) > 100 it gets fairly slow"""
         pos = unit.position_tuple
         return (self.distance_math_hypot(p, pos) for p in points)
 
@@ -915,13 +1032,21 @@ class BotAIInternal(ABC):
         method 3: Use scipy's cidst square matrix (2d array) without asserts (careful: very weird error messages, but maybe slightly faster)"""
         assert 0 <= method <= 3, f"Selected method was: {method}"
         if method == 0:
-            self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method0
+            self._distance_squared_unit_to_unit = (
+                self._distance_squared_unit_to_unit_method0
+            )
         elif method == 1:
-            self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method1
+            self._distance_squared_unit_to_unit = (
+                self._distance_squared_unit_to_unit_method1
+            )
             self.calculate_distances = self._calculate_distances_method1
         elif method == 2:
-            self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method2
+            self._distance_squared_unit_to_unit = (
+                self._distance_squared_unit_to_unit_method2
+            )
             self.calculate_distances = self._calculate_distances_method2
         elif method == 3:
-            self._distance_squared_unit_to_unit = self._distance_squared_unit_to_unit_method2
+            self._distance_squared_unit_to_unit = (
+                self._distance_squared_unit_to_unit_method2
+            )
             self.calculate_distances = self._calculate_distances_method3

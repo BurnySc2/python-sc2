@@ -4,7 +4,6 @@ from typing import FrozenSet, Set
 import numpy as np
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
@@ -282,7 +281,7 @@ def main():
     )
     _map = "PillarsofGoldLE"
     run_game(
-        maps.get(_map),
+        _map,
         [Bot(Race.Terran, RampWallBot()), Computer(Race.Zerg, Difficulty.Hard)],
         realtime=True,
         # sc2_version="4.10.1",

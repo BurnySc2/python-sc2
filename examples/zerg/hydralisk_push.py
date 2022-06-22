@@ -1,6 +1,5 @@
 import random
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
@@ -126,7 +125,7 @@ class Hydralisk(BotAI):
 
 def main():
     run_game(
-        maps.get("(2)CatalystLE"),
+        "(2)CatalystLE",
         [Bot(Race.Zerg, Hydralisk()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         save_replay_as="ZvT.SC2Replay",

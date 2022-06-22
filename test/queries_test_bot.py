@@ -13,7 +13,6 @@ from typing import List, Union
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race
 from sc2.ids.ability_id import AbilityId
@@ -24,7 +23,6 @@ from sc2.position import Point2
 
 
 class TestBot(BotAI):
-
     def __init__(self):
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
@@ -44,7 +42,7 @@ class TestBot(BotAI):
         sys.exit(0)
 
     async def clear_map_center(self):
-        """ Spawn observer in map center, remove all enemy units, remove all own units. """
+        """Spawn observer in map center, remove all enemy units, remove all own units."""
         map_center = self.game_info.map_center
 
         # Spawn observer to be able to see enemy invisible units
@@ -80,18 +78,26 @@ class TestBot(BotAI):
             unit_type = [unit_type]
         for i in unit_type:
             if i == UnitTypeId.CREEPTUMOR:
-                await self.client.debug_create_unit([[i, 1, self.game_info.map_center + Point2((5, 5)), 2]])
+                await self.client.debug_create_unit(
+                    [[i, 1, self.game_info.map_center + Point2((5, 5)), 2]]
+                )
             else:
-                await self.client.debug_create_unit([[i, 1, self.game_info.map_center, 2]])
+                await self.client.debug_create_unit(
+                    [[i, 1, self.game_info.map_center, 2]]
+                )
 
     async def run_can_place(self) -> bool:
         # await self._advance_steps(200)
-        result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
+        result = await self.can_place(
+            AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center]
+        )
         return result[0]
 
     async def run_can_place_single(self) -> bool:
         # await self._advance_steps(200)
-        result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
+        result = await self.can_place(
+            AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center]
+        )
         return result[0]
 
     async def test_can_place_expect_true(self):
@@ -124,20 +130,28 @@ class TestBot(BotAI):
 
             result = await self.run_can_place()
             if result:
-                logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
+                logger.info(
+                    f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
+                )
             else:
                 logger.error(
                     f"Expected result to be True, but was False for test case: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
                 )
-            assert result, f"Expected result to be False, but was True for test case: {i}"
+            assert (
+                result
+            ), f"Expected result to be False, but was True for test case: {i}"
             result2 = await self.run_can_place_single()
             if result2:
-                logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
+                logger.info(
+                    f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
+                )
             else:
                 logger.error(
                     f"Expected result2 to be True, but was False for test case: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
                 )
-            assert result2, f"Expected result to be False, but was True for test case: {i}"
+            assert (
+                result2
+            ), f"Expected result to be False, but was True for test case: {i}"
             await self.clear_map_center()
 
     async def test_can_place_expect_false(self):
@@ -184,8 +198,12 @@ class TestBot(BotAI):
                     f"Expected result to be False, but was True for test case: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
                 )
             else:
-                logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
-            assert not result, f"Expected result to be False, but was True for test case: {i}"
+                logger.info(
+                    f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
+                )
+            assert (
+                not result
+            ), f"Expected result to be False, but was True for test case: {i}"
             await self.clear_map_center()
 
         # TODO Losing vision of a blocking enemy unit, check if can_place still returns False
@@ -195,14 +213,17 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
-
     async def on_step(self, iteration: int):
         for unit in self.units:
             unit.hold_position()
 
 
 def main():
-    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(
+        "Empty128",
+        [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())],
+        realtime=False,
+    )
 
 
 if __name__ == "__main__":

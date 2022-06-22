@@ -8,7 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from loguru import logger
 
-from sc2 import maps
+from sc2 import file_maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
@@ -18,16 +18,28 @@ from sc2.player import Bot, Computer
 
 
 class BatteryOverchargeBot(BotAI):
-
     async def on_start(self):
-        """ Spawn requires structures. """
+        """Spawn requires structures."""
         await self.client.debug_create_unit(
             [
-                [UnitTypeId.PYLON, 1, self.start_location.towards(self.game_info.map_center, 5), 1],
-                [UnitTypeId.SHIELDBATTERY, 1,
-                 self.start_location.towards(self.game_info.map_center, 5), 1],
-                [UnitTypeId.CYBERNETICSCORE, 1,
-                 self.start_location.towards(self.game_info.map_center, 5), 1],
+                [
+                    UnitTypeId.PYLON,
+                    1,
+                    self.start_location.towards(self.game_info.map_center, 5),
+                    1,
+                ],
+                [
+                    UnitTypeId.SHIELDBATTERY,
+                    1,
+                    self.start_location.towards(self.game_info.map_center, 5),
+                    1,
+                ],
+                [
+                    UnitTypeId.CYBERNETICSCORE,
+                    1,
+                    self.start_location.towards(self.game_info.map_center, 5),
+                    1,
+                ],
             ]
         )
 
@@ -48,9 +60,11 @@ class BatteryOverchargeBot(BotAI):
 
 def main():
     run_game(
-        maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, BatteryOverchargeBot()),
-         Computer(Race.Terran, Difficulty.Medium)],
+        "AcropolisLE",
+        [
+            Bot(Race.Protoss, BatteryOverchargeBot()),
+            Computer(Race.Terran, Difficulty.Medium),
+        ],
         realtime=False,
         disable_fog=True,
     )

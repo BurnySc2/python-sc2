@@ -1,7 +1,6 @@
 import numpy as np
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race, Result
 from sc2.ids.ability_id import AbilityId
@@ -143,7 +142,7 @@ class ZergRushBot(BotAI):
 
 def main():
     run_game(
-        maps.get("AcropolisLE"),
+        "AcropolisLE",
         [Bot(Race.Zerg, ZergRushBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         save_replay_as="ZvT.SC2Replay",

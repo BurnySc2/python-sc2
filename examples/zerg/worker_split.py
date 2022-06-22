@@ -9,7 +9,6 @@ import asyncio
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.main import run_game
@@ -42,7 +41,7 @@ class WorkerSplitBot(BotAI):
 
 def main():
     run_game(
-        maps.get("AcropolisLE"),
+        "AcropolisLE",
         [Bot(Race.Zerg, WorkerSplitBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=True,
     )

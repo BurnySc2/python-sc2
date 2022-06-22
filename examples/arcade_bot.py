@@ -4,8 +4,7 @@ To play an arcade map, you need to download the map first.
 Open the StarCraft2 Map Editor through the Battle.net launcher, in the top left go to
 File -> Open -> (Tab) Blizzard -> Log in -> with "Source: Map/Mod Name" search for your desired map, in this example "Marine Split Challenge-LOTV" map created by printf
 Hit "Ok" and confirm the download. Now that the map is opened, go to "File -> Save as" to store it on your hard drive.
-Now load the arcade map by entering your map name below in
-sc2.maps.get("YOURMAPNAME") without the .SC2Map extension
+Now load the arcade map by entering your map name below.
 
 
 Map info:
@@ -23,7 +22,6 @@ from typing import Union
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race
 from sc2.ids.ability_id import AbilityId
@@ -37,7 +35,6 @@ from sc2.unit import Unit
 
 
 class MarineSplitChallenge(BotAI):
-
     async def on_start(self):
         await self.chat_send("Edit this message for automatic chat commands.")
         self.client.game_step = 2
@@ -120,7 +117,7 @@ class MarineSplitChallenge(BotAI):
 
 def main():
     run_game(
-        maps.get("Marine Split Challenge"),
+        "Marine Split Challenge",
         [Bot(Race.Terran, MarineSplitChallenge())],
         realtime=False,
         save_replay_as="Example.SC2Replay",

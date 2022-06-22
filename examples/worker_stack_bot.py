@@ -5,7 +5,7 @@ This is only a demo that works on game start, but does not work when adding more
 This bot exists only to showcase how to keep track of mineral tag over multiple steps / frames.
 
 Task for the user who wants to enhance this bot:
-- Allow mining from vespene geysirs
+- Allow mining from vespene geysers
 - Remove dead workers and re-assign (new) workers to that mineral patch, or pick a worker from a long distance mineral patch
 - Re-assign workers when new base is completed (or near complete)
 - Re-assign workers when base died
@@ -17,7 +17,6 @@ from typing import Dict, Set
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.main import run_game
@@ -106,7 +105,7 @@ class WorkerStackBot(BotAI):
 
 def main():
     run_game(
-        maps.get("AcropolisLE"),
+        "AcropolisLE",
         [Bot(Race.Protoss, WorkerStackBot()),
          Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,

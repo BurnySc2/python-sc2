@@ -9,7 +9,6 @@ import asyncio
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race, Result
 from sc2.ids.ability_id import AbilityId
@@ -22,7 +21,6 @@ on_end_was_called: bool = False
 
 
 class RealTimeTestBot(BotAI):
-
     async def on_before_start(self):
         mf = self.mineral_field
         for w in self.workers:
@@ -36,7 +34,7 @@ class RealTimeTestBot(BotAI):
         await asyncio.sleep(1)
 
     async def on_start(self):
-        """ This function is run after the expansion locations and ramps are calculated. """
+        """This function is run after the expansion locations and ramps are calculated."""
         self.client.game_step = 1
 
     async def on_step(self, iteration):
@@ -70,7 +68,9 @@ class RealTimeTestBot(BotAI):
                     continue
                 if self.enemy_structures.closer_than(10, expansion_location):
                     continue
-                await self.client.debug_create_unit([[UnitTypeId.NEXUS, 1, expansion_location, 1]])
+                await self.client.debug_create_unit(
+                    [[UnitTypeId.NEXUS, 1, expansion_location, 1]]
+                )
                 logger.info(
                     f"{self.time_formatted} {self.state.game_loop} Spawning a nexus {self.supply_used} / {self.supply_cap}"
                 )
@@ -79,14 +79,18 @@ class RealTimeTestBot(BotAI):
 
         # Spawn new pylon in map center if no more expansions are available
         if self.supply_left == 0 and not made_nexus:
-            await self.client.debug_create_unit([[UnitTypeId.PYLON, 1, self.game_info.map_center, 1]])
+            await self.client.debug_create_unit(
+                [[UnitTypeId.PYLON, 1, self.game_info.map_center, 1]]
+            )
 
         # Don't get disturbed during this test
         if self.enemy_units:
             await self.client.debug_kill_unit(self.enemy_units)
 
         if self.supply_used >= 199 or self.time > 7 * 60:
-            logger.info("Test successful, bot reached 199 supply without queueing two probes at once")
+            logger.info(
+                "Test successful, bot reached 199 supply without queueing two probes at once"
+            )
             await self.client.leave()
 
     async def on_building_construction_complete(self, unit: Unit):
@@ -102,9 +106,11 @@ class RealTimeTestBot(BotAI):
 
 def main():
     run_game(
-        maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, RealTimeTestBot()),
-         Computer(Race.Terran, Difficulty.Medium)],
+        "AcropolisLE",
+        [
+            Bot(Race.Protoss, RealTimeTestBot()),
+            Computer(Race.Terran, Difficulty.Medium),
+        ],
         realtime=True,
         disable_fog=True,
     )

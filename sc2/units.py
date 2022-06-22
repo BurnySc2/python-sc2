@@ -63,7 +63,11 @@ class Units(list):
         return Units(
             chain(
                 iter(self),
-                (other_unit for other_unit in other if other_unit.tag not in (self_unit.tag for self_unit in self)),
+                (
+                    other_unit
+                    for other_unit in other
+                    if other_unit.tag not in (self_unit.tag for self_unit in self)
+                ),
             ),
             self._bot_object,
         )
@@ -75,7 +79,11 @@ class Units(list):
         return Units(
             chain(
                 iter(self),
-                (other_unit for other_unit in other if other_unit.tag not in (self_unit.tag for self_unit in self)),
+                (
+                    other_unit
+                    for other_unit in other
+                    if other_unit.tag not in (self_unit.tag for self_unit in self)
+                ),
             ),
             self._bot_object,
         )
@@ -85,7 +93,11 @@ class Units(list):
         :param other:
         """
         return Units(
-            (other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self)),
+            (
+                other_unit
+                for other_unit in other
+                if other_unit.tag in (self_unit.tag for self_unit in self)
+            ),
             self._bot_object,
         )
 
@@ -94,7 +106,11 @@ class Units(list):
         :param other:
         """
         return Units(
-            (self_unit for self_unit in self if self_unit.tag not in (other_unit.tag for other_unit in other)),
+            (
+                self_unit
+                for self_unit in self
+                if self_unit.tag not in (other_unit.tag for other_unit in other)
+            ),
             self._bot_object,
         )
 
@@ -117,10 +133,7 @@ class Units(list):
         """
         :param tag:
         """
-        for unit in self:
-            if unit.tag == tag:
-                return unit
-        return None
+        return next((unit for unit in self if unit.tag == tag), None)
 
     def by_tag(self, tag: int) -> Unit:
         """
@@ -140,9 +153,8 @@ class Units(list):
         """
         :param n:
         """
-        if n >= self.amount:
-            return self
-        return self.subgroup(self[:n])
+        return self if n >= self.amount else self.subgroup(self[:n])
+
 
     @property
     def random(self) -> Unit:
@@ -153,7 +165,7 @@ class Units(list):
         return random.choice(self) if self else other
 
     def random_group_of(self, n: int) -> Units:
-        """ Returns self if n >= self.amount. """
+        """Returns self if n >= self.amount."""
         if n < 1:
             return Units([], self._bot_object)
         if n >= self.amount:
@@ -185,6 +197,7 @@ class Units(list):
         """
         return self.filter(lambda x: unit.target_in_range(x, bonus_distance=bonus_distance))
 
+
     def closest_distance_to(self, position: Union[Unit, Point2]) -> float:
         """Returns the distance between the closest unit from this group to the target unit.
 
@@ -200,7 +213,13 @@ class Units(list):
         """
         assert self, "Units object is empty"
         if isinstance(position, Unit):
-            return min(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self)**0.5
+            return (
+                min(
+                    self._bot_object._distance_squared_unit_to_unit(unit, position)
+                    for unit in self
+                )
+                ** 0.5
+            )
         return min(self._bot_object._distance_units_to_pos(self, position))
 
     def furthest_distance_to(self, position: Union[Unit, Point2]) -> float:
@@ -219,8 +238,33 @@ class Units(list):
         """
         assert self, "Units object is empty"
         if isinstance(position, Unit):
-            return max(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self)**0.5
+            return (
+                max(
+                    self._bot_object._distance_squared_unit_to_unit(unit, position)
+                    for unit in self
+                )
+                ** 0.5
+            )
         return max(self._bot_object._distance_units_to_pos(self, position))
+
+
+    @property
+    def health_lowest(self) -> Unit:
+        """
+        Returns the lowest HP unit in Units
+        """
+        assert self, "Units object is empty"
+        return sorted(iter(self), key=lambda unit: unit.health)[0]
+
+
+    @property
+    def health_highest(self) -> Unit:
+        """
+        Returns the highest HP unit in Units
+        """
+        assert self, "Units object is empty"
+        return sorted(iter(self), key=lambda unit: unit.health)[-1]
+
 
     def closest_to(self, position: Union[Unit, Point2]) -> Unit:
         """Returns the closest unit (from this Units object) to the target unit or position.
@@ -597,7 +641,7 @@ class Units(list):
         :param other:
         """
         assert isinstance(other, set), (
-            "Please use a set as this filter function is already fairly slow. For example" +
+            "Please use a set as this filter function is already fairly slow. For example"
             " 'self.units.same_tech({UnitTypeId.LAIR})'"
         )
         tech_alias_types: Set[int] = {u.value for u in other}

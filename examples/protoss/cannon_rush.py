@@ -1,6 +1,5 @@
 import random
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.unit_typeid import UnitTypeId
@@ -63,9 +62,11 @@ class CannonRushBot(BotAI):
 
 def main():
     run_game(
-        maps.get("(2)CatalystLE"),
-        [Bot(Race.Protoss, CannonRushBot(), name="CheeseCannon"),
-         Computer(Race.Protoss, Difficulty.Medium)],
+        "CatalystLE",
+        [
+            Bot(Race.Protoss, CannonRushBot(), name="CheeseCannon"),
+            Computer(Race.Protoss, Difficulty.Medium),
+        ],
         realtime=False,
     )
 

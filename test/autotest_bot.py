@@ -5,7 +5,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from loguru import logger
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Race
 from sc2.ids.ability_id import AbilityId
@@ -19,7 +18,6 @@ from sc2.units import Units
 
 
 class TestBot(BotAI):
-
     def __init__(self):
         BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
@@ -28,7 +26,8 @@ class TestBot(BotAI):
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}") for index in range(4000)
+            getattr(self, f"test_botai_actions{index}")
+            for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_done_by_name = set()
@@ -100,9 +99,13 @@ class TestBot(BotAI):
         for loc in self.enemy_start_locations:
             assert isinstance(loc, Point2), loc
             assert loc.distance_to(self.start_location) > 20, (loc, self.start_location)
-        assert self.main_base_ramp.top_center.distance_to(self.start_location) < 30, self.main_base_ramp.top_center
+        assert (
+            self.main_base_ramp.top_center.distance_to(self.start_location) < 30
+        ), self.main_base_ramp.top_center
         assert self.can_afford(UnitTypeId.SCV)
-        assert self.owned_expansions == {self.townhalls.first.position: self.townhalls.first}
+        assert self.owned_expansions == {
+            self.townhalls.first.position: self.townhalls.first
+        }
         # Test if bot start location is in expansion locations
         assert self.townhalls.random.position in self.expansion_locations_list
         # Test if enemy start locations are in expansion locations
@@ -115,17 +118,26 @@ class TestBot(BotAI):
     async def test_botai_functions(self):
         for location in self.expansion_locations_list:
             # Can't build on spawn locations, skip these
-            if location in self.enemy_start_locations or location == self.start_location:
+            if (
+                location in self.enemy_start_locations
+                or location == self.start_location
+            ):
                 continue
             assert (await self.can_place(UnitTypeId.COMMANDCENTER, [location]))[0]
-            assert (await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location]))[0]
+            assert (
+                await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location])
+            )[0]
             # TODO Remove the following two lines if can_place function gets fully converted to only accept list of positions
             assert await self.can_place(UnitTypeId.COMMANDCENTER, [location])
             assert await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location])
             assert await self.can_place_single(UnitTypeId.COMMANDCENTER, location)
-            assert await self.can_place_single(AbilityId.TERRANBUILD_COMMANDCENTER, location)
+            assert await self.can_place_single(
+                AbilityId.TERRANBUILD_COMMANDCENTER, location
+            )
             await self.find_placement(UnitTypeId.COMMANDCENTER, location)
-        assert len(await self.get_available_abilities(self.workers)) == self.workers.amount
+        assert (
+            len(await self.get_available_abilities(self.workers)) == self.workers.amount
+        )
         self.tests_done_by_name.add("test_botai_functions")
 
     # Test self.state variables
@@ -134,7 +146,9 @@ class TestBot(BotAI):
         assert len(self.state.action_errors) == 0, self.state.action_errors
         assert len(self.state.chat) == 0, self.state.chat
         assert self.state.game_loop > 0, self.state.game_loop
-        assert self.state.score.collection_rate_minerals >= 0, self.state.score.collection_rate_minerals
+        assert (
+            self.state.score.collection_rate_minerals >= 0
+        ), self.state.score.collection_rate_minerals
         assert len(self.state.upgrades) == 0, self.state.upgrades
         self.tests_done_by_name.add("test_game_state_static_variables")
 
@@ -162,11 +176,16 @@ class TestBot(BotAI):
 
         def temp_filter(unit: Unit):
             return (
-                unit.is_moving or unit.is_patrolling or unit.orders and unit.orders[0] == AbilityId.HOLDPOSITION_HOLD
+                unit.is_moving
+                or unit.is_patrolling
+                or unit.orders
+                and unit.orders[0] == AbilityId.HOLDPOSITION_HOLD
                 or unit.is_attacking
             )
 
-        while self.units.filter(lambda unit: temp_filter(unit)).amount < len(self.scv_action_list):
+        while self.units.filter(lambda unit: temp_filter(unit)).amount < len(
+            self.scv_action_list
+        ):
             scv: Unit
             for index, scv in enumerate(self.workers):
                 if index > len(self.scv_action_list):
@@ -191,7 +210,10 @@ class TestBot(BotAI):
     async def test_botai_actions3(self):
         center = self.game_info.map_center
 
-        while self.units.filter(lambda x: x.is_moving).amount < 6 and self.units.gathering.amount >= 6:
+        while (
+            self.units.filter(lambda x: x.is_moving).amount < 6
+            and self.units.gathering.amount >= 6
+        ):
             scvs = self.workers
             scvs1 = scvs[:6]
             scvs2 = scvs[6:]
@@ -228,7 +250,12 @@ class TestBot(BotAI):
 
             await self._advance_steps(10)
 
-            assert self.structures_without_construction_SCVs(UnitTypeId.COMMANDCENTER).amount == 0
+            assert (
+                self.structures_without_construction_SCVs(
+                    UnitTypeId.COMMANDCENTER
+                ).amount
+                == 0
+            )
 
             if self.townhalls(UnitTypeId.COMMANDCENTER).amount >= 2:
                 assert self.townhalls(UnitTypeId.COMMANDCENTER).not_ready.amount == 1
@@ -249,7 +276,9 @@ class TestBot(BotAI):
 
         while 1:
             if self.units(UnitTypeId.REAPER).amount < 10:
-                await self.client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
+                await self.client.debug_create_unit(
+                    [[UnitTypeId.REAPER, 10, center, 1]]
+                )
 
             for reaper in self.units(UnitTypeId.REAPER):
                 reaper(AbilityId.KD8CHARGE_KD8CHARGE, center)
@@ -275,7 +304,9 @@ class TestBot(BotAI):
         center = self.game_info.map_center
         while 1:
             if self.units(UnitTypeId.RAVAGER).amount < 10:
-                await self.client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
+                await self.client.debug_create_unit(
+                    [[UnitTypeId.RAVAGER, 10, center, 1]]
+                )
             for ravager in self.units(UnitTypeId.RAVAGER):
                 ravager(AbilityId.EFFECT_CORROSIVEBILE, center)
 
@@ -305,11 +336,19 @@ class TestBot(BotAI):
         if not self.structures(UnitTypeId.HATCHERY):
             await self.client.debug_create_unit([[UnitTypeId.HATCHERY, 1, center, 1]])
         if not self.structures(UnitTypeId.SPAWNINGPOOL):
-            await self.client.debug_create_unit([[UnitTypeId.SPAWNINGPOOL, 1, center, 1]])
+            await self.client.debug_create_unit(
+                [[UnitTypeId.SPAWNINGPOOL, 1, center, 1]]
+            )
 
         while 1:
-            townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
-            if townhalls.amount == 3 and self.minerals >= 450 and not self.already_pending(UnitTypeId.QUEEN):
+            townhalls = self.structures.of_type(
+                {UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY}
+            )
+            if (
+                townhalls.amount == 3
+                and self.minerals >= 450
+                and not self.already_pending(UnitTypeId.QUEEN)
+            ):
                 self.train(UnitTypeId.QUEEN, amount=3)
                 # Equivalent to:
                 # for townhall in townhalls:
@@ -320,7 +359,9 @@ class TestBot(BotAI):
                 break
 
         # Cleanup
-        townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
+        townhalls = self.structures.of_type(
+            {UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY}
+        )
         queens = self.units(UnitTypeId.QUEEN)
         pool = self.structures(UnitTypeId.SPAWNINGPOOL)
         await self.client.debug_kill_unit(townhalls | queens | pool)
@@ -338,7 +379,9 @@ class TestBot(BotAI):
         while 1:
             HTs = self.units(UnitTypeId.HIGHTEMPLAR)
             if HTs.amount < target_amount:
-                await self.client.debug_create_unit([[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]])
+                await self.client.debug_create_unit(
+                    [[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]]
+                )
 
             else:
                 for ht in HTs:
@@ -380,11 +423,19 @@ class TestBot(BotAI):
 
             # Spawn units
             if not bane_nests:
-                await self.client.debug_create_unit([[UnitTypeId.BANELINGNEST, 1, center, 1]])
+                await self.client.debug_create_unit(
+                    [[UnitTypeId.BANELINGNEST, 1, center, 1]]
+                )
             if banes.amount + bane_cocoons.amount + lings.amount < target_amount:
-                await self.client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]])
+                await self.client.debug_create_unit(
+                    [[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]]
+                )
 
-            if lings.amount >= target_amount and self.minerals >= 10_000 and self.vespene >= 10_000:
+            if (
+                lings.amount >= target_amount
+                and self.minerals >= 10_000
+                and self.vespene >= 10_000
+            ):
                 for ling in lings:
                     ling.train(UnitTypeId.BANELING)
             await self._advance_steps(20)
@@ -415,7 +466,9 @@ class TestBot(BotAI):
             await self._advance_steps(2)
 
         while not self.enemy_units(UnitTypeId.INFESTOR):
-            await self.client.debug_create_unit([[UnitTypeId.INFESTOR, 1, map_center, 2]])
+            await self.client.debug_create_unit(
+                [[UnitTypeId.INFESTOR, 1, map_center, 2]]
+            )
             await self._advance_steps(2)
 
         raven = self.units(UnitTypeId.RAVEN)[0]
@@ -448,14 +501,18 @@ class TestBot(BotAI):
         while 1:
             # Once depot is under construction: debug kill scv -> advance simulation: should now match the test case
             if self.structures(UnitTypeId.SUPPLYDEPOT).not_ready.amount == 1:
-                construction_scvs: Units = self.workers.filter(lambda worker: worker.is_constructing_scv)
+                construction_scvs: Units = self.workers.filter(
+                    lambda worker: worker.is_constructing_scv
+                )
                 if construction_scvs:
                     await self.client.debug_kill_unit(construction_scvs)
                     await self._advance_steps(8)
                     await self._advance_steps(8)
 
                     # Test case
-                    assert not self.workers.filter(lambda worker: worker.is_constructing_scv)
+                    assert not self.workers.filter(
+                        lambda worker: worker.is_constructing_scv
+                    )
                     assert self.structures_without_construction_SCVs.amount >= 1
                     break
 
@@ -484,7 +541,6 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
-
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
@@ -505,7 +561,11 @@ class EmptyBot(BotAI):
 
 
 def main():
-    run_game(maps.get("Acropolis"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(
+        "AcropolisLE",
+        [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())],
+        realtime=False,
+    )
 
 
 if __name__ == "__main__":

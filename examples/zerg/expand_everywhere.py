@@ -2,7 +2,6 @@ import random
 from contextlib import suppress
 from typing import Set
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.unit_typeid import UnitTypeId
@@ -69,7 +68,7 @@ class ExpandEverywhere(BotAI):
 
 def main():
     run_game(
-        maps.get("AcropolisLE"),
+        "AcropolisLE",
         [Bot(Race.Zerg, ExpandEverywhere()),
          Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,

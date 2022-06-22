@@ -9,7 +9,6 @@ Bot made by Burny
 import random
 from typing import Set
 
-from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
@@ -387,7 +386,7 @@ class MassReaperBot(BotAI):
 def main():
     # Multiple difficulties for enemy bots available https://github.com/Blizzard/s2client-api/blob/ce2b3c5ac5d0c85ede96cef38ee7ee55714eeb2f/include/sc2api/sc2_gametypes.h#L30
     run_game(
-        maps.get("AcropolisLE"),
+        "AcropolisLE",
         [Bot(Race.Terran, MassReaperBot()), Computer(Race.Zerg, Difficulty.VeryHard)],
         realtime=False,
     )
