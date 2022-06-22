@@ -213,13 +213,7 @@ class Units(list):
         """
         assert self, "Units object is empty"
         if isinstance(position, Unit):
-            return (
-                min(
-                    self._bot_object._distance_squared_unit_to_unit(unit, position)
-                    for unit in self
-                )
-                ** 0.5
-            )
+            return min(self._bot_object._distance_squared_unit_to_unit(unit, position) for unit in self) ** 0.5
         return min(self._bot_object._distance_units_to_pos(self, position))
 
     def furthest_distance_to(self, position: Union[Unit, Point2]) -> float:

@@ -87,10 +87,7 @@ class GameMatch:
         }
 
     def __repr__(self):
-        p1 = self.players[0].name or p1
-        p2 = self.players[1].name or p2
-        return f"Map: {self.map_sc2.name}, {p1} vs {p2}, realtime={self.realtime}, seed={self.random_seed}"
-
+        return f"Map: {self.map_sc2.name}, {self.players[0].name} vs {self.players[1].name}, realtime={self.realtime}, seed={self.random_seed}"
 
 async def _play_game_human(client, player_id, realtime, game_time_limit):
     while True:
@@ -536,7 +533,7 @@ def get_replay_version(replay_path: Union[str, Path]) -> Tuple[str, str]:
 # TODO Deprecate run_game function in favor of run_multiple_games
 def run_game(
     map_name: Union[MapPath,str],
-    players: List[AbstractPlayer], 
+    players: List[AbstractPlayer],
     alternate_install_path: Optional[str] = None,
     **kwargs
 ) -> Union[Result, List[Optional[Result]]]:
@@ -778,9 +775,7 @@ async def maintain_SCII_count(
 
             controllers.extend(c for c in new_controllers if isinstance(c, Controller))
             if len(controllers) == count:
-                await asyncio.wait_for(
-                    asyncio.gather(*(c.ping() for c in controllers)), timeout=20
-                )
+                await asyncio.wait_for(asyncio.gather(*(c.ping() for c in controllers)), timeout=20)
                 break
             extra = [
                 extra[i]
