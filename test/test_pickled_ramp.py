@@ -133,7 +133,7 @@ class TestClass:
         ), f"Too many expansions found: {len(bot.expansion_locations_list)}"
         # On N player maps, it is expected that there are N*X bases because of symmetry, at least for maps designed for 1vs1
         # Those maps in the list have an un-even expansion count
-        expect_even_expansion_count = 1 if bot.game_info.map_name in ["StargazersAIE", "StasisLE"] else 0
+        expect_even_expansion_count = 1 if bot.game_info.map_name in ["StargazersAIE", "Stasis LE"] else 0
         assert (
             len(bot.expansion_locations_list) % (len(bot.enemy_start_locations) + 1) == expect_even_expansion_count
         ), f"{bot.expansion_locations_list}"
