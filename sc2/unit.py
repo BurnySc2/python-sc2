@@ -975,10 +975,7 @@ class Unit:
         """Returns the target tag (if it is a Unit) or Point2 (if it is a Position)
         from the first order, returns None if the unit is idle"""
         if self.orders:
-            target = self.orders[0].target
-            if isinstance(target, int):
-                return target
-            return Point2.from_proto(target)
+            return self.orders[0].target
         return None
 
     @property

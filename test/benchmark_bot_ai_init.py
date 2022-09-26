@@ -1,8 +1,3 @@
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
 from test.test_pickled_data import MAPS, get_map_specific_bot
 
 

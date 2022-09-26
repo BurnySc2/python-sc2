@@ -79,5 +79,5 @@ repos:
     name: pytest
     stages: [commit]
     language: system
-    entry: poetry run pytest test
+    entry: poetry run python -m pytest test
     pass_filenames: false

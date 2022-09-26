@@ -83,28 +83,28 @@ jobs:
 
     - name: Run pytest
       run: |
-        poetry run pytest test
+        poetry run python -m pytest test
 
       # Run benchmarks
     - name: Run benchmark benchmark_array_creation
       run: |
-        poetry run pytest test/benchmark_array_creation.py
+        poetry run python -m pytest test/benchmark_array_creation.py
 
     - name: Run benchmark benchmark_distance_two_points
       run: |
-        poetry run pytest test/benchmark_distance_two_points.py
+        poetry run python -m pytest test/benchmark_distance_two_points.py
 
     - name: Run benchmark benchmark_distances_cdist
       run: |
-        poetry run pytest test/benchmark_distances_cdist.py
+        poetry run python -m pytest test/benchmark_distances_cdist.py
 
     - name: Run benchmark benchmark_distances_points_to_point
       run: |
-        poetry run pytest test/benchmark_distances_points_to_point.py
+        poetry run python -m pytest test/benchmark_distances_points_to_point.py
 
     - name: Run benchmark benchmark_distances_units
       run: |
-        poetry run pytest test/benchmark_distances_units.py
+        poetry run python -m pytest test/benchmark_distances_units.py
 
   run_test_bots:
     # Run test bots that download the SC2 linux client and run it

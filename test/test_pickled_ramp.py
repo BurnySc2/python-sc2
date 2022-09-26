@@ -7,10 +7,7 @@ This test/script uses the pickle files located in "python-sc2/test/pickle_data" 
 It will load the pickle files, recreate the bot object from scratch and tests most of the bot properties and functions.
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import time
 from pathlib import Path
 from test.test_pickled_data import MAPS, get_map_specific_bot

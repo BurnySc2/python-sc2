@@ -1,10 +1,6 @@
 """
 This bot tests if battery overcharge crashes the bot.
 """
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from loguru import logger
 

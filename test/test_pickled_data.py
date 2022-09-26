@@ -7,17 +7,11 @@ This test/script uses the pickle files located in "python-sc2/test/pickle_data" 
 It will load the pickle files, recreate the bot object from scratch and tests most of the bot properties and functions.
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
-import os
-import sys
-from contextlib import suppress
 
-from sc2.client import Client
-from sc2.pixel_map import PixelMap
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import lzma
 import pickle
 import random
+from contextlib import suppress
 from pathlib import Path
 from typing import List
 
@@ -26,6 +20,7 @@ from hypothesis import strategies as st
 from loguru import logger
 
 from sc2.bot_ai import BotAI
+from sc2.client import Client
 from sc2.data import CloakState, Race
 from sc2.game_data import Cost, GameData
 from sc2.game_info import GameInfo
@@ -33,6 +28,7 @@ from sc2.game_state import GameState
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
+from sc2.pixel_map import PixelMap
 from sc2.position import Point2, Point3, Rect, Size
 from sc2.unit import Unit
 from sc2.units import Units
