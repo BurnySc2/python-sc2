@@ -1,7 +1,10 @@
 """
 This bot tests if on 'realtime=True' any nexus has more than 1 probe in the queue.
 """
+import os
+import sys
 
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import asyncio
 
 from loguru import logger
