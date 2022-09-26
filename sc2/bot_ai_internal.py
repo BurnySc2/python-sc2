@@ -623,7 +623,7 @@ class BotAIInternal(ABC):
 
         for unit in MessageToDict(
             self.state.observation_raw, including_default_value_fields=False, preserving_proto_field_name=True
-        )['units']:
+        ).get('units', []):
             if unit.get('is_blip'):
                 self.blips.add(Blip(unit))
             else:
