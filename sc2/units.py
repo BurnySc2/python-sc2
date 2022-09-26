@@ -606,7 +606,7 @@ class Units(list):
             for same in unit_data[unitType.value]._proto.tech_alias:
                 tech_alias_types.add(same)
         return self.filter(
-            lambda unit: unit._proto.unit_type in tech_alias_types or
+            lambda unit: unit.unit_type in tech_alias_types or
             any(same in tech_alias_types for same in unit._type_data._proto.tech_alias)
         )
 
@@ -638,8 +638,7 @@ class Units(list):
             unit_alias_types.add(unit_data[unitType.value]._proto.unit_alias)
         unit_alias_types.discard(0)
         return self.filter(
-            lambda unit: unit._proto.unit_type in unit_alias_types or unit._type_data._proto.unit_alias in
-            unit_alias_types
+            lambda unit: unit.unit_type in unit_alias_types or unit._type_data._proto.unit_alias in unit_alias_types
         )
 
     @cached_property
@@ -647,12 +646,10 @@ class Units(list):
         """ Returns the central position of all units. """
         assert self, "Units object is empty"
         amount = self.amount
-        return Point2(
-            (
-                sum(unit._proto.pos.x for unit in self) / amount,
-                sum(unit._proto.pos.y for unit in self) / amount,
-            )
-        )
+        return Point2((
+            sum(unit.pos['x'] for unit in self) / amount,
+            sum(unit.pos['y'] for unit in self) / amount,
+        ))
 
     @property
     def selected(self) -> Units:

@@ -13,6 +13,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import time
 from pathlib import Path
+from test.test_pickled_data import MAPS, get_map_specific_bot
 
 from loguru import logger
 
@@ -20,7 +21,6 @@ from sc2.game_info import Ramp
 from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-from test.test_pickled_data import get_map_specific_bot, MAPS
 
 
 # From https://docs.pytest.org/en/latest/example/parametrize.html#a-quick-port-of-testscenarios

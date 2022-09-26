@@ -3,8 +3,23 @@ from __future__ import annotations
 
 import math
 import warnings
+from dataclasses import dataclass, field
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Callable, FrozenSet, List, Optional, Set, Tuple, TypeVar, Union, Dict
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    Dict,
+    FrozenSet,
+    List,
+    Literal,
+    Optional,
+    Set,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 from sc2.constants import (
     CAN_BE_ATTACKED,
@@ -50,7 +65,7 @@ from sc2.constants import (
     UNIT_PHOTONCANNON,
     transforming,
 )
-from sc2.data import Alliance, Attribute, CloakState, Race, Target, race_gas, warpgate_abilities, DisplayType
+from sc2.data import Alliance, Attribute, CloakState, DisplayType, Race, Target, race_gas, warpgate_abilities
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
@@ -62,30 +77,38 @@ if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
     from sc2.game_data import AbilityData, UnitTypeData
 
-from dataclasses import dataclass, field
-from typing import ClassVar
 
-
-class UnitOrder:
+@dataclass
+class RallyTarget:
+    point: Point2
+    tag: Optional[int] = None
 
     @classmethod
-    def from_proto(cls, proto, bot_object: BotAI):
+    def from_proto(cls, proto: dict) -> RallyTarget:
         return cls(
-            bot_object.game_data.abilities[proto.ability_id],
-            (proto.target_world_space_pos if proto.HasField("target_world_space_pos") else proto.target_unit_tag),
-            proto.progress,
+            proto["point"],
+            int(proto["tag"]) if ("tag" in proto) else None,
         )
 
-    def __init__(self, ability: AbilityData, target, progress: float = 0):
-        """
-        :param ability:
-        :param target:
-        :param progress:
-        """
-        self.ability: AbilityData = ability
-        # This can be an int (if target is unit) or proto Point2 object, which needs to be converted using 'Point2.from_proto(target)'
-        self.target = target
-        self.progress: float = progress
+
+@dataclass
+class UnitOrder:
+    ability: AbilityData  # TODO: Should this be AbilityId instead?
+    target: Optional[Union[int, Point2]] = None
+    progress: float = 0
+
+    @classmethod
+    def from_proto(cls, proto: dict, bot_object: BotAI) -> UnitOrder:
+        target = None
+        if "target_world_space_pos" in proto:
+            target = proto["target_world_space_pos"]
+        if "target_unit_tag" in proto:
+            target = int(proto["target_unit_tag"])
+        return cls(
+            ability=bot_object.game_data.abilities[proto['ability_id']],
+            target=target,
+            progress=proto['progress'] if "progress" in proto else 0,
+        )
 
     def __repr__(self) -> str:
         return f"UnitOrder({self.ability}, {self.target}, {self.progress})"
@@ -97,7 +120,8 @@ T = TypeVar("T")
 class CacheDict(dict):
 
     def retrieve_and_set(self, key: Any, func: Callable[[], T]) -> T:
-        """ Either return the value at a certain key, or set the return value of a function to that key, then return that value. """
+        """ Either return the value at a certain key,
+        or set the return value of a function to that key, then return that value. """
         if key in self:
             return self[key]
         self[key] = func()
@@ -107,19 +131,28 @@ class CacheDict(dict):
 # pylint: disable=R0904
 @dataclass
 class Unit:
-    display_type: DisplayType = ""  # type: ignore
-    alliance: Alliance = ""  # type: ignore
-    tag: int = ""  # type: ignore
+    """
+    Same definition as in
+    https://github.com/Blizzard/s2client-proto/blob/63615821fad543d570d65f8d7ab67f71f33cf663/s2clientprotocol/raw.proto#L99
+    # TODO: Add docstring and short information on each variable
+    """
+    display_type: Optional[DisplayType] = None
+    alliance: Optional[Alliance] = None
+
+    tag: int = "0"  # type: ignore
     unit_type: int = 0
     owner: int = 0
-    pos: Dict[str, float] = field(default_factory=dict)
+
+    pos: Dict[Literal["x", "y", "z"], float] = field(default_factory=dict)
     facing: float = 0
     radius: float = 0
     build_progress: float = 0
-    cloak: CloakState = ""  # type: ignore
+    cloak: Optional[CloakState] = None
     buff_ids: List[int] = field(default_factory=list)
+
     detect_range: float = 0
     radar_range: float = 0
+
     is_selected: bool = False
     is_on_screen: bool = False
     is_blip: bool = False
@@ -129,6 +162,7 @@ class Unit:
     armor_upgrade_level: int = 0
     shield_upgrade_level: int = 0
 
+    # Not populated for snapshots
     health: float = 0
     health_max: float = 0
     shield: float = 0
@@ -141,31 +175,49 @@ class Unit:
     is_burrowed: bool = False
     is_hallucination: bool = False
 
+    # Not populated for enemies
     orders: List[UnitOrder] = field(default_factory=list)
-    add_on_tag: int = 0
+    add_on_tag: int = "0"  # type: ignore
+    # self.passengeers only has a few fields filled
+    # https://github.com/Blizzard/s2client-proto/blob/63615821fad543d570d65f8d7ab67f71f33cf663/s2clientprotocol/raw.proto#L83-L92
     passengers: List[Unit] = field(default_factory=list)
     cargo_space_taken: int = 0
     cargo_space_max: int = 0
     assigned_harvesters: int = 0
     ideal_harvesters: int = 0
-    weapon_cooldown: float = 0
-    engaged_target_tag: int = 0
+    weapon_cooldown: float = -1
+    engaged_target_tag: int = "0"  # type: ignore
     buff_duration_remain: int = 0
     buff_duration_max: int = 0
-    rally_targets: list[int] = field(default_factory=list)
+    rally_targets: List[RallyTarget] = field(default_factory=list)
 
+    # Internal calculation
     bot_object: BotAI = None  # type: ignore
     distance_calculation_index: int = 0
     base_build: int = 0
 
+    # Cache mapping of integer to UnitTypeId
     class_cache: ClassVar[CacheDict] = CacheDict()
 
     def __post_init__(self):
+        """ Convert improperly given argument types to enum or internal types. """
         self.tag = int(self.tag)
-        self.display_type = DisplayType[self.display_type]
-        self.alliance = Alliance[self.alliance]
-        self.cloak = CloakState[self.cloak]
-        self.orders = []
+        self.add_on_tag = int(self.add_on_tag)
+        self.engaged_target_tag = int(self.engaged_target_tag)
+
+        self.weapon_cooldown = self.weapon_cooldown if self.can_attack else -1
+
+        self.display_type = DisplayType[self.display_type] if self.display_type else None
+        self.alliance = Alliance[self.alliance] if self.alliance else None
+        self.cloak = CloakState[self.cloak] if self.cloak else None
+
+        self.orders = [UnitOrder.from_proto(order_raw, self.bot_object) for order_raw in self.orders]  # type: ignore
+        self.passengers = [
+            Unit(**passenger, bot_object=self.bot_object) for passenger in self.passengers  # type: ignore
+        ]
+        self.rally_targets = [
+            RallyTarget.from_proto(rally_target) for rally_target in self.rally_targets  # type: ignore
+        ]
 
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
@@ -188,7 +240,7 @@ class Unit:
         return self.bot_object.game_data.units[self.unit_type]
 
     @cached_property
-    def _creation_ability(self) -> AbilityData:
+    def _creation_ability(self) -> Optional[AbilityData]:
         """ Provides the AbilityData of the creation ability of this unit. """
         return self._type_data.creation_ability
 
@@ -788,7 +840,6 @@ class Unit:
                     # Adept ereceive 45% attack speed bonus from glaives
                     self.type_id == UnitTypeId.ADEPT and self.is_mine and UpgradeId.ADEPTPIERCINGATTACK in upgrades
                 ):
-                    # TODO next patch: if self.type_id is adept: check if attack speed buff is active, instead of upgrade
                     weapon_speed /= 1.45
                 elif self.type_id == UnitTypeId.MARINE and BuffId.STIMPACK in self.buffs:
                     # Marine and marauder receive 50% attack speed bonus from stim
@@ -1065,7 +1116,6 @@ class Unit:
     def cargo_left(self) -> int:
         """ Returns how much cargo space is currently left in the unit. """
         return self.cargo_space_max - self.cargo_space_taken
-
 
     @property
     def surplus_harvesters(self) -> int:
@@ -1344,91 +1394,3 @@ class Unit:
             subtract_supply=subtract_supply,
             can_afford_check=can_afford_check,
         )
-
-
-# from pydantic import BaseModel
-
-# pydantic
-# class Unit(BaseModel):
-#     display_type: str = ""
-#     alliance: str = ""
-#     tag: str = ""
-#     unit_type: int = 0
-#     owner: int = 0
-#     pos: Dict[str, float] = None
-#     facing: float = 0
-#     radius: float = 0
-#     build_progress: float = 0
-#     cloak: str = ""
-#     buff_ids: List[int] = None
-#     detect_range: float = 0
-#     radar_range: float = 0
-#     is_selected: bool = False
-#     is_on_screen: bool = False
-#     is_blip: bool = False
-#     is_powered: bool = False
-#     is_active: bool = False
-#     attack_upgrade_level: int = 0
-#     armor_upgrade_level: int = 0
-#     shield_upgrade_level: int = 0
-#
-#     health: float = 0
-#     health_max: float = 0
-#     shield: float = 0
-#     shield_max: float = 0
-#     energy: float = 0
-#     energy_max: float = 0
-#     mineral_contents: int = 0
-#     vespene_contents: int = 0
-#     is_flying: bool = False
-#     is_burrowed: bool = False
-#     is_hallucination: bool = False
-#
-#     orders: List = None
-#     add_on_tag: int = 0
-#     passengers: List = None
-#     cargo_space_taken: int = 0
-#     cargo_space_max: int = 0
-#     assigned_harvesters: int = 0
-#     ideal_harvesters: int = 0
-#     weapon_cooldown: float = 0
-#     engaged_target_tag: int = 0
-#     buff_duration_remain: int = 0
-#     buff_duration_max: int = 0
-#     rally_targets: List = None
-#
-#     bot_object: BotAI = None  # type: ignore
-#     distance_calculation_index: int = 0
-#     base_build: int = 0
-#
-#     class_cache: ClassVar[CacheDict] = CacheDict()
-#
-#     # def __post_init__(self):
-#     #     self.tag = int(self.tag)
-#
-#     @property
-#     def game_loop(self) -> int:
-#         """ UnitTypeId found in sc2/ids/unit_typeid. """
-#         return self.bot_object.state.game_loop
-#
-#     @property
-#     def type_id(self) -> UnitTypeId:
-#         """ UnitTypeId found in sc2/ids/unit_typeid. """
-#         return UnitTypeId(self.unit_type)
-#
-#     @cached_property
-#     def _type_data(self) -> UnitTypeData:
-#         """ Provides the unit type data. """
-#         return self.bot_object.game_data.units[self.unit_type]
-#
-#     @property
-#     def position_tuple(self) -> Tuple[float, float]:
-#         """ Returns the 2d position of the unit as tuple without conversion to Point2. """
-#         return self.pos["x"], self.pos["y"]
-#
-#     @property
-#     def is_structure(self) -> bool:
-#         """ Checks if the unit is a structure. """
-#         return IS_STRUCTURE in self._type_data.attributes
-#
-#
