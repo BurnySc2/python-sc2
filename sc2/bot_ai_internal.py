@@ -295,7 +295,7 @@ class BotAIInternal(ABC):
                 is_int = isinstance(order.target, int)
                 if (
                     is_int and order.target in structures_in_production
-                    or not is_int and Point2.from_proto(order.target) in structures_in_production
+                    or not is_int and order.target in structures_in_production
                 ):
                     continue
                 abilities_amount[order.ability] += 1
@@ -624,7 +624,7 @@ class BotAIInternal(ABC):
         for unit in MessageToDict(
             self.state.observation_raw, including_default_value_fields=False, preserving_proto_field_name=True
         )['units']:
-            if unit['is_blip']:
+            if unit.get('is_blip'):
                 self.blips.add(Blip(unit))
             else:
                 unit_type: int = unit['unit_type']

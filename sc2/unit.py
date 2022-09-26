@@ -99,9 +99,9 @@ class UnitOrder:
 
     @classmethod
     def from_proto(cls, proto: dict, bot_object: BotAI) -> UnitOrder:
-        target = None
+        target: Optional[Union[int, Point2]] = None
         if "target_world_space_pos" in proto:
-            target = proto["target_world_space_pos"]
+            target = Point2.from_proto_string(proto["target_world_space_pos"])
         if "target_unit_tag" in proto:
             target = int(proto["target_unit_tag"])
         return cls(
@@ -590,12 +590,12 @@ class Unit:
     @cached_property
     def position(self) -> Point2:
         """ Returns the 2d position of the unit. """
-        return Point2((self.pos["x"], self.pos["y"]))
+        return Point2.from_proto_string(self.pos)
 
     @cached_property
     def position3d(self) -> Point3:
         """ Returns the 3d position of the unit. """
-        return Point3((self.pos["x"], self.pos["y"], self.pos["z"]))
+        return Point3.from_proto_string(self.pos)
 
     def distance_to(self, p: Union[Unit, Point2]) -> float:
         """Using the 2d distance between self and p.

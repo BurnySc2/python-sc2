@@ -867,11 +867,8 @@ class BotAI(BotAIInternal):
                 continue
             for order in worker.orders:
                 # When a construction is resumed, the worker.orders[0].target is the tag of the structure, else it is a Point2
-                target = order.target
-                if isinstance(target, int):
-                    worker_targets.add(target)
-                else:
-                    worker_targets.add(Point2.from_proto(target))
+                if isinstance(order.target, (int, Point2)):
+                    worker_targets.add(order.target)
         return self.structures.filter(
             lambda structure: structure.build_progress < 1
             # Redundant check?
