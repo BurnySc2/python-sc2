@@ -105,13 +105,13 @@ class EffectData:
     def id(self) -> Union[EffectId, str]:
         if self.fake:
             # Returns the string from constants.py, e.g. "KD8CHARGE"
-            return FakeEffectID[self._proto.unit_type]
+            return FakeEffectID[self._proto['unit_type']]
         return EffectId(self._proto.effect_id)
 
     @property
     def positions(self) -> Set[Point2]:
         if self.fake:
-            return {Point2.from_proto(self._proto.pos)}
+            return {Point2.from_proto_string(self._proto['pos'])}
         return {Point2.from_proto(p) for p in self._proto.pos}
 
     @property

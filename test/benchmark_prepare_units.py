@@ -1,5 +1,4 @@
 from test.test_pickled_data import MAPS, get_map_specific_bot
-
 from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:

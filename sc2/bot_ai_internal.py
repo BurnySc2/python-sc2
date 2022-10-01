@@ -539,6 +539,20 @@ class BotAIInternal(ABC):
 
         index: int = 0
 
+        # Renaming keys in the 'unit' dict so that these values can be converted to python objects when accessed (as property)
+        rename_keys = {
+            "tag": "_tag",
+            "add_on_tag": "_add_on_tag",
+            "engaged_target_tag": "_engaged_target_tag",
+            "weapon_cooldown": "_weapon_cooldown",
+            "display_type": "_display_type",
+            "alliance": "_alliance",
+            "cloak": "_cloak",
+            "orders": "_orders",
+            "passengers": "_passengers",
+            "rally_targets": "_rally_targets",
+        }
+
         for unit in MessageToDict(
             self.state.observation_raw, including_default_value_fields=False, preserving_proto_field_name=True
         ).get('units', []):
@@ -550,6 +564,10 @@ class BotAIInternal(ABC):
                 if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue
+
+                for old_key, new_key in rename_keys.items():
+                    if old_key in unit:
+                        unit[new_key] = unit.pop(old_key)
                 unit_obj = Unit(
                     **unit,
                     bot_object=self,
@@ -558,10 +576,10 @@ class BotAIInternal(ABC):
                 )
                 index += 1
                 self.all_units.append(unit_obj)
-                if unit['display_type'] == "Placeholder":
+                if unit['_display_type'] == "Placeholder":
                     self.placeholders.append(unit_obj)
                     continue
-                alliance = unit['alliance']
+                alliance = unit['_alliance']
                 # Alliance.Neutral.value = 3
                 if alliance == "Neutral":
                     # XELNAGATOWER = 149
