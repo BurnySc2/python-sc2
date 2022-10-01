@@ -134,62 +134,61 @@ class Unit:
     """
     Same definition as in
     https://github.com/Blizzard/s2client-proto/blob/63615821fad543d570d65f8d7ab67f71f33cf663/s2clientprotocol/raw.proto#L99
-    # TODO: Add docstring and short information on each variable
     """
-    display_type: Optional[DisplayType] = None
-    alliance: Optional[Alliance] = None
+    _display_type: Optional[str] = None
+    _alliance: Optional[str] = None
 
-    tag: int = "0"  # type: ignore
+    _tag: str = "0"
     unit_type: int = 0
     owner: int = 0
 
     pos: Dict[Literal["x", "y", "z"], float] = field(default_factory=dict)
-    facing: float = 0
-    radius: float = 0
-    build_progress: float = 0
-    cloak: Optional[CloakState] = None
+    facing: float = 0  #: The direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis.
+    radius: float = 0  #: Half of unit size. See https://liquipedia.net/starcraft2/Unit_Statistics_(Legacy_of_the_Void)
+    build_progress: float = 0  #: Returns completion in range [0,1].
+    _cloak: Optional[str] = None
     buff_ids: List[int] = field(default_factory=list)
 
-    detect_range: float = 0
+    detect_range: float = 0  #: Returns the detection distance of the unit.
     radar_range: float = 0
 
-    is_selected: bool = False
-    is_on_screen: bool = False
-    is_blip: bool = False
-    is_powered: bool = False
-    is_active: bool = False
-    attack_upgrade_level: int = 0
-    armor_upgrade_level: int = 0
-    shield_upgrade_level: int = 0
+    is_selected: bool = False  #: Checks if the unit is currently selected.
+    is_on_screen: bool = False  #: Checks if the unit is on the screen.
+    is_blip: bool = False  #: Checks if the unit is detected by a sensor tower.
+    is_powered: bool = False  #: Checks if the unit is powered by a pylon or warppism.
+    is_active: bool = False  #: Checks if the unit has an order (e.g. unit is currently moving or attacking, structure is currently training or researching).
+    attack_upgrade_level: int = 0  #: Returns the upgrade level of the units attack. Returns 0 for units without a weapon
+    armor_upgrade_level: int = 0  #: Returns the upgrade level of the units armor.
+    shield_upgrade_level: int = 0  #: Returns the upgrade level of the units shield.
 
     # Not populated for snapshots
-    health: float = 0
-    health_max: float = 0
-    shield: float = 0
-    shield_max: float = 0
-    energy: float = 0
-    energy_max: float = 0
-    mineral_contents: int = 0
-    vespene_contents: int = 0
-    is_flying: bool = False
-    is_burrowed: bool = False
-    is_hallucination: bool = False
+    health: float = 0  #: Returns the health of the unit. Does not include shields.
+    health_max: float = 0  #: Returns the maximum health of the unit. Does not include shields.
+    shield: float = 0  #: Returns the shield points the unit has. Returns 0 for non-protoss units.
+    shield_max: float = 0  #: Returns the maximum shield points the unit can have. Returns 0 for non-protoss units.
+    energy: float = 0  #: Returns the amount of energy the unit has. Returns 0 for units without energy.
+    energy_max: float = 0  #: Returns the maximum amount of energy the unit can have. Returns 0 for units without energy.
+    mineral_contents: int = 0  #: Returns the amount of minerals remaining in a mineral field.
+    vespene_contents: int = 0  #: Returns the amount of gas remaining in a geyser.
+    is_flying: bool = False  #: Checks if the unit is flying.
+    is_burrowed: bool = False  #: Checks if the unit is burrowed.
+    is_hallucination: bool = False  #: Returns True if the unit is your own hallucination or detected.
 
     # Not populated for enemies
-    orders: List[UnitOrder] = field(default_factory=list)
-    add_on_tag: int = "0"  # type: ignore
+    _orders: List[Any] = field(default_factory=list)
+    _add_on_tag: str = "0"
     # self.passengeers only has a few fields filled
     # https://github.com/Blizzard/s2client-proto/blob/63615821fad543d570d65f8d7ab67f71f33cf663/s2clientprotocol/raw.proto#L83-L92
-    passengers: List[Unit] = field(default_factory=list)
-    cargo_space_taken: int = 0
-    cargo_space_max: int = 0
-    assigned_harvesters: int = 0
-    ideal_harvesters: int = 0
-    weapon_cooldown: float = -1
-    engaged_target_tag: int = "0"  # type: ignore
-    buff_duration_remain: int = 0
-    buff_duration_max: int = 0
-    rally_targets: List[RallyTarget] = field(default_factory=list)
+    _passengers: List[Any] = field(default_factory=list)
+    cargo_space_taken: int = 0  #: Returns how much cargo space is currently used in the unit. Note that some units take up more than one space.
+    cargo_space_max: int = 0  #: How much cargo space is available at maximum.
+    assigned_harvesters: int = 0  #: Returns the number of workers currently gathering resources at a geyser or mining base.
+    ideal_harvesters: int = 0  #: Returns the ideal harverster count for unit. 3 for gas buildings, 2*n for n mineral patches on that base.
+    _weapon_cooldown: float = -1
+    _engaged_target_tag: str = "0"
+    buff_duration_remain: int = 0  #: Returns the amount of remaining frames of the visible timer bar. Returns 0 for units without a timer bar.
+    buff_duration_max: int = 0  #: Returns the maximum amount of frames of the visible timer bar. Returns 0 for units without a timer bar.
+    _rally_targets: List[Any] = field(default_factory=list)
 
     # Internal calculation
     bot_object: BotAI = None  # type: ignore
@@ -199,29 +198,13 @@ class Unit:
     # Cache mapping of integer to UnitTypeId
     class_cache: ClassVar[CacheDict] = CacheDict()
 
-    def __post_init__(self):
-        """ Convert improperly given argument types to enum or internal types. """
-        self.tag = int(self.tag)
-        self.add_on_tag = int(self.add_on_tag)
-        self.engaged_target_tag = int(self.engaged_target_tag)
-
-        self.weapon_cooldown = self.weapon_cooldown if self.can_attack else -1
-
-        self.display_type = DisplayType[self.display_type] if self.display_type else None
-        self.alliance = Alliance[self.alliance] if self.alliance else None
-        self.cloak = CloakState[self.cloak] if self.cloak else None
-
-        self.orders = [UnitOrder.from_proto(order_raw, self.bot_object) for order_raw in self.orders]  # type: ignore
-        self.passengers = [
-            Unit(**passenger, bot_object=self.bot_object) for passenger in self.passengers  # type: ignore
-        ]
-        self.rally_targets = [
-            RallyTarget.from_proto(rally_target) for rally_target in self.rally_targets  # type: ignore
-        ]
-
     def __repr__(self) -> str:
         """ Returns string of this form: Unit(name='SCV', tag=4396941328). """
         return f"Unit(name={self.name !r}, tag={self.tag})"
+
+    @cached_property
+    def display_type(self) -> Optional[DisplayType]:
+        return DisplayType[self._display_type] if self._display_type else None
 
     @property
     def game_loop(self) -> int:
@@ -230,9 +213,8 @@ class Unit:
 
     @property
     def type_id(self) -> UnitTypeId:
-        """ UnitTypeId found in sc2/ids/unit_typeid. """
-        unit_type: int = self.unit_type
-        return self.class_cache.retrieve_and_set(unit_type, lambda: UnitTypeId(unit_type))
+        """ UnitTypeId found in sc2/ids/unit_typeid.py. """
+        return self.class_cache.retrieve_and_set(self.unit_type, lambda: UnitTypeId(self.unit_type))
 
     @cached_property
     def _type_data(self) -> UnitTypeData:
@@ -253,6 +235,11 @@ class Unit:
     def race(self) -> Race:
         """ Returns the race of the unit """
         return Race(self._type_data._proto.race)
+
+    @property
+    def tag(self) -> int:
+        """ Returns the unique tag of the unit. """
+        return int(self._tag)
 
     @property
     def is_structure(self) -> bool:
@@ -566,6 +553,11 @@ class Unit:
             is_on_screen: false
         """
         return self.display_type == IS_PLACEHOLDER
+
+    @cached_property
+    def alliance(self) -> Optional[Alliance]:
+        """ Returns the team the unit belongs to. """
+        return Alliance[self._alliance] if self._alliance else None
 
     @property
     def is_mine(self) -> bool:
@@ -919,6 +911,13 @@ class Unit:
         """ Checks if the unit is completed. """
         return self.build_progress == 1
 
+    @cached_property
+    def cloak(self) -> Optional[CloakState]:
+        """Returns cloak state.
+        See https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188fbe9dbf/include/sc2api/sc2_unit.h#L95
+        """
+        return CloakState[self._cloak] if self._cloak else None
+
     @property
     def is_cloaked(self) -> bool:
         """ Checks if the unit is cloaked. """
@@ -969,6 +968,12 @@ class Unit:
         return bool(self.vespene_contents)
 
     # PROPERTIES BELOW THIS COMMENT ARE NOT POPULATED FOR ENEMIES
+
+    @cached_property
+    def orders(self) -> List[UnitOrder]:
+        """ Returns the a list of the current orders. """
+        # TODO: add examples on how to use unit orders
+        return [UnitOrder.from_proto(order_raw, self.bot_object) for order_raw in self._orders]
 
     @cached_property
     def order_target(self) -> Optional[Union[int, Point2]]:
@@ -1047,6 +1052,11 @@ class Unit:
         return self.is_using_ability(IS_REPAIRING)
 
     @property
+    def add_on_tag(self) -> int:
+        """Returns the tag of the addon of unit. If the unit has no addon, returns 0."""
+        return int(self._add_on_tag)
+
+    @property
     def has_add_on(self) -> bool:
         """ Checks if unit has an addon attached. """
         return bool(self.add_on_tag)
@@ -1082,6 +1092,11 @@ class Unit:
         The distance from center to center on the y-axis is -0.5.
         """
         return self.position.offset(Point2((2.5, -0.5)))
+
+    @cached_property
+    def passengers(self) -> List[Unit]:
+        """ Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism. """
+        return [Unit(**passenger, bot_object=self.bot_object) for passenger in self._passengers]
 
     @cached_property
     def passengers_tags(self) -> Set[int]:
@@ -1123,11 +1138,34 @@ class Unit:
         return self.assigned_harvesters - self.ideal_harvesters
 
     @property
+    def weapon_cooldown(self) -> float:
+        """Returns the time until the unit can fire again,
+        returns -1 for units that can't attack.
+        Usage:
+        if unit.weapon_cooldown == 0:
+            unit.attack(target)
+        elif unit.weapon_cooldown < 0:
+            unit.move(closest_allied_unit_because_cant_attack)
+        else:
+            unit.move(retreatPosition)"""
+        if self.can_attack:
+            return self._weapon_cooldown
+        return -1
+
+    @property
     def weapon_ready(self) -> bool:
         """Checks if the weapon is ready to be fired."""
         return self.weapon_cooldown == 0
 
-    # TODO: Add rally targets https://github.com/Blizzard/s2client-proto/commit/80484692fa9e0ea6e7be04e728e4f5995c64daa3#diff-3b331650a4f7c9271a579b31cf771ed5R88-R92
+    @property
+    def engaged_target_tag(self) -> int:
+        # TODO What does this do?
+        return int(self._engaged_target_tag)
+
+    @cached_property
+    def rally_targets(self) -> List[RallyTarget]:
+        """ Returns the queue of rallytargets of the structure. """
+        return [RallyTarget.from_proto(rally_target) for rally_target in self._rally_targets]
 
     # Unit functions
 
