@@ -741,7 +741,6 @@ class BotAIInternal(ABC):
         proto_game_info = await self.client._execute(game_info=sc_pb.RequestGameInfo())
         self._prepare_step(gs, proto_game_info)
         await self.issue_events()
-        # await self.on_step(-1)
 
     @final
     async def issue_events(self):

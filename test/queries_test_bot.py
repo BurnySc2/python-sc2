@@ -90,8 +90,8 @@ class TestBot(BotAI):
 
     async def run_can_place_single(self) -> bool:
         # await self._advance_steps(200)
-        result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
-        return result[0]
+        result = await self.can_place_single(AbilityId.TERRANBUILD_COMMANDCENTER, self.game_info.map_center)
+        return result
 
     async def test_can_place_expect_true(self):
         test_cases = [
@@ -128,7 +128,7 @@ class TestBot(BotAI):
                 logger.error(
                     f"Expected result to be True, but was False for test case: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}"
                 )
-            assert result, f"Expected result to be False, but was True for test case: {i}"
+            assert result, f"Expected result to be True, but was False for test case: {i}"
             result2 = await self.run_can_place_single()
             if result2:
                 logger.info(f"Test case successful: {i}, own unit: {own_unit_type}, enemy unit: {enemy_unit_type}")
@@ -191,6 +191,8 @@ class TestBot(BotAI):
         #   for: creep, burrowed ling, burrowed roach, dark templar
 
         # TODO Check if a moving invisible unit is blocking (patroulling dark templar, patroulling burrowed roach)
+
+        # TODO self.can_cast()
 
 
 class EmptyBot(BotAI):

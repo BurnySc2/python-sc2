@@ -888,7 +888,7 @@ class BotAI(BotAIInternal):
     ) -> bool:
         """Not recommended as this function checks many positions if it "can place" on them until it found a valid
         position. Also if the given position is not placeable, this function tries to find a nearby position to place
-        the structure. Then uses 'self.do' to give the worker the order to start the construction.
+        the structure. Then orders the worker to start the construction.
 
         :param building:
         :param near:
@@ -930,7 +930,7 @@ class BotAI(BotAIInternal):
         """Trains a specified number of units. Trains only one if amount is not specified.
         Warning: currently has issues with warp gate warp ins
 
-        New function. Please report any bugs!
+        Very generic function. Please use with caution and report any bugs!
 
         Example Zerg::
 
@@ -1152,6 +1152,7 @@ class BotAI(BotAIInternal):
 
     def in_map_bounds(self, pos: Union[Point2, tuple, list]) -> bool:
         """Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
+
         :param pos:"""
         return (
             self.game_info.playable_area.x <= pos[0] <
