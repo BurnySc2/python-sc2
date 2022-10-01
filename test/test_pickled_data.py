@@ -12,6 +12,7 @@ import sys
 from contextlib import suppress
 
 from sc2.client import Client
+from sc2.ids.buff_id import BuffId
 from sc2.pixel_map import PixelMap
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
@@ -1081,6 +1082,12 @@ def test_position_rect(x, y, w, h):
     assert rect.size == Size((w, h))
     assert rect.center == Point2((rect.x + rect.width / 2, rect.y + rect.height / 2))
     assert rect.offset((1, 1)) == Rect((x + 1, y + 1, w, h))
+
+
+def test_missing_enum():
+    enum_number = 123456789
+    enum_converted = BuffId(enum_number)
+    assert enum_converted == BuffId.NULL
 
 
 if __name__ == "__main__":

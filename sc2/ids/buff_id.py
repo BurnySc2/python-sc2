@@ -312,8 +312,12 @@ class BuffId(enum.Enum):
     LOADOUTSPRAYTRACKER = 305
     NYDUSCREEPGROWTH = 306
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"BuffId.{self.name}"
+
+    @classmethod
+    def _missing_(cls, value: int) -> "BuffId":
+        return cls.NULL
 
 
 for item in BuffId:
