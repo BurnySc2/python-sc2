@@ -1097,5 +1097,11 @@ def test_position_rect(x, y, w, h):
     assert rect.offset((1, 1)) == Rect((x + 1, y + 1, w, h))
 
 
+def test_missing_enum():
+    enum_number = 123456789
+    enum_converted = BuffId(enum_number)
+    assert enum_converted == BuffId.NULL
+
+
 if __name__ == "__main__":
     test_unit()

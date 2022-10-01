@@ -1280,6 +1280,7 @@ class BotAI(BotAIInternal):
             print(f"My unit took damage: {unit} took {amount_damage_taken} damage")
 
         :param unit:
+        :param amount_damage_taken:
         """
 
     async def on_enemy_unit_entered_vision(self, unit: Unit):

@@ -151,6 +151,7 @@ def main():
         "HonorgroundsLE",
         "IceandChrome506",
         "IceandChromeLE",
+        "InsideAndOutAIE",
         "InterloperLE",
         "JagannathaAIE",
         "KairosJunctionLE",
@@ -158,6 +159,7 @@ def main():
         "LostandFoundLE",
         "LightshadeAIE",
         "MechDepotLE",
+        "MoondanceAIE",
         "NeonVioletSquareLE",
         "NewkirkPrecinctTE",
         "NewRepugnancyLE",
@@ -180,12 +182,14 @@ def main():
         "SimulacrumLE",
         "Submarine506",
         "SubmarineLE",
-        # "StasisLE", Commented out because it has uneven number of expansions, and wasn't used in the ladder pool anyway
+        "StargazersAIE",
+        "StasisLE",
         "TheTimelessVoid",
         "ThunderbirdLE",
         "Treachery",
         "Triton",
         "Urzagol",
+        "WaterfallAIE",
         "WintersGateLE",
         "WorldofSleepersLE",
         "YearZeroLE",
@@ -202,6 +206,7 @@ def main():
                     f"Pickle file for map {map_} was already generated. Skipping. If you wish to re-generate files, please remove them first."
                 )
                 continue
+            logger.info(f"Creating pickle file for map {map_} ...")
             run_game(maps.get(map_), [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)], realtime=False)
         except ProtocolError:
             # ProtocolError appears after a leave game request
@@ -211,7 +216,6 @@ def main():
             logger.error(
                 f"Map {map_} could not be found, so pickle files for that map could not be generated. Error: {e}"
             )
-            # traceback.print_exc()
 
 
 if __name__ == "__main__":

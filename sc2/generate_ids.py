@@ -151,21 +151,29 @@ class IdGenerator:
                 code.append(f"    {key} = {value}")
 
             # Add repr function to more easily dump enums to dict
-            code += ["\n", "    def __repr__(self):", '        return f"' + class_name + '.{self.name}"']
+            code += f"""
+    def __repr__(self) -> str:
+        return f"{class_name}.{{self.name}}"
+""".split("\n")
 
-            code += [
-                "\n",
-                f"for item in {class_name}:",
-                # f"    assert not item.name in globals()",
-                "    globals()[item.name] = item",
-                "",
-            ]
+            # Add missing ids function to not make the game crash when unknown BuffId was detected
+            if class_name == "BuffId":
+                code += f"""
+    @classmethod
+    def _missing_(cls, value: int) -> "{class_name}":
+        return cls.NULL
+""".split("\n")
+
+            code += f"""
+for item in {class_name}:
+    globals()[item.name] = item
+""".split("\n")
 
             ids_file_path = (idsdir / self.FILE_TRANSLATE[name]).with_suffix(".py")
             with ids_file_path.open("w") as f:
                 f.write("\n".join(code))
 
-            # Apply formatting]
+            # Apply formatting
             try:
                 subprocess.run(["poetry", "run", "yapf", ids_file_path, "-i"], check=True)
             except FileNotFoundError:
@@ -185,7 +193,7 @@ class IdGenerator:
                     f"Game version is different (Old: {self.game_version}, new: {ID_VERSION_STRING}. Updating ids to match game version"
                 )
             stable_id_path = Path(self.DATA_JSON[self.PF])
-            assert stable_id_path.is_file()
+            assert stable_id_path.is_file(), f"stable_id.json was not found at path \"{stable_id_path}\""
             with stable_id_path.open(encoding="utf-8") as data_file:
                 data = json.loads(data_file.read())
             self.generate_python_code(self.parse_data(data))

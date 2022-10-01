@@ -87,6 +87,12 @@ SC2CLIENTHOST=<your windows IP>
 SC2SERVERHOST=0.0.0.0
 ```
 
+If you are adding these to your .bashrc, you may need to export your environment variables by adding:
+```sh
+export SC2CLIENTHOST
+export SC2SERVERHOST
+```
+
 You can find your Windows IP using `ipconfig /all` from `PowerShell.exe` or `CMD.exe`.
 
 ## Example

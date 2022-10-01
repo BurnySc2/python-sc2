@@ -8,6 +8,7 @@ import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 from typing import List, Union
 
 from loguru import logger
@@ -38,6 +39,8 @@ class TestBot(BotAI):
         await self.clear_map_center()
         await self.test_can_place_expect_true()
         await self.test_can_place_expect_false()
+        await self.test_rally_points_with_rally_ability()
+        await self.test_rally_points_with_smart_ability()
 
         # await self.client.leave()
         sys.exit(0)
@@ -192,7 +195,63 @@ class TestBot(BotAI):
 
         # TODO Check if a moving invisible unit is blocking (patroulling dark templar, patroulling burrowed roach)
 
-        # TODO self.can_cast()
+    async def test_rally_points_with_rally_ability(self):
+        map_center = self.game_info.map_center
+        barracks_spawn_point = map_center.offset(Point2((10, 10)))
+        await self.client.debug_create_unit(
+            [[UnitTypeId.BARRACKS, 2, barracks_spawn_point, 1], [UnitTypeId.FACTORY, 2, barracks_spawn_point, 1]]
+        )
+        await self._advance_steps(10)
+
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            structure(AbilityId.RALLY_UNITS, map_center)
+        assert len(self.actions) == 4
+        filtered_actions = list(filter(self.prevent_double_actions, self.actions))
+        assert len(filtered_actions) == 4
+
+        await self._advance_steps(10)
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            if not list(structure._proto.rally_targets):
+                logger.error("Test case incomplete: Rally point command by using rally ability")
+                return
+            rally_target = structure._proto.rally_targets[0]
+            rally_target_point = Point2.from_proto(rally_target.point)
+            distance = rally_target_point.distance_to_point2(map_center)
+            assert distance < 0.1
+
+        logger.info("Test case successful: Rally point command by using rally ability")
+        await self.clear_map_center()
+
+    async def test_rally_points_with_smart_ability(self):
+        map_center = self.game_info.map_center
+        barracks_spawn_point = map_center.offset(Point2((10, 10)))
+        await self.client.debug_create_unit(
+            [[UnitTypeId.BARRACKS, 2, barracks_spawn_point, 1], [UnitTypeId.FACTORY, 2, barracks_spawn_point, 1]]
+        )
+        await self._advance_steps(10)
+
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            structure(AbilityId.SMART, map_center)
+        assert len(self.actions) == 4
+        filtered_actions = list(filter(self.prevent_double_actions, self.actions))
+        assert len(filtered_actions) == 4
+
+        await self._advance_steps(10)
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            if not list(structure._proto.rally_targets):
+                logger.error("Test case incomplete: Rally point command by using smart ability")
+                return
+            rally_target = structure._proto.rally_targets[0]
+            rally_target_point = Point2.from_proto(rally_target.point)
+            distance = rally_target_point.distance_to_point2(map_center)
+            assert distance < 0.1
+
+        logger.info("Test case successful: Rally point command by using smart ability")
+        await self.clear_map_center()
+
+    # TODO: Add more examples that use constants.py "COMBINEABLE_ABILITIES"
+
+    # TODO self.can_cast()
 
 
 class EmptyBot(BotAI):
