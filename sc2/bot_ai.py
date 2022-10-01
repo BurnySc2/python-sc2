@@ -782,10 +782,10 @@ class BotAI(BotAIInternal):
         }
         # SUPPLYDEPOTDROP is not in self.game_data.units, so bot_ai should not check the build progress via creation ability (worker abilities)
         if structure_type_value not in self.game_data.units:
-            return max((s.build_progress for s in self.structures if s._proto.unit_type in equiv_values), default=0)
+            return max((s.build_progress for s in self.structures if s.unit_type in equiv_values), default=0)
         creation_ability: AbilityData = self.game_data.units[structure_type_value].creation_ability
         max_value = max(
-            [s.build_progress for s in self.structures if s._proto.unit_type in equiv_values] +
+            [s.build_progress for s in self.structures if s.unit_type in equiv_values] +
             [self._abilities_all_units[1].get(creation_ability, 0)],
             default=0,
         )
@@ -867,11 +867,8 @@ class BotAI(BotAIInternal):
                 continue
             for order in worker.orders:
                 # When a construction is resumed, the worker.orders[0].target is the tag of the structure, else it is a Point2
-                target = order.target
-                if isinstance(target, int):
-                    worker_targets.add(target)
-                else:
-                    worker_targets.add(Point2.from_proto(target))
+                if isinstance(order.target, (int, Point2)):
+                    worker_targets.add(order.target)
         return self.structures.filter(
             lambda structure: structure.build_progress < 1
             # Redundant check?
@@ -891,7 +888,7 @@ class BotAI(BotAIInternal):
     ) -> bool:
         """Not recommended as this function checks many positions if it "can place" on them until it found a valid
         position. Also if the given position is not placeable, this function tries to find a nearby position to place
-        the structure. Then uses 'self.do' to give the worker the order to start the construction.
+        the structure. Then orders the worker to start the construction.
 
         :param building:
         :param near:
@@ -933,7 +930,7 @@ class BotAI(BotAIInternal):
         """Trains a specified number of units. Trains only one if amount is not specified.
         Warning: currently has issues with warp gate warp ins
 
-        New function. Please report any bugs!
+        Very generic function. Please use with caution and report any bugs!
 
         Example Zerg::
 
@@ -1155,6 +1152,7 @@ class BotAI(BotAIInternal):
 
     def in_map_bounds(self, pos: Union[Point2, tuple, list]) -> bool:
         """Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.
+
         :param pos:"""
         return (
             self.game_info.playable_area.x <= pos[0] <
@@ -1282,6 +1280,7 @@ class BotAI(BotAIInternal):
             print(f"My unit took damage: {unit} took {amount_damage_taken} damage")
 
         :param unit:
+        :param amount_damage_taken:
         """
 
     async def on_enemy_unit_entered_vision(self, unit: Unit):

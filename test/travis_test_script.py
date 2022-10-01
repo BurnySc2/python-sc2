@@ -2,7 +2,7 @@
 This script is made as a wrapper for sc2 bots to set a timeout to the bots (in case they can't find the last enemy structure or the game is ending in a draw)
 Ideally this script should be done with a bot that terminates on its own after certain things have been achieved, e.g. testing if the bot can expand at all, and then terminates after it has successfully expanded.
 
-Usage: see .bat files in /bat_files/ folder
+Usage:
 cd into python-sc2/ directory
 docker build -t test_image -f test/Dockerfile .
 docker run test_image -c "python test/travis_test_script.py test/autotest_bot.py"

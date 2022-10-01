@@ -173,7 +173,7 @@ class UnitTypeData:
 
     @property
     def attributes(self) -> List[Attribute]:
-        return self._proto.attributes
+        return list(self._proto.attributes)
 
     def has_attribute(self, attr) -> bool:
         assert isinstance(attr, Attribute)
