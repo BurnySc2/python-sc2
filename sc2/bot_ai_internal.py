@@ -538,88 +538,6 @@ class BotAIInternal(ABC):
         worker_types: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
 
         index: int = 0
-        # TODO: Remove me
-        # _debug_test2 = MessageToDict(
-        #     self.state.observation_raw, including_default_value_fields=False, preserving_proto_field_name=True
-        # )
-
-        # for unit in  self.state.observation_raw.units:
-        #     if unit.is_blip:
-        #         self.blips.add(Blip(unit))
-        #     else:
-        #         unit_type: int = unit.unit_type
-        #         # Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
-        #         if unit_type in FakeEffectID:
-        #             self.state.effects.add(EffectData(unit, fake=True))
-        #             continue
-        #         # _debug_test = MessageToDict(unit, including_default_value_fields=True, preserving_proto_field_name=True)
-        #         # dataclass
-        #         unit_obj = Unit(
-        #             **MessageToDict(unit, including_default_value_fields=False, preserving_proto_field_name=True),
-        #             bot_object=self,
-        #             distance_calculation_index=index,
-        #             base_build=self.base_build,
-        #         )
-        #         index += 1
-        #         self.all_units.append(unit_obj)
-        #         if unit.display_type == "Placeholder":
-        #             self.placeholders.append(unit_obj)
-        #             continue
-        #         alliance = unit.alliance
-        #         # Alliance.Neutral.value = 3
-        #         if alliance == 3:
-        #             # XELNAGATOWER = 149
-        #             if unit_type == 149:
-        #                 self.watchtowers.append(unit_obj)
-        #             # mineral field enums
-        #             elif unit_type in mineral_ids:
-        #                 self.mineral_field.append(unit_obj)
-        #                 self.resources.append(unit_obj)
-        #             # geyser enums
-        #             elif unit_type in geyser_ids:
-        #                 self.vespene_geyser.append(unit_obj)
-        #                 self.resources.append(unit_obj)
-        #             # all destructable rocks
-        #             else:
-        #                 self.destructables.append(unit_obj)
-        #         # Alliance.Self.value = 1
-        #         elif alliance == 1:
-        #             self.all_own_units.append(unit_obj)
-        #             unit_id: UnitTypeId = unit_obj.type_id
-        #             if unit_obj.is_structure:
-        #                 self.structures.append(unit_obj)
-        #                 if unit_id in race_townhalls[self.race]:
-        #                     self.townhalls.append(unit_obj)
-        #                 elif unit_id in ALL_GAS or unit_obj.vespene_contents:
-        #                     # TODO: remove "or unit_obj.vespene_contents" when a new linux client newer than version 4.10.0 is released
-        #                     self.gas_buildings.append(unit_obj)
-        #                 elif unit_id in {
-        #                     UnitTypeId.TECHLAB,
-        #                     UnitTypeId.BARRACKSTECHLAB,
-        #                     UnitTypeId.FACTORYTECHLAB,
-        #                     UnitTypeId.STARPORTTECHLAB,
-        #                 }:
-        #                     self.techlab_tags.add(unit_obj.tag)
-        #                 elif unit_id in {
-        #                     UnitTypeId.REACTOR,
-        #                     UnitTypeId.BARRACKSREACTOR,
-        #                     UnitTypeId.FACTORYREACTOR,
-        #                     UnitTypeId.STARPORTREACTOR,
-        #                 }:
-        #                     self.reactor_tags.add(unit_obj.tag)
-        #             else:
-        #                 self.units.append(unit_obj)
-        #                 if unit_id in worker_types:
-        #                     self.workers.append(unit_obj)
-        #                 elif unit_id == UnitTypeId.LARVA:
-        #                     self.larva.append(unit_obj)
-        #         # Alliance.Enemy.value = 4
-        #         elif alliance == 4:
-        #             self.all_enemy_units.append(unit_obj)
-        #             if unit_obj.is_structure:
-        #                 self.enemy_structures.append(unit_obj)
-        #             else:
-        #                 self.enemy_units.append(unit_obj)
 
         for unit in MessageToDict(
             self.state.observation_raw, including_default_value_fields=False, preserving_proto_field_name=True
@@ -632,8 +550,6 @@ class BotAIInternal(ABC):
                 if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue
-                # _debug_test = MessageToDict(unit, including_default_value_fields=True, preserving_proto_field_name=True)
-                # dataclass
                 unit_obj = Unit(
                     **unit,
                     bot_object=self,
