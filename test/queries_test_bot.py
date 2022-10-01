@@ -211,11 +211,10 @@ class TestBot(BotAI):
 
         await self._advance_steps(10)
         for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
-            if not list(structure._proto.rally_targets):
+            if not structure.rally_targets:
                 logger.error("Test case incomplete: Rally point command by using rally ability")
                 return
-            rally_target = structure._proto.rally_targets[0]
-            rally_target_point = Point2.from_proto(rally_target.point)
+            rally_target_point = structure.rally_targets[0].point
             distance = rally_target_point.distance_to_point2(map_center)
             assert distance < 0.1
 
@@ -238,11 +237,10 @@ class TestBot(BotAI):
 
         await self._advance_steps(10)
         for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
-            if not list(structure._proto.rally_targets):
+            if not structure.rally_targets:
                 logger.error("Test case incomplete: Rally point command by using smart ability")
                 return
-            rally_target = structure._proto.rally_targets[0]
-            rally_target_point = Point2.from_proto(rally_target.point)
+            rally_target_point = structure.rally_targets[0].point
             distance = rally_target_point.distance_to_point2(map_center)
             assert distance < 0.1
 

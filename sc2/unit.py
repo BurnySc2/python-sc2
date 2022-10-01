@@ -86,7 +86,7 @@ class RallyTarget:
     @classmethod
     def from_proto(cls, proto: dict) -> RallyTarget:
         return cls(
-            proto["point"],
+            Point2.from_proto_string(proto["point"]),
             int(proto["tag"]) if ("tag" in proto) else None,
         )
 
