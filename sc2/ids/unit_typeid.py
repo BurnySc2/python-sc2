@@ -2063,7 +2063,7 @@ class UnitTypeId(enum.Enum):
     DUMMYUNIT013 = 2055
     DUMMYUNIT014 = 2056
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"UnitTypeId.{self.name}"
 
 

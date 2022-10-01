@@ -302,7 +302,7 @@ class BuffId(enum.Enum):
     RESONATINGGLAIVESPHASESHIFT = 294
     NEURALPARASITECHILDREN = 295
     AMORPHOUSARMORCLOUD = 296
-    RAVENSHREDDERMISSILEARMORREDUCTIONUISUBTRUCT = 297
+    DUMMYBUFF001 = 297
     BATTERYOVERCHARGE = 298
     DUMMYBUFF001 = 299
     DUMMYBUFF002 = 300
@@ -312,8 +312,12 @@ class BuffId(enum.Enum):
     LOADOUTSPRAYTRACKER = 305
     NYDUSCREEPGROWTH = 306
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"BuffId.{self.name}"
+
+    @classmethod
+    def _missing_(cls, value: int) -> "BuffId":
+        return cls.NULL
 
 
 for item in BuffId:
