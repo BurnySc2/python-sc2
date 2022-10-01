@@ -87,6 +87,10 @@ jobs:
         poetry run python -m pytest test
 
       # Run benchmarks
+    - name: Run benchmark benchmark_bot_ai_init
+      run: |
+        poetry run python -m pytest test/benchmark_bot_ai_init.py
+
     - name: Run benchmark benchmark_array_creation
       run: |
         poetry run python -m pytest test/benchmark_array_creation.py
