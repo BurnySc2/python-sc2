@@ -1,11 +1,21 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, TypeVar
+from typing import TYPE_CHECKING, Callable, Hashable, TypeVar
 
 if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
 
 T = TypeVar("T")
+
+
+class CacheDict(dict):
+
+    def retrieve_and_set(self, key: Hashable, func: Callable[[], T]) -> T:
+        """ Either return the value at a certain key,
+        or set the return value of a function to that key, then return that value. """
+        if key not in self:
+            self[key] = func()
+        return self[key]
 
 
 class property_cache_once_per_frame(property):

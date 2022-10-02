@@ -8,7 +8,9 @@ import warnings
 from abc import ABC
 from collections import Counter
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, Dict, Generator, Iterable, List, Set, Tuple, Union, final
+from typing import TYPE_CHECKING, Any
+from typing import Counter as CounterType
+from typing import Dict, Generator, Iterable, List, Set, Tuple, Union, final
 
 import numpy as np
 from google.protobuf.json_format import MessageToDict  # type: ignore
@@ -25,8 +27,9 @@ from sc2.constants import (
     mineral_ids,
 )
 from sc2.data import ActionResult, Race, race_townhalls
-from sc2.game_data import AbilityData, Cost, GameData
+from sc2.game_data import Cost, GameData
 from sc2.game_state import Blip, EffectData, GameState
+from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
 from sc2.pixel_map import PixelMap
@@ -257,20 +260,20 @@ class BotAIInternal(ABC):
 
     @final
     @property_cache_once_per_frame
-    def _abilities_all_units(self) -> Tuple[Counter, Dict[AbilityData, float]]:
+    def _abilities_all_units(self) -> Tuple[CounterType[AbilityId], Dict[AbilityId, float]]:
         """Cache for the already_pending function, includes protoss units warping in,
         all units in production and all structures, and all morphs"""
-        abilities_amount = Counter()
-        max_build_progress: Dict[AbilityData, float] = {}
+        abilities_amount: CounterType[AbilityId] = Counter()
+        max_build_progress: Dict[AbilityId, float] = {}
         unit: Unit
         for unit in self.units + self.structures:
             for order in unit.orders:
-                abilities_amount[order.ability] += 1
+                abilities_amount[order.ability.exact_id] += 1
             if not unit.is_ready:
                 if self.race != Race.Terran or not unit.is_structure:
                     # If an SCV is constructing a building, already_pending would count this structure twice
                     # (once from the SCV order, and once from "not structure.is_ready")
-                    creation_ability: AbilityData = self.game_data.units[unit.type_id.value].creation_ability
+                    creation_ability: AbilityId = self.game_data.units[unit.type_id.value].creation_ability.exact_id
                     abilities_amount[creation_ability] += 1
                     max_build_progress[creation_ability] = max(
                         max_build_progress.get(creation_ability, 0), unit.build_progress
@@ -280,9 +283,9 @@ class BotAIInternal(ABC):
 
     @final
     @property_cache_once_per_frame
-    def _worker_orders(self) -> Counter:
+    def _worker_orders(self) -> CounterType[AbilityId]:
         """ This function is used internally, do not use! It is to store all worker abilities. """
-        abilities_amount = Counter()
+        abilities_amount: CounterType[AbilityId] = Counter()
         structures_in_production: Set[Union[Point2, int]] = set()
         for structure in self.structures:
             if structure.type_id in TERRAN_STRUCTURES_REQUIRE_SCV:
@@ -292,13 +295,9 @@ class BotAIInternal(ABC):
             for order in worker.orders:
                 # Skip if the SCV is constructing (not isinstance(order.target, int))
                 # or resuming construction (isinstance(order.target, int))
-                is_int = isinstance(order.target, int)
-                if (
-                    is_int and order.target in structures_in_production
-                    or not is_int and order.target in structures_in_production
-                ):
+                if order.target in structures_in_production:
                     continue
-                abilities_amount[order.ability] += 1
+                abilities_amount[order.ability.exact_id] += 1
         return abilities_amount
 
     @final

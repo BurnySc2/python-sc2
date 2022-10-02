@@ -159,7 +159,7 @@ class Client(Protocol):
         result = await self._execute(
             data=sc_pb.RequestData(ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True)
         )
-        return GameData(result.data)
+        return GameData.from_proto(result.data)
 
     async def dump_data(self, ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True):
         """

@@ -401,13 +401,13 @@ class BotAI(BotAIInternal):
         :param unit_type:"""
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
-        unit_supply_cost = self.game_data.units[unit_type.value]._proto.food_required
+        unit_supply_cost = self.game_data.units[unit_type.value].food_required
         if unit_supply_cost > 0 and unit_type in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[unit_type]) == 1:
             producer: UnitTypeId
             for producer in UNIT_TRAINED_FROM[unit_type]:
                 producer_unit_data = self.game_data.units[producer.value]
-                if producer_unit_data._proto.food_required <= unit_supply_cost:
-                    producer_supply_cost = producer_unit_data._proto.food_required
+                if producer_unit_data.food_required <= unit_supply_cost:
+                    producer_supply_cost = producer_unit_data.food_required
                     unit_supply_cost -= producer_supply_cost
         return unit_supply_cost
 
@@ -439,7 +439,7 @@ class BotAI(BotAIInternal):
         :param unit_type:
         """
         unit_data = self.game_data.units[unit_type.value]
-        return Cost(unit_data._proto.mineral_cost, unit_data._proto.vespene_cost)
+        return Cost(unit_data.mineral_cost, unit_data.vespene_cost)
 
     def calculate_cost(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId]) -> Cost:
         """
@@ -482,7 +482,7 @@ class BotAI(BotAIInternal):
                     return self.calculate_unit_value(UnitTypeId.ARCHON)
             unit_data = self.game_data.units[item_id.value]
             # Cost of morphs is automatically correctly calculated by 'calculate_ability_cost'
-            return self.game_data.calculate_ability_cost(unit_data.creation_ability)
+            return self.game_data.calculate_ability_cost(unit_data.creation_ability.exact_id)
 
         if isinstance(item_id, UpgradeId):
             cost = self.game_data.upgrades[item_id.value].cost
@@ -552,8 +552,8 @@ class BotAI(BotAIInternal):
         if ability_id in abilities:
             if only_check_energy_and_cooldown:
                 return True
-            cast_range = self.game_data.abilities[ability_id.value]._proto.cast_range
-            ability_target = self.game_data.abilities[ability_id.value]._proto.target
+            cast_range = self.game_data.abilities[ability_id.value].cast_range
+            ability_target: int = self.game_data.abilities[ability_id.value].target_enum.value
             # Check if target is in range (or is a self cast like stimpack)
             if (
                 ability_target == 1 or ability_target == Target.PointOrNone.value and isinstance(target, Point2)
@@ -783,7 +783,7 @@ class BotAI(BotAIInternal):
         # SUPPLYDEPOTDROP is not in self.game_data.units, so bot_ai should not check the build progress via creation ability (worker abilities)
         if structure_type_value not in self.game_data.units:
             return max((s.build_progress for s in self.structures if s.unit_type in equiv_values), default=0)
-        creation_ability: AbilityData = self.game_data.units[structure_type_value].creation_ability
+        creation_ability: AbilityId = self.game_data.units[structure_type_value].creation_ability.exact_id
         max_value = max(
             [s.build_progress for s in self.structures if s.unit_type in equiv_values] +
             [self._abilities_all_units[1].get(creation_ability, 0)],
@@ -821,7 +821,7 @@ class BotAI(BotAIInternal):
         unit_info_id = race_dict[self.race][structure_type]
         unit_info_id_value = unit_info_id.value
         # The following commented out line is unreliable for ghost / thor as they return 0 which is incorrect
-        # unit_info_id_value = self.game_data.units[structure_type.value]._proto.tech_requirement
+        # unit_info_id_value = self.game_data.units[structure_type.value].tech_requirement
         if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
         progresses: List[float] = [self.structure_type_build_progress(unit_info_id_value)]
@@ -846,14 +846,14 @@ class BotAI(BotAIInternal):
         """
         if isinstance(unit_type, UpgradeId):
             return self.already_pending_upgrade(unit_type)
-        ability = self.game_data.units[unit_type.value].creation_ability
+        ability = self.game_data.units[unit_type.value].creation_ability.exact_id
         return self._abilities_all_units[0][ability]
 
     def worker_en_route_to_build(self, unit_type: UnitTypeId) -> float:
         """This function counts how many workers are on the way to start the construction a building.
 
         :param unit_type:"""
-        ability = self.game_data.units[unit_type.value].creation_ability
+        ability = self.game_data.units[unit_type.value].creation_ability.exact_id
         return self._worker_orders[ability]
 
     @property_cache_once_per_frame
