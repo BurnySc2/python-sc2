@@ -47,7 +47,7 @@ def get_map_specific_bot(map_path: Path) -> BotAI:
 
     # Build fresh bot object, and load the pickled data into the bot object
     bot = BotAI()
-    game_data = GameData(raw_game_data.data)
+    game_data = GameData.from_proto(raw_game_data.data)
     game_info = GameInfo(raw_game_info.game_info)
     game_state = GameState(raw_observation)
     bot._initialize_variables()
@@ -291,7 +291,7 @@ def test_bot_ai():
         elif isinstance(item_id, UpgradeId):
             return bot.game_data.upgrades[item_id.value].cost
         elif isinstance(item_id, UnitTypeId):
-            creation_ability: AbilityId = bot.game_data.units[item_id.value].creation_ability
+            creation_ability: AbilityId = bot.game_data.units[item_id.value].creation_ability.exact_id
             return bot.game_data.calculate_ability_cost(creation_ability)
 
     def assert_cost(item_id, real_cost: Cost):
@@ -441,9 +441,9 @@ def test_game_data():
         assert isinstance(unit_data.has_minerals, bool)
         assert isinstance(unit_data.has_vespene, bool)
         assert isinstance(unit_data.cargo_size, int)
-        assert isinstance(unit_data.tech_requirement, (UnitTypeId, type(None)))
-        assert isinstance(unit_data.tech_alias, (list, type(None)))
-        assert isinstance(unit_data.unit_alias, (UnitTypeId, type(None)))
+        assert isinstance(unit_data.tech_requirement_id, (UnitTypeId, type(None)))
+        assert isinstance(unit_data.tech_alias, list)
+        assert isinstance(unit_data.unit_alias_id, (UnitTypeId, type(None)))
         assert isinstance(unit_data.race, Race)
         assert isinstance(unit_data.cost_zerg_corrected, Cost)
         assert isinstance(unit_data.morph_cost, (Cost, type(None)))
@@ -527,8 +527,8 @@ def test_unit():
     assert not townhall.is_massive
     assert not scv.is_psionic
     assert not townhall.is_psionic
-    assert scv.tech_alias is None
-    assert townhall.tech_alias is None
+    assert scv.tech_alias == []
+    assert townhall.tech_alias == []
     assert scv.unit_alias is None
     assert townhall.unit_alias is None
     assert scv.can_attack
@@ -947,10 +947,6 @@ def test_position_pointlike(x1, y1, x2, y2, x3, y3):
     assert abs(pos1.distance_to(pos2) - dist) <= epsilon
     assert abs(pos1.distance_to_point2(pos2) - dist) <= epsilon
     assert abs(pos1._distance_squared(pos2)**0.5 - dist) <= epsilon
-
-    if epsilon < dist < 1e5:
-        assert pos1.is_closer_than(dist + epsilon, pos2)
-        assert pos1.is_further_than(dist - epsilon, pos2)
 
     points = {pos2, pos3}
     points2 = {pos1, pos2, pos3}

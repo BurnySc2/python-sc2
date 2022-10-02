@@ -38,16 +38,8 @@ class Units(list):
         """
         return self.of_type(unit_types)
 
-    def __iter__(self) -> Generator[Unit]:
+    def __iter__(self) -> Generator[Unit, None, None]:
         return (item for item in super().__iter__())
-
-    # TODO Deprecate in favor of Units.__call__
-    def select(self, units: Iterable[Unit]):
-        """Creates a new mutable Units object from Units or list object.
-
-        :param units:
-        """
-        return Units(units, self._bot_object)
 
     def copy(self) -> Units:
         """Creates a new mutable Units object from Units or list object.
@@ -457,7 +449,6 @@ class Units(list):
         """
         return self.subgroup(self._list_sorted_closest_to_distance(position=position, distance=distance)[-n:])
 
-    # TODO Deprecate in favor of Units.__call__
     def subgroup(self, units: Iterable[Unit]) -> Units:
         """Creates a new mutable Units object from Units or list object.
 
@@ -602,12 +593,12 @@ class Units(list):
         )
         tech_alias_types: Set[int] = {u.value for u in other}
         unit_data = self._bot_object.game_data.units
-        for unitType in other:
-            for same in unit_data[unitType.value]._proto.tech_alias:
+        for unit_type in other:
+            for same in unit_data[unit_type.value].tech_alias:
                 tech_alias_types.add(same)
         return self.filter(
             lambda unit: unit.unit_type in tech_alias_types or
-            any(same in tech_alias_types for same in unit._type_data._proto.tech_alias)
+            any(same in tech_alias_types for same in unit._type_data.tech_alias)
         )
 
     def same_unit(self, other: Union[UnitTypeId, Iterable[UnitTypeId]]) -> Units:
@@ -634,11 +625,11 @@ class Units(list):
             other = {other}
         unit_alias_types: Set[int] = {u.value for u in other}
         unit_data = self._bot_object.game_data.units
-        for unitType in other:
-            unit_alias_types.add(unit_data[unitType.value]._proto.unit_alias)
+        for unit_type in other:
+            unit_alias_types.add(unit_data[unit_type.value].unit_alias)
         unit_alias_types.discard(0)
         return self.filter(
-            lambda unit: unit.unit_type in unit_alias_types or unit._type_data._proto.unit_alias in unit_alias_types
+            lambda unit: unit.unit_type in unit_alias_types or unit._type_data.unit_alias in unit_alias_types
         )
 
     @cached_property

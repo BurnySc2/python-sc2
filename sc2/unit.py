@@ -5,28 +5,13 @@ import math
 import warnings
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    ClassVar,
-    Dict,
-    FrozenSet,
-    List,
-    Literal,
-    Optional,
-    Set,
-    Tuple,
-    TypeVar,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, FrozenSet, List, Literal, Optional, Set, Tuple, Union
 
+from sc2.cache import CacheDict
 from sc2.constants import (
     CAN_BE_ATTACKED,
     DAMAGE_BONUS_PER_UPGRADE,
-    IS_ARMORED,
     IS_ATTACKING,
-    IS_BIOLOGICAL,
     IS_CARRYING_MINERALS,
     IS_CARRYING_RESOURCES,
     IS_CARRYING_VESPENE,
@@ -36,18 +21,13 @@ from sc2.constants import (
     IS_DETECTOR,
     IS_ENEMY,
     IS_GATHERING,
-    IS_LIGHT,
-    IS_MASSIVE,
-    IS_MECHANICAL,
     IS_MINE,
     IS_PATROLLING,
     IS_PLACEHOLDER,
-    IS_PSIONIC,
     IS_REPAIRING,
     IS_RETURNING,
     IS_REVEALED,
     IS_SNAPSHOT,
-    IS_STRUCTURE,
     IS_VISIBLE,
     OFF_CREEP_SPEED_INCREASE_DICT,
     OFF_CREEP_SPEED_UPGRADE_DICT,
@@ -63,9 +43,10 @@ from sc2.constants import (
     UNIT_COLOSSUS,
     UNIT_ORACLE,
     UNIT_PHOTONCANNON,
+    WEAPON_TYPE_LITERAL,
     transforming,
 )
-from sc2.data import Alliance, Attribute, CloakState, DisplayType, Race, Target, race_gas, warpgate_abilities
+from sc2.data import Alliance, CloakState, DisplayType, Race, Target, race_gas, warpgate_abilities
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
@@ -75,7 +56,7 @@ from sc2.unit_command import UnitCommand
 
 if TYPE_CHECKING:
     from sc2.bot_ai import BotAI
-    from sc2.game_data import AbilityData, UnitTypeData
+    from sc2.game_data import AbilityData, UnitTypeData, Weapon
 
 
 @dataclass
@@ -112,20 +93,6 @@ class UnitOrder:
 
     def __repr__(self) -> str:
         return f"UnitOrder({self.ability}, {self.target}, {self.progress})"
-
-
-T = TypeVar("T")
-
-
-class CacheDict(dict):
-
-    def retrieve_and_set(self, key: Any, func: Callable[[], T]) -> T:
-        """ Either return the value at a certain key,
-        or set the return value of a function to that key, then return that value. """
-        if key in self:
-            return self[key]
-        self[key] = func()
-        return self[key]
 
 
 # pylint: disable=R0904
@@ -234,7 +201,7 @@ class Unit:
     @cached_property
     def race(self) -> Race:
         """ Returns the race of the unit """
-        return Race(self._type_data._proto.race)
+        return Race(self._type_data.race)
 
     @property
     def tag(self) -> int:
@@ -244,62 +211,62 @@ class Unit:
     @property
     def is_structure(self) -> bool:
         """ Checks if the unit is a structure. """
-        return IS_STRUCTURE in self._type_data.attributes
+        return "Structure" in self._type_data.attributes
 
     @property
     def is_light(self) -> bool:
         """ Checks if the unit has the 'light' attribute. """
-        return IS_LIGHT in self._type_data.attributes
+        return "Light" in self._type_data.attributes
 
     @property
     def is_armored(self) -> bool:
         """ Checks if the unit has the 'armored' attribute. """
-        return IS_ARMORED in self._type_data.attributes
+        return "Armored" in self._type_data.attributes
 
     @property
     def is_biological(self) -> bool:
         """ Checks if the unit has the 'biological' attribute. """
-        return IS_BIOLOGICAL in self._type_data.attributes
+        return "Biological" in self._type_data.attributes
 
     @property
     def is_mechanical(self) -> bool:
         """ Checks if the unit has the 'mechanical' attribute. """
-        return IS_MECHANICAL in self._type_data.attributes
+        return "Mechanical" in self._type_data.attributes
 
     @property
     def is_massive(self) -> bool:
         """ Checks if the unit has the 'massive' attribute. """
-        return IS_MASSIVE in self._type_data.attributes
+        return "Massive" in self._type_data.attributes
 
     @property
     def is_psionic(self) -> bool:
         """ Checks if the unit has the 'psionic' attribute. """
-        return IS_PSIONIC in self._type_data.attributes
+        return "Psionic" in self._type_data.attributes
 
     @cached_property
-    def tech_alias(self) -> Optional[List[UnitTypeId]]:
+    def tech_alias(self) -> List[UnitTypeId]:
         """Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
         For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]
-        For SCV, this returns None"""
-        return self._type_data.tech_alias
+        For SCV, this returns this returns empty list"""
+        return self._type_data.tech_alias_ids
 
     @cached_property
     def unit_alias(self) -> Optional[UnitTypeId]:
         """Building type equality, e.g. FlyingOrbitalCommand is the same as OrbitalCommand
         For flying OrbitalCommand, this returns UnitTypeId.OrbitalCommand
         For SCV, this returns None"""
-        return self._type_data.unit_alias
+        return self._type_data.unit_alias_id
 
     @cached_property
-    def _weapons(self):
+    def _weapons(self) -> List[Weapon]:
         """ Returns the weapons of the unit. """
-        return self._type_data._proto.weapons
+        return self._type_data.weapons_list
 
     @cached_property
     def can_attack(self) -> bool:
         """ Checks if the unit can attack at all. """
         # TODO BATTLECRUISER doesnt have weapons in proto?!
-        return bool(self._weapons) or self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}
+        return bool(self._weapons) or self.unit_type in {UNIT_BATTLECRUISER.value, UNIT_ORACLE.value}
 
     @property
     def can_attack_both(self) -> bool:
@@ -309,19 +276,16 @@ class Unit:
     @cached_property
     def can_attack_ground(self) -> bool:
         """ Checks if the unit can attack ground units. """
-        if self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}:
+        if self.type_id in {UNIT_BATTLECRUISER.value, UNIT_ORACLE.value}:
             return True
-        if self._weapons:
-            return any(weapon.type in TARGET_GROUND for weapon in self._weapons)
-        return False
+        return bool(self._type_data.ground_weapon)
 
     @cached_property
     def ground_dps(self) -> float:
         """ Returns the dps against ground units. Does not include upgrades. """
-        if self.can_attack_ground:
-            weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
-            if weapon:
-                return (weapon.damage * weapon.attacks) / weapon.speed
+        weapon = self._type_data.ground_weapon
+        if weapon:
+            return (weapon.damage * weapon.attacks) / weapon.speed
         return 0
 
     @cached_property
@@ -331,10 +295,9 @@ class Unit:
             return 4
         if self.type_id == UNIT_BATTLECRUISER:
             return 6
-        if self.can_attack_ground:
-            weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
-            if weapon:
-                return weapon.range
+        weapon = self._type_data.ground_weapon
+        if weapon:
+            return weapon.range
         return 0
 
     @cached_property
@@ -342,17 +305,14 @@ class Unit:
         """ Checks if the unit can air attack at all. Does not include upgrades. """
         if self.type_id == UNIT_BATTLECRUISER:
             return True
-        if self._weapons:
-            return any(weapon.type in TARGET_AIR for weapon in self._weapons)
-        return False
+        return bool(self._type_data.air_weapon)
 
     @cached_property
     def air_dps(self) -> float:
         """ Returns the dps against air units. Does not include upgrades. """
-        if self.can_attack_air:
-            weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_AIR), None)
-            if weapon:
-                return (weapon.damage * weapon.attacks) / weapon.speed
+        weapon = self._type_data.air_weapon
+        if weapon:
+            return (weapon.damage * weapon.attacks) / weapon.speed
         return 0
 
     @cached_property
@@ -360,41 +320,38 @@ class Unit:
         """ Returns the range against air units. Does not include upgrades. """
         if self.type_id == UNIT_BATTLECRUISER:
             return 6
-        if self.can_attack_air:
-            weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_AIR), None)
-            if weapon:
-                return weapon.range
+        weapon = self._type_data.air_weapon
+        if weapon:
+            return weapon.range
         return 0
 
     @cached_property
-    def bonus_damage(self) -> Optional[Tuple[int, str]]:
+    def bonus_damage(self) -> Optional[Tuple[float, str]]:
         """Returns a tuple of form '(bonus damage, armor type)' if unit does 'bonus damage' against 'armor type'.
         Possible armor typs are: 'Light', 'Armored', 'Biological', 'Mechanical', 'Psionic', 'Massive', 'Structure'."""
         # TODO: Consider units with ability attacks (Oracle, Baneling) or multiple attacks (Thor).
-        if self._weapons:
-            for weapon in self._weapons:
-                if weapon.damage_bonus:
-                    b = weapon.damage_bonus[0]
-                    bonus: int = b.bonus
-                    return bonus, Attribute(b.attribute).name
+        for weapon in self._weapons:
+            if weapon.damage_bonus:
+                b = weapon.damage_bonus[0]
+                return b.bonus, b.attribute
         return None
 
     @property
     def armor(self) -> float:
         """ Returns the armor of the unit. Does not include upgrades """
-        return self._type_data._proto.armor
+        return self._type_data.armor
 
     @property
     def sight_range(self) -> float:
         """ Returns the sight range of the unit. """
-        return self._type_data._proto.sight_range
+        return self._type_data.sight_range
 
     @property
     def movement_speed(self) -> float:
         """Returns the movement speed of the unit.
         This is the unit movement speed on game speed 'normal'. To convert it to 'faster' movement speed, multiply it by a factor of '1.4'. E.g. reaper movement speed is listed here as 3.75, but should actually be 5.25.
         Does not include upgrades or buffs."""
-        return self._type_data._proto.movement_speed
+        return self._type_data.movement_speed
 
     @cached_property
     def real_speed(self) -> float:
@@ -637,9 +594,9 @@ class Unit:
         :param target:
         :param bonus_distance:
         """
-        cast_range = self.bot_object.game_data.abilities[ability_id.value]._proto.cast_range
+        cast_range = self.bot_object.game_data.abilities[ability_id.value].cast_range
         assert cast_range > 0, f"Checking for an ability ({ability_id}) that has no cast range"
-        ability_target_type = self.bot_object.game_data.abilities[ability_id.value]._proto.target
+        ability_target_type = self.bot_object.game_data.abilities[ability_id.value].target
         # For casting abilities that target other units, like transfuse, feedback, snipe, yamato
         if (
             ability_target_type in {Target.Unit.value, Target.PointOrUnit.value}  # type: ignore
@@ -734,7 +691,7 @@ class Unit:
                 return (0, 0, 0)
             # TODO if bunker belongs to us, use passengers and upgrade level to calculate damage
 
-        required_target_type: Set[int] = (
+        required_target_type: Set[WEAPON_TYPE_LITERAL] = (
             TARGET_BOTH
             if target.type_id == UnitTypeId.COLOSSUS else TARGET_GROUND if not target.is_flying else TARGET_AIR
         )
@@ -768,7 +725,7 @@ class Unit:
                     )
                     # Hardcode blueflame damage bonus from hellions
                     if (
-                        bonus.attribute == IS_LIGHT and self.type_id == UnitTypeId.HELLION
+                        bonus.attribute == "Light" and self.type_id == UnitTypeId.HELLION
                         and UpgradeId.HIGHCAPACITYBARRELS in self.bot_object.state.upgrades
                     ):
                         bonus_damage_per_upgrade += 5
@@ -872,8 +829,11 @@ class Unit:
         :param ignore_armor:
         :param include_overkill_damage:
         """
-        calc_tuple: Tuple[float, float,
-                          float] = self.calculate_damage_vs_target(target, ignore_armor, include_overkill_damage)
+        calc_tuple: Tuple[float, float, float] = self.calculate_damage_vs_target(
+            target,
+            ignore_armor,
+            include_overkill_damage,
+        )
         # TODO fix for real time? The result may have to be multiplied by 1.4 because of game_speed=normal
         if calc_tuple[1] == 0:
             return 0
@@ -1403,7 +1363,7 @@ class Unit:
         """
         if self.bot_object.unit_command_uses_self_do:
             return UnitCommand(ability, self, target=target, queue=queue)
-        expected_target: int = self.bot_object.game_data.abilities[ability.value]._proto.target
+        expected_target: int = self.bot_object.game_data.abilities[ability.value].target_enum.value
         # 1: None, 2: Point, 3: Unit, 4: PointOrUnit, 5: PointOrNone
         if target is None and expected_target not in {1, 5}:
             warnings.warn(

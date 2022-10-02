@@ -423,7 +423,7 @@ def generate_unit_alias_dict(data: dict):
             unit_alias_unit_type_id = UnitTypeId(unit_alias)
             all_unit_aliases[unit_type] = unit_alias_unit_type_id
 
-        tech_aliases: List[int] = game_data.units[unit_type_value]._proto.tech_alias
+        tech_aliases: List[int] = game_data.units[unit_type_value].tech_alias
 
         for tech_alias in tech_aliases:
             # Might be 0 if it has no alias
