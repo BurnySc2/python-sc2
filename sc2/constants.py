@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Any, Dict, Literal, Set
+from typing import Dict, Literal, Set, Union
 
 from sc2.data import Alliance, CloakState, DisplayType
 from sc2.ids.ability_id import AbilityId
@@ -486,7 +486,7 @@ ALL_GAS: Set[UnitTypeId] = {
     UnitTypeId.EXTRACTOR,
     UnitTypeId.EXTRACTORRICH,
 }
-DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Any]] = {
+DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Dict[Union[ATTRIBUTES_LITERAL, None], int]]] = {
     #
     # Protoss
     #
@@ -503,7 +503,7 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Any]] = {
     },
     UnitTypeId.STALKER: {
         "Any": {
-            "Amored": 1
+            "Armored": 1
         }
     },
     UnitTypeId.DARKTEMPLAR: {
@@ -521,7 +521,7 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Any]] = {
     UnitTypeId.IMMORTAL: {
         "Ground": {
             None: 2,
-            "Amored": 3
+            "Armored": 3
         }
     },
     UnitTypeId.COLOSSUS: {
@@ -555,7 +555,7 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Any]] = {
     # Barracks Units
     UnitTypeId.MARAUDER: {
         "Ground": {
-            "Amored": 1
+            "Armored": 1
         }
     },
     UnitTypeId.GHOST: {
@@ -583,13 +583,13 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Any]] = {
     UnitTypeId.SIEGETANK: {
         "Ground": {
             None: 2,
-            "Amored": 1
+            "Armored": 1
         }
     },
     UnitTypeId.SIEGETANKSIEGED: {
         "Ground": {
             None: 4,
-            "Amored": 1
+            "Armored": 1
         }
     },
     UnitTypeId.THOR: {
@@ -650,7 +650,7 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Any]] = {
     UnitTypeId.LURKERMPBURROWED: {
         "Ground": {
             None: 2,
-            "Amored": 1
+            "Armored": 1
         }
     },
     UnitTypeId.ULTRALISK: {

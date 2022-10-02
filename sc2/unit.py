@@ -829,8 +829,11 @@ class Unit:
         :param ignore_armor:
         :param include_overkill_damage:
         """
-        calc_tuple: Tuple[float, float,
-                          float] = self.calculate_damage_vs_target(target, ignore_armor, include_overkill_damage)
+        calc_tuple: Tuple[float, float, float] = self.calculate_damage_vs_target(
+            target,
+            ignore_armor,
+            include_overkill_damage,
+        )
         # TODO fix for real time? The result may have to be multiplied by 1.4 because of game_speed=normal
         if calc_tuple[1] == 0:
             return 0
