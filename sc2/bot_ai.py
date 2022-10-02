@@ -783,7 +783,10 @@ class BotAI(BotAIInternal):
         # SUPPLYDEPOTDROP is not in self.game_data.units, so bot_ai should not check the build progress via creation ability (worker abilities)
         if structure_type_value not in self.game_data.units:
             return max((s.build_progress for s in self.structures if s.unit_type in equiv_values), default=0)
-        creation_ability: AbilityId = self.game_data.units[structure_type_value].creation_ability.exact_id
+        creation_ability_data: AbilityData = self.game_data.units[structure_type_value].creation_ability
+        if creation_ability_data is None:
+            return 0
+        creation_ability: AbilityId = creation_ability_data.exact_id
         max_value = max(
             [s.build_progress for s in self.structures if s.unit_type in equiv_values] +
             [self._abilities_all_units[1].get(creation_ability, 0)],
