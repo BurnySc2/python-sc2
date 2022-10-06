@@ -212,9 +212,7 @@ class BotAI(BotAIInternal):
         :param ignore_resource_requirements:"""
         return await self.client.query_available_abilities(units, ignore_resource_requirements)
 
-    async def expand_now(
-        self, building: UnitTypeId = None, max_distance: float = 10, location: Optional[Point2] = None
-    ):
+    async def expand_now(self, building: UnitTypeId = None, max_distance: int = 10, location: Optional[Point2] = None):
         """Finds the next possible expansion via 'self.get_next_expansion()'. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.
 
         :param building:
