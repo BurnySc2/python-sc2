@@ -251,10 +251,9 @@ class GameInfo:
             return len(np.unique(sliced)) == 1
 
         # all points in the playable area that are pathable but not placable
-        pa = self.playable_area
-        mixed_numpy_array = self.pathing_grid.data_numpy & (1 - self.placement_grid.data_numpy)
-        mixed_numpy_array_limited = mixed_numpy_array[:pa.y + pa.height, :pa.x + pa.width]
-        points = (Point2((x, y)) for y, x in np.argwhere(mixed_numpy_array_limited) if pa.x <= x and pa.y <= y)
+        mixed_numpy_array: np.ndarray = self.pathing_grid.data_numpy & (1 - self.placement_grid.data_numpy)
+        # ramp points are already inside the playable area, so no need to check that
+        points = (Point2((x, y)) for y, x in np.argwhere(mixed_numpy_array == 1))
 
         # divide points into ramp points and vision blockers
         ramp_points = []
