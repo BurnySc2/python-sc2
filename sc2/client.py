@@ -183,7 +183,7 @@ class Client(Protocol):
 
     async def get_game_info(self) -> GameInfo:
         result = await self._execute(game_info=sc_pb.RequestGameInfo())
-        return GameInfo(result.game_info)
+        return GameInfo(_proto=result.game_info)
 
     async def actions(self, actions, return_successes=False):
         if not actions:

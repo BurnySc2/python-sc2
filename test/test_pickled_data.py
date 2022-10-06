@@ -48,7 +48,7 @@ def get_map_specific_bot(map_path: Path) -> BotAI:
     # Build fresh bot object, and load the pickled data into the bot object
     bot = BotAI()
     game_data = GameData.from_proto(raw_game_data.data)
-    game_info = GameInfo(raw_game_info.game_info)
+    game_info = GameInfo(_proto=raw_game_info.game_info)
     game_state = GameState(raw_observation)
     bot._initialize_variables()
     client = Client(True)

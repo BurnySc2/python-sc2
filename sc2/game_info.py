@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import heapq
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from functools import cached_property
 from typing import Any, Deque, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple
 
@@ -208,34 +208,82 @@ class Ramp:
         return sorted_depots[0].negative_offset(direction)
 
 
+@dataclass
 class GameInfo:
+    _proto: Any = None
 
-    def __init__(self, proto):
-        self._proto = proto
-        self.players: List[Player] = [Player.from_proto(p) for p in self._proto.player_info]
-        self.map_name: str = self._proto.map_name
-        self.local_map_path: str = self._proto.local_map_path
-        self.map_size: Size = Size.from_proto(self._proto.start_raw.map_size)
+    # Filled later by BotAI._prepare_first_step
+    player_start_location: Point2 = None  # type: ignore
 
+    _pathing_grid: PixelMap = None  # type: ignore
+    _map_ramps: List[Ramp] = None  # type: ignore
+    _vision_blockers: FrozenSet[Point2] = None  # type: ignore
+
+    @cached_property
+    def players(self) -> List[Player]:
+        return [Player.from_proto(p) for p in self._proto.player_info]
+
+    @property
+    def map_name(self) -> str:
+        return self._proto.map_name
+
+    @property
+    def local_map_path(self) -> str:
+        return self._proto.local_map_path
+
+    @cached_property
+    def map_size(self) -> Size:
+        return Size.from_proto(self._proto.start_raw.map_size)
+
+    @property
+    def pathing_grid(self) -> PixelMap:
         # self.pathing_grid[point]: if 0 point is not pathable, if 1 point is pathable
-        self.pathing_grid: PixelMap = PixelMap(self._proto.start_raw.pathing_grid, in_bits=True)
+        if self._pathing_grid is None:
+            self._pathing_grid: PixelMap = PixelMap(self._proto.start_raw.pathing_grid, in_bits=True)
+        return self._pathing_grid
+
+    @cached_property
+    def terrain_height(self) -> PixelMap:
         # self.terrain_height[point]: returns the height in range of 0 to 255 at that point
-        self.terrain_height: PixelMap = PixelMap(self._proto.start_raw.terrain_height)
+        return PixelMap(self._proto.start_raw.terrain_height)
+
+    @cached_property
+    def placement_grid(self) -> PixelMap:
         # self.placement_grid[point]: if 0 point is not placeable, if 1 point is pathable
-        self.placement_grid: PixelMap = PixelMap(self._proto.start_raw.placement_grid, in_bits=True)
-        self.playable_area = Rect.from_proto(self._proto.start_raw.playable_area)
-        self.map_center = self.playable_area.center
+        return PixelMap(self._proto.start_raw.placement_grid, in_bits=True)
 
-        self.map_ramps: List[Ramp] = None  # type: ignore
-        self.vision_blockers: FrozenSet[Point2] = None  # type: ignore
-        self.map_ramps, self.vision_blockers = self._find_ramps_and_vision_blockers()
+    @cached_property
+    def playable_area(self) -> Rect:
+        # self.placement_grid[point]: if 0 point is not placeable, if 1 point is pathable
+        return Rect.from_proto(self._proto.start_raw.playable_area)
 
-        self.player_races: Dict[int, Race] = {
-            p.player_id: p.race_actual or p.race_requested
-            for p in self._proto.player_info
-        }
-        self.start_locations: List[Point2] = [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
-        self.player_start_location: Point2 = None  # Filled later by BotAI._prepare_first_step
+    @cached_property
+    def map_center(self) -> Point2:
+        # self.placement_grid[point]: if 0 point is not placeable, if 1 point is pathable
+        return self.playable_area.center
+
+    def _calc_map_ramps_and_vision_blockers(self):
+        self._map_ramps, self._vision_blockers = self._find_ramps_and_vision_blockers()
+
+    @property
+    def map_ramps(self) -> List[Ramp]:
+        if self._map_ramps is None:
+            self._calc_map_ramps_and_vision_blockers()
+        return self._map_ramps
+
+    @property
+    def vision_blockers(self) -> FrozenSet[Point2]:
+        if self._vision_blockers is None:
+            self._calc_map_ramps_and_vision_blockers()
+        return self._vision_blockers
+
+    @cached_property
+    def player_races(self) -> Dict[int, Race]:
+        return {p.player_id: p.race_actual or p.race_requested for p in self._proto.player_info}
+
+    @cached_property
+    def start_locations(self) -> List[Point2]:
+        return [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
 
     def _find_ramps_and_vision_blockers(self) -> Tuple[List[Ramp], FrozenSet[Point2]]:
         """Calculate points that are pathable but not placeable.

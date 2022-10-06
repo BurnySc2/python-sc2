@@ -57,7 +57,7 @@ class ExporterBot(BotAI):
 
         # To test if this data is convertable in the first place
         _game_data = GameData(raw_game_data.data)
-        _game_info = GameInfo(raw_game_info.game_info)
+        _game_info = GameInfo(_proto=raw_game_info.game_info)
         _game_state = GameState(raw_observation)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
