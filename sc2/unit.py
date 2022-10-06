@@ -67,7 +67,7 @@ class RallyTarget:
     @classmethod
     def from_proto(cls, proto: dict) -> RallyTarget:
         return cls(
-            Point2.from_proto_string(proto["point"]),
+            Point2.from_proto_dict(proto["point"]),
             int(proto["tag"]) if ("tag" in proto) else None,
         )
 
@@ -82,7 +82,7 @@ class UnitOrder:
     def from_proto(cls, proto: dict, bot_object: BotAI) -> UnitOrder:
         target: Optional[Union[int, Point2]] = None
         if "target_world_space_pos" in proto:
-            target = Point2.from_proto_string(proto["target_world_space_pos"])
+            target = Point2.from_proto_dict(proto["target_world_space_pos"])
         if "target_unit_tag" in proto:
             target = int(proto["target_unit_tag"])
         return cls(
@@ -539,12 +539,12 @@ class Unit:
     @cached_property
     def position(self) -> Point2:
         """ Returns the 2d position of the unit. """
-        return Point2.from_proto_string(self.pos)
+        return Point2.from_proto_dict(self.pos)
 
     @cached_property
     def position3d(self) -> Point3:
         """ Returns the 3d position of the unit. """
-        return Point3.from_proto_string(self.pos)
+        return Point3.from_proto_dict(self.pos)
 
     def distance_to(self, p: Union[Unit, Point2]) -> float:
         """Using the 2d distance between self and p.

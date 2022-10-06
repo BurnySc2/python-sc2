@@ -111,7 +111,7 @@ class EffectData:
     @property
     def positions(self) -> Set[Point2]:
         if self.fake:
-            return {Point2.from_proto_string(self._proto['pos'])}
+            return {Point2.from_proto_dict(self._proto['pos'])}
         return {Point2.from_proto(p) for p in self._proto.pos}
 
     @property
@@ -198,6 +198,7 @@ class GameState:
     def __init__(self, response_observation, previous_observation=None):
         """
         :param response_observation:
+        :param previous_observation:
         """
         # Only filled in realtime=True in case the bot skips frames
         self.previous_observation = previous_observation

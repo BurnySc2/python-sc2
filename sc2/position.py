@@ -149,7 +149,7 @@ class Point2(Pointlike):
         return cls((data.x, data.y))
 
     @classmethod
-    def from_proto_string(cls, data: dict) -> Point2:
+    def from_proto_dict(cls, data: dict) -> Point2:
         """
         :param data:
         """
@@ -314,14 +314,14 @@ class Point2(Pointlike):
         return abs(other.x - self.x) + abs(other.y - self.y)
 
     @staticmethod
-    def center(units_or_points: Iterable[Point2]) -> Point2:
+    def center(points: List[Point2]) -> Point2:
         """Returns the central point for points in list
 
-        :param units_or_points:"""
+        :param points:"""
         s = Point2((0, 0))
-        for p in units_or_points:
+        for p in points:
             s += p
-        return s / len(units_or_points)
+        return s / len(points)
 
 
 class Point3(Point2):
@@ -334,7 +334,7 @@ class Point3(Point2):
         return cls((data.x, data.y, data.z))
 
     @classmethod
-    def from_proto_string(cls, data: dict) -> Point3:
+    def from_proto_dict(cls, data: dict) -> Point3:
         """
         :param data:
         """
