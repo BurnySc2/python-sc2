@@ -220,16 +220,19 @@ class GameInfo:
         self.local_map_path: str = self._proto.local_map_path
         self.map_size: Size = Size.from_proto(self._proto.start_raw.map_size)
 
-        # self.pathing_grid[point]: if 0, point is not pathable, if 1, point is pathable
+        # self.pathing_grid[point]: if 0 point is not pathable, if 1 point is pathable
         self.pathing_grid: PixelMap = PixelMap(self._proto.start_raw.pathing_grid, in_bits=True)
         # self.terrain_height[point]: returns the height in range of 0 to 255 at that point
         self.terrain_height: PixelMap = PixelMap(self._proto.start_raw.terrain_height)
-        # self.placement_grid[point]: if 0, point is not placeable, if 1, point is pathable
+        # self.placement_grid[point]: if 0 point is not placeable, if 1 point is pathable
         self.placement_grid: PixelMap = PixelMap(self._proto.start_raw.placement_grid, in_bits=True)
         self.playable_area = Rect.from_proto(self._proto.start_raw.playable_area)
         self.map_center = self.playable_area.center
-        self.map_ramps: List[Ramp] = None  # Filled later by BotAI._prepare_first_step
-        self.vision_blockers: FrozenSet[Point2] = None  # Filled later by BotAI._prepare_first_step
+
+        self.map_ramps: List[Ramp] = None  # type: ignore
+        self.vision_blockers: FrozenSet[Point2] = None  # type: ignore
+        self.map_ramps, self.vision_blockers = self._find_ramps_and_vision_blockers()
+
         self.player_races: Dict[int, Race] = {
             p.player_id: p.race_actual or p.race_requested
             for p in self._proto.player_info
@@ -242,25 +245,29 @@ class GameInfo:
         Then divide them into ramp points if not all points around the points are equal height
         and into vision blockers if they are."""
 
-        def equal_height_around(tile):
+        def equal_height_around(tile: Point2) -> bool:
             # mask to slice array 1 around tile
             sliced = self.terrain_height.data_numpy[tile[1] - 1:tile[1] + 2, tile[0] - 1:tile[0] + 2]
             return len(np.unique(sliced)) == 1
 
-        map_area = self.playable_area
         # all points in the playable area that are pathable but not placable
-        points = [
-            Point2((a, b)) for (b, a), value in np.ndenumerate(self.pathing_grid.data_numpy)
-            if value == 1 and map_area.x <= a < map_area.x + map_area.width and map_area.y <= b < map_area.y +
-            map_area.height and self.placement_grid[(a, b)] == 0
-        ]
-        # divide points into ramp points and vision blockers
-        ramp_points = [point for point in points if not equal_height_around(point)]
-        vision_blockers = frozenset(point for point in points if equal_height_around(point))
-        ramps = [Ramp(group, self) for group in self._find_groups(ramp_points)]
-        return ramps, vision_blockers
+        pa = self.playable_area
+        mixed_numpy_array = self.pathing_grid.data_numpy & (1 - self.placement_grid.data_numpy)
+        mixed_numpy_array_limited = mixed_numpy_array[:pa.y + pa.height, :pa.x + pa.width]
+        points = (Point2((x, y)) for y, x in np.argwhere(mixed_numpy_array_limited) if pa.x <= x and pa.y <= y)
 
-    def _find_groups(self, points: FrozenSet[Point2], minimum_points_per_group: int = 8) -> Iterable[FrozenSet[Point2]]:
+        # divide points into ramp points and vision blockers
+        ramp_points = []
+        vision_blockers = []
+        for point in points:
+            if equal_height_around(point):
+                vision_blockers.append(point)
+            else:
+                ramp_points.append(point)
+        ramps = [Ramp(group, self) for group in self._find_groups(ramp_points)]
+        return ramps, frozenset(vision_blockers)
+
+    def _find_groups(self, points: Iterable[Point2], minimum_points_per_group: int = 8) -> Iterable[FrozenSet[Point2]]:
         """
         From a set of points, this function will try to group points together by
         painting clusters of points in a rectangular map using flood fill algorithm.
@@ -276,11 +283,11 @@ class GameInfo:
         def paint(pt: Point2) -> None:
             picture[pt.y][pt.x] = current_color
 
-        nearby: List[Tuple[int, int]] = [(a, b) for a in [-1, 0, 1] for b in [-1, 0, 1] if a != 0 or b != 0]
+        nearby: List[Tuple[int, int]] = [(x, y) for x in [-1, 0, 1] for y in [-1, 0, 1] if x != 0 or y != 0]
 
         remaining: Set[Point2] = set(points)
-        for point in remaining:
-            paint(point)
+        for point_r in remaining:
+            paint(point_r)
         current_color = 1
         queue: Deque[Point2] = deque()
         while remaining:

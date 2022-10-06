@@ -108,7 +108,6 @@ def test_bot_ai():
     assert bot.townhalls.random.position not in bot.enemy_start_locations
     assert bot.enemy_units == Units([], bot)
     assert bot.enemy_structures == Units([], bot)
-    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     assert bot.main_base_ramp  # Test if any ramp was found
 
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
@@ -393,7 +392,6 @@ def test_bot_ai():
 
 def test_game_info():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
-    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     # Test if main base ramp works
     game_info: GameInfo = bot.game_info
 

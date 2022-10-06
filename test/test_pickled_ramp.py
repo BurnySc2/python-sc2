@@ -38,7 +38,6 @@ class TestClass:
 
     def test_main_base_ramp(self, map_path: Path):
         bot = get_map_specific_bot(map_path)
-        bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
 
         # Test if main ramp works for all spawns
         for spawn in bot.game_info.start_locations + [bot.townhalls[0].position]:
@@ -87,7 +86,6 @@ class TestClass:
 
     def test_bot_ai(self, map_path: Path):
         bot = get_map_specific_bot(map_path)
-        bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
 
         # Recalculate and time expansion locations
         t0 = time.perf_counter()

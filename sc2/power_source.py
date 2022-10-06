@@ -1,34 +1,36 @@
+from dataclasses import dataclass
+from typing import List
+
 from sc2.position import Point2
 
 
+@dataclass
 class PowerSource:
+    position: Point2
+    radius: float
+    unit_tag: int
+
+    def __post_init__(self):
+        assert self.radius > 0
 
     @classmethod
     def from_proto(cls, proto):
-        return cls(Point2.from_proto(proto.pos), proto.radius, proto.tag)
+        return PowerSource(Point2.from_proto(proto.pos), proto.radius, proto.tag)
 
-    def __init__(self, position, radius, unit_tag):
-        assert isinstance(position, Point2)
-        assert radius > 0
-        self.position = position
-        self.radius = radius
-        self.unit_tag = unit_tag
-
-    def covers(self, position):
+    def covers(self, position: Point2) -> bool:
         return self.position.distance_to(position) <= self.radius
 
     def __repr__(self):
         return f"PowerSource({self.position}, {self.radius})"
 
 
+@dataclass
 class PsionicMatrix:
+    sources: List[PowerSource]
 
     @classmethod
     def from_proto(cls, proto):
-        return cls([PowerSource.from_proto(p) for p in proto])
+        return PsionicMatrix([PowerSource.from_proto(p) for p in proto])
 
-    def __init__(self, sources):
-        self.sources = sources
-
-    def covers(self, position):
+    def covers(self, position: Point2) -> bool:
         return any(source.covers(position) for source in self.sources)
