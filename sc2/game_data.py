@@ -118,8 +118,7 @@ class AbilityData:
     _ability_type_data_cache: ClassVar[CacheDict] = CacheDict()
 
     @classmethod
-    def id_exists(cls, ability_id):
-        assert isinstance(ability_id, int), f"Wrong type: {ability_id} is not int"
+    def id_exists(cls, ability_id: int) -> bool:
         if ability_id == 0:
             return False
         i = bisect_left(cls.ability_ids, ability_id)  # quick binary search

@@ -465,7 +465,6 @@ class BotAIInternal(ABC):
             self.game_info.player_start_location = self.townhalls.first.position
             # Calculate and cache expansion locations forever inside 'self._cache_expansion_locations', this is done to prevent a bug when this is run and cached later in the game
             self._find_expansion_locations()
-        self.game_info.map_ramps, self.game_info.vision_blockers = self.game_info._find_ramps_and_vision_blockers()
         self._time_before_step: float = time.perf_counter()
 
     @final
@@ -477,7 +476,7 @@ class BotAIInternal(ABC):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # update pathing grid, which unfortunately is in GameInfo instead of GameState
-        self.game_info.pathing_grid: PixelMap = PixelMap(proto_game_info.game_info.start_raw.pathing_grid, in_bits=True)
+        self.game_info._pathing_grid = PixelMap(proto_game_info.game_info.start_raw.pathing_grid, in_bits=True)
         # Required for events, needs to be before self.units are initialized so the old units are stored
         self._units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.units}
         self._structures_previous_map: Dict[int, Unit] = {structure.tag: structure for structure in self.structures}
