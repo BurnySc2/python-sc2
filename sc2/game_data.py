@@ -73,8 +73,11 @@ class GameData:
 
                 if unit.id == UnitTypeId.ZERGLING:
                     # HARD CODED: zerglings are generated in pairs
-                    self._ability_cost_cache[unit.ability_id
-                                             ] = Cost(unit.cost.minerals * 2, unit.cost.vespene * 2, unit.cost.time)
+                    self._ability_cost_cache[unit.ability_id] = Cost(
+                        unit.cost.minerals * 2,
+                        unit.cost.vespene * 2,
+                        unit.cost.time,
+                    )
                     continue
                 # Correction for morphing units, e.g. orbital would return 550/0 instead of actual 150/0
                 morph_cost = unit.morph_cost

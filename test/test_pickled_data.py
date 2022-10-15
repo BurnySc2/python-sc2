@@ -16,6 +16,7 @@ from contextlib import suppress
 from pathlib import Path
 from typing import List
 
+from google.protobuf.internal import api_implementation
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from loguru import logger
@@ -56,6 +57,11 @@ def get_map_specific_bot(map_path: Path) -> BotAI:
     bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
 
     return bot
+
+
+def test_protobuf_implementation():
+    # Make sure that cpp is used as implementation
+    assert api_implementation.Type() == "cpp"
 
 
 def test_bot_ai():
