@@ -3,9 +3,12 @@
 # Run via
 # sh dockerfiles/test_new_python_candidate.sh
 
+# Stop on error https://stackoverflow.com/a/2871034/10882657
+set -e
+
 # Set which versions to use
 export VERSION_NUMBER=${VERSION_NUMBER:-0.9.9}
-export PYTHON_VERSION=${PYTHON_VERSION:-'3.11.0b1'}
+export PYTHON_VERSION=${PYTHON_VERSION:-'3.11'}
 export SC2_VERSION=${SC2_VERSION:-4.10}
 
 # For better readability, set local variables
