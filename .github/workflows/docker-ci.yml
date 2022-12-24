@@ -12,8 +12,8 @@ on:
     - develop
 
 env:
-  VERSION_NUMBER: '1.0.1'
-  LATEST_PYTHON_VERSION: '3.10'
+  VERSION_NUMBER: '1.0.2'
+  LATEST_PYTHON_VERSION: '3.11'
   LATEST_SC2_VERSION: '4.10'
   EXPERIMENTAL_PYTHON_VERSION: '3.11.0b1'
 
@@ -77,7 +77,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
         sc2-version: ['4.10']
     env:
       IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}
