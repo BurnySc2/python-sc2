@@ -129,17 +129,10 @@ r1 = distance_matrix_scipy_cdist_squared(units, point).flatten()
 r2 = distance_numpy_basic_1(units, point)
 r3 = distance_numpy_basic_2(units, point)
 r4 = distance_numpy_einsum(units, point)
-# r5 = distance_numpy_basic_1_numba(units_np, point_np)
-# r6 = distance_numpy_basic_2_numba(units_np, point_np)
-# r10 = distance_numba(flat_units, point_np, len(flat_units) // 2)
 
 assert np.array_equal(r1, r2)
 assert np.array_equal(r1, r3)
 assert np.array_equal(r1, r4)
-# assert np.array_equal(r1, r5)
-# assert np.array_equal(r1, r6)
-
-# print(r10)
 
 
 def test_distance_matrix_scipy_cdist_squared(benchmark):
