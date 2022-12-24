@@ -22,7 +22,7 @@ env:
   # Docker image version, see https://hub.docker.com/r/burnysc2/python-sc2-docker/tags
   # This version should always lack behind one version behind the docker-ci.yml because it is possible that it doesn't exist
   VERSION_NUMBER: '1.0.0'
-  LATEST_PYTHON_VERSION: '3.11'
+  LATEST_PYTHON_VERSION: '3.10'
   LATEST_SC2_VERSION: '4.10'
 
 jobs:
