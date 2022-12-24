@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -44,7 +45,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">game_data.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">game_data.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.GameData"><code class="docutils literal notranslate"><span class="pre">GameData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.AbilityData"><code class="docutils literal notranslate"><span class="pre">AbilityData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.button_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.button_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.exact_id"><code class="docutils literal notranslate"><span class="pre">AbilityData.exact_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.friendly_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.friendly_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.id"><code class="docutils literal notranslate"><span class="pre">AbilityData.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.link_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.link_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.UnitTypeData"><code class="docutils literal notranslate"><span class="pre">UnitTypeData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.cargo_size"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cargo_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cost_zerg_corrected</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.footprint_radius"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.footprint_radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.morph_cost"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.morph_cost</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.tech_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_alias</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.tech_requirement"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_requirement</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.unit_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.unit_alias</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.UpgradeData"><code class="docutils literal notranslate"><span class="pre">UpgradeData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.Cost"><code class="docutils literal notranslate"><span class="pre">Cost</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
@@ -69,8 +93,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>game_data.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">game_data.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/game_data/index.rst.txt" rel="nofollow"> View page source</a>
       </li>

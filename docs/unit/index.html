@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -42,7 +43,150 @@
 <li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">unit.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">unit.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.unit.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.add_on_land_position"><code class="docutils literal notranslate"><span class="pre">Unit.add_on_land_position</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.add_on_position"><code class="docutils literal notranslate"><span class="pre">Unit.add_on_position</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.add_on_tag"><code class="docutils literal notranslate"><span class="pre">Unit.add_on_tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.age"><code class="docutils literal notranslate"><span class="pre">Unit.age</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.age_in_frames"><code class="docutils literal notranslate"><span class="pre">Unit.age_in_frames</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.air_dps"><code class="docutils literal notranslate"><span class="pre">Unit.air_dps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.air_range"><code class="docutils literal notranslate"><span class="pre">Unit.air_range</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.alliance"><code class="docutils literal notranslate"><span class="pre">Unit.alliance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.armor"><code class="docutils literal notranslate"><span class="pre">Unit.armor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.armor_upgrade_level"><code class="docutils literal notranslate"><span class="pre">Unit.armor_upgrade_level</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.assigned_harvesters"><code class="docutils literal notranslate"><span class="pre">Unit.assigned_harvesters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.attack"><code class="docutils literal notranslate"><span class="pre">Unit.attack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.attack_upgrade_level"><code class="docutils literal notranslate"><span class="pre">Unit.attack_upgrade_level</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.bonus_damage"><code class="docutils literal notranslate"><span class="pre">Unit.bonus_damage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.buff_duration_max"><code class="docutils literal notranslate"><span class="pre">Unit.buff_duration_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.buff_duration_remain"><code class="docutils literal notranslate"><span class="pre">Unit.buff_duration_remain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.buffs"><code class="docutils literal notranslate"><span class="pre">Unit.buffs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.build"><code class="docutils literal notranslate"><span class="pre">Unit.build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.build_gas"><code class="docutils literal notranslate"><span class="pre">Unit.build_gas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.build_progress"><code class="docutils literal notranslate"><span class="pre">Unit.build_progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.calculate_damage_vs_target"><code class="docutils literal notranslate"><span class="pre">Unit.calculate_damage_vs_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.calculate_dps_vs_target"><code class="docutils literal notranslate"><span class="pre">Unit.calculate_dps_vs_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.calculate_speed"><code class="docutils literal notranslate"><span class="pre">Unit.calculate_speed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.can_attack"><code class="docutils literal notranslate"><span class="pre">Unit.can_attack</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.can_attack_air"><code class="docutils literal notranslate"><span class="pre">Unit.can_attack_air</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.can_attack_both"><code class="docutils literal notranslate"><span class="pre">Unit.can_attack_both</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.can_attack_ground"><code class="docutils literal notranslate"><span class="pre">Unit.can_attack_ground</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.can_be_attacked"><code class="docutils literal notranslate"><span class="pre">Unit.can_be_attacked</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.cargo_left"><code class="docutils literal notranslate"><span class="pre">Unit.cargo_left</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.cargo_max"><code class="docutils literal notranslate"><span class="pre">Unit.cargo_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.cargo_size"><code class="docutils literal notranslate"><span class="pre">Unit.cargo_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.cargo_used"><code class="docutils literal notranslate"><span class="pre">Unit.cargo_used</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.cloak"><code class="docutils literal notranslate"><span class="pre">Unit.cloak</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.detect_range"><code class="docutils literal notranslate"><span class="pre">Unit.detect_range</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.distance_per_step"><code class="docutils literal notranslate"><span class="pre">Unit.distance_per_step</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.distance_to"><code class="docutils literal notranslate"><span class="pre">Unit.distance_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.distance_to_squared"><code class="docutils literal notranslate"><span class="pre">Unit.distance_to_squared()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.distance_to_weapon_ready"><code class="docutils literal notranslate"><span class="pre">Unit.distance_to_weapon_ready</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.energy"><code class="docutils literal notranslate"><span class="pre">Unit.energy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.energy_max"><code class="docutils literal notranslate"><span class="pre">Unit.energy_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.energy_percentage"><code class="docutils literal notranslate"><span class="pre">Unit.energy_percentage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.facing"><code class="docutils literal notranslate"><span class="pre">Unit.facing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.footprint_radius"><code class="docutils literal notranslate"><span class="pre">Unit.footprint_radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.gather"><code class="docutils literal notranslate"><span class="pre">Unit.gather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.ground_dps"><code class="docutils literal notranslate"><span class="pre">Unit.ground_dps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.ground_range"><code class="docutils literal notranslate"><span class="pre">Unit.ground_range</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.has_add_on"><code class="docutils literal notranslate"><span class="pre">Unit.has_add_on</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.has_buff"><code class="docutils literal notranslate"><span class="pre">Unit.has_buff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.has_cargo"><code class="docutils literal notranslate"><span class="pre">Unit.has_cargo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.has_reactor"><code class="docutils literal notranslate"><span class="pre">Unit.has_reactor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.has_techlab"><code class="docutils literal notranslate"><span class="pre">Unit.has_techlab</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.has_vespene"><code class="docutils literal notranslate"><span class="pre">Unit.has_vespene</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.health"><code class="docutils literal notranslate"><span class="pre">Unit.health</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.health_max"><code class="docutils literal notranslate"><span class="pre">Unit.health_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.health_percentage"><code class="docutils literal notranslate"><span class="pre">Unit.health_percentage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.hold_position"><code class="docutils literal notranslate"><span class="pre">Unit.hold_position()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.ideal_harvesters"><code class="docutils literal notranslate"><span class="pre">Unit.ideal_harvesters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.in_ability_cast_range"><code class="docutils literal notranslate"><span class="pre">Unit.in_ability_cast_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_active"><code class="docutils literal notranslate"><span class="pre">Unit.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_armored"><code class="docutils literal notranslate"><span class="pre">Unit.is_armored</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_attacking"><code class="docutils literal notranslate"><span class="pre">Unit.is_attacking</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_biological"><code class="docutils literal notranslate"><span class="pre">Unit.is_biological</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_blip"><code class="docutils literal notranslate"><span class="pre">Unit.is_blip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_burrowed"><code class="docutils literal notranslate"><span class="pre">Unit.is_burrowed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_carrying_minerals"><code class="docutils literal notranslate"><span class="pre">Unit.is_carrying_minerals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_carrying_resource"><code class="docutils literal notranslate"><span class="pre">Unit.is_carrying_resource</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_carrying_vespene"><code class="docutils literal notranslate"><span class="pre">Unit.is_carrying_vespene</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_cloaked"><code class="docutils literal notranslate"><span class="pre">Unit.is_cloaked</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_collecting"><code class="docutils literal notranslate"><span class="pre">Unit.is_collecting</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_constructing_scv"><code class="docutils literal notranslate"><span class="pre">Unit.is_constructing_scv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_detector"><code class="docutils literal notranslate"><span class="pre">Unit.is_detector</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_enemy"><code class="docutils literal notranslate"><span class="pre">Unit.is_enemy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_facing"><code class="docutils literal notranslate"><span class="pre">Unit.is_facing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_flying"><code class="docutils literal notranslate"><span class="pre">Unit.is_flying</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_gathering"><code class="docutils literal notranslate"><span class="pre">Unit.is_gathering</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_hallucination"><code class="docutils literal notranslate"><span class="pre">Unit.is_hallucination</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_idle"><code class="docutils literal notranslate"><span class="pre">Unit.is_idle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_light"><code class="docutils literal notranslate"><span class="pre">Unit.is_light</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_massive"><code class="docutils literal notranslate"><span class="pre">Unit.is_massive</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_mechanical"><code class="docutils literal notranslate"><span class="pre">Unit.is_mechanical</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_memory"><code class="docutils literal notranslate"><span class="pre">Unit.is_memory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_mine"><code class="docutils literal notranslate"><span class="pre">Unit.is_mine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_mineral_field"><code class="docutils literal notranslate"><span class="pre">Unit.is_mineral_field</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_moving"><code class="docutils literal notranslate"><span class="pre">Unit.is_moving</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_on_screen"><code class="docutils literal notranslate"><span class="pre">Unit.is_on_screen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_patrolling"><code class="docutils literal notranslate"><span class="pre">Unit.is_patrolling</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_placeholder"><code class="docutils literal notranslate"><span class="pre">Unit.is_placeholder</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_powered"><code class="docutils literal notranslate"><span class="pre">Unit.is_powered</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_psionic"><code class="docutils literal notranslate"><span class="pre">Unit.is_psionic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_ready"><code class="docutils literal notranslate"><span class="pre">Unit.is_ready</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_repairing"><code class="docutils literal notranslate"><span class="pre">Unit.is_repairing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_returning"><code class="docutils literal notranslate"><span class="pre">Unit.is_returning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_revealed"><code class="docutils literal notranslate"><span class="pre">Unit.is_revealed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_selected"><code class="docutils literal notranslate"><span class="pre">Unit.is_selected</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_snapshot"><code class="docutils literal notranslate"><span class="pre">Unit.is_snapshot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_structure"><code class="docutils literal notranslate"><span class="pre">Unit.is_structure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_transforming"><code class="docutils literal notranslate"><span class="pre">Unit.is_transforming</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_using_ability"><code class="docutils literal notranslate"><span class="pre">Unit.is_using_ability()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_vespene_geyser"><code class="docutils literal notranslate"><span class="pre">Unit.is_vespene_geyser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.is_visible"><code class="docutils literal notranslate"><span class="pre">Unit.is_visible</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.mineral_contents"><code class="docutils literal notranslate"><span class="pre">Unit.mineral_contents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.move"><code class="docutils literal notranslate"><span class="pre">Unit.move()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.movement_speed"><code class="docutils literal notranslate"><span class="pre">Unit.movement_speed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.name"><code class="docutils literal notranslate"><span class="pre">Unit.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.order_target"><code class="docutils literal notranslate"><span class="pre">Unit.order_target</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.orders"><code class="docutils literal notranslate"><span class="pre">Unit.orders</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.owner_id"><code class="docutils literal notranslate"><span class="pre">Unit.owner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.passengers"><code class="docutils literal notranslate"><span class="pre">Unit.passengers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.passengers_tags"><code class="docutils literal notranslate"><span class="pre">Unit.passengers_tags</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.patrol"><code class="docutils literal notranslate"><span class="pre">Unit.patrol()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.position"><code class="docutils literal notranslate"><span class="pre">Unit.position</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.position3d"><code class="docutils literal notranslate"><span class="pre">Unit.position3d</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.position_tuple"><code class="docutils literal notranslate"><span class="pre">Unit.position_tuple</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.race"><code class="docutils literal notranslate"><span class="pre">Unit.race</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.radius"><code class="docutils literal notranslate"><span class="pre">Unit.radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.real_speed"><code class="docutils literal notranslate"><span class="pre">Unit.real_speed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.repair"><code class="docutils literal notranslate"><span class="pre">Unit.repair()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.research"><code class="docutils literal notranslate"><span class="pre">Unit.research()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.return_resource"><code class="docutils literal notranslate"><span class="pre">Unit.return_resource()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.shield"><code class="docutils literal notranslate"><span class="pre">Unit.shield</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.shield_health_percentage"><code class="docutils literal notranslate"><span class="pre">Unit.shield_health_percentage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.shield_max"><code class="docutils literal notranslate"><span class="pre">Unit.shield_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.shield_percentage"><code class="docutils literal notranslate"><span class="pre">Unit.shield_percentage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.shield_upgrade_level"><code class="docutils literal notranslate"><span class="pre">Unit.shield_upgrade_level</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.sight_range"><code class="docutils literal notranslate"><span class="pre">Unit.sight_range</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.smart"><code class="docutils literal notranslate"><span class="pre">Unit.smart()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.stop"><code class="docutils literal notranslate"><span class="pre">Unit.stop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.surplus_harvesters"><code class="docutils literal notranslate"><span class="pre">Unit.surplus_harvesters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.tag"><code class="docutils literal notranslate"><span class="pre">Unit.tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.target_in_range"><code class="docutils literal notranslate"><span class="pre">Unit.target_in_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.tech_alias"><code class="docutils literal notranslate"><span class="pre">Unit.tech_alias</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.train"><code class="docutils literal notranslate"><span class="pre">Unit.train()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.type_id"><code class="docutils literal notranslate"><span class="pre">Unit.type_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.unit_alias"><code class="docutils literal notranslate"><span class="pre">Unit.unit_alias</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.vespene_contents"><code class="docutils literal notranslate"><span class="pre">Unit.vespene_contents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.warp_in"><code class="docutils literal notranslate"><span class="pre">Unit.warp_in()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.weapon_cooldown"><code class="docutils literal notranslate"><span class="pre">Unit.weapon_cooldown</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.weapon_ready"><code class="docutils literal notranslate"><span class="pre">Unit.weapon_ready</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
@@ -69,8 +213,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>unit.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">unit.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/unit/index.rst.txt" rel="nofollow"> View page source</a>
       </li>

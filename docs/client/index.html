@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -47,7 +48,50 @@
 <li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">client.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">client.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.client.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.chat_send"><code class="docutils literal notranslate"><span class="pre">Client.chat_send()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_all_resources"><code class="docutils literal notranslate"><span class="pre">Client.debug_all_resources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_box2_out"><code class="docutils literal notranslate"><span class="pre">Client.debug_box2_out()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_box_out"><code class="docutils literal notranslate"><span class="pre">Client.debug_box_out()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_control_enemy"><code class="docutils literal notranslate"><span class="pre">Client.debug_control_enemy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_cooldown"><code class="docutils literal notranslate"><span class="pre">Client.debug_cooldown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_create_unit"><code class="docutils literal notranslate"><span class="pre">Client.debug_create_unit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_fast_build"><code class="docutils literal notranslate"><span class="pre">Client.debug_fast_build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_food"><code class="docutils literal notranslate"><span class="pre">Client.debug_food()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_free"><code class="docutils literal notranslate"><span class="pre">Client.debug_free()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_gas"><code class="docutils literal notranslate"><span class="pre">Client.debug_gas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_god"><code class="docutils literal notranslate"><span class="pre">Client.debug_god()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_hang"><code class="docutils literal notranslate"><span class="pre">Client.debug_hang()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_kill_unit"><code class="docutils literal notranslate"><span class="pre">Client.debug_kill_unit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_line_out"><code class="docutils literal notranslate"><span class="pre">Client.debug_line_out()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_minerals"><code class="docutils literal notranslate"><span class="pre">Client.debug_minerals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_set_unit_value"><code class="docutils literal notranslate"><span class="pre">Client.debug_set_unit_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_show_map"><code class="docutils literal notranslate"><span class="pre">Client.debug_show_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_sphere_out"><code class="docutils literal notranslate"><span class="pre">Client.debug_sphere_out()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_tech_tree"><code class="docutils literal notranslate"><span class="pre">Client.debug_tech_tree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_text_screen"><code class="docutils literal notranslate"><span class="pre">Client.debug_text_screen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_text_simple"><code class="docutils literal notranslate"><span class="pre">Client.debug_text_simple()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_text_world"><code class="docutils literal notranslate"><span class="pre">Client.debug_text_world()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.debug_upgrade"><code class="docutils literal notranslate"><span class="pre">Client.debug_upgrade()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.dump_data"><code class="docutils literal notranslate"><span class="pre">Client.dump_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.leave"><code class="docutils literal notranslate"><span class="pre">Client.leave()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.move_camera"><code class="docutils literal notranslate"><span class="pre">Client.move_camera()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.move_camera_spatial"><code class="docutils literal notranslate"><span class="pre">Client.move_camera_spatial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.obs_move_camera"><code class="docutils literal notranslate"><span class="pre">Client.obs_move_camera()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.query_available_abilities"><code class="docutils literal notranslate"><span class="pre">Client.query_available_abilities()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.query_available_abilities_with_tag"><code class="docutils literal notranslate"><span class="pre">Client.query_available_abilities_with_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.query_building_placement"><code class="docutils literal notranslate"><span class="pre">Client.query_building_placement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.query_pathing"><code class="docutils literal notranslate"><span class="pre">Client.query_pathing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.query_pathings"><code class="docutils literal notranslate"><span class="pre">Client.query_pathings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.quick_load"><code class="docutils literal notranslate"><span class="pre">Client.quick_load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.quick_save"><code class="docutils literal notranslate"><span class="pre">Client.quick_save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.step"><code class="docutils literal notranslate"><span class="pre">Client.step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.client.Client.toggle_autocast"><code class="docutils literal notranslate"><span class="pre">Client.toggle_autocast()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
@@ -69,8 +113,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>client.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">client.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/client/index.rst.txt" rel="nofollow"> View page source</a>
       </li>

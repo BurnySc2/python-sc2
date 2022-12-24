@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -46,7 +47,32 @@
 <li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">game_state.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">game_state.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_state.GameState"><code class="docutils literal notranslate"><span class="pre">GameState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.action_errors"><code class="docutils literal notranslate"><span class="pre">GameState.action_errors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.actions"><code class="docutils literal notranslate"><span class="pre">GameState.actions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.actions_toggle_autocast"><code class="docutils literal notranslate"><span class="pre">GameState.actions_toggle_autocast</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.actions_unit_commands"><code class="docutils literal notranslate"><span class="pre">GameState.actions_unit_commands</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.alerts"><code class="docutils literal notranslate"><span class="pre">GameState.alerts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.chat"><code class="docutils literal notranslate"><span class="pre">GameState.chat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.dead_units"><code class="docutils literal notranslate"><span class="pre">GameState.dead_units</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.GameState.effects"><code class="docutils literal notranslate"><span class="pre">GameState.effects</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_state.Blip"><code class="docutils literal notranslate"><span class="pre">Blip</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.Blip.is_blip"><code class="docutils literal notranslate"><span class="pre">Blip.is_blip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.Blip.position"><code class="docutils literal notranslate"><span class="pre">Blip.position</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.Blip.position3d"><code class="docutils literal notranslate"><span class="pre">Blip.position3d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_state.Common"><code class="docutils literal notranslate"><span class="pre">Common</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_state.EffectData"><code class="docutils literal notranslate"><span class="pre">EffectData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.EffectData.is_enemy"><code class="docutils literal notranslate"><span class="pre">EffectData.is_enemy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_state.EffectData.is_mine"><code class="docutils literal notranslate"><span class="pre">EffectData.is_mine</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
@@ -69,8 +95,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>game_state.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">game_state.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/game_state/index.rst.txt" rel="nofollow"> View page source</a>
       </li>

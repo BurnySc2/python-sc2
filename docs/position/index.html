@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -48,7 +49,47 @@
 <li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">position.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">position.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.position.Pointlike"><code class="docutils literal notranslate"><span class="pre">Pointlike</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.closest"><code class="docutils literal notranslate"><span class="pre">Pointlike.closest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.distance_to"><code class="docutils literal notranslate"><span class="pre">Pointlike.distance_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.distance_to_closest"><code class="docutils literal notranslate"><span class="pre">Pointlike.distance_to_closest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.distance_to_furthest"><code class="docutils literal notranslate"><span class="pre">Pointlike.distance_to_furthest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.distance_to_point2"><code class="docutils literal notranslate"><span class="pre">Pointlike.distance_to_point2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.furthest"><code class="docutils literal notranslate"><span class="pre">Pointlike.furthest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.is_closer_than"><code class="docutils literal notranslate"><span class="pre">Pointlike.is_closer_than()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.is_further_than"><code class="docutils literal notranslate"><span class="pre">Pointlike.is_further_than()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.offset"><code class="docutils literal notranslate"><span class="pre">Pointlike.offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.sort_by_distance"><code class="docutils literal notranslate"><span class="pre">Pointlike.sort_by_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.towards"><code class="docutils literal notranslate"><span class="pre">Pointlike.towards()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Pointlike.unit_axes_towards"><code class="docutils literal notranslate"><span class="pre">Pointlike.unit_axes_towards()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.position.Point2"><code class="docutils literal notranslate"><span class="pre">Point2</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.as_PointI"><code class="docutils literal notranslate"><span class="pre">Point2.as_PointI</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.center"><code class="docutils literal notranslate"><span class="pre">Point2.center()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.circle_intersection"><code class="docutils literal notranslate"><span class="pre">Point2.circle_intersection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.direction_vector"><code class="docutils literal notranslate"><span class="pre">Point2.direction_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.from_proto"><code class="docutils literal notranslate"><span class="pre">Point2.from_proto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.length"><code class="docutils literal notranslate"><span class="pre">Point2.length</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.manhattan_distance"><code class="docutils literal notranslate"><span class="pre">Point2.manhattan_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.normalized"><code class="docutils literal notranslate"><span class="pre">Point2.normalized</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point2.offset"><code class="docutils literal notranslate"><span class="pre">Point2.offset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.position.Point3"><code class="docutils literal notranslate"><span class="pre">Point3</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Point3.from_proto"><code class="docutils literal notranslate"><span class="pre">Point3.from_proto()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.position.Size"><code class="docutils literal notranslate"><span class="pre">Size</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.position.Rect"><code class="docutils literal notranslate"><span class="pre">Rect</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Rect.from_proto"><code class="docutils literal notranslate"><span class="pre">Rect.from_proto()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Rect.right"><code class="docutils literal notranslate"><span class="pre">Rect.right</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.position.Rect.top"><code class="docutils literal notranslate"><span class="pre">Rect.top</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../score/index.html">score.py</a></li>
@@ -69,8 +110,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>position.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">position.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/position/index.rst.txt" rel="nofollow"> View page source</a>
       </li>

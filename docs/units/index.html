@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -43,7 +44,60 @@
 <li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">units.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">units.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.units.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.by_tag"><code class="docutils literal notranslate"><span class="pre">Units.by_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.center"><code class="docutils literal notranslate"><span class="pre">Units.center</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.closer_than"><code class="docutils literal notranslate"><span class="pre">Units.closer_than()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.closest_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.closest_distance_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.closest_n_units"><code class="docutils literal notranslate"><span class="pre">Units.closest_n_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.closest_to"><code class="docutils literal notranslate"><span class="pre">Units.closest_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.collecting"><code class="docutils literal notranslate"><span class="pre">Units.collecting</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.copy"><code class="docutils literal notranslate"><span class="pre">Units.copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.enemy"><code class="docutils literal notranslate"><span class="pre">Units.enemy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.exclude_type"><code class="docutils literal notranslate"><span class="pre">Units.exclude_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.filter"><code class="docutils literal notranslate"><span class="pre">Units.filter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.find_by_tag"><code class="docutils literal notranslate"><span class="pre">Units.find_by_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.flying"><code class="docutils literal notranslate"><span class="pre">Units.flying</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.further_than"><code class="docutils literal notranslate"><span class="pre">Units.further_than()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.furthest_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.furthest_distance_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.furthest_n_units"><code class="docutils literal notranslate"><span class="pre">Units.furthest_n_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.furthest_to"><code class="docutils literal notranslate"><span class="pre">Units.furthest_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.gathering"><code class="docutils literal notranslate"><span class="pre">Units.gathering</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.idle"><code class="docutils literal notranslate"><span class="pre">Units.idle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.in_attack_range_of"><code class="docutils literal notranslate"><span class="pre">Units.in_attack_range_of()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.in_closest_distance_to_group"><code class="docutils literal notranslate"><span class="pre">Units.in_closest_distance_to_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.in_distance_between"><code class="docutils literal notranslate"><span class="pre">Units.in_distance_between()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.in_distance_of_group"><code class="docutils literal notranslate"><span class="pre">Units.in_distance_of_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.mineral_field"><code class="docutils literal notranslate"><span class="pre">Units.mineral_field</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.n_closest_to_distance"><code class="docutils literal notranslate"><span class="pre">Units.n_closest_to_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.n_furthest_to_distance"><code class="docutils literal notranslate"><span class="pre">Units.n_furthest_to_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.not_flying"><code class="docutils literal notranslate"><span class="pre">Units.not_flying</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.not_ready"><code class="docutils literal notranslate"><span class="pre">Units.not_ready</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.not_structure"><code class="docutils literal notranslate"><span class="pre">Units.not_structure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.of_type"><code class="docutils literal notranslate"><span class="pre">Units.of_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.owned"><code class="docutils literal notranslate"><span class="pre">Units.owned</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.prefer_idle"><code class="docutils literal notranslate"><span class="pre">Units.prefer_idle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.random_group_of"><code class="docutils literal notranslate"><span class="pre">Units.random_group_of()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.ready"><code class="docutils literal notranslate"><span class="pre">Units.ready</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.returning"><code class="docutils literal notranslate"><span class="pre">Units.returning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.same_tech"><code class="docutils literal notranslate"><span class="pre">Units.same_tech()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.same_unit"><code class="docutils literal notranslate"><span class="pre">Units.same_unit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.select"><code class="docutils literal notranslate"><span class="pre">Units.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.selected"><code class="docutils literal notranslate"><span class="pre">Units.selected</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.sorted_by_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.sorted_by_distance_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.structure"><code class="docutils literal notranslate"><span class="pre">Units.structure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.subgroup"><code class="docutils literal notranslate"><span class="pre">Units.subgroup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.tags"><code class="docutils literal notranslate"><span class="pre">Units.tags</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.tags_in"><code class="docutils literal notranslate"><span class="pre">Units.tags_in()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.tags_not_in"><code class="docutils literal notranslate"><span class="pre">Units.tags_not_in()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.take"><code class="docutils literal notranslate"><span class="pre">Units.take()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.vespene_geyser"><code class="docutils literal notranslate"><span class="pre">Units.vespene_geyser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.units.Units.visible"><code class="docutils literal notranslate"><span class="pre">Units.visible</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
@@ -69,8 +123,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>units.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">units.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/units/index.rst.txt" rel="nofollow"> View page source</a>
       </li>

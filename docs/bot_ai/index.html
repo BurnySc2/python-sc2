@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -41,7 +42,71 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">bot_ai.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">bot_ai.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.bot_ai.BotAI"><code class="docutils literal notranslate"><span class="pre">BotAI</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.alert"><code class="docutils literal notranslate"><span class="pre">BotAI.alert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.already_pending"><code class="docutils literal notranslate"><span class="pre">BotAI.already_pending()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.already_pending_upgrade"><code class="docutils literal notranslate"><span class="pre">BotAI.already_pending_upgrade()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.build"><code class="docutils literal notranslate"><span class="pre">BotAI.build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.calculate_cost"><code class="docutils literal notranslate"><span class="pre">BotAI.calculate_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.calculate_supply_cost"><code class="docutils literal notranslate"><span class="pre">BotAI.calculate_supply_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.calculate_unit_value"><code class="docutils literal notranslate"><span class="pre">BotAI.calculate_unit_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.can_afford"><code class="docutils literal notranslate"><span class="pre">BotAI.can_afford()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.can_cast"><code class="docutils literal notranslate"><span class="pre">BotAI.can_cast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.can_feed"><code class="docutils literal notranslate"><span class="pre">BotAI.can_feed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.can_place"><code class="docutils literal notranslate"><span class="pre">BotAI.can_place()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.can_place_single"><code class="docutils literal notranslate"><span class="pre">BotAI.can_place_single()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.chat_send"><code class="docutils literal notranslate"><span class="pre">BotAI.chat_send()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.distribute_workers"><code class="docutils literal notranslate"><span class="pre">BotAI.distribute_workers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.enemy_start_locations"><code class="docutils literal notranslate"><span class="pre">BotAI.enemy_start_locations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.expand_now"><code class="docutils literal notranslate"><span class="pre">BotAI.expand_now()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.find_placement"><code class="docutils literal notranslate"><span class="pre">BotAI.find_placement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.get_available_abilities"><code class="docutils literal notranslate"><span class="pre">BotAI.get_available_abilities()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.get_next_expansion"><code class="docutils literal notranslate"><span class="pre">BotAI.get_next_expansion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.get_terrain_height"><code class="docutils literal notranslate"><span class="pre">BotAI.get_terrain_height()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.get_terrain_z_height"><code class="docutils literal notranslate"><span class="pre">BotAI.get_terrain_z_height()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.has_creep"><code class="docutils literal notranslate"><span class="pre">BotAI.has_creep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.in_map_bounds"><code class="docutils literal notranslate"><span class="pre">BotAI.in_map_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.in_pathing_grid"><code class="docutils literal notranslate"><span class="pre">BotAI.in_pathing_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.in_placement_grid"><code class="docutils literal notranslate"><span class="pre">BotAI.in_placement_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.is_visible"><code class="docutils literal notranslate"><span class="pre">BotAI.is_visible()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.main_base_ramp"><code class="docutils literal notranslate"><span class="pre">BotAI.main_base_ramp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_before_start"><code class="docutils literal notranslate"><span class="pre">BotAI.on_before_start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_building_construction_complete"><code class="docutils literal notranslate"><span class="pre">BotAI.on_building_construction_complete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_building_construction_started"><code class="docutils literal notranslate"><span class="pre">BotAI.on_building_construction_started()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_end"><code class="docutils literal notranslate"><span class="pre">BotAI.on_end()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_enemy_unit_entered_vision"><code class="docutils literal notranslate"><span class="pre">BotAI.on_enemy_unit_entered_vision()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_enemy_unit_left_vision"><code class="docutils literal notranslate"><span class="pre">BotAI.on_enemy_unit_left_vision()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_start"><code class="docutils literal notranslate"><span class="pre">BotAI.on_start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_step"><code class="docutils literal notranslate"><span class="pre">BotAI.on_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_unit_created"><code class="docutils literal notranslate"><span class="pre">BotAI.on_unit_created()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_unit_destroyed"><code class="docutils literal notranslate"><span class="pre">BotAI.on_unit_destroyed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_unit_took_damage"><code class="docutils literal notranslate"><span class="pre">BotAI.on_unit_took_damage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_unit_type_changed"><code class="docutils literal notranslate"><span class="pre">BotAI.on_unit_type_changed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.on_upgrade_complete"><code class="docutils literal notranslate"><span class="pre">BotAI.on_upgrade_complete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.research"><code class="docutils literal notranslate"><span class="pre">BotAI.research()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.select_build_worker"><code class="docutils literal notranslate"><span class="pre">BotAI.select_build_worker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.start_location"><code class="docutils literal notranslate"><span class="pre">BotAI.start_location</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.step_time"><code class="docutils literal notranslate"><span class="pre">BotAI.step_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.structure_type_build_progress"><code class="docutils literal notranslate"><span class="pre">BotAI.structure_type_build_progress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.tech_requirement_progress"><code class="docutils literal notranslate"><span class="pre">BotAI.tech_requirement_progress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.time"><code class="docutils literal notranslate"><span class="pre">BotAI.time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.time_formatted"><code class="docutils literal notranslate"><span class="pre">BotAI.time_formatted</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.train"><code class="docutils literal notranslate"><span class="pre">BotAI.train()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.units_created"><code class="docutils literal notranslate"><span class="pre">BotAI.units_created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai.BotAI.worker_en_route_to_build"><code class="docutils literal notranslate"><span class="pre">BotAI.worker_en_route_to_build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.bot_ai_internal.BotAIInternal"><code class="docutils literal notranslate"><span class="pre">BotAIInternal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array"><code class="docutils literal notranslate"><span class="pre">BotAIInternal.convert_tuple_to_numpy_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai_internal.BotAIInternal.do"><code class="docutils literal notranslate"><span class="pre">BotAIInternal.do()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai_internal.BotAIInternal.issue_events"><code class="docutils literal notranslate"><span class="pre">BotAIInternal.issue_events()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai_internal.BotAIInternal.prevent_double_actions"><code class="docutils literal notranslate"><span class="pre">BotAIInternal.prevent_double_actions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.bot_ai_internal.BotAIInternal.synchronous_do"><code class="docutils literal notranslate"><span class="pre">BotAIInternal.synchronous_do()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
@@ -69,8 +134,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>bot_ai.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">bot_ai.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/bot_ai/index.rst.txt" rel="nofollow"> View page source</a>
       </li>

@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -68,8 +69,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Welcome to python-sc2’s documentation!</li>
+      <li><a href="#" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Welcome to python-sc2’s documentation!</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -105,19 +106,75 @@
 <li class="toctree-l2"><a class="reference internal" href="text_files/docker.html#docker-cleanup">Docker cleanup</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="bot_ai/index.html">bot_ai.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="unit/index.html">unit.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="units/index.html">units.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="game_data/index.html">game_data.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="game_info/index.html">game_info.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="game_state/index.html">game_state.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="client/index.html">client.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="position/index.html">position.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pixel_map/index.html">pixel_map.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="protocol/index.html">protocol.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="score/index.html">score.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="unit_command/index.html">unit_command.py</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ids/index.html">ids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bot_ai/index.html">bot_ai.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bot_ai/index.html#sc2.bot_ai.BotAI"><code class="docutils literal notranslate"><span class="pre">BotAI</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal"><code class="docutils literal notranslate"><span class="pre">BotAIInternal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="unit/index.html">unit.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unit/index.html#sc2.unit.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="units/index.html">units.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="units/index.html#sc2.units.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="game_data/index.html">game_data.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="game_data/index.html#sc2.game_data.GameData"><code class="docutils literal notranslate"><span class="pre">GameData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_data/index.html#sc2.game_data.AbilityData"><code class="docutils literal notranslate"><span class="pre">AbilityData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_data/index.html#sc2.game_data.UnitTypeData"><code class="docutils literal notranslate"><span class="pre">UnitTypeData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_data/index.html#sc2.game_data.UpgradeData"><code class="docutils literal notranslate"><span class="pre">UpgradeData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_data/index.html#sc2.game_data.Cost"><code class="docutils literal notranslate"><span class="pre">Cost</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="game_info/index.html">game_info.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="game_info/index.html#sc2.game_info.Ramp"><code class="docutils literal notranslate"><span class="pre">Ramp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_info/index.html#sc2.game_info.GameInfo"><code class="docutils literal notranslate"><span class="pre">GameInfo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="game_state/index.html">game_state.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="game_state/index.html#sc2.game_state.GameState"><code class="docutils literal notranslate"><span class="pre">GameState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_state/index.html#sc2.game_state.Blip"><code class="docutils literal notranslate"><span class="pre">Blip</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_state/index.html#sc2.game_state.Common"><code class="docutils literal notranslate"><span class="pre">Common</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="game_state/index.html#sc2.game_state.EffectData"><code class="docutils literal notranslate"><span class="pre">EffectData</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/index.html">client.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/index.html#sc2.client.Client"><code class="docutils literal notranslate"><span class="pre">Client</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="position/index.html">position.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="position/index.html#sc2.position.Pointlike"><code class="docutils literal notranslate"><span class="pre">Pointlike</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="position/index.html#sc2.position.Point2"><code class="docutils literal notranslate"><span class="pre">Point2</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="position/index.html#sc2.position.Point3"><code class="docutils literal notranslate"><span class="pre">Point3</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="position/index.html#sc2.position.Size"><code class="docutils literal notranslate"><span class="pre">Size</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="position/index.html#sc2.position.Rect"><code class="docutils literal notranslate"><span class="pre">Rect</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pixel_map/index.html">pixel_map.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pixel_map/index.html#sc2.pixel_map.PixelMap"><code class="docutils literal notranslate"><span class="pre">PixelMap</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="protocol/index.html">protocol.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocol/index.html#sc2.protocol.Protocol"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="score/index.html">score.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="score/index.html#sc2.score.ScoreDetails"><code class="docutils literal notranslate"><span class="pre">ScoreDetails</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="unit_command/index.html">unit_command.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unit_command/index.html#sc2.unit_command.UnitCommand"><code class="docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ids/index.html">ids</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ids/index.html#sc2.ids.ability_id.AbilityId"><code class="docutils literal notranslate"><span class="pre">AbilityId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="ids/index.html#sc2.ids.buff_id.BuffId"><code class="docutils literal notranslate"><span class="pre">BuffId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="ids/index.html#sc2.ids.effect_id.EffectId"><code class="docutils literal notranslate"><span class="pre">EffectId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="ids/index.html#sc2.ids.unit_typeid.UnitTypeId"><code class="docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="ids/index.html#sc2.ids.upgrade_id.UpgradeId"><code class="docutils literal notranslate"><span class="pre">UpgradeId</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>

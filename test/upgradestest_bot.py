@@ -161,7 +161,6 @@ class TestBot(BotAI):
                 while 1:
                     upgrader_structures: Units = self.structures(structure_type)
                     # Upgrade has been researched, break
-                    # Hi atira monkaBirthday
                     if upgrader_structures:
                         upgrader_structure: Unit = upgrader_structures.closest_to(map_center)
                         if upgrader_structure.is_idle:

@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -45,7 +46,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">game_info.py</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">game_info.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_info.Ramp"><code class="docutils literal notranslate"><span class="pre">Ramp</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.barracks_can_fit_addon"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_can_fit_addon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.barracks_correct_placement"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_correct_placement</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.barracks_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_in_middle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.corner_depots"><code class="docutils literal notranslate"><span class="pre">Ramp.corner_depots</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.depot_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.depot_in_middle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.protoss_wall_buildings"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_buildings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.protoss_wall_pylon"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_pylon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.protoss_wall_warpin"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_warpin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.upper"><code class="docutils literal notranslate"><span class="pre">Ramp.upper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.upper2_for_ramp_wall"><code class="docutils literal notranslate"><span class="pre">Ramp.upper2_for_ramp_wall</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sc2.game_info.GameInfo"><code class="docutils literal notranslate"><span class="pre">GameInfo</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
@@ -69,8 +86,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>game_info.py</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">game_info.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/game_info/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
