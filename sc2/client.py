@@ -31,7 +31,7 @@ class Client(Protocol):
         """
         super().__init__(ws)
         # How many frames will be waited between iterations before the next one is called
-        self.game_step: int = 8
+        self.game_step: int = 4
         self.save_replay_path: Optional[str] = save_replay_path
         self._player_id = None
         self._game_result = None
