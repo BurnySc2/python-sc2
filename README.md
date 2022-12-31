@@ -36,9 +36,9 @@ You'll need a StarCraft II executable. If you are running Windows or macOS, just
 
 ### Linux installation
 
-You can install StarCraft II on Linux with [Wine](https://www.winehq.org/), [Lutris](https://lutris.net/games/battlenet/) or even the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but the latter is headless so you cannot actually see the game..  
-Starcraft II can be directrly installed from Battlenet once it is downloaded with Lutris.
-By default, it will be installed here : 
+You can install StarCraft II on Linux with [Wine](https://www.winehq.org/), [Lutris](https://lutris.net/games/battlenet/) or even the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but the latter is headless so you cannot actually see the game.
+Starcraft II can be directly installed from Battlenet once it is downloaded with Lutris.
+By default, it will be installed here:
 ```sh
 /home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
 ```
