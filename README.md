@@ -32,7 +32,26 @@ pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/a
 Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments or poetry.
 
 ### StarCraft II
-You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
+You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). 
+
+### Linux installation
+
+You can install StarCraft II on Linux with [Wine](https://www.winehq.org/), [Lutris](https://lutris.net/games/battlenet/) or even the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but the latter is headless so you cannot actually see the game..  
+Starcraft II can be directrly installed from Battlenet once it is downloaded with Lutris.
+By default, it will be installed here : 
+```sh
+/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
+```
+Next, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`):
+
+```sh
+SC2PF=WineLinux
+WINE=/usr/bin/wine
+# Or a wine binary from lutris:
+# WINE=/home/burny/.local/share/lutris/runners/wine/lutris-4.20-x86_64/bin/wine64
+# Default Lutris StarCraftII Installation path:
+SC2PATH='/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/'
+```
 
 ### Maps
 You probably want some maps too.
@@ -55,18 +74,6 @@ After installing the library, a StarCraft II executable, and some maps, you're r
 python examples/protoss/cannon_rush.py
 ```
 
-#### WINE and Lutris
-
-If you installed StarCraft II on Linux with Wine or Lutris, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`):
-
-```sh
-SC2PF=WineLinux
-WINE=/usr/bin/wine
-# Or a wine binary from lutris:
-# WINE=/home/burny/.local/share/lutris/runners/wine/lutris-4.20-x86_64/bin/wine64
-# Default Lutris StarCraftII Installation path:
-SC2PATH='/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/'
-```
 
 #### WSL
 
