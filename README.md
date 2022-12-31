@@ -32,7 +32,7 @@ pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/a
 Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments or poetry.
 
 ### StarCraft II
-You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). 
+You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from [blizzard app](https://starcraft2.com/).
 
 ### Linux installation
 
