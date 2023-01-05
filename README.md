@@ -31,8 +31,8 @@ pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/a
 ```
 Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments or poetry.
 
-### StarCraft II
-You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from [blizzard app](https://starcraft2.com/).
+## StarCraft II
+You'll need a StarCraft II executable. If you are running Windows or macOS, just install SC2 from [blizzard app](https://starcraft2.com/).
 
 ### Linux installation
 
@@ -53,29 +53,7 @@ WINE=/usr/bin/wine
 SC2PATH='/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/'
 ```
 
-### Maps
-You probably want some maps too.
-
-#### Official maps
-Official Blizzard map downloads are available from [Blizzard/s2client-proto](https://github.com/Blizzard/s2client-proto#downloads).  
-Extract these maps into their respective *subdirectories* in the SC2 maps directory.  
-e.g. `install-dir/Maps/Ladder2017Season1/`
-
-#### Bot ladder maps
-Maps that are run on the [SC2 AI Ladder](http://sc2ai.net/) and [SC2 AI Arena](https://aiarena.net/) can be downloaded [from the sc2ai wiki](http://wiki.sc2ai.net/Ladder_Maps) and [the aiarena wiki](https://aiarena.net/wiki/bot-development/getting-started/#wiki-toc-maps).   
-**Extract these maps into the *root* of the SC2 maps directory** (otherwise ladder replays won't work).  
-e.g. `install-dir/Maps/AcropolisLE.SC2Map`
-
-### Running
-
-After installing the library, a StarCraft II executable, and some maps, you're ready to get started. Simply run a bot file to fire up an instance of StarCraft II with the bot running. For example:
-
-```python
-python examples/protoss/cannon_rush.py
-```
-
-
-#### WSL
+### WSL
 
 When running WSL in Windows, python-sc2 detects WSL by default and starts Windows Starcraft 2 instead of Linux Starcraft 2.
 If you wish to instead have the game played in Linux, you can disable this behavior by setting `SC2_WSL_DETECT`
@@ -101,6 +79,30 @@ export SC2SERVERHOST
 ```
 
 You can find your Windows IP using `ipconfig /all` from `PowerShell.exe` or `CMD.exe`.
+
+## Maps
+You will need maps to run the library.
+
+#### Official maps
+Official Blizzard map downloads are available from [Blizzard/s2client-proto](https://github.com/Blizzard/s2client-proto#downloads).  
+Extract these maps into their respective *subdirectories* in the SC2 maps directory.  
+e.g. `install-dir/Maps/Ladder2017Season1/`
+
+#### Bot ladder maps
+Maps that are run on the [SC2 AI Ladder](http://sc2ai.net/) and [SC2 AI Arena](https://aiarena.net/) can be downloaded [from the sc2ai wiki](http://wiki.sc2ai.net/Ladder_Maps) and [the aiarena wiki](https://aiarena.net/wiki/bot-development/getting-started/#wiki-toc-maps).   
+**Extract these maps into the *root* of the SC2 maps directory** (otherwise ladder replays won't work).  
+e.g. `install-dir/Maps/AcropolisLE.SC2Map`
+
+### Running
+
+After installing the library, a StarCraft II executable, and some maps, you're ready to get started. Simply run a bot file to fire up an instance of StarCraft II with the bot running. For example:
+
+```python
+python examples/protoss/cannon_rush.py
+```
+
+
+
 
 ## Example
 
