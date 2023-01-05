@@ -39,12 +39,12 @@ You'll need a StarCraft II executable. If you are running Windows or macOS, just
 You can install StarCraft II on Linux with [Wine](https://www.winehq.org/), [Lutris](https://lutris.net/games/battlenet/) or even the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but the latter is headless so you cannot actually see the game.
 Starcraft II can be directly installed from Battlenet once it is downloaded with Lutris.
 By default, it will be installed here:
-```sh
+```
 /home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
 ```
 Next, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`):
 
-```sh
+```
 SC2PF=WineLinux
 WINE=/usr/bin/wine
 # Or a wine binary from lutris:
@@ -67,7 +67,7 @@ WSL version 1 should not require any configuration. You may be asked to allow Py
 
 When running WSL version 2 you need to supply the following environment variables so that your bot can connect:
 
-```sh
+```
 SC2CLIENTHOST=<your windows IP>
 SC2SERVERHOST=0.0.0.0
 ```
@@ -97,12 +97,9 @@ e.g. `install-dir/Maps/AcropolisLE.SC2Map`
 
 After installing the library, a StarCraft II executable, and some maps, you're ready to get started. Simply run a bot file to fire up an instance of StarCraft II with the bot running. For example:
 
-```python
+```sh
 python examples/protoss/cannon_rush.py
 ```
-
-
-
 
 ## Example
 
@@ -188,7 +185,7 @@ If you have any issues, ideas or feedback, please create [a new issue](https://g
 Git commit messages use [imperative-style messages](https://stackoverflow.com/a/3580764/2867076), start with capital letter and do not have trailing commas.
 
 To run pre-commit hooks (which run autoformatting and autosort imports) you can run
-```
+```sh
 poetry run pre-commit install
 poetry run pre-commit run --all-files
 ```
