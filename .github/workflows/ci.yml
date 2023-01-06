@@ -251,12 +251,19 @@ jobs:
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
-    - name: Install poetry
-        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
-        # https://github.com/readthedocs/readthedocs.org/issues/4912#issuecomment-1110189914
+    - name: Install Poetry
       run: |
         pip install poetry
-        poetry config virtualenvs.create false
+
+    - name: Make poetry use local .venv folder
+      run: poetry config virtualenvs.in-project true
+
+    - name: Set up cache
+      if: matrix.os != 'windows-latest'
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
 
     - name: Install dependencies
       run: |
@@ -297,8 +304,7 @@ jobs:
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
-    - name: Update dependencies
-        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
+    - name: Install Poetry
       run: |
         pip install poetry
 
