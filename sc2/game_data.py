@@ -17,7 +17,6 @@ from sc2.ids.unit_typeid import UnitTypeId
 
 # Set of parts of names of abilities that have no cost
 # E.g every ability that has 'Hold' in its name is free
-# TODO move to constants, add more?
 FREE_ABILITIES = {"Lower", "Raise", "Land", "Lift", "Hold", "Harvest"}
 
 
@@ -150,9 +149,7 @@ class AbilityData:
 
     @property
     def is_free_morph(self) -> bool:
-        if any(free in self.link_name for free in FREE_ABILITIES):
-            return True
-        return False
+        return any(free in self.link_name for free in FREE_ABILITIES)
 
     @property
     def cost(self) -> Cost:

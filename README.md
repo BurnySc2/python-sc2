@@ -31,11 +31,57 @@ pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/a
 ```
 Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments or poetry.
 
-### StarCraft II
-You'll need a StarCraft II executable. If you are running Windows or macOS, just install the normal SC2 from blizzard app. [The free starter edition works too.](https://us.battle.net/account/sc2/starter-edition/). Linux users get the best experience by installing the Windows version of StarCraft II with [Wine](https://www.winehq.org). Linux user can also use the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but it's headless so you cannot actually see the game.
+## StarCraft II
+You'll need a StarCraft II executable. If you are running Windows or macOS, just install SC2 from [blizzard app](https://starcraft2.com/).
 
-### Maps
-You probably want some maps too.
+### Linux installation
+
+You can install StarCraft II on Linux with [Wine](https://www.winehq.org/), [Lutris](https://lutris.net/games/battlenet/) or even the [Linux binary](https://github.com/Blizzard/s2client-proto#downloads), but the latter is headless so you cannot actually see the game.
+Starcraft II can be directly installed from Battlenet once it is downloaded with Lutris.
+By default, it will be installed here:
+```
+/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/
+```
+Next, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`):
+
+```
+SC2PF=WineLinux
+WINE=/usr/bin/wine
+# Or a wine binary from lutris:
+# WINE=/home/burny/.local/share/lutris/runners/wine/lutris-4.20-x86_64/bin/wine64
+# Default Lutris StarCraftII Installation path:
+SC2PATH='/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/'
+```
+
+### WSL
+
+When running WSL in Windows, python-sc2 detects WSL by default and starts Windows Starcraft 2 instead of Linux Starcraft 2.
+If you wish to instead have the game played in Linux, you can disable this behavior by setting `SC2_WSL_DETECT`
+environment variable to "0". You can do this inside python with the following code:
+```py
+import os
+os.environ["SC2_WSL_DETECT"] = "0"
+```  
+
+WSL version 1 should not require any configuration. You may be asked to allow Python through your firewall.
+
+When running WSL version 2 you need to supply the following environment variables so that your bot can connect:
+
+```
+SC2CLIENTHOST=<your windows IP>
+SC2SERVERHOST=0.0.0.0
+```
+
+If you are adding these to your .bashrc, you may need to export your environment variables by adding:
+```sh
+export SC2CLIENTHOST
+export SC2SERVERHOST
+```
+
+You can find your Windows IP using `ipconfig /all` from `PowerShell.exe` or `CMD.exe`.
+
+## Maps
+You will need maps to run the library.
 
 #### Official maps
 Official Blizzard map downloads are available from [Blizzard/s2client-proto](https://github.com/Blizzard/s2client-proto#downloads).  
@@ -51,49 +97,9 @@ e.g. `install-dir/Maps/AcropolisLE.SC2Map`
 
 After installing the library, a StarCraft II executable, and some maps, you're ready to get started. Simply run a bot file to fire up an instance of StarCraft II with the bot running. For example:
 
-```python
+```sh
 python examples/protoss/cannon_rush.py
 ```
-
-#### WINE and Lutris
-
-If you installed StarCraft II on Linux with Wine or Lutris, set the following environment variables (either globally or within your development environment, e.g. Pycharm: `Run -> Edit Configurations -> Environment Variables`):
-
-```sh
-SC2PF=WineLinux
-WINE=/usr/bin/wine
-# Or a wine binary from lutris:
-# WINE=/home/burny/.local/share/lutris/runners/wine/lutris-4.20-x86_64/bin/wine64
-# Default Lutris StarCraftII Installation path:
-SC2PATH='/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/'
-```
-
-#### WSL
-
-When running WSL in Windows, python-sc2 detects WSL by default and starts Windows Starcraft 2 instead of Linux Starcraft 2.
-If you wish to instead have the game played in Linux, you can disable this behavior by setting `SC2_WSL_DETECT`
-environment variable to "0". You can do this inside python with the following code:
-```py
-import os
-os.environ["SC2_WSL_DETECT"] = "0"
-```  
-
-WSL version 1 should not require any configuration. You may be asked to allow Python through your firewall.
-
-When running WSL version 2 you need to supply the following environment variables so that your bot can connect:
-
-```sh
-SC2CLIENTHOST=<your windows IP>
-SC2SERVERHOST=0.0.0.0
-```
-
-If you are adding these to your .bashrc, you may need to export your environment variables by adding:
-```sh
-export SC2CLIENTHOST
-export SC2SERVERHOST
-```
-
-You can find your Windows IP using `ipconfig /all` from `PowerShell.exe` or `CMD.exe`.
 
 ## Example
 
@@ -179,7 +185,7 @@ If you have any issues, ideas or feedback, please create [a new issue](https://g
 Git commit messages use [imperative-style messages](https://stackoverflow.com/a/3580764/2867076), start with capital letter and do not have trailing commas.
 
 To run pre-commit hooks (which run autoformatting and autosort imports) you can run
-```
+```sh
 poetry run pre-commit install
 poetry run pre-commit run --all-files
 ```
