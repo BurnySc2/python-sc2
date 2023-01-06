@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "burnysc2"
-version = "6.0.6"
+version = "6.0.7"
 description = "A StarCraft II API Client for Python 3"
 authors = ["BurnySc2 <gamingburny@gmail.com>"]
 license = "MIT"
@@ -23,6 +23,7 @@ classifiers=[
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 packages = [
     { include = "sc2/**/*.py" },
