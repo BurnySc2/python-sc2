@@ -98,7 +98,7 @@ jobs:
       run: |
         mv sc2/dicts sc2/dicts_old
         poetry run python generate_dicts_from_data_json.py
-        poetry run pre-commit run --all-files --hook-stage commit
+        poetry run pre-commit run --all-files --hook-stage push
 
     - name: Compare generated dict files
       # Exit code will be 0 if the results of both commands are equal
