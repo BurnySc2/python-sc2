@@ -71,10 +71,10 @@ class RallyTarget:
     tag: Optional[int] = None
 
     @classmethod
-    def from_proto(cls, proto: dict) -> RallyTarget:
+    def from_proto(cls, proto: Any) -> RallyTarget:
         return cls(
-            Point2.from_proto_dict(proto["point"]),
-            int(proto["tag"]) if ("tag" in proto) else None,
+            Point2.from_proto(proto.point),
+            proto.tag if proto.HasField("tag") else None,
         )
 
 
