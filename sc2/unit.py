@@ -86,9 +86,11 @@ class UnitOrder:
 
     @classmethod
     def from_proto(cls, proto: Any, bot_object: BotAI) -> UnitOrder:
-        target: Optional[
-            Union[int, Point2]
-        ] = Point2.from_proto(proto.target_world_space_pos) if proto.HasField("target_world_space_pos") else proto.target_unit_tag
+        target: Optional[Union[int, Point2]] = proto.target_unit_tag
+        if proto.HasField("target_world_space_pos"):
+            target = Point2.from_proto(proto.target_world_space_pos)
+        elif proto.HasField("target_unit_tag"):
+            target = proto.target_unit_tag
         return cls(
             ability=bot_object.game_data.abilities[proto.ability_id],
             target=target,
