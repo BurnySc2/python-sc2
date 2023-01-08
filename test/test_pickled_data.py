@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, List, Tuple
 
 from google.protobuf.internal import api_implementation
+from google.protobuf.pyext._message import RepeatedScalarContainer
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from loguru import logger
@@ -51,8 +52,8 @@ def load_map_pickle_data(map_path: Path) -> Tuple[Any, Any, Any]:
 def build_bot_object_from_pickle_data(raw_game_data, raw_game_info, raw_observation) -> BotAI:
     # Build fresh bot object, and load the pickled data into the bot object
     bot = BotAI()
-    game_data = GameData.from_proto(raw_game_data.data)
-    game_info = GameInfo(_proto=raw_game_info.game_info)
+    game_data = GameData(raw_game_data.data)
+    game_info = GameInfo(raw_game_info.game_info)
     game_state = GameState(raw_observation)
     bot._initialize_variables()
     client = Client(True)
@@ -124,6 +125,7 @@ def test_bot_ai():
     assert bot.townhalls.random.position not in bot.enemy_start_locations
     assert bot.enemy_units == Units([], bot)
     assert bot.enemy_structures == Units([], bot)
+    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     assert bot.main_base_ramp  # Test if any ramp was found
 
     # The following functions need to be tested by autotest_bot.py because they use API query which isn't available here as this file only uses the pickle files and is not able to interact with the API as SC2 is not running while this test runs
@@ -409,6 +411,7 @@ def test_bot_ai():
 def test_game_info():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     # Test if main base ramp works
+    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     game_info: GameInfo = bot.game_info
 
     bot.game_info.player_start_location = bot.townhalls.random.position
@@ -451,13 +454,13 @@ def test_game_data():
         assert unit_data.name
         assert isinstance(unit_data.creation_ability, (AbilityData, type(None)))
         assert isinstance(unit_data.footprint_radius, (float, type(None)))
-        assert isinstance(unit_data.attributes, list)
+        assert isinstance(unit_data.attributes, RepeatedScalarContainer)
         assert isinstance(unit_data.has_minerals, bool)
         assert isinstance(unit_data.has_vespene, bool)
         assert isinstance(unit_data.cargo_size, int)
-        assert isinstance(unit_data.tech_requirement_id, (UnitTypeId, type(None)))
-        assert isinstance(unit_data.tech_alias, list)
-        assert isinstance(unit_data.unit_alias_id, (UnitTypeId, type(None)))
+        assert isinstance(unit_data.tech_requirement, (UnitTypeId, type(None)))
+        assert isinstance(unit_data.tech_alias, (list, type(None)))
+        assert isinstance(unit_data.unit_alias, (UnitTypeId, type(None)))
         assert isinstance(unit_data.race, Race)
         assert isinstance(unit_data.cost_zerg_corrected, Cost)
         assert isinstance(unit_data.morph_cost, (Cost, type(None)))
@@ -541,8 +544,8 @@ def test_unit():
     assert not townhall.is_massive
     assert not scv.is_psionic
     assert not townhall.is_psionic
-    assert scv.tech_alias == []
-    assert townhall.tech_alias == []
+    assert scv.tech_alias is None
+    assert townhall.tech_alias is None
     assert scv.unit_alias is None
     assert townhall.unit_alias is None
     assert scv.can_attack
@@ -571,8 +574,8 @@ def test_unit():
     assert scv.real_speed == scv.movement_speed
     assert not townhall.movement_speed
     assert townhall.real_speed == townhall.movement_speed
-    # assert abs(scv.distance_per_step - 1.004464) < 1e-3
-    # assert not townhall.distance_per_step
+    assert abs(scv.distance_per_step - 0.502231) < 1e-3
+    assert not townhall.distance_per_step
     assert scv.distance_to_weapon_ready == 0
     assert not townhall.distance_to_weapon_ready
     assert not scv.is_mineral_field
@@ -910,7 +913,7 @@ def test_units():
     assert not townhalls.vespene_geyser
     assert scvs.prefer_idle
     assert townhalls.prefer_idle
-    # assert len(Unit.class_cache) == 2  # Filled with CC and SCV from previous tests
+    assert len(Unit.class_cache) == 2  # Filled with CC and SCV from previous tests
     assert len(scvs + townhalls) == 13
     assert hash(scvs + townhalls)
     assert scvs.copy()

@@ -1,14 +1,11 @@
 from collections import defaultdict
-from typing import Dict, Literal, Set, Union
+from typing import Any, Dict, Set
 
-from sc2.data import Alliance, CloakState, DisplayType
+from sc2.data import Alliance, Attribute, CloakState, DisplayType, TargetType
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
-
-WEAPON_TYPE_LITERAL = Literal["Ground", "Air", "Any"]
-ATTRIBUTES_LITERAL = Literal["Structure", "Armored", "Psionic", "Massive", "Heroic", "Biological", "Light"]
 
 mineral_ids: Set[int] = {
     UnitTypeId.RICHMINERALFIELD.value,
@@ -159,19 +156,27 @@ abilityid_to_unittypeid: Dict[AbilityId, UnitTypeId] = {
     AbilityId.LOCUSTTRAIN_SWARMHOST: UnitTypeId.SWARMHOSTMP,
     AbilityId.TRAINQUEEN_QUEEN: UnitTypeId.QUEEN,
 }
+
+IS_STRUCTURE: int = Attribute.Structure.value
+IS_LIGHT: int = Attribute.Light.value
+IS_ARMORED: int = Attribute.Armored.value
+IS_BIOLOGICAL: int = Attribute.Biological.value
+IS_MECHANICAL: int = Attribute.Mechanical.value
+IS_MASSIVE: int = Attribute.Massive.value
+IS_PSIONIC: int = Attribute.Psionic.value
 UNIT_BATTLECRUISER: UnitTypeId = UnitTypeId.BATTLECRUISER
 UNIT_ORACLE: UnitTypeId = UnitTypeId.ORACLE
-TARGET_GROUND: Set[WEAPON_TYPE_LITERAL] = {"Ground", "Any"}
-TARGET_AIR: Set[WEAPON_TYPE_LITERAL] = {"Air", "Any"}
-TARGET_BOTH: Set[WEAPON_TYPE_LITERAL] = TARGET_GROUND | TARGET_AIR
-IS_SNAPSHOT = DisplayType.Snapshot
-IS_VISIBLE = DisplayType.Visible
-IS_PLACEHOLDER = DisplayType.Placeholder
-IS_MINE = Alliance.Self
-IS_ENEMY = Alliance.Enemy
-IS_CLOAKED: Set[int] = {CloakState.Cloaked, CloakState.CloakedDetected, CloakState.CloakedAllied}
-IS_REVEALED: int = CloakState.CloakedDetected
-CAN_BE_ATTACKED: Set[int] = {CloakState.NotCloaked, CloakState.CloakedDetected}
+TARGET_GROUND: Set[int] = {TargetType.Ground.value, TargetType.Any.value}
+TARGET_AIR: Set[int] = {TargetType.Air.value, TargetType.Any.value}
+TARGET_BOTH = TARGET_GROUND | TARGET_AIR
+IS_SNAPSHOT = DisplayType.Snapshot.value
+IS_VISIBLE = DisplayType.Visible.value
+IS_PLACEHOLDER = DisplayType.Placeholder.value
+IS_MINE = Alliance.Self.value
+IS_ENEMY = Alliance.Enemy.value
+IS_CLOAKED: Set[int] = {CloakState.Cloaked.value, CloakState.CloakedDetected.value, CloakState.CloakedAllied.value}
+IS_REVEALED: int = CloakState.CloakedDetected.value
+CAN_BE_ATTACKED: Set[int] = {CloakState.NotCloaked.value, CloakState.CloakedDetected.value}
 IS_CARRYING_MINERALS: Set[BuffId] = {BuffId.CARRYMINERALFIELDMINERALS, BuffId.CARRYHIGHYIELDMINERALFIELDMINERALS}
 IS_CARRYING_VESPENE: Set[BuffId] = {
     BuffId.CARRYHARVESTABLEVESPENEGEYSERGAS,
@@ -486,137 +491,137 @@ ALL_GAS: Set[UnitTypeId] = {
     UnitTypeId.EXTRACTOR,
     UnitTypeId.EXTRACTORRICH,
 }
-DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Dict[Union[ATTRIBUTES_LITERAL, None], int]]] = {
+DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[TargetType, Any]] = {
     #
     # Protoss
     #
     UnitTypeId.PROBE: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 0
         }
     },
     # Gateway Units
     UnitTypeId.ADEPT: {
-        "Ground": {
-            "Light": 1
+        TargetType.Ground.value: {
+            IS_LIGHT: 1
         }
     },
     UnitTypeId.STALKER: {
-        "Any": {
-            "Armored": 1
+        TargetType.Any.value: {
+            IS_ARMORED: 1
         }
     },
     UnitTypeId.DARKTEMPLAR: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 5
         }
     },
     UnitTypeId.ARCHON: {
-        "Any": {
+        TargetType.Any.value: {
             None: 3,
-            "Biological": 1
+            IS_BIOLOGICAL: 1
         }
     },
     # Robo Units
     UnitTypeId.IMMORTAL: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2,
-            "Armored": 3
+            IS_ARMORED: 3
         }
     },
     UnitTypeId.COLOSSUS: {
-        "Ground": {
-            "Light": 1
+        TargetType.Ground.value: {
+            IS_LIGHT: 1
         }
     },
     # Stargate Units
     UnitTypeId.ORACLE: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 0
         }
     },
     UnitTypeId.TEMPEST: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 4
         },
-        "Air": {
+        TargetType.Air.value: {
             None: 3,
-            "Massive": 2
+            IS_MASSIVE: 2
         }
     },
     #
     # Terran
     #
     UnitTypeId.SCV: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 0
         }
     },
     # Barracks Units
     UnitTypeId.MARAUDER: {
-        "Ground": {
-            "Armored": 1
+        TargetType.Ground.value: {
+            IS_ARMORED: 1
         }
     },
     UnitTypeId.GHOST: {
-        "Any": {
-            "Light": 1
+        TargetType.Any.value: {
+            IS_LIGHT: 1
         }
     },
     # Factory Units
     UnitTypeId.HELLION: {
-        "Ground": {
-            "Light": 1
+        TargetType.Ground.value: {
+            IS_LIGHT: 1
         }
     },
     UnitTypeId.HELLIONTANK: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2,
-            "Light": 1
+            IS_LIGHT: 1
         }
     },
     UnitTypeId.CYCLONE: {
-        "Any": {
+        TargetType.Any.value: {
             None: 2
         }
     },
     UnitTypeId.SIEGETANK: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2,
-            "Armored": 1
+            IS_ARMORED: 1
         }
     },
     UnitTypeId.SIEGETANKSIEGED: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 4,
-            "Armored": 1
+            IS_ARMORED: 1
         }
     },
     UnitTypeId.THOR: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 3
         },
-        "Air": {
-            "Light": 1
+        TargetType.Air.value: {
+            IS_LIGHT: 1
         }
     },
     UnitTypeId.THORAP: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 3
         },
-        "Air": {
+        TargetType.Air.value: {
             None: 3,
-            "Massive": 1
+            IS_MASSIVE: 1
         }
     },
     # Starport Units
     UnitTypeId.VIKINGASSAULT: {
-        "Ground": {
-            "Mechanical": 1
+        TargetType.Ground.value: {
+            IS_MECHANICAL: 1
         }
     },
     UnitTypeId.LIBERATORAG: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 5
         }
     },
@@ -624,48 +629,48 @@ DAMAGE_BONUS_PER_UPGRADE: Dict[UnitTypeId, Dict[WEAPON_TYPE_LITERAL, Dict[Union[
     # Zerg
     #
     UnitTypeId.DRONE: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 0
         }
     },
     # Hatch Tech Units (Queen, Ling, Bane, Roach, Ravager)
     UnitTypeId.BANELING: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2,
-            "Light": 2,
-            "Structure": 3
+            IS_LIGHT: 2,
+            IS_STRUCTURE: 3
         }
     },
     UnitTypeId.ROACH: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2
         }
     },
     UnitTypeId.RAVAGER: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2
         }
     },
     # Lair Tech Units (Hydra, Lurker, Ultra)
     UnitTypeId.LURKERMPBURROWED: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2,
-            "Armored": 1
+            IS_ARMORED: 1
         }
     },
     UnitTypeId.ULTRALISK: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 3
         }
     },
     # Spire Units (Muta, Corruptor, BL)
     UnitTypeId.CORRUPTOR: {
-        "Air": {
-            "Massive": 1
+        TargetType.Air.value: {
+            IS_MASSIVE: 1
         }
     },
     UnitTypeId.BROODLORD: {
-        "Ground": {
+        TargetType.Ground.value: {
             None: 2
         }
     },

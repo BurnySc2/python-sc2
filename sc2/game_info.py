@@ -4,7 +4,7 @@ import heapq
 from collections import deque
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Any, Deque, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple
+from typing import Deque, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple
 
 import numpy as np
 
@@ -114,8 +114,8 @@ class Ramp:
             except AssertionError:
                 # Returns None when no placement was found, this is the case on the map Honorgrounds LE with an exceptionally large main base ramp
                 return None
-            anyLowerPoint = next(iter(self.lower))
-            return max(intersects, key=lambda p: p.distance_to_point2(anyLowerPoint))
+            any_lower_point = next(iter(self.lower))
+            return max(intersects, key=lambda p: p.distance_to_point2(any_lower_point))
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -208,110 +208,56 @@ class Ramp:
         return sorted_depots[0].negative_offset(direction)
 
 
-@dataclass
 class GameInfo:
-    _proto: Any = None
 
-    # Filled later by BotAI._prepare_first_step
-    player_start_location: Point2 = None  # type: ignore
+    def __init__(self, proto):
+        self._proto = proto
+        self.players: List[Player] = [Player.from_proto(p) for p in self._proto.player_info]
+        self.map_name: str = self._proto.map_name
+        self.local_map_path: str = self._proto.local_map_path
+        self.map_size: Size = Size.from_proto(self._proto.start_raw.map_size)
 
-    _pathing_grid: PixelMap = None  # type: ignore
-    _map_ramps: List[Ramp] = None  # type: ignore
-    _vision_blockers: FrozenSet[Point2] = None  # type: ignore
-
-    @cached_property
-    def players(self) -> List[Player]:
-        return [Player.from_proto(p) for p in self._proto.player_info]
-
-    @property
-    def map_name(self) -> str:
-        return self._proto.map_name
-
-    @property
-    def local_map_path(self) -> str:
-        return self._proto.local_map_path
-
-    @cached_property
-    def map_size(self) -> Size:
-        return Size.from_proto(self._proto.start_raw.map_size)
-
-    @property
-    def pathing_grid(self) -> PixelMap:
-        # self.pathing_grid[point]: if 0 point is not pathable, if 1 point is pathable
-        if self._pathing_grid is None:
-            self._pathing_grid: PixelMap = PixelMap(self._proto.start_raw.pathing_grid, in_bits=True)
-        return self._pathing_grid
-
-    @cached_property
-    def terrain_height(self) -> PixelMap:
+        # self.pathing_grid[point]: if 0, point is not pathable, if 1, point is pathable
+        self.pathing_grid: PixelMap = PixelMap(self._proto.start_raw.pathing_grid, in_bits=True)
         # self.terrain_height[point]: returns the height in range of 0 to 255 at that point
-        return PixelMap(self._proto.start_raw.terrain_height)
-
-    @cached_property
-    def placement_grid(self) -> PixelMap:
-        # self.placement_grid[point]: if 0 point is not placeable, if 1 point is pathable
-        return PixelMap(self._proto.start_raw.placement_grid, in_bits=True)
-
-    @cached_property
-    def playable_area(self) -> Rect:
-        # self.placement_grid[point]: if 0 point is not placeable, if 1 point is pathable
-        return Rect.from_proto(self._proto.start_raw.playable_area)
-
-    @cached_property
-    def map_center(self) -> Point2:
-        # self.placement_grid[point]: if 0 point is not placeable, if 1 point is pathable
-        return self.playable_area.center
-
-    def _calc_map_ramps_and_vision_blockers(self):
-        self._map_ramps, self._vision_blockers = self._find_ramps_and_vision_blockers()
-
-    @property
-    def map_ramps(self) -> List[Ramp]:
-        if self._map_ramps is None:
-            self._calc_map_ramps_and_vision_blockers()
-        return self._map_ramps
-
-    @property
-    def vision_blockers(self) -> FrozenSet[Point2]:
-        if self._vision_blockers is None:
-            self._calc_map_ramps_and_vision_blockers()
-        return self._vision_blockers
-
-    @cached_property
-    def player_races(self) -> Dict[int, Race]:
-        return {p.player_id: p.race_actual or p.race_requested for p in self._proto.player_info}
-
-    @cached_property
-    def start_locations(self) -> List[Point2]:
-        return [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
+        self.terrain_height: PixelMap = PixelMap(self._proto.start_raw.terrain_height)
+        # self.placement_grid[point]: if 0, point is not placeable, if 1, point is pathable
+        self.placement_grid: PixelMap = PixelMap(self._proto.start_raw.placement_grid, in_bits=True)
+        self.playable_area = Rect.from_proto(self._proto.start_raw.playable_area)
+        self.map_center = self.playable_area.center
+        self.map_ramps: List[Ramp] = None  # Filled later by BotAI._prepare_first_step
+        self.vision_blockers: FrozenSet[Point2] = None  # Filled later by BotAI._prepare_first_step
+        self.player_races: Dict[int, Race] = {
+            p.player_id: p.race_actual or p.race_requested
+            for p in self._proto.player_info
+        }
+        self.start_locations: List[Point2] = [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
+        self.player_start_location: Point2 = None  # Filled later by BotAI._prepare_first_step
 
     def _find_ramps_and_vision_blockers(self) -> Tuple[List[Ramp], FrozenSet[Point2]]:
         """Calculate points that are pathable but not placeable.
         Then divide them into ramp points if not all points around the points are equal height
         and into vision blockers if they are."""
 
-        def equal_height_around(tile: Point2) -> bool:
+        def equal_height_around(tile):
             # mask to slice array 1 around tile
             sliced = self.terrain_height.data_numpy[tile[1] - 1:tile[1] + 2, tile[0] - 1:tile[0] + 2]
             return len(np.unique(sliced)) == 1
 
+        map_area = self.playable_area
         # all points in the playable area that are pathable but not placable
-        mixed_numpy_array: np.ndarray = self.pathing_grid.data_numpy & (1 - self.placement_grid.data_numpy)
-        # ramp points are already inside the playable area, so no need to check that
-        points = (Point2((x, y)) for y, x in np.argwhere(mixed_numpy_array == 1))
-
+        points = [
+            Point2((a, b)) for (b, a), value in np.ndenumerate(self.pathing_grid.data_numpy)
+            if value == 1 and map_area.x <= a < map_area.x + map_area.width and map_area.y <= b < map_area.y +
+            map_area.height and self.placement_grid[(a, b)] == 0
+        ]
         # divide points into ramp points and vision blockers
-        ramp_points = []
-        vision_blockers = []
-        for point in points:
-            if equal_height_around(point):
-                vision_blockers.append(point)
-            else:
-                ramp_points.append(point)
+        ramp_points = [point for point in points if not equal_height_around(point)]
+        vision_blockers = frozenset(point for point in points if equal_height_around(point))
         ramps = [Ramp(group, self) for group in self._find_groups(ramp_points)]
-        return ramps, frozenset(vision_blockers)
+        return ramps, vision_blockers
 
-    def _find_groups(self, points: Iterable[Point2], minimum_points_per_group: int = 8) -> Iterable[FrozenSet[Point2]]:
+    def _find_groups(self, points: FrozenSet[Point2], minimum_points_per_group: int = 8) -> Iterable[FrozenSet[Point2]]:
         """
         From a set of points, this function will try to group points together by
         painting clusters of points in a rectangular map using flood fill algorithm.
@@ -327,11 +273,11 @@ class GameInfo:
         def paint(pt: Point2) -> None:
             picture[pt.y][pt.x] = current_color
 
-        nearby: List[Tuple[int, int]] = [(x, y) for x in [-1, 0, 1] for y in [-1, 0, 1] if x != 0 or y != 0]
+        nearby: List[Tuple[int, int]] = [(a, b) for a in [-1, 0, 1] for b in [-1, 0, 1] if a != 0 or b != 0]
 
         remaining: Set[Point2] = set(points)
-        for point_r in remaining:
-            paint(point_r)
+        for point in remaining:
+            paint(point)
         current_color = 1
         queue: Deque[Point2] = deque()
         while remaining:

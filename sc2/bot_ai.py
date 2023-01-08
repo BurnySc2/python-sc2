@@ -399,13 +399,13 @@ class BotAI(BotAIInternal):
         :param unit_type:"""
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
-        unit_supply_cost = self.game_data.units[unit_type.value].food_required
+        unit_supply_cost = self.game_data.units[unit_type.value]._proto.food_required
         if unit_supply_cost > 0 and unit_type in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[unit_type]) == 1:
             producer: UnitTypeId
             for producer in UNIT_TRAINED_FROM[unit_type]:
                 producer_unit_data = self.game_data.units[producer.value]
-                if producer_unit_data.food_required <= unit_supply_cost:
-                    producer_supply_cost = producer_unit_data.food_required
+                if producer_unit_data._proto.food_required <= unit_supply_cost:
+                    producer_supply_cost = producer_unit_data._proto.food_required
                     unit_supply_cost -= producer_supply_cost
         return unit_supply_cost
 
@@ -437,7 +437,7 @@ class BotAI(BotAIInternal):
         :param unit_type:
         """
         unit_data = self.game_data.units[unit_type.value]
-        return Cost(unit_data.mineral_cost, unit_data.vespene_cost)
+        return Cost(unit_data._proto.mineral_cost, unit_data._proto.vespene_cost)
 
     def calculate_cost(self, item_id: Union[UnitTypeId, UpgradeId, AbilityId]) -> Cost:
         """

@@ -148,13 +148,6 @@ class Point2(Pointlike):
         """
         return cls((data.x, data.y))
 
-    @classmethod
-    def from_proto_dict(cls, data: dict) -> Point2:
-        """
-        :param data:
-        """
-        return cls((data['x'], data['y']))
-
     @property
     def as_Point2D(self) -> common_pb.Point2D:
         return common_pb.Point2D(x=self.x, y=self.y)
@@ -332,13 +325,6 @@ class Point3(Point2):
         :param data:
         """
         return cls((data.x, data.y, data.z))
-
-    @classmethod
-    def from_proto_dict(cls, data: dict) -> Point3:
-        """
-        :param data:
-        """
-        return cls((data['x'], data['y'], data['z']))
 
     @property
     def as_Point(self) -> common_pb.Point:

@@ -13,13 +13,13 @@ from typing import Counter as CounterType
 from typing import Dict, Generator, Iterable, List, Set, Tuple, Union, final
 
 import numpy as np
-from google.protobuf.json_format import MessageToDict  # type: ignore
 from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2.cache import property_cache_once_per_frame
 from sc2.constants import (
     ALL_GAS,
+    IS_PLACEHOLDER,
     TERRAN_STRUCTURES_REQUIRE_SCV,
     FakeEffectID,
     abilityid_to_unittypeid,
@@ -224,7 +224,7 @@ class BotAIInternal(ABC):
                 if self.game_info.placement_grid[point.rounded] == 1
                 # Check if all resources have enough space to point
                 and all(
-                    point.distance_to(resource) >= (7 if resource.unit_type in geyser_ids else 6)
+                    point.distance_to(resource) >= (7 if resource._proto.unit_type in geyser_ids else 6)
                     for resource in resources
                 )
             )
@@ -536,49 +536,24 @@ class BotAIInternal(ABC):
         worker_types: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
 
         index: int = 0
-
-        # Renaming keys in the 'unit' dict so that these values can be converted to python objects when accessed (as property)
-        rename_keys = {
-            "tag": "_tag",
-            "add_on_tag": "_add_on_tag",
-            "engaged_target_tag": "_engaged_target_tag",
-            "weapon_cooldown": "_weapon_cooldown",
-            "display_type": "_display_type",
-            "alliance": "_alliance",
-            "cloak": "_cloak",
-            "orders": "_orders",
-            "passengers": "_passengers",
-            "rally_targets": "_rally_targets",
-        }
-
-        for unit in MessageToDict(
-            self.state.observation_raw, including_default_value_fields=False, preserving_proto_field_name=True
-        ).get('units', []):
-            if unit.get('is_blip'):
+        for unit in self.state.observation_raw.units:
+            if unit.is_blip:
                 self.blips.add(Blip(unit))
             else:
-                unit_type: int = unit['unit_type']
+                unit_type: int = unit.unit_type
                 # Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield
                 if unit_type in FakeEffectID:
                     self.state.effects.add(EffectData(unit, fake=True))
                     continue
-
-                for old_key, new_key in rename_keys.items():
-                    if old_key in unit:
-                        unit[new_key] = unit.pop(old_key)
-                unit_obj = Unit(
-                    **unit,
-                    bot_object=self,
-                    distance_calculation_index=index,
-                    base_build=self.base_build,
-                )
+                unit_obj = Unit(unit, self, distance_calculation_index=index, base_build=self.base_build)
                 index += 1
                 self.all_units.append(unit_obj)
-                if unit['_display_type'] == "Placeholder":
+                if unit.display_type == IS_PLACEHOLDER:
                     self.placeholders.append(unit_obj)
                     continue
-                alliance = unit['_alliance']
-                if alliance == "Neutral":
+                alliance = unit.alliance
+                # Alliance.Neutral.value = 3
+                if alliance == 3:
                     # XELNAGATOWER = 149
                     if unit_type == 149:
                         self.watchtowers.append(unit_obj)
@@ -593,7 +568,8 @@ class BotAIInternal(ABC):
                     # all destructable rocks
                     else:
                         self.destructables.append(unit_obj)
-                elif alliance == 'Self':
+                # Alliance.Self.value = 1
+                elif alliance == 1:
                     self.all_own_units.append(unit_obj)
                     unit_id: UnitTypeId = unit_obj.type_id
                     if unit_obj.is_structure:
@@ -623,7 +599,8 @@ class BotAIInternal(ABC):
                             self.workers.append(unit_obj)
                         elif unit_id == UnitTypeId.LARVA:
                             self.larva.append(unit_obj)
-                elif alliance == 'Enemy':
+                # Alliance.Enemy.value = 4
+                elif alliance == 4:
                     self.all_enemy_units.append(unit_obj)
                     if unit_obj.is_structure:
                         self.enemy_structures.append(unit_obj)
