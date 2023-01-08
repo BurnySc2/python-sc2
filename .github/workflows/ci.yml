@@ -98,6 +98,7 @@ jobs:
         mv sc2/dicts sc2/dicts_old
         poetry run python generate_dicts_from_data_json.py
         poetry run pre-commit run --all-files --hook-stage push || true
+        rm -rf sc2/dicts/__pycache__ sc2/dicts_old/__pycache__
 
     - name: Upload generated dicts folder as artifact
       uses: actions/upload-artifact@v3
@@ -154,12 +155,6 @@ jobs:
       run: poetry run python -m pytest test
 
       # Run benchmarks
-    - name: Run benchmark benchmark_bot_ai_init
-      run: poetry run python -m pytest test/benchmark_bot_ai_init.py
-
-    - name: Run benchmark benchmark_bot_ai_prepare_units
-      run: poetry run python -m pytest test/benchmark_prepare_units.py
-
     - name: Run benchmark benchmark_array_creation
       run: poetry run python -m pytest test/benchmark_array_creation.py
 
@@ -174,6 +169,12 @@ jobs:
 
     - name: Run benchmark benchmark_distances_units
       run: poetry run python -m pytest test/benchmark_distances_units.py
+
+    - name: Run benchmark benchmark_bot_ai_prepare_units
+      run: poetry run python -m pytest test/benchmark_prepare_units.py
+
+    - name: Run benchmark benchmark_bot_ai_init
+      run: poetry run python -m pytest test/benchmark_bot_ai_init.py
 
   run_test_bots:
     # Run test bots that download the SC2 linux client and run it
