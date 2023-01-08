@@ -1,7 +1,6 @@
 # If you change the name, change the link on  the README.md for the badge too
 name: Tests
 
-
 on:
   push:
     paths:
@@ -9,8 +8,11 @@ on:
     - examples/**
     - test/**
     - docs_generate/**
-    - pyproject.toml
+    - .pre-commit-config.yaml
+    - generate_dicts_from_data_json.py
+    - generate_id_constants_from_stableid.py
     - poetry.lock
+    - pyproject.toml
     - README.md
     - .github/workflows/ci.yml
   pull_request:
@@ -147,18 +149,6 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
-    - name: Run yapf autoformat
-      if: matrix.os != 'windows-latest'
-      run: poetry run yapf --in-place $(git ls-files '*.py')
-
-    - name: Run pylint on sc2 folder
-      if: matrix.os != 'windows-latest'
-      run: poetry run pylint $(git ls-files '*.py' | grep -E 'sc2/.*')
-
-    - name: Run pylint on examples folder
-      if: matrix.os != 'windows-latest'
-      run: poetry run pylint $(git ls-files '*.py' | grep -E 'examples/.*')
-
     - name: Run pytest
       run: poetry run python -m pytest test
 
@@ -245,14 +235,9 @@ jobs:
   run_example_bots:
     # Run example bots against computer
     name: Run example bots against computer
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: [run_pre_commit_hook, generate_dicts_from_data_json, run_pytest_tests]
-    strategy:
-      # Do not allow this test to cancel. Finish all jobs regardless of error
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
     env:
       IMAGE_NAME: burnysc2/python-sc2-docker:local
 
@@ -465,7 +450,7 @@ jobs:
         FOLDER: .   # The folder the action should deploy.
 
   release_to_pypi:
-    name: Pypi
+    name: Pypi package release
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [release_to_github_pages]
@@ -490,4 +475,3 @@ jobs:
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
       continue-on-error: true
       run: poetry publish --username ${{ secrets.pypi_username }} --password ${{ secrets.pypi_password }}
-

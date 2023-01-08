@@ -1,4 +1,4 @@
-name: Build and push Dockerfile
+name: Build and push Docker image
 
 # Only run if Dockerfile or docker-ci.yml changed
 on:
