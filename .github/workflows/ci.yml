@@ -29,7 +29,7 @@ jobs:
   run_pre_commit_hook:
     name: Run pre-commit hook
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
@@ -55,11 +55,55 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
+        poetry run pre-commit install
 
     - name: Run pre-commit hooks
       run: |
-         poetry run pre-commit install
-         poetry run pre-commit run --all-files --hook-stage push
+        poetry run pre-commit run --all-files --hook-stage push
+
+  generate_dicts_from_data_json:
+    name: Generate dicts from data.json
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+    - name: Install poetry
+      run: |
+        pip install poetry
+
+    - name: Make poetry use local .venv folder
+      run: poetry config virtualenvs.in-project true
+
+    - name: Set up cache
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+
+    - name: Install dependencies
+      run: |
+        poetry install
+        poetry run pre-commit install
+
+    - name: Run generate dicts
+      # Check if newly generated file is the same as existing file
+      # Run pre-commit hook to format files
+      run: |
+        mv sc2/dicts sc2/dicts_old
+        poetry run python generate_dicts_from_data_json.py
+        poetry run pre-commit run --all-files --hook-stage commit
+
+    - name: Compare generated dict files
+      # Exit code will be 0 if the results of both commands are equal
+      run: |
+        [[ `ls sc2/dicts | md5sum` == `ls sc2/dicts_old | md5sum` ]]
 
   run_pytest_tests:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
@@ -283,8 +327,8 @@ jobs:
   release_to_github_pages:
     name: GitHub Pages
     runs-on: ubuntu-latest
-    timeout-minutes: 3
-    needs: [run_pytest_tests, run_test_bots, run_example_bots, run_pre_commit_hook]
+    timeout-minutes: 5
+    needs: [run_pytest_tests, run_test_bots, run_example_bots, run_pre_commit_hook, generate_dicts_from_data_json]
 
     steps:
     - uses: actions/checkout@v2
@@ -337,7 +381,7 @@ jobs:
     name: Pypi
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [run_pytest_tests, run_test_bots, run_example_bots, run_pre_commit_hook]
+    needs: [release_to_github_pages]
 
     steps:
     - uses: actions/checkout@v2

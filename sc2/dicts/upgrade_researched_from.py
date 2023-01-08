@@ -6,8 +6,8 @@ from typing import Dict
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
 
-# from ..ids.buff_id import BuffId
-# from ..ids.effect_id import EffectId
+# from sc2.ids.buff_id import BuffId
+# from sc2.ids.effect_id import EffectId
 
 UPGRADE_RESEARCHED_FROM: Dict[UpgradeId, UnitTypeId] = {
     UpgradeId.ADEPTPIERCINGATTACK: UnitTypeId.TWILIGHTCOUNCIL,
