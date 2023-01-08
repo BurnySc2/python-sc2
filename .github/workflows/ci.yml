@@ -84,7 +84,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install Poetry
+    - name: Install poetry
       run: |
         pip install poetry
 
@@ -297,7 +297,16 @@ jobs:
     - name: Install poetry
       run: |
         pip install poetry
-        poetry config virtualenvs.create false
+
+    - name: Make poetry use local .venv folder
+      run: poetry config virtualenvs.in-project true
+
+    - name: Set up cache
+      if: matrix.os != 'windows-latest'
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
 
     - name: Install dependencies
       run: |
@@ -338,8 +347,7 @@ jobs:
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
-    - name: Update dependencies
-        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
+    - name: Install poetry
       run: |
         pip install poetry
 
