@@ -40,8 +40,7 @@ jobs:
         VERSION_NUMBER: ${{ env.VERSION_NUMBER }}
         PYTHON_VERSION: ${{ env.LATEST_PYTHON_VERSION }}
         SC2_VERSION: ${{ env.LATEST_SC2_VERSION }}
-      run: |
-        sh dockerfiles/test_docker_image.sh
+      run: sh dockerfiles/test_docker_image.sh
 
   run_test_new_python_version:
     name: Run test_new_python_candidate.sh
@@ -66,8 +65,7 @@ jobs:
         VERSION_NUMBER: ${{ env.VERSION_NUMBER }}
         PYTHON_VERSION: ${{ env.EXPERIMENTAL_PYTHON_VERSION }}
         SC2_VERSION: ${{ env.LATEST_SC2_VERSION }}
-      run: |
-        sh dockerfiles/test_new_python_candidate.sh
+      run: sh dockerfiles/test_new_python_candidate.sh
 
   docker_build:
     name: Build docker image
@@ -87,8 +85,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build docker image
-      run: |
-        docker build -t $IMAGE_NAME-v$VERSION_NUMBER $BUILD_ARGS - < dockerfiles/Dockerfile
+      run: docker build -t $IMAGE_NAME-v$VERSION_NUMBER $BUILD_ARGS - < dockerfiles/Dockerfile
 
     - name: Enable experimental docker features
       run: |
@@ -96,8 +93,7 @@ jobs:
         sudo systemctl restart docker.service
 
     - name: Build squashed image
-      run: |
-        docker build -t $IMAGE_NAME-v$VERSION_NUMBER-squashed --squash $BUILD_ARGS - < dockerfiles/Dockerfile
+      run: docker build -t $IMAGE_NAME-v$VERSION_NUMBER-squashed --squash $BUILD_ARGS - < dockerfiles/Dockerfile
 
     - name: Run test bots on squashed image
       if: matrix.python-version != '3.7'
@@ -123,13 +119,11 @@ jobs:
 
     - name: Upload docker image
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-      run: |
-        docker push $IMAGE_NAME-v$VERSION_NUMBER
+      run: docker push $IMAGE_NAME-v$VERSION_NUMBER
 
     - name: Upload squashed docker image
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-      run: |
-        docker push $IMAGE_NAME-v$VERSION_NUMBER-squashed
+      run: docker push $IMAGE_NAME-v$VERSION_NUMBER-squashed
 
     - name: Upload squashed docker image as latest tag
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push' && matrix.python-version == env.LATEST_PYTHON_VERSION && matrix.sc2-version == env.LATEST_SC2_VERSION

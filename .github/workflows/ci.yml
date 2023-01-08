@@ -40,8 +40,7 @@ jobs:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
     - name: Install poetry
-      run: |
-        pip install poetry
+      run: pip install poetry
 
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
@@ -58,8 +57,7 @@ jobs:
         poetry run pre-commit install
 
     - name: Run pre-commit hooks
-      run: |
-        poetry run pre-commit run --all-files --hook-stage push
+      run: poetry run pre-commit run --all-files --hook-stage push
 
   generate_dicts_from_data_json:
     name: Generate dicts from data.json
@@ -75,8 +73,7 @@ jobs:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
     - name: Install poetry
-      run: |
-        pip install poetry
+      run: pip install poetry
 
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
@@ -108,8 +105,7 @@ jobs:
 
     - name: Compare generated dict files
       # Exit code will be 0 if the results of both commands are equal
-      run: |
-        [[ `ls sc2/dicts | md5sum` == `ls sc2/dicts_old | md5sum` ]]
+      run: [[ `ls sc2/dicts | md5sum` == `ls sc2/dicts_old | md5sum` ]]
 
   run_pytest_tests:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
@@ -135,8 +131,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install poetry
-      run: |
-        pip install poetry
+      run: pip install poetry
 
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
@@ -149,62 +144,51 @@ jobs:
         key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
 
     - name: Install dependencies
-      run: |
-        poetry install
+      run: poetry install
 
     - name: Run yapf autoformat
       if: matrix.os != 'windows-latest'
-      run: |
-        poetry run yapf --in-place $(git ls-files '*.py')
+      run: poetry run yapf --in-place $(git ls-files '*.py')
 
     - name: Run pylint on sc2 folder
       if: matrix.os != 'windows-latest'
-      run: |
-        poetry run pylint $(git ls-files '*.py' | grep -E 'sc2/.*')
+      run: poetry run pylint $(git ls-files '*.py' | grep -E 'sc2/.*')
 
     - name: Run pylint on examples folder
       if: matrix.os != 'windows-latest'
-      run: |
-        poetry run pylint $(git ls-files '*.py' | grep -E 'examples/.*')
+      run: poetry run pylint $(git ls-files '*.py' | grep -E 'examples/.*')
 
     - name: Run pytest
-      run: |
-        poetry run python -m pytest test
+      run: poetry run python -m pytest test
 
       # Run benchmarks
     - name: Run benchmark benchmark_bot_ai_init
-      run: |
-        poetry run python -m pytest test/benchmark_bot_ai_init.py
+      run: poetry run python -m pytest test/benchmark_bot_ai_init.py
 
     - name: Run benchmark benchmark_bot_ai_prepare_units
-      run: |
-        poetry run python -m pytest test/benchmark_prepare_units.py
+      run: poetry run python -m pytest test/benchmark_prepare_units.py
 
     - name: Run benchmark benchmark_array_creation
-      run: |
-        poetry run python -m pytest test/benchmark_array_creation.py
+      run: poetry run python -m pytest test/benchmark_array_creation.py
 
     - name: Run benchmark benchmark_distance_two_points
-      run: |
-        poetry run python -m pytest test/benchmark_distance_two_points.py
+      run: poetry run python -m pytest test/benchmark_distance_two_points.py
 
     - name: Run benchmark benchmark_distances_cdist
-      run: |
-        poetry run python -m pytest test/benchmark_distances_cdist.py
+      run: poetry run python -m pytest test/benchmark_distances_cdist.py
 
     - name: Run benchmark benchmark_distances_points_to_point
-      run: |
-        poetry run python -m pytest test/benchmark_distances_points_to_point.py
+      run: poetry run python -m pytest test/benchmark_distances_points_to_point.py
 
     - name: Run benchmark benchmark_distances_units
-      run: |
-        poetry run python -m pytest test/benchmark_distances_units.py
+      run: poetry run python -m pytest test/benchmark_distances_units.py
 
   run_test_bots:
     # Run test bots that download the SC2 linux client and run it
     name: Run testbots linux
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
+    needs: [run_pre_commit_hook, generate_dicts_from_data_json, run_pytest_tests]
     strategy:
       # Do not allow this test to cancel. Finish all jobs regardless of error
       fail-fast: false
@@ -220,16 +204,13 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Print directories and files
-      run: |
-        sudo apt-get install tree
-        tree
+      run: sudo apt-get install tree && tree
 
     - name: Load and build docker image
       # Build docker image from Dockerfile using specific python and sc2 version
       env:
         BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
-      run: |
-        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
+      run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
 
     - name: Run autotest_bot.py
       # Run bot and list resulting files (replay file, stable_id.json)
@@ -265,6 +246,7 @@ jobs:
     name: Run example bots against computer
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
+    needs: [run_pre_commit_hook, generate_dicts_from_data_json, run_pytest_tests]
     strategy:
       # Do not allow this test to cancel. Finish all jobs regardless of error
       fail-fast: false
@@ -278,16 +260,13 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Print directories and files
-      run: |
-        sudo apt-get install tree
-        tree
+      run: sudo apt-get install tree && tree
 
     - name: Load and build docker image
       # Build docker image from Dockerfile using specific python and sc2 version
       env:
         BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
-      run: |
-        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+      run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
 
     - name: Run example bots vs computer
       run: |
@@ -330,11 +309,82 @@ jobs:
 #        docker exec -i my_container bash -c "tree"
 #        docker rm -f my_container
 
-  release_to_github_pages:
-    name: GitHub Pages
+  run_coverage:
+    # Run and upload coverage report using python 3.9
+    # This coverage test does not cover the whole testing range, check /bat_files/rune_code_coverage.bat
+    name: Run coverage
+    needs: [run_test_bots, run_example_bots]
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: [run_pytest_tests, run_test_bots, run_example_bots, run_pre_commit_hook, generate_dicts_from_data_json]
+    timeout-minutes: 30
+    env:
+      IMAGE_NAME: burnysc2/python-sc2-docker:local
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Load and build docker image
+      # Build docker image from Dockerfile using specific python and sc2 version
+      env:
+        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
+      run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+
+    - name: Set up container
+      run: |
+        mkdir htmlcov
+        docker run -i -d \
+          --mount type=bind,source=$(pwd)/htmlcov,destination=/root/python-sc2/htmlcov \
+          --name my_container \
+          $IMAGE_NAME
+        echo "Install dev requirements because only non dev requirements exist in the docker image at the moment"
+        docker exec -i my_container bash -c "poetry install"
+
+    - name: Run coverage on tests
+      run: docker exec -i my_container bash -c "poetry run pytest --cov=./"
+
+    - name: Run coverage on autotest_bot.py
+      run: docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/autotest_bot.py"
+
+    - name: Run coverage on upgradestest_bot.py
+      run: docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/upgradestest_bot.py"
+
+    - name: Run coverage on damagetest_bot.py
+      run: docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/damagetest_bot.py"
+
+    - name: Run coverage on queries_test_bot.py
+      run: docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/queries_test_bot.py"
+
+# Bots might run differently long each time and create flucuations in code coverage - better to mock behavior instead
+#    - name: Run coverage on example bots
+#      run: |
+#        docker exec -i my_container bash -c "poetry run coverage run -a test/run_example_bots_vs_computer.py"
+
+    - name: Generate xml coverage file
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage xml"
+        docker cp my_container:/root/python-sc2/coverage.xml $(pwd)/coverage.xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: coverage.xml
+
+    - name: Generate html coverage files in htmlcov/ folder
+      run: |
+        docker exec -i my_container bash -c "poetry run coverage html"
+        echo "Upload htmlcov folder because it was mounted in container, so it will be available in host machine"
+
+    - name: Upload htmlcov/ folder as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Coverage_report
+        path: htmlcov
+
+  run_radon:
+    name: Run radon complexity analysis
+    needs: [run_test_bots, run_example_bots]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
@@ -345,8 +395,39 @@ jobs:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
     - name: Install poetry
-      run: |
-        pip install poetry
+      run: pip install poetry
+
+    - name: Make poetry use local .venv folder
+      run: poetry config virtualenvs.in-project true
+
+    - name: Set up cache
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Run poetry radon
+      run: poetry run radon cc sc2/ -a -nb
+
+  release_to_github_pages:
+    name: GitHub Pages
+    needs: [run_test_bots, run_example_bots]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+    - name: Install poetry
+      run: pip install poetry
 
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
@@ -359,8 +440,7 @@ jobs:
         key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
 
     - name: Install dependencies
-      run: |
-        poetry install
+      run: poetry install
 
     - name: Build docs from scratch
       run: |
@@ -398,18 +478,15 @@ jobs:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
     - name: Install poetry
-      run: |
-        pip install poetry
+      run: pip install poetry
 
     - name: Build package
         # Builds package to dist/* directory
-      run: |
-        poetry build
+      run: poetry build
 
     - name: Publish
         # Publish package on pypi
       if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
       continue-on-error: true
-      run: |
-        poetry publish --username ${{ secrets.pypi_username }} --password ${{ secrets.pypi_password }}
+      run: poetry publish --username ${{ secrets.pypi_username }} --password ${{ secrets.pypi_password }}
 
