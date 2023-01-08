@@ -47,7 +47,13 @@ jobs:
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
 
-    - name: Set up cache
+    - name: Cache pre-commit
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pre-commit
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('.pre-commit.config.yaml') }}
+
+    - name: Cache .venv
       uses: actions/cache@v3
       with:
         path: .venv
@@ -80,7 +86,13 @@ jobs:
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
 
-    - name: Set up cache
+    - name: Cache pre-commit
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pre-commit
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('.pre-commit.config.yaml') }}
+
+    - name: Cache .venv
       uses: actions/cache@v3
       with:
         path: .venv
@@ -141,7 +153,7 @@ jobs:
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
 
-    - name: Set up cache
+    - name: Cache .venv
       if: matrix.os != 'windows-latest'
       uses: actions/cache@v3
       with:
@@ -388,7 +400,7 @@ jobs:
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
 
-    - name: Set up cache
+    - name: Cache .venv
       uses: actions/cache@v3
       with:
         path: .venv
@@ -420,7 +432,7 @@ jobs:
     - name: Make poetry use local .venv folder
       run: poetry config virtualenvs.in-project true
 
-    - name: Set up cache
+    - name: Cache .venv
       if: matrix.os != 'windows-latest'
       uses: actions/cache@v3
       with:
