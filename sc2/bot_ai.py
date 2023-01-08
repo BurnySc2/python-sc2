@@ -550,8 +550,8 @@ class BotAI(BotAIInternal):
         if ability_id in abilities:
             if only_check_energy_and_cooldown:
                 return True
-            cast_range = self.game_data.abilities[ability_id.value].cast_range
-            ability_target: int = self.game_data.abilities[ability_id.value].target_enum.value
+            cast_range = self.game_data.abilities[ability_id.value]._proto.cast_range
+            ability_target: int = self.game_data.abilities[ability_id.value]._proto.target
             # Check if target is in range (or is a self cast like stimpack)
             if (
                 ability_target == 1 or ability_target == Target.PointOrNone.value and isinstance(target, Point2)
@@ -786,7 +786,7 @@ class BotAI(BotAIInternal):
             return 0
         creation_ability: AbilityId = creation_ability_data.exact_id
         max_value = max(
-            [s.build_progress for s in self.structures if s.unit_type in equiv_values] +
+            [s.build_progress for s in self.structures if s._proto.unit_type in equiv_values] +
             [self._abilities_all_units[1].get(creation_ability, 0)],
             default=0,
         )
@@ -822,7 +822,7 @@ class BotAI(BotAIInternal):
         unit_info_id = race_dict[self.race][structure_type]
         unit_info_id_value = unit_info_id.value
         # The following commented out line is unreliable for ghost / thor as they return 0 which is incorrect
-        # unit_info_id_value = self.game_data.units[structure_type.value].tech_requirement
+        # unit_info_id_value = self.game_data.units[structure_type.value]._proto.tech_requirement
         if not unit_info_id_value:  # Equivalent to "if unit_info_id_value == 0:"
             return 1
         progresses: List[float] = [self.structure_type_build_progress(unit_info_id_value)]
@@ -868,8 +868,7 @@ class BotAI(BotAIInternal):
                 continue
             for order in worker.orders:
                 # When a construction is resumed, the worker.orders[0].target is the tag of the structure, else it is a Point2
-                if isinstance(order.target, (int, Point2)):
-                    worker_targets.add(order.target)
+                worker_targets.add(order.target)
         return self.structures.filter(
             lambda structure: structure.build_progress < 1
             # Redundant check?

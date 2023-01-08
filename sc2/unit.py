@@ -85,7 +85,7 @@ class UnitOrder:
     progress: float = 0
 
     @classmethod
-    def from_proto(cls, proto: dict, bot_object: BotAI) -> UnitOrder:
+    def from_proto(cls, proto: Any, bot_object: BotAI) -> UnitOrder:
         target: Optional[
             Union[int, Point2]
         ] = proto.target_world_space_pos if proto.HasField("target_world_space_pos") else proto.target_unit_tag
@@ -1020,10 +1020,10 @@ class Unit:
     # PROPERTIES BELOW THIS COMMENT ARE NOT POPULATED FOR ENEMIES
 
     @cached_property
-    def orders(self) -> Tuple[UnitOrder, ...]:
+    def orders(self) -> List[UnitOrder]:
         """ Returns the a list of the current orders. """
         # TODO: add examples on how to use unit orders
-        return tuple(UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders)
+        return [UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders]
 
     @cached_property
     def order_target(self) -> Optional[Union[int, Point2]]:
