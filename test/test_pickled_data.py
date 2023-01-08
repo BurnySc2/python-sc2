@@ -15,7 +15,7 @@ import random
 import sys
 from contextlib import suppress
 from pathlib import Path
-from typing import List
+from typing import Any, List, Tuple
 
 from google.protobuf.internal import api_implementation
 from hypothesis import given, settings
@@ -42,11 +42,13 @@ MAPS: List[Path] = [
 ]
 
 
-def get_map_specific_bot(map_path: Path) -> BotAI:
-    assert map_path in MAPS
+def load_map_pickle_data(map_path: Path) -> Tuple[Any, Any, Any]:
     with lzma.open(str(map_path.absolute()), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
+        return raw_game_data, raw_game_info, raw_observation
 
+
+def build_bot_object_from_pickle_data(raw_game_data, raw_game_info, raw_observation) -> BotAI:
     # Build fresh bot object, and load the pickled data into the bot object
     bot = BotAI()
     game_data = GameData.from_proto(raw_game_data.data)
@@ -56,8 +58,13 @@ def get_map_specific_bot(map_path: Path) -> BotAI:
     client = Client(True)
     bot._prepare_start(client=client, player_id=1, game_info=game_info, game_data=game_data)
     bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
-
     return bot
+
+
+def get_map_specific_bot(map_path: Path) -> BotAI:
+    assert map_path in MAPS
+    data = load_map_pickle_data(map_path)
+    return build_bot_object_from_pickle_data(*data)
 
 
 def test_protobuf_implementation():

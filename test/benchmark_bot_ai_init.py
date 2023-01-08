@@ -1,10 +1,13 @@
-from test.test_pickled_data import MAPS, get_map_specific_bot
+from test.test_pickled_data import MAPS, build_bot_object_from_pickle_data, load_map_pickle_data
+from typing import Any, List, Tuple
+
+# Load pickle files outside of benchmark
+MAP_PICKLE_DATA: List[Tuple[Any, Any, Any]] = [load_map_pickle_data(path) for path in MAPS]
 
 
 def _test_run_bot_ai_init_on_all_maps():
-    # Run bot initialization from pickled files via get_map_specific_bot()
-    for map_ in MAPS:
-        _result = get_map_specific_bot(map_)
+    for data in MAP_PICKLE_DATA:
+        build_bot_object_from_pickle_data(*data)
 
 
 def test_bench_bot_ai_init(benchmark):
