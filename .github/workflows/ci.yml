@@ -105,7 +105,8 @@ jobs:
 
     - name: Compare generated dict files
       # Exit code will be 0 if the results of both commands are equal
-      run: [[ `ls sc2/dicts | md5sum` == `ls sc2/dicts_old | md5sum` ]]
+      run: |
+        [[ `ls sc2/dicts | md5sum` == `ls sc2/dicts_old | md5sum` ]]
 
   run_pytest_tests:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
