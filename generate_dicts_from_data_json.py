@@ -8,10 +8,6 @@ This script does the following:
 
 data.json origin:
 https://github.com/BurnySc2/sc2-techtree/tree/develop/data
-
-json viewers to inspect the data.json manually:
-http://jsonviewer.stack.hu/
-https://jsonformatter.org/json-viewer
 """
 import json
 import lzma
@@ -402,7 +398,7 @@ def generate_unit_alias_dict(data: dict):
     logger.info(f"Loading pickled game data file {pickled_file_path}")
     with lzma.open(pickled_file_path.absolute(), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
-        game_data = GameData(raw_game_data.data)
+        game_data = GameData.from_proto(raw_game_data.data)
 
     all_unit_aliases: Dict[UnitTypeId, UnitTypeId] = OrderedDict2()
     all_tech_aliases: Dict[UnitTypeId, Set[UnitTypeId]] = OrderedDict2()
@@ -417,7 +413,7 @@ def generate_unit_alias_dict(data: dict):
         assert (
             unit_type_value in game_data.units
         ), f"Unit {unit_type} not listed in game_data.units - perhaps pickled file {pickled_file_path} is outdated?"
-        unit_alias: int = game_data.units[unit_type_value]._proto.unit_alias
+        unit_alias: int = game_data.units[unit_type_value].unit_alias
         if unit_alias:
             # Might be 0 if it has no alias
             unit_alias_unit_type_id = UnitTypeId(unit_alias)
@@ -447,7 +443,7 @@ def generate_redirect_abilities_dict(data: dict):
     logger.info(f"Loading pickled game data file {pickled_file_path}")
     with lzma.open(pickled_file_path.absolute(), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
-        game_data = GameData(raw_game_data.data)
+        game_data = GameData.from_proto(raw_game_data.data)
 
     all_redirect_abilities: Dict[AbilityId, AbilityId] = OrderedDict2()
 
@@ -460,7 +456,7 @@ def generate_redirect_abilities_dict(data: dict):
             logger.info(f"Error with ability id value {ability_id_value}")
             continue
 
-        generic_redirect_ability_value: int = game_data.abilities[ability_id_value]._proto.remaps_to_ability_id
+        generic_redirect_ability_value: int = game_data.abilities[ability_id_value].remaps_to_ability_id
         if generic_redirect_ability_value:
             # Might be 0 if it has no redirect ability
             all_redirect_abilities[ability_id] = AbilityId(generic_redirect_ability_value)

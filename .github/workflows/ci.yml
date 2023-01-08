@@ -26,6 +26,41 @@ env:
   LATEST_SC2_VERSION: '4.10'
 
 jobs:
+  run_pre_commit_hook:
+    name: Run pre-commit hook
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+    - name: Install poetry
+      run: |
+        pip install poetry
+
+    - name: Make poetry use local .venv folder
+      run: poetry config virtualenvs.in-project true
+
+    - name: Set up cache
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+
+    - name: Install dependencies
+      run: |
+        poetry install
+
+    - name: Run pre-commit hooks
+      run: |
+         poetry run pre-commit install
+         poetry run pre-commit run --all-files --hook-stage push
+
   run_pytest_tests:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
@@ -249,7 +284,7 @@ jobs:
     name: GitHub Pages
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    needs: [run_pytest_tests, run_test_bots, run_example_bots]
+    needs: [run_pytest_tests, run_test_bots, run_example_bots, run_pre_commit_hook]
 
     steps:
     - uses: actions/checkout@v2
@@ -260,8 +295,6 @@ jobs:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
     - name: Install poetry
-        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts
-        # https://github.com/readthedocs/readthedocs.org/issues/4912#issuecomment-1110189914
       run: |
         pip install poetry
         poetry config virtualenvs.create false
@@ -295,7 +328,7 @@ jobs:
     name: Pypi
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [run_pytest_tests, run_test_bots, run_example_bots]
+    needs: [run_pytest_tests, run_test_bots, run_example_bots, run_pre_commit_hook]
 
     steps:
     - uses: actions/checkout@v2

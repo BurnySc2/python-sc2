@@ -75,14 +75,13 @@ class ExporterBot(BotAI):
         await self.client.debug_god()
 
         # Spawn one of each unit
-        # await self.client.debug_create_unit([[unit_id, 1, self.game_info.map_center, 1] for unit_id in self.game_data.units])
         valid_units: Set[UnitTypeId] = {
             UnitTypeId(unit_id)
             for unit_id, data in self.game_data.units.items()
-            if data._proto.race != Race.NoRace and data._proto.race != Race.Random and data._proto.available
+            if data.race != Race.NoRace and data.race != Race.Random and data.available
             # Dont cloak units
             and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP and
-            (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
+            (data.mineral_cost or data.movement_speed or data.weapons)
         }
 
         # Create units for self
@@ -98,7 +97,6 @@ class ExporterBot(BotAI):
         await self.store_data_to_file(file_path)
 
         await self.client.leave()
-        return
 
 
 def main():

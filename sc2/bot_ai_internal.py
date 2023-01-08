@@ -578,7 +578,6 @@ class BotAIInternal(ABC):
                     self.placeholders.append(unit_obj)
                     continue
                 alliance = unit['_alliance']
-                # Alliance.Neutral.value = 3
                 if alliance == "Neutral":
                     # XELNAGATOWER = 149
                     if unit_type == 149:
@@ -594,7 +593,6 @@ class BotAIInternal(ABC):
                     # all destructable rocks
                     else:
                         self.destructables.append(unit_obj)
-                # Alliance.Self.value = 1
                 elif alliance == 'Self':
                     self.all_own_units.append(unit_obj)
                     unit_id: UnitTypeId = unit_obj.type_id
@@ -625,7 +623,6 @@ class BotAIInternal(ABC):
                             self.workers.append(unit_obj)
                         elif unit_id == UnitTypeId.LARVA:
                             self.larva.append(unit_obj)
-                # Alliance.Enemy.value = 4
                 elif alliance == 'Enemy':
                     self.all_enemy_units.append(unit_obj)
                     if unit_obj.is_structure:

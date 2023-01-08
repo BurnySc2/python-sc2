@@ -64,9 +64,10 @@ jobs:
       run: |
         docker exec -i my_container bash -c "poetry run coverage run -a test/travis_test_script.py test/queries_test_bot.py"
 
-    - name: Run coverage on example bots
-      run: |
-        docker exec -i my_container bash -c "poetry run coverage run -a test/run_example_bots_vs_computer.py"
+# Bots might run differently long each time and create flucuations in code coverage - better to mock behavior instead
+#    - name: Run coverage on example bots
+#      run: |
+#        docker exec -i my_container bash -c "poetry run coverage run -a test/run_example_bots_vs_computer.py"
 
     - name: Generate xml coverage file
       run: |
