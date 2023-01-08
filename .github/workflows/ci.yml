@@ -100,6 +100,12 @@ jobs:
         poetry run python generate_dicts_from_data_json.py
         poetry run pre-commit run --all-files --hook-stage push || true
 
+    - name: Upload generated dicts folder as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Generated_dicts
+        path: sc2/dicts
+
     - name: Compare generated dict files
       # Exit code will be 0 if the results of both commands are equal
       run: |
