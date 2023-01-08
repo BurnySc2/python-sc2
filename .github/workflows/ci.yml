@@ -113,6 +113,7 @@ jobs:
   run_pytest_tests:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
+    needs: [run_pre_commit_hook, generate_dicts_from_data_json]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
@@ -177,9 +178,9 @@ jobs:
   run_test_bots:
     # Run test bots that download the SC2 linux client and run it
     name: Run testbots linux
+    needs: [run_pytest_tests]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
-    needs: [run_pre_commit_hook, generate_dicts_from_data_json, run_pytest_tests]
     strategy:
       # Do not allow this test to cancel. Finish all jobs regardless of error
       fail-fast: false
@@ -235,9 +236,9 @@ jobs:
   run_example_bots:
     # Run example bots against computer
     name: Run example bots against computer
+    needs: [run_pytest_tests]
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    needs: [run_pre_commit_hook, generate_dicts_from_data_json, run_pytest_tests]
     env:
       IMAGE_NAME: burnysc2/python-sc2-docker:local
 
@@ -451,9 +452,9 @@ jobs:
 
   release_to_pypi:
     name: Pypi package release
+    needs: [release_to_github_pages]
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [release_to_github_pages]
 
     steps:
     - uses: actions/checkout@v2
