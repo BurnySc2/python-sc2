@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from bisect import bisect_left
+from contextlib import suppress
 from dataclasses import dataclass, field
 from functools import cached_property
 from typing import Any, ClassVar, Dict, List, Optional, Set
@@ -11,9 +12,11 @@ from google.protobuf.json_format import MessageToDict
 from sc2.cache import CacheDict
 from sc2.constants import ATTRIBUTES_LITERAL, TARGET_AIR, TARGET_GROUND, WEAPON_TYPE_LITERAL
 from sc2.data import Attribute, Race, Target
-from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
+
+with suppress(ImportError):
+    from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
 
 # Set of parts of names of abilities that have no cost
 # E.g every ability that has 'Hold' in its name is free

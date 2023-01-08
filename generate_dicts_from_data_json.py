@@ -13,7 +13,6 @@ import json
 import lzma
 import os
 import pickle
-import subprocess
 from collections import OrderedDict
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Union
@@ -63,9 +62,6 @@ def dump_dict_to_file(
         logger.info(my_dict)
         f.write(repr(my_dict))
 
-    # Apply formatting
-    subprocess.run(["poetry", "run", "yapf", file_path, "-i"])
-
 
 def generate_init_file(dict_file_paths: List[Path], file_path: Path, file_header: str):
     base_file_names = sorted(path.stem for path in dict_file_paths)
@@ -77,9 +73,6 @@ def generate_init_file(dict_file_paths: List[Path], file_path: Path, file_header
         all_line = f"__all__ = {base_file_names}"
         logger.info(all_line)
         f.write(all_line)
-
-    # Apply formatting
-    subprocess.run(["poetry", "run", "yapf", file_path, "-i"])
 
 
 def get_unit_train_build_abilities(data):

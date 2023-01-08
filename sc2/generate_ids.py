@@ -2,7 +2,6 @@
 import importlib
 import json
 import platform
-import subprocess
 import sys
 from pathlib import Path
 
@@ -172,14 +171,6 @@ for item in {class_name}:
             ids_file_path = (idsdir / self.FILE_TRANSLATE[name]).with_suffix(".py")
             with ids_file_path.open("w") as f:
                 f.write("\n".join(code))
-
-            # Apply formatting
-            try:
-                subprocess.run(["poetry", "run", "yapf", ids_file_path, "-i"], check=True)
-            except FileNotFoundError:
-                logger.info(
-                    f"Yapf is not installed. Please use 'pip install yapf' to install yapf formatter.\nCould not autoformat file {ids_file_path}"
-                )
 
         if self.game_version is not None:
             version_path = Path(__file__).parent / "ids" / "id_version.py"
