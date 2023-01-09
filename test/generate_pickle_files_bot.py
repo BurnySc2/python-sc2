@@ -57,7 +57,7 @@ class ExporterBot(BotAI):
 
         # To test if this data is convertable in the first place
         _game_data = GameData(raw_game_data.data)
-        _game_info = GameInfo(_proto=raw_game_info.game_info)
+        _game_info = GameInfo(raw_game_info.game_info)
         _game_state = GameState(raw_observation)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -78,10 +78,10 @@ class ExporterBot(BotAI):
         valid_units: Set[UnitTypeId] = {
             UnitTypeId(unit_id)
             for unit_id, data in self.game_data.units.items()
-            if data.race != Race.NoRace and data.race != Race.Random and data.available
+            if data._proto.race != Race.NoRace and data._proto.race != Race.Random and data._proto.available
             # Dont cloak units
             and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP and
-            (data.mineral_cost or data.movement_speed or data.weapons)
+            (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
         }
 
         # Create units for self
