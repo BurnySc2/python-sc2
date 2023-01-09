@@ -239,7 +239,7 @@ class TestBot(BotAI):
         for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
             if not structure.rally_targets:
                 logger.error("Test case incomplete: Rally point command by using smart ability")
-                continue
+                sys.exit(1)
             rally_target_point = structure.rally_targets[0].point
             distance = rally_target_point.distance_to_point2(map_center)
             assert distance < 0.1
