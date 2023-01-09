@@ -187,5 +187,5 @@ Git commit messages use [imperative-style messages](https://stackoverflow.com/a/
 To run pre-commit hooks (which run autoformatting and autosort imports) you can run
 ```sh
 poetry run pre-commit install
-poetry run pre-commit run --all-files
+poetry run pre-commit run --all-files --hook-stage push
 ```

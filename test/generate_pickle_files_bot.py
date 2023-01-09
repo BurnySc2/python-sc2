@@ -2,15 +2,6 @@
 This "bot" will loop over several available ladder maps and generate the pickle file in the "/test/pickle_data/" subfolder.
 These will then be used to run tests from the test script "test_pickled_data.py"
 """
-import os
-import sys
-
-from sc2 import maps
-from sc2.bot_ai import BotAI
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
 import lzma
 import os
 import pickle
@@ -19,11 +10,14 @@ from typing import Set
 from loguru import logger
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
+from sc2 import maps
+from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
 from sc2.game_data import GameData
 from sc2.game_info import GameInfo
 from sc2.game_state import GameState
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.protocol import ProtocolError
 
@@ -81,7 +75,6 @@ class ExporterBot(BotAI):
         await self.client.debug_god()
 
         # Spawn one of each unit
-        # await self.client.debug_create_unit([[unit_id, 1, self.game_info.map_center, 1] for unit_id in self.game_data.units])
         valid_units: Set[UnitTypeId] = {
             UnitTypeId(unit_id)
             for unit_id, data in self.game_data.units.items()
@@ -104,7 +97,6 @@ class ExporterBot(BotAI):
         await self.store_data_to_file(file_path)
 
         await self.client.leave()
-        return
 
 
 def main():

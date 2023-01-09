@@ -3,7 +3,6 @@ from __future__ import annotations
 import itertools
 import math
 import random
-import warnings
 from typing import TYPE_CHECKING, Iterable, List, Set, Tuple, Union
 
 from s2clientprotocol import common_pb2 as common_pb
@@ -45,28 +44,6 @@ class Pointlike(tuple):
 
         :param p2:"""
         return (self[0] - p2[0])**2 + (self[1] - p2[1])**2
-
-    def is_closer_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:
-        """Check if another point (or unit) is closer than the given distance.
-
-        :param distance:
-        :param p:"""
-        warnings.warn(
-            'position.is_closer_than is deprecated and will be deleted soon', DeprecationWarning, stacklevel=2
-        )
-        p = p.position
-        return self.distance_to_point2(p) < distance
-
-    def is_further_than(self, distance: Union[int, float], p: Union[Unit, Point2]) -> bool:
-        """Check if another point (or unit) is further than the given distance.
-
-        :param distance:
-        :param p:"""
-        warnings.warn(
-            'position.is_further_than is deprecated and will be deleted soon', DeprecationWarning, stacklevel=2
-        )
-        p = p.position
-        return self.distance_to_point2(p) > distance
 
     def sort_by_distance(self, ps: Union[Units, Iterable[Point2]]) -> List[Point2]:
         """This returns the target points sorted as list.
@@ -330,14 +307,14 @@ class Point2(Pointlike):
         return abs(other.x - self.x) + abs(other.y - self.y)
 
     @staticmethod
-    def center(units_or_points: Iterable[Point2]) -> Point2:
+    def center(points: List[Point2]) -> Point2:
         """Returns the central point for points in list
 
-        :param units_or_points:"""
+        :param points:"""
         s = Point2((0, 0))
-        for p in units_or_points:
+        for p in points:
             s += p
-        return s / len(units_or_points)
+        return s / len(points)
 
 
 class Point3(Point2):

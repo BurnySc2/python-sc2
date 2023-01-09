@@ -198,6 +198,7 @@ class GameState:
     def __init__(self, response_observation, previous_observation=None):
         """
         :param response_observation:
+        :param previous_observation:
         """
         # Only filled in realtime=True in case the bot skips frames
         self.previous_observation = previous_observation

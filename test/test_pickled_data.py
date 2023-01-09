@@ -7,33 +7,32 @@ This test/script uses the pickle files located in "python-sc2/test/pickle_data" 
 It will load the pickle files, recreate the bot object from scratch and tests most of the bot properties and functions.
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
-import os
-import sys
-from contextlib import suppress
 
-from sc2.client import Client
-from sc2.ids.buff_id import BuffId
-from sc2.pixel_map import PixelMap
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import lzma
+import math
 import pickle
 import random
+import sys
+from contextlib import suppress
 from pathlib import Path
-from typing import List
+from typing import Any, List, Tuple
 
+from google.protobuf.internal import api_implementation
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from loguru import logger
 
 from sc2.bot_ai import BotAI
+from sc2.client import Client
 from sc2.data import CloakState, Race
-from sc2.game_data import Cost, GameData
+from sc2.game_data import AbilityData, Cost, GameData
 from sc2.game_info import GameInfo
 from sc2.game_state import GameState
 from sc2.ids.ability_id import AbilityId
+from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
+from sc2.pixel_map import PixelMap
 from sc2.position import Point2, Point3, Rect, Size
 from sc2.unit import Unit
 from sc2.units import Units
@@ -43,12 +42,14 @@ MAPS: List[Path] = [
 ]
 
 
-def get_map_specific_bot(map_path: Path) -> BotAI:
-    assert map_path in MAPS
+def load_map_pickle_data(map_path: Path) -> Tuple[Any, Any, Any]:
     with lzma.open(str(map_path.absolute()), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
+        return raw_game_data, raw_game_info, raw_observation
 
-    # Build fresh bot object, and load the pickle'd data into the bot object
+
+def build_bot_object_from_pickle_data(raw_game_data, raw_game_info, raw_observation) -> BotAI:
+    # Build fresh bot object, and load the pickled data into the bot object
     bot = BotAI()
     game_data = GameData(raw_game_data.data)
     game_info = GameInfo(raw_game_info.game_info)
@@ -57,8 +58,20 @@ def get_map_specific_bot(map_path: Path) -> BotAI:
     client = Client(True)
     bot._prepare_start(client=client, player_id=1, game_info=game_info, game_data=game_data)
     bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
-
     return bot
+
+
+def get_map_specific_bot(map_path: Path) -> BotAI:
+    assert map_path in MAPS
+    data = load_map_pickle_data(map_path)
+    return build_bot_object_from_pickle_data(*data)
+
+
+def test_protobuf_implementation():
+    """Make sure that cpp is used as implementation"""
+    # Doesn't seem to be implemented in newer python versions
+    if sys.version_info.major == 3 and sys.version_info.minor < 10:
+        assert api_implementation.Type() == "cpp"
 
 
 def test_bot_ai():
@@ -294,7 +307,7 @@ def test_bot_ai():
         elif isinstance(item_id, UpgradeId):
             return bot.game_data.upgrades[item_id.value].cost
         elif isinstance(item_id, UnitTypeId):
-            creation_ability: AbilityId = bot.game_data.units[item_id.value].creation_ability
+            creation_ability: AbilityId = bot.game_data.units[item_id.value].creation_ability.exact_id
             return bot.game_data.calculate_ability_cost(creation_ability)
 
     def assert_cost(item_id, real_cost: Cost):
@@ -396,8 +409,8 @@ def test_bot_ai():
 
 def test_game_info():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
-    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     # Test if main base ramp works
+    bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     game_info: GameInfo = bot.game_info
 
     bot.game_info.player_start_location = bot.townhalls.random.position
@@ -428,34 +441,35 @@ def test_game_data():
         assert ability_data.exact_id
         assert ability_data.friendly_name
         # Doesnt work for all AbilityData (may return empty string or no cost)
-        ability_data.link_name
-        ability_data.button_name
-        ability_data.is_free_morph
-        ability_data.cost
+        assert isinstance(ability_data.link_name, str)
+        assert isinstance(ability_data.button_name, str)
+        assert isinstance(ability_data.is_free_morph, bool)
+        assert isinstance(ability_data.cost, Cost)
 
     assert game_data.units
     for unit_data in game_data.units.values():
         with suppress(ValueError):
             assert unit_data.id
         assert unit_data.name
-        unit_data.creation_ability
-        unit_data.footprint_radius
-        unit_data.attributes
-        unit_data.has_minerals
-        unit_data.has_vespene
-        unit_data.cargo_size
-        unit_data.tech_requirement
-        unit_data.tech_alias
-        unit_data.unit_alias
-        assert unit_data.race
-        unit_data.cost_zerg_corrected
-        unit_data.morph_cost
+        assert isinstance(unit_data.creation_ability, (AbilityData, type(None)))
+        assert isinstance(unit_data.footprint_radius, (float, type(None)))
+        # TODO Fails on newer python versions
+        # assert isinstance(unit_data.attributes, RepeatedScalarContainer)
+        assert isinstance(unit_data.has_minerals, bool)
+        assert isinstance(unit_data.has_vespene, bool)
+        assert isinstance(unit_data.cargo_size, int)
+        assert isinstance(unit_data.tech_requirement, (UnitTypeId, type(None)))
+        assert isinstance(unit_data.tech_alias, (list, type(None)))
+        assert isinstance(unit_data.unit_alias, (UnitTypeId, type(None)))
+        assert isinstance(unit_data.race, Race)
+        assert isinstance(unit_data.cost_zerg_corrected, Cost)
+        assert isinstance(unit_data.morph_cost, (Cost, type(None)))
 
     assert game_data.upgrades
     for upgrade_data in game_data.upgrades.values():
-        upgrade_data.name
-        upgrade_data.research_ability
-        upgrade_data.cost
+        assert isinstance(upgrade_data.name, str)
+        assert isinstance(upgrade_data.research_ability, (AbilityData, type(None)))
+        assert isinstance(upgrade_data.cost, Cost)
 
 
 def test_game_state():
@@ -560,8 +574,8 @@ def test_unit():
     assert scv.real_speed == scv.movement_speed
     assert not townhall.movement_speed
     assert townhall.real_speed == townhall.movement_speed
-    # assert abs(scv.distance_per_step - 1.004464) < 1e-3
-    # assert not townhall.distance_per_step
+    assert abs(scv.distance_per_step - 0.502231) < 1e-3
+    assert not townhall.distance_per_step
     assert scv.distance_to_weapon_ready == 0
     assert not townhall.distance_to_weapon_ready
     assert not scv.is_mineral_field
@@ -738,8 +752,8 @@ def test_unit():
     assert townhall.distance_to_squared(scv)
     assert scv.target_in_range(townhall, bonus_distance=5)
     assert not townhall.target_in_range(scv, bonus_distance=5)
-    # assert not scv.has_buff(buff ID)
-    # assert not townhall.has_buff(buff ID)
+    assert not scv.has_buff(BuffId.STIMPACK)
+    assert not townhall.has_buff(BuffId.STIMPACK)
 
     assert scv.calculate_damage_vs_target(townhall)[0] == 4
     assert scv.calculate_damage_vs_target(townhall, ignore_armor=True)[0] == 5
@@ -747,6 +761,19 @@ def test_unit():
     assert townhall.calculate_damage_vs_target(scv, ignore_armor=True) == (0, 0, 0)
 
     # TODO create one of each unit in the pickle tests to do damage calculations without having to create a mock class for each unit
+
+    assert scv.calculate_dps_vs_target(townhall) - 2.66 < 0.01
+    assert scv.calculate_dps_vs_target(townhall, ignore_armor=True) - 3.33 < 0.01
+    assert townhall.calculate_dps_vs_target(scv) == 0
+    assert townhall.calculate_dps_vs_target(scv, ignore_armor=True) == 0
+
+    assert scv.is_facing(townhall, angle_error=2 * math.pi)
+    assert not scv.is_facing(townhall)
+    assert townhall.is_facing(scv, angle_error=2 * math.pi)
+    assert not townhall.is_facing(scv)
+
+    assert scv.footprint_radius == 0
+    assert townhall.footprint_radius == 2.5
 
     # marauder1 = Unit(marauder_proto, bot)
     # marauder_15_hp = Unit(marauder_proto, bot)
@@ -818,6 +845,7 @@ def test_units():
     assert townhalls.in_closest_distance_to_group(scvs)
     assert townhalls.n_closest_to_distance(scvs.first.position, 0, 1)
     assert townhalls.n_furthest_to_distance(scvs.first.position, 0, 1)
+
     empty_units = Units([], bot_object=bot)
     assert not empty_units
     assert not empty_units.closer_than(999, townhalls.first)
@@ -825,6 +853,7 @@ def test_units():
     assert not empty_units.in_distance_between(townhalls.first, 0, 999)
     assert not empty_units.closest_n_units(townhalls.first, 0)
     assert not empty_units.furthest_n_units(townhalls.first, 0)
+
     assert scvs.subgroup(scvs)
     assert townhalls.subgroup(townhalls)
     assert scvs.filter(pred=lambda x: x.type_id == UnitTypeId.SCV)
@@ -895,8 +924,9 @@ def test_dicts():
     # May be missing but that should not fail the tests
     try:
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
-    except:
+    except ImportError:
         logger.info(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
+        return
 
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
 
@@ -934,10 +964,6 @@ def test_position_pointlike(x1, y1, x2, y2, x3, y3):
     assert abs(pos1.distance_to(pos2) - dist) <= epsilon
     assert abs(pos1.distance_to_point2(pos2) - dist) <= epsilon
     assert abs(pos1._distance_squared(pos2)**0.5 - dist) <= epsilon
-
-    if epsilon < dist < 1e5:
-        assert pos1.is_closer_than(dist + epsilon, pos2)
-        assert pos1.is_further_than(dist - epsilon, pos2)
 
     points = {pos2, pos3}
     points2 = {pos1, pos2, pos3}

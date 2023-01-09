@@ -3,9 +3,11 @@ from __future__ import annotations
 
 import math
 import warnings
+from dataclasses import dataclass
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Callable, FrozenSet, List, Optional, Set, Tuple, TypeVar, Union
+from typing import TYPE_CHECKING, Any, FrozenSet, List, Optional, Set, Tuple, Union
 
+from sc2.cache import CacheDict
 from sc2.constants import (
     CAN_BE_ATTACKED,
     DAMAGE_BONUS_PER_UPGRADE,
@@ -63,42 +65,40 @@ if TYPE_CHECKING:
     from sc2.game_data import AbilityData, UnitTypeData
 
 
-class UnitOrder:
+@dataclass
+class RallyTarget:
+    point: Point2
+    tag: Optional[int] = None
 
     @classmethod
-    def from_proto(cls, proto, bot_object: BotAI):
+    def from_proto(cls, proto: Any) -> RallyTarget:
         return cls(
-            bot_object.game_data.abilities[proto.ability_id],
-            (proto.target_world_space_pos if proto.HasField("target_world_space_pos") else proto.target_unit_tag),
-            proto.progress,
+            Point2.from_proto(proto.point),
+            proto.tag if proto.HasField("tag") else None,
         )
 
-    def __init__(self, ability: AbilityData, target, progress: float = 0):
-        """
-        :param ability:
-        :param target:
-        :param progress:
-        """
-        self.ability: AbilityData = ability
-        # This can be an int (if target is unit) or proto Point2 object, which needs to be converted using 'Point2.from_proto(target)'
-        self.target = target
-        self.progress: float = progress
+
+@dataclass
+class UnitOrder:
+    ability: AbilityData  # TODO: Should this be AbilityId instead?
+    target: Optional[Union[int, Point2]] = None
+    progress: float = 0
+
+    @classmethod
+    def from_proto(cls, proto: Any, bot_object: BotAI) -> UnitOrder:
+        target: Optional[Union[int, Point2]] = proto.target_unit_tag
+        if proto.HasField("target_world_space_pos"):
+            target = Point2.from_proto(proto.target_world_space_pos)
+        elif proto.HasField("target_unit_tag"):
+            target = proto.target_unit_tag
+        return cls(
+            ability=bot_object.game_data.abilities[proto.ability_id],
+            target=target,
+            progress=proto.progress,
+        )
 
     def __repr__(self) -> str:
         return f"UnitOrder({self.ability}, {self.target}, {self.progress})"
-
-
-T = TypeVar("T")
-
-
-class CacheDict(dict):
-
-    def retrieve_and_set(self, key: Any, func: Callable[[], T]) -> T:
-        """ Either return the value at a certain key, or set the return value of a function to that key, then return that value. """
-        if key in self:
-            return self[key]
-        self[key] = func()
-        return self[key]
 
 
 # pylint: disable=R0904
@@ -294,8 +294,7 @@ class Unit:
             for weapon in self._weapons:
                 if weapon.damage_bonus:
                     b = weapon.damage_bonus[0]
-                    bonus: int = b.bonus
-                    return bonus, Attribute(b.attribute).name
+                    return b.bonus, Attribute(b.attribute).name
         return None
 
     @property
@@ -1023,10 +1022,10 @@ class Unit:
     # PROPERTIES BELOW THIS COMMENT ARE NOT POPULATED FOR ENEMIES
 
     @cached_property
-    def orders(self) -> Tuple[UnitOrder, ...]:
+    def orders(self) -> List[UnitOrder]:
         """ Returns the a list of the current orders. """
         # TODO: add examples on how to use unit orders
-        return tuple(UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders)
+        return [UnitOrder.from_proto(order, self._bot_object) for order in self._proto.orders]
 
     @cached_property
     def order_target(self) -> Optional[Union[int, Point2]]:
@@ -1229,7 +1228,10 @@ class Unit:
         # TODO What does this do?
         return self._proto.engaged_target_tag
 
-    # TODO: Add rally targets https://github.com/Blizzard/s2client-proto/commit/80484692fa9e0ea6e7be04e728e4f5995c64daa3#diff-3b331650a4f7c9271a579b31cf771ed5R88-R92
+    @cached_property
+    def rally_targets(self) -> List[RallyTarget]:
+        """ Returns the queue of rallytargets of the structure. """
+        return [RallyTarget.from_proto(rally_target) for rally_target in self._proto.rally_targets]
 
     # Unit functions
 
