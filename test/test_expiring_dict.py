@@ -1,8 +1,4 @@
-import os
-import sys
 from contextlib import suppress
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from sc2.expiring_dict import ExpiringDict
 
@@ -63,13 +59,11 @@ def test_class():
     c = 0
     for key in test.keys():
         c += 1
-        pass
     assert c == 4
 
     c = 0
     for value in test.values():
         c += 1
-        pass
     assert c == 4
 
     # Update from another dict

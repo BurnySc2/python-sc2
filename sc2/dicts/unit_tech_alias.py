@@ -5,8 +5,8 @@ from typing import Dict, Set
 
 from sc2.ids.unit_typeid import UnitTypeId
 
-# from ..ids.buff_id import BuffId
-# from ..ids.effect_id import EffectId
+# from sc2.ids.buff_id import BuffId
+# from sc2.ids.effect_id import EffectId
 
 UNIT_TECH_ALIAS: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.BARRACKSFLYING: {UnitTypeId.BARRACKS},

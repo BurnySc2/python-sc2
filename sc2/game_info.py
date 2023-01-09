@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import heapq
 from collections import deque
+from dataclasses import dataclass
 from functools import cached_property
-from typing import Any, Deque, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple
+from typing import Deque, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple
 
 import numpy as np
 
@@ -12,42 +13,38 @@ from sc2.player import Player, Race
 from sc2.position import Point2, Rect, Size
 
 
+@dataclass
 class Ramp:
+    points: FrozenSet[Point2]
+    game_info: GameInfo
 
-    def __init__(self, points: FrozenSet[Point2], game_info: GameInfo):
-        """
-        :param points:
-        :param game_info:
-        """
-        self.cache: Dict[str, Any] = {}
-        self._points: FrozenSet[Point2] = points
-        self.__game_info = game_info
+    @property
+    def x_offset(self) -> float:
         # Tested by printing actual building locations vs calculated depot positions
-        self.x_offset = 0.5
-        self.y_offset = 0.5
-        self.cache = {}
+        return 0.5
+
+    @property
+    def y_offset(self) -> float:
+        # Tested by printing actual building locations vs calculated depot positions
+        return 0.5
 
     @cached_property
     def _height_map(self):
-        return self.__game_info.terrain_height
+        return self.game_info.terrain_height
 
     @cached_property
     def size(self) -> int:
-        return len(self._points)
+        return len(self.points)
 
     def height_at(self, p: Point2) -> int:
         return self._height_map[p]
-
-    @cached_property
-    def points(self) -> FrozenSet[Point2]:
-        return self._points.copy()
 
     @cached_property
     def upper(self) -> FrozenSet[Point2]:
         """ Returns the upper points of a ramp. """
         current_max = -10000
         result = set()
-        for p in self._points:
+        for p in self.points:
             height = self.height_at(p)
             if height > current_max:
                 current_max = height
@@ -72,7 +69,7 @@ class Ramp:
     def lower(self) -> FrozenSet[Point2]:
         current_min = 10000
         result = set()
-        for p in self._points:
+        for p in self.points:
             height = self.height_at(p)
             if height < current_min:
                 current_min = height
@@ -117,8 +114,8 @@ class Ramp:
             except AssertionError:
                 # Returns None when no placement was found, this is the case on the map Honorgrounds LE with an exceptionally large main base ramp
                 return None
-            anyLowerPoint = next(iter(self.lower))
-            return max(intersects, key=lambda p: p.distance_to_point2(anyLowerPoint))
+            any_lower_point = next(iter(self.lower))
+            return max(intersects, key=lambda p: p.distance_to_point2(any_lower_point))
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -186,9 +183,9 @@ class Ramp:
             direction = self.barracks_in_middle.negative_offset(middle)
             # sort depots based on distance to start to get wallin orientation
             sorted_depots = sorted(
-                self.corner_depots, key=lambda depot: depot.distance_to(self.__game_info.player_start_location)
+                self.corner_depots, key=lambda depot: depot.distance_to(self.game_info.player_start_location)
             )
-            wall1 = sorted_depots[1].offset(direction)
+            wall1: Point2 = sorted_depots[1].offset(direction)
             wall2 = middle + direction + (middle - wall1) / 1.5
             return frozenset([wall1, wall2])
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
@@ -207,7 +204,7 @@ class Ramp:
         # direction up the ramp
         direction = self.barracks_in_middle.negative_offset(middle)
         # sort depots based on distance to start to get wallin orientation
-        sorted_depots = sorted(self.corner_depots, key=lambda x: x.distance_to(self.__game_info.player_start_location))
+        sorted_depots = sorted(self.corner_depots, key=lambda x: x.distance_to(self.game_info.player_start_location))
         return sorted_depots[0].negative_offset(direction)
 
 

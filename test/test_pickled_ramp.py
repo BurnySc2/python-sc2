@@ -7,46 +7,17 @@ This test/script uses the pickle files located in "python-sc2/test/pickle_data" 
 It will load the pickle files, recreate the bot object from scratch and tests most of the bot properties and functions.
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-import lzma
-import pickle
 import time
 from pathlib import Path
-from typing import List
+from test.test_pickled_data import MAPS, get_map_specific_bot
 
 from loguru import logger
 
-from sc2.bot_ai import BotAI
-from sc2.game_data import GameData
-from sc2.game_info import GameInfo, Ramp
-from sc2.game_state import GameState
+from sc2.game_info import Ramp
 from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-
-MAPS: List[Path] = [
-    map_path for map_path in (Path(__file__).parent / "pickle_data").iterdir() if map_path.suffix == ".xz"
-]
-
-
-def get_map_specific_bot(map_path: Path) -> BotAI:
-    assert map_path in MAPS
-    with lzma.open(str(map_path.absolute()), "rb") as f:
-        raw_game_data, raw_game_info, raw_observation = pickle.load(f)
-
-    # Build fresh bot object, and load the pickle'd data into the bot object
-    bot = BotAI()
-    game_data = GameData(raw_game_data.data)
-    game_info = GameInfo(raw_game_info.game_info)
-    game_state = GameState(raw_observation)
-    bot._initialize_variables()
-    bot._prepare_start(client=None, player_id=1, game_info=game_info, game_data=game_data)
-    bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
-
-    return bot
 
 
 # From https://docs.pytest.org/en/latest/example/parametrize.html#a-quick-port-of-testscenarios
@@ -116,7 +87,6 @@ class TestClass:
 
     def test_bot_ai(self, map_path: Path):
         bot = get_map_specific_bot(map_path)
-        bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
 
         # Recalculate and time expansion locations
         t0 = time.perf_counter()

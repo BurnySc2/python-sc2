@@ -311,7 +311,6 @@ COMBINEABLE_ABILITIES: Set[AbilityId] = {
     AbilityId.MOVE,
     AbilityId.ATTACK,
     AbilityId.SCAN_MOVE,
-    AbilityId.SMART,
     AbilityId.STOP,
     AbilityId.HOLDPOSITION,
     AbilityId.PATROL,

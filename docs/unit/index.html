@@ -160,6 +160,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.position_tuple"><code class="docutils literal notranslate"><span class="pre">Unit.position_tuple</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.race"><code class="docutils literal notranslate"><span class="pre">Unit.race</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.radius"><code class="docutils literal notranslate"><span class="pre">Unit.radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.rally_targets"><code class="docutils literal notranslate"><span class="pre">Unit.rally_targets</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.real_speed"><code class="docutils literal notranslate"><span class="pre">Unit.real_speed</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.repair"><code class="docutils literal notranslate"><span class="pre">Unit.repair()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sc2.unit.Unit.research"><code class="docutils literal notranslate"><span class="pre">Unit.research()</span></code></a></li>
@@ -1390,7 +1391,7 @@ from the first order, returns None if the unit is idle</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.unit.Unit.orders">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">UnitOrder</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.orders" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">UnitOrder</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.orders" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the a list of the current orders.</p>
 </dd></dl>
 
@@ -1474,6 +1475,12 @@ point, the unit will patrol in a circle.</p>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.unit.Unit.rally_targets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rally_targets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">RallyTarget</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.unit.Unit.rally_targets" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the queue of rallytargets of the structure.</p>
 </dd></dl>
 
 <dl class="py property">
