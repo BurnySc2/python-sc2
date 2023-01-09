@@ -7,21 +7,17 @@ import subprocess
 import sys
 import tempfile
 import time
-import json
-import re
-from typing import Any, Dict, Iterable, List, Tuple, Optional, Union
+from contextlib import suppress
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import aiohttp
 import portpicker
-
-from .controller import Controller
-from .paths import Paths
-from sc2 import paths
-from sc2 import wsl
-
-from sc2.versions import VERSIONS
-
 from loguru import logger
+
+from sc2 import paths, wsl
+from sc2.controller import Controller
+from sc2.paths import Paths
+from sc2.versions import VERSIONS
 
 
 class kill_switch:
@@ -36,7 +32,8 @@ class kill_switch:
     def kill_all(cls):
         logger.info(f"kill_switch: Process cleanup for {len(cls._to_kill)} processes")
         for p in cls._to_kill:
-            p._clean()
+            # pylint: disable=W0212
+            p._clean(verbose=False)
 
 
 class SC2Process:
@@ -99,7 +96,7 @@ class SC2Process:
     async def __aenter__(self) -> Controller:
         kill_switch.add(self)
 
-        def signal_handler(*args):
+        def signal_handler(*_args):
             # unused arguments: signal handling library expects all signal
             # callback handlers to accept two positional arguments
             kill_switch.kill_all()
@@ -137,6 +134,7 @@ class SC2Process:
         for version in self.versions:
             if version["label"] == target_sc2_version:
                 return version["data-hash"]
+        return None
 
     def _launch(self):
         if self._base_build:
@@ -192,7 +190,7 @@ class SC2Process:
 
         sc2_cwd = str(Paths.CWD) if Paths.CWD else None
 
-        if paths.PF == "WSL1" or paths.PF == "WSL2":
+        if paths.PF in {"WSL1", "WSL2"}:
             return wsl.run(args, sc2_cwd)
 
         return subprocess.Popen(
@@ -238,11 +236,13 @@ class SC2Process:
         if self._session is not None:
             await self._session.close()
 
-    def _clean(self):
-        logger.info("Cleaning up...")
+    # pylint: disable=R0912
+    def _clean(self, verbose=True):
+        if verbose:
+            logger.info("Cleaning up...")
 
         if self._process is not None:
-            if paths.PF == "WSL1" or paths.PF == "WSL2":
+            if paths.PF in {"WSL1", "WSL2"}:
                 if wsl.kill(self._process):
                     logger.error("KILLED")
             elif self._process.poll() is None:
@@ -256,13 +256,11 @@ class SC2Process:
                 self._process.wait()
                 logger.error("KILLED")
             # Try to kill wineserver on linux
-            if paths.PF == "Linux" or paths.PF == "WineLinux":
-                try:
-                    p = subprocess.Popen(["wineserver", "-k"])
-                    p.wait()
+            if paths.PF in {"Linux", "WineLinux"}:
                 # Command wineserver not detected
-                except FileNotFoundError:
-                    pass
+                with suppress(FileNotFoundError):
+                    with subprocess.Popen(["wineserver", "-k"]) as p:
+                        p.wait()
 
         if os.path.exists(self._tmp_dir):
             shutil.rmtree(self._tmp_dir)
@@ -272,4 +270,5 @@ class SC2Process:
         if self._used_portpicker and self._port is not None:
             portpicker.return_port(self._port)
             self._port = None
-        logger.info("Cleanup complete")
+        if verbose:
+            logger.info("Cleanup complete")

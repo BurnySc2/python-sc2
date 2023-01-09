@@ -1,23 +1,30 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
 import numpy as np
-from sc2.position import Point2, Point3
+from loguru import logger
 
-import sc2
-from sc2.data import Result
-from sc2 import Race, Difficulty
-from sc2.constants import *
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race, Result
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.buff_id import BuffId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
+from sc2.position import Point2, Point3
 from sc2.unit import Unit
 from sc2.units import Units
 
 
-class ZergRushBot(sc2.BotAI):
+# pylint: disable=W0231
+class ZergRushBot(BotAI):
+
+    def __init__(self):
+        self.on_end_called = False
+
     async def on_start(self):
         self.client.game_step = 2
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(glhf)")
@@ -56,9 +63,8 @@ class ZergRushBot(sc2.BotAI):
                     drone.gather(mineral, queue=True)
 
         # If we have 100 vespene, this will try to research zergling speed once the spawning pool is at 100% completion
-        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(
-            UpgradeId.ZERGLINGMOVEMENTSPEED
-        ):
+        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED
+                                        ) == 0 and self.can_afford(UpgradeId.ZERGLINGMOVEMENTSPEED):
             spawning_pools_ready: Units = self.structures(UnitTypeId.SPAWNINGPOOL).ready
             if spawning_pools_ready:
                 self.research(UpgradeId.ZERGLINGMOVEMENTSPEED)
@@ -69,8 +75,7 @@ class ZergRushBot(sc2.BotAI):
 
         # While we have less than 88 vespene mined: send drones into extractor one frame at a time
         if (
-            self.gas_buildings.ready
-            and self.vespene < 88
+            self.gas_buildings.ready and self.vespene < 88
             and self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0
         ):
             extractor: Unit = self.gas_buildings.first
@@ -91,13 +96,12 @@ class ZergRushBot(sc2.BotAI):
 
         # If our spawningpool is completed, start making zerglings
         if self.structures(UnitTypeId.SPAWNINGPOOL).ready and self.larva and self.can_afford(UnitTypeId.ZERGLING):
-            amount_trained: int = self.train(UnitTypeId.ZERGLING, self.larva.amount)
+            _amount_trained: int = self.train(UnitTypeId.ZERGLING, self.larva.amount)
 
         # If we have no extractor, build extractor
         if (
             self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) == 0
-            and self.can_afford(UnitTypeId.EXTRACTOR)
-            and self.workers
+            and self.can_afford(UnitTypeId.EXTRACTOR) and self.workers
         ):
             drone: Unit = self.workers.random
             target: Unit = self.vespene_geyser.closest_to(drone)
@@ -130,15 +134,16 @@ class ZergRushBot(sc2.BotAI):
             if value == 1:
                 # Green if there is creep
                 color = Point3((0, 255, 0))
-            self._client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
+            self.client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
     async def on_end(self, game_result: Result):
-        print(f"{self.time_formatted} On end was called")
+        self.on_end_called = True
+        logger.info(f"{self.time_formatted} On end was called")
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("AcropolisLE"),
+    run_game(
+        maps.get("AcropolisLE"),
         [Bot(Race.Zerg, ZergRushBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         save_replay_as="ZvT.SC2Replay",

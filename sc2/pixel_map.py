@@ -1,21 +1,21 @@
-from typing import Callable, FrozenSet, List, Set
+from pathlib import Path
+from typing import Callable, FrozenSet, List, Set, Tuple, Union
 
 import numpy as np
 
-from .position import Point2
+from sc2.position import Point2
 
 
 class PixelMap:
-    def __init__(self, proto, in_bits: bool = False, mirrored: bool = False):
+
+    def __init__(self, proto, in_bits: bool = False):
         """
         :param proto:
         :param in_bits:
-        :param mirrored:
         """
         self._proto = proto
         # Used for copying pixelmaps
         self._in_bits: bool = in_bits
-        self._mirrored: bool = mirrored
 
         assert self.width * self.height == (8 if in_bits else 1) * len(
             self._proto.data
@@ -24,32 +24,30 @@ class PixelMap:
         if in_bits:
             buffer_data = np.unpackbits(buffer_data)
         self.data_numpy = buffer_data.reshape(self._proto.size.y, self._proto.size.x)
-        if mirrored:
-            self.data_numpy = np.flipud(self.data_numpy)
 
     @property
-    def width(self):
+    def width(self) -> int:
         return self._proto.size.x
 
     @property
-    def height(self):
+    def height(self) -> int:
         return self._proto.size.y
 
     @property
-    def bits_per_pixel(self):
+    def bits_per_pixel(self) -> int:
         return self._proto.bits_per_pixel
 
     @property
-    def bytes_per_pixel(self):
+    def bytes_per_pixel(self) -> int:
         return self._proto.bits_per_pixel // 8
 
-    def __getitem__(self, pos):
+    def __getitem__(self, pos: Tuple[int, int]) -> int:
         """ Example usage: is_pathable = self._game_info.pathing_grid[Point2((20, 20))] != 0 """
         assert 0 <= pos[0] < self.width, f"x is {pos[0]}, self.width is {self.width}"
         assert 0 <= pos[1] < self.height, f"y is {pos[1]}, self.height is {self.height}"
         return int(self.data_numpy[pos[1], pos[0]])
 
-    def __setitem__(self, pos, value):
+    def __setitem__(self, pos: Tuple[int, int], value: int):
         """ Example usage: self._game_info.pathing_grid[Point2((20, 20))] = 255 """
         assert 0 <= pos[0] < self.width, f"x is {pos[0]}, self.width is {self.width}"
         assert 0 <= pos[1] < self.height, f"y is {pos[1]}, self.height is {self.height}"
@@ -59,14 +57,14 @@ class PixelMap:
         assert isinstance(value, int), f"value is of type {type(value)}, it should be an integer"
         self.data_numpy[pos[1], pos[0]] = value
 
-    def is_set(self, p):
+    def is_set(self, p: Tuple[int, int]) -> bool:
         return self[p] != 0
 
-    def is_empty(self, p):
+    def is_empty(self, p: Tuple[int, int]) -> bool:
         return not self.is_set(p)
 
-    def copy(self):
-        return PixelMap(self._proto, in_bits=self._in_bits, mirrored=self._mirrored)
+    def copy(self) -> "PixelMap":
+        return PixelMap(self._proto, in_bits=self._in_bits)
 
     def flood_fill(self, start_point: Point2, pred: Callable[[int], bool]) -> Set[Point2]:
         nodes: Set[Point2] = set()
@@ -99,21 +97,23 @@ class PixelMap:
 
         return groups
 
-    def print(self, wide=False):
+    def print(self, wide: bool = False) -> None:
         for y in range(self.height):
             for x in range(self.width):
                 print("#" if self.is_set((x, y)) else " ", end=(" " if wide else ""))
             print("")
 
-    def save_image(self, filename):
+    def save_image(self, filename: Union[str, Path]):
         data = [(0, 0, self[x, y]) for y in range(self.height) for x in range(self.width)]
+        # pylint: disable=C0415
         from PIL import Image
 
         im = Image.new("RGB", (self.width, self.height))
-        im.putdata(data)
+        im.putdata(data)  # type: ignore
         im.save(filename)
 
     def plot(self):
+        # pylint: disable=C0415
         import matplotlib.pyplot as plt
 
         plt.imshow(self.data_numpy, origin="lower")

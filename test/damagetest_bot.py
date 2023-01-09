@@ -1,44 +1,30 @@
-import sys, os
+import os
+import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import random
 import math
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.player import Bot, Computer
-from sc2.data import Alliance
-
-from sc2.position import Pointlike, Point2, Point3
-from sc2.units import Units
-from sc2.unit import Unit
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.effect_id import EffectId
-
-from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
-
-from typing import List, Set, Dict, Optional, Union
 
 from loguru import logger
 
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot
+from sc2.unit import Unit
 
-class TestBot(sc2.BotAI):
+
+class TestBot(BotAI):
+
     def __init__(self):
-        sc2.BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
 
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}")
-            for index in range(4000)
+            getattr(self, f"test_botai_actions{index}") for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_target = 4
@@ -67,7 +53,7 @@ class TestBot(sc2.BotAI):
 
         # Exit bot
         if iteration > 100:
-            print("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
             exit(0)
 
     async def clean_up_center(self):
@@ -192,8 +178,8 @@ class TestBot(sc2.BotAI):
             my_units = self.units | self.structures
             enemy_units = self.enemy_units | self.enemy_structures
             if not my_units or not enemy_units:
-                # print("my units:", my_units)
-                # print("enemy units:",enemy_units)
+                # logger.info("my units:", my_units)
+                # logger.info("enemy units:",enemy_units)
                 return None, None
             attacker: Unit = my_units.closest_to(map_center)
             defender: Unit = enemy_units.closest_to(map_center)
@@ -257,8 +243,7 @@ class TestBot(sc2.BotAI):
                 for defender_type in defender_units:
                     # DT, Thor, Tempest one-shots workers, so skip test
                     if (
-                        attacker_type
-                        in {
+                        attacker_type in {
                             UnitTypeId.DARKTEMPLAR,
                             UnitTypeId.TEMPEST,
                             UnitTypeId.THOR,
@@ -266,8 +251,7 @@ class TestBot(sc2.BotAI):
                             UnitTypeId.LIBERATORAG,
                             UnitTypeId.PLANETARYFORTRESS,
                             UnitTypeId.ARCHON,
-                        }
-                        and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}
+                        } and defender_type in {UnitTypeId.PROBE, UnitTypeId.DRONE, UnitTypeId.SCV, UnitTypeId.MULE}
                     ):
                         continue
 
@@ -280,15 +264,13 @@ class TestBot(sc2.BotAI):
                     # Wait for units to spawn
                     attacker, defender = get_attacker_and_defender()
                     while (
-                        attacker is None
-                        or defender is None
-                        or attacker.type_id != attacker_type
+                        attacker is None or defender is None or attacker.type_id != attacker_type
                         or defender.type_id != defender_type
                     ):
                         await self._advance_steps(1)
                         attacker, defender = get_attacker_and_defender()
                         # TODO check if shield calculation is correct by setting shield of enemy unit
-                    # print(f"Attacker: {attacker}, defender: {defender}")
+                    # logger.info(f"Attacker: {attacker}, defender: {defender}")
                     do_some_unit_property_tests(attacker, defender)
 
                     # Units have spawned, calculate expected damage
@@ -317,7 +299,7 @@ class TestBot(sc2.BotAI):
                         real_damage = math.ceil(
                             defender.health_max + defender.shield_max - defender.health - defender.shield
                         )
-                        # print(
+                        # logger.info(
                         #     f"Attacker type: {attacker_type}, defender health: {defender.health} / {defender.health_max}, defender shield: {defender.shield} / {defender.shield_max}, expected damage: {expected_damage}, real damage so far: {real_damage}, attacker weapon cooldown: {attacker.weapon_cooldown}"
                         # )
                         max_steps -= 1
@@ -336,7 +318,8 @@ class TestBot(sc2.BotAI):
         logger.warning("Action test 1001 successful.")
 
 
-class EmptyBot(sc2.BotAI):
+class EmptyBot(BotAI):
+
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
@@ -357,7 +340,7 @@ class EmptyBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(sc2.maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
 
 
 if __name__ == "__main__":

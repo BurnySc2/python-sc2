@@ -2,10 +2,10 @@ import os
 import platform
 from pathlib import Path
 
-from sc2.observer_ai import ObserverAI
-from sc2 import run_replay
-
 from loguru import logger
+
+from sc2.main import run_replay
+from sc2.observer_ai import ObserverAI
 
 
 class ObserverBot(ObserverAI):
@@ -41,5 +41,5 @@ if __name__ == "__main__":
         replay_path = os.path.join(folder_path, replay_name)
     assert os.path.isfile(
         replay_path
-    ), f"Run worker_rush.py in the same folder first to generate a replay. Then run watch_replay.py again."
+    ), "Run worker_rush.py in the same folder first to generate a replay. Then run watch_replay.py again."
     run_replay(my_observer_ai, replay_path=replay_path)

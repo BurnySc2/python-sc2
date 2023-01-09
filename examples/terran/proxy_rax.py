@@ -1,18 +1,20 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.position import Point2
-from sc2.ids.unit_typeid import UnitTypeId
 
 
-class ProxyRaxBot(sc2.BotAI):
+class ProxyRaxBot(BotAI):
+
+    async def on_start(self):
+        self.client.game_step = 2
+
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         # If we don't have a townhall anymore, send all units to attack
         ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
@@ -21,8 +23,8 @@ class ProxyRaxBot(sc2.BotAI):
             for unit in self.workers | self.units(UnitTypeId.MARINE):
                 unit.attack(target)
             return
-        else:
-            cc: Unit = ccs.first
+
+        cc: Unit = ccs.first
 
         # Send marines in waves of 15, each time 15 are idle, send them to their death
         marines: Units = self.units(UnitTypeId.MARINE).idle
@@ -43,9 +45,8 @@ class ProxyRaxBot(sc2.BotAI):
                 await self.build(UnitTypeId.SUPPLYDEPOT, near=cc.position.towards(self.game_info.map_center, 5))
 
         # Build proxy barracks
-        elif self.structures(UnitTypeId.BARRACKS).amount < 3 or (
-            self.minerals > 400 and self.structures(UnitTypeId.BARRACKS).amount < 5
-        ):
+        elif self.structures(UnitTypeId.BARRACKS
+                             ).amount < 3 or (self.minerals > 400 and self.structures(UnitTypeId.BARRACKS).amount < 5):
             if self.can_afford(UnitTypeId.BARRACKS):
                 p: Point2 = self.game_info.map_center.towards(self.enemy_start_locations[0], 25)
                 await self.build(UnitTypeId.BARRACKS, near=p)
@@ -61,8 +62,8 @@ class ProxyRaxBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+    run_game(
+        maps.get("(2)CatalystLE"),
         [Bot(Race.Terran, ProxyRaxBot()), Computer(Race.Zerg, Difficulty.Hard)],
         realtime=False,
     )

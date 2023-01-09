@@ -1,0 +1,83 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    # Check yaml files like this one and github actions if they are valid
+  - id: check-yaml
+    # Check toml files like pyproject.toml if it is valid
+  - id: check-toml
+    # Check if python files are valid
+  - id: check-ast
+  - id: check-builtin-literals
+  - id: check-docstring-first
+  - id: debug-statements
+
+# Check github action workflow files
+- repo: https://github.com/sirosen/check-jsonschema
+  rev: 0.14.3
+  hooks:
+  - id: check-github-workflows
+
+# Remove unused imports
+- repo: https://github.com/hadialqattan/pycln
+  rev: v1.3.1
+  hooks:
+  - id: pycln
+    args: [--config=pyproject.toml]
+
+# Convert relative to absolute imports
+- repo: https://github.com/MarcoGorelli/absolufy-imports
+  rev: v0.3.1
+  hooks:
+  - id: absolufy-imports
+
+# Sort imports
+- repo: https://github.com/pycqa/isort
+  rev: 5.5.4
+  hooks:
+  - id: isort
+    files: \.(py)$
+    args: [--settings-path=pyproject.toml]
+
+- repo: https://github.com/pre-commit/pygrep-hooks
+  rev: v1.9.0
+  hooks:
+  # Check for bad code
+  - id: python-no-eval
+  - id: python-no-log-warn
+  # Enforce type annotation instead of comment annotation
+  - id: python-use-type-annotations
+
+- repo: local
+  hooks:
+  # Autoformat code
+  - id: yapf
+    name: format python code
+    stages: [commit]
+    language: system
+    entry: /bin/bash -c "poetry run yapf --in-place $(git ls-files '*.py')"
+    pass_filenames: false
+
+  - id: pylint
+    name: pylint
+    stages: [commit]
+    language: system
+    entry: /bin/bash -c "poetry run pylint $(git ls-files '*.py' | grep -E '(sc2)|(examples)/.*')"
+    pass_filenames: false
+
+# TODO Types before enabling this
+#  # Run mypy type checks
+#  - id: mypy
+#    name: mypy
+#    stages: [commit]
+#    language: system
+#    entry: /bin/bash -c "poetry run mypy $(git ls-files '*.py' | grep -E '(sc2)|(examples)/.*')"
+#    pass_filenames: false
+
+  # Run tests
+  - id: pytest
+    name: pytest
+    stages: [commit]
+    language: system
+    entry: poetry run pytest test
+    pass_filenames: false

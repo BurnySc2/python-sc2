@@ -1,3 +1,4 @@
+# pylint: disable=R0904
 class ScoreDetails:
     """Accessable in self.state.score during step function
     For more information, see https://github.com/Blizzard/s2client-proto/blob/master/s2clientprotocol/score.proto

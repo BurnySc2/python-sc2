@@ -1,19 +1,16 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.player import Bot, Computer
-from sc2.player import Human
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
 from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
+from sc2.main import run_game
+from sc2.player import Bot, Computer
+from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
-from sc2.position import Point2
 
 
-class CyclonePush(sc2.BotAI):
+class CyclonePush(BotAI):
+
     def select_target(self) -> Point2:
         # Pick a random enemy structure's position
         targets = self.enemy_structures
@@ -26,12 +23,13 @@ class CyclonePush(sc2.BotAI):
             return targets.random.position
 
         # Pick enemy start location if it has no friendly units nearby
-        if min([unit.distance_to(self.enemy_start_locations[0]) for unit in self.units]) > 5:
+        if min((unit.distance_to(self.enemy_start_locations[0]) for unit in self.units)) > 5:
             return self.enemy_start_locations[0]
 
         # Pick a random mineral field on the map
         return self.mineral_field.random.position
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         CCs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         # If no command center exists, attack-move with all workers and cyclones
@@ -40,9 +38,9 @@ class CyclonePush(sc2.BotAI):
             for unit in self.workers | self.units(UnitTypeId.CYCLONE):
                 unit.attack(target)
             return
-        else:
-            # Otherwise, grab the first command center from the list of command centers
-            cc: Unit = CCs.first
+
+        # Otherwise, grab the first command center from the list of command centers
+        cc: Unit = CCs.first
 
         # Every 50 iterations (here: every 50*8 = 400 frames)
         if iteration % 50 == 0 and self.units(UnitTypeId.CYCLONE).amount > 2:
@@ -60,8 +58,7 @@ class CyclonePush(sc2.BotAI):
         # While we have less than 22 workers: build more
         # Check if we can afford them (by minerals and by supply)
         if (
-            self.can_afford(UnitTypeId.SCV)
-            and self.supply_workers + self.already_pending(UnitTypeId.SCV) < 22
+            self.can_afford(UnitTypeId.SCV) and self.supply_workers + self.already_pending(UnitTypeId.SCV) < 22
             and cc.is_idle
         ):
             cc.train(UnitTypeId.SCV)
@@ -125,8 +122,8 @@ class CyclonePush(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+    run_game(
+        maps.get("(2)CatalystLE"),
         [
             # Human(Race.Terran),
             Bot(Race.Terran, CyclonePush()),

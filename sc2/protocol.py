@@ -1,16 +1,16 @@
 import asyncio
-
 import sys
+from contextlib import suppress
 
-from s2clientprotocol import sc2api_pb2 as sc_pb
 from aiohttp import ClientWebSocketResponse
-
-from .data import Status
-
 from loguru import logger
+from s2clientprotocol import sc2api_pb2 as sc_pb
+
+from sc2.data import Status
 
 
 class ProtocolError(Exception):
+
     @property
     def is_game_over_error(self) -> bool:
         return self.args[0] in ["['Game has already ended']", "['Not supported if game has already ended']"]
@@ -21,6 +21,7 @@ class ConnectionAlreadyClosed(ProtocolError):
 
 
 class Protocol:
+
     def __init__(self, ws):
         """
         A class for communicating with an SCII application.
@@ -34,21 +35,20 @@ class Protocol:
         logger.debug(f"Sending request: {request !r}")
         try:
             await self._ws.send_bytes(request.SerializeToString())
-        except TypeError:
+        except TypeError as exc:
             logger.exception("Cannot send: Connection already closed.")
-            raise ConnectionAlreadyClosed("Connection already closed.")
-        logger.debug(f"Request sent")
+            raise ConnectionAlreadyClosed("Connection already closed.") from exc
+        logger.debug("Request sent")
 
         response = sc_pb.Response()
         try:
             response_bytes = await self._ws.receive_bytes()
-        except TypeError:
+        except TypeError as exc:
             if self._status == Status.ended:
                 logger.info("Cannot receive: Game has already ended.")
-                raise ConnectionAlreadyClosed("Game has already ended")
-            else:
-                logger.error("Cannot receive: Connection already closed.")
-                raise ConnectionAlreadyClosed("Connection already closed.")
+                raise ConnectionAlreadyClosed("Game has already ended") from exc
+            logger.error("Cannot receive: Connection already closed.")
+            raise ConnectionAlreadyClosed("Connection already closed.") from exc
         except asyncio.CancelledError:
             # If request is sent, the response must be received before reraising cancel
             try:
@@ -59,11 +59,11 @@ class Protocol:
             raise
 
         response.ParseFromString(response_bytes)
-        logger.debug(f"Response received")
+        logger.debug("Response received")
         return response
 
     async def _execute(self, **kwargs):
-        assert len(kwargs) == 1, "Only one request allowed"
+        assert len(kwargs) == 1, "Only one request allowed by the API"
 
         response = await self.__request(sc_pb.Request(**kwargs))
 
@@ -83,7 +83,5 @@ class Protocol:
         return result
 
     async def quit(self):
-        try:
+        with suppress(ConnectionAlreadyClosed, ConnectionResetError):
             await self._execute(quit=sc_pb.RequestQuit())
-        except ConnectionAlreadyClosed:
-            pass

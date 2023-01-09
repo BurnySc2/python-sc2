@@ -1,21 +1,22 @@
-from s2clientprotocol import sc2api_pb2 as sc_pb
-
-from .player import Computer
-from .protocol import Protocol
-
-from pathlib import Path
 import platform
+from pathlib import Path
 
 from loguru import logger
+from s2clientprotocol import sc2api_pb2 as sc_pb
+
+from sc2.player import Computer
+from sc2.protocol import Protocol
 
 
 class Controller(Protocol):
+
     def __init__(self, ws, process):
         super().__init__(ws)
         self._process = process
 
     @property
     def running(self):
+        # pylint: disable=W0212
         return self._process._process is not None
 
     async def create_game(self, game_map, players, realtime: bool, random_seed=None, disable_fog=None):

@@ -1,31 +1,28 @@
-from .paths import Paths
+from __future__ import annotations
+
+from pathlib import Path
 
 from loguru import logger
 
+from sc2.paths import Paths
 
-def get(name=None):
-    maps = []
-    for mapdir in (p for p in Paths.MAPS.iterdir()):
-        if mapdir.is_dir():
-            for mapfile in (p for p in mapdir.iterdir() if p.is_file()):
-                if mapfile.suffix == ".SC2Map":
-                    maps.append(Map(mapfile))
-        elif mapdir.is_file():
-            if mapdir.suffix == ".SC2Map":
-                maps.append(Map(mapdir))
 
-    if name is None:
-        return maps
-
-    for m in maps:
-        if m.matches(name):
-            return m
+def get(name: str) -> Map:
+    # Iterate through 2 folder depths
+    for map_dir in (p for p in Paths.MAPS.iterdir()):
+        if map_dir.is_dir():
+            for map_file in (p for p in map_dir.iterdir()):
+                if Map.matches_target_map_name(map_file, name):
+                    return Map(map_file)
+        elif Map.matches_target_map_name(map_dir, name):
+            return Map(map_dir)
 
     raise KeyError(f"Map '{name}' was not found. Please put the map file in \"/StarCraft II/Maps/\".")
 
 
 class Map:
-    def __init__(self, path):
+
+    def __init__(self, path: Path):
         self.path = path
 
         if self.path.is_absolute():
@@ -46,8 +43,13 @@ class Map:
         with open(self.path, "rb") as f:
             return f.read()
 
-    def matches(self, name):
-        return self.name.lower().replace(" ", "") == name.lower().replace(" ", "")
-
     def __repr__(self):
         return f"Map({self.path})"
+
+    @classmethod
+    def is_map_file(cls, file: Path) -> bool:
+        return file.is_file() and file.suffix == ".SC2Map"
+
+    @classmethod
+    def matches_target_map_name(cls, file: Path, name: str) -> bool:
+        return cls.is_map_file(file) and file.stem == name

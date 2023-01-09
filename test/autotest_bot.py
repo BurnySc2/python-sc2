@@ -1,44 +1,34 @@
-import sys, os
+import os
+import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-import random
-import math
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.player import Bot, Computer
-from sc2.data import Alliance
-
-from sc2.position import Pointlike, Point2, Point3
-from sc2.units import Units
-from sc2.unit import Unit
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.effect_id import EffectId
-
-from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
-
-from typing import List, Set, Dict, Optional, Union
-
 from loguru import logger
 
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.effect_id import EffectId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot
+from sc2.position import Point2
+from sc2.unit import Unit
+from sc2.units import Units
 
-class TestBot(sc2.BotAI):
+
+class TestBot(BotAI):
+
     def __init__(self):
-        sc2.BotAI.__init__(self)
+        BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
 
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}")
-            for index in range(4000)
+            getattr(self, f"test_botai_actions{index}") for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_done_by_name = set()
@@ -80,7 +70,7 @@ class TestBot(sc2.BotAI):
 
         # Exit bot
         if iteration > 100:
-            print("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
             exit(0)
 
     async def clean_up_center(self):
@@ -130,8 +120,8 @@ class TestBot(sc2.BotAI):
             assert (await self.can_place(UnitTypeId.COMMANDCENTER, [location]))[0]
             assert (await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location]))[0]
             # TODO Remove the following two lines if can_place function gets fully converted to only accept list of positions
-            assert await self.can_place(UnitTypeId.COMMANDCENTER, location)
-            assert await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, location)
+            assert await self.can_place(UnitTypeId.COMMANDCENTER, [location])
+            assert await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [location])
             assert await self.can_place_single(UnitTypeId.COMMANDCENTER, location)
             assert await self.can_place_single(AbilityId.TERRANBUILD_COMMANDCENTER, location)
             await self.find_placement(UnitTypeId.COMMANDCENTER, location)
@@ -150,9 +140,9 @@ class TestBot(sc2.BotAI):
 
     # Test self._game_info variables
     async def test_game_info_static_variables(self):
-        assert len(self._game_info.players) == 2, self._game_info.players
-        assert len(self._game_info.map_ramps) >= 2, self._game_info.map_ramps
-        assert len(self._game_info.player_races) == 2, self._game_info.player_races
+        assert len(self.game_info.players) == 2, self.game_info.players
+        assert len(self.game_info.map_ramps) >= 2, self.game_info.map_ramps
+        assert len(self.game_info.player_races) == 2, self.game_info.player_races
         self.tests_done_by_name.add("test_game_info_static_variables")
 
     # Test BotAI action: train SCV
@@ -168,14 +158,11 @@ class TestBot(sc2.BotAI):
 
     # Test BotAI action: move all SCVs to center of map
     async def test_botai_actions2(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         def temp_filter(unit: Unit):
             return (
-                unit.is_moving
-                or unit.is_patrolling
-                or unit.orders
-                and unit.orders[0] == AbilityId.HOLDPOSITION_HOLD
+                unit.is_moving or unit.is_patrolling or unit.orders and unit.orders[0] == AbilityId.HOLDPOSITION_HOLD
                 or unit.is_attacking
             )
 
@@ -193,8 +180,6 @@ class TestBot(sc2.BotAI):
                     scv.attack(center)
                 elif action == "hold":
                     scv.hold_position()
-                elif action == "scan_move":
-                    scv.scan_move(center)
 
             await self._advance_steps(2)
 
@@ -204,7 +189,7 @@ class TestBot(sc2.BotAI):
 
     # Test BotAI action: move some scvs to the center, some to minerals
     async def test_botai_actions3(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         while self.units.filter(lambda x: x.is_moving).amount < 6 and self.units.gathering.amount >= 6:
             scvs = self.workers
@@ -260,18 +245,18 @@ class TestBot(sc2.BotAI):
 
     # Test if reaper grenade shows up in effects
     async def test_botai_actions6(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         while 1:
             if self.units(UnitTypeId.REAPER).amount < 10:
-                await self._client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.REAPER, 10, center, 1]])
 
             for reaper in self.units(UnitTypeId.REAPER):
                 reaper(AbilityId.KD8CHARGE_KD8CHARGE, center)
 
-            # print(f"Effects: {self.state.effects}")
+            # logger.info(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
-                # print(f"Effect: {effect}")
+                # logger.info(f"Effect: {effect}")
                 pass
             # Cleanup
             await self._advance_steps(2)
@@ -279,7 +264,7 @@ class TestBot(sc2.BotAI):
             if len(self.state.effects) != 0:
                 break
 
-        await self._client.debug_kill_unit(self.units(UnitTypeId.REAPER))
+        await self.client.debug_kill_unit(self.units(UnitTypeId.REAPER))
         # Wait for effectts to time out
         await self._advance_steps(100)
         logger.warning("Action test 06 successful.")
@@ -287,16 +272,16 @@ class TestBot(sc2.BotAI):
 
     # Test ravager effects
     async def test_botai_actions7(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
         while 1:
             if self.units(UnitTypeId.RAVAGER).amount < 10:
-                await self._client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.RAVAGER, 10, center, 1]])
             for ravager in self.units(UnitTypeId.RAVAGER):
                 ravager(AbilityId.EFFECT_CORROSIVEBILE, center)
 
-            # print(f"Effects: {self.state.effects}")
+            # logger.info(f"Effects: {self.state.effects}")
             for effect in self.state.effects:
-                # print(f"Effect: {effect}")
+                # logger.info(f"Effect: {effect}")
                 if effect.id == EffectId.RAVAGERCORROSIVEBILECP:
                     success = True
             await self._advance_steps(2)
@@ -304,7 +289,7 @@ class TestBot(sc2.BotAI):
             if len(self.state.effects) != 0:
                 break
         # Cleanup
-        await self._client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
+        await self.client.debug_kill_unit(self.units(UnitTypeId.RAVAGER))
         # Wait for effectts to time out
         await self._advance_steps(100)
         logger.warning("Action test 07 successful.")
@@ -312,15 +297,15 @@ class TestBot(sc2.BotAI):
 
     # Test if train function works on hatchery, lair, hive
     async def test_botai_actions8(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
         if not self.structures(UnitTypeId.HIVE):
-            await self._client.debug_create_unit([[UnitTypeId.HIVE, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.HIVE, 1, center, 1]])
         if not self.structures(UnitTypeId.LAIR):
-            await self._client.debug_create_unit([[UnitTypeId.LAIR, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.LAIR, 1, center, 1]])
         if not self.structures(UnitTypeId.HATCHERY):
-            await self._client.debug_create_unit([[UnitTypeId.HATCHERY, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.HATCHERY, 1, center, 1]])
         if not self.structures(UnitTypeId.SPAWNINGPOOL):
-            await self._client.debug_create_unit([[UnitTypeId.SPAWNINGPOOL, 1, center, 1]])
+            await self.client.debug_create_unit([[UnitTypeId.SPAWNINGPOOL, 1, center, 1]])
 
         while 1:
             townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
@@ -338,14 +323,14 @@ class TestBot(sc2.BotAI):
         townhalls = self.structures.of_type({UnitTypeId.HIVE, UnitTypeId.LAIR, UnitTypeId.HATCHERY})
         queens = self.units(UnitTypeId.QUEEN)
         pool = self.structures(UnitTypeId.SPAWNINGPOOL)
-        await self._client.debug_kill_unit(townhalls | queens | pool)
+        await self.client.debug_kill_unit(townhalls | queens | pool)
         await self._advance_steps(2)
         logger.warning("Action test 08 successful.")
         return
 
     # Morph an archon from 2 high templars
     async def test_botai_actions9(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
         target_amount = 2
         HTs = self.units(UnitTypeId.HIGHTEMPLAR)
         archons = self.units(UnitTypeId.ARCHON)
@@ -353,7 +338,7 @@ class TestBot(sc2.BotAI):
         while 1:
             HTs = self.units(UnitTypeId.HIGHTEMPLAR)
             if HTs.amount < target_amount:
-                await self._client.debug_create_unit([[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]])
 
             else:
                 for ht in HTs:
@@ -368,16 +353,16 @@ class TestBot(sc2.BotAI):
 
         # Cleanup
         if archons:
-            await self._client.debug_kill_unit(archons)
+            await self.client.debug_kill_unit(archons)
         if HTs:
-            await self._client.debug_kill_unit(HTs)
+            await self.client.debug_kill_unit(HTs)
         await self._advance_steps(2)
         logger.warning("Action test 09 successful.")
         return
 
     # Morph 400 banelings from 400 lings in the same frame
     async def test_botai_actions10(self):
-        center = self._game_info.map_center
+        center = self.game_info.map_center
 
         target_amount = 400
         while 1:
@@ -395,9 +380,9 @@ class TestBot(sc2.BotAI):
 
             # Spawn units
             if not bane_nests:
-                await self._client.debug_create_unit([[UnitTypeId.BANELINGNEST, 1, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.BANELINGNEST, 1, center, 1]])
             if banes.amount + bane_cocoons.amount + lings.amount < target_amount:
-                await self._client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]])
+                await self.client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]])
 
             if lings.amount >= target_amount and self.minerals >= 10_000 and self.vespene >= 10_000:
                 for ling in lings:
@@ -413,7 +398,7 @@ class TestBot(sc2.BotAI):
                 break
 
         # Cleanup
-        await self._client.debug_kill_unit(lings | banes | bane_nests | bane_cocoons)
+        await self.client.debug_kill_unit(lings | banes | bane_nests | bane_cocoons)
         await self._advance_steps(2)
         logger.warning("Action test 10 successful.")
         return
@@ -445,7 +430,7 @@ class TestBot(sc2.BotAI):
             await self._advance_steps(2)
             enemy = self.enemy_units(UnitTypeId.INFESTOR)[0]
             if enemy.buffs:
-                # print(enemy.buffs, enemy.buff_duration_remain, enemy.buff_duration_max)
+                # logger.info(enemy.buffs, enemy.buff_duration_remain, enemy.buff_duration_max)
                 break
 
         logger.warning("Action test 11 successful.")
@@ -453,7 +438,7 @@ class TestBot(sc2.BotAI):
 
     # Test if structures_without_construction_SCVs works after killing the scv
     async def test_botai_actions12(self):
-        map_center: Point2 = self._game_info.map_center
+        map_center: Point2 = self.game_info.map_center
 
         # Wait till can afford depot
         while not self.can_afford(UnitTypeId.SUPPLYDEPOT):
@@ -498,7 +483,8 @@ class TestBot(sc2.BotAI):
     # Test if dicts are correct for unit_trained_from.py -> train all units once
 
 
-class EmptyBot(sc2.BotAI):
+class EmptyBot(BotAI):
+
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
@@ -519,7 +505,7 @@ class EmptyBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(sc2.maps.get("Acropolis"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(maps.get("Acropolis"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
 
 
 if __name__ == "__main__":

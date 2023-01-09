@@ -1,4 +1,6 @@
-import sys, os
+import os
+import sys
+from contextlib import suppress
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -6,11 +8,14 @@ from sc2.expiring_dict import ExpiringDict
 
 
 def test_class():
+
     class State:
+
         def __init__(self):
             self.game_loop = 0
 
     class BotAI:
+
         def __init__(self):
             self.state = State()
 
@@ -38,10 +43,8 @@ def test_class():
     assert result == "its me mario"
 
     # Get item that doesnt exist
-    try:
+    with suppress(KeyError):
         result = test["doesnt_exist"]
-    except KeyError:
-        pass
     assert result == test["hello"]
 
     # Set new item

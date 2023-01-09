@@ -1,23 +1,21 @@
-import sys, os
+from loguru import logger
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.ids.unit_typeid import UnitTypeId
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
-from sc2.ids.upgrade_id import UpgradeId
 from sc2.ids.buff_id import BuffId
-from sc2.unit import Unit
-from sc2.units import Units
-from sc2.position import Point2
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 
 
-class WarpGateBot(sc2.BotAI):
+# pylint: disable=W0231
+class WarpGateBot(BotAI):
+
     def __init__(self):
         # Initialize inherited class
-        sc2.BotAI.__init__(self)
         self.proxy_built = False
 
     async def warp_new_units(self, proxy):
@@ -29,10 +27,11 @@ class WarpGateBot(sc2.BotAI):
                 placement = await self.find_placement(AbilityId.WARPGATETRAIN_STALKER, pos, placement_step=1)
                 if placement is None:
                     # return ActionResult.CantFindPlacementLocation
-                    print("can't place")
+                    logger.info("can't place")
                     return
                 warpgate.warp_in(UnitTypeId.STALKER, placement)
 
+    # pylint: disable=R0912
     async def on_step(self, iteration):
         await self.distribute_workers()
 
@@ -41,8 +40,8 @@ class WarpGateBot(sc2.BotAI):
             for worker in self.workers:
                 worker.attack(self.enemy_start_locations[0])
             return
-        else:
-            nexus = self.townhalls.ready.random
+
+        nexus = self.townhalls.ready.random
 
         # Build pylon when on low supply
         if self.supply_left < 2 and self.already_pending(UnitTypeId.PYLON) == 0:
@@ -59,6 +58,7 @@ class WarpGateBot(sc2.BotAI):
             if self.can_afford(UnitTypeId.PYLON):
                 await self.build(UnitTypeId.PYLON, near=nexus.position.towards(self.game_info.map_center, 5))
 
+        proxy = None
         if self.structures(UnitTypeId.PYLON).ready:
             proxy = self.structures(UnitTypeId.PYLON).closest_to(self.enemy_start_locations[0])
             pylon = self.structures(UnitTypeId.PYLON).ready.random
@@ -87,13 +87,12 @@ class WarpGateBot(sc2.BotAI):
                 if worker is None:
                     break
                 if not self.gas_buildings or not self.gas_buildings.closer_than(1, vg):
-                    worker.build(UnitTypeId.ASSIMILATOR, vg)
+                    worker.build_gas(vg)
                     worker.stop(queue=True)
 
         # Research warp gate if cybercore is completed
         if (
-            self.structures(UnitTypeId.CYBERNETICSCORE).ready
-            and self.can_afford(AbilityId.RESEARCH_WARPGATE)
+            self.structures(UnitTypeId.CYBERNETICSCORE).ready and self.can_afford(AbilityId.RESEARCH_WARPGATE)
             and self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 0
         ):
             ccore = self.structures(UnitTypeId.CYBERNETICSCORE).ready.first
@@ -104,7 +103,7 @@ class WarpGateBot(sc2.BotAI):
             if self.already_pending_upgrade(UpgradeId.WARPGATERESEARCH) == 1:
                 gateway(AbilityId.MORPH_WARPGATE)
 
-        if self.proxy_built:
+        if self.proxy_built and proxy:
             await self.warp_new_units(proxy)
 
         # Make stalkers attack either closest enemy unit or enemy spawn location
@@ -119,8 +118,7 @@ class WarpGateBot(sc2.BotAI):
 
         # Build proxy pylon
         if (
-            self.structures(UnitTypeId.CYBERNETICSCORE).amount >= 1
-            and not self.proxy_built
+            self.structures(UnitTypeId.CYBERNETICSCORE).amount >= 1 and not self.proxy_built
             and self.can_afford(UnitTypeId.PYLON)
         ):
             p = self.game_info.map_center.towards(self.enemy_start_locations[0], 20)
@@ -140,8 +138,8 @@ class WarpGateBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
+    run_game(
+        maps.get("(2)CatalystLE"),
         [Bot(Race.Protoss, WarpGateBot()), Computer(Race.Protoss, Difficulty.Easy)],
         realtime=False,
     )

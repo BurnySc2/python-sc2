@@ -1,46 +1,37 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import sc2
-from sc2 import Race
-from sc2.player import Bot
-
-from sc2.units import Units
-from sc2.unit import Unit
-from sc2.position import Point2, Point3
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.ability_id import AbilityId
-
-from sc2.player import Bot, Computer
-from sc2.data import Difficulty
-
-from sc2.game_data import GameData
-from sc2.game_info import GameInfo
-from sc2.game_state import GameState
-
-from sc2.protocol import ProtocolError
-
-from typing import List, Dict, Set, Tuple, Any, Optional, Union
-
-from s2clientprotocol import sc2api_pb2 as sc_pb
-import pickle, os, sys, traceback, lzma
-
-from loguru import logger
-
-
 """
 This "bot" will loop over several available ladder maps and generate the pickle file in the "/test/pickle_data/" subfolder.
 These will then be used to run tests from the test script "test_pickled_data.py"
 """
+import os
+import sys
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.main import run_game
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+import lzma
+import os
+import pickle
+from typing import Set
+
+from loguru import logger
+from s2clientprotocol import sc2api_pb2 as sc_pb
+
+from sc2.data import Difficulty, Race
+from sc2.game_data import GameData
+from sc2.game_info import GameInfo
+from sc2.game_state import GameState
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.player import Bot, Computer
+from sc2.protocol import ProtocolError
 
 
-class ExporterBot(sc2.BotAI):
+class ExporterBot(BotAI):
+
     def __init__(self):
-        sc2.BotAI.__init__(self)
+        BotAI.__init__(self)
         self.map_name: str = None
 
     async def on_step(self, iteration):
@@ -62,18 +53,18 @@ class ExporterBot(sc2.BotAI):
 
     async def store_data_to_file(self, file_path: str):
         # Grab all raw data from observation
-        raw_game_data = await self._client._execute(
+        raw_game_data = await self.client._execute(
             data=sc_pb.RequestData(ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True)
         )
 
-        raw_game_info = await self._client._execute(game_info=sc_pb.RequestGameInfo())
+        raw_game_info = await self.client._execute(game_info=sc_pb.RequestGameInfo())
 
         raw_observation = self.state.response_observation
 
         # To test if this data is convertable in the first place
-        game_data = GameData(raw_game_data.data)
-        game_info = GameInfo(raw_game_info.game_info)
-        game_state = GameState(raw_observation)
+        _game_data = GameData(raw_game_data.data)
+        _game_info = GameInfo(raw_game_info.game_info)
+        _game_state = GameState(raw_observation)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with lzma.open(file_path, "wb") as f:
@@ -96,8 +87,8 @@ class ExporterBot(sc2.BotAI):
             for unit_id, data in self.game_data.units.items()
             if data._proto.race != Race.NoRace and data._proto.race != Race.Random and data._proto.available
             # Dont cloak units
-            and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP
-            and (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
+            and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP and
+            (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
         }
 
         # Create units for self
@@ -112,13 +103,13 @@ class ExporterBot(sc2.BotAI):
         file_path = self.get_combat_file_path()
         await self.store_data_to_file(file_path)
 
-        await self._client.leave()
+        await self.client.leave()
         return
 
 
 def main():
 
-    maps = [
+    maps_ = [
         "16-BitLE",
         "2000AtmospheresAIE",
         "AbiogenesisLE",
@@ -133,6 +124,7 @@ def main():
         "Bandwidth",
         "BattleontheBoardwalkLE",
         "BelShirVestigeLE",
+        "BerlingradAIE",
         "BlackburnAIE",
         "BlackpinkLE",
         "BlueshiftLE",
@@ -140,6 +132,7 @@ def main():
         "CatalystLE",
         "CeruleanFallLE",
         "CrystalCavern",
+        "CuriousMindsAIE",
         "CyberForestLE",
         "DarknessSanctuaryLE",
         "DeathAura506",
@@ -157,11 +150,14 @@ def main():
         "EverDreamLE",
         "FractureLE",
         "FrostLE",
+        "GlitteringAshesAIE",
         "GoldenWall506",
         "GoldenWallLE",
+        "HardwireAIE",
         "HonorgroundsLE",
         "IceandChrome506",
         "IceandChromeLE",
+        "InsideAndOutAIE",
         "InterloperLE",
         "JagannathaAIE",
         "KairosJunctionLE",
@@ -169,6 +165,7 @@ def main():
         "LostandFoundLE",
         "LightshadeAIE",
         "MechDepotLE",
+        "MoondanceAIE",
         "NeonVioletSquareLE",
         "NewkirkPrecinctTE",
         "NewRepugnancyLE",
@@ -191,19 +188,21 @@ def main():
         "SimulacrumLE",
         "Submarine506",
         "SubmarineLE",
-        # "StasisLE", Commented out because it has uneven number of expansions, and wasn't used in the ladder pool anyway
+        "StargazersAIE",
+        "StasisLE",
         "TheTimelessVoid",
         "ThunderbirdLE",
         "Treachery",
         "Triton",
         "Urzagol",
+        "WaterfallAIE",
         "WintersGateLE",
         "WorldofSleepersLE",
         "YearZeroLE",
         "ZenLE",
     ]
 
-    for map_ in maps:
+    for map_ in maps_:
         try:
             bot = ExporterBot()
             bot.map_name = map_
@@ -213,17 +212,16 @@ def main():
                     f"Pickle file for map {map_} was already generated. Skipping. If you wish to re-generate files, please remove them first."
                 )
                 continue
-            sc2.run_game(
-                sc2.maps.get(map_), [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)], realtime=False
-            )
+            logger.info(f"Creating pickle file for map {map_} ...")
+            run_game(maps.get(map_), [Bot(Race.Terran, bot), Computer(Race.Zerg, Difficulty.Easy)], realtime=False)
         except ProtocolError:
             # ProtocolError appears after a leave game request
             pass
         except Exception as e:
-            logger.warning(
+            logger.exception(f"Caught unknown exception: {e}")
+            logger.error(
                 f"Map {map_} could not be found, so pickle files for that map could not be generated. Error: {e}"
             )
-            # traceback.print_exc()
 
 
 if __name__ == "__main__":

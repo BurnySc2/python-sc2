@@ -1,9 +1,12 @@
-import sc2
-from sc2 import run_game, maps, Race, Difficulty
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 
 
-class WorkerRushBot(sc2.BotAI):
+class WorkerRushBot(BotAI):
+
     async def on_step(self, iteration):
         if iteration == 0:
             for worker in self.workers:

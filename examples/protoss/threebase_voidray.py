@@ -1,22 +1,20 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.ids.unit_typeid import UnitTypeId
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
 from sc2.ids.ability_id import AbilityId
-from sc2.ids.upgrade_id import UpgradeId
 from sc2.ids.buff_id import BuffId
-from sc2.unit import Unit
-from sc2.units import Units
-from sc2.position import Point2
-from sc2.ids.buff_id import BuffId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 
 
-class ThreebaseVoidrayBot(sc2.BotAI):
+class ThreebaseVoidrayBot(BotAI):
+
+    # pylint: disable=R0912
     async def on_step(self, iteration):
+        target_base_count = 3
+        target_stargate_count = 3
+
         if iteration == 0:
             await self.chat_send("(glhf)")
 
@@ -25,8 +23,8 @@ class ThreebaseVoidrayBot(sc2.BotAI):
             for worker in self.workers:
                 worker.attack(self.enemy_start_locations[0])
             return
-        else:
-            nexus = self.townhalls.ready.random
+
+        nexus = self.townhalls.ready.random
 
         # If this random nexus is not idle and has not chrono buff, chrono it with one of the nexuses we have
         if not nexus.is_idle and not nexus.has_buff(BuffId.CHRONOBOOSTENERGYCOST):
@@ -56,11 +54,8 @@ class ThreebaseVoidrayBot(sc2.BotAI):
 
         # If we are low on supply, build pylon
         if (
-            self.supply_left < 2
-            and self.already_pending(UnitTypeId.PYLON) == 0
-            or self.supply_used > 15
-            and self.supply_left < 4
-            and self.already_pending(UnitTypeId.PYLON) < 2
+            self.supply_left < 2 and self.already_pending(UnitTypeId.PYLON) == 0
+            or self.supply_used > 15 and self.supply_left < 4 and self.already_pending(UnitTypeId.PYLON) < 2
         ):
             # Always check if you can afford something before you build it
             if self.can_afford(UnitTypeId.PYLON):
@@ -106,15 +101,16 @@ class ThreebaseVoidrayBot(sc2.BotAI):
                         break
 
                     if not self.gas_buildings or not self.gas_buildings.closer_than(1, vg):
-                        worker.build(UnitTypeId.ASSIMILATOR, vg)
+                        worker.build_gas(vg)
                         worker.stop(queue=True)
 
         # If we have less than 3  but at least 3 nexuses, build stargate
         if self.structures(UnitTypeId.PYLON).ready and self.structures(UnitTypeId.CYBERNETICSCORE).ready:
             pylon = self.structures(UnitTypeId.PYLON).ready.random
             if (
-                self.townhalls.ready.amount + self.already_pending(UnitTypeId.NEXUS) >= 3
-                and self.structures(UnitTypeId.STARGATE).ready.amount + self.already_pending(UnitTypeId.STARGATE) < 3
+                self.townhalls.ready.amount + self.already_pending(UnitTypeId.NEXUS) >= target_base_count
+                and self.structures(UnitTypeId.STARGATE).ready.amount + self.already_pending(UnitTypeId.STARGATE) <
+                target_stargate_count
             ):
                 if self.can_afford(UnitTypeId.STARGATE):
                     await self.build(UnitTypeId.STARGATE, near=pylon)
@@ -127,9 +123,10 @@ class ThreebaseVoidrayBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("(2)CatalystLE"),
-        [Bot(Race.Protoss, ThreebaseVoidrayBot()), Computer(Race.Protoss, Difficulty.Easy)],
+    run_game(
+        maps.get("(2)CatalystLE"),
+        [Bot(Race.Protoss, ThreebaseVoidrayBot()),
+         Computer(Race.Protoss, Difficulty.Easy)],
         realtime=False,
     )
 

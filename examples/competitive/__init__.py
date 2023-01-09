@@ -1,18 +1,14 @@
+# pylint: disable=W0212
 import argparse
-
-import sys
 import asyncio
+
 import aiohttp
+from loguru import logger
 
 import sc2
-from sc2 import Race, Difficulty
-from sc2.player import Bot, Computer
+from sc2.client import Client
 from sc2.protocol import ConnectionAlreadyClosed
 
-from sc2.sc2process import SC2Process
-from sc2.client import Client
-
-from loguru import logger
 
 # Run ladder game
 # This lets python-sc2 connect to a LadderManager game: https://github.com/Cryptyc/Sc2LadderServer
@@ -28,9 +24,9 @@ def run_ladder_game(bot):
     parser.add_argument("--ComputerDifficulty", type=str, nargs="?", help="Computer difficulty")
     parser.add_argument("--OpponentId", type=str, nargs="?", help="Opponent ID")
     parser.add_argument("--RealTime", action="store_true", help="Real time flag")
-    args, unknown = parser.parse_known_args()
+    args, _unknown = parser.parse_known_args()
 
-    if args.LadderServer == None:
+    if args.LadderServer is None:
         host = "127.0.0.1"
     else:
         host = args.LadderServer
@@ -42,13 +38,6 @@ def run_ladder_game(bot):
     bot.ai.opponent_id = args.OpponentId
 
     realtime = args.RealTime
-
-    # Versus Computer doesn't work yet
-    computer_opponent = False
-    if args.ComputerOpponent:
-        computer_opponent = True
-        computer_race = args.ComputerRace
-        computer_difficulty = args.ComputerDifficulty
 
     # Port config
     if lan_port is None:
@@ -69,20 +58,18 @@ def run_ladder_game(bot):
 
 
 # Modified version of sc2.main._join_game to allow custom host and port, and to not spawn an additional sc2process (thanks to alkurbatov for fix)
-async def join_ladder_game(
-    host, port, players, realtime, portconfig, save_replay_as=None, step_time_limit=None, game_time_limit=None
-):
-    ws_url = "ws://{}:{}/sc2api".format(host, port)
+async def join_ladder_game(host, port, players, realtime, portconfig, save_replay_as=None, game_time_limit=None):
+    ws_url = f"ws://{host}:{port}/sc2api"
     ws_connection = await aiohttp.ClientSession().ws_connect(ws_url, timeout=120)
     client = Client(ws_connection)
     try:
-        result = await sc2.main._play_game(players[0], client, realtime, portconfig, step_time_limit, game_time_limit)
+        result = await sc2.main._play_game(players[0], client, realtime, portconfig, game_time_limit)
         if save_replay_as is not None:
             await client.save_replay(save_replay_as)
         # await client.leave()
         # await client.quit()
     except ConnectionAlreadyClosed:
-        logger.error(f"Connection was closed before the game ended")
+        logger.error("Connection was closed before the game ended")
         return None
     finally:
         ws_connection.close()

@@ -1,12 +1,13 @@
 import os
 import platform
 import re
-import subprocess
+import sys
+from contextlib import suppress
 from pathlib import Path
 
-import sc2.wsl as wsl
-
 from loguru import logger
+
+from sc2 import wsl
 
 BASEDIR = {
     "Windows": "C:/Program Files (x86)/StarCraft II",
@@ -57,7 +58,7 @@ PF = platform_detect()
 
 def get_home():
     """Get home directory of user, using Windows home directory for WSL."""
-    if PF == "WSL1" or PF == "WSL2":
+    if PF in {"WSL1", "WSL2"}:
         return wsl.get_wsl_home() or Path.home().expanduser()
     return Path.home().expanduser()
 
@@ -71,7 +72,7 @@ def get_user_sc2_install():
                 content = f.read()
             if content:
                 base = re.search(r" = (.*)Versions", content).group(1)
-                if PF == "WSL1" or PF == "WSL2":
+                if PF in {"WSL1", "WSL2"}:
                     base = str(wsl.win_path_to_wsl_path(base))
 
                 if os.path.exists(base):
@@ -90,9 +91,9 @@ def get_runner_args(cwd):
         runner_file = runner_file if runner_file.is_file() else runner_file / "wine"
         """
         TODO Is converting linux path really necessary?
-        That would convert 
+        That would convert
         '/home/burny/Games/battlenet/drive_c/Program Files (x86)/StarCraft II/Support64'
-        to 
+        to
         'Z:\\home\\burny\\Games\\battlenet\\drive_c\\Program Files (x86)\\StarCraft II\\Support64'
         """
         return [runner_file, "start", "/d", cwd, "/unix"]
@@ -103,13 +104,11 @@ def latest_executeble(versions_dir, base_build=None):
     latest = None
 
     if base_build is not None:
-        try:
+        with suppress(ValueError):
             latest = (
                 int(base_build[4:]),
                 max(p for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith(str(base_build))),
             )
-        except ValueError:
-            pass
 
     if base_build is None or latest is None:
         latest = max((int(p.name[4:]), p) for p in versions_dir.iterdir() if p.is_dir() and p.name.startswith("Base"))
@@ -117,18 +116,19 @@ def latest_executeble(versions_dir, base_build=None):
     version, path = latest
 
     if version < 55958:
-        logger.critical(f"Your SC2 binary is too old. Upgrade to 3.16.1 or newer.")
-        exit(1)
+        logger.critical("Your SC2 binary is too old. Upgrade to 3.16.1 or newer.")
+        sys.exit(1)
     return path / BINPATH[PF]
 
 
 class _MetaPaths(type):
     """"Lazily loads paths to allow importing the library even if SC2 isn't installed."""
 
+    # pylint: disable=C0203
     def __setup(self):
         if PF not in BASEDIR:
             logger.critical(f"Unsupported platform '{PF}'")
-            exit(1)
+            sys.exit(1)
 
         try:
             base = os.environ.get("SC2PATH") or get_user_sc2_install() or BASEDIR[PF]
@@ -144,9 +144,11 @@ class _MetaPaths(type):
                 self.MAPS = self.BASE / "Maps"
         except FileNotFoundError as e:
             logger.critical(f"SC2 installation not found: File '{e.filename}' does not exist.")
-            exit(1)
+            sys.exit(1)
 
+    # pylint: disable=C0203
     def __getattr__(self, attr):
+        # pylint: disable=E1120
         self.__setup()
         return getattr(self, attr)
 

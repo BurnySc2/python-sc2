@@ -1,0 +1,322 @@
+# If you change the name, change the link on  the README.md for the badge too
+name: Tests
+
+
+on:
+  push:
+    paths:
+    - sc2/**
+    - examples/**
+    - test/**
+    - docs_generate/**
+    - pyproject.toml
+    - poetry.lock
+    - README.md
+    - .github/workflows/ci.yml
+  pull_request:
+    branches:
+    - master
+    - develop
+
+env:
+  # Docker image version, see https://hub.docker.com/r/burnysc2/python-sc2-docker/tags
+  # This version should always lack behind one version behind the docker-ci.yml because it is possible that it doesn't exist
+  VERSION_NUMBER: '1.0.1'
+  LATEST_PYTHON_VERSION: '3.10'
+  LATEST_SC2_VERSION: '4.10'
+
+jobs:
+  run_pytest_tests:
+    # Run pytest tests on pickle files (pre-generated SC2 API observations)
+    name: Run pytest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        # Python 3.6 fails due to: https://www.python.org/dev/peps/pep-0563/
+        # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
+        # Python 3.7 support has been dropped due to missing cached_property (new since Python 3.8) https://docs.python.org/3/library/functools.html#functools.cached_property
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      id: setup-python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry
+      run: |
+        pip install poetry
+
+    - name: Make poetry use local .venv folder
+      run: poetry config virtualenvs.in-project true
+
+    - name: Set up cache
+      if: matrix.os != 'windows-latest'
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+
+    - name: Install dependencies
+      run: |
+        poetry install
+
+    - name: Run yapf autoformat
+      if: matrix.os != 'windows-latest'
+      run: |
+        poetry run yapf --in-place $(git ls-files '*.py')
+
+    - name: Run pylint on sc2 folder
+      if: matrix.os != 'windows-latest'
+      run: |
+        poetry run pylint $(git ls-files '*.py' | grep -E 'sc2/.*')
+
+    - name: Run pylint on examples folder
+      if: matrix.os != 'windows-latest'
+      run: |
+        poetry run pylint $(git ls-files '*.py' | grep -E 'examples/.*')
+
+    - name: Run pytest
+      run: |
+        poetry run pytest test
+
+      # Run benchmarks
+    - name: Run benchmark benchmark_array_creation
+      run: |
+        poetry run pytest test/benchmark_array_creation.py
+
+    - name: Run benchmark benchmark_distance_two_points
+      run: |
+        poetry run pytest test/benchmark_distance_two_points.py
+
+    - name: Run benchmark benchmark_distances_cdist
+      run: |
+        poetry run pytest test/benchmark_distances_cdist.py
+
+    - name: Run benchmark benchmark_distances_points_to_point
+      run: |
+        poetry run pytest test/benchmark_distances_points_to_point.py
+
+    - name: Run benchmark benchmark_distances_units
+      run: |
+        poetry run pytest test/benchmark_distances_units.py
+
+  run_test_bots:
+    # Run test bots that download the SC2 linux client and run it
+    name: Run testbots linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      # Do not allow this test to cancel. Finish all jobs regardless of error
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.8', '3.9', '3.10']
+        sc2-version: ['4.10']
+    env:
+      IMAGE_NAME: burnysc2/python-sc2:local
+
+    steps:
+    # Copy data from repository
+    - uses: actions/checkout@v2
+
+    - name: Print directories and files
+      run: |
+        sudo apt-get install tree
+        tree
+
+    - name: Load and build docker image
+      # Build docker image from Dockerfile using specific python and sc2 version
+      env:
+        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
+      run: |
+        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
+
+    - name: Run autotest_bot.py
+      # Run bot and list resulting files (replay file, stable_id.json)
+      run: |
+        docker run -i -d --name my_container $IMAGE_NAME
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/autotest_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
+
+    - name: Run upgradestest_bot.py
+      run: |
+        docker run -i -d --name my_container $IMAGE_NAME
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
+
+    - name: Run damagetest_bot.py
+      run: |
+        docker run -i -d --name my_container $IMAGE_NAME
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/damagetest_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
+
+    - name: Run queries_test_bot.py
+      run: |
+        docker run -i -d --name my_container $IMAGE_NAME
+        docker exec -i my_container bash -c "python test/travis_test_script.py test/queries_test_bot.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
+
+  run_example_bots:
+    # Run example bots against computer
+    name: Run example bots against computer
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      # Do not allow this test to cancel. Finish all jobs regardless of error
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    env:
+      IMAGE_NAME: burnysc2/python-sc2-docker:local
+
+    steps:
+    # Copy data from repository
+    - uses: actions/checkout@v2
+
+    - name: Print directories and files
+      run: |
+        sudo apt-get install tree
+        tree
+
+    - name: Load and build docker image
+      # Build docker image from Dockerfile using specific python and sc2 version
+      env:
+        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
+      run: |
+        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+
+    - name: Run example bots vs computer
+      run: |
+        docker run -i -d --name my_container $IMAGE_NAME
+        docker exec -i my_container bash -c "python test/run_example_bots_vs_computer.py"
+        docker exec -i my_container bash -c "tree"
+        docker rm -f my_container
+
+# TODO Fix in main.py "run_multiple_games" or "a_run_multiple_games" or "a_run_multiple_games_nokill"
+#  run_bot_vs_bot:
+#    # Run bot vs bot
+#    name: Run example bots against each other
+#    runs-on: ${{ matrix.os }}
+#    timeout-minutes: 30
+#    strategy:
+#      # Do not allow this test to cancel. Finish all jobs regardless of error
+#      fail-fast: false
+#      matrix:
+#        os: [ubuntu-latest]
+#        python-version: ['3.10']
+#        sc2-version: ['4.10']
+#    steps:
+#    # Copy data from repository
+#    - uses: actions/checkout@v2
+#
+#    - name: Print directories and files
+#      run: |
+#        sudo apt-get install tree
+#        tree
+#
+#    - name: Load and build docker image
+#      # Build docker image from Dockerfile using python 3.8
+#      run: |
+#        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg VERSION_NUMBER=$VERSION_NUMBER .
+#
+#    - name: Run example bots vs each other
+#      run: |
+#        docker run -it -d --name my_container test_image
+#        docker exec -i my_container bash -c "python test/run_example_bots_vs_each_other.py"
+#        docker exec -i my_container bash -c "tree"
+#        docker rm -f my_container
+
+  release_to_github_pages:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: [run_pytest_tests, run_test_bots, run_example_bots]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+    - name: Install Poetry
+      run: |
+        pip install poetry
+
+    - name: Make poetry use local .venv folder
+      run: poetry config virtualenvs.in-project true
+
+    - name: Set up cache
+      if: matrix.os != 'windows-latest'
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+
+    - name: Install dependencies
+      run: |
+        poetry install
+
+    - name: Build docs from scratch
+      run: |
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=./docs/index.html\" />" > index.html
+        mkdir -p docs
+        cd docs_generate
+        poetry run sphinx-build -a -E -b html . ../docs
+
+    - name: Remove files unrelated to docs
+      run: |
+        rm -rf data dockerfiles docs_generate examples sc2 test
+        rm poetry.lock
+
+    - name: Publish to Github Pages
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: develop   # The branch the action should deploy from.
+        BRANCH: gh-pages   # The branch the action should deploy to.
+        FOLDER: .   # The folder the action should deploy.
+
+  release_to_pypi:
+    name: Pypi
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [run_pytest_tests, run_test_bots, run_example_bots]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+    - name: Install Poetry
+      run: |
+        pip install poetry
+
+    - name: Build package
+        # Builds package to dist/* directory
+      run: |
+        poetry build
+
+    - name: Publish
+        # Publish package on pypi
+      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+      continue-on-error: true
+      run: |
+        poetry publish --username ${{ secrets.pypi_username }} --password ${{ secrets.pypi_password }}
+

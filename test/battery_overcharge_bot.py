@@ -1,30 +1,33 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import sc2
-from sc2.position import Point2, Point3
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.data import Result
-from sc2.player import Bot, Computer
-from sc2.unit import Unit
-from sc2.units import Units
-from loguru import logger
-
 """
 This bot tests if battery overcharge crashes the bot.
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+from loguru import logger
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot, Computer
 
 
-class BatteryOverchargeBot(sc2.BotAI):
+class BatteryOverchargeBot(BotAI):
+
     async def on_start(self):
         """ Spawn requires structures. """
         await self.client.debug_create_unit(
             [
                 [UnitTypeId.PYLON, 1, self.start_location.towards(self.game_info.map_center, 5), 1],
-                [UnitTypeId.SHIELDBATTERY, 1, self.start_location.towards(self.game_info.map_center, 5), 1],
-                [UnitTypeId.CYBERNETICSCORE, 1, self.start_location.towards(self.game_info.map_center, 5), 1],
+                [UnitTypeId.SHIELDBATTERY, 1,
+                 self.start_location.towards(self.game_info.map_center, 5), 1],
+                [UnitTypeId.CYBERNETICSCORE, 1,
+                 self.start_location.towards(self.game_info.map_center, 5), 1],
             ]
         )
 
@@ -44,9 +47,10 @@ class BatteryOverchargeBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, BatteryOverchargeBot()), Computer(Race.Terran, Difficulty.Medium)],
+    run_game(
+        maps.get("AcropolisLE"),
+        [Bot(Race.Protoss, BatteryOverchargeBot()),
+         Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         disable_fog=True,
     )

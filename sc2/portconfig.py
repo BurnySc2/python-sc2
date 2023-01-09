@@ -1,4 +1,5 @@
 import json
+
 import portpicker
 
 
@@ -60,8 +61,7 @@ class Portconfig:
                 pc = cls(server_ports=server_ports, player_ports=player_ports)
                 pc._picked_ports.append(start)
                 return pc
-        else:
-            raise portpicker.NoFreePortFoundError()
+        raise portpicker.NoFreePortFoundError()
 
     @classmethod
     def from_json(cls, json_data):

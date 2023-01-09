@@ -1,42 +1,31 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import random
-import math
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.player import Bot, Computer
-from sc2.data import Alliance
-
-from sc2.position import Pointlike, Point2, Point3
-from sc2.units import Units
-from sc2.unit import Unit
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.effect_id import EffectId
-
-from typing import List, Set, Dict, Optional, Union
-
-from loguru import logger
-
-
 """
 This testbot's purpose is to test the query behavior of the API.
 These query functions are:
 self.can_place (RequestQueryBuildingPlacement)
 TODO: self.client.query_pathing (RequestQueryPathing)
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+from typing import List, Union
+
+from loguru import logger
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot
+from sc2.position import Point2
 
 
-class TestBot(sc2.BotAI):
+class TestBot(BotAI):
+
     def __init__(self):
-        sc2.BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
 
@@ -50,9 +39,11 @@ class TestBot(sc2.BotAI):
         await self.clear_map_center()
         await self.test_can_place_expect_true()
         await self.test_can_place_expect_false()
+        await self.test_rally_points_with_rally_ability()
+        await self.test_rally_points_with_smart_ability()
 
         # await self.client.leave()
-        exit(0)
+        sys.exit(0)
 
     async def clear_map_center(self):
         """ Spawn observer in map center, remove all enemy units, remove all own units. """
@@ -204,15 +195,72 @@ class TestBot(sc2.BotAI):
 
         # TODO Check if a moving invisible unit is blocking (patroulling dark templar, patroulling burrowed roach)
 
+    async def test_rally_points_with_rally_ability(self):
+        map_center = self.game_info.map_center
+        barracks_spawn_point = map_center.offset(Point2((10, 10)))
+        await self.client.debug_create_unit(
+            [[UnitTypeId.BARRACKS, 2, barracks_spawn_point, 1], [UnitTypeId.FACTORY, 2, barracks_spawn_point, 1]]
+        )
+        await self._advance_steps(10)
 
-class EmptyBot(sc2.BotAI):
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            structure(AbilityId.RALLY_UNITS, map_center)
+        assert len(self.actions) == 4
+        filtered_actions = list(filter(self.prevent_double_actions, self.actions))
+        assert len(filtered_actions) == 4
+
+        await self._advance_steps(10)
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            if not list(structure._proto.rally_targets):
+                logger.error("Test case incomplete: Rally point command by using rally ability")
+                return
+            rally_target = structure._proto.rally_targets[0]
+            rally_target_point = Point2.from_proto(rally_target.point)
+            distance = rally_target_point.distance_to_point2(map_center)
+            assert distance < 0.1
+
+        logger.info("Test case successful: Rally point command by using rally ability")
+        await self.clear_map_center()
+
+    async def test_rally_points_with_smart_ability(self):
+        map_center = self.game_info.map_center
+        barracks_spawn_point = map_center.offset(Point2((10, 10)))
+        await self.client.debug_create_unit(
+            [[UnitTypeId.BARRACKS, 2, barracks_spawn_point, 1], [UnitTypeId.FACTORY, 2, barracks_spawn_point, 1]]
+        )
+        await self._advance_steps(10)
+
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            structure(AbilityId.SMART, map_center)
+        assert len(self.actions) == 4
+        filtered_actions = list(filter(self.prevent_double_actions, self.actions))
+        assert len(filtered_actions) == 4
+
+        await self._advance_steps(10)
+        for structure in self.structures([UnitTypeId.BARRACKS, UnitTypeId.FACTORY]):
+            if not list(structure._proto.rally_targets):
+                logger.error("Test case incomplete: Rally point command by using smart ability")
+                return
+            rally_target = structure._proto.rally_targets[0]
+            rally_target_point = Point2.from_proto(rally_target.point)
+            distance = rally_target_point.distance_to_point2(map_center)
+            assert distance < 0.1
+
+        logger.info("Test case successful: Rally point command by using smart ability")
+        await self.clear_map_center()
+
+    # TODO: Add more examples that use constants.py "COMBINEABLE_ABILITIES"
+
+
+class EmptyBot(BotAI):
+
     async def on_step(self, iteration: int):
         for unit in self.units:
             unit.hold_position()
 
 
 def main():
-    sc2.run_game(sc2.maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
 
 
 if __name__ == "__main__":

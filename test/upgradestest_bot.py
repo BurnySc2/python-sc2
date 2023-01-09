@@ -1,44 +1,36 @@
-import sys, os
+import os
+import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-import random
-import math
-
-import sc2
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.player import Bot, Computer
-from sc2.data import Alliance
-
-from sc2.position import Pointlike, Point2, Point3
-from sc2.units import Units
-from sc2.unit import Unit
-
-from sc2.ids.unit_typeid import UnitTypeId
-from sc2.ids.ability_id import AbilityId
-from sc2.ids.buff_id import BuffId
-from sc2.ids.upgrade_id import UpgradeId
-from sc2.ids.effect_id import EffectId
-
-from sc2.dicts.unit_trained_from import UNIT_TRAINED_FROM
-
-from typing import List, Set, Dict, Optional, Union
+from typing import Dict, List
 
 from loguru import logger
 
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Race
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.ids.upgrade_id import UpgradeId
+from sc2.main import run_game
+from sc2.player import Bot
+from sc2.position import Point2
+from sc2.unit import Unit
+from sc2.units import Units
 
-class TestBot(sc2.BotAI):
+
+class TestBot(BotAI):
+
     def __init__(self):
-        sc2.BotAI.__init__(self)
+        BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
 
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}")
-            for index in range(4000)
+            getattr(self, f"test_botai_actions{index}") for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_done_by_name = set()
@@ -72,7 +64,7 @@ class TestBot(sc2.BotAI):
 
         # Exit bot
         if iteration > 100:
-            print("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
             exit(0)
 
     async def clean_up_center(self):
@@ -92,10 +84,10 @@ class TestBot(sc2.BotAI):
 
     # Create all upgrade research structures and research each possible upgrade
     async def test_botai_actions1(self):
-        map_center: Point2 = self._game_info.map_center
+        map_center: Point2 = self.game_info.map_center
 
-        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
+        from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
 
         structure_types: List[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
         upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM.keys())
@@ -131,7 +123,7 @@ class TestBot(sc2.BotAI):
                     or self.game_data.upgrades[upgrade_id.value].research_ability is None
                     or self.game_data.upgrades[upgrade_id.value].research_ability.exact_id != research_ability
                 ):
-                    print(
+                    logger.info(
                         f"Could not find upgrade {upgrade_id} or research ability {research_ability} in self.game_data - potential version mismatch (balance upgrade - windows vs linux SC2 client"
                     )
                     continue
@@ -145,19 +137,19 @@ class TestBot(sc2.BotAI):
                     spawn_structures.append(required_building)
 
                 await self.client.debug_create_unit([[structure, 1, map_center, 1] for structure in spawn_structures])
-                print(
+                logger.info(
                     f"Spawning {structure_type} to research upgrade {upgrade_id} via research ability {research_ability}"
                 )
                 await self._advance_steps(2)
 
                 # Wait for the structure to spawn
                 while not self.structures(structure_type):
-                    # print(f"Waiting for structure {structure_type} to spawn, structures close to center so far: {self.structures.closer_than(20, map_center)}")
+                    # logger.info(f"Waiting for structure {structure_type} to spawn, structures close to center so far: {self.structures.closer_than(20, map_center)}")
                     await self._advance_steps(2)
 
                 # If cannot afford to research: cheat money
                 while not self.can_afford(upgrade_id):
-                    # print(f"Cheating money to be able to afford {upgrade_id}, cost: {self.calculate_cost(upgrade_id)}")
+                    # logger.info(f"Cheating money to be able to afford {upgrade_id}, cost: {self.calculate_cost(upgrade_id)}")
                     await self.client.debug_all_resources()
                     await self._advance_steps(2)
 
@@ -169,11 +161,10 @@ class TestBot(sc2.BotAI):
                 while 1:
                     upgrader_structures: Units = self.structures(structure_type)
                     # Upgrade has been researched, break
-                    # Hi atira monkaBirthday
                     if upgrader_structures:
                         upgrader_structure: Unit = upgrader_structures.closest_to(map_center)
                         if upgrader_structure.is_idle:
-                            # print(f"Making {upgrader_structure} research upgrade {upgrade_id}")
+                            # logger.info(f"Making {upgrader_structure} research upgrade {upgrade_id}")
                             upgrader_structure.research(upgrade_id)
                         await self._advance_steps(2)
                         if upgrade_id in self.state.upgrades:
@@ -183,7 +174,8 @@ class TestBot(sc2.BotAI):
         logger.warning("Action test 1 successful.")
 
 
-class EmptyBot(sc2.BotAI):
+class EmptyBot(BotAI):
+
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
@@ -204,7 +196,7 @@ class EmptyBot(sc2.BotAI):
 
 
 def main():
-    sc2.run_game(sc2.maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
+    run_game(maps.get("Empty128"), [Bot(Race.Terran, TestBot()), Bot(Race.Zerg, EmptyBot())], realtime=False)
 
 
 if __name__ == "__main__":

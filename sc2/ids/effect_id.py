@@ -19,7 +19,7 @@ class EffectId(enum.Enum):
     RAVAGERCORROSIVEBILECP = 11
     LURKERMP = 12
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"EffectId.{self.name}"
 
 

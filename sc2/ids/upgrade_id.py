@@ -309,7 +309,7 @@ class UpgradeId(enum.Enum):
     PSIONICAMPLIFIERS = 301
     SECRETEDCOATING = 302
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"UpgradeId.{self.name}"
 
 

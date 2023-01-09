@@ -1,17 +1,19 @@
 from __future__ import annotations
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, TYPE_CHECKING
+
 from itertools import groupby
+from typing import TYPE_CHECKING, Union
 
 from s2clientprotocol import raw_pb2 as raw_pb
 
-from .position import Point2
-from .unit import Unit
+from sc2.position import Point2
+from sc2.unit import Unit
 
 if TYPE_CHECKING:
-    from .unit_command import UnitCommand
-    from .ids.ability_id import AbilityId
+    from sc2.ids.ability_id import AbilityId
+    from sc2.unit_command import UnitCommand
 
 
+# pylint: disable=R0912
 def combine_actions(action_iter):
     """
     Example input:
@@ -33,7 +35,8 @@ def combine_actions(action_iter):
         if combineable:
             # Combine actions with no target, e.g. lift, burrowup, burrowdown, siege, unsiege, uproot spines
             cmd = raw_pb.ActionRawUnitCommand(
-                ability_id=ability.value, unit_tags={u.unit.tag for u in items}, queue_command=queue
+                ability_id=ability.value, unit_tags={u.unit.tag
+                                                     for u in items}, queue_command=queue
             )
             # Combine actions with target point, e.g. attack_move or move commands on a position
             if isinstance(target, Point2):

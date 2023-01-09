@@ -5,8 +5,6 @@
 position.py
 ****************************
 
-TODO: Replace this with info about this file
-
 .. autoclass:: sc2.position.Pointlike
    :members:
 .. autoclass:: sc2.position.Point2

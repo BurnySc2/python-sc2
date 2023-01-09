@@ -1,26 +1,28 @@
-import sys, os
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import sc2
-from sc2.position import Point2, Point3
-from sc2 import Race, Difficulty
-from sc2.constants import *
-from sc2.data import Result
-from sc2.player import Bot, Computer
-from sc2.unit import Unit
-from sc2.units import Units
-
-import asyncio
-
 """
 This bot tests if on 'realtime=True' any nexus has more than 1 probe in the queue.
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import asyncio
+
+from loguru import logger
+
+from sc2 import maps
+from sc2.bot_ai import BotAI
+from sc2.data import Difficulty, Race, Result
+from sc2.ids.ability_id import AbilityId
+from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
+from sc2.player import Bot, Computer
+from sc2.unit import Unit
 
 on_end_was_called: bool = False
 
 
-class RealTimeTestBot(sc2.BotAI):
+class RealTimeTestBot(BotAI):
+
     async def on_before_start(self):
         mf = self.mineral_field
         for w in self.workers:
@@ -50,10 +52,10 @@ class RealTimeTestBot(sc2.BotAI):
         for nexus in self.townhalls:
             nexus_orders_amount = len(nexus.orders)
             assert nexus_orders_amount <= 1, f"{nexus_orders_amount}"
-            # print(f"{self.time_formatted} {self.state.game_loop} {nexus} orders: {nexus_orders_amount}")
+            # logger.info(f"{self.time_formatted} {self.state.game_loop} {nexus} orders: {nexus_orders_amount}")
             if nexus.is_idle and self.can_afford(UnitTypeId.PROBE):
                 nexus.train(UnitTypeId.PROBE)
-                print(
+                logger.info(
                     f"{self.time_formatted} {self.state.game_loop} Training probe {self.supply_used} / {self.supply_cap}"
                 )
             # Chrono
@@ -69,7 +71,7 @@ class RealTimeTestBot(sc2.BotAI):
                 if self.enemy_structures.closer_than(10, expansion_location):
                     continue
                 await self.client.debug_create_unit([[UnitTypeId.NEXUS, 1, expansion_location, 1]])
-                print(
+                logger.info(
                     f"{self.time_formatted} {self.state.game_loop} Spawning a nexus {self.supply_used} / {self.supply_cap}"
                 )
                 made_nexus = True
@@ -84,7 +86,7 @@ class RealTimeTestBot(sc2.BotAI):
             await self.client.debug_kill_unit(self.enemy_units)
 
         if self.supply_used >= 199 or self.time > 7 * 60:
-            print(f"Test successful, bot reached 199 supply without queueing two probes at once")
+            logger.info("Test successful, bot reached 199 supply without queueing two probes at once")
             await self.client.leave()
 
     async def on_building_construction_complete(self, unit: Unit):
@@ -95,13 +97,14 @@ class RealTimeTestBot(sc2.BotAI):
     async def on_end(self, game_result: Result):
         global on_end_was_called
         on_end_was_called = True
-        print(f"on_end() was called with result: {game_result}")
+        logger.info(f"on_end() was called with result: {game_result}")
 
 
 def main():
-    sc2.run_game(
-        sc2.maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, RealTimeTestBot()), Computer(Race.Terran, Difficulty.Medium)],
+    run_game(
+        maps.get("AcropolisLE"),
+        [Bot(Race.Protoss, RealTimeTestBot()),
+         Computer(Race.Terran, Difficulty.Medium)],
         realtime=True,
         disable_fog=True,
     )
