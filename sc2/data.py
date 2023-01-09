@@ -43,6 +43,7 @@ race_worker: Dict[Race, UnitTypeId] = {
     Race.Protoss: UnitTypeId.PROBE,
     Race.Terran: UnitTypeId.SCV,
     Race.Zerg: UnitTypeId.DRONE,
+    Race.Random: UnitTypeId.DRONE,       
 }
 
 race_townhalls: Dict[Race, Set[UnitTypeId]] = {
