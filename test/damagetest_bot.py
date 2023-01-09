@@ -238,7 +238,6 @@ class TestBot(BotAI):
         for upgrade_level in upgrade_levels:
             if upgrade_level != 0:
                 await self.client.debug_upgrade()
-                # await self._advance_steps(5)
             for attacker_type in attacker_units:
                 for defender_type in defender_units:
                     # DT, Thor, Tempest one-shots workers, so skip test

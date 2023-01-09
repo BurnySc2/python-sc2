@@ -87,12 +87,10 @@ class TestBot(BotAI):
                 await self.client.debug_create_unit([[i, 1, self.game_info.map_center, 2]])
 
     async def run_can_place(self) -> bool:
-        # await self._advance_steps(200)
         result = await self.can_place(AbilityId.TERRANBUILD_COMMANDCENTER, [self.game_info.map_center])
         return result[0]
 
     async def run_can_place_single(self) -> bool:
-        # await self._advance_steps(200)
         result = await self.can_place_single(AbilityId.TERRANBUILD_COMMANDCENTER, self.game_info.map_center)
         return result
 

@@ -477,7 +477,7 @@ class BotAIInternal(ABC):
         # Set attributes from new state before on_step."""
         self.state: GameState = state  # See game_state.py
         # update pathing grid, which unfortunately is in GameInfo instead of GameState
-        self.game_info._pathing_grid = PixelMap(proto_game_info.game_info.start_raw.pathing_grid, in_bits=True)
+        self.game_info.pathing_grid = PixelMap(proto_game_info.game_info.start_raw.pathing_grid, in_bits=True)
         # Required for events, needs to be before self.units are initialized so the old units are stored
         self._units_previous_map: Dict[int, Unit] = {unit.tag: unit for unit in self.units}
         self._structures_previous_map: Dict[int, Unit] = {structure.tag: structure for structure in self.structures}
