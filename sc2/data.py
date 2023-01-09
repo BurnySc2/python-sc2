@@ -85,4 +85,5 @@ race_gas: Dict[Race, UnitTypeId] = {
     Race.Protoss: UnitTypeId.ASSIMILATOR,
     Race.Terran: UnitTypeId.REFINERY,
     Race.Zerg: UnitTypeId.EXTRACTOR,
+    Race.Random: UnitTypeId.EXTRACTOR,
 }
