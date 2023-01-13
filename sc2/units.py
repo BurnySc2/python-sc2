@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import random
-from functools import cached_property
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Callable, Generator, Iterable, List, Optional, Set, Tuple, Union
 
@@ -633,15 +632,14 @@ class Units(list):
             unit_alias_types
         )
 
-    @cached_property
+    @property
     def center(self) -> Point2:
         """ Returns the central position of all units. """
         assert self, "Units object is empty"
-        amount = self.amount
         return Point2(
             (
-                sum(unit._proto.pos.x for unit in self) / amount,
-                sum(unit._proto.pos.y for unit in self) / amount,
+                sum(unit._proto.pos.x for unit in self) / self.amount,
+                sum(unit._proto.pos.y for unit in self) / self.amount,
             )
         )
 

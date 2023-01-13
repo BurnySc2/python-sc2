@@ -57,7 +57,7 @@ def test_class():
         assert test.get(key, with_age=True)[1] in {0, 1}
 
     c = 0
-    for key in test.keys():
+    for _key in test.keys():
         c += 1
     assert c == 4
 
@@ -81,13 +81,13 @@ def test_class():
 
     assert len(test) == 0
 
-    for key in test.keys():
+    for _key in test.keys():
         assert False
 
-    for value in test.values():
+    for _value in test.values():
         assert False
 
-    for key, value in test.items():
+    for _key, _value in test.items():
         assert False
 
     assert "new_key" not in test
