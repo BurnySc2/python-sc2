@@ -254,8 +254,8 @@ SPEED_INCREASE_DICT: Dict[UnitTypeId, float] = {
     UnitTypeId.ROACH: 1.3333333333,
     UnitTypeId.LURKERMP: 1.1,
 }
-temp1 = set(SPEED_UPGRADE_DICT.keys())
-temp2 = set(SPEED_INCREASE_DICT.keys())
+temp1 = set(SPEED_UPGRADE_DICT)
+temp2 = set(SPEED_INCREASE_DICT)
 assert temp1 == temp2, f"{temp1.symmetric_difference(temp2)}"
 del temp1
 del temp2
@@ -283,8 +283,8 @@ OFF_CREEP_SPEED_INCREASE_DICT: Dict[UnitTypeId, float] = {
     UnitTypeId.HYDRALISK: 1.25,
     UnitTypeId.ULTRALISK: 1.2,
 }
-temp1 = set(OFF_CREEP_SPEED_UPGRADE_DICT.keys())
-temp2 = set(OFF_CREEP_SPEED_INCREASE_DICT.keys())
+temp1 = set(OFF_CREEP_SPEED_UPGRADE_DICT)
+temp2 = set(OFF_CREEP_SPEED_INCREASE_DICT)
 assert temp1 == temp2, f"{temp1.symmetric_difference(temp2)}"
 del temp1
 del temp2

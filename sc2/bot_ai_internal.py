@@ -729,18 +729,16 @@ class BotAIInternal(ABC):
                 await self.on_enemy_unit_entered_vision(enemy_structure)
 
         # Call events for enemy unit left vision
-        enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map.keys()) - self.enemy_units.tags
+        enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map) - self.enemy_units.tags
         for enemy_unit_tag in enemy_units_left_vision:
             await self.on_enemy_unit_left_vision(enemy_unit_tag)
-        enemy_structures_left_vision: Set[int] = (
-            set(self._enemy_structures_previous_map.keys()) - self.enemy_structures.tags
-        )
+        enemy_structures_left_vision: Set[int] = (set(self._enemy_structures_previous_map) - self.enemy_structures.tags)
         for enemy_structure_tag in enemy_structures_left_vision:
             await self.on_enemy_unit_left_vision(enemy_structure_tag)
 
     @final
     async def _issue_unit_dead_events(self):
-        for unit_tag in self.state.dead_units & set(self._all_units_previous_map.keys()):
+        for unit_tag in self.state.dead_units & set(self._all_units_previous_map):
             await self.on_unit_destroyed(unit_tag)
 
     # DISTANCE CALCULATION
