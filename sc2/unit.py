@@ -576,6 +576,34 @@ class Unit:
             (self.radius + target.radius + unit_attack_range + bonus_distance)**2
         )
 
+    @cached_property
+    def abilities(self) -> Set[AbilityId]:
+        """Returns a set of all abilities the unit can execute.
+
+        If the tech requirement is not met or the ability is on cooldown, the ability is not contained in this set.
+        Resource requirement is ignored and needs to be manually checked.
+
+        Examples::
+
+            for stalker in self.units(UnitTypeId.STALKER):
+                # False if blink is on cooldown or not researched
+                if AbilityId.EFFECT_BLINK_STALKER in stalker.abilities:
+                    stalker(EFFECT_BLINK_STALKER, target_position)
+
+            for roach in self.units(UnitTypeId.ROACH):
+                if self.can_afford(UnitTypeId.RAVAGER):
+                    # Automatically subtract 25 from self.minerals and 75 from self.vespene in this loop
+                    roach.train(UnitTypeId.RAVAGER)
+        """
+        if not self.is_mine:
+            warnings.warn(
+                f"Abilities are known only for your own units, but tried to get abilities for {self}.",
+                RuntimeWarning,
+                stacklevel=1,
+            )
+            return set()
+        return self._bot_object._unit_abilities[self.tag]
+
     def in_ability_cast_range(
         self, ability_id: AbilityId, target: Union[Unit, Point2], bonus_distance: float = 0
     ) -> bool:
@@ -1249,8 +1277,22 @@ class Unit:
         queue: bool = False,
         can_afford_check: bool = False,
     ) -> Union[UnitCommand, bool]:
-        """Orders unit to train another 'unit'.
-        Usage: COMMANDCENTER.train(SCV)
+        """Orders unit to train another 'unit'. Can also be used for unit and structure morphs.
+        Examples::
+
+            for cc in self.townhalls:
+                cc.train(SCV)
+
+            for cc in self.townhalls(UnitTypeId.COMMANDCENTER):
+                # Check if we can afford it - does not check the tech requirement (in this case 'barracks')
+                if cc.is_idle and self.can_afford(UnitTypeId.ORBITALCOMMAND):
+                    # Automatically subtract 150 from self.minerals in this loop
+                    cc.train(UnitTypeId.ORBITALCOMMAND)
+
+            for roach in self.units(UnitTypeId.ROACH):
+                if self.can_afford(UnitTypeId.RAVAGER):
+                    # Automatically subtract 25 from self.minerals and 75 from self.vespene in this loop
+                    roach.train(UnitTypeId.RAVAGER)
 
         :param unit:
         :param queue:
@@ -1270,12 +1312,16 @@ class Unit:
         queue: bool = False,
         can_afford_check: bool = False,
     ) -> Union[UnitCommand, bool]:
-        """Orders unit to build another 'unit' at 'position'.
-        Usage::
+        """Orders unit to build another 'unit' at 'position'. Can also be used for unit and structure morphs.
+        Examples::
 
-            SCV.build(COMMANDCENTER, position)
-            # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position
-            SCV.build(REFINERY, target_vespene_geysir)
+            SCV.build(UnitTypeId.COMMANDCENTER, position)
+
+            for cc in self.townhalls(UnitTypeId.COMMANDCENTER):
+                # Check if we can afford it - does not check the tech requirement (in this case 'barracks')
+                if cc.is_idle and self.can_afford(UnitTypeId.ORBITALCOMMAND):
+                    # Automatically subtract 150 from self.minerals in this loop
+                    cc.build(UnitTypeId.ORBITALCOMMAND)
 
         :param unit:
         :param position:

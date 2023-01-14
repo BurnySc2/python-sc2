@@ -16,7 +16,9 @@ import sys
 from contextlib import suppress
 from pathlib import Path
 from typing import Any, List, Tuple
+from unittest.mock import patch
 
+import pytest
 from google.protobuf.internal import api_implementation
 from hypothesis import given, settings
 from hypothesis import strategies as st
@@ -48,7 +50,7 @@ def load_map_pickle_data(map_path: Path) -> Tuple[Any, Any, Any]:
         return raw_game_data, raw_game_info, raw_observation
 
 
-def build_bot_object_from_pickle_data(raw_game_data, raw_game_info, raw_observation) -> BotAI:
+async def build_bot_object_from_pickle_data(raw_game_data, raw_game_info, raw_observation) -> BotAI:
     # Build fresh bot object, and load the pickled data into the bot object
     bot = BotAI()
     game_data = GameData(raw_game_data.data)
@@ -57,14 +59,15 @@ def build_bot_object_from_pickle_data(raw_game_data, raw_game_info, raw_observat
     bot._initialize_variables()
     client = Client(True)
     bot._prepare_start(client=client, player_id=1, game_info=game_info, game_data=game_data)
-    bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
+    with patch.object(Client, "query_available_abilities_with_tag", return_value={}):
+        await bot._prepare_step(state=game_state, proto_game_info=raw_game_info)
     return bot
 
 
-def get_map_specific_bot(map_path: Path) -> BotAI:
+async def get_map_specific_bot(map_path: Path) -> BotAI:
     assert map_path in MAPS
     data = load_map_pickle_data(map_path)
-    return build_bot_object_from_pickle_data(*data)
+    return await build_bot_object_from_pickle_data(*data)
 
 
 def test_protobuf_implementation():
@@ -74,8 +77,9 @@ def test_protobuf_implementation():
         assert api_implementation.Type() == "cpp"
 
 
-def test_bot_ai():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_bot_ai():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     # Test initial bot attributes at game start
 
     # Properties from _prepare_start
@@ -407,8 +411,9 @@ def test_bot_ai():
     assert bot.calculate_supply_cost(UnitTypeId.LURKERMP) == 1
 
 
-def test_game_info():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_game_info():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     # Test if main base ramp works
     bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
     game_info: GameInfo = bot.game_info
@@ -431,8 +436,9 @@ def test_game_info():
     assert game_info.player_start_location
 
 
-def test_game_data():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_game_data():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     game_data = bot.game_data
 
     assert game_data.abilities
@@ -472,8 +478,9 @@ def test_game_data():
         assert isinstance(upgrade_data.cost, Cost)
 
 
-def test_game_state():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_game_state():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     state = bot.state
 
     assert not state.actions
@@ -495,8 +502,9 @@ def test_game_state():
     assert not state.effects
 
 
-def test_pixelmap():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_pixelmap():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     pathing_grid: PixelMap = bot.game_info.pathing_grid
     assert pathing_grid.bits_per_pixel
     assert pathing_grid.bytes_per_pixel == pathing_grid.bits_per_pixel // 8
@@ -510,20 +518,23 @@ def test_pixelmap():
     pathing_grid.print()
 
 
-def test_blip():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_blip():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     # TODO this needs to be done in a test bot that has a sensor tower
     # blips are enemy dots on the minimap that are out of vision
 
 
-def test_score():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_score():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     assert bot.state.score
     assert bot.state.score.summary
 
 
-def test_unit():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_unit():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     scv: Unit = bot.workers.random
     townhall: Unit = bot.townhalls.first
 
@@ -793,8 +804,9 @@ def test_unit():
     # assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False)[0] == 15
 
 
-def test_units():
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+@pytest.mark.asyncio
+async def test_units():
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
     scvs = bot.workers
     townhalls = bot.townhalls
 
@@ -920,7 +932,8 @@ def test_units():
     assert scvs.by_tag(scvs[0].tag)
 
 
-def test_dicts():
+@pytest.mark.asyncio
+async def test_dicts():
     # May be missing but that should not fail the tests
     try:
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
@@ -928,7 +941,7 @@ def test_dicts():
         logger.info(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
         return
 
-    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+    bot: BotAI = await get_map_specific_bot(random.choice(MAPS))
 
     unit_id: UnitTypeId
     data: dict
