@@ -842,12 +842,18 @@ class BotAI(BotAIInternal):
             amount_of_CCs_in_queue_and_production: int = self.already_pending(UnitTypeId.COMMANDCENTER)
             amount_of_lairs_morphing: int = self.already_pending(UnitTypeId.LAIR)
 
-
         :param unit_type:
         """
         if isinstance(unit_type, UpgradeId):
             return self.already_pending_upgrade(unit_type)
-        ability = self.game_data.units[unit_type.value].creation_ability.exact_id
+        try:
+            ability = self.game_data.units[unit_type.value].creation_ability.exact_id
+        except AttributeError:
+            # Hotfix for checking pending archons
+            if unit_type == UnitTypeId.ARCHON:
+                return self._abilities_all_units[0][AbilityId.ARCHON_WARP_TARGET] / 2
+            logger.error(f"Uncaught UnitTypeId: {unit_type}")
+            return 0
         return self._abilities_all_units[0][ability]
 
     def worker_en_route_to_build(self, unit_type: UnitTypeId) -> float:

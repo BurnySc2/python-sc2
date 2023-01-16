@@ -273,8 +273,13 @@ class BotAIInternal(ABC):
                 if self.race != Race.Terran or not unit.is_structure:
                     # If an SCV is constructing a building, already_pending would count this structure twice
                     # (once from the SCV order, and once from "not structure.is_ready")
-                    creation_ability: AbilityId = self.game_data.units[unit.type_id.value].creation_ability.exact_id
-                    abilities_amount[creation_ability] += 1
+                    if unit.type_id == UnitTypeId.ARCHON:
+                        # Hotfix for archons in morph state
+                        creation_ability = AbilityId.ARCHON_WARP_TARGET
+                        abilities_amount[creation_ability] += 2
+                    else:
+                        creation_ability: AbilityId = self.game_data.units[unit.type_id.value].creation_ability.exact_id
+                        abilities_amount[creation_ability] += 1
                     max_build_progress[creation_ability] = max(
                         max_build_progress.get(creation_ability, 0), unit.build_progress
                     )

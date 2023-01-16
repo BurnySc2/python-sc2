@@ -39,8 +39,6 @@ class TestBot(BotAI):
         # There will be 20 iterations of the bot doing nothing between tests
         self.iteration_wait_time_between_actions = 20
 
-        self.scv_action_list = ["move", "patrol", "attack", "hold", "scan_move"]
-
         # Variables for test_botai_actions11
 
     async def on_start(self):
@@ -154,7 +152,6 @@ class TestBot(BotAI):
 
         await self._advance_steps(2)
         logger.warning("Action test 01 successful.")
-        return
 
     # Test BotAI action: move all SCVs to center of map
     async def test_botai_actions2(self):
@@ -166,12 +163,13 @@ class TestBot(BotAI):
                 or unit.is_attacking
             )
 
-        while self.units.filter(lambda unit: temp_filter(unit)).amount < len(self.scv_action_list):
+        scv_action_list = ["move", "patrol", "attack", "hold", "scan_move"]
+        while self.units.filter(lambda unit: temp_filter(unit)).amount < len(scv_action_list):
             scv: Unit
             for index, scv in enumerate(self.workers):
-                if index > len(self.scv_action_list):
+                if index > len(scv_action_list):
                     scv.stop()
-                action = self.scv_action_list[index % len(self.scv_action_list)]
+                action = scv_action_list[index % len(scv_action_list)]
                 if action == "move":
                     scv.move(center)
                 elif action == "patrol":
@@ -185,7 +183,6 @@ class TestBot(BotAI):
 
         await self._advance_steps(2)
         logger.warning("Action test 02 successful.")
-        return
 
     # Test BotAI action: move some scvs to the center, some to minerals
     async def test_botai_actions3(self):
@@ -204,7 +201,6 @@ class TestBot(BotAI):
             await self._advance_steps(2)
         await self._advance_steps(2)
         logger.warning("Action test 03 successful.")
-        return
 
     # Test BotAI action: move all SCVs to mine minerals near townhall
     async def test_botai_actions4(self):
@@ -216,7 +212,6 @@ class TestBot(BotAI):
             await self._advance_steps(2)
         await self._advance_steps(2)
         logger.warning("Action test 04 successful.")
-        return
 
     # Test BotAI action: self.expand_now() which tests for get_next_expansion, select_build_worker, can_place, find_placement, build and can_afford
     async def test_botai_actions5(self):
@@ -241,7 +236,6 @@ class TestBot(BotAI):
 
         await self._advance_steps(2)
         logger.warning("Action test 05 successful.")
-        return
 
     # Test if reaper grenade shows up in effects
     async def test_botai_actions6(self):
@@ -268,7 +262,6 @@ class TestBot(BotAI):
         # Wait for effectts to time out
         await self._advance_steps(100)
         logger.warning("Action test 06 successful.")
-        return
 
     # Test ravager effects
     async def test_botai_actions7(self):
@@ -293,7 +286,6 @@ class TestBot(BotAI):
         # Wait for effectts to time out
         await self._advance_steps(100)
         logger.warning("Action test 07 successful.")
-        return
 
     # Test if train function works on hatchery, lair, hive
     async def test_botai_actions8(self):
@@ -326,39 +318,47 @@ class TestBot(BotAI):
         await self.client.debug_kill_unit(townhalls | queens | pool)
         await self._advance_steps(2)
         logger.warning("Action test 08 successful.")
-        return
 
     # Morph an archon from 2 high templars
     async def test_botai_actions9(self):
         center = self.game_info.map_center
-        target_amount = 2
-        HTs = self.units(UnitTypeId.HIGHTEMPLAR)
-        archons = self.units(UnitTypeId.ARCHON)
+        await self.client.debug_create_unit(
+            [
+                [UnitTypeId.HIGHTEMPLAR, 1, center, 1],
+                [UnitTypeId.DARKTEMPLAR, 1, center + Point2((5, 0)), 1],
+            ]
+        )
+        await self._advance_steps(4)
+        assert self.already_pending(UnitTypeId.ARCHON) == 0
 
         while 1:
-            HTs = self.units(UnitTypeId.HIGHTEMPLAR)
-            if HTs.amount < target_amount:
-                await self.client.debug_create_unit([[UnitTypeId.HIGHTEMPLAR, target_amount - HTs.amount, center, 1]])
+            for templar in self.units.of_type({UnitTypeId.HIGHTEMPLAR, UnitTypeId.DARKTEMPLAR}):
+                templar(AbilityId.MORPH_ARCHON)
 
-            else:
-                for ht in HTs:
-                    ht(AbilityId.MORPH_ARCHON)
+            await self._advance_steps(4)
 
-            await self._advance_steps(2)
-            # Check if condition is met
-            HTs = self.units(UnitTypeId.HIGHTEMPLAR)
+            templars = self.units.of_type({UnitTypeId.HIGHTEMPLAR, UnitTypeId.DARKTEMPLAR})
             archons = self.units(UnitTypeId.ARCHON)
-            if archons.amount == 1:
+            if templars.amount > 0:
+                # High templars are on their way to morph ot morph has started
+                assert self.already_pending(UnitTypeId.ARCHON) == 1
+            else:
+                # Morph started
+                assert self.already_pending(UnitTypeId.ARCHON) == archons.not_ready.amount
+
+            # Check if condition is met
+            if archons.ready.amount == 1:
+                assert templars.amount == 0
+                assert self.already_pending(UnitTypeId.ARCHON) == 0
                 break
 
         # Cleanup
         if archons:
             await self.client.debug_kill_unit(archons)
-        if HTs:
-            await self.client.debug_kill_unit(HTs)
+        if templars:
+            await self.client.debug_kill_unit(templars)
         await self._advance_steps(2)
         logger.warning("Action test 09 successful.")
-        return
 
     # Morph 400 banelings from 400 lings in the same frame
     async def test_botai_actions10(self):
@@ -401,7 +401,6 @@ class TestBot(BotAI):
         await self.client.debug_kill_unit(lings | banes | bane_nests | bane_cocoons)
         await self._advance_steps(2)
         logger.warning("Action test 10 successful.")
-        return
 
     # Trigger anti armor missile of raven against enemy unit and check if buff was received
     async def test_botai_actions11(self):
