@@ -231,8 +231,9 @@ class GameInfo:
             p.player_id: p.race_actual or p.race_requested
             for p in self._proto.player_info
         }
-        self.start_locations: List[Point2] = [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
-        self.start_locations = [Point2((round(x, 1), round(y, 1)))  for x, y in self.start_locations]            
+        self.start_locations: List[Point2] = [
+            Point2.from_proto(sl).round(decimals=1) for sl in self._proto.start_raw.start_locations
+        ]
         self.player_start_location: Point2 = None  # Filled later by BotAI._prepare_first_step
 
     def _find_ramps_and_vision_blockers(self) -> Tuple[List[Ramp], FrozenSet[Point2]]:
