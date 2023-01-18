@@ -190,10 +190,14 @@ class Point2(Pointlike):
     def to3(self) -> Point3:
         return Point3((*self, 0))
 
-    def offset(self, p: Point2):
+    def round(self, decimals: int) -> Point2:
+        """Rounds each number in the tuple to the amount of given decimals."""
+        return Point2((round(self[0], decimals), round(self[1], decimals)))
+
+    def offset(self, p: Point2) -> Point2:
         return Point2((self[0] + p[0], self[1] + p[1]))
 
-    def random_on_distance(self, distance):
+    def random_on_distance(self, distance) -> Point2:
         if isinstance(distance, (tuple, list)):  # interval
             distance = distance[0] + random.random() * (distance[1] - distance[0])
 
