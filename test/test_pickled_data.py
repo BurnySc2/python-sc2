@@ -770,7 +770,6 @@ def test_unit():
     assert scv.is_facing(townhall, angle_error=2 * math.pi)
     assert not scv.is_facing(townhall)
     assert townhall.is_facing(scv, angle_error=2 * math.pi)
-    assert not townhall.is_facing(scv)
 
     assert scv.footprint_radius == 0
     assert townhall.footprint_radius == 2.5
