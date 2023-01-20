@@ -34,10 +34,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
@@ -73,10 +73,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
@@ -139,11 +139,11 @@ jobs:
         python-version: ['3.8', '3.9', '3.10', '3.11']
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python ${{ matrix.python-version }}
       id: setup-python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -206,7 +206,7 @@ jobs:
 
     steps:
     # Copy data from repository
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Print directories and files
       run: sudo apt-get install tree && tree
@@ -257,7 +257,7 @@ jobs:
 
     steps:
     # Copy data from repository
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Print directories and files
       run: sudo apt-get install tree && tree
@@ -290,7 +290,7 @@ jobs:
 #        sc2-version: ['4.10']
 #    steps:
 #    # Copy data from repository
-#    - uses: actions/checkout@v2
+#    - uses: actions/checkout@v3
 #
 #    - name: Print directories and files
 #      run: |
@@ -320,7 +320,7 @@ jobs:
       IMAGE_NAME: burnysc2/python-sc2-docker:local
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Load and build docker image
       # Build docker image from Dockerfile using specific python and sc2 version
@@ -387,10 +387,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
@@ -419,10 +419,10 @@ jobs:
     timeout-minutes: 5
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
@@ -470,10 +470,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
