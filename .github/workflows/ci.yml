@@ -215,7 +215,7 @@ jobs:
       # Build docker image from Dockerfile using specific python and sc2 version
       env:
         BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
-      run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
+      run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
 
     - name: Run autotest_bot.py
       # Run bot and list resulting files (replay file, stable_id.json)
@@ -279,15 +279,11 @@ jobs:
 #  run_bot_vs_bot:
 #    # Run bot vs bot
 #    name: Run example bots against each other
-#    runs-on: ${{ matrix.os }}
-#    timeout-minutes: 30
-#    strategy:
-#      # Do not allow this test to cancel. Finish all jobs regardless of error
-#      fail-fast: false
-#      matrix:
-#        os: [ubuntu-latest]
-#        python-version: ['3.10']
-#        sc2-version: ['4.10']
+#    needs: [run_pytest_tests]
+#    timeout-minutes: 60
+#    env:
+#      IMAGE_NAME: burnysc2/python-sc2-docker:local
+#
 #    steps:
 #    # Copy data from repository
 #    - uses: actions/checkout@v3
@@ -298,13 +294,15 @@ jobs:
 #        tree
 #
 #    - name: Load and build docker image
-#      # Build docker image from Dockerfile using python 3.8
+#      # Build docker image from Dockerfile using specific python and sc2 version
+#      env:
+#        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
 #      run: |
-#        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg VERSION_NUMBER=$VERSION_NUMBER .
+#        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
 #
 #    - name: Run example bots vs each other
 #      run: |
-#        docker run -it -d --name my_container test_image
+#        docker run -i -d --name my_container $IMAGE_NAME
 #        docker exec -i my_container bash -c "python test/run_example_bots_vs_each_other.py"
 #        docker exec -i my_container bash -c "tree"
 #        docker rm -f my_container

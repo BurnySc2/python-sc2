@@ -6,7 +6,7 @@ ARG PYTHON_VERSION=3.8
 ARG SC2_VERSION=4.10
 ARG VERSION_NUMBER=1.0.0
 
-FROM burnysc2/python-sc2-docker:py_$PYTHON_VERSION-sc2_$SC2_VERSION-v$VERSION_NUMBER
+FROM burnysc2/python-sc2-docker:py_$PYTHON_VERSION-sc2_$SC2_VERSION-v$VERSION_NUMBER-squashed
 
 # Debugging purposes
 RUN echo $PYTHON_VERSION
