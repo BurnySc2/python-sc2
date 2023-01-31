@@ -51,25 +51,11 @@ repos:
 - repo: local
   hooks:
   # Autoformat code
-  - id: yapf-modified
-    name: format modified python files
-    stages: [commit]
-    language: system
-    entry: /bin/bash -c "poetry run yapf --in-place $(git ls-files -m '*.py')"
-    pass_filenames: false
-
   - id: yapf
     name: format all python files
     stages: [push]
     language: system
     entry: /bin/bash -c "poetry run yapf --in-place $(git ls-files '*.py')"
-    pass_filenames: false
-
-  - id: pylint-modified
-    name: pylint modified python files
-    stages: [commit]
-    language: system
-    entry: /bin/bash -c "poetry run pylint $(git ls-files -m '*.py' | grep -E '(sc2)|(examples)/.*')"
     pass_filenames: false
 
   - id: pylint
