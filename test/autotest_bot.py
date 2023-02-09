@@ -74,7 +74,7 @@ class TestBot(BotAI):
     async def clean_up_center(self):
         map_center = self.game_info.map_center
         # Remove everything close to map center
-        my_units = self.units | self.structures
+        my_units = self.all_own_units
         if my_units:
             my_units = my_units.closer_than(20, map_center)
         if my_units:
@@ -143,8 +143,8 @@ class TestBot(BotAI):
         assert len(self.game_info.player_races) == 2, self.game_info.player_races
         self.tests_done_by_name.add("test_game_info_static_variables")
 
-    # Test BotAI action: train SCV
     async def test_botai_actions1(self):
+        # Test BotAI action: train SCV
         while self.already_pending(UnitTypeId.SCV) < 1:
             if self.can_afford(UnitTypeId.SCV):
                 self.townhalls.random.train(UnitTypeId.SCV)
@@ -184,8 +184,8 @@ class TestBot(BotAI):
         await self._advance_steps(2)
         logger.warning("Action test 02 successful.")
 
-    # Test BotAI action: move some scvs to the center, some to minerals
     async def test_botai_actions3(self):
+        # Test BotAI action: move some scvs to the center, some to minerals
         center = self.game_info.map_center
 
         while self.units.filter(lambda x: x.is_moving).amount < 6 and self.units.gathering.amount >= 6:
@@ -202,8 +202,8 @@ class TestBot(BotAI):
         await self._advance_steps(2)
         logger.warning("Action test 03 successful.")
 
-    # Test BotAI action: move all SCVs to mine minerals near townhall
     async def test_botai_actions4(self):
+        # Test BotAI action: move all SCVs to mine minerals near townhall
         while self.units.gathering.amount < 12:
             mf = self.mineral_field.closest_to(self.townhalls.random)
             for scv in self.workers:
@@ -213,8 +213,8 @@ class TestBot(BotAI):
         await self._advance_steps(2)
         logger.warning("Action test 04 successful.")
 
-    # Test BotAI action: self.expand_now() which tests for get_next_expansion, select_build_worker, can_place, find_placement, build and can_afford
     async def test_botai_actions5(self):
+        # Test BotAI action: self.expand_now() which tests for get_next_expansion, select_build_worker, can_place, find_placement, build and can_afford
         # Wait till worker has started construction of CC
         while 1:
             if self.can_afford(UnitTypeId.COMMANDCENTER):
@@ -237,8 +237,8 @@ class TestBot(BotAI):
         await self._advance_steps(2)
         logger.warning("Action test 05 successful.")
 
-    # Test if reaper grenade shows up in effects
     async def test_botai_actions6(self):
+        # Test if reaper grenade shows up in effects
         center = self.game_info.map_center
 
         while 1:
@@ -263,8 +263,8 @@ class TestBot(BotAI):
         await self._advance_steps(100)
         logger.warning("Action test 06 successful.")
 
-    # Test ravager effects
     async def test_botai_actions7(self):
+        # Test ravager effects
         center = self.game_info.map_center
         while 1:
             if self.units(UnitTypeId.RAVAGER).amount < 10:
@@ -287,8 +287,8 @@ class TestBot(BotAI):
         await self._advance_steps(100)
         logger.warning("Action test 07 successful.")
 
-    # Test if train function works on hatchery, lair, hive
     async def test_botai_actions8(self):
+        # Test if train function works on hatchery, lair, hive
         center = self.game_info.map_center
         if not self.structures(UnitTypeId.HIVE):
             await self.client.debug_create_unit([[UnitTypeId.HIVE, 1, center, 1]])
@@ -319,8 +319,8 @@ class TestBot(BotAI):
         await self._advance_steps(2)
         logger.warning("Action test 08 successful.")
 
-    # Morph an archon from 2 high templars
     async def test_botai_actions9(self):
+        # Morph an archon from 2 high templars
         center = self.game_info.map_center
         await self.client.debug_create_unit(
             [
@@ -360,8 +360,8 @@ class TestBot(BotAI):
         await self._advance_steps(2)
         logger.warning("Action test 09 successful.")
 
-    # Morph 400 banelings from 400 lings in the same frame
     async def test_botai_actions10(self):
+        # Morph 400 banelings from 400 lings in the same frame
         center = self.game_info.map_center
 
         target_amount = 400
@@ -381,8 +381,9 @@ class TestBot(BotAI):
             # Spawn units
             if not bane_nests:
                 await self.client.debug_create_unit([[UnitTypeId.BANELINGNEST, 1, center, 1]])
-            if banes.amount + bane_cocoons.amount + lings.amount < target_amount:
-                await self.client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - lings.amount, center, 1]])
+            current_amount = banes.amount + bane_cocoons.amount + lings.amount
+            if current_amount < target_amount:
+                await self.client.debug_create_unit([[UnitTypeId.ZERGLING, target_amount - current_amount, center, 1]])
 
             if lings.amount >= target_amount and self.minerals >= 10_000 and self.vespene >= 10_000:
                 for ling in lings:
@@ -402,8 +403,8 @@ class TestBot(BotAI):
         await self._advance_steps(2)
         logger.warning("Action test 10 successful.")
 
-    # Trigger anti armor missile of raven against enemy unit and check if buff was received
     async def test_botai_actions11(self):
+        # Trigger anti armor missile of raven against enemy unit and check if buff was received
         await self.clean_up_center()
         await self.clean_up_center()
 
@@ -435,10 +436,8 @@ class TestBot(BotAI):
         logger.warning("Action test 11 successful.")
         await self.clean_up_center()
 
-    # Test if structures_without_construction_SCVs works after killing the scv
     async def test_botai_actions12(self):
-        map_center: Point2 = self.game_info.map_center
-
+        # Test if structures_without_construction_SCVs works after killing the scv
         # Wait till can afford depot
         while not self.can_afford(UnitTypeId.SUPPLYDEPOT):
             await self.client.debug_all_resources()
