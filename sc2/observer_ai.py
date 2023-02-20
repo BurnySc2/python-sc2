@@ -36,17 +36,14 @@ class ObserverAI(BotAIInternal):
         t = self.time
         return f"{int(t // 60):02}:{int(t % 60):02}"
 
-    @property
     def game_info(self) -> GameInfo:
         """ See game_info.py """
         return self._game_info
 
-    @property
     def game_data(self) -> GameData:
         """ See game_data.py """
         return self._game_data
 
-    @property
     def client(self) -> Client:
         """ See client.py """
         return self._client
