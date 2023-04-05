@@ -597,5 +597,11 @@ TRAIN_INFO: Dict[UnitTypeId, Dict[UnitTypeId, Dict[str, Union[AbilityId, bool, U
             'requires_placement_position': True,
             'requires_power': True
         }
+    },
+    UnitTypeId.ZERGLING: {
+        UnitTypeId.BANELING: {
+            'ability': AbilityId.MORPHTOBANELING_BANELING,
+            'required_building': UnitTypeId.BANELINGNEST
+        }
     }
 }

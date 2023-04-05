@@ -13,6 +13,7 @@ UNIT_TRAINED_FROM: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.ARMORY: {UnitTypeId.SCV},
     UnitTypeId.ASSIMILATOR: {UnitTypeId.PROBE},
     UnitTypeId.AUTOTURRET: {UnitTypeId.RAVEN},
+    UnitTypeId.BANELING: {UnitTypeId.ZERGLING},
     UnitTypeId.BANELINGNEST: {UnitTypeId.DRONE},
     UnitTypeId.BANSHEE: {UnitTypeId.STARPORT},
     UnitTypeId.BARRACKS: {UnitTypeId.SCV},

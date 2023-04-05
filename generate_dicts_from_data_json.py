@@ -119,6 +119,7 @@ def get_unit_train_build_abilities(data):
                 AbilityId.MORPHTOBROODLORD_BROODLORD,
                 AbilityId.MORPHZERGLINGTOBANELING_BANELING,
                 AbilityId.MORPHTORAVAGER_RAVAGER,
+                AbilityId.MORPHTOBANELING_BANELING,
                 AbilityId.MORPH_LURKER,
                 AbilityId.UPGRADETOLAIR_LAIR,
                 AbilityId.UPGRADETOHIVE_HIVE,
