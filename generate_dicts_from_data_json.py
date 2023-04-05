@@ -430,14 +430,6 @@ def generate_redirect_abilities_dict(data: dict):
     _unit_data = data["Unit"]
     _upgrade_data = data["Upgrade"]
 
-    # Load pickled game data files
-    pickled_file_path = get_map_file_path()
-    assert pickled_file_path.is_file(), f"Could not find pickled data file {pickled_file_path}"
-    logger.info(f"Loading pickled game data file {pickled_file_path}")
-    with lzma.open(pickled_file_path.absolute(), "rb") as f:
-        raw_game_data, raw_game_info, raw_observation = pickle.load(f)
-        game_data = GameData(raw_game_data.data)
-
     all_redirect_abilities: Dict[AbilityId, AbilityId] = OrderedDict2()
 
     entry: dict
@@ -449,10 +441,11 @@ def generate_redirect_abilities_dict(data: dict):
             logger.info(f"Error with ability id value {ability_id_value}")
             continue
 
-        generic_redirect_ability_value: int = game_data.abilities[ability_id_value]._proto.remaps_to_ability_id
-        if generic_redirect_ability_value:
-            # Might be 0 if it has no redirect ability
-            all_redirect_abilities[ability_id] = AbilityId(generic_redirect_ability_value)
+        generic_redirect_ability_value = entry.get("remaps_to_ability_id", 0)
+        if generic_redirect_ability_value == 0:
+            # No generic ability available
+            continue
+        all_redirect_abilities[ability_id] = AbilityId(generic_redirect_ability_value)
 
     return all_redirect_abilities
 

@@ -13,7 +13,6 @@ UNIT_TRAINED_FROM: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.ARMORY: {UnitTypeId.SCV},
     UnitTypeId.ASSIMILATOR: {UnitTypeId.PROBE},
     UnitTypeId.AUTOTURRET: {UnitTypeId.RAVEN},
-    UnitTypeId.BANELING: {UnitTypeId.ZERGLING},
     UnitTypeId.BANELINGNEST: {UnitTypeId.DRONE},
     UnitTypeId.BANSHEE: {UnitTypeId.STARPORT},
     UnitTypeId.BARRACKS: {UnitTypeId.SCV},
@@ -25,9 +24,7 @@ UNIT_TRAINED_FROM: Dict[UnitTypeId, Set[UnitTypeId]] = {
     UnitTypeId.COLOSSUS: {UnitTypeId.ROBOTICSFACILITY},
     UnitTypeId.COMMANDCENTER: {UnitTypeId.SCV},
     UnitTypeId.CORRUPTOR: {UnitTypeId.LARVA},
-    UnitTypeId.CREEPTUMOR: {
-        UnitTypeId.CREEPTUMOR, UnitTypeId.CREEPTUMORBURROWED, UnitTypeId.CREEPTUMORQUEEN, UnitTypeId.QUEEN
-    },
+    UnitTypeId.CREEPTUMOR: {UnitTypeId.CREEPTUMORBURROWED, UnitTypeId.CREEPTUMORQUEEN, UnitTypeId.QUEEN},
     UnitTypeId.CREEPTUMORQUEEN: {UnitTypeId.QUEEN},
     UnitTypeId.CYBERNETICSCORE: {UnitTypeId.PROBE},
     UnitTypeId.CYCLONE: {UnitTypeId.FACTORY},
