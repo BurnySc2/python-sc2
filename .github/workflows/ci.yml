@@ -463,7 +463,7 @@ jobs:
 
   release_to_pypi:
     name: Pypi package release
-    needs: [release_to_github_pages]
+    needs: [run_test_bots, run_example_bots]
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
