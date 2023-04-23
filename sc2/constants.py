@@ -7,6 +7,8 @@ from sc2.ids.buff_id import BuffId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.upgrade_id import UpgradeId
 
+WORKER_TYPES: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
+
 mineral_ids: Set[int] = {
     UnitTypeId.RICHMINERALFIELD.value,
     UnitTypeId.RICHMINERALFIELD750.value,

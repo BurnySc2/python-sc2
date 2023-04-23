@@ -12,8 +12,10 @@ import time
 from pathlib import Path
 from test.test_pickled_data import MAPS, get_map_specific_bot
 
+import pytest
 from loguru import logger
 
+from sc2.bot_ai import BotAI
 from sc2.game_info import Ramp
 from sc2.position import Point2
 from sc2.unit import Unit
@@ -36,8 +38,9 @@ class TestClass:
     # Load all pickle files and convert them into bot objects from raw data (game_data, game_info, game_state)
     scenarios = [(map_path.name, {"map_path": map_path}) for map_path in MAPS]
 
-    def test_main_base_ramp(self, map_path: Path):
-        bot = get_map_specific_bot(map_path)
+    @pytest.mark.asyncio
+    async def test_main_base_ramp(self, map_path: Path):
+        bot: BotAI = await get_map_specific_bot(map_path)
         bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
 
         # Test if main ramp works for all spawns
@@ -85,8 +88,9 @@ class TestClass:
                 assert ramp.protoss_wall_buildings == frozenset()
                 assert ramp.protoss_wall_warpin is None
 
-    def test_bot_ai(self, map_path: Path):
-        bot = get_map_specific_bot(map_path)
+    @pytest.mark.asyncio
+    async def test_bot_ai(self, map_path: Path):
+        bot: BotAI = await get_map_specific_bot(map_path)
 
         # Recalculate and time expansion locations
         t0 = time.perf_counter()

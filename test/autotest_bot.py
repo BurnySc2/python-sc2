@@ -107,6 +107,39 @@ class TestBot(BotAI):
         for location in self.enemy_start_locations:
             assert location in self.expansion_locations_list
 
+        # Test if units and structures have expected abilities
+        standard_scv_abilities = {
+            AbilityId.ATTACK_ATTACK,
+            AbilityId.EFFECT_REPAIR_SCV,
+            AbilityId.EFFECT_SPRAY_TERRAN,
+            AbilityId.HARVEST_GATHER_SCV,
+            AbilityId.HOLDPOSITION_HOLD,
+            AbilityId.MOVE_MOVE,
+            AbilityId.PATROL_PATROL,
+            AbilityId.SMART,
+            AbilityId.STOP_STOP,
+            AbilityId.TERRANBUILD_COMMANDCENTER,
+            AbilityId.TERRANBUILD_ENGINEERINGBAY,
+            AbilityId.TERRANBUILD_REFINERY,
+            AbilityId.TERRANBUILD_SUPPLYDEPOT,
+        }
+        for scv in self.units:
+            assert isinstance(scv.abilities, set)
+            if scv.is_carrying_minerals:
+                assert scv.abilities == standard_scv_abilities | {AbilityId.HARVEST_RETURN_SCV}
+            else:
+                assert scv.abilities == standard_scv_abilities
+
+        for cc in self.townhalls:
+            assert isinstance(cc.abilities, set)
+            assert cc.abilities == {
+                AbilityId.COMMANDCENTERTRAIN_SCV,
+                AbilityId.LIFT_COMMANDCENTER,
+                AbilityId.LOADALL_COMMANDCENTER,
+                AbilityId.RALLY_COMMANDCENTER,
+                AbilityId.SMART,
+            }
+
         self.tests_done_by_name.add("test_botai_properties")
 
     # Test BotAI functions
@@ -437,8 +470,6 @@ class TestBot(BotAI):
 
     # Test if structures_without_construction_SCVs works after killing the scv
     async def test_botai_actions12(self):
-        map_center: Point2 = self.game_info.map_center
-
         # Wait till can afford depot
         while not self.can_afford(UnitTypeId.SUPPLYDEPOT):
             await self.client.debug_all_resources()

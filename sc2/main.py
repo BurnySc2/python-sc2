@@ -130,7 +130,7 @@ async def _play_game_ai(
         gs = GameState(state.observation)
         proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
         try:
-            ai._prepare_step(gs, proto_game_info)
+            await ai._prepare_step(gs, proto_game_info)
             await ai.on_before_start()
             ai._prepare_first_step()
             await ai.on_start()
@@ -191,7 +191,7 @@ async def _play_game_ai(
             await ai.on_end(Result.Tie)
             return Result.Tie
         proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
-        ai._prepare_step(gs, proto_game_info)
+        await ai._prepare_step(gs, proto_game_info)
 
         await run_bot_iteration(iteration)  # Main bot loop
 
@@ -252,7 +252,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
         return client._game_result[player_id]
     gs = GameState(state.observation)
     proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
-    ai._prepare_step(gs, proto_game_info)
+    await ai._prepare_step(gs, proto_game_info)
     ai._prepare_first_step()
     try:
         await ai.on_start()
@@ -283,7 +283,7 @@ async def _play_replay(client, ai, realtime=False, player_id=0):
             logger.debug(f"Score: {gs.score.score}")
 
             proto_game_info = await client._execute(game_info=sc_pb.RequestGameInfo())
-            ai._prepare_step(gs, proto_game_info)
+            await ai._prepare_step(gs, proto_game_info)
 
         logger.debug(f"Running AI step, it={iteration} {gs.game_loop * 0.725 * (1 / 16):.2f}s")
 

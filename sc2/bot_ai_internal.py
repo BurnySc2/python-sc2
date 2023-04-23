@@ -21,6 +21,7 @@ from sc2.constants import (
     ALL_GAS,
     IS_PLACEHOLDER,
     TERRAN_STRUCTURES_REQUIRE_SCV,
+    WORKER_TYPES,
     FakeEffectID,
     abilityid_to_unittypeid,
     geyser_ids,
@@ -110,6 +111,7 @@ class BotAIInternal(ABC):
         self._enemy_units_previous_map: Dict[int, Unit] = {}
         self._enemy_structures_previous_map: Dict[int, Unit] = {}
         self._all_units_previous_map: Dict[int, Unit] = {}
+        self._unit_abilities: Dict[int, Set[AbilityId]] = {}
         self._previous_upgrades: Set[UpgradeId] = set()
         self._expansion_positions_list: List[Point2] = []
         self._resource_location_to_expansion_position_dict: Dict[Point2, Point2] = {}
@@ -474,7 +476,7 @@ class BotAIInternal(ABC):
         self._time_before_step: float = time.perf_counter()
 
     @final
-    def _prepare_step(self, state, proto_game_info):
+    async def _prepare_step(self, state, proto_game_info):
         """
         :param state:
         :param proto_game_info:
@@ -510,6 +512,12 @@ class BotAIInternal(ABC):
 
         self.idle_worker_count: int = state.common.idle_worker_count
         self.army_count: int = state.common.army_count
+
+        self._unit_abilities = await self.client.query_available_abilities_with_tag(
+            self.all_own_units,
+            ignore_resource_requirements=True,
+        )
+
         self._time_before_step: float = time.perf_counter()
 
         if self.enemy_race == Race.Random and self.all_enemy_units:
@@ -538,8 +546,6 @@ class BotAIInternal(ABC):
         self.placeholders: Units = Units([], self)
         self.techlab_tags: Set[int] = set()
         self.reactor_tags: Set[int] = set()
-
-        worker_types: Set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
 
         index: int = 0
         for unit in self.state.observation_raw.units:
@@ -601,7 +607,7 @@ class BotAIInternal(ABC):
                             self.reactor_tags.add(unit_obj.tag)
                     else:
                         self.units.append(unit_obj)
-                        if unit_id in worker_types:
+                        if unit_id in WORKER_TYPES:
                             self.workers.append(unit_obj)
                         elif unit_id == UnitTypeId.LARVA:
                             self.larva.append(unit_obj)
@@ -651,7 +657,7 @@ class BotAIInternal(ABC):
         state = await self.client.observation()
         gs = GameState(state.observation)
         proto_game_info = await self.client._execute(game_info=sc_pb.RequestGameInfo())
-        self._prepare_step(gs, proto_game_info)
+        await self._prepare_step(gs, proto_game_info)
         await self.issue_events()
 
     @final
