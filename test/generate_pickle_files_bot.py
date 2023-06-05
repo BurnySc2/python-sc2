@@ -8,7 +8,7 @@ import pickle
 from typing import Set
 
 from loguru import logger
-from s2clientprotocol import sc2api_pb2 as sc_pb
+from sc2.s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2 import maps
 from sc2.bot_ai import BotAI

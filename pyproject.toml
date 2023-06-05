@@ -36,9 +36,8 @@ loguru = "^0.6.0"
 mpyq = "^0.2.5"
 numpy = "^1.19.3"
 portpicker = "^1.4.0"
-s2clientprotocol = "^5.0.7"
 scipy = "^1.7.1"
-protobuf = "<4.0.0"
+protobuf = "^4.23.2"
 
 [tool.poetry.dev-dependencies]
 codecov = "^2.1.12"

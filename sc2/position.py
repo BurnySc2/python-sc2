@@ -5,7 +5,7 @@ import math
 import random
 from typing import TYPE_CHECKING, Iterable, List, Set, Tuple, Union
 
-from s2clientprotocol import common_pb2 as common_pb
+from sc2.s2clientprotocol import common_pb2 as common_pb
 
 if TYPE_CHECKING:
     from sc2.unit import Unit
