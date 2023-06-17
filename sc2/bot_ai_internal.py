@@ -185,13 +185,17 @@ class BotAIInternal(ABC):
         ]
         # Loop the merging process as long as we change something
         merged_group = True
+        height_grid: PixelMap = self.game_info.terrain_height
         while merged_group:
             merged_group = False
             # Check every combination of two groups
             for group_a, group_b in itertools.combinations(resource_groups, 2):
                 # Check if any pair of resource of these groups is closer than threshold together
+                # And that they are on the same terrain level
                 if any(
                     resource_a.distance_to(resource_b) <= resource_spread_threshold
+                    and height_grid[resource_a.position.rounded]
+                    == height_grid[resource_b.position.rounded]
                     for resource_a, resource_b in itertools.product(group_a, group_b)
                 ):
                     # Remove the single groups and add the merged group
