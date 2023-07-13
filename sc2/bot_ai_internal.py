@@ -193,16 +193,12 @@ class BotAIInternal(ABC):
                 # Check if any pair of resource of these groups is closer than threshold together
                 # And that they are on the same terrain level
                 if any(
-                        resource_a.distance_to(resource_b) <= resource_spread_threshold
-                        # check if terrain height measurement at resources is within 10 units
-                        # this is since some older maps have inconsistent terrain height
-                        # tiles at certain expansion locations
-                        and abs(
-                            height_grid[resource_a.position.rounded]
-                            - height_grid[resource_b.position.rounded]
-                        )
-                        <= 10
-                        for resource_a, resource_b in itertools.product(group_a, group_b)
+                    resource_a.distance_to(resource_b) <= resource_spread_threshold
+                    # check if terrain height measurement at resources is within 10 units
+                    # this is since some older maps have inconsistent terrain height
+                    # tiles at certain expansion locations
+                    and abs(height_grid[resource_a.position.rounded] - height_grid[resource_b.position.rounded]) <= 10
+                    for resource_a, resource_b in itertools.product(group_a, group_b)
                 ):
                     # Remove the single groups and add the merged group
                     resource_groups.remove(group_a)
