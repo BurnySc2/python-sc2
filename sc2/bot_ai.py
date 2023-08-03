@@ -400,6 +400,8 @@ class BotAI(BotAIInternal):
         :param unit_type:"""
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
+        if unit_type in {UnitTypeId.BANELING}:
+            return 0
         unit_supply_cost = self.game_data.units[unit_type.value]._proto.food_required
         if unit_supply_cost > 0 and unit_type in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[unit_type]) == 1:
             producer: UnitTypeId
@@ -472,11 +474,13 @@ class BotAI(BotAIInternal):
         """
         if isinstance(item_id, UnitTypeId):
             # Fix cost for reactor and techlab where the API returns 0 for both
-            if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB, UnitTypeId.ARCHON}:
+            if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB, UnitTypeId.ARCHON, UnitTypeId.BANELING}:
                 if item_id == UnitTypeId.REACTOR:
                     return Cost(50, 50)
                 if item_id == UnitTypeId.TECHLAB:
                     return Cost(50, 25)
+                if item_id == UnitTypeId.BANELING:
+                    return Cost(25, 25)
                 if item_id == UnitTypeId.ARCHON:
                     return self.calculate_unit_value(UnitTypeId.ARCHON)
             unit_data = self.game_data.units[item_id.value]

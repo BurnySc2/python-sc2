@@ -361,12 +361,6 @@ jobs:
         docker exec -i my_container bash -c "poetry run coverage xml"
         docker cp my_container:/root/python-sc2/coverage.xml $(pwd)/coverage.xml
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: coverage.xml
-
     - name: Generate html coverage files in htmlcov/ folder
       run: |
         docker exec -i my_container bash -c "poetry run coverage html"
@@ -463,7 +457,7 @@ jobs:
 
   release_to_pypi:
     name: Pypi package release
-    needs: [release_to_github_pages]
+    needs: [run_test_bots, run_example_bots]
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
