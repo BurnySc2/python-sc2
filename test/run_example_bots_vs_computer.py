@@ -18,7 +18,7 @@ from sc2.main import GameMatch, a_run_multiple_games_nokill
 from sc2.player import Bot, Computer
 
 # Time limit given in seconds of total in game time
-game_time_limit_vs_computer = 120
+game_time_limit_vs_computer = 240
 
 bot_infos = [
     # Protoss
