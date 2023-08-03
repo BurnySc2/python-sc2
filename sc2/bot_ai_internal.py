@@ -749,7 +749,7 @@ class BotAIInternal(ABC):
         enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map) - self.enemy_units.tags
         for enemy_unit_tag in enemy_units_left_vision:
             await self.on_enemy_unit_left_vision(enemy_unit_tag)
-        enemy_structures_left_vision: Set[int] = (set(self._enemy_structures_previous_map) - self.enemy_structures.tags)
+        enemy_structures_left_vision: Set[int] = set(self._enemy_structures_previous_map) - self.enemy_structures.tags
         for enemy_structure_tag in enemy_structures_left_vision:
             await self.on_enemy_unit_left_vision(enemy_structure_tag)
 
