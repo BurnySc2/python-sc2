@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "burnysc2"
-version = "6.3.0"
+version = "6.4.0"
 description = "A StarCraft II API Client for Python 3"
 authors = ["BurnySc2 <gamingburny@gmail.com>"]
 license = "MIT"
