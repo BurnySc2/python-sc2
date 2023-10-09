@@ -41,7 +41,7 @@ scipy = "^1.7.1"
 protobuf = "<4.0.0"
 
 [tool.poetry.dev-dependencies]
-codecov = "^2.1.12"
+codecov = "^2.1.13"
 coverage = "^7.0"
 hypothesis = "^6.23.1"
 matplotlib = "^3.4.3"
