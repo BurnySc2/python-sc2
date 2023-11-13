@@ -6,14 +6,20 @@ This is a fork of BurnySc2/python-sc2 library. The purpose is to provide support
 
 CURRENTLY UNDER DEVELOPMENT. NO RELEASES YET.
 
+In order to properly create a map with the scion mod you must first clone the scion repository.
+https://github.com/Solstice245/scion-keiron-dev.git
+Then open a melee 1v1 map in the editor. Save the map to desired location. Add the dependency for the scion mod by clicking File>Dependencies>Add Other>'your scion clone'/ScionMod.SC2Mod
+Save the map file. It is now ready to be used.
+
 If you do not have a standard install path for SCII set the environment variable SC2PATH=your_path
 
-To assist with development clone the repository then run
+To assist with development clone the repository then run commands:
 ```
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
 An easy-to-use library for writing AI Bots for StarCraft II in Python 3. The ultimate goal is simplicity and ease of use, while still preserving all functionality. A really simple worker rush bot should be no more than twenty lines of code, not two hundred. However, this library intends to provide both high and low level abstractions.
 
 **This library (currently) covers only the raw scripted interface.** At this time I don't intend to add support for graphics-based interfaces.
