@@ -331,9 +331,6 @@ RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool,
         }
     },
     UnitTypeId.INFESTATIONPIT: {
-        UpgradeId.INFESTORENERGYUPGRADE: {
-            'ability': AbilityId.RESEARCH_PATHOGENGLANDS
-        },
         UpgradeId.NEURALPARASITE: {
             'ability': AbilityId.RESEARCH_NEURALPARASITE
         }

@@ -30,7 +30,9 @@ class IdGenerator:
         self.HOME_DIR = str(Path.home())
         self.DATA_JSON = {
             "Darwin": self.HOME_DIR + "/Library/Application Support/Blizzard/StarCraft II/stableid.json",
-            "Windows": self.HOME_DIR + "/Documents/StarCraft II/stableid.json",
+
+            # My system uses OneDrive for Documents folder
+            "Windows": self.HOME_DIR + "/OneDrive/Documents/StarCraft II/stableid.json",
             "Linux": self.HOME_DIR + "/Documents/StarCraft II/stableid.json",
         }
 

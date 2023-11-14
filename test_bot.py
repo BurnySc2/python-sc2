@@ -10,7 +10,7 @@ class WorkerRushBot(BotAI):
             for worker in self.workers:
                 worker.attack(self.enemy_start_locations[0])
 
-run_game(maps.get("allscion"), [
+run_game(maps.get("workpls"), [
     Bot(Race.Zerg, WorkerRushBot()),
     Computer(Race.Protoss, Difficulty.Medium)
 ], realtime=True)
