@@ -24,13 +24,14 @@ classifiers=[
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 packages = [
     { include = "sc2/**/*.py" },
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8, <3.12"
+python = ">=3.8, <3.13"
 aiohttp = "^3.7.4"
 loguru = "^0.6.0"
 mpyq = "^0.2.5"

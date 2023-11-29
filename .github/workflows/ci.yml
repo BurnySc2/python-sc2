@@ -136,7 +136,7 @@ jobs:
         # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
         # Python 3.7 support has been dropped due to missing cached_property (new since Python 3.8) https://docs.python.org/3/library/functools.html#functools.cached_property
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
 
     steps:
     - uses: actions/checkout@v3
@@ -199,7 +199,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
         sc2-version: ['4.10']
     env:
       IMAGE_NAME: burnysc2/python-sc2:local
