@@ -18,10 +18,12 @@ RUN apt-get update \
     && apt-get upgrade --assume-yes --quiet=2
 
 # Update and install packages for SC2 development environment
+# gcc to compile packages
 # git, unzip and wget for download and extraction
 # rename to rename maps
 # tree for debugging
 RUN apt-get install --assume-yes --no-install-recommends --no-show-upgraded \
+    gcc \
     git  \
     unzip \
     wget \
