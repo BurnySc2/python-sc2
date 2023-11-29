@@ -77,7 +77,7 @@ RUN wget --quiet --show-progress --progress=bar:force http://blzdistsc2-a.akamai
     && rm -r Ladder2019Season3 
 
 # Get v5.0.6 maps
-RUN wget --quiet --show-progress --progress=bar:force https://github.com/shostyn/sc2patch/raw/master/Maps/506.zip \
+RUN wget --quiet --show-progress --progress=bar:force https://github.com/shostyn/sc2patch/raw/4987d4915b47c801adbc05e297abaa9ca2988838/Maps/506.zip \
     && unzip -q -o '506.zip' \
     && rm 506.zip
 
