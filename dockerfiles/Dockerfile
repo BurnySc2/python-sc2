@@ -19,11 +19,13 @@ RUN apt-get update \
 
 # Update and install packages for SC2 development environment
 # gcc to compile packages
+# libc6-dev required by gcc: /usr/local/include/python3.12/Python.h:23:12: fatal error: stdlib.h: No such file or directory
 # git, unzip and wget for download and extraction
 # rename to rename maps
 # tree for debugging
 RUN apt-get install --assume-yes --no-install-recommends --no-show-upgraded \
     gcc \
+    libc6-dev \
     git  \
     unzip \
     wget \
