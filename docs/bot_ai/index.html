@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bot_ai.py &mdash; python-sc2  documentation</title>
@@ -29,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> python-sc2
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            python-sc2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -134,7 +138,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">bot_ai.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/bot_ai/index.rst.txt" rel="nofollow"> View page source</a>
@@ -192,10 +196,10 @@ Possible alerts are listed here <a class="reference external" href="https://gith
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>alert_code</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Alert</span></code>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -214,10 +218,10 @@ workers and build queues of buildings.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_type</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -238,10 +242,10 @@ workers and build queues of buildings.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>upgrade_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -254,7 +258,7 @@ workers and build queues of buildings.</p>
 position. Also if the given position is not placeable, this function tries to find a nearby position to place
 the structure. Then orders the worker to start the construction.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
 <li><p><strong>near</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
@@ -264,7 +268,7 @@ the structure. Then orders the worker to start the construction.</p>
 <li><p><strong>placement_step</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -299,10 +303,10 @@ The total cost to create a ravager is 100/100, but the actual morph cost from ro
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>item_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="../game_data/index.html#sc2.game_data.Cost" title="sc2.game_data.Cost"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cost</span></code></a></p>
 </dd>
 </dl>
@@ -322,10 +326,10 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -342,10 +346,10 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="../game_data/index.html#sc2.game_data.Cost" title="sc2.game_data.Cost"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cost</span></code></a></p>
 </dd>
 </dl>
@@ -369,13 +373,13 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>item_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]) – </p></li>
 <li><p><strong>check_supply_cost</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -392,16 +396,16 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </div>
 <p>See data_pb2.py (line 161) for the numbers 1-5 to make sense</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
 <li><p><strong>ability_id</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>) – </p></li>
 <li><p><strong>target</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
 <li><p><strong>only_check_energy_and_cooldown</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
-<li><p><strong>cached_abilities_of_unit</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]]) – </p></li>
+<li><p><strong>cached_abilities_of_unit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -419,10 +423,10 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -441,13 +445,13 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../game_data/index.html#sc2.game_data.AbilityData" title="sc2.game_data.AbilityData"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityData</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p></li>
 <li><p><strong>position</strong> – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
@@ -458,7 +462,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_place_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.can_place_single" title="Permalink to this definition"></a></dt>
 <dd><p>Checks the placement for only one position.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -473,7 +477,7 @@ The required supply to build zerglings is 1 because they pop in pairs, so this f
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>message</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
 <li><p><strong>team_only</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
@@ -495,7 +499,7 @@ For example long distance mining control and moving workers if a base was killed
 are not being handled.</p>
 <p>WARNING: This is quite slow when there are lots of workers or multiple bases.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>resource_ratio</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p>
 </dd>
 </dl>
@@ -505,11 +509,6 @@ are not being handled.</p>
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.enemy_start_locations">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enemy_start_locations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.enemy_start_locations" title="Permalink to this definition"></a></dt>
 <dd><p>Possible start locations for enemies.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -517,9 +516,9 @@ are not being handled.</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expand_now</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.expand_now" title="Permalink to this definition"></a></dt>
 <dd><p>Finds the next possible expansion via ‘self.get_next_expansion()’. If the target expansion is blocked (e.g. an enemy unit), it will misplace the expansion.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>building</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]) – </p></li>
+<li><p><strong>building</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
 <li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 <li><p><strong>location</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
 </ul>
@@ -538,7 +537,7 @@ are not being handled.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>building</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]) – </p></li>
 <li><p><strong>near</strong> (<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p></li>
@@ -548,7 +547,7 @@ are not being handled.</p>
 <li><p><strong>addon_place</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
 </dd>
 </dl>
@@ -567,13 +566,13 @@ are not being handled.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>units</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>], <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>]) – </p></li>
 <li><p><strong>ignore_resource_requirements</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]]</p>
 </dd>
 </dl>
@@ -584,7 +583,7 @@ are not being handled.</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_next_expansion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_next_expansion" title="Permalink to this definition"></a></dt>
 <dd><p>Find next expansion location.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
 </dd>
 </dl>
@@ -596,10 +595,10 @@ are not being handled.</p>
 <dd><p>Returns terrain height at a position.
 Caution: terrain height is different from a unit’s z-coordinate.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -610,10 +609,10 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <span class="sig-name descname"><span class="pre">get_terrain_z_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.get_terrain_z_height" title="Permalink to this definition"></a></dt>
 <dd><p>Returns terrain z-height at a position.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -624,10 +623,10 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <span class="sig-name descname"><span class="pre">has_creep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.has_creep" title="Permalink to this definition"></a></dt>
 <dd><p>Returns True if there is creep on the grid point.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -638,10 +637,10 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <span class="sig-name descname"><span class="pre">in_map_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_map_bounds" title="Permalink to this definition"></a></dt>
 <dd><p>Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -652,10 +651,10 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 <span class="sig-name descname"><span class="pre">in_pathing_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.in_pathing_grid" title="Permalink to this definition"></a></dt>
 <dd><p>Returns True if a ground unit can pass through a grid point.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -668,10 +667,10 @@ Caution: terrain height is different from a unit’s z-coordinate.</p>
 Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.
 Caution: some x and y offset might be required, see ramp code in game_info.py</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -682,10 +681,10 @@ Caution: some x and y offset might be required, see ramp code in game_info.py</p
 <span class="sig-name descname"><span class="pre">is_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.is_visible" title="Permalink to this definition"></a></dt>
 <dd><p>Returns True if you have vision on a grid point.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -714,7 +713,7 @@ This function is useful in realtime=True mode to split your workers or start pro
 <dd><p>Override this in your bot class. This function is called when a building
 construction is completed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
 </dd>
 </dl>
@@ -726,7 +725,7 @@ construction is completed.</p>
 <dd><p>Override this in your bot class.
 This function is called when a building construction has started.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
 </dd>
 </dl>
@@ -738,7 +737,7 @@ This function is called when a building construction has started.</p>
 <dd><p>Override this in your bot class. This function is called at the end of a game.
 Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>game_result</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code>) – </p>
 </dd>
 </dl>
@@ -749,7 +748,7 @@ Unsure if this function will be called on the laddermanager client as the bot pr
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_enemy_unit_entered_vision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_enemy_unit_entered_vision" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when an enemy unit (unit or structure) entered vision (which was not visible last frame).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
 </dd>
 </dl>
@@ -767,7 +766,7 @@ If you want to store a snapshot of the unit, use self._enemy_units_previous_map[
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_tag</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p>
 </dd>
 </dl>
@@ -787,7 +786,7 @@ At this point, game_data, game_info and the first iteration of game_state (self.
 Override this in your bot class.
 This function is called on every game step (looped in realtime mode).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>iteration</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p>
 </dd>
 </dl>
@@ -798,7 +797,7 @@ This function is called on every game step (looped in realtime mode).</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_unit_created</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_unit_created" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called when a unit is created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p>
 </dd>
 </dl>
@@ -813,7 +812,7 @@ because the unit does not exist any more.
 This will event will be called when a unit (or structure, friendly or enemy) dies.
 For enemy units, this only works if the enemy unit was in vision on death.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_tag</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p>
 </dd>
 </dl>
@@ -832,7 +831,7 @@ TODO: If there is a demand for it, then I can add a similar event for when enemy
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
 <li><p><strong>amount_damage_taken</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
@@ -852,7 +851,7 @@ a corruptor morphed to broodlordcocoon, etc..</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>unit</strong> (<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>) – </p></li>
 <li><p><strong>previous_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
@@ -866,7 +865,7 @@ a corruptor morphed to broodlordcocoon, etc..</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_upgrade_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upgrade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.on_upgrade_complete" title="Permalink to this definition"></a></dt>
 <dd><p>Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>upgrade</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>) – </p>
 </dd>
 </dl>
@@ -891,10 +890,10 @@ or the building to research the upgrade was missing or not idle.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>upgrade_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.upgrade_id.UpgradeId" title="sc2.ids.upgrade_id.UpgradeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpgradeId</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -913,13 +912,13 @@ or the building to research the upgrade was missing or not idle.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
 <li><p><strong>force</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]</p>
 </dd>
 </dl>
@@ -930,11 +929,6 @@ or the building to research the upgrade was missing or not idle.</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.bot_ai.BotAI.start_location" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the spawn location of the bot, using the position of the first created townhall.
 This will be None if the bot is run on an arcade or custom map that does not feature townhalls at game start.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -946,11 +940,6 @@ Second value is the average step duration
 Third value is the maximum step duration - the longest the bot ever took (including on_start())
 Fourth value is the step duration the bot took last iteration
 If called in the first iteration, it returns (inf, 0, 0, 0)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -980,10 +969,10 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>structure_type</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -1012,10 +1001,10 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>structure_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -1025,22 +1014,12 @@ If called in the first iteration, it returns (inf, 0, 0, 0)</p>
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.time">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.time" title="Permalink to this definition"></a></dt>
 <dd><p>Returns time in seconds, assumes the game is played on ‘faster’</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.time_formatted">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">time_formatted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.bot_ai.BotAI.time_formatted" title="Permalink to this definition"></a></dt>
 <dd><p>Returns time as string in min:sec format</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1066,15 +1045,15 @@ Warning: currently has issues with warp gate warp ins</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p></li>
 <li><p><strong>amount</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
-<li><p><strong>closest_to</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p></li>
+<li><p><strong>closest_to</strong> (<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p></li>
 <li><p><strong>train_only_idle_buildings</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
 </dd>
 </dl>
@@ -1096,11 +1075,6 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
                 <span class="n">marine</span><span class="o">.</span><span class="n">attack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enemy_start_locations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1108,10 +1082,10 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 <span class="sig-name descname"><span class="pre">worker_en_route_to_build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai.BotAI.worker_en_route_to_build" title="Permalink to this definition"></a></dt>
 <dd><p>This function counts how many workers are on the way to start the construction a building.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_type</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -1128,7 +1102,7 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 <em class="property"><span class="pre">final</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convert_tuple_to_numpy_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a single position to a 2d numpy array with 1 row and 2 columns.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
 </dd>
 </dl>
@@ -1163,7 +1137,7 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>action</strong> (<a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a>) – </p></li>
 <li><p><strong>subtract_cost</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
@@ -1171,7 +1145,7 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 <li><p><strong>can_afford_check</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
@@ -1192,10 +1166,10 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 <dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal.prevent_double_actions">
 <em class="property"><span class="pre">final</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prevent_double_actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.prevent_double_actions" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>action</strong> – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>

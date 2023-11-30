@@ -1,5 +1,5 @@
 # Set up StarCraft II Test Environment for python-sc2 bots (not pysc2 bots!)
-ARG PYTHON_VERSION=3.8
+ARG PYTHON_VERSION=3.9
 
 # Use an official debian stretch slim release as a base image
 FROM python:$PYTHON_VERSION-slim
@@ -18,10 +18,14 @@ RUN apt-get update \
     && apt-get upgrade --assume-yes --quiet=2
 
 # Update and install packages for SC2 development environment
+# gcc to compile packages
+# libc6-dev required by gcc: /usr/local/include/python3.12/Python.h:23:12: fatal error: stdlib.h: No such file or directory
 # git, unzip and wget for download and extraction
 # rename to rename maps
 # tree for debugging
 RUN apt-get install --assume-yes --no-install-recommends --no-show-upgraded \
+    gcc \
+    libc6-dev \
     git  \
     unzip \
     wget \
@@ -77,7 +81,7 @@ RUN wget --quiet --show-progress --progress=bar:force http://blzdistsc2-a.akamai
     && rm -r Ladder2019Season3 
 
 # Get v5.0.6 maps
-RUN wget --quiet --show-progress --progress=bar:force https://github.com/shostyn/sc2patch/raw/master/Maps/506.zip \
+RUN wget --quiet --show-progress --progress=bar:force https://github.com/shostyn/sc2patch/raw/4987d4915b47c801adbc05e297abaa9ca2988838/Maps/506.zip \
     && unzip -q -o '506.zip' \
     && rm 506.zip
 

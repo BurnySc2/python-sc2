@@ -20,21 +20,21 @@ classifiers=[
     "Operating System :: MacOS :: MacOS X",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 packages = [
     { include = "sc2/**/*.py" },
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8, <3.12"
+python = ">=3.9, <3.13"
 aiohttp = "^3.7.4"
 loguru = "^0.6.0"
 mpyq = "^0.2.5"
-numpy = "^1.19.3"
+numpy = "^1.26.0"
 portpicker = "^1.4.0"
 s2clientprotocol = "^5.0.7"
 scipy = "^1.7.1"
@@ -65,7 +65,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 ignore_missing_imports = true
 
 [tool.pycln]

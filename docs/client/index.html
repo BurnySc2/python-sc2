@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>client.py &mdash; python-sc2  documentation</title>
@@ -29,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> python-sc2
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            python-sc2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -113,7 +117,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">client.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/client/index.rst.txt" rel="nofollow"> View page source</a>
@@ -148,11 +152,11 @@
 <span class="sig-name descname"><span class="pre">debug_box2_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">half_vertex_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_box2_out" title="Permalink to this definition"></a></dt>
 <dd><p>Draws a box center at a position ‘pos’, with box side lengths (vertices) of two times ‘half_vertex_length’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>half_vertex_length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
-<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -163,11 +167,11 @@
 <span class="sig-name descname"><span class="pre">debug_box_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_box_out" title="Permalink to this definition"></a></dt>
 <dd><p>Draws a box with p_min and p_max as corners of the box.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p_min</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>p_max</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
-<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -191,7 +195,7 @@
 <dd><p>Usage example (will spawn 5 marines in the center of the map for player ID 1):
 await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_spawn_commands</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]]]) – </p>
 </dd>
 </dl>
@@ -237,7 +241,7 @@ await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map
 <dt class="sig sig-object py" id="sc2.client.Client.debug_kill_unit">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">debug_kill_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_kill_unit" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unit_tags</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]) – </p>
 </dd>
 </dl>
@@ -248,11 +252,11 @@ await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map
 <span class="sig-name descname"><span class="pre">debug_line_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_line_out" title="Permalink to this definition"></a></dt>
 <dd><p>Draws a line from p0 to p1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p0</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>p1</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
-<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -284,11 +288,11 @@ await self.debug_set_unit_value(self.workers, 2, value=1)</p>
 <span class="sig-name descname"><span class="pre">debug_sphere_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_sphere_out" title="Permalink to this definition"></a></dt>
 <dd><p>Draws a sphere at point p with radius r.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>r</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – </p></li>
-<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -305,11 +309,11 @@ await self.debug_set_unit_value(self.workers, 2, value=1)</p>
 <span class="sig-name descname"><span class="pre">debug_text_screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.debug_text_screen" title="Permalink to this definition"></a></dt>
 <dd><p>Draws a text on the screen (monitor / game window) with coordinates 0 &lt;= x, y &lt;= 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
 <li><p><strong>pos</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – </p></li>
-<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>size</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 </ul>
 </dd>
@@ -329,10 +333,10 @@ await self.debug_set_unit_value(self.workers, 2, value=1)</p>
 To grab a unit’s 3d position, use unit.position3d
 Usually the Z value of a Point3 is between 8 and 14 (except for flying units). Use self.get_terrain_z_height() from bot_ai.py to get the Z value (height) of the terrain at a 2D position.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
-<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>color</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>size</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – </p></li>
 </ul>
 </dd>
@@ -366,7 +370,7 @@ await self._client.dump_data()</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">move_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.move_camera" title="Permalink to this definition"></a></dt>
 <dd><p>Moves camera to the target position</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p>
 </dd>
 </dl>
@@ -377,7 +381,7 @@ await self._client.dump_data()</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">move_camera_spatial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.move_camera_spatial" title="Permalink to this definition"></a></dt>
 <dd><p>Moves camera to the target position using the spatial aciton interface</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p>
 </dd>
 </dl>
@@ -388,7 +392,7 @@ await self._client.dump_data()</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obs_move_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.obs_move_camera" title="Permalink to this definition"></a></dt>
 <dd><p>Moves observer camera to the target position. Only works when observing (e.g. watching the replay).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p>
 </dd>
 </dl>
@@ -399,7 +403,7 @@ await self._client.dump_data()</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_available_abilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_resource_requirements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.query_available_abilities" title="Permalink to this definition"></a></dt>
 <dd><p>Query abilities of multiple units</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]]</p>
 </dd>
 </dl>
@@ -410,7 +414,7 @@ await self._client.dump_data()</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_available_abilities_with_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_resource_requirements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.query_available_abilities_with_tag" title="Permalink to this definition"></a></dt>
 <dd><p>Query abilities of multiple units</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>]]</p>
 </dd>
 </dl>
@@ -421,14 +425,14 @@ await self._client.dump_data()</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_building_placement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_resources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.query_building_placement" title="Permalink to this definition"></a></dt>
 <dd><p>This function might be deleted in favor of the function above (_query_building_placement_fast).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ability</strong> (<a class="reference internal" href="../game_data/index.html#sc2.game_data.AbilityData" title="sc2.game_data.AbilityData"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityData</span></code></a>) – </p></li>
 <li><p><strong>positions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]]) – </p></li>
 <li><p><strong>ignore_resources</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ActionResult</span></code>]</p>
 </dd>
 </dl>
@@ -440,13 +444,13 @@ await self._client.dump_data()</p>
 <dd><p>Caution: returns “None” when path not found
 Try to combine queries with the function below because the pathing query is generally slow.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>start</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 <li><p><strong>end</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]</p>
 </dd>
 </dl>
@@ -459,10 +463,10 @@ Try to combine queries with the function below because the pathing query is gene
 -&gt; returns [distance1, distance2]
 Caution: returns 0 when path not found</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>zipped_list</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a>]]]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
 </dd>
 </dl>
@@ -500,7 +504,7 @@ See: <a class="reference external" href="https://github.com/Blizzard/s2client-pr
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">toggle_autocast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ability</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.client.Client.toggle_autocast" title="Permalink to this definition"></a></dt>
 <dd><p>Toggle autocast of all specified units</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>units</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>], <a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>]) – </p></li>
 <li><p><strong>ability</strong> (<a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbilityId</span></code></a>) – </p></li>

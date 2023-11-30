@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>position.py &mdash; python-sc2  documentation</title>
@@ -29,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> python-sc2
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            python-sc2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -109,7 +113,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">position.py</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/position/index.rst.txt" rel="nofollow"> View page source</a>
@@ -132,10 +136,10 @@
 <span class="sig-name descname"><span class="pre">closest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.closest" title="Permalink to this definition"></a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ps</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
 </dd>
 </dl>
@@ -146,10 +150,10 @@
 <span class="sig-name descname"><span class="pre">distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate a single distance from a point or unit to another point or unit</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -162,7 +166,7 @@
 :type ps: <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]]
 :param ps:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -173,10 +177,10 @@
 <span class="sig-name descname"><span class="pre">distance_to_furthest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.distance_to_furthest" title="Permalink to this definition"></a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ps</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -188,10 +192,10 @@
 <dd><p>Same as the function above, but should be a bit faster because of the dropped asserts
 and conversion.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>p</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -202,10 +206,10 @@ and conversion.</p>
 <span class="sig-name descname"><span class="pre">furthest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.furthest" title="Permalink to this definition"></a></dt>
 <dd><p>This function assumes the 2d distance is meant</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ps</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]]) – Units object, or iterable of Unit or Point2</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pointlike</span></code></a>]</p>
 </dd>
 </dl>
@@ -215,10 +219,10 @@ and conversion.</p>
 <dt class="sig sig-object py" id="sc2.position.Pointlike.offset">
 <span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.offset" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>p</strong> – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pointlike</span></code></a></p>
 </dd>
 </dl>
@@ -231,10 +235,10 @@ and conversion.</p>
 You should not pass a set or dict since those are not sortable.
 If you want to sort your units towards a point, use ‘units.sorted_by_distance_to(point)’ instead.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ps</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../units/index.html#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
 </dd>
 </dl>
@@ -244,14 +248,14 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 <dt class="sig sig-object py" id="sc2.position.Pointlike.towards">
 <span class="sig-name descname"><span class="pre">towards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.towards" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pointlike</span></code></a>]) – </p></li>
 <li><p><strong>distance</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – </p></li>
 <li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sc2.position.Pointlike" title="sc2.position.Pointlike"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pointlike</span></code></a></p>
 </dd>
 </dl>
@@ -261,7 +265,7 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 <dt class="sig sig-object py" id="sc2.position.Pointlike.unit_axes_towards">
 <span class="sig-name descname"><span class="pre">unit_axes_towards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Pointlike.unit_axes_towards" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>p</strong> – </p>
 </dd>
 </dl>
@@ -276,11 +280,6 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 <dt class="sig sig-object py" id="sc2.position.Point2.as_PointI">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">as_PointI</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">PointI</span></em><a class="headerlink" href="#sc2.position.Point2.as_PointI" title="Permalink to this definition"></a></dt>
 <dd><p>Represents points on the minimap. Values must be between 0 and 64.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PointI</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -288,10 +287,10 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.center" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the central point for points in list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
 </dd>
 </dl>
@@ -303,13 +302,13 @@ If you want to sort your units towards a point, use ‘units.sorted_by_distance_
 <dd><p>self is point1, p is point2, r is the radius for circles originating in both points
 Used in ramp finding</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p</strong> (<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p></li>
 <li><p><strong>r</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>]</p>
 </dd>
 </dl>
@@ -320,7 +319,7 @@ Used in ramp finding</p>
 <span class="sig-name descname"><span class="pre">direction_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.direction_vector" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a vector to a direction that can face vertically, horizontally or diagonal or be zero, e.g. (0, 0), (1, -1), (1, 0)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
 </dd>
 </dl>
@@ -330,10 +329,10 @@ Used in ramp finding</p>
 <dt class="sig sig-object py" id="sc2.position.Point2.from_proto">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.from_proto" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
 </dd>
 </dl>
@@ -343,21 +342,16 @@ Used in ramp finding</p>
 <dt class="sig sig-object py" id="sc2.position.Point2.length">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Point2.length" title="Permalink to this definition"></a></dt>
 <dd><p>This property exists in case Point2 is used as a vector.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.manhattan_distance">
 <span class="sig-name descname"><span class="pre">manhattan_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.manhattan_distance" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
 </dl>
@@ -367,21 +361,16 @@ Used in ramp finding</p>
 <dt class="sig sig-object py" id="sc2.position.Point2.normalized">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normalized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.position.Point2.normalized" title="Permalink to this definition"></a></dt>
 <dd><p>This property exists in case Point2 is used as a vector.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.position.Point2.offset">
 <span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.offset" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>p</strong> (<a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
 </dd>
 </dl>
@@ -392,7 +381,7 @@ Used in ramp finding</p>
 <span class="sig-name descname"><span class="pre">round</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decimals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point2.round" title="Permalink to this definition"></a></dt>
 <dd><p>Rounds each number in the tuple to the amount of given decimals.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></p>
 </dd>
 </dl>
@@ -407,10 +396,10 @@ Used in ramp finding</p>
 <dt class="sig sig-object py" id="sc2.position.Point3.from_proto">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Point3.from_proto" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sc2.position.Point3" title="sc2.position.Point3"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point3</span></code></a></p>
 </dd>
 </dl>
@@ -430,7 +419,7 @@ Used in ramp finding</p>
 <dt class="sig sig-object py" id="sc2.position.Rect.from_proto">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_proto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.position.Rect.from_proto" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – </p>
 </dd>
 </dl>
@@ -440,22 +429,12 @@ Used in ramp finding</p>
 <dt class="sig sig-object py" id="sc2.position.Rect.right">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Rect.right" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the x-coordinate of the rectangle of its right side.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.position.Rect.top">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#sc2.position.Rect.top" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the y-coordinate of the rectangle of its top side.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
