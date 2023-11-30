@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using docker to run SC2 bots &mdash; python-sc2  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -99,11 +100,11 @@
            <div itemprop="articleBody">
              
   <section id="using-docker-to-run-sc2-bots">
-<h1>Using docker to run SC2 bots<a class="headerlink" href="#using-docker-to-run-sc2-bots" title="Permalink to this heading"></a></h1>
+<h1>Using docker to run SC2 bots<a class="headerlink" href="#using-docker-to-run-sc2-bots" title="Link to this heading"></a></h1>
 <p>This is a small overview on how to use docker to run 2 bots (here: python-sc2 bots) against each other using the linux binary SC2 client.
 For a quick summary of commands, scroll to the bottom.</p>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Docker installed and running</p></li>
 <li><p>Internet</p></li>
@@ -111,34 +112,34 @@ For a quick summary of commands, scroll to the bottom.</p>
 </ul>
 </section>
 <section id="pulling-the-docker-image">
-<h2>Pulling the Docker image<a class="headerlink" href="#pulling-the-docker-image" title="Permalink to this heading"></a></h2>
+<h2>Pulling the Docker image<a class="headerlink" href="#pulling-the-docker-image" title="Link to this heading"></a></h2>
 <p>The SC2 AI community has decided to stay on Python3.9 for a while. I’ll try to update the docker image as soon as a new linux binary is released, or create a pull request at <a class="reference external" href="https://github.com/BurnySc2/python-sc2-docker">https://github.com/BurnySc2/python-sc2-docker</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.9</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
 </pre></div>
 </div>
 </section>
 <section id="deleting-previous-containers">
-<h2>Deleting previous containers<a class="headerlink" href="#deleting-previous-containers" title="Permalink to this heading"></a></h2>
+<h2>Deleting previous containers<a class="headerlink" href="#deleting-previous-containers" title="Link to this heading"></a></h2>
 <p>To remove the previously used <code class="docutils literal notranslate"><span class="pre">app</span></code> container:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">name</span> <span class="n">app</span> <span class="n">test_image</span>
 </pre></div>
 </div>
 </section>
 <section id="launching-a-new-container">
-<h2>Launching a new container<a class="headerlink" href="#launching-a-new-container" title="Permalink to this heading"></a></h2>
+<h2>Launching a new container<a class="headerlink" href="#launching-a-new-container" title="Link to this heading"></a></h2>
 <p>The following command launches a new container in interactive mode, which means it will not shut down once it is done running:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">it</span> <span class="o">-</span><span class="n">d</span> <span class="o">--</span><span class="n">name</span> <span class="n">app</span> <span class="n">burnysc2</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">sc2</span><span class="o">-</span><span class="n">docker</span><span class="p">:</span><span class="n">release</span><span class="o">-</span><span class="n">python_3</span><span class="mf">.9</span><span class="o">-</span><span class="n">sc2_4</span><span class="mf">.10</span><span class="n">_arenaclient_burny</span>
 </pre></div>
 </div>
 </section>
 <section id="install-bot-requirements">
-<h2>Install bot requirements<a class="headerlink" href="#install-bot-requirements" title="Permalink to this heading"></a></h2>
+<h2>Install bot requirements<a class="headerlink" href="#install-bot-requirements" title="Link to this heading"></a></h2>
 <p>The command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-i</span> <span class="pre">app</span> <span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">&quot;burnysc2&gt;=0.12.12&quot;</span></code> installs the <code class="docutils literal notranslate"><span class="pre">burnysc2</span></code> dependencies in the docker container. Add more libraries as needed. You can also create your custom docker image so you do not have to re-install the dependencies every time you create a new container.</p>
 <p>Since the linux SC2 binary is usually outdated (last update as of this writing was summer of 2019), you will likely have to replace your IDs with older IDs, which can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2/tree/linux-4.10/sc2/ids">https://github.com/BurnySc2/python-sc2/tree/linux-4.10/sc2/ids</a></p>
 <p>If you want your bots to play against a compiled bot (<code class="docutils literal notranslate"><span class="pre">.exe</span></code>), you will have to install <code class="docutils literal notranslate"><span class="pre">wine</span></code>. I have not included wine in the docker image to keep the image as small as possible.</p>
 </section>
 <section id="copying-bots-to-the-container">
-<h2>Copying Bots to the container<a class="headerlink" href="#copying-bots-to-the-container" title="Permalink to this heading"></a></h2>
+<h2>Copying Bots to the container<a class="headerlink" href="#copying-bots-to-the-container" title="Link to this heading"></a></h2>
 <p>The bots in the container need to be located under <code class="docutils literal notranslate"><span class="pre">app:/root/StarCraftII/Bots/&lt;bot_name&gt;</span></code>
 A copy command could be <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">cp</span> <span class="pre">examples/competetive/.</span> <span class="pre">app:/root/StarCraftII/Bots/my_bot</span></code> if you are in the main <code class="docutils literal notranslate"><span class="pre">python-sc2`</span> <span class="pre">directory,</span> <span class="pre">which</span> <span class="pre">copies</span> <span class="pre">the</span> <span class="pre">competetive</span> <span class="pre">example</span> <span class="pre">bot</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">container.</span> <span class="pre">The</span> <span class="pre">bots</span> <span class="pre">will</span> <span class="pre">be</span> <span class="pre">launched</span> <span class="pre">via</span> <span class="pre">``run.py</span></code>. The <code class="docutils literal notranslate"><span class="pre">ladderbots.json</span></code> might not be needed.
 Don’t forget to copy the python-sc2/sc2 folder, or else an older version might be used (on import) and your bot might not work correctly.</p>
@@ -146,7 +147,7 @@ Don’t forget to copy the python-sc2/sc2 folder, or else an older version might
 <p><a class="reference external" href="https://github.com/BurnySc2/python-sc2/tree/develop/examples/competitive">https://github.com/BurnySc2/python-sc2/tree/develop/examples/competitive</a> or <a class="reference external" href="https://eschamp.discourse.group/t/simple-starcraft-2-bot-template-to-get-started/155">https://eschamp.discourse.group/t/simple-starcraft-2-bot-template-to-get-started/155</a></p>
 </section>
 <section id="copying-the-runner-to-the-container">
-<h2>Copying the runner to the container<a class="headerlink" href="#copying-the-runner-to-the-container" title="Permalink to this heading"></a></h2>
+<h2>Copying the runner to the container<a class="headerlink" href="#copying-the-runner-to-the-container" title="Link to this heading"></a></h2>
 <p>You will have to configure the <code class="docutils literal notranslate"><span class="pre">custom_run_local.py</span></code> file (ctrl+f for <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">main()</span></code>).
 It can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/custom_run_local.py">https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/custom_run_local.py</a></p>
 <p>You may also customize the arenaclient <code class="docutils literal notranslate"><span class="pre">settings.json</span></code> (e.g. max game time) which is located under <code class="docutils literal notranslate"><span class="pre">/root/aiarena-client/arenaclient/proxy/settings.json</span></code>
@@ -157,14 +158,14 @@ Click here to check which settings are available: <a class="reference external" 
 </div>
 </section>
 <section id="running-the-match-es">
-<h2>Running the match(es)<a class="headerlink" href="#running-the-match-es" title="Permalink to this heading"></a></h2>
+<h2>Running the match(es)<a class="headerlink" href="#running-the-match-es" title="Link to this heading"></a></h2>
 <p>Now you are ready to let docker run your matches (headless):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">i</span> <span class="n">app</span> <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">run_local</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </section>
 <section id="copying-the-replay-from-container-to-host-machine">
-<h2>Copying the replay from container to host machine<a class="headerlink" href="#copying-the-replay-from-container-to-host-machine" title="Permalink to this heading"></a></h2>
+<h2>Copying the replay from container to host machine<a class="headerlink" href="#copying-the-replay-from-container-to-host-machine" title="Link to this heading"></a></h2>
 <p>To copy the <code class="docutils literal notranslate"><span class="pre">results.json</span></code> to the host machine to analyse the results, use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">temp</span>
 <span class="n">docker</span> <span class="n">cp</span> <span class="n">app</span><span class="p">:</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span> <span class="n">temp</span><span class="o">/</span><span class="n">results</span><span class="o">.</span><span class="n">json</span>
@@ -177,12 +178,12 @@ Click here to check which settings are available: <a class="reference external" 
 </div>
 </section>
 <section id="summary-using-a-shell-script">
-<h2>Summary using a shell script<a class="headerlink" href="#summary-using-a-shell-script" title="Permalink to this heading"></a></h2>
+<h2>Summary using a shell script<a class="headerlink" href="#summary-using-a-shell-script" title="Link to this heading"></a></h2>
 <p>For a full runner script, see:</p>
 <p><a class="reference external" href="https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/docker_run_bots.sh">https://github.com/BurnySc2/python-sc2/blob/fa4933a1bf89540a052482b1a394c8d6206d7491/bat_files/docker/docker_run_bots.sh</a></p>
 </section>
 <section id="docker-cleanup">
-<h2>Docker cleanup<a class="headerlink" href="#docker-cleanup" title="Permalink to this heading"></a></h2>
+<h2>Docker cleanup<a class="headerlink" href="#docker-cleanup" title="Link to this heading"></a></h2>
 <p>See also: <a class="reference external" href="https://docs.docker.com/config/pruning/">https://docs.docker.com/config/pruning/</a>
 Force removing all containers (including running):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker rm -f $(docker ps -aq)

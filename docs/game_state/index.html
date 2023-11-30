@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>game_state.py &mdash; python-sc2  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -113,20 +114,20 @@
   <div class="toctree-wrapper compound">
 </div>
 <section id="game-state-py">
-<h1>game_state.py<a class="headerlink" href="#game-state-py" title="Permalink to this heading"></a></h1>
+<h1>game_state.py<a class="headerlink" href="#game-state-py" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_state.GameState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">GameState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_observation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_observation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.GameState" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">GameState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_observation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_observation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.GameState" title="Link to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.action_errors">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">action_errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionError</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.action_errors" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">action_errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionError</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.action_errors" title="Link to this definition"></a></dt>
 <dd><p>List of erroneous actions since last frame.
 See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L648-L652">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L648-L652</a></p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.actions">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">actions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionRawUnitCommand</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionRawToggleAutocast</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionRawCameraMove</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.actions" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">actions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionRawUnitCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ActionRawToggleAutocast</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ActionRawCameraMove</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.actions" title="Link to this definition"></a></dt>
 <dd><p>List of successful actions since last frame.
 See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L630-L637">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L630-L637</a></p>
 <p>Each action is converted into Python dataclasses: ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove</p>
@@ -134,39 +135,39 @@ See <a class="reference external" href="https://github.com/Blizzard/s2client-pro
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.actions_toggle_autocast">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">actions_toggle_autocast</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionRawToggleAutocast</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.actions_toggle_autocast" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">actions_toggle_autocast</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionRawToggleAutocast</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.actions_toggle_autocast" title="Link to this definition"></a></dt>
 <dd><p>List of successful autocast toggle actions since last frame.
 See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L199-L202">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L199-L202</a></p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.actions_unit_commands">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">actions_unit_commands</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionRawUnitCommand</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.actions_unit_commands" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">actions_unit_commands</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ActionRawUnitCommand</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.actions_unit_commands" title="Link to this definition"></a></dt>
 <dd><p>List of successful unit actions since last frame.
 See <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L193">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L193</a></p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.alerts">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alerts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.alerts" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alerts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.alerts" title="Link to this definition"></a></dt>
 <dd><p>Game alerts, see <a class="reference external" href="https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L683-L706">https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L683-L706</a></p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.chat">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ChatMessage</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.chat" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ChatMessage</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.chat" title="Link to this definition"></a></dt>
 <dd><p>List of chat messages sent this frame (by either player).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.dead_units">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dead_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.dead_units" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dead_units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_state.GameState.dead_units" title="Link to this definition"></a></dt>
 <dd><p>A set of unit tags that died this frame</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sc2.game_state.GameState.effects">
-<span class="sig-name descname"><span class="pre">effects</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code><span class="pre">[</span><a class="reference internal" href="#sc2.game_state.EffectData" title="sc2.game_state.EffectData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectData</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#sc2.game_state.GameState.effects" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">effects</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code><span class="pre">[</span><a class="reference internal" href="#sc2.game_state.EffectData" title="sc2.game_state.EffectData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectData</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#sc2.game_state.GameState.effects" title="Link to this definition"></a></dt>
 <dd><p>Usage:
 for effect in self.state.effects:</p>
 <blockquote>
@@ -182,22 +183,22 @@ for effect in self.state.effects:</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_state.Blip">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">Blip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.Blip" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">Blip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.Blip" title="Link to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.Blip.is_blip">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_blip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_state.Blip.is_blip" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_blip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_state.Blip.is_blip" title="Link to this definition"></a></dt>
 <dd><p>Detected by sensor tower.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.Blip.position">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.game_state.Blip.position" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.game_state.Blip.position" title="Link to this definition"></a></dt>
 <dd><p>2d position of the blip.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.Blip.position3d">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position3d</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><span class="pre">Point3</span></a></em><a class="headerlink" href="#sc2.game_state.Blip.position3d" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position3d</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point3" title="sc2.position.Point3"><span class="pre">Point3</span></a></em><a class="headerlink" href="#sc2.game_state.Blip.position3d" title="Link to this definition"></a></dt>
 <dd><p>3d position of the blip.</p>
 </dd></dl>
 
@@ -205,21 +206,21 @@ for effect in self.state.effects:</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_state.Common">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">Common</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.Common" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">Common</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.Common" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_state.EffectData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">EffectData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fake</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.EffectData" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_state.</span></span><span class="sig-name descname"><span class="pre">EffectData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fake</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_state.EffectData" title="Link to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.EffectData.is_enemy">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_enemy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_state.EffectData.is_enemy" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_enemy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_state.EffectData.is_enemy" title="Link to this definition"></a></dt>
 <dd><p>Checks if the effect is hostile.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_state.EffectData.is_mine">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_mine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_state.EffectData.is_mine" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_mine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_state.EffectData.is_mine" title="Link to this definition"></a></dt>
 <dd><p>Checks if the effect is caused by me.</p>
 </dd></dl>
 
