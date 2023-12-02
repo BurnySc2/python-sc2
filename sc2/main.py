@@ -233,7 +233,7 @@ async def _play_game(
     return result
 
 
-async def _play_replay(client, ai, realtime=False, player_id=0):
+async def _play_replay(client, ai, realtime=False, player_id=1):
     ai._initialize_variables()
 
     game_data = await client.get_game_data()
@@ -455,7 +455,7 @@ async def _setup_replay(server, replay_path, realtime, observed_id):
 async def _host_replay(replay_path, ai, realtime, _portconfig, base_build, data_version, observed_id):
     async with SC2Process(fullscreen=False, base_build=base_build, data_hash=data_version) as server:
         client = await _setup_replay(server, replay_path, realtime, observed_id)
-        result = await _play_replay(client, ai, realtime)
+        result = await _play_replay(client, ai, realtime, observed_id)
         return result
 
 
@@ -498,7 +498,7 @@ def run_game(map_settings, players, **kwargs) -> Union[Result, List[Optional[Res
     return result
 
 
-def run_replay(ai, replay_path, realtime=False, observed_id=0):
+def run_replay(ai, replay_path, realtime=False, observed_id=1):
     portconfig = Portconfig()
     assert os.path.isfile(replay_path), f"Replay does not exist at the given path: {replay_path}"
     assert os.path.isabs(
