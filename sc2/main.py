@@ -17,7 +17,7 @@ import mpyq
 import portpicker
 from aiohttp import ClientSession, ClientWebSocketResponse
 from loguru import logger
-from s2clientprotocol import sc2api_pb2 as sc_pb
+from sc2.s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2.bot_ai import BotAI
 from sc2.client import Client

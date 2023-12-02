@@ -3,7 +3,7 @@ from __future__ import annotations
 from itertools import groupby
 from typing import TYPE_CHECKING, Union
 
-from s2clientprotocol import raw_pb2 as raw_pb
+from sc2.s2clientprotocol import raw_pb2 as raw_pb
 
 from sc2.position import Point2
 from sc2.unit import Unit

@@ -4,7 +4,7 @@ from contextlib import suppress
 
 from aiohttp import ClientWebSocketResponse
 from loguru import logger
-from s2clientprotocol import sc2api_pb2 as sc_pb
+from sc2.s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2.data import Status
 

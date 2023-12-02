@@ -14,7 +14,7 @@ from typing import Dict, Generator, Iterable, List, Set, Tuple, Union, final
 
 import numpy as np
 from loguru import logger
-from s2clientprotocol import sc2api_pb2 as sc_pb
+from sc2.s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2.cache import property_cache_once_per_frame
 from sc2.constants import (

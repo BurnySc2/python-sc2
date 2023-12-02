@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from loguru import logger
-from s2clientprotocol import debug_pb2 as debug_pb
-from s2clientprotocol import query_pb2 as query_pb
-from s2clientprotocol import raw_pb2 as raw_pb
-from s2clientprotocol import sc2api_pb2 as sc_pb
-from s2clientprotocol import spatial_pb2 as spatial_pb
+from sc2.s2clientprotocol import debug_pb2 as debug_pb
+from sc2.s2clientprotocol import query_pb2 as query_pb
+from sc2.s2clientprotocol import raw_pb2 as raw_pb
+from sc2.s2clientprotocol import sc2api_pb2 as sc_pb
+from sc2.s2clientprotocol import spatial_pb2 as spatial_pb
 
 from sc2.action import combine_actions
 from sc2.data import ActionResult, ChatChannel, Race, Result, Status
