@@ -274,9 +274,6 @@ RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool,
         }
     },
     UnitTypeId.GHOSTACADEMY: {
-        UpgradeId.ENHANCEDSHOCKWAVES: {
-            'ability': AbilityId.GHOSTACADEMYRESEARCH_RESEARCHENHANCEDSHOCKWAVES
-        },
         UpgradeId.PERSONALCLOAKING: {
             'ability': AbilityId.RESEARCH_PERSONALCLOAKING
         }
@@ -426,9 +423,6 @@ RESEARCH_INFO: Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool,
         },
         UpgradeId.BANSHEESPEED: {
             'ability': AbilityId.RESEARCH_BANSHEEHYPERFLIGHTROTORS
-        },
-        UpgradeId.RAVENCORVIDREACTOR: {
-            'ability': AbilityId.RESEARCH_RAVENCORVIDREACTOR
         }
     },
     UnitTypeId.TEMPLARARCHIVE: {

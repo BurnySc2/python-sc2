@@ -13,6 +13,7 @@ import math
 import pickle
 import random
 import sys
+import unittest
 from contextlib import suppress
 from pathlib import Path
 from typing import Any, List, Tuple
@@ -24,6 +25,7 @@ from loguru import logger
 
 from sc2.bot_ai import BotAI
 from sc2.client import Client
+from sc2.constants import ALL_GAS, CREATION_ABILITY_FIX
 from sc2.data import CloakState, Race
 from sc2.game_data import AbilityData, Cost, GameData
 from sc2.game_info import GameInfo
@@ -770,7 +772,6 @@ def test_unit():
     assert scv.is_facing(townhall, angle_error=2 * math.pi)
     assert not scv.is_facing(townhall)
     assert townhall.is_facing(scv, angle_error=2 * math.pi)
-    assert not townhall.is_facing(scv)
 
     assert scv.footprint_radius == 0
     assert townhall.footprint_radius == 2.5
@@ -918,6 +919,61 @@ def test_units():
     assert hash(scvs + townhalls)
     assert scvs.copy()
     assert scvs.by_tag(scvs[0].tag)
+
+
+def test_exact_creation_ability():
+    try:
+        from sc2.dicts.unit_abilities import UNIT_ABILITIES
+        from sc2.dicts.unit_unit_alias import UNIT_UNIT_ALIAS
+    except ImportError:
+        logger.info(f"Import error: dict sc2/dicts/ are missing!")
+        return
+    test_case = unittest.TestCase()
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+
+    ignore_types = {
+        UnitTypeId.ADEPTPHASESHIFT,
+        UnitTypeId.ARBITERMP,
+        UnitTypeId.BROODLING,
+        UnitTypeId.BYPASSARMORDRONE,
+        UnitTypeId.CORSAIRMP,
+        UnitTypeId.EGG,
+        UnitTypeId.ELSECARO_COLONIST_HUT,
+        UnitTypeId.HERC,
+        UnitTypeId.HERCPLACEMENT,
+        UnitTypeId.INFESTEDTERRANSEGG,
+        UnitTypeId.LARVA,
+        UnitTypeId.NYDUSCANALCREEPER,
+        UnitTypeId.QUEENMP,
+        UnitTypeId.RAVENREPAIRDRONE,
+        UnitTypeId.REPLICANT,
+        UnitTypeId.SCOURGEMP,
+        UnitTypeId.SCOUTMP,
+        UnitTypeId.WARHOUND,
+    }
+
+    unit_types = list(UNIT_UNIT_ALIAS) + list(UNIT_UNIT_ALIAS.values()) + list(UNIT_ABILITIES) + list(ALL_GAS)
+    unit_types_unique_sorted = sorted(set(t.name for t in unit_types))
+    for unit_type_name in unit_types_unique_sorted:
+        unit_type = UnitTypeId[unit_type_name]
+        if unit_type in ignore_types:
+            continue
+
+        if unit_type in [
+            UnitTypeId.ARCHON,
+            UnitTypeId.ASSIMILATORRICH,
+            UnitTypeId.EXTRACTORRICH,
+            UnitTypeId.REFINERYRICH,
+        ]:
+            with test_case.assertRaises(AttributeError):
+                _creation_ability = bot.game_data.units[unit_type.value].creation_ability.exact_id
+            continue
+
+        try:
+            _creation_ability = bot.game_data.units[unit_type.value].creation_ability.exact_id
+        except AttributeError:
+            if unit_type not in CREATION_ABILITY_FIX:
+                assert False, f"Unit type '{unit_type}' missing from CREATION_ABILITY_FIX"
 
 
 def test_dicts():

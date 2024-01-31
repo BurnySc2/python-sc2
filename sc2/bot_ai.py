@@ -13,6 +13,7 @@ from loguru import logger
 from sc2.bot_ai_internal import BotAIInternal
 from sc2.cache import property_cache_once_per_frame
 from sc2.constants import (
+    CREATION_ABILITY_FIX,
     EQUIVALENTS_FOR_TECH_PROGRESS,
     PROTOSS_TECH_REQUIREMENT,
     TERRAN_STRUCTURES_REQUIRE_SCV,
@@ -399,6 +400,8 @@ class BotAI(BotAIInternal):
         :param unit_type:"""
         if unit_type in {UnitTypeId.ZERGLING}:
             return 1
+        if unit_type in {UnitTypeId.BANELING}:
+            return 0
         unit_supply_cost = self.game_data.units[unit_type.value]._proto.food_required
         if unit_supply_cost > 0 and unit_type in UNIT_TRAINED_FROM and len(UNIT_TRAINED_FROM[unit_type]) == 1:
             producer: UnitTypeId
@@ -471,11 +474,13 @@ class BotAI(BotAIInternal):
         """
         if isinstance(item_id, UnitTypeId):
             # Fix cost for reactor and techlab where the API returns 0 for both
-            if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB, UnitTypeId.ARCHON}:
+            if item_id in {UnitTypeId.REACTOR, UnitTypeId.TECHLAB, UnitTypeId.ARCHON, UnitTypeId.BANELING}:
                 if item_id == UnitTypeId.REACTOR:
                     return Cost(50, 50)
                 if item_id == UnitTypeId.TECHLAB:
                     return Cost(50, 25)
+                if item_id == UnitTypeId.BANELING:
+                    return Cost(25, 25)
                 if item_id == UnitTypeId.ARCHON:
                     return self.calculate_unit_value(UnitTypeId.ARCHON)
             unit_data = self.game_data.units[item_id.value]
@@ -787,7 +792,7 @@ class BotAI(BotAIInternal):
         creation_ability: AbilityId = creation_ability_data.exact_id
         max_value = max(
             [s.build_progress for s in self.structures if s._proto.unit_type in equiv_values] +
-            [self._abilities_all_units[1].get(creation_ability, 0)],
+            [self._abilities_count_and_build_progress[1].get(creation_ability, 0)],
             default=0,
         )
         return max_value
@@ -842,13 +847,22 @@ class BotAI(BotAIInternal):
             amount_of_CCs_in_queue_and_production: int = self.already_pending(UnitTypeId.COMMANDCENTER)
             amount_of_lairs_morphing: int = self.already_pending(UnitTypeId.LAIR)
 
-
         :param unit_type:
         """
         if isinstance(unit_type, UpgradeId):
             return self.already_pending_upgrade(unit_type)
-        ability = self.game_data.units[unit_type.value].creation_ability.exact_id
-        return self._abilities_all_units[0][ability]
+        try:
+            ability = self.game_data.units[unit_type.value].creation_ability.exact_id
+        except AttributeError:
+            if unit_type in CREATION_ABILITY_FIX:
+                # Hotfix for checking pending archons
+                if unit_type == UnitTypeId.ARCHON:
+                    return self._abilities_count_and_build_progress[0][AbilityId.ARCHON_WARP_TARGET] / 2
+                # Hotfix for rich geysirs
+                return self._abilities_count_and_build_progress[0][CREATION_ABILITY_FIX[unit_type]]
+            logger.error(f"Uncaught UnitTypeId: {unit_type}")
+            return 0
+        return self._abilities_count_and_build_progress[0][ability]
 
     def worker_en_route_to_build(self, unit_type: UnitTypeId) -> float:
         """This function counts how many workers are on the way to start the construction a building.

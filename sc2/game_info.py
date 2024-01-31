@@ -97,6 +97,7 @@ class Ramp:
             intersects = p1.circle_intersection(p2, 5**0.5)
             any_lower_point = next(iter(self.lower))
             return max(intersects, key=lambda p: p.distance_to_point2(any_lower_point))
+        # pylint: disable=broad-exception-raised
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -116,6 +117,7 @@ class Ramp:
                 return None
             any_lower_point = next(iter(self.lower))
             return max(intersects, key=lambda p: p.distance_to_point2(any_lower_point))
+        # pylint: disable=broad-exception-raised
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -134,6 +136,7 @@ class Ramp:
             # Offset from middle depot to corner depots is (2, 1)
             intersects = center.circle_intersection(depot_position, 5**0.5)
             return intersects
+        # pylint: disable=broad-exception-raised
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -142,6 +145,7 @@ class Ramp:
         # https://i.imgur.com/4b2cXHZ.png
         if len(self.upper2_for_ramp_wall) == 2:
             return self.barracks_in_middle.x + 1 > max(self.corner_depots, key=lambda depot: depot.x).x
+        # pylint: disable=broad-exception-raised
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -153,6 +157,7 @@ class Ramp:
             if self.barracks_can_fit_addon:
                 return self.barracks_in_middle
             return self.barracks_in_middle.offset((-2, 0))
+        # pylint: disable=broad-exception-raised
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -163,6 +168,7 @@ class Ramp:
         if len(self.upper) not in {2, 5}:
             return None
         if len(self.upper2_for_ramp_wall) != 2:
+            # pylint: disable=broad-exception-raised
             raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
         middle = self.depot_in_middle
         # direction up the ramp
@@ -188,6 +194,7 @@ class Ramp:
             wall1: Point2 = sorted_depots[1].offset(direction)
             wall2 = middle + direction + (middle - wall1) / 1.5
             return frozenset([wall1, wall2])
+        # pylint: disable=broad-exception-raised
         raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
 
     @cached_property
@@ -199,6 +206,7 @@ class Ramp:
         if len(self.upper) not in {2, 5}:
             return None
         if len(self.upper2_for_ramp_wall) != 2:
+            # pylint: disable=broad-exception-raised
             raise Exception("Not implemented. Trying to access a ramp that has a wrong amount of upper points.")
         middle = self.depot_in_middle
         # direction up the ramp
@@ -231,7 +239,9 @@ class GameInfo:
             p.player_id: p.race_actual or p.race_requested
             for p in self._proto.player_info
         }
-        self.start_locations: List[Point2] = [Point2.from_proto(sl) for sl in self._proto.start_raw.start_locations]
+        self.start_locations: List[Point2] = [
+            Point2.from_proto(sl).round(decimals=1) for sl in self._proto.start_raw.start_locations
+        ]
         self.player_start_location: Point2 = None  # Filled later by BotAI._prepare_first_step
 
     def _find_ramps_and_vision_blockers(self) -> Tuple[List[Ramp], FrozenSet[Point2]]:

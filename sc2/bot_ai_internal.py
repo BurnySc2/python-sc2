@@ -19,6 +19,7 @@ from s2clientprotocol import sc2api_pb2 as sc_pb
 from sc2.cache import property_cache_once_per_frame
 from sc2.constants import (
     ALL_GAS,
+    CREATION_ABILITY_FIX,
     IS_PLACEHOLDER,
     TERRAN_STRUCTURES_REQUIRE_SCV,
     FakeEffectID,
@@ -185,13 +186,19 @@ class BotAIInternal(ABC):
         ]
         # Loop the merging process as long as we change something
         merged_group = True
+        height_grid: PixelMap = self.game_info.terrain_height
         while merged_group:
             merged_group = False
             # Check every combination of two groups
             for group_a, group_b in itertools.combinations(resource_groups, 2):
                 # Check if any pair of resource of these groups is closer than threshold together
+                # And that they are on the same terrain level
                 if any(
                     resource_a.distance_to(resource_b) <= resource_spread_threshold
+                    # check if terrain height measurement at resources is within 10 units
+                    # this is since some older maps have inconsistent terrain height
+                    # tiles at certain expansion locations
+                    and abs(height_grid[resource_a.position.rounded] - height_grid[resource_b.position.rounded]) <= 10
                     for resource_a, resource_b in itertools.product(group_a, group_b)
                 ):
                     # Remove the single groups and add the merged group
@@ -260,7 +267,7 @@ class BotAIInternal(ABC):
 
     @final
     @property_cache_once_per_frame
-    def _abilities_all_units(self) -> Tuple[CounterType[AbilityId], Dict[AbilityId, float]]:
+    def _abilities_count_and_build_progress(self) -> Tuple[CounterType[AbilityId], Dict[AbilityId, float]]:
         """Cache for the already_pending function, includes protoss units warping in,
         all units in production and all structures, and all morphs"""
         abilities_amount: CounterType[AbilityId] = Counter()
@@ -273,8 +280,18 @@ class BotAIInternal(ABC):
                 if self.race != Race.Terran or not unit.is_structure:
                     # If an SCV is constructing a building, already_pending would count this structure twice
                     # (once from the SCV order, and once from "not structure.is_ready")
-                    creation_ability: AbilityId = self.game_data.units[unit.type_id.value].creation_ability.exact_id
-                    abilities_amount[creation_ability] += 1
+                    if unit.type_id in CREATION_ABILITY_FIX:
+                        if unit.type_id == UnitTypeId.ARCHON:
+                            # Hotfix for archons in morph state
+                            creation_ability = AbilityId.ARCHON_WARP_TARGET
+                            abilities_amount[creation_ability] += 2
+                        else:
+                            # Hotfix for rich geysirs
+                            creation_ability = CREATION_ABILITY_FIX[unit.type_id]
+                            abilities_amount[creation_ability] += 1
+                    else:
+                        creation_ability: AbilityId = self.game_data.units[unit.type_id.value].creation_ability.exact_id
+                        abilities_amount[creation_ability] += 1
                     max_build_progress[creation_ability] = max(
                         max_build_progress.get(creation_ability, 0), unit.build_progress
                     )
@@ -729,18 +746,16 @@ class BotAIInternal(ABC):
                 await self.on_enemy_unit_entered_vision(enemy_structure)
 
         # Call events for enemy unit left vision
-        enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map.keys()) - self.enemy_units.tags
+        enemy_units_left_vision: Set[int] = set(self._enemy_units_previous_map) - self.enemy_units.tags
         for enemy_unit_tag in enemy_units_left_vision:
             await self.on_enemy_unit_left_vision(enemy_unit_tag)
-        enemy_structures_left_vision: Set[int] = (
-            set(self._enemy_structures_previous_map.keys()) - self.enemy_structures.tags
-        )
+        enemy_structures_left_vision: Set[int] = set(self._enemy_structures_previous_map) - self.enemy_structures.tags
         for enemy_structure_tag in enemy_structures_left_vision:
             await self.on_enemy_unit_left_vision(enemy_structure_tag)
 
     @final
     async def _issue_unit_dead_events(self):
-        for unit_tag in self.state.dead_units & set(self._all_units_previous_map.keys()):
+        for unit_tag in self.state.dead_units & set(self._all_units_previous_map):
             await self.on_unit_destroyed(unit_tag)
 
     # DISTANCE CALCULATION

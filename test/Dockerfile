@@ -1,12 +1,12 @@
 # Buildable via command from root folder
-# docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=3.8 --build-arg SC2_VERSION=4.10 .
+# docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=3.9 --build-arg SC2_VERSION=4.10 .
 
 # For more info see https://github.com/BurnySc2/python-sc2-docker
-ARG PYTHON_VERSION=3.8
+ARG PYTHON_VERSION=3.9
 ARG SC2_VERSION=4.10
 ARG VERSION_NUMBER=1.0.0
 
-FROM burnysc2/python-sc2-docker:py_$PYTHON_VERSION-sc2_$SC2_VERSION-v$VERSION_NUMBER
+FROM burnysc2/python-sc2-docker:py_$PYTHON_VERSION-sc2_$SC2_VERSION-v$VERSION_NUMBER-squashed
 
 # Debugging purposes
 RUN echo $PYTHON_VERSION

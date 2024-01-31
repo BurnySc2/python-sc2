@@ -89,7 +89,7 @@ class TestBot(BotAI):
         from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
 
         structure_types: List[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
-        upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM.keys())
+        upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM)
 
         # TODO if *techlab in name -> spawn rax/ fact / starport next to it
         addon_structures: Dict[str, UnitTypeId] = {

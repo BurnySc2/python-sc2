@@ -58,6 +58,9 @@ class GameData:
                 if unit.id == UnitTypeId.ZERGLING:
                     # HARD CODED: zerglings are generated in pairs
                     return Cost(unit.cost.minerals * 2, unit.cost.vespene * 2, unit.cost.time)
+                if unit.id == UnitTypeId.BANELING:
+                    # HARD CODED: banelings don't cost 50/25 as described in the API, but 25/25
+                    return Cost(25, 25, unit.cost.time)
                 # Correction for morphing units, e.g. orbital would return 550/0 instead of actual 150/0
                 morph_cost = unit.morph_cost
                 if morph_cost:  # can be None
