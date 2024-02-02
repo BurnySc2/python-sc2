@@ -129,8 +129,7 @@ TRAIN_INFO: Dict[UnitTypeId, Dict[UnitTypeId, Dict[str, Union[AbilityId, bool, U
     },
     UnitTypeId.FACTORY: {
         UnitTypeId.CYCLONE: {
-            'ability': AbilityId.TRAIN_CYCLONE,
-            'requires_techlab': True
+            'ability': AbilityId.TRAIN_CYCLONE
         },
         UnitTypeId.HELLION: {
             'ability': AbilityId.FACTORYTRAIN_HELLION
