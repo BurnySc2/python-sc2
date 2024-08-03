@@ -977,7 +977,7 @@ def test_dicts():
         for upgrade_id, upgrade_data in data.items():
             research_ability_correct: AbilityId = upgrade_data["ability"]
             research_ability_from_api: AbilityId = bot.game_data.upgrades[upgrade_id.value].research_ability.exact_id
-            if upgrade_id.value == 770:
+            if research_ability_correct.value == 770:
                 # FACTORYTECHLABRESEARCH_CYCLONERESEARCHHURRICANETHRUSTERS incorrectly identified as tempest upgrade
                 continue
             if upgrade_id.value in {116, 117, 118}:
