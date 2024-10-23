@@ -18,7 +18,7 @@ For a list of ongoing changes and differences to the main repository of Dentosal
 
 By installing this library you agree to be bound by the terms of the [AI and Machine Learning License](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html).
 
-For this fork, you'll need Python 3.9 or newer.
+For this fork, you'll need Python 3.10 or newer.
 
 Install the pypi package:
 ```

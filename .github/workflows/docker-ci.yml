@@ -12,10 +12,10 @@ on:
     - develop
 
 env:
-  VERSION_NUMBER: '1.0.3'
-  LATEST_PYTHON_VERSION: '3.11'
+  VERSION_NUMBER: '1.0.4'
+  LATEST_PYTHON_VERSION: '3.12'
   LATEST_SC2_VERSION: '4.10'
-  EXPERIMENTAL_PYTHON_VERSION: '3.12'
+  EXPERIMENTAL_PYTHON_VERSION: '3.13'
 
 jobs:
   run_test_docker_image:
@@ -75,7 +75,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
         sc2-version: ['4.10']
     env:
       IMAGE_NAME: burnysc2/python-sc2-docker:py_${{ matrix.python-version }}-sc2_${{ matrix.sc2-version }}

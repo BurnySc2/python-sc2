@@ -6,7 +6,7 @@ This is an overview to the BurnySc2/python-sc2 library which can be found here: 
 
 Requirements
 -------------
-- Python 3.9 or newer
+- Python 3.10 or newer
 - StarCraft 2 Client installation in the **default installation path** which should be ``C:\Program Files (x86)\StarCraft II``
 
 Installation

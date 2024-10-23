@@ -7,7 +7,7 @@ set -e
 
 # Set which versions to use
 export VERSION_NUMBER=${VERSION_NUMBER:-0.9.9}
-export PYTHON_VERSION=${PYTHON_VERSION:-3.10}
+export PYTHON_VERSION=${PYTHON_VERSION:-3.12}
 export SC2_VERSION=${SC2_VERSION:-4.10}
 
 # For better readability, set local variables
@@ -36,8 +36,7 @@ docker rm -f test_container
 # https://docs.docker.com/storage/bind-mounts/#use-a-read-only-bind-mount
 docker run -i -d \
   --name test_container \
-  --mount type=bind,source="$(pwd)",destination=/root/python-sc2,readonly \
-  --entrypoint /bin/bash \
+  --volume ./:/root/python-sc2:ro \
   $IMAGE_NAME
 
 # Install python-sc2, via mount the python-sc2 folder will be available

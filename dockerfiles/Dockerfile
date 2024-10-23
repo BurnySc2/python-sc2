@@ -1,5 +1,5 @@
 # Set up StarCraft II Test Environment for python-sc2 bots (not pysc2 bots!)
-ARG PYTHON_VERSION=3.9
+ARG PYTHON_VERSION=3.10
 
 # Use an official debian stretch slim release as a base image
 FROM python:$PYTHON_VERSION-slim

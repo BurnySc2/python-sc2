@@ -12,9 +12,9 @@ Requirements
 
 Pulling the Docker image
 ------------------------
-The SC2 AI community has decided to stay on Python3.9 for a while. I'll try to update the docker image as soon as a new linux binary is released, or create a pull request at https://github.com/BurnySc2/python-sc2-docker ::
+The SC2 AI community has decided to stay on Python3.10 for a while. I'll try to update the docker image as soon as a new linux binary is released, or create a pull request at https://github.com/BurnySc2/python-sc2-docker ::
 
-    docker pull burnysc2/python-sc2-docker:release-python_3.9-sc2_4.10_arenaclient_burny
+    docker pull burnysc2/python-sc2-docker:release-python_3.10-sc2_4.10_arenaclient_burny
 
 Deleting previous containers
 -----------------------------
@@ -26,7 +26,7 @@ Launching a new container
 --------------------------
 The following command launches a new container in interactive mode, which means it will not shut down once it is done running::
 
-    docker run -it -d --name app burnysc2/python-sc2-docker:release-python_3.9-sc2_4.10_arenaclient_burny
+    docker run -it -d --name app burnysc2/python-sc2-docker:release-python_3.10-sc2_4.10_arenaclient_burny
 
 Install bot requirements
 -------------------------
