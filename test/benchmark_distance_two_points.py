@@ -161,4 +161,4 @@ def test_distance_sum_squared(benchmark):
 #     assert check_result(result, correct_result ** 2)
 
 # Run this file using
-# poetry run pytest test/test_benchmark_distance_two_points.py --benchmark-compare
+# uv run pytest test/test_benchmark_distance_two_points.py --benchmark-compare

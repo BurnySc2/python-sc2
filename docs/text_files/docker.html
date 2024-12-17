@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
@@ -6,18 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using docker to run SC2 bots &mdash; python-sc2  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -134,7 +132,7 @@ For a quick summary of commands, scroll to the bottom.</p>
 </section>
 <section id="install-bot-requirements">
 <h2>Install bot requirements<a class="headerlink" href="#install-bot-requirements" title="Link to this heading"></a></h2>
-<p>The command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-i</span> <span class="pre">app</span> <span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">&quot;burnysc2&gt;=0.12.12&quot;</span></code> installs the <code class="docutils literal notranslate"><span class="pre">burnysc2</span></code> dependencies in the docker container. Add more libraries as needed. You can also create your custom docker image so you do not have to re-install the dependencies every time you create a new container.</p>
+<p>The command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span> <span class="pre">-i</span> <span class="pre">app</span> <span class="pre">uv</span> <span class="pre">add</span> <span class="pre">&quot;burnysc2&gt;=0.12.12&quot;</span></code> installs the <code class="docutils literal notranslate"><span class="pre">burnysc2</span></code> dependencies in the docker container. Add more libraries as needed. You can also create your custom docker image so you do not have to re-install the dependencies every time you create a new container.</p>
 <p>Since the linux SC2 binary is usually outdated (last update as of this writing was summer of 2019), you will likely have to replace your IDs with older IDs, which can be found here: <a class="reference external" href="https://github.com/BurnySc2/python-sc2/tree/linux-4.10/sc2/ids">https://github.com/BurnySc2/python-sc2/tree/linux-4.10/sc2/ids</a></p>
 <p>If you want your bots to play against a compiled bot (<code class="docutils literal notranslate"><span class="pre">.exe</span></code>), you will have to install <code class="docutils literal notranslate"><span class="pre">wine</span></code>. I have not included wine in the docker image to keep the image as small as possible.</p>
 </section>
@@ -160,7 +158,7 @@ Click here to check which settings are available: <a class="reference external" 
 <section id="running-the-match-es">
 <h2>Running the match(es)<a class="headerlink" href="#running-the-match-es" title="Link to this heading"></a></h2>
 <p>Now you are ready to let docker run your matches (headless):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">i</span> <span class="n">app</span> <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">run_local</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">i</span> <span class="n">app</span> <span class="n">uv</span> <span class="n">run</span> <span class="n">python</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">aiarena</span><span class="o">-</span><span class="n">client</span><span class="o">/</span><span class="n">arenaclient</span><span class="o">/</span><span class="n">run_local</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </section>

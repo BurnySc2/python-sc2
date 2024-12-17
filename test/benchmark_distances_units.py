@@ -117,4 +117,4 @@ def test_distance_matrix_scipy_pdist_squared(benchmark):
 
 
 # Run this file using
-# poetry run pytest test/test_benchmark_distances_units.py --benchmark-compare
+# uv run pytest test/test_benchmark_distances_units.py --benchmark-compare

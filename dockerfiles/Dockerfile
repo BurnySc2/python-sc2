@@ -1,9 +1,8 @@
 # Set up StarCraft II Test Environment for python-sc2 bots (not pysc2 bots!)
 ARG PYTHON_VERSION=3.10
 
-# Use an official debian stretch slim release as a base image
-FROM python:$PYTHON_VERSION-slim
-MAINTAINER Burny <gamingburny@gmail.com>
+# https://docs.astral.sh/uv/guides/integration/docker/#available-images
+FROM ghcr.io/astral-sh/uv:python$PYTHON_VERSION-bookworm-slim
 
 ARG SC2_VERSION=4.10
 

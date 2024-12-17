@@ -14,4 +14,4 @@ def test_bench_bot_ai_init(benchmark):
 
 
 # Run this file using
-# poetry run pytest test/benchmark_bot_ai_init.py --benchmark-compare --benchmark-min-rounds=5
+# uv run pytest test/benchmark_bot_ai_init.py --benchmark-compare --benchmark-min-rounds=5

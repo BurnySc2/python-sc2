@@ -15,7 +15,6 @@ Install through pip using ``pip install burnysc2`` if Python is in your environm
 
 Alternatively (of if the command above doesn't work) you can install a specific branch directly from github, here the develop branch::
 
-    pip install poetry
     pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/archive/develop.zip
 
 Creating a bot

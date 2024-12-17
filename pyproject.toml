@@ -1,10 +1,10 @@
-[tool.poetry]
-name = "burnysc2"
+[project]
+name = "sc2"
 version = "7.0.1"
 description = "A StarCraft II API Client for Python 3"
-authors = ["BurnySc2 <gamingburny@gmail.com>"]
+authors = [{ name = "BurnySc2", email = "gamingburny@gmail.com" }]
+requires-python = ">=3.9, <3.13"
 license = "MIT"
-homepage = "https://github.com/Burnysc2/python-sc2"
 documentation = "https://burnysc2.github.io/python-sc2/docs/index.html"
 keywords = ["StarCraft", "StarCraft 2", "StarCraft II", "AI", "Bot"]
 classifiers = [
@@ -26,48 +26,46 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-packages = [{ include = "sc2/**/*.py" }]
+readme = "README.md"
 
-[tool.poetry.dependencies]
-python = ">=3.9, <3.14"
-aiohttp = "^3.7.4"
-loguru = "^0.6.0"
-mpyq = "^0.2.5"
-numpy = [
-    { version = ">=2.1.0", markers = "python_version >= '3.13'" },
-    { version = "<2.1.0", markers = "python_version < '3.13'" },
+dependencies = [
+    "aiohttp>=3.11.10",
+    "loguru>=0.7.3",
+    "mpyq>=0.2.5",
+    "numpy>=2.1.0; python_full_version >= '3.13'",
+    "numpy>=2.0.0; python_full_version < '3.13'",
+    "portpicker>=1.6.0",
+    "protobuf<4.0.0",
+    "s2clientprotocol>=5.0.14.93333.0",
+    "scipy>=1.14.1; python_full_version >= '3.13'",
+    "scipy>=1.7.1; python_full_version < '3.13'",
 ]
-portpicker = "^1.4.0"
-s2clientprotocol = "^5.0.7"
-scipy = [
-    { version = ">=1.14.1", markers = "python_version >= '3.13'" },
-    { version = "^1.7.1", markers = "python_version < '3.13'" },
+
+[dependency-groups]
+dev = [
+    "coverage>=7.6.9",
+    "hypothesis>=6.122.3",
+    "matplotlib>=3.9.4",
+    "mypy>=1.13.0",
+    "pillow>=11.0.0",
+    "pre-commit>=4.0.1",
+    "pyglet>=2.0.20",
+    "pylint>=3.3.2",
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.25.0",
+    "pytest-benchmark>=5.1.0",
+    "pytest-cov>=6.0.0",
+    "radon>=6.0.1",
+    "sphinx>=7.4.7",
+    "sphinx-autodoc-typehints>=2.3.0",
+    "sphinx-rtd-theme>=3.0.2",
+    "toml>=0.10.2",
+    "yapf>=0.43.0",
 ]
-protobuf = "<4.0.0"
 
-[tool.poetry.group.dev.dependencies]
-coverage = "^7.2"
-hypothesis = "^6.23.1"
-matplotlib = "^3.4.3"
-mypy = "^0.960"
-pillow = "^11.0"
-pre-commit = "^2.15.0"
-pyglet = "^2.0"
-pylint = "^2.11.1"
-pytest = "^7.1.1"
-pytest-asyncio = "^0.18.3"
-pytest-benchmark = "^4.0.0"
-pytest-cov = "^4.0.0"
-radon = "^5.1.0"
-sphinx = "^7.0"
-sphinx-autodoc-typehints = "^1.18"
-sphinx-rtd-theme = "^2.0"
-toml = "^0.10.2"
-yapf = "^0.32.0"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[project.urls]
+Repository = "https://github.com/Burnysc2/python-sc2"
+Documentation = "https://burnysc2.github.io/python-sc2"
 
 [tool.mypy]
 python_version = "3.10"

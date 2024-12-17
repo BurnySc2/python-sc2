@@ -30,7 +30,7 @@ The following command launches a new container in interactive mode, which means 
 
 Install bot requirements
 -------------------------
-The command ``docker exec -i app poetry add "burnysc2>=0.12.12"`` installs the ``burnysc2`` dependencies in the docker container. Add more libraries as needed. You can also create your custom docker image so you do not have to re-install the dependencies every time you create a new container.
+The command ``docker exec -i app uv add "burnysc2>=0.12.12"`` installs the ``burnysc2`` dependencies in the docker container. Add more libraries as needed. You can also create your custom docker image so you do not have to re-install the dependencies every time you create a new container.
 
 Since the linux SC2 binary is usually outdated (last update as of this writing was summer of 2019), you will likely have to replace your IDs with older IDs, which can be found here: https://github.com/BurnySc2/python-sc2/tree/linux-4.10/sc2/ids
 
@@ -62,7 +62,7 @@ Running the match(es)
 ---------------------
 Now you are ready to let docker run your matches (headless)::
 
-    docker exec -i app poetry run python /root/aiarena-client/arenaclient/run_local.py
+    docker exec -i app uv run python /root/aiarena-client/arenaclient/run_local.py
 
 Copying the replay from container to host machine
 --------------------------------------------------------------

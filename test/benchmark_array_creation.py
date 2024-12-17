@@ -140,4 +140,4 @@ def test_numpy_ones(benchmark):
 
 
 # Run this file using
-# poetry run pytest test/test_benchmark_array_creation.py --benchmark-compare
+# uv run pytest test/test_benchmark_array_creation.py --benchmark-compare

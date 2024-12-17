@@ -16,4 +16,4 @@ def test_bench_prepare_units(benchmark):
 
 
 # Run this file using
-# poetry run pytest test/benchmark_prepare_units.py --benchmark-compare
+# uv run pytest test/benchmark_prepare_units.py --benchmark-compare

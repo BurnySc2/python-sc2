@@ -18,12 +18,12 @@ ADD . /root/python-sc2
 
 # Install the python-sc2 library and its requirements (s2clientprotocol etc.) to python
 WORKDIR /root/python-sc2
-RUN pip install --no-cache-dir poetry \
+RUN pip install --no-cache-dir uv \
     # This will not include dev dependencies
-    && poetry export -f requirements.txt --output requirements.txt --without-hashes \
+    && uv export --format requirements-txt --output-file requirements.txt --no-hashes \
     && pip install --no-cache-dir -r requirements.txt
 
 # This will be executed during the container run instead:
-# docker run test_image -c "poetry run python examples/protoss/cannon_rush.py"
+# docker run test_image -c "uv run python examples/protoss/cannon_rush.py"
 
 ENTRYPOINT [ "/bin/bash" ]
