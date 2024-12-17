@@ -10,7 +10,6 @@ from sc2.units import Units
 
 
 class CyclonePush(BotAI):
-
     def select_target(self) -> Point2:
         # Pick a random enemy structure's position
         targets = self.enemy_structures
@@ -23,13 +22,12 @@ class CyclonePush(BotAI):
             return targets.random.position
 
         # Pick enemy start location if it has no friendly units nearby
-        if min((unit.distance_to(self.enemy_start_locations[0]) for unit in self.units)) > 5:
+        if min(unit.distance_to(self.enemy_start_locations[0]) for unit in self.units) > 5:
             return self.enemy_start_locations[0]
 
         # Pick a random mineral field on the map
         return self.mineral_field.random.position
 
-    # pylint: disable=R0912
     async def on_step(self, iteration):
         CCs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         # If no command center exists, attack-move with all workers and cyclones
@@ -58,7 +56,8 @@ class CyclonePush(BotAI):
         # While we have less than 22 workers: build more
         # Check if we can afford them (by minerals and by supply)
         if (
-            self.can_afford(UnitTypeId.SCV) and self.supply_workers + self.already_pending(UnitTypeId.SCV) < 22
+            self.can_afford(UnitTypeId.SCV)
+            and self.supply_workers + self.already_pending(UnitTypeId.SCV) < 22
             and cc.is_idle
         ):
             cc.train(UnitTypeId.SCV)

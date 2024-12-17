@@ -7,7 +7,6 @@ Bot made by Burny
 """
 
 import random
-from typing import Set
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
@@ -21,14 +20,11 @@ from sc2.unit import Unit
 from sc2.units import Units
 
 
-# pylint: disable=W0231
 class MassReaperBot(BotAI):
-
     def __init__(self):
         # Select distance calculation method 0, which is the pure python distance calculation without caching or indexing, using math.hypot(), for more info see bot_ai_internal.py _distances_override_functions() function
         self.distance_calculation_method = 3
 
-    # pylint: disable=R0912,R0914
     async def on_step(self, iteration):
         # Benchmark and print duration time of the on_step method based on "self.distance_calculation_method" value
         # logger.info(self.time_formatted, self.supply_used, self.step_time[1])
@@ -39,8 +35,11 @@ class MassReaperBot(BotAI):
         - self.already_pending(TYPE) counts how many units are queued
         """
         if (
-            self.supply_left < 5 and self.townhalls and self.supply_used >= 14
-            and self.can_afford(UnitTypeId.SUPPLYDEPOT) and self.already_pending(UnitTypeId.SUPPLYDEPOT) < 1
+            self.supply_left < 5
+            and self.townhalls
+            and self.supply_used >= 14
+            and self.can_afford(UnitTypeId.SUPPLYDEPOT)
+            and self.already_pending(UnitTypeId.SUPPLYDEPOT) < 1
         ):
             workers: Units = self.workers.gathering
             # If workers were found
@@ -68,7 +67,8 @@ class MassReaperBot(BotAI):
 
         # Expand if we can afford (400 minerals) and have less than 2 bases
         if (
-            1 <= self.townhalls.amount < 2 and self.already_pending(UnitTypeId.COMMANDCENTER) == 0
+            1 <= self.townhalls.amount < 2
+            and self.already_pending(UnitTypeId.COMMANDCENTER) == 0
             and self.can_afford(UnitTypeId.COMMANDCENTER)
         ):
             # get_next_expansion returns the position of the next possible expansion location where you can place a command center
@@ -88,8 +88,8 @@ class MassReaperBot(BotAI):
             # self.structures.of_type(
             #     [UnitTypeId.SUPPLYDEPOT, UnitTypeId.SUPPLYDEPOTLOWERED, UnitTypeId.SUPPLYDEPOTDROP]
             # ).ready
-            and self.structures(UnitTypeId.BARRACKS).ready.amount + self.already_pending(UnitTypeId.BARRACKS) < 4 and
-            self.can_afford(UnitTypeId.BARRACKS)
+            and self.structures(UnitTypeId.BARRACKS).ready.amount + self.already_pending(UnitTypeId.BARRACKS) < 4
+            and self.can_afford(UnitTypeId.BARRACKS)
         ):
             workers: Units = self.workers.gathering
             if (
@@ -113,8 +113,9 @@ class MassReaperBot(BotAI):
                 # Find all vespene geysers that are closer than range 10 to this townhall
                 vgs: Units = self.vespene_geyser.closer_than(10, th)
                 for vg in vgs:
-                    if await self.can_place_single(UnitTypeId.REFINERY,
-                                                   vg.position) and self.can_afford(UnitTypeId.REFINERY):
+                    if await self.can_place_single(UnitTypeId.REFINERY, vg.position) and self.can_afford(
+                        UnitTypeId.REFINERY
+                    ):
                         workers: Units = self.workers.gathering
                         if workers:  # same condition as above
                             worker: Unit = workers.closest_to(vg)
@@ -126,10 +127,13 @@ class MassReaperBot(BotAI):
 
         # Make scvs until 22, usually you only need 1:1 mineral:gas ratio for reapers, but if you don't lose any then you will need additional depots (mule income should take care of that)
         # Stop scv production when barracks is complete but we still have a command center (priotize morphing to orbital command)
-    # pylint: disable=R0916
         if (
-            self.can_afford(UnitTypeId.SCV) and self.supply_left > 0 and self.supply_workers < 22 and (
-                self.structures(UnitTypeId.BARRACKS).ready.amount < 1 and self.townhalls(UnitTypeId.COMMANDCENTER).idle
+            self.can_afford(UnitTypeId.SCV)
+            and self.supply_left > 0
+            and self.supply_workers < 22
+            and (
+                self.structures(UnitTypeId.BARRACKS).ready.amount < 1
+                and self.townhalls(UnitTypeId.COMMANDCENTER).idle
                 or self.townhalls(UnitTypeId.ORBITALCOMMAND).idle
             )
         ):
@@ -151,17 +155,17 @@ class MassReaperBot(BotAI):
         enemies: Units = self.enemy_units | self.enemy_structures
         enemies_can_attack: Units = enemies.filter(lambda unit: unit.can_attack_ground)
         for r in self.units(UnitTypeId.REAPER):
-
             # Move to range 15 of closest unit if reaper is below 20 hp and not regenerating
             enemy_threats_close: Units = enemies_can_attack.filter(
                 lambda unit: unit.distance_to(r) < 15
             )  # Threats that can attack the reaper
 
             if r.health_percentage < 2 / 5 and enemy_threats_close:
-                retreat_points: Set[Point2] = self.neighbors8(r.position,
-                                                              distance=2) | self.neighbors8(r.position, distance=4)
+                retreat_points: set[Point2] = self.neighbors8(r.position, distance=2) | self.neighbors8(
+                    r.position, distance=4
+                )
                 # Filter points that are pathable
-                retreat_points: Set[Point2] = {x for x in retreat_points if self.in_pathing_grid(x)}
+                retreat_points: set[Point2] = {x for x in retreat_points if self.in_pathing_grid(x)}
                 if retreat_points:
                     closest_enemy: Unit = enemy_threats_close.closest_to(r)
                     retreat_point: Unit = closest_enemy.position.furthest(retreat_points)
@@ -179,13 +183,14 @@ class MassReaperBot(BotAI):
                 continue  # Continue for loop, dont execute any of the following
 
             # Attack is on cooldown, check if grenade is on cooldown, if not then throw it to furthest enemy in range 5
-            # pylint: disable=W0212
-            reaper_grenade_range: float = (
-                self.game_data.abilities[AbilityId.KD8CHARGE_KD8CHARGE.value]._proto.cast_range
-            )
+            reaper_grenade_range: float = self.game_data.abilities[
+                AbilityId.KD8CHARGE_KD8CHARGE.value
+            ]._proto.cast_range
             enemy_ground_units_in_grenade_range: Units = enemies_can_attack.filter(
-                lambda unit: not unit.is_structure and not unit.is_flying and unit.type_id not in
-                {UnitTypeId.LARVA, UnitTypeId.EGG} and unit.distance_to(r) < reaper_grenade_range
+                lambda unit: not unit.is_structure
+                and not unit.is_flying
+                and unit.type_id not in {UnitTypeId.LARVA, UnitTypeId.EGG}
+                and unit.distance_to(r) < reaper_grenade_range
             )
             if enemy_ground_units_in_grenade_range and (r.is_attacking or r.is_moving):
                 # If AbilityId.KD8CHARGE_KD8CHARGE in abilities, we check that to see if the reaper grenade is off cooldown
@@ -208,10 +213,11 @@ class MassReaperBot(BotAI):
             )  # Hardcoded attackrange minus 0.5
             # Threats that can attack the reaper
             if r.weapon_cooldown != 0 and enemy_threats_very_close:
-                retreat_points: Set[Point2] = self.neighbors8(r.position,
-                                                              distance=2) | self.neighbors8(r.position, distance=4)
+                retreat_points: set[Point2] = self.neighbors8(r.position, distance=2) | self.neighbors8(
+                    r.position, distance=4
+                )
                 # Filter points that are pathable by a reaper
-                retreat_points: Set[Point2] = {x for x in retreat_points if self.in_pathing_grid(x)}
+                retreat_points: set[Point2] = {x for x in retreat_points if self.in_pathing_grid(x)}
                 if retreat_points:
                     closest_enemy: Unit = enemy_threats_very_close.closest_to(r)
                     retreat_point: Point2 = max(
@@ -253,13 +259,13 @@ class MassReaperBot(BotAI):
     # Stolen and modified from position.py
 
     @staticmethod
-    def neighbors4(position, distance=1) -> Set[Point2]:
+    def neighbors4(position, distance=1) -> set[Point2]:
         p = position
         d = distance
         return {Point2((p.x - d, p.y)), Point2((p.x + d, p.y)), Point2((p.x, p.y - d)), Point2((p.x, p.y + d))}
 
     # Stolen and modified from position.py
-    def neighbors8(self, position, distance=1) -> Set[Point2]:
+    def neighbors8(self, position, distance=1) -> set[Point2]:
         p = position
         d = distance
         return self.neighbors4(position, distance) | {
@@ -270,7 +276,6 @@ class MassReaperBot(BotAI):
         }
 
     # Distribute workers function rewritten, the default distribute_workers() function did not saturate gas quickly enough
-    # pylint: disable=R0912
     async def my_distribute_workers(self, performance_heavy=True, only_saturate_gas=False):
         mineral_tags = [x.tag for x in self.mineral_field]
         gas_building_tags = [x.tag for x in self.gas_buildings]
@@ -288,8 +293,10 @@ class MassReaperBot(BotAI):
                 deficit_gas_buildings[g.tag] = {"unit": g, "deficit": deficit}
             elif deficit < 0:
                 surplus_workers = self.workers.closer_than(10, g).filter(
-                    lambda w: w not in worker_pool_tags and len(w.orders) == 1 and w.orders[0].ability.id in
-                    [AbilityId.HARVEST_GATHER] and w.orders[0].target in gas_building_tags
+                    lambda w: w not in worker_pool_tags
+                    and len(w.orders) == 1
+                    and w.orders[0].ability.id in [AbilityId.HARVEST_GATHER]
+                    and w.orders[0].target in gas_building_tags
                 )
                 for _ in range(-deficit):
                     if surplus_workers.amount > 0:
@@ -308,8 +315,10 @@ class MassReaperBot(BotAI):
                     deficit_townhalls[th.tag] = {"unit": th, "deficit": deficit}
                 elif deficit < 0:
                     surplus_workers = self.workers.closer_than(10, th).filter(
-                        lambda w: w.tag not in worker_pool_tags and len(w.orders) == 1 and w.orders[0].ability.id in
-                        [AbilityId.HARVEST_GATHER] and w.orders[0].target in mineral_tags
+                        lambda w: w.tag not in worker_pool_tags
+                        and len(w.orders) == 1
+                        and w.orders[0].ability.id in [AbilityId.HARVEST_GATHER]
+                        and w.orders[0].target in mineral_tags
                     )
                     # worker_pool.extend(surplus_workers)
                     for _ in range(-deficit):
@@ -337,7 +346,8 @@ class MassReaperBot(BotAI):
             -gasInfo["deficit"] for gasTag, gasInfo in surplusgas_buildings.items() if gasInfo["deficit"] < 0
         )
         surplus_count += sum(
-            -townhall_info["deficit"] for townhall_tag, townhall_info in surplus_townhalls.items()
+            -townhall_info["deficit"]
+            for townhall_tag, townhall_info in surplus_townhalls.items()
             if townhall_info["deficit"] < 0
         )
 
@@ -347,8 +357,10 @@ class MassReaperBot(BotAI):
                 if worker_pool.amount >= deficit_gas_count:
                     break
                 workers_near_gas = self.workers.closer_than(10, gas_info["unit"]).filter(
-                    lambda w: w.tag not in worker_pool_tags and len(w.orders) == 1 and w.orders[0].ability.id in
-                    [AbilityId.HARVEST_GATHER] and w.orders[0].target in mineral_tags
+                    lambda w: w.tag not in worker_pool_tags
+                    and len(w.orders) == 1
+                    and w.orders[0].ability.id in [AbilityId.HARVEST_GATHER]
+                    and w.orders[0].target in mineral_tags
                 )
                 while workers_near_gas.amount > 0 and worker_pool.amount < deficit_gas_count:
                     w = workers_near_gas.pop()

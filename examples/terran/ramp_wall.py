@@ -1,5 +1,4 @@
 import random
-from typing import FrozenSet, Set
 
 import numpy as np
 from loguru import logger
@@ -17,12 +16,9 @@ from sc2.units import Units
 
 
 class RampWallBot(BotAI):
-
-    # pylint: disable=W0231
     def __init__(self):
         self.unit_command_uses_self_do = False
 
-    # pylint: disable=R0912
     async def on_step(self, iteration):
         ccs: Units = self.townhalls(UnitTypeId.COMMANDCENTER)
         if not ccs:
@@ -74,7 +70,7 @@ class RampWallBot(BotAI):
         # Draw if two selected units are facing each other - green if this guy is facing the other, red if he is not
         self.draw_facing_units()
 
-        depot_placement_positions: FrozenSet[Point2] = self.main_base_ramp.corner_depots
+        depot_placement_positions: frozenset[Point2] = self.main_base_ramp.corner_depots
         # Uncomment the following if you want to build 3 supply depots in the wall instead of a barracks in the middle + 2 depots in the corner
         # depot_placement_positions = self.main_base_ramp.corner_depots | {self.main_base_ramp.depot_in_middle}
 
@@ -86,9 +82,8 @@ class RampWallBot(BotAI):
 
         # Filter locations close to finished supply depots
         if depots:
-            depot_placement_positions: Set[Point2] = {
-                d
-                for d in depot_placement_positions if depots.closest_distance_to(d) > 1
+            depot_placement_positions: set[Point2] = {
+                d for d in depot_placement_positions if depots.closest_distance_to(d) > 1
             }
 
         # Build depots
@@ -248,7 +243,7 @@ class RampWallBot(BotAI):
         self.client.debug_text_simple(text="Hello world2!")
 
     def draw_facing_units(self):
-        """ Draws green box on top of selected_unit2, if selected_unit2 is facing selected_unit1 """
+        """Draws green box on top of selected_unit2, if selected_unit2 is facing selected_unit1"""
         selected_unit1: Unit
         selected_unit2: Unit
         red = Point3((255, 0, 0))

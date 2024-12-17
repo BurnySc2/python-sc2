@@ -32,3 +32,27 @@ repos:
   - id: python-no-log-warn
   # Enforce type annotation instead of comment annotation
   - id: python-use-type-annotations
+
+- repo: local
+  hooks:
+  # Autoformat code
+  - id: ruff-format-check
+    name: Check if files are formatted
+    stages: [push]
+    language: system
+    entry: uv run ruff format . --check --diff
+    pass_filenames: false
+
+  - id: ruff-lint
+    name: Lint files
+    stages: [push]
+    language: system
+    entry: uv run ruff check .
+    pass_filenames: false
+
+  - id: pyre
+    name: Static types checking with pyre
+    stages: [push]
+    language: system
+    entry: uv run pyre
+    pass_filenames: false

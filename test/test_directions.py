@@ -67,7 +67,9 @@ def test_towards_random_angle():
     random.seed(1)
 
     def random_points(n=1000):
-        rs = lambda: 1 - random.random() * 2
+        def rs():
+            return 1 - random.random() * 2
+
         return {Point2((rs() * 1000, rs() * 1000)) for _ in range(n)}
 
     def verify(source, target, max_difference=(pi / 4), n=1000):

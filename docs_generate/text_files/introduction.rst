@@ -79,10 +79,10 @@ Information about the enemy player::
     self.enemy_structures: Units
 
     # Enemy spawn locations as a list of Point2 points
-    self.enemy_start_locations: List[Point2]
+    self.enemy_start_locations: list[Point2]
 
     # Enemy units that are inside your sensor tower range
-    self.blips: Set[Blip]
+    self.blips: set[Blip]
 
     # The enemy race. If the enemy chose random, this will stay at random forever
     self.enemy_race: Race
@@ -98,7 +98,7 @@ Other information::
     self.all_units: Units # All units combined: yours, enemy's and neutral
 
     # Locations of possible expansions
-    self.expansion_locations: Dict[Point2, Units]
+    self.expansion_locations: dict[Point2, Units]
 
     # Game data about units, abilities and upgrades (see game_data.py)
     self.game_data: GameData

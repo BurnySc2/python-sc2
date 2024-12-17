@@ -6,7 +6,6 @@ from sc2.player import Bot, Computer
 
 
 class WorkerRushBot(BotAI):
-
     async def on_step(self, iteration):
         if iteration == 0:
             for worker in self.workers:

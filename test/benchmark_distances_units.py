@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors[21]
 import math
 import random
 
@@ -30,8 +31,7 @@ amount = 200
 min_value = 0
 max_value = 250
 points = np.array(
-    [np.array([random.uniform(min_value, max_value),
-               random.uniform(min_value, max_value)]) for _ in range(amount)]
+    [np.array([random.uniform(min_value, max_value), random.uniform(min_value, max_value)]) for _ in range(amount)]
 )
 
 m1 = distance_matrix_scipy_cdist(points)
@@ -41,7 +41,7 @@ ms2 = distance_matrix_scipy_pdist_squared(points)
 
 
 def calc_row_idx(k, n):
-    return int(math.ceil((1 / 2.0) * (-((-8 * k + 4 * n**2 - 4 * n - 7)**0.5) + 2 * n - 1) - 1))
+    return int(math.ceil((1 / 2.0) * (-((-8 * k + 4 * n**2 - 4 * n - 7) ** 0.5) + 2 * n - 1) - 1))
 
 
 def elem_in_i_rows(i, n):

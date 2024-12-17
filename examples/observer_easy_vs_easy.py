@@ -8,8 +8,7 @@ from sc2.player import Bot, Computer
 def main():
     run_game(
         maps.get("Abyssal Reef LE"),
-        [Bot(Race.Protoss, CannonRushBot()),
-         Computer(Race.Protoss, Difficulty.Medium)],
+        [Bot(Race.Protoss, CannonRushBot()), Computer(Race.Protoss, Difficulty.Medium)],
         realtime=True,
     )
 

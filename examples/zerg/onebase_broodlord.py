@@ -1,3 +1,4 @@
+# noqa: SIM102
 import random
 
 from sc2 import maps
@@ -13,13 +14,11 @@ from sc2.units import Units
 
 
 class BroodlordBot(BotAI):
-
     def select_target(self) -> Point2:
         if self.enemy_structures:
             return random.choice(self.enemy_structures).position
         return self.enemy_start_locations[0]
 
-    # pylint: disable=R0912
     async def on_step(self, iteration):
         larvae: Units = self.larva
         forces: Units = self.units.of_type({UnitTypeId.ZERGLING, UnitTypeId.CORRUPTOR, UnitTypeId.BROODLORD})

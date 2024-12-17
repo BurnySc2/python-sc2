@@ -21,8 +21,7 @@ def get(name: str) -> Map:
 
 
 class Map:
-
-    def __init__(self, path: Path):
+    def __init__(self, path: Path) -> None:
         self.path = path
 
         if self.path.is_absolute():
@@ -35,15 +34,15 @@ class Map:
             self.relative_path = self.path
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.path.stem
 
     @property
-    def data(self):
-        with open(self.path, "rb") as f:
+    def data(self) -> bytes:
+        with Path(self.path).open("rb") as f:
             return f.read()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Map({self.path})"
 
     @classmethod

@@ -10,7 +10,6 @@ All functions that require some kind of query or interaction with the API direct
 
 import time
 from pathlib import Path
-from test.test_pickled_data import MAPS, get_map_specific_bot
 
 from loguru import logger
 
@@ -18,6 +17,7 @@ from sc2.game_info import Ramp
 from sc2.position import Point2
 from sc2.unit import Unit
 from sc2.units import Units
+from test.test_pickled_data import MAPS, get_map_specific_bot
 
 
 # From https://docs.pytest.org/en/latest/example/parametrize.html#a-quick-port-of-testscenarios
@@ -28,7 +28,7 @@ def pytest_generate_tests(metafunc):
         idlist.append(scenario[0])
         items = scenario[1].items()
         argnames = [x[0] for x in items]
-        argvalues.append(([x[1] for x in items]))
+        argvalues.append([x[1] for x in items])
     metafunc.parametrize(argnames, argvalues, ids=idlist, scope="class")
 
 
@@ -38,6 +38,7 @@ class TestClass:
 
     def test_main_base_ramp(self, map_path: Path):
         bot = get_map_specific_bot(map_path)
+        # pyre-ignore[16]
         bot.game_info.map_ramps, bot.game_info.vision_blockers = bot.game_info._find_ramps_and_vision_blockers()
 
         # Test if main ramp works for all spawns
@@ -103,18 +104,20 @@ class TestClass:
         ), f"Too many expansions found: {len(bot.expansion_locations_list)}"
         # On N player maps, it is expected that there are N*X bases because of symmetry, at least for maps designed for 1vs1
         # Those maps in the list have an un-even expansion count
+        # pyre-ignore[16]
         expect_even_expansion_count = 1 if bot.game_info.map_name in ["StargazersAIE", "Stasis LE"] else 0
         assert (
             len(bot.expansion_locations_list) % (len(bot.enemy_start_locations) + 1) == expect_even_expansion_count
         ), f"{bot.expansion_locations_list}"
         # Test if bot start location is in expansion locations
-        assert bot.townhalls.random.position in set(
-            bot.expansion_locations_list
+        assert (
+            bot.townhalls.random.position in set(bot.expansion_locations_list)
         ), f'This error might occur if you are running the tests locally using command "pytest test/", possibly because you are using an outdated cache.py version, but it should not occur when using docker and uv.\n{bot.townhalls.random.position}, {bot.expansion_locations_list}'
         # Test if enemy start locations are in expansion locations
         for location in bot.enemy_start_locations:
             assert location in set(bot.expansion_locations_list), f"{location}, {bot.expansion_locations_list}"
         # Each expansion is supposed to have at least one geysir and 6-12 minerals
+        # pyre-ignore[16]
         for expansion, resource_positions in bot.expansion_locations_dict.items():
             assert isinstance(expansion, Point2)
             assert isinstance(resource_positions, Units)

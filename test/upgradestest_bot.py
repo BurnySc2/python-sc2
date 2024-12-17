@@ -1,8 +1,4 @@
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from typing import Dict, List
+from __future__ import annotations
 
 from loguru import logger
 
@@ -20,7 +16,6 @@ from sc2.units import Units
 
 
 class TestBot(BotAI):
-
     def __init__(self):
         BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
@@ -29,7 +24,8 @@ class TestBot(BotAI):
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}") for index in range(4000)
+            getattr(self, f"test_botai_actions{index}")
+            for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_done_by_name = set()
@@ -63,7 +59,7 @@ class TestBot(BotAI):
 
         # Exit bot
         if iteration > 100:
-            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info(f"Tests completed after {round(self.time, 1)} seconds")
             exit(0)
 
     async def clean_up_center(self):
@@ -88,11 +84,11 @@ class TestBot(BotAI):
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
         from sc2.dicts.upgrade_researched_from import UPGRADE_RESEARCHED_FROM
 
-        structure_types: List[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
-        upgrade_types: List[UpgradeId] = list(UPGRADE_RESEARCHED_FROM)
+        structure_types: list[UnitTypeId] = sorted(set(UPGRADE_RESEARCHED_FROM.values()), key=lambda data: data.name)
+        upgrade_types: list[UpgradeId] = list(UPGRADE_RESEARCHED_FROM)
 
         # TODO if *techlab in name -> spawn rax/ fact / starport next to it
-        addon_structures: Dict[str, UnitTypeId] = {
+        addon_structures: dict[str, UnitTypeId] = {
             "BARRACKS": UnitTypeId.BARRACKS,
             "FACTORY": UnitTypeId.FACTORY,
             "STARPORT": UnitTypeId.STARPORT,
@@ -106,10 +102,9 @@ class TestBot(BotAI):
             if "TECHLAB" in structure_type.name:
                 continue
 
-            structure_upgrade_types: Dict[UpgradeId, Dict[str, AbilityId]] = RESEARCH_INFO[structure_type]
-            data: Dict[str, AbilityId]
+            structure_upgrade_types: dict[UpgradeId, dict[str, AbilityId]] = RESEARCH_INFO[structure_type]
+            data: dict[str, AbilityId]
             for upgrade_id, data in structure_upgrade_types.items():
-
                 # Collect data to spawn
                 research_ability: AbilityId = data.get("ability", None)
                 requires_power: bool = data.get("requires_power", False)
@@ -128,7 +123,7 @@ class TestBot(BotAI):
                     continue
 
                 # Spawn structure and requirements
-                spawn_structures: List[UnitTypeId] = []
+                spawn_structures: list[UnitTypeId] = []
                 if requires_power:
                     spawn_structures.append(UnitTypeId.PYLON)
                 spawn_structures.append(structure_type)
@@ -153,7 +148,7 @@ class TestBot(BotAI):
                     await self._advance_steps(2)
 
                 # Research upgrade
-                assert upgrade_id in upgrade_types, f"Given upgrade is not in the list of upgrade types"
+                assert upgrade_id in upgrade_types, "Given upgrade is not in the list of upgrade types"
                 assert self.structures(structure_type), f"Structure {structure_type} has not been spawned in time"
 
                 # Try to research the upgrade
@@ -174,12 +169,12 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
-
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
 
     async def on_step(self, iteration: int):
+        # pyre-ignore[16]
         map_center = self.game_info.map_center
         enemies = self.enemy_units | self.enemy_structures
         if enemies:

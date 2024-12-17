@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import os
 import os.path
@@ -8,10 +10,14 @@ import sys
 import tempfile
 import time
 from contextlib import suppress
-from typing import Any, Dict, List, Optional, Tuple, Union
+from pathlib import Path
+from typing import Any
 
 import aiohttp
+
+# pyre-ignore[21]
 import portpicker
+from aiohttp.client_ws import ClientWebSocketResponse
 from loguru import logger
 
 from sc2 import paths, wsl
@@ -20,19 +26,18 @@ from sc2.paths import Paths
 from sc2.versions import VERSIONS
 
 
-class kill_switch:
-    _to_kill: List[Any] = []
+class KillSwitch:
+    _to_kill: list[Any] = []
 
     @classmethod
-    def add(cls, value):
+    def add(cls, value) -> None:
         logger.debug("kill_switch: Add switch")
         cls._to_kill.append(value)
 
     @classmethod
-    def kill_all(cls):
+    def kill_all(cls) -> None:
         logger.info(f"kill_switch: Process cleanup for {len(cls._to_kill)} processes")
         for p in cls._to_kill:
-            # pylint: disable=W0212
             p._clean(verbose=False)
 
 
@@ -54,21 +59,21 @@ class SC2Process:
 
     def __init__(
         self,
-        host: Optional[str] = None,
-        port: Optional[int] = None,
+        host: str | None = None,
+        port: int | None = None,
         fullscreen: bool = False,
-        resolution: Optional[Union[List[int], Tuple[int, int]]] = None,
-        placement: Optional[Union[List[int], Tuple[int, int]]] = None,
+        resolution: list[int] | tuple[int, int] | None = None,
+        placement: list[int] | tuple[int, int] | None = None,
         render: bool = False,
-        sc2_version: str = None,
-        base_build: str = None,
-        data_hash: str = None,
+        sc2_version: str | None = None,
+        base_build: str | None = None,
+        data_hash: str | None = None,
     ) -> None:
         assert isinstance(host, str) or host is None
         assert isinstance(port, int) or port is None
 
         self._render = render
-        self._arguments: Dict[str, str] = {"-displayMode": str(int(fullscreen))}
+        self._arguments: dict[str, str] = {"-displayMode": str(int(fullscreen))}
         if not fullscreen:
             if resolution and len(resolution) == 2:
                 self._arguments["-windowwidth"] = str(resolution[0])
@@ -86,7 +91,7 @@ class SC2Process:
             self._port = port
         self._used_portpicker = bool(port is None)
         self._tmp_dir = tempfile.mkdtemp(prefix="SC2_")
-        self._process: subprocess = None
+        self._process: subprocess.Popen | None = None
         self._session = None
         self._ws = None
         self._sc2_version = sc2_version
@@ -94,12 +99,12 @@ class SC2Process:
         self._data_hash = data_hash
 
     async def __aenter__(self) -> Controller:
-        kill_switch.add(self)
+        KillSwitch.add(self)
 
         def signal_handler(*_args):
             # unused arguments: signal handling library expects all signal
             # callback handlers to accept two positional arguments
-            kill_switch.kill_all()
+            KillSwitch.kill_all()
 
         signal.signal(signal.SIGINT, signal_handler)
 
@@ -113,13 +118,13 @@ class SC2Process:
 
         return Controller(self._ws, self)
 
-    async def __aexit__(self, *args):
+    async def __aexit__(self, *args) -> None:
         await self._close_connection()
-        kill_switch.kill_all()
+        KillSwitch.kill_all()
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     @property
-    def ws_url(self):
+    def ws_url(self) -> str:
         return f"ws://{self._host}:{self._port}/sc2api"
 
     @property
@@ -128,8 +133,8 @@ class SC2Process:
         https://github.com/Blizzard/s2client-proto/blob/master/buildinfo/versions.json"""
         return VERSIONS
 
-    def find_data_hash(self, target_sc2_version: str) -> Optional[str]:
-        """ Returns the data hash from the matching version string. """
+    def find_data_hash(self, target_sc2_version: str) -> str | None:
+        """Returns the data hash from the matching version string."""
         version: dict
         for version in self.versions:
             if version["label"] == target_sc2_version:
@@ -161,11 +166,8 @@ class SC2Process:
         if self._sc2_version:
 
             def special_match(strg: str):
-                """ Tests if the specified version is in the versions.py dict. """
-                for version in self.versions:
-                    if version["label"] == strg:
-                        return True
-                return False
+                """Tests if the specified version is in the versions.py dict."""
+                return any(version["label"] == strg for version in self.versions)
 
             valid_version_string = special_match(self._sc2_version)
             if valid_version_string:
@@ -197,11 +199,11 @@ class SC2Process:
             args,
             cwd=sc2_cwd,
             # Suppress Wine error messages
-            stderr=subprocess.DEVNULL
+            stderr=subprocess.DEVNULL,
             # , env=run_config.env
         )
 
-    async def _connect(self):
+    async def _connect(self) -> ClientWebSocketResponse:
         # How long it waits for SC2 to start (in seconds)
         for i in range(180):
             if self._process is None:
@@ -227,7 +229,7 @@ class SC2Process:
         logger.debug("Websocket connection to SC2 process timed out")
         raise TimeoutError("Websocket")
 
-    async def _close_connection(self):
+    async def _close_connection(self) -> None:
         logger.info(f"Closing connection at {self._port}...")
 
         if self._ws is not None:
@@ -236,12 +238,12 @@ class SC2Process:
         if self._session is not None:
             await self._session.close()
 
-    # pylint: disable=R0912
-    def _clean(self, verbose=True):
+    def _clean(self, verbose: bool = True) -> None:
         if verbose:
             logger.info("Cleaning up...")
 
         if self._process is not None:
+            assert isinstance(self._process, subprocess.Popen)
             if paths.PF in {"WSL1", "WSL2"}:
                 if wsl.kill(self._process):
                     logger.error("KILLED")
@@ -258,11 +260,10 @@ class SC2Process:
             # Try to kill wineserver on linux
             if paths.PF in {"Linux", "WineLinux"}:
                 # Command wineserver not detected
-                with suppress(FileNotFoundError):
-                    with subprocess.Popen(["wineserver", "-k"]) as p:
-                        p.wait()
+                with suppress(FileNotFoundError), subprocess.Popen(["wineserver", "-k"]) as p:
+                    p.wait()
 
-        if os.path.exists(self._tmp_dir):
+        if Path(self._tmp_dir).exists():
             shutil.rmtree(self._tmp_dir)
 
         self._process = None

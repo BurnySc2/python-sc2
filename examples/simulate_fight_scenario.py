@@ -13,7 +13,6 @@ OPPONENT_PLAYER_ID = 2
 
 
 class FightBot(BotAI):
-
     def __init__(self):
         super().__init__()
         self.enemy_location: Point2 = None
@@ -48,16 +47,14 @@ class FightBot(BotAI):
         await self.client.debug_create_unit(
             [
                 [UnitTypeId.SUPPLYDEPOT, 1, self.enemy_location, OPPONENT_PLAYER_ID],
-                [UnitTypeId.MARINE, 4,
-                 self.enemy_location.towards(self.start_location, 8), OPPONENT_PLAYER_ID]
+                [UnitTypeId.MARINE, 4, self.enemy_location.towards(self.start_location, 8), OPPONENT_PLAYER_ID],
             ]
         )
 
         await self.client.debug_create_unit(
             [
                 [UnitTypeId.SUPPLYDEPOT, 1, self.start_location, MY_PLAYER_ID],
-                [UnitTypeId.MARINE, 4,
-                 self.start_location.towards(self.enemy_location, 8), MY_PLAYER_ID]
+                [UnitTypeId.MARINE, 4, self.start_location.towards(self.enemy_location, 8), MY_PLAYER_ID],
             ]
         )
 
@@ -81,7 +78,7 @@ def main():
         maps.get("Flat64"),
         # NOTE: you can have two bots fighting with each other here
         [Bot(Race.Terran, FightBot()), Computer(Race.Terran, Difficulty.Medium)],
-        realtime=True
+        realtime=True,
     )
 
 

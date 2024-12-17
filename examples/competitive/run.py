@@ -1,4 +1,4 @@
-# pylint: disable=E0401
+# pyre-ignore-all-errors[16, 21]
 import sys
 
 from __init__ import run_ladder_game

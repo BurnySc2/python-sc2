@@ -3,7 +3,6 @@ from sc2.data import Result
 
 
 class CompetitiveBot(BotAI):
-
     async def on_start(self):
         print("Game started")
         # Do things here before the game starts
@@ -12,6 +11,7 @@ class CompetitiveBot(BotAI):
         # Populate this function with whatever your bot should do!
         pass
 
+    # pyre-ignore[11]
     async def on_end(self, game_result: Result):
         print("Game ended.")
         # Do things here after the game ends

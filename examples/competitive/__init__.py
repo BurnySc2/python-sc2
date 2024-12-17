@@ -1,4 +1,3 @@
-# pylint: disable=W0212
 import argparse
 import asyncio
 
@@ -7,7 +6,7 @@ from loguru import logger
 
 import sc2
 from sc2.client import Client
-from sc2.protocol import ConnectionAlreadyClosed
+from sc2.protocol import ConnectionAlreadyClosedError
 
 
 # Run ladder game
@@ -26,10 +25,7 @@ def run_ladder_game(bot):
     parser.add_argument("--RealTime", action="store_true", help="Real time flag")
     args, _unknown = parser.parse_known_args()
 
-    if args.LadderServer is None:
-        host = "127.0.0.1"
-    else:
-        host = args.LadderServer
+    host = "127.0.0.1" if args.LadderServer is None else args.LadderServer
 
     host_port = args.GamePort
     lan_port = args.StartPort
@@ -68,7 +64,7 @@ async def join_ladder_game(host, port, players, realtime, portconfig, save_repla
             await client.save_replay(save_replay_as)
         # await client.leave()
         # await client.quit()
-    except ConnectionAlreadyClosed:
+    except ConnectionAlreadyClosedError:
         logger.error("Connection was closed before the game ended")
         return None
     finally:

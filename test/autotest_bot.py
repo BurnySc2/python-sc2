@@ -1,7 +1,4 @@
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from __future__ import annotations
 
 from loguru import logger
 
@@ -19,7 +16,6 @@ from sc2.units import Units
 
 
 class TestBot(BotAI):
-
     def __init__(self):
         BotAI.__init__(self)
         # The time the bot has to complete all tests, here: the number of game seconds
@@ -28,7 +24,8 @@ class TestBot(BotAI):
         # Check how many test action functions we have
         # At least 4 tests because we test properties and variables
         self.action_tests = [
-            getattr(self, f"test_botai_actions{index}") for index in range(4000)
+            getattr(self, f"test_botai_actions{index}")
+            for index in range(4000)
             if hasattr(getattr(self, f"test_botai_actions{index}", 0), "__call__")
         ]
         self.tests_done_by_name = set()
@@ -68,7 +65,7 @@ class TestBot(BotAI):
 
         # Exit bot
         if iteration > 100:
-            logger.info("Tests completed after {} seconds".format(round(self.time, 1)))
+            logger.info(f"Tests completed after {round(self.time, 1)} seconds")
             exit(0)
 
     async def clean_up_center(self):
@@ -159,7 +156,10 @@ class TestBot(BotAI):
 
         def temp_filter(unit: Unit):
             return (
-                unit.is_moving or unit.is_patrolling or unit.orders and unit.orders[0] == AbilityId.HOLDPOSITION_HOLD
+                unit.is_moving
+                or unit.is_patrolling
+                or unit.orders
+                and unit.orders[0] == AbilityId.HOLDPOSITION_HOLD
                 or unit.is_attacking
             )
 
@@ -372,11 +372,8 @@ class TestBot(BotAI):
             bane_cocoons = self.units(UnitTypeId.BANELINGCOCOON)
 
             # Cheat money, need 10k/10k to morph 400 lings to 400 banes
-            if not banes and not bane_cocoons:
-                if self.minerals < 10_000:
-                    await self.client.debug_all_resources()
-                elif self.vespene < 10_000:
-                    await self.client.debug_all_resources()
+            if not banes and not bane_cocoons and (self.minerals < 10_000 or self.vespene < 10_000):
+                await self.client.debug_all_resources()
 
             # Spawn units
             if not bane_nests:
@@ -482,12 +479,12 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
-
     async def on_start(self):
         if self.units:
             await self.client.debug_kill_unit(self.units)
 
     async def on_step(self, iteration: int):
+        # pyre-ignore[16]
         map_center = self.game_info.map_center
         enemies = self.enemy_units | self.enemy_structures
         if enemies:

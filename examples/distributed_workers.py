@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors[16]
 from sc2 import maps
 from sc2.bot_ai import BotAI
 from sc2.data import Difficulty, Race
@@ -7,7 +8,6 @@ from sc2.player import Bot, Computer
 
 
 class TerranBot(BotAI):
-
     async def on_step(self, iteration):
         await self.distribute_workers()
         await self.build_supply()

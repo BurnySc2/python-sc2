@@ -1,13 +1,19 @@
-# pylint: disable=W0212
+# pyre-ignore-all-errors[16, 29]
+from __future__ import annotations
+
 import asyncio
 import os
 import platform
 import subprocess
 import time
 import traceback
+from pathlib import Path
 
 from aiohttp import WSMsgType, web
+from aiohttp.web_ws import WebSocketResponse
 from loguru import logger
+
+# pyre-fixme[21]
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2.controller import Controller
@@ -26,9 +32,9 @@ class Proxy:
         controller: Controller,
         player: BotProcess,
         proxyport: int,
-        game_time_limit: int = None,
+        game_time_limit: int | None = None,
         realtime: bool = False,
-    ):
+    ) -> None:
         self.controller = controller
         self.player = player
         self.port = proxyport
@@ -39,10 +45,10 @@ class Proxy:
         )
 
         self.result = None
-        self.player_id: int = None
+        self.player_id: int | None = None
         self.done = False
 
-    async def parse_request(self, msg):
+    async def parse_request(self, msg) -> None:
         request = sc_pb.Request()
         request.ParseFromString(msg.data)
         if request.HasField("quit"):
@@ -58,7 +64,7 @@ class Proxy:
         await self.controller._ws.send_bytes(request.SerializeToString())
 
     # TODO Catching too general exception Exception (broad-except)
-    # pylint: disable=W0703
+
     async def get_response(self):
         response_bytes = None
         try:
@@ -91,38 +97,34 @@ class Proxy:
                 logger.info(f"Controller({self.player.name}): {self.controller._status}->{new_status}")
                 self.controller._status = new_status
 
-        if self.player_id is None:
-            if response.HasField("join_game"):
-                self.player_id = response.join_game.player_id
-                logger.info(f"Proxy({self.player.name}): got join_game for {self.player_id}")
+        if self.player_id is None and response.HasField("join_game"):
+            self.player_id = response.join_game.player_id
+            logger.info(f"Proxy({self.player.name}): got join_game for {self.player_id}")
 
-        if self.result is None:
-            if response.HasField("observation"):
-                obs: sc_pb.ResponseObservation = response.observation
-                if obs.player_result:
-                    self.result = {pr.player_id: Result(pr.result) for pr in obs.player_result}
-                elif (
-                    self.timeout_loop and obs.HasField("observation") and obs.observation.game_loop > self.timeout_loop
-                ):
-                    self.result = {i: Result.Tie for i in range(1, 3)}
-                    logger.info(f"Proxy({self.player.name}) timing out")
-                    act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message="Proxy: Timing out"))]
-                    await self.controller._execute(action=sc_pb.RequestAction(actions=act))
+        if self.result is None and response.HasField("observation"):
+            obs: sc_pb.ResponseObservation = response.observation
+            if obs.player_result:
+                self.result = {pr.player_id: Result(pr.result) for pr in obs.player_result}
+            elif self.timeout_loop and obs.HasField("observation") and obs.observation.game_loop > self.timeout_loop:
+                self.result = {i: Result.Tie for i in range(1, 3)}
+                logger.info(f"Proxy({self.player.name}) timing out")
+                act = [sc_pb.Action(action_chat=sc_pb.ActionChat(message="Proxy: Timing out"))]
+                await self.controller._execute(action=sc_pb.RequestAction(actions=act))
         return response
 
-    async def get_result(self):
+    async def get_result(self) -> None:
         try:
             res = await self.controller.ping()
             if res.status in {Status.in_game, Status.in_replay, Status.ended}:
                 res = await self.controller._execute(observation=sc_pb.RequestObservation())
                 if res.HasField("observation") and res.observation.player_result:
                     self.result = {pr.player_id: Result(pr.result) for pr in res.observation.player_result}
-        # pylint: disable=W0703
+
         # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             logger.exception(f"Caught unknown exception: {e}")
 
-    async def proxy_handler(self, request):
+    async def proxy_handler(self, request) -> WebSocketResponse:
         bot_ws = web.WebSocketResponse(receive_timeout=30)
         await bot_ws.prepare(request)
         try:
@@ -130,7 +132,6 @@ class Proxy:
                 if msg.data is None:
                     raise TypeError(f"data is None, {msg}")
                 if msg.data and msg.type == WSMsgType.BINARY:
-
                     await self.parse_request(msg)
 
                     response_bytes = await self.get_response()
@@ -144,7 +145,7 @@ class Proxy:
                     logger.error("Client shutdown")
                 else:
                     logger.error("Incorrect message type")
-        # pylint: disable=W0703
+
         # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             logger.exception(f"Caught unknown exception: {e}")
@@ -157,14 +158,13 @@ class Proxy:
                 if self.controller._status in {Status.in_game, Status.in_replay}:
                     await self.controller._execute(leave_game=sc_pb.RequestLeaveGame())
                 await bot_ws.close()
-            # pylint: disable=W0703
+
             # TODO Catching too general exception Exception (broad-except)
             except Exception as e:
                 logger.exception(f"Caught unknown exception during surrender: {e}")
             self.done = True
         return bot_ws
 
-    # pylint: disable=R0912
     async def play_with_proxy(self, startport):
         logger.info(f"Proxy({self.port}): Starting app")
         app = web.Application()
@@ -185,7 +185,7 @@ class Proxy:
         if self.player.stdout is None:
             bot_process = subprocess.Popen(player_command_line, stdout=subprocess.DEVNULL, **subproc_args)
         else:
-            with open(self.player.stdout, "w+") as out:
+            with Path(self.player.stdout).open("w+") as out:
                 bot_process = subprocess.Popen(player_command_line, stdout=out, **subproc_args)
 
         while self.result is None:
@@ -209,8 +209,8 @@ class Proxy:
             if isinstance(bot_process, subprocess.Popen):
                 if bot_process.stdout and not bot_process.stdout.closed:  # should not run anymore
                     logger.info(f"==================output for player {self.player.name}")
-                    for l in bot_process.stdout.readlines():
-                        logger.opt(raw=True).info(l.decode("utf-8"))
+                    for line in bot_process.stdout.readlines():
+                        logger.opt(raw=True).info(line.decode("utf-8"))
                     bot_process.stdout.close()
                     logger.info("==================")
                 bot_process.terminate()
@@ -223,7 +223,7 @@ class Proxy:
             bot_process.wait()
         try:
             await apprunner.cleanup()
-        # pylint: disable=W0703
+
         # TODO Catching too general exception Exception (broad-except)
         except Exception as e:
             logger.exception(f"Caught unknown exception during cleaning: {e}")

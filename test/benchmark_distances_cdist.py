@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors[21]
 import random
 
 import numpy as np
@@ -124,8 +125,7 @@ amount = 200
 min_value = 0
 max_value = 300
 points = np.array(
-    [np.array([random.uniform(min_value, max_value),
-               random.uniform(min_value, max_value)]) for _ in range(amount)]
+    [np.array([random.uniform(min_value, max_value), random.uniform(min_value, max_value)]) for _ in range(amount)]
 )
 
 

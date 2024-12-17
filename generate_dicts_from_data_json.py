@@ -9,13 +9,14 @@ This script does the following:
 data.json origin:
 https://github.com/BurnySc2/sc2-techtree/tree/develop/data
 """
+
+from __future__ import annotations
+
 import json
 import lzma
-import os
 import pickle
 from collections import OrderedDict
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Union
 
 from loguru import logger
 
@@ -32,19 +33,17 @@ def get_map_file_path() -> Path:
 # Custom repr function so that the output is always the same and only changes when there were changes in the data.json tech tree file
 # The output just needs to be ordered (sorted by enum name), but it does not matter anymore if the bot then imports an unordered dict and set
 class OrderedDict2(OrderedDict):
-
     def __repr__(self):
         if not self:
             return "{}"
         return (
-            "{" +
-            ", ".join(f"{repr(key)}: {repr(value)}"
-                      for key, value in sorted(self.items(), key=lambda u: u[0].name)) + "}"
+            "{"
+            + ", ".join(f"{repr(key)}: {repr(value)}" for key, value in sorted(self.items(), key=lambda u: u[0].name))
+            + "}"
         )
 
 
 class OrderedSet2(set):
-
     def __repr__(self):
         if not self:
             return "set()"
@@ -63,7 +62,7 @@ def dump_dict_to_file(
         f.write(repr(my_dict))
 
 
-def generate_init_file(dict_file_paths: List[Path], file_path: Path, file_header: str):
+def generate_init_file(dict_file_paths: list[Path], file_path: Path, file_header: str):
     base_file_names = sorted(path.stem for path in dict_file_paths)
 
     with file_path.open("w") as f:
@@ -81,14 +80,14 @@ def get_unit_train_build_abilities(data):
     _upgrade_data = data["Upgrade"]
 
     # From which abilities can a unit be trained
-    train_abilities: Dict[UnitTypeId, Set[AbilityId]] = OrderedDict2()
+    train_abilities: dict[UnitTypeId, set[AbilityId]] = OrderedDict2()
     # If the ability requires a placement position
-    ability_requires_placement: Set[AbilityId] = set()
+    ability_requires_placement: set[AbilityId] = set()
     # Map ability to unittypeid
-    ability_to_unittypeid_dict: Dict[AbilityId, UnitTypeId] = OrderedDict2()
+    ability_to_unittypeid_dict: dict[AbilityId, UnitTypeId] = OrderedDict2()
 
     # From which abilities can a unit be morphed
-    # unit_morph_abilities: Dict[UnitTypeId, Set[AbilityId]] = {}
+    # unit_morph_abilities: dict[UnitTypeId, set[AbilityId]] = {}
 
     entry: dict
     for entry in ability_data:
@@ -115,7 +114,9 @@ def get_unit_train_build_abilities(data):
         # Collect larva morph abilities, and one way morphs (exclude burrow, hellbat morph, siege tank siege)
         # Also doesnt include building addons
         if not train_unit_type_id_value and (
-            "LARVATRAIN_" in ability_id.name or ability_id in {
+            "LARVATRAIN_" in ability_id.name
+            or ability_id
+            in {
                 AbilityId.MORPHTOBROODLORD_BROODLORD,
                 AbilityId.MORPHZERGLINGTOBANELING_BANELING,
                 AbilityId.MORPHTORAVAGER_RAVAGER,
@@ -174,7 +175,7 @@ def get_unit_train_build_abilities(data):
         }
     }
     """
-    unit_train_abilities: Dict[UnitTypeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]] = OrderedDict2()
+    unit_train_abilities: dict[UnitTypeId, dict[str, AbilityId | bool | UnitTypeId]] = OrderedDict2()
     for entry in unit_data:
         unit_abilities = entry.get("abilities", [])
         unit_type = UnitTypeId(entry["id"])
@@ -188,7 +189,7 @@ def get_unit_train_build_abilities(data):
                     continue
 
                 requires_techlab: bool = False
-                required_building: Optional[UnitTypeId] = None
+                required_building: UnitTypeId | None = None
                 requires_placement_position: bool = False
                 requires_power: bool = False
                 """
@@ -201,7 +202,7 @@ def get_unit_train_build_abilities(data):
                     }
                   ]
                 """
-                requirements: List[Dict[str, int]] = ability_info.get("requirements", [])
+                requirements: list[dict[str, int]] = ability_info.get("requirements", [])
                 if requirements:
                     # Assume train abilities only have one tech building requirement; thors requiring armory and techlab is seperatedly counted
                     assert (
@@ -245,7 +246,7 @@ def get_upgrade_abilities(data):
     unit_data = data["Unit"]
     _upgrade_data = data["Upgrade"]
 
-    ability_to_upgrade_dict: Dict[AbilityId, UpgradeId] = OrderedDict2()
+    ability_to_upgrade_dict: dict[AbilityId, UpgradeId] = OrderedDict2()
     """
     We want to be able to research an upgrade by doing
     await self.can_research(UpgradeId, return_idle_structures=True) -> returns list of idle structures that can research it
@@ -258,7 +259,6 @@ def get_upgrade_abilities(data):
         if isinstance(entry.get("target", {}), str):
             continue
         ability_id: AbilityId = AbilityId(entry["id"])
-        researched_ability_id: UnitTypeId
 
         upgrade_id_value: int = entry.get("target", {}).get("Research", {}).get("upgrade", 0)
         if upgrade_id_value:
@@ -363,12 +363,12 @@ def get_unit_abilities(data: dict):
     unit_data = data["Unit"]
     _upgrade_data = data["Upgrade"]
 
-    all_unit_abilities: Dict[UnitTypeId, Set[AbilityId]] = OrderedDict2()
+    all_unit_abilities: dict[UnitTypeId, set[AbilityId]] = OrderedDict2()
     entry: dict
     for entry in unit_data:
         entry_unit_abilities = entry.get("abilities", [])
         unit_type = UnitTypeId(entry["id"])
-        current_collected_unit_abilities: Set[AbilityId] = OrderedSet2()
+        current_collected_unit_abilities: set[AbilityId] = OrderedSet2()
         for ability_info in entry_unit_abilities:
             ability_id_value: int = ability_info.get("ability", 0)
             if ability_id_value:
@@ -394,15 +394,15 @@ def generate_unit_alias_dict(data: dict):
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
         game_data = GameData(raw_game_data.data)
 
-    all_unit_aliases: Dict[UnitTypeId, UnitTypeId] = OrderedDict2()
-    all_tech_aliases: Dict[UnitTypeId, Set[UnitTypeId]] = OrderedDict2()
+    all_unit_aliases: dict[UnitTypeId, UnitTypeId] = OrderedDict2()
+    all_tech_aliases: dict[UnitTypeId, set[UnitTypeId]] = OrderedDict2()
 
     entry: dict
     for entry in unit_data:
         unit_type_value = entry["id"]
         unit_type = UnitTypeId(entry["id"])
 
-        current_unit_tech_aliases: Set[UnitTypeId] = OrderedSet2()
+        current_unit_tech_aliases: set[UnitTypeId] = OrderedSet2()
 
         assert (
             unit_type_value in game_data.units
@@ -413,7 +413,7 @@ def generate_unit_alias_dict(data: dict):
             unit_alias_unit_type_id = UnitTypeId(unit_alias)
             all_unit_aliases[unit_type] = unit_alias_unit_type_id
 
-        tech_aliases: List[int] = game_data.units[unit_type_value]._proto.tech_alias
+        tech_aliases: list[int] = game_data.units[unit_type_value]._proto.tech_alias
 
         for tech_alias in tech_aliases:
             # Might be 0 if it has no alias
@@ -431,7 +431,7 @@ def generate_redirect_abilities_dict(data: dict):
     _unit_data = data["Unit"]
     _upgrade_data = data["Upgrade"]
 
-    all_redirect_abilities: Dict[AbilityId, AbilityId] = OrderedDict2()
+    all_redirect_abilities: dict[AbilityId, AbilityId] = OrderedDict2()
 
     entry: dict
     for entry in ability_data:
@@ -459,7 +459,7 @@ def main():
         data = json.load(f)
 
     dicts_path = path / "sc2" / "dicts"
-    os.makedirs(dicts_path, exist_ok=True)
+    Path(dicts_path).mkdir(parents=True, exist_ok=True)
 
     # All unit train and build abilities
     unit_train_abilities = get_unit_train_build_abilities(data=data)
@@ -501,7 +501,7 @@ from sc2.ids.upgrade_id import UpgradeId
 # from sc2.ids.buff_id import BuffId
 # from sc2.ids.effect_id import EffectId
 
-from typing import Dict, Set, Union
+from typing import Union
     """
 
     dict_file_paths = [
@@ -517,8 +517,7 @@ from typing import Dict, Set, Union
     init_file_path = dicts_path / "__init__.py"
     init_header = f"""# DO NOT EDIT!
 # This file was automatically generated by "{file_name}"
-    
-    """
+"""
     generate_init_file(dict_file_paths=dict_file_paths, file_path=init_file_path, file_header=init_header)
 
     dump_dict_to_file(
@@ -526,57 +525,56 @@ from typing import Dict, Set, Union
         unit_creation_dict_path,
         dict_name="TRAIN_INFO",
         file_header=file_header,
-        dict_type_annotation=": Dict[UnitTypeId, Dict[UnitTypeId, Dict[str, Union[AbilityId, bool, UnitTypeId]]]]",
+        dict_type_annotation=": dict[UnitTypeId, dict[UnitTypeId, dict[str, Union[AbilityId, bool, UnitTypeId]]]]",
     )
     dump_dict_to_file(
         unit_research_abilities,
         unit_research_abilities_dict_path,
         dict_name="RESEARCH_INFO",
         file_header=file_header,
-        dict_type_annotation=
-        ": Dict[UnitTypeId, Dict[UpgradeId, Dict[str, Union[AbilityId, bool, UnitTypeId, UpgradeId]]]]",
+        dict_type_annotation=": dict[UnitTypeId, dict[UpgradeId, dict[str, Union[AbilityId, bool, UnitTypeId, UpgradeId]]]]",
     )
     dump_dict_to_file(
         unit_trained_from,
         unit_trained_from_dict_path,
         dict_name="UNIT_TRAINED_FROM",
         file_header=file_header,
-        dict_type_annotation=": Dict[UnitTypeId, Set[UnitTypeId]]",
+        dict_type_annotation=": dict[UnitTypeId, set[UnitTypeId]]",
     )
     dump_dict_to_file(
         upgrade_researched_from,
         upgrade_researched_from_dict_path,
         dict_name="UPGRADE_RESEARCHED_FROM",
         file_header=file_header,
-        dict_type_annotation=": Dict[UpgradeId, UnitTypeId]",
+        dict_type_annotation=": dict[UpgradeId, UnitTypeId]",
     )
     dump_dict_to_file(
         unit_abilities,
         unit_abilities_dict_path,
         dict_name="UNIT_ABILITIES",
         file_header=file_header,
-        dict_type_annotation=": Dict[UnitTypeId, Set[AbilityId]]",
+        dict_type_annotation=": dict[UnitTypeId, set[AbilityId]]",
     )
     dump_dict_to_file(
         unit_unit_alias,
         unit_unit_alias_dict_path,
         dict_name="UNIT_UNIT_ALIAS",
         file_header=file_header,
-        dict_type_annotation=": Dict[UnitTypeId, UnitTypeId]",
+        dict_type_annotation=": dict[UnitTypeId, UnitTypeId]",
     )
     dump_dict_to_file(
         unit_tech_alias,
         unit_tech_alias_dict_path,
         dict_name="UNIT_TECH_ALIAS",
         file_header=file_header,
-        dict_type_annotation=": Dict[UnitTypeId, Set[UnitTypeId]]",
+        dict_type_annotation=": dict[UnitTypeId, set[UnitTypeId]]",
     )
     dump_dict_to_file(
         all_redirect_abilities,
         all_redirect_abilities_path,
         dict_name="GENERIC_REDIRECT_ABILITIES",
         file_header=file_header,
-        dict_type_annotation=": Dict[AbilityId, AbilityId]",
+        dict_type_annotation=": dict[AbilityId, AbilityId]",
     )
 
 

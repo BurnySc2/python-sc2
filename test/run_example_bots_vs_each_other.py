@@ -1,14 +1,13 @@
+# pyre-ignore-all-errors[16]
 """
 This script makes sure to run all bots in the examples folder to check if they can launch against each other.
 """
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from __future__ import annotations
+
 import asyncio
 from importlib import import_module
 from itertools import combinations
-from typing import List, Type
 
 from loguru import logger
 
@@ -27,87 +26,88 @@ bot_infos = [
     {
         "race": Race.Protoss,
         "path": "examples.protoss.cannon_rush",
-        "bot_class_name": "CannonRushBot"
+        "bot_class_name": "CannonRushBot",
     },
     {
         "race": Race.Protoss,
         "path": "examples.protoss.find_adept_shades",
-        "bot_class_name": "FindAdeptShadesBot"
+        "bot_class_name": "FindAdeptShadesBot",
     },
     {
         "race": Race.Protoss,
         "path": "examples.protoss.threebase_voidray",
-        "bot_class_name": "ThreebaseVoidrayBot"
+        "bot_class_name": "ThreebaseVoidrayBot",
     },
     {
         "race": Race.Protoss,
         "path": "examples.protoss.warpgate_push",
-        "bot_class_name": "WarpGateBot"
+        "bot_class_name": "WarpGateBot",
     },
     # Terran
     {
         "race": Race.Terran,
         "path": "examples.terran.cyclone_push",
-        "bot_class_name": "CyclonePush"
+        "bot_class_name": "CyclonePush",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.mass_reaper",
-        "bot_class_name": "MassReaperBot"
+        "bot_class_name": "MassReaperBot",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.onebase_battlecruiser",
-        "bot_class_name": "BCRushBot"
+        "bot_class_name": "BCRushBot",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.proxy_rax",
-        "bot_class_name": "ProxyRaxBot"
+        "bot_class_name": "ProxyRaxBot",
     },
     {
         "race": Race.Terran,
         "path": "examples.terran.ramp_wall",
-        "bot_class_name": "RampWallBot"
+        "bot_class_name": "RampWallBot",
     },
     # Zerg
     {
         "race": Race.Zerg,
         "path": "examples.zerg.expand_everywhere",
-        "bot_class_name": "ExpandEverywhere"
+        "bot_class_name": "ExpandEverywhere",
     },
     {
         "race": Race.Zerg,
         "path": "examples.zerg.hydralisk_push",
-        "bot_class_name": "Hydralisk"
+        "bot_class_name": "Hydralisk",
     },
     {
         "race": Race.Zerg,
         "path": "examples.zerg.onebase_broodlord",
-        "bot_class_name": "BroodlordBot"
+        "bot_class_name": "BroodlordBot",
     },
     {
         "race": Race.Zerg,
         "path": "examples.zerg.zerg_rush",
-        "bot_class_name": "ZergRushBot"
+        "bot_class_name": "ZergRushBot",
     },
 ]
 
-matches: List[GameMatch] = []
+matches: list[GameMatch] = []
 
 # Run bots against each other
 for bot_info1, bot_info2 in combinations(bot_infos, 2):
+    # pyre-ignore[11]
     bot_race1: Race = bot_info1["race"]
     bot_path: str = bot_info1["path"]
     bot_class_name: str = bot_info1["bot_class_name"]
     module = import_module(bot_path)
-    bot_class1: Type[BotAI] = getattr(module, bot_class_name)
+    bot_class1: type[BotAI] = getattr(module, bot_class_name)
 
     bot_race2: Race = bot_info2["race"]
     bot_path: str = bot_info2["path"]
     bot_class_name: str = bot_info2["bot_class_name"]
     module = import_module(bot_path)
-    bot_class2: Type[BotAI] = getattr(module, bot_class_name)
+    bot_class2: type[BotAI] = getattr(module, bot_class_name)
 
     for realtime in [True, False]:
         matches.append(
@@ -138,5 +138,5 @@ async def main():
     logger.info("Checked all results")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())

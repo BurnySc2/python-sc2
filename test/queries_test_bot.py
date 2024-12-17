@@ -1,15 +1,13 @@
+# pyre-ignore-all-errors[16]
 """
 This testbot's purpose is to test the query behavior of the API.
 These query functions are:
 self.can_place (RequestQueryBuildingPlacement)
 TODO: self.client.query_pathing (RequestQueryPathing)
 """
-import os
+
+from __future__ import annotations
 import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-from typing import List, Union
 
 from loguru import logger
 
@@ -24,7 +22,6 @@ from sc2.position import Point2
 
 
 class TestBot(BotAI):
-
     def __init__(self):
         # The time the bot has to complete all tests, here: the number of game seconds
         self.game_time_timeout_limit = 20 * 60  # 20 minutes ingame time
@@ -46,7 +43,7 @@ class TestBot(BotAI):
         sys.exit(0)
 
     async def clear_map_center(self):
-        """ Spawn observer in map center, remove all enemy units, remove all own units. """
+        """Spawn observer in map center, remove all enemy units, remove all own units."""
         map_center = self.game_info.map_center
 
         # Spawn observer to be able to see enemy invisible units
@@ -69,16 +66,16 @@ class TestBot(BotAI):
             await self.client.debug_kill_unit(my_units)
             await self._advance_steps(10)
 
-    async def spawn_unit(self, unit_type: Union[UnitTypeId, List[UnitTypeId]]):
+    async def spawn_unit(self, unit_type: UnitTypeId | list[UnitTypeId]):
         await self._advance_steps(10)
-        if not isinstance(unit_type, List):
+        if not isinstance(unit_type, list):
             unit_type = [unit_type]
         for i in unit_type:
             await self.client.debug_create_unit([[i, 1, self.game_info.map_center, 1]])
 
-    async def spawn_unit_enemy(self, unit_type: Union[UnitTypeId, List[UnitTypeId]]):
+    async def spawn_unit_enemy(self, unit_type: UnitTypeId | list[UnitTypeId]):
         await self._advance_steps(10)
-        if not isinstance(unit_type, List):
+        if not isinstance(unit_type, list):
             unit_type = [unit_type]
         for i in unit_type:
             if i == UnitTypeId.CREEPTUMOR:
@@ -251,7 +248,6 @@ class TestBot(BotAI):
 
 
 class EmptyBot(BotAI):
-
     async def on_step(self, iteration: int):
         for unit in self.units:
             unit.hold_position()

@@ -1,4 +1,5 @@
-# pylint: disable=R0911,W1510
+from __future__ import annotations
+
 import os
 import re
 import subprocess
@@ -10,12 +11,12 @@ from loguru import logger
 ## accessed directly by any bot clients
 
 
-def win_path_to_wsl_path(path):
+def win_path_to_wsl_path(path) -> Path:
     """Convert a path like C:\\foo to /mnt/c/foo"""
     return Path("/mnt") / PureWindowsPath(re.sub("^([A-Z]):", lambda m: m.group(1).lower(), path))
 
 
-def wsl_path_to_win_path(path):
+def wsl_path_to_win_path(path) -> PureWindowsPath:
     """Convert a path like /mnt/c/foo to C:\\foo"""
     return PureWindowsPath(re.sub("^/mnt/([a-z])", lambda m: m.group(1).upper() + ":", path))
 
@@ -39,7 +40,7 @@ if ($proc) {
 }"""
 
 
-def run(popen_args, sc2_cwd):
+def run(popen_args, sc2_cwd) -> subprocess.Popen[str]:
     """Run SC2 in Windows and get the pid so that it can be killed later."""
     path = wsl_path_to_win_path(popen_args[0])
     args = " ".join(popen_args[1:])
@@ -53,7 +54,7 @@ def run(popen_args, sc2_cwd):
     )
 
 
-def kill(wsl_process):
+def kill(wsl_process) -> bool:
     """Needed to kill a process started with WSL. Returns true if killed successfully."""
     # HACK: subprocess and WSL1 appear to have a nasty interaction where
     # any streams are never closed and the process is never considered killed,
@@ -69,7 +70,7 @@ def kill(wsl_process):
     return proc.returncode == 0  # Returns 128 on failure
 
 
-def detect():
+def detect() -> str | None:
     """Detect the current running version of WSL, and bail out if it doesn't exist"""
     # Allow disabling WSL detection with an environment variable
     if os.getenv("SC2_WSL_DETECT", "1") == "0":

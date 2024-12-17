@@ -8,6 +8,8 @@ It will load the pickle files, recreate the bot object from scratch and tests mo
 All functions that require some kind of query or interaction with the API directly will have to be tested in the "autotest_bot.py" in a live game.
 """
 
+from __future__ import annotations
+
 import lzma
 import math
 import pickle
@@ -17,8 +19,9 @@ import sys
 import unittest
 from contextlib import suppress
 from pathlib import Path
-from typing import Any, List, Tuple
+from typing import Any
 
+# pyre-ignore[21]
 from google.protobuf.internal import api_implementation
 from hypothesis import given, settings
 from hypothesis import strategies as st
@@ -40,12 +43,12 @@ from sc2.position import Point2, Point3, Rect, Size
 from sc2.unit import Unit
 from sc2.units import Units
 
-MAPS: List[Path] = [
+MAPS: list[Path] = [
     map_path for map_path in (Path(__file__).parent / "pickle_data").iterdir() if map_path.suffix == ".xz"
 ]
 
 
-def load_map_pickle_data(map_path: Path) -> Tuple[Any, Any, Any]:
+def load_map_pickle_data(map_path: Path) -> tuple[Any, Any, Any]:
     with lzma.open(str(map_path.absolute()), "rb") as f:
         raw_game_data, raw_game_info, raw_observation = pickle.load(f)
         return raw_game_data, raw_game_info, raw_observation
@@ -73,7 +76,7 @@ def get_map_specific_bot(map_path: Path) -> BotAI:
 def test_protobuf_implementation():
     """Make sure that cpp is used as implementation"""
     # Doesn't seem to be implemented in newer python versions
-    if sys.version_info.major == 3 and sys.version_info.minor < 10 and sys.platform != "darwin":
+    if sys.version_info < (3, 10) and sys.platform != "darwin":
         assert api_implementation.Type() == "cpp"
 
 
@@ -176,7 +179,7 @@ def test_bot_ai():
     assert bot.already_pending_upgrade(UpgradeId.STIMPACK) == 0
     assert bot.already_pending(UpgradeId.STIMPACK) == 0
     assert bot.already_pending(UnitTypeId.SCV) == 0
-    assert 0 < bot.get_terrain_height(worker)
+    assert bot.get_terrain_height(worker) > 0
     assert bot.in_placement_grid(worker)
     assert bot.in_pathing_grid(worker)
     # The pickle data was created by a terran bot, so there is no creep under any worker
@@ -290,12 +293,14 @@ def test_bot_ai():
 
     def calc_cost(item_id) -> Cost:
         if isinstance(item_id, AbilityId):
+            # pyre-ignore[16]
             return bot.game_data.calculate_ability_cost(item_id)
         elif isinstance(item_id, UpgradeId):
             return bot.game_data.upgrades[item_id.value].cost
         elif isinstance(item_id, UnitTypeId):
             creation_ability: AbilityId = bot.game_data.units[item_id.value].creation_ability.exact_id
             return bot.game_data.calculate_ability_cost(creation_ability)
+        return Cost(0, 0)
 
     def assert_cost(item_id, real_cost: Cost):
         assert calc_cost(item_id) == real_cost, f"Cost of {item_id} should be {real_cost} but is {calc_cost(item_id)}"
@@ -911,7 +916,7 @@ def test_exact_creation_ability():
         from sc2.dicts.unit_abilities import UNIT_ABILITIES
         from sc2.dicts.unit_unit_alias import UNIT_UNIT_ALIAS
     except ImportError:
-        logger.info(f"Import error: dict sc2/dicts/ are missing!")
+        logger.info("Import error: dict sc2/dicts/ are missing!")
         return
     test_case = unittest.TestCase()
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
@@ -938,7 +943,7 @@ def test_exact_creation_ability():
     }
 
     unit_types = list(UNIT_UNIT_ALIAS) + list(UNIT_UNIT_ALIAS.values()) + list(UNIT_ABILITIES) + list(ALL_GAS)
-    unit_types_unique_sorted = sorted(set(t.name for t in unit_types))
+    unit_types_unique_sorted = sorted({t.name for t in unit_types})
     for unit_type_name in unit_types_unique_sorted:
         unit_type = UnitTypeId[unit_type_name]
         if unit_type in ignore_types:
@@ -966,7 +971,7 @@ def test_dicts():
     try:
         from sc2.dicts.unit_research_abilities import RESEARCH_INFO
     except ImportError:
-        logger.info(f"Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
+        logger.info("Import error: dict sc2/dicts/unit_research_abilities.py is missing!")
         return
 
     # If on macOS or Linux: skip (fails on several upgrades on github actions)
@@ -1005,10 +1010,10 @@ def test_position_pointlike(x1, y1, x2, y2, x3, y3):
     pos3 = Point2((x3, y3))
     epsilon = 1e-3
     assert pos1.position == pos1
-    dist = ((x2 - x1)**2 + (y2 - y1)**2)**0.5
+    dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
     assert abs(pos1.distance_to(pos2) - dist) <= epsilon
     assert abs(pos1.distance_to_point2(pos2) - dist) <= epsilon
-    assert abs(pos1._distance_squared(pos2)**0.5 - dist) <= epsilon
+    assert abs(pos1._distance_squared(pos2) ** 0.5 - dist) <= epsilon
 
     points = {pos2, pos3}
     points2 = {pos1, pos2, pos3}
@@ -1017,20 +1022,20 @@ def test_position_pointlike(x1, y1, x2, y2, x3, y3):
         assert pos1.sort_by_distance(points2) == sorted(points2, key=lambda p: pos1._distance_squared(p))
         assert pos1.closest(points2) == pos1
         closest_point = min(points, key=lambda p: p._distance_squared(pos1))
-        dist_closest_point = pos1._distance_squared(closest_point)**0.5
+        dist_closest_point = pos1._distance_squared(closest_point) ** 0.5
         furthest_point = max(points, key=lambda p: p._distance_squared(pos1))
-        dist_furthest_point = pos1._distance_squared(furthest_point)**0.5
+        dist_furthest_point = pos1._distance_squared(furthest_point) ** 0.5
 
         # Distances between pos1-pos2 and pos1-pos3 might be the same, so the sorting might still be different, that's why I use a set here
         assert pos1.closest(points) in {p for p in points2 if abs(pos1.distance_to(p) - dist_closest_point) < epsilon}
-        assert abs(pos1.distance_to_closest(points) - pos1._distance_squared(closest_point)**0.5) < epsilon
+        assert abs(pos1.distance_to_closest(points) - pos1._distance_squared(closest_point) ** 0.5) < epsilon
         assert pos1.furthest(points) in {p for p in points2 if abs(pos1.distance_to(p) - dist_furthest_point) < epsilon}
-        assert abs(pos1.distance_to_furthest(points) - pos1._distance_squared(furthest_point)**0.5) < epsilon
+        assert abs(pos1.distance_to_furthest(points) - pos1._distance_squared(furthest_point) ** 0.5) < epsilon
         assert pos1.offset(pos2) == Point2((pos1.x + pos2.x, pos1.y + pos2.y))
         if pos1 != pos2:
             assert pos1.unit_axes_towards(pos2) != Point2((0, 0))
 
-        if 0 < x3:
+        if x3 > 0:
             temp_pos = pos1.towards(pos2, x3)
             if x3 <= pos1.distance_to(pos2):
                 # Using "towards" function to go between pos1 and pos2
@@ -1072,13 +1077,13 @@ def test_position_point2(x1, y1, x2, y2):
     assert pos1.to2 == pos1
     assert pos1.to3 == Point3((x1, y1, 0))
 
-    length1 = (pos1.x**2 + pos1.y**2)**0.5
+    length1 = (pos1.x**2 + pos1.y**2) ** 0.5
     assert abs(pos1.length - length1) < 0.001
     if length1:
         normalized1 = pos1 / length1
         assert abs(pos1.normalized.is_same_as(pos1 / length1))
         assert abs(normalized1.length - 1) < 0.001
-    length2 = (pos2.x**2 + pos2.y**2)**0.5
+    length2 = (pos2.x**2 + pos2.y**2) ** 0.5
     assert abs(pos2.length - length2) < 0.001
     if length2:
         normalized2 = pos2 / length2
@@ -1087,7 +1092,7 @@ def test_position_point2(x1, y1, x2, y2):
 
     assert isinstance(pos1.distance_to(pos2), float)
     assert isinstance(pos1.distance_to_point2(pos2), float)
-    if 0 < x2:
+    if x2 > 0:
         assert pos1.random_on_distance(x2) != pos1
         assert pos1.towards_with_random_angle(pos2, x2) != pos1
     assert pos1.towards_with_random_angle(pos2) != pos1

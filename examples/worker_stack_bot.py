@@ -13,7 +13,7 @@ Task for the user who wants to enhance this bot:
 - Re-assign workers when gas mines out
 """
 
-from typing import Dict, Set
+from __future__ import annotations
 
 from loguru import logger
 
@@ -27,12 +27,10 @@ from sc2.unit import Unit
 from sc2.units import Units
 
 
-# pylint: disable=W0231
 class WorkerStackBot(BotAI):
-
     def __init__(self):
-        self.worker_to_mineral_patch_dict: Dict[int, int] = {}
-        self.mineral_patch_to_list_of_workers: Dict[int, Set[int]] = {}
+        self.worker_to_mineral_patch_dict: dict[int, int] = {}
+        self.mineral_patch_to_list_of_workers: dict[int, set[int]] = {}
         self.minerals_sorted_by_distance: Units = Units([], self)
         # Distance 0.01 to 0.1 seems fine
         self.townhall_distance_threshold = 0.01
@@ -44,10 +42,9 @@ class WorkerStackBot(BotAI):
         await self.assign_workers()
 
     async def assign_workers(self):
-        self.minerals_sorted_by_distance = self.mineral_field.closer_than(10,
-                                                                          self.start_location).sorted_by_distance_to(
-                                                                              self.start_location
-                                                                          )
+        self.minerals_sorted_by_distance = self.mineral_field.closer_than(
+            10, self.start_location
+        ).sorted_by_distance_to(self.start_location)
 
         # Assign workers to mineral patch, start with the mineral patch closest to base
         for mineral in self.minerals_sorted_by_distance:
@@ -69,16 +66,15 @@ class WorkerStackBot(BotAI):
     async def on_step(self, iteration: int):
         if self.worker_to_mineral_patch_dict:
             # Quick-access cache mineral tag to mineral Unit
-            minerals: Dict[int, Unit] = {mineral.tag: mineral for mineral in self.mineral_field}
+            minerals: dict[int, Unit] = {mineral.tag: mineral for mineral in self.mineral_field}
 
+            worker: Unit
             for worker in self.workers:
                 if not self.townhalls:
                     logger.error("All townhalls died - can't return resources")
                     break
-
-                worker: Unit
                 mineral_tag = self.worker_to_mineral_patch_dict[worker.tag]
-                mineral = minerals.get(mineral_tag, None)
+                mineral = minerals.get(mineral_tag)
                 if mineral is None:
                     logger.error(f"Mined out mineral with tag {mineral_tag} for worker {worker.tag}")
                     continue
@@ -93,6 +89,7 @@ class WorkerStackBot(BotAI):
                     # Move worker in front of the nexus to avoid deceleration until the last moment
                     if worker.distance_to(th) > th.radius + worker.radius + self.townhall_distance_threshold:
                         pos: Point2 = th.position
+                        # pyre-ignore[6]
                         worker.move(pos.towards(worker, th.radius * self.townhall_distance_factor))
                         worker.return_resource(queue=True)
                     else:
@@ -100,6 +97,7 @@ class WorkerStackBot(BotAI):
                         worker.gather(mineral, queue=True)
 
         # Print info every 30 game-seconds
+        # pyre-ignore[16]
         if self.state.game_loop % (22.4 * 30) == 0:
             logger.info(f"{self.time_formatted} Mined a total of {int(self.state.score.collected_minerals)} minerals")
 
@@ -107,8 +105,7 @@ class WorkerStackBot(BotAI):
 def main():
     run_game(
         maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, WorkerStackBot()),
-         Computer(Race.Terran, Difficulty.Medium)],
+        [Bot(Race.Protoss, WorkerStackBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         random_seed=0,
     )

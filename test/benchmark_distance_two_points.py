@@ -1,7 +1,9 @@
+# pyre-ignore-all-errors[21]
+from __future__ import annotations
+
 import math
 import platform
 import random
-from typing import Union
 
 import numpy as np
 from scipy.spatial import distance as scipydistance
@@ -10,15 +12,15 @@ from scipy.spatial import distance as scipydistance
 from sc2.position import Point2
 
 PYTHON_VERSION = platform.python_version_tuple()
-USING_PYTHON_3_8: bool = ("3", "8") <= PYTHON_VERSION
+USING_PYTHON_3_8: bool = PYTHON_VERSION >= ("3", "8")
 
 
 def distance_to_python_raw(s, p):
-    return ((s[0] - p[0])**2 + (s[1] - p[1])**2)**0.5
+    return ((s[0] - p[0]) ** 2 + (s[1] - p[1]) ** 2) ** 0.5
 
 
 def distance_to_squared_python_raw(s, p):
-    return (s[0] - p[0])**2 + (s[1] - p[1])**2
+    return (s[0] - p[0]) ** 2 + (s[1] - p[1]) ** 2
 
 
 if USING_PYTHON_3_8:
@@ -31,35 +33,35 @@ def distance_to_math_hypot(s, p):
     return math.hypot((s[0] - p[0]), (s[1] - p[1]))
 
 
-def distance_scipy_euclidean(p1, p2) -> Union[int, float]:
-    """ Distance calculation using scipy """
+def distance_scipy_euclidean(p1, p2) -> int | float:
+    """Distance calculation using scipy"""
     dist = scipydistance.euclidean(p1, p2)
     # dist = distance.cdist(p1.T, p2.T, "euclidean")
     return dist
 
 
 def distance_numpy_linalg_norm(p1, p2):
-    """ Distance calculation using numpy """
+    """Distance calculation using numpy"""
     return np.linalg.norm(p1 - p2)
 
 
-def distance_sum_squared_sqrt(p1, p2) -> Union[int, float]:
-    """ Distance calculation using numpy """
-    return np.sqrt(np.sum((p1 - p2)**2))
+def distance_sum_squared_sqrt(p1, p2) -> int | float:
+    """Distance calculation using numpy"""
+    return np.sqrt(np.sum((p1 - p2) ** 2))
 
 
-def distance_sum_squared(p1, p2) -> Union[int, float]:
-    """ Distance calculation using numpy """
-    return np.sum((p1 - p2)**2, axis=0)
+def distance_sum_squared(p1, p2) -> int | float:
+    """Distance calculation using numpy"""
+    return np.sum((p1 - p2) ** 2, axis=0)
 
 
 # @njit
-# def distance_python_raw_njit(p1: Point2, p2: Point2) -> Union[int, float]:
+# def distance_python_raw_njit(p1: Point2, p2: Point2) -> int | float:
 #     """ The built in Point2 distance function rewritten differently with njit, same structure as distance02 """
 #     return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
 
 # @njit
-# def distance_python_raw_square_njit(p1: Point2, p2: Point2) -> Union[int, float]:
+# def distance_python_raw_square_njit(p1: Point2, p2: Point2) -> int | float:
 #     """ The built in Point2 distance function rewritten differently with njit, same structure as distance02 """
 #     return (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2
 
@@ -69,12 +71,12 @@ def distance_sum_squared(p1, p2) -> Union[int, float]:
 #     return np.linalg.norm(p1 - p2)
 
 # @njit("float64(float64[:], float64[:])")
-# def distance_numpy_square_sum_sqrt_njit(p1, p2) -> Union[int, float]:
+# def distance_numpy_square_sum_sqrt_njit(p1, p2) -> int | float:
 #     """ Distance calculation using numpy + numba, same structure as distance13 """
 #     return np.sqrt(np.sum((p1 - p2) ** 2))
 
 # @njit("float64(float64[:], float64[:])")
-# def distance_numpy_square_sum_njit(p1, p2) -> Union[int, float]:
+# def distance_numpy_square_sum_njit(p1, p2) -> int | float:
 #     """ Distance calculation using numpy + numba, same structure as distance13 """
 #     return np.sum((p1 - p2) ** 2, axis=0)
 
@@ -90,9 +92,7 @@ correct_result = distance_to_math_hypot(p1, p2)
 
 
 def check_result(result1, result2, accuracy=1e-5):
-    if abs(result1 - result2) <= accuracy:
-        return True
-    return False
+    return abs(result1 - result2) <= accuracy
 
 
 if USING_PYTHON_3_8:

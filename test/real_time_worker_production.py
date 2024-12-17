@@ -1,10 +1,9 @@
 """
 This bot tests if on 'realtime=True' any nexus has more than 1 probe in the queue.
 """
-import os
-import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from __future__ import annotations
+
 import asyncio
 
 from loguru import logger
@@ -22,7 +21,6 @@ on_end_was_called: bool = False
 
 
 class RealTimeTestBot(BotAI):
-
     async def on_before_start(self):
         mf = self.mineral_field
         for w in self.workers:
@@ -36,7 +34,7 @@ class RealTimeTestBot(BotAI):
         await asyncio.sleep(1)
 
     async def on_start(self):
-        """ This function is run after the expansion locations and ramps are calculated. """
+        """This function is run after the expansion locations and ramps are calculated."""
         self.client.game_step = 1
 
     async def on_step(self, iteration):
@@ -94,6 +92,7 @@ class RealTimeTestBot(BotAI):
         if unit.is_structure:
             unit(AbilityId.RALLY_WORKERS, self.mineral_field.closest_to(unit))
 
+    # pyre-ignore[11]
     async def on_end(self, game_result: Result):
         global on_end_was_called
         on_end_was_called = True
@@ -103,8 +102,7 @@ class RealTimeTestBot(BotAI):
 def main():
     run_game(
         maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, RealTimeTestBot()),
-         Computer(Race.Terran, Difficulty.Medium)],
+        [Bot(Race.Protoss, RealTimeTestBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=True,
         disable_fog=True,
     )

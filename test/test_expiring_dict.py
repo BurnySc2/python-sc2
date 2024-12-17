@@ -4,14 +4,11 @@ from sc2.expiring_dict import ExpiringDict
 
 
 def test_class():
-
     class State:
-
         def __init__(self):
             self.game_loop = 0
 
     class BotAI:
-
         def __init__(self):
             self.state = State()
 
@@ -57,7 +54,7 @@ def test_class():
         assert test.get(key, with_age=True)[1] in {0, 1}
 
     c = 0
-    for _key in test.keys():
+    for _key in test:
         c += 1
     assert c == 4
 
@@ -81,7 +78,7 @@ def test_class():
 
     assert len(test) == 0
 
-    for _key in test.keys():
+    for _key in test:
         assert False
 
     for _value in test.values():

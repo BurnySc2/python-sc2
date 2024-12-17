@@ -2,6 +2,8 @@ import platform
 from pathlib import Path
 
 from loguru import logger
+
+# pyre-ignore[21]
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2.player import Computer
@@ -9,14 +11,12 @@ from sc2.protocol import Protocol
 
 
 class Controller(Protocol):
-
-    def __init__(self, ws, process):
+    def __init__(self, ws, process) -> None:
         super().__init__(ws)
         self._process = process
 
     @property
-    def running(self):
-        # pylint: disable=W0212
+    def running(self) -> bool:
         return self._process._process is not None
 
     async def create_game(self, game_map, players, realtime: bool, random_seed=None, disable_fog=None):
@@ -46,13 +46,13 @@ class Controller(Protocol):
         return result
 
     async def request_save_map(self, download_path: str):
-        """ Not working on linux. """
+        """Not working on linux."""
         req = sc_pb.RequestSaveMap(map_path=download_path)
         result = await self._execute(save_map=req)
         return result
 
     async def request_replay_info(self, replay_path: str):
-        """ Not working on linux. """
+        """Not working on linux."""
         req = sc_pb.RequestReplayInfo(replay_path=replay_path, download_data=False)
         result = await self._execute(replay_info=req)
         return result

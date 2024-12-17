@@ -23,14 +23,11 @@ class BanesBanesBanes(BotAI):
             return random.choice(self.enemy_structures).position
         return self.enemy_start_locations[0]
 
-    # pylint: disable=R0912
     async def on_step(self, iteration):
         larvae: Units = self.larva
         lings: Units = self.units(UnitTypeId.ZERGLING)
         # Send all idle banes to enemy
-        if banes := [
-            u for u in self.units if u.type_id == UnitTypeId.BANELING and u.is_idle
-        ]:
+        if banes := [u for u in self.units if u.type_id == UnitTypeId.BANELING and u.is_idle]:
             for unit in banes:
                 unit.attack(self.select_target())
 
@@ -45,11 +42,7 @@ class BanesBanesBanes(BotAI):
             return
 
         # If bane nest is ready, train banes
-        if (
-            lings
-            and self.can_afford(UnitTypeId.BANELING)
-            and self.structures(UnitTypeId.BANELINGNEST).ready
-        ):
+        if lings and self.can_afford(UnitTypeId.BANELING) and self.structures(UnitTypeId.BANELINGNEST).ready:
             # TODO: Get lings.random.train(UnitTypeId.BANELING) to work
             #   Broken on recent patches
             # lings.random.train(UnitTypeId.BANELING)
@@ -60,9 +53,7 @@ class BanesBanesBanes(BotAI):
 
         # If all our townhalls are dead, send all our units to attack
         if not self.townhalls:
-            for unit in self.units.of_type(
-                {UnitTypeId.DRONE, UnitTypeId.QUEEN, UnitTypeId.ZERGLING}
-            ):
+            for unit in self.units.of_type({UnitTypeId.DRONE, UnitTypeId.QUEEN, UnitTypeId.ZERGLING}):
                 unit.attack(self.enemy_start_locations[0])
             return
 
@@ -77,11 +68,7 @@ class BanesBanesBanes(BotAI):
                 queen(AbilityId.EFFECT_INJECTLARVA, hq)
 
         # Build spawning pool
-        if (
-            self.structures(UnitTypeId.SPAWNINGPOOL).amount
-            + self.already_pending(UnitTypeId.SPAWNINGPOOL)
-            == 0
-        ):
+        if self.structures(UnitTypeId.SPAWNINGPOOL).amount + self.already_pending(UnitTypeId.SPAWNINGPOOL) == 0:
             if self.can_afford(UnitTypeId.SPAWNINGPOOL):
                 await self.build(
                     UnitTypeId.SPAWNINGPOOL,
@@ -95,14 +82,8 @@ class BanesBanesBanes(BotAI):
         #             hq.build(UnitTypeId.LAIR)
 
         # If lair is ready and we have no hydra den on the way: build hydra den
-        if self.structures(UnitTypeId.SPAWNINGPOOL).ready and self.can_afford(
-            UnitTypeId.BANELINGNEST
-        ):
-            if (
-                self.structures(UnitTypeId.BANELINGNEST).amount
-                + self.already_pending(UnitTypeId.BANELINGNEST)
-                == 0
-            ):
+        if self.structures(UnitTypeId.SPAWNINGPOOL).ready and self.can_afford(UnitTypeId.BANELINGNEST):
+            if self.structures(UnitTypeId.BANELINGNEST).amount + self.already_pending(UnitTypeId.BANELINGNEST) == 0:
                 await self.build(
                     UnitTypeId.BANELINGNEST,
                     near=hq.position.towards(self.game_info.map_center, 5),
@@ -111,8 +92,7 @@ class BanesBanesBanes(BotAI):
         # If we dont have both extractors: build them
         if (
             self.structures(UnitTypeId.SPAWNINGPOOL)
-            and self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR)
-            < 2
+            and self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) < 2
             and self.can_afford(UnitTypeId.EXTRACTOR)
         ):
             # May crash if we dont have any drones

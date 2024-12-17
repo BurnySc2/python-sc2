@@ -1,6 +1,8 @@
+# pyre-ignore-all-errors[21]
+from __future__ import annotations
+
 import math
 import random
-from typing import List, Tuple
 
 import numpy as np
 from scipy.spatial.distance import cdist
@@ -15,28 +17,28 @@ def distance_matrix_scipy_cdist_squared(ps, p1):
 
 
 def distance_numpy_basic_1(ps, p1):
-    """ Distance calculation using numpy """
+    """Distance calculation using numpy"""
     flat_units = (item for sublist in ps for item in sublist)
     units_np = np.fromiter(flat_units, dtype=float, count=2 * len(ps)).reshape((-1, 2))
     point_np = np.fromiter(p1, dtype=float, count=2).reshape((-1, 2))
     # Subtract and then square the values
-    nppoints = (units_np - point_np)**2
+    nppoints = (units_np - point_np) ** 2
     # Calc the sum of each vector
     nppoints = nppoints.sum(axis=1)
     return nppoints
 
 
 def distance_numpy_basic_2(ps, p1):
-    """ Distance calculation using numpy """
+    """Distance calculation using numpy"""
     flat_units = (item for sublist in ps for item in sublist)
     units_np = np.fromiter(flat_units, dtype=float, count=2 * len(ps)).reshape((-1, 2))
     point_np = np.fromiter(p1, dtype=float, count=2).reshape((-1, 2))
-    dist_2 = np.sum((units_np - point_np)**2, axis=1)
+    dist_2 = np.sum((units_np - point_np) ** 2, axis=1)
     return dist_2
 
 
 def distance_numpy_einsum(ps, p1):
-    """ Distance calculation using numpy einstein sum """
+    """Distance calculation using numpy einstein sum"""
     flat_units = (item for sublist in ps for item in sublist)
     units_np = np.fromiter(flat_units, dtype=float, count=2 * len(ps)).reshape((-1, 2))
     point_np = np.fromiter(p1, dtype=float, count=2).reshape((-1, 2))
@@ -46,7 +48,7 @@ def distance_numpy_einsum(ps, p1):
 
 
 def distance_numpy_einsum_pre_converted(ps, p1):
-    """ Distance calculation using numpy einstein sum """
+    """Distance calculation using numpy einstein sum"""
     deltas = ps - p1
     dist_2 = np.einsum("ij,ij->i", deltas, deltas)
     return dist_2
@@ -83,18 +85,18 @@ def distance_numpy_einsum_pre_converted(ps, p1):
 
 
 def distance_pure_python(ps, p1):
-    """ Distance calculation using numpy with jit(nopython=True) """
+    """Distance calculation using numpy with jit(nopython=True)"""
     distances = []
     x1 = p1[0]
     y1 = p1[1]
     for x0, y0 in ps:
-        distance_squared = (x0 - x1)**2 + (y0 - y1)**2
+        distance_squared = (x0 - x1) ** 2 + (y0 - y1) ** 2
         distances.append(distance_squared)
     return distances
 
 
 def distance_math_hypot(ps, p1):
-    """ Distance calculation using math.hypot """
+    """Distance calculation using math.hypot"""
     distances = []
     x1 = p1[0]
     y1 = p1[1]
@@ -110,8 +112,8 @@ amount = 50
 min_value = 0
 max_value = 250
 
-point: Tuple[float, float] = (random.uniform(min_value, max_value), random.uniform(min_value, max_value))
-units: List[Tuple[float, float]] = [
+point: tuple[float, float] = (random.uniform(min_value, max_value), random.uniform(min_value, max_value))
+units: list[tuple[float, float]] = [
     (random.uniform(min_value, max_value), random.uniform(min_value, max_value)) for _ in range(amount)
 ]
 

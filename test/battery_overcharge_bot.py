@@ -14,16 +14,13 @@ from sc2.player import Bot, Computer
 
 
 class BatteryOverchargeBot(BotAI):
-
     async def on_start(self):
-        """ Spawn requires structures. """
+        """Spawn requires structures."""
         await self.client.debug_create_unit(
             [
                 [UnitTypeId.PYLON, 1, self.start_location.towards(self.game_info.map_center, 5), 1],
-                [UnitTypeId.SHIELDBATTERY, 1,
-                 self.start_location.towards(self.game_info.map_center, 5), 1],
-                [UnitTypeId.CYBERNETICSCORE, 1,
-                 self.start_location.towards(self.game_info.map_center, 5), 1],
+                [UnitTypeId.SHIELDBATTERY, 1, self.start_location.towards(self.game_info.map_center, 5), 1],
+                [UnitTypeId.CYBERNETICSCORE, 1, self.start_location.towards(self.game_info.map_center, 5), 1],
             ]
         )
 
@@ -38,15 +35,14 @@ class BatteryOverchargeBot(BotAI):
                         nexus(AbilityId.BATTERYOVERCHARGE_BATTERYOVERCHARGE, battery)
 
         if iteration > 20:
-            logger.warning(f"Success, bot did not crash. Exiting bot.")
+            logger.warning("Success, bot did not crash. Exiting bot.")
             await self.client.leave()
 
 
 def main():
     run_game(
         maps.get("AcropolisLE"),
-        [Bot(Race.Protoss, BatteryOverchargeBot()),
-         Computer(Race.Terran, Difficulty.Medium)],
+        [Bot(Race.Protoss, BatteryOverchargeBot()), Computer(Race.Terran, Difficulty.Medium)],
         realtime=False,
         disable_fog=True,
     )

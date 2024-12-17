@@ -1,8 +1,12 @@
+# pyre-ignore-all-errors[6, 9, 16, 29, 58]
 from __future__ import annotations
 
-from typing import Dict, Iterable, List, Optional, Set, Tuple, Union
+from collections.abc import Iterable
+from pathlib import Path
 
 from loguru import logger
+
+# pyre-ignore[21]
 from s2clientprotocol import debug_pb2 as debug_pb
 from s2clientprotocol import query_pb2 as query_pb
 from s2clientprotocol import raw_pb2 as raw_pb
@@ -16,27 +20,25 @@ from sc2.game_info import GameInfo
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.position import Point2, Point3
-from sc2.protocol import ConnectionAlreadyClosed, Protocol, ProtocolError
+from sc2.protocol import ConnectionAlreadyClosedError, Protocol, ProtocolError
 from sc2.renderer import Renderer
 from sc2.unit import Unit
 from sc2.units import Units
 
 
-# pylint: disable=R0904
 class Client(Protocol):
-
-    def __init__(self, ws, save_replay_path: str = None):
+    def __init__(self, ws, save_replay_path: str = None) -> None:
         """
         :param ws:
         """
         super().__init__(ws)
         # How many frames will be waited between iterations before the next one is called
         self.game_step: int = 4
-        self.save_replay_path: Optional[str] = save_replay_path
+        self.save_replay_path: str | None = save_replay_path
         self._player_id = None
         self._game_result = None
         # Store a hash value of all the debug requests to prevent sending the same ones again if they haven't changed last frame
-        self._debug_hash_tuple_last_iteration: Tuple[int, int, int, int] = (0, 0, 0, 0)
+        self._debug_hash_tuple_last_iteration: tuple[int, int, int, int] = (0, 0, 0, 0)
         self._debug_draw_last_frame = False
         self._debug_texts = []
         self._debug_lines = []
@@ -101,8 +103,8 @@ class Client(Protocol):
         self._player_id = result.join_game.player_id
         return result.join_game.player_id
 
-    async def leave(self):
-        """ You can use 'await self.client.leave()' to surrender midst game. """
+    async def leave(self) -> None:
+        """You can use 'await self.client.leave()' to surrender midst game."""
         is_resign = self._game_result is None
 
         if is_resign:
@@ -115,14 +117,14 @@ class Client(Protocol):
                 await self.save_replay(self.save_replay_path)
                 self.save_replay_path = None
             await self._execute(leave_game=sc_pb.RequestLeaveGame())
-        except (ProtocolError, ConnectionAlreadyClosed):
+        except (ProtocolError, ConnectionAlreadyClosedError):
             if is_resign:
                 raise
 
-    async def save_replay(self, path):
+    async def save_replay(self, path) -> None:
         logger.debug("Requesting replay from server")
         result = await self._execute(save_replay=sc_pb.RequestSaveReplay())
-        with open(path, "wb") as f:
+        with Path(path).open("wb") as f:
             f.write(result.save_replay.data)
         logger.info(f"Saved replay to {path}")
 
@@ -151,7 +153,7 @@ class Client(Protocol):
         return result
 
     async def step(self, step_size: int = None):
-        """ EXPERIMENTAL: Change self._client.game_step during the step function to increase or decrease steps per second """
+        """EXPERIMENTAL: Change self._client.game_step during the step function to increase or decrease steps per second"""
         step_size = step_size or self.game_step
         return await self._execute(step=sc_pb.RequestStep(count=step_size))
 
@@ -161,7 +163,14 @@ class Client(Protocol):
         )
         return GameData(result.data)
 
-    async def dump_data(self, ability_id=True, unit_type_id=True, upgrade_id=True, buff_id=True, effect_id=True):
+    async def dump_data(
+        self,
+        ability_id: bool = True,
+        unit_type_id: bool = True,
+        upgrade_id: bool = True,
+        buff_id: bool = True,
+        effect_id: bool = True,
+    ) -> None:
         """
         Dump the game data files
         choose what data to dump in the keywords
@@ -178,14 +187,14 @@ class Client(Protocol):
                 effect_id=effect_id,
             )
         )
-        with open("data_dump.txt", "a") as file:
+        with Path("data_dump.txt").open("a") as file:
             file.write(str(result.data))
 
     async def get_game_info(self) -> GameInfo:
         result = await self._execute(game_info=sc_pb.RequestGameInfo())
         return GameInfo(result.game_info)
 
-    async def actions(self, actions, return_successes=False):
+    async def actions(self, actions, return_successes: bool = False):
         if not actions:
             return None
         if not isinstance(actions, list):
@@ -202,8 +211,7 @@ class Client(Protocol):
             return [ActionResult(r) for r in res.action.result]
         return [ActionResult(r) for r in res.action.result if ActionResult(r) != ActionResult.Success]
 
-    async def query_pathing(self, start: Union[Unit, Point2, Point3],
-                            end: Union[Point2, Point3]) -> Optional[Union[int, float]]:
+    async def query_pathing(self, start: Unit | Point2 | Point3, end: Point2 | Point3) -> int | float | None:
         """Caution: returns "None" when path not found
         Try to combine queries with the function below because the pathing query is generally slow.
 
@@ -221,7 +229,7 @@ class Client(Protocol):
             return None
         return distance
 
-    async def query_pathings(self, zipped_list: List[List[Union[Unit, Point2, Point3]]]) -> List[float]:
+    async def query_pathings(self, zipped_list: list[list[Unit | Point2 | Point3]]) -> list[float]:
         """Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])
         -> returns [distance1, distance2]
         Caution: returns 0 when path not found
@@ -244,8 +252,8 @@ class Client(Protocol):
         return [float(d.distance) for d in results.query.pathing]
 
     async def _query_building_placement_fast(
-        self, ability: AbilityId, positions: List[Union[Point2, Point3]], ignore_resources: bool = True
-    ) -> List[bool]:
+        self, ability: AbilityId, positions: list[Point2 | Point3], ignore_resources: bool = True
+    ) -> list[bool]:
         """
         Returns a list of booleans. Return True for positions that are valid, False otherwise.
 
@@ -268,9 +276,10 @@ class Client(Protocol):
     async def query_building_placement(
         self,
         ability: AbilityData,
-        positions: List[Union[Point2, Point3]],
-        ignore_resources: bool = True
-    ) -> List[ActionResult]:
+        positions: list[Point2 | Point3],
+        ignore_resources: bool = True,
+        # pyre-fixme[11]
+    ) -> list[ActionResult]:
         """This function might be deleted in favor of the function above (_query_building_placement_fast).
 
         :param ability:
@@ -290,9 +299,9 @@ class Client(Protocol):
         return [ActionResult(p.result) for p in result.query.placements]
 
     async def query_available_abilities(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
-    ) -> List[List[AbilityId]]:
-        """ Query abilities of multiple units """
+        self, units: list[Unit] | Units, ignore_resource_requirements: bool = False
+    ) -> list[list[AbilityId]]:
+        """Query abilities of multiple units"""
         input_was_a_list = True
         if not isinstance(units, list):
             """ Deprecated, accepting a single unit may be removed in the future, query a list of units instead """
@@ -308,13 +317,14 @@ class Client(Protocol):
         )
         """ Fix for bots that only query a single unit, may be removed soon """
         if not input_was_a_list:
+            # pyre-fixme[7]
             return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities][0]
         return [[AbilityId(a.ability_id) for a in b.abilities] for b in result.query.abilities]
 
     async def query_available_abilities_with_tag(
-        self, units: Union[List[Unit], Units], ignore_resource_requirements: bool = False
-    ) -> Dict[int, Set[AbilityId]]:
-        """ Query abilities of multiple units """
+        self, units: list[Unit] | Units, ignore_resource_requirements: bool = False
+    ) -> dict[int, set[AbilityId]]:
+        """Query abilities of multiple units"""
 
         result = await self._execute(
             query=query_pb.RequestQuery(
@@ -324,8 +334,8 @@ class Client(Protocol):
         )
         return {b.unit_tag: {AbilityId(a.ability_id) for a in b.abilities} for b in result.query.abilities}
 
-    async def chat_send(self, message: str, team_only: bool):
-        """ Writes a message to the chat """
+    async def chat_send(self, message: str, team_only: bool) -> None:
+        """Writes a message to the chat"""
         ch = ChatChannel.Team if team_only else ChatChannel.Broadcast
         await self._execute(
             action=sc_pb.RequestAction(
@@ -333,7 +343,7 @@ class Client(Protocol):
             )
         )
 
-    async def toggle_autocast(self, units: Union[List[Unit], Units], ability: AbilityId):
+    async def toggle_autocast(self, units: list[Unit] | Units, ability: AbilityId) -> None:
         """Toggle autocast of all specified units
 
         :param units:
@@ -348,15 +358,16 @@ class Client(Protocol):
                 actions=[
                     sc_pb.Action(
                         action_raw=raw_pb.ActionRaw(
-                            toggle_autocast=raw_pb.
-                            ActionRawToggleAutocast(ability_id=ability.value, unit_tags=(u.tag for u in units))
+                            toggle_autocast=raw_pb.ActionRawToggleAutocast(
+                                ability_id=ability.value, unit_tags=(u.tag for u in units)
+                            )
                         )
                     )
                 ]
             )
         )
 
-    async def debug_create_unit(self, unit_spawn_commands: List[List[Union[UnitTypeId, int, Point2, Point3]]]):
+    async def debug_create_unit(self, unit_spawn_commands: list[list[UnitTypeId | int | Point2 | Point3]]) -> None:
         """Usage example (will spawn 5 marines in the center of the map for player ID 1):
         await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])
 
@@ -380,12 +391,13 @@ class Client(Protocol):
                             pos=position.as_Point2D,
                             quantity=amount_of_units,
                         )
-                    ) for unit_type, amount_of_units, position, owner_id in unit_spawn_commands
+                    )
+                    for unit_type, amount_of_units, position, owner_id in unit_spawn_commands
                 )
             )
         )
 
-    async def debug_kill_unit(self, unit_tags: Union[Unit, Units, List[int], Set[int]]):
+    async def debug_kill_unit(self, unit_tags: Unit | Units | list[int] | set[int]) -> None:
         """
         :param unit_tags:
         """
@@ -399,7 +411,7 @@ class Client(Protocol):
             debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(kill_unit=debug_pb.DebugKillUnit(tag=unit_tags))])
         )
 
-    async def move_camera(self, position: Union[Unit, Units, Point2, Point3]):
+    async def move_camera(self, position: Unit | Units | Point2 | Point3) -> None:
         """Moves camera to the target position
 
         :param position:"""
@@ -420,7 +432,7 @@ class Client(Protocol):
             )
         )
 
-    async def obs_move_camera(self, position: Union[Unit, Units, Point2, Point3]):
+    async def obs_move_camera(self, position: Unit | Units | Point2 | Point3) -> None:
         """Moves observer camera to the target position. Only works when observing (e.g. watching the replay).
 
         :param position:"""
@@ -437,7 +449,7 @@ class Client(Protocol):
             )
         )
 
-    async def move_camera_spatial(self, position: Union[Point2, Point3]):
+    async def move_camera_spatial(self, position: Point2 | Point3) -> None:
         """Moves camera to the target position using the spatial aciton interface
 
         :param position:"""
@@ -449,17 +461,17 @@ class Client(Protocol):
         )
         await self._execute(action=sc_pb.RequestAction(actions=[action]))
 
-    def debug_text_simple(self, text: str):
-        """ Draws a text in the top left corner of the screen (up to a max of 6 messages fit there). """
+    def debug_text_simple(self, text: str) -> None:
+        """Draws a text in the top left corner of the screen (up to a max of 6 messages fit there)."""
         self._debug_texts.append(DrawItemScreenText(text=text, color=None, start_point=Point2((0, 0)), font_size=8))
 
     def debug_text_screen(
         self,
         text: str,
-        pos: Union[Point2, Point3, tuple, list],
-        color: Union[tuple, list, Point3] = None,
+        pos: Point2 | Point3 | tuple | list,
+        color: tuple | list | Point3 = None,
         size: int = 8,
-    ):
+    ) -> None:
         """
         Draws a text on the screen (monitor / game window) with coordinates 0 <= x, y <= 1.
 
@@ -477,15 +489,15 @@ class Client(Protocol):
     def debug_text_2d(
         self,
         text: str,
-        pos: Union[Point2, Point3, tuple, list],
-        color: Union[tuple, list, Point3] = None,
+        pos: Point2 | Point3 | tuple | list,
+        color: tuple | list | Point3 = None,
         size: int = 8,
     ):
         return self.debug_text_screen(text, pos, color, size)
 
     def debug_text_world(
-        self, text: str, pos: Union[Unit, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
-    ):
+        self, text: str, pos: Unit | Point3, color: tuple | list | Point3 = None, size: int = 8
+    ) -> None:
         """
         Draws a text at Point3 position in the game world.
         To grab a unit's 3d position, use unit.position3d
@@ -500,14 +512,10 @@ class Client(Protocol):
         assert isinstance(pos, Point3)
         self._debug_texts.append(DrawItemWorldText(text=text, color=color, start_point=pos, font_size=size))
 
-    def debug_text_3d(
-        self, text: str, pos: Union[Unit, Point3], color: Union[tuple, list, Point3] = None, size: int = 8
-    ):
+    def debug_text_3d(self, text: str, pos: Unit | Point3, color: tuple | list | Point3 = None, size: int = 8):
         return self.debug_text_world(text, pos, color, size)
 
-    def debug_line_out(
-        self, p0: Union[Unit, Point3], p1: Union[Unit, Point3], color: Union[tuple, list, Point3] = None
-    ):
+    def debug_line_out(self, p0: Unit | Point3, p1: Unit | Point3, color: tuple | list | Point3 = None) -> None:
         """
         Draws a line from p0 to p1.
 
@@ -525,10 +533,10 @@ class Client(Protocol):
 
     def debug_box_out(
         self,
-        p_min: Union[Unit, Point3],
-        p_max: Union[Unit, Point3],
-        color: Union[tuple, list, Point3] = None,
-    ):
+        p_min: Unit | Point3,
+        p_max: Unit | Point3,
+        color: tuple | list | Point3 = None,
+    ) -> None:
         """
         Draws a box with p_min and p_max as corners of the box.
 
@@ -546,10 +554,10 @@ class Client(Protocol):
 
     def debug_box2_out(
         self,
-        pos: Union[Unit, Point3],
+        pos: Unit | Point3,
         half_vertex_length: float = 0.25,
-        color: Union[tuple, list, Point3] = None,
-    ):
+        color: tuple | list | Point3 = None,
+    ) -> None:
         """
         Draws a box center at a position 'pos', with box side lengths (vertices) of two times 'half_vertex_length'.
 
@@ -564,7 +572,7 @@ class Client(Protocol):
         p1 = pos + Point3((half_vertex_length, half_vertex_length, half_vertex_length))
         self._debug_boxes.append(DrawItemBox(start_point=p0, end_point=p1, color=color))
 
-    def debug_sphere_out(self, p: Union[Unit, Point3], r: float, color: Union[tuple, list, Point3] = None):
+    def debug_sphere_out(self, p: Unit | Point3, r: float, color: tuple | list | Point3 = None) -> None:
         """
         Draws a sphere at point p with radius r.
 
@@ -577,7 +585,7 @@ class Client(Protocol):
         assert isinstance(p, Point3)
         self._debug_spheres.append(DrawItemSphere(start_point=p, radius=r, color=color))
 
-    async def _send_debug(self):
+    async def _send_debug(self) -> None:
         """Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.
         Check examples/terran/ramp_wall.py for example drawing. Each draw request needs to be sent again in every single on_step iteration.
         """
@@ -597,14 +605,18 @@ class Client(Protocol):
                             debug=[
                                 debug_pb.DebugCommand(
                                     draw=debug_pb.DebugDraw(
-                                        text=[text.to_proto()
-                                              for text in self._debug_texts] if self._debug_texts else None,
-                                        lines=[line.to_proto()
-                                               for line in self._debug_lines] if self._debug_lines else None,
-                                        boxes=[box.to_proto()
-                                               for box in self._debug_boxes] if self._debug_boxes else None,
-                                        spheres=[sphere.to_proto()
-                                                 for sphere in self._debug_spheres] if self._debug_spheres else None,
+                                        text=[text.to_proto() for text in self._debug_texts]
+                                        if self._debug_texts
+                                        else None,
+                                        lines=[line.to_proto() for line in self._debug_lines]
+                                        if self._debug_lines
+                                        else None,
+                                        boxes=[box.to_proto() for box in self._debug_boxes]
+                                        if self._debug_boxes
+                                        else None,
+                                        spheres=[sphere.to_proto() for sphere in self._debug_spheres]
+                                        if self._debug_spheres
+                                        else None,
                                     )
                                 )
                             ]
@@ -629,10 +641,12 @@ class Client(Protocol):
             )
             self._debug_draw_last_frame = False
 
-    async def debug_leave(self):
+    async def debug_leave(self) -> None:
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(end_game=debug_pb.DebugEndGame())]))
 
-    async def debug_set_unit_value(self, unit_tags: Union[Iterable[int], Units, Unit], unit_value: int, value: float):
+    async def debug_set_unit_value(
+        self, unit_tags: Iterable[int] | Units | Unit, unit_value: int, value: float
+    ) -> None:
         """Sets a "unit value" (Energy, Life or Shields) of the given units to the given value.
         Can't set the life of a unit to 0, use "debug_kill_unit" for that. Also can't set the life above the unit's maximum.
         The following example sets the health of all your workers to 1:
@@ -654,15 +668,17 @@ class Client(Protocol):
             debug=sc_pb.RequestDebug(
                 debug=(
                     debug_pb.DebugCommand(
-                        unit_value=debug_pb.
-                        DebugSetUnitValue(unit_value=unit_value, value=float(value), unit_tag=unit_tag)
-                    ) for unit_tag in unit_tags
+                        unit_value=debug_pb.DebugSetUnitValue(
+                            unit_value=unit_value, value=float(value), unit_tag=unit_tag
+                        )
+                    )
+                    for unit_tag in unit_tags
                 )
             )
         )
 
-    async def debug_hang(self, delay_in_seconds: float):
-        """ Freezes the SC2 client. Not recommended to be used. """
+    async def debug_hang(self, delay_in_seconds: float) -> None:
+        """Freezes the SC2 client. Not recommended to be used."""
         delay_in_ms = int(round(delay_in_seconds * 1000))
         await self._execute(
             debug=sc_pb.RequestDebug(
@@ -670,60 +686,60 @@ class Client(Protocol):
             )
         )
 
-    async def debug_show_map(self):
-        """ Reveals the whole map for the bot. Using it a second time disables it again. """
+    async def debug_show_map(self) -> None:
+        """Reveals the whole map for the bot. Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=1)]))
 
-    async def debug_control_enemy(self):
-        """ Allows control over enemy units and structures similar to team games control - does not allow the bot to spend the opponent's ressources. Using it a second time disables it again.  """
+    async def debug_control_enemy(self) -> None:
+        """Allows control over enemy units and structures similar to team games control - does not allow the bot to spend the opponent's ressources. Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=2)]))
 
-    async def debug_food(self):
-        """ Should disable food usage (does not seem to work?). Using it a second time disables it again.  """
+    async def debug_food(self) -> None:
+        """Should disable food usage (does not seem to work?). Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=3)]))
 
-    async def debug_free(self):
-        """ Units, structures and upgrades are free of mineral and gas cost. Using it a second time disables it again.  """
+    async def debug_free(self) -> None:
+        """Units, structures and upgrades are free of mineral and gas cost. Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=4)]))
 
-    async def debug_all_resources(self):
-        """ Gives 5000 minerals and 5000 vespene to the bot. """
+    async def debug_all_resources(self) -> None:
+        """Gives 5000 minerals and 5000 vespene to the bot."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=5)]))
 
-    async def debug_god(self):
-        """ Your units and structures no longer take any damage. Using it a second time disables it again. """
+    async def debug_god(self) -> None:
+        """Your units and structures no longer take any damage. Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=6)]))
 
-    async def debug_minerals(self):
-        """ Gives 5000 minerals to the bot. """
+    async def debug_minerals(self) -> None:
+        """Gives 5000 minerals to the bot."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=7)]))
 
-    async def debug_gas(self):
-        """ Gives 5000 vespene to the bot. This does not seem to be working. """
+    async def debug_gas(self) -> None:
+        """Gives 5000 vespene to the bot. This does not seem to be working."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=8)]))
 
-    async def debug_cooldown(self):
-        """ Disables cooldowns of unit abilities for the bot. Using it a second time disables it again. """
+    async def debug_cooldown(self) -> None:
+        """Disables cooldowns of unit abilities for the bot. Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=9)]))
 
-    async def debug_tech_tree(self):
-        """ Removes all tech requirements (e.g. can build a factory without having a barracks). Using it a second time disables it again. """
+    async def debug_tech_tree(self) -> None:
+        """Removes all tech requirements (e.g. can build a factory without having a barracks). Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=10)]))
 
-    async def debug_upgrade(self):
-        """ Researches all currently available upgrades. E.g. using it once unlocks combat shield, stimpack and 1-1. Using it a second time unlocks 2-2 and all other upgrades stay researched. """
+    async def debug_upgrade(self) -> None:
+        """Researches all currently available upgrades. E.g. using it once unlocks combat shield, stimpack and 1-1. Using it a second time unlocks 2-2 and all other upgrades stay researched."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=11)]))
 
-    async def debug_fast_build(self):
-        """ Sets the build time of units and structures and upgrades to zero. Using it a second time disables it again. """
+    async def debug_fast_build(self) -> None:
+        """Sets the build time of units and structures and upgrades to zero. Using it a second time disables it again."""
         await self._execute(debug=sc_pb.RequestDebug(debug=[debug_pb.DebugCommand(game_state=12)]))
 
-    async def quick_save(self):
+    async def quick_save(self) -> None:
         """Saves the current game state to an in-memory bookmark.
         See: https://github.com/Blizzard/s2client-proto/blob/eeaf5efaea2259d7b70247211dff98da0a2685a2/s2clientprotocol/sc2api.proto#L93"""
         await self._execute(quick_save=sc_pb.RequestQuickSave())
 
-    async def quick_load(self):
+    async def quick_load(self) -> None:
         """Loads the game state from the previously stored in-memory bookmark.
         Caution:
             - The SC2 Client will crash if the game wasn't quicksaved
@@ -733,10 +749,9 @@ class Client(Protocol):
 
 
 class DrawItem:
-
     @staticmethod
-    def to_debug_color(color: Union[tuple, Point3]):
-        """ Helper function for color conversion """
+    def to_debug_color(color: tuple | Point3):
+        """Helper function for color conversion"""
         if color is None:
             return debug_pb.Color(r=255, g=255, b=255)
         # Need to check if not of type Point3 because Point3 inherits from tuple
@@ -746,6 +761,7 @@ class DrawItem:
         r = getattr(color, "r", getattr(color, "x", 255))
         g = getattr(color, "g", getattr(color, "y", 255))
         b = getattr(color, "b", getattr(color, "z", 255))
+        # pyre-ignore[20]
         if max(r, g, b) <= 1:
             r *= 255
             g *= 255
@@ -755,8 +771,7 @@ class DrawItem:
 
 
 class DrawItemScreenText(DrawItem):
-
-    def __init__(self, start_point: Point2 = None, color: Point3 = None, text: str = "", font_size: int = 8):
+    def __init__(self, start_point: Point2 = None, color: Point3 = None, text: str = "", font_size: int = 8) -> None:
         self._start_point: Point2 = start_point
         self._color: Point3 = color
         self._text: str = text
@@ -771,13 +786,12 @@ class DrawItemScreenText(DrawItem):
             size=self._font_size,
         )
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self._start_point, self._color, self._text, self._font_size))
 
 
 class DrawItemWorldText(DrawItem):
-
-    def __init__(self, start_point: Point3 = None, color: Point3 = None, text: str = "", font_size: int = 8):
+    def __init__(self, start_point: Point3 = None, color: Point3 = None, text: str = "", font_size: int = 8) -> None:
         self._start_point: Point3 = start_point
         self._color: Point3 = color
         self._text: str = text
@@ -792,13 +806,12 @@ class DrawItemWorldText(DrawItem):
             size=self._font_size,
         )
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self._start_point, self._text, self._font_size, self._color))
 
 
 class DrawItemLine(DrawItem):
-
-    def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None):
+    def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None) -> None:
         self._start_point: Point3 = start_point
         self._end_point: Point3 = end_point
         self._color: Point3 = color
@@ -809,13 +822,12 @@ class DrawItemLine(DrawItem):
             color=self.to_debug_color(self._color),
         )
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self._start_point, self._end_point, self._color))
 
 
 class DrawItemBox(DrawItem):
-
-    def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None):
+    def __init__(self, start_point: Point3 = None, end_point: Point3 = None, color: Point3 = None) -> None:
         self._start_point: Point3 = start_point
         self._end_point: Point3 = end_point
         self._color: Point3 = color
@@ -827,13 +839,12 @@ class DrawItemBox(DrawItem):
             color=self.to_debug_color(self._color),
         )
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self._start_point, self._end_point, self._color))
 
 
 class DrawItemSphere(DrawItem):
-
-    def __init__(self, start_point: Point3 = None, radius: float = None, color: Point3 = None):
+    def __init__(self, start_point: Point3 = None, radius: float = None, color: Point3 = None) -> None:
         self._start_point: Point3 = start_point
         self._radius: float = radius
         self._color: Point3 = color
@@ -843,5 +854,5 @@ class DrawItemSphere(DrawItem):
             p=self._start_point.as_Point, r=self._radius, color=self.to_debug_color(self._color)
         )
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self._start_point, self._radius, self._color))

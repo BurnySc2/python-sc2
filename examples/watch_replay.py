@@ -1,4 +1,3 @@
-import os
 import platform
 from pathlib import Path
 
@@ -32,14 +31,13 @@ if __name__ == "__main__":
         if not replay_path.is_file():
             logger.warning(f"You are on linux, please put the replay in directory {home_replay_folder}")
             raise FileNotFoundError
-        replay_path = str(replay_path)
-    elif os.path.isabs(replay_name):
-        replay_path = replay_name
+    elif Path(replay_name).is_absolute():
+        replay_path = Path(replay_name)
     else:
         # Convert relative path to absolute path, assuming this replay is in this folder
-        folder_path = os.path.dirname(__file__)
-        replay_path = os.path.join(folder_path, replay_name)
-    assert os.path.isfile(
-        replay_path
+        folder_path = Path(__file__).parent
+        replay_path = folder_path / replay_name
+    assert (
+        replay_path.is_file()
     ), "Run worker_rush.py in the same folder first to generate a replay. Then run watch_replay.py again."
     run_replay(my_observer_ai, replay_path=replay_path)
