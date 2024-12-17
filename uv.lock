@@ -1599,7 +1599,7 @@ wheels = [
 
 [[package]]
 name = "sc2"
-version = "7.0.1"
+version = "7.0.2"
 source = { virtual = "." }
 dependencies = [
     { name = "aiohttp" },
