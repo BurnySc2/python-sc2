@@ -1,6 +1,6 @@
 [project]
-name = "sc2"
-version = "7.0.2"
+name = "burnysc2"
+version = "7.0.3"
 description = "A StarCraft II API Client for Python 3"
 authors = [{ name = "BurnySc2", email = "gamingburny@gmail.com" }]
 requires-python = ">=3.9, <3.13"

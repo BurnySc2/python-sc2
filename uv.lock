@@ -154,6 +154,84 @@ wheels = [
 ]
 
 [[package]]
+name = "burnysc2"
+version = "7.0.3"
+source = { virtual = "." }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "loguru" },
+    { name = "mpyq" },
+    { name = "numpy" },
+    { name = "portpicker" },
+    { name = "protobuf" },
+    { name = "s2clientprotocol" },
+    { name = "scipy", version = "1.13.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "scipy", version = "1.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "coverage" },
+    { name = "hypothesis" },
+    { name = "matplotlib" },
+    { name = "mypy" },
+    { name = "pillow" },
+    { name = "pre-commit" },
+    { name = "pyglet" },
+    { name = "pylint" },
+    { name = "pyre-check" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-benchmark" },
+    { name = "pytest-cov" },
+    { name = "radon" },
+    { name = "ruff" },
+    { name = "sphinx" },
+    { name = "sphinx-autodoc-typehints" },
+    { name = "sphinx-rtd-theme" },
+    { name = "toml" },
+    { name = "yapf" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aiohttp", specifier = ">=3.11.10" },
+    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "mpyq", specifier = ">=0.2.5" },
+    { name = "numpy", marker = "python_full_version < '3.13'", specifier = ">=2.0.0" },
+    { name = "numpy", marker = "python_full_version >= '3.13'", specifier = ">=2.1.0" },
+    { name = "portpicker", specifier = ">=1.6.0" },
+    { name = "protobuf", specifier = "<4.0.0" },
+    { name = "s2clientprotocol", specifier = ">=5.0.14.93333.0" },
+    { name = "scipy", marker = "python_full_version < '3.13'", specifier = ">=1.7.1" },
+    { name = "scipy", marker = "python_full_version >= '3.13'", specifier = ">=1.14.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "coverage", specifier = ">=7.6.9" },
+    { name = "hypothesis", specifier = ">=6.122.3" },
+    { name = "matplotlib", specifier = ">=3.9.4" },
+    { name = "mypy", specifier = ">=1.13.0" },
+    { name = "pillow", specifier = ">=11.0.0" },
+    { name = "pre-commit", specifier = ">=4.0.1" },
+    { name = "pyglet", specifier = ">=2.0.20" },
+    { name = "pylint", specifier = ">=3.3.2" },
+    { name = "pyre-check", specifier = ">=0.9.23" },
+    { name = "pytest", specifier = ">=8.3.4" },
+    { name = "pytest-asyncio", specifier = ">=0.25.0" },
+    { name = "pytest-benchmark", specifier = ">=5.1.0" },
+    { name = "pytest-cov", specifier = ">=6.0.0" },
+    { name = "radon", specifier = ">=6.0.1" },
+    { name = "ruff", specifier = ">=0.8.3" },
+    { name = "sphinx", specifier = ">=7.4.7" },
+    { name = "sphinx-autodoc-typehints", specifier = ">=2.3.0" },
+    { name = "sphinx-rtd-theme", specifier = ">=3.0.2" },
+    { name = "toml", specifier = ">=0.10.2" },
+    { name = "yapf", specifier = ">=0.43.0" },
+]
+
+[[package]]
 name = "certifi"
 version = "2024.12.14"
 source = { registry = "https://pypi.org/simple" }
@@ -1595,84 +1673,6 @@ dependencies = [
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c0/11/33ab328601a07619448b3c1e1a49b886677766af0c9ad516fe5ff733624a/s2clientprotocol-5.0.14.93333.0-py2.py3-none-any.whl", hash = "sha256:f3d40aa76f78c51e0cad8efdb220910d4d0540fa00ed1b4cdfe7994f6ffa238d", size = 55607 },
-]
-
-[[package]]
-name = "sc2"
-version = "7.0.2"
-source = { virtual = "." }
-dependencies = [
-    { name = "aiohttp" },
-    { name = "loguru" },
-    { name = "mpyq" },
-    { name = "numpy" },
-    { name = "portpicker" },
-    { name = "protobuf" },
-    { name = "s2clientprotocol" },
-    { name = "scipy", version = "1.13.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "scipy", version = "1.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "coverage" },
-    { name = "hypothesis" },
-    { name = "matplotlib" },
-    { name = "mypy" },
-    { name = "pillow" },
-    { name = "pre-commit" },
-    { name = "pyglet" },
-    { name = "pylint" },
-    { name = "pyre-check" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-benchmark" },
-    { name = "pytest-cov" },
-    { name = "radon" },
-    { name = "ruff" },
-    { name = "sphinx" },
-    { name = "sphinx-autodoc-typehints" },
-    { name = "sphinx-rtd-theme" },
-    { name = "toml" },
-    { name = "yapf" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiohttp", specifier = ">=3.11.10" },
-    { name = "loguru", specifier = ">=0.7.3" },
-    { name = "mpyq", specifier = ">=0.2.5" },
-    { name = "numpy", marker = "python_full_version < '3.13'", specifier = ">=2.0.0" },
-    { name = "numpy", marker = "python_full_version >= '3.13'", specifier = ">=2.1.0" },
-    { name = "portpicker", specifier = ">=1.6.0" },
-    { name = "protobuf", specifier = "<4.0.0" },
-    { name = "s2clientprotocol", specifier = ">=5.0.14.93333.0" },
-    { name = "scipy", marker = "python_full_version < '3.13'", specifier = ">=1.7.1" },
-    { name = "scipy", marker = "python_full_version >= '3.13'", specifier = ">=1.14.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "coverage", specifier = ">=7.6.9" },
-    { name = "hypothesis", specifier = ">=6.122.3" },
-    { name = "matplotlib", specifier = ">=3.9.4" },
-    { name = "mypy", specifier = ">=1.13.0" },
-    { name = "pillow", specifier = ">=11.0.0" },
-    { name = "pre-commit", specifier = ">=4.0.1" },
-    { name = "pyglet", specifier = ">=2.0.20" },
-    { name = "pylint", specifier = ">=3.3.2" },
-    { name = "pyre-check", specifier = ">=0.9.23" },
-    { name = "pytest", specifier = ">=8.3.4" },
-    { name = "pytest-asyncio", specifier = ">=0.25.0" },
-    { name = "pytest-benchmark", specifier = ">=5.1.0" },
-    { name = "pytest-cov", specifier = ">=6.0.0" },
-    { name = "radon", specifier = ">=6.0.1" },
-    { name = "ruff", specifier = ">=0.8.3" },
-    { name = "sphinx", specifier = ">=7.4.7" },
-    { name = "sphinx-autodoc-typehints", specifier = ">=2.3.0" },
-    { name = "sphinx-rtd-theme", specifier = ">=3.0.2" },
-    { name = "toml", specifier = ">=0.10.2" },
-    { name = "yapf", specifier = ">=0.43.0" },
 ]
 
 [[package]]
