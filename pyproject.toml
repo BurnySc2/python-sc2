@@ -65,6 +65,9 @@ dev = [
     "yapf>=0.43.0",
 ]
 
+[tool.setuptools]
+license-files = []
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["sc2"]
