@@ -1,0 +1,806 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sc2.position &#8212; python-sc2  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/position';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ids/index.html">ids</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sc2.position</h1><div class="highlight"><pre>
+<span></span><span class="c1"># pyre-ignore-all-errors[6, 14, 15, 58]</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">SupportsFloat</span><span class="p">,</span> <span class="n">SupportsIndex</span>
+
+<span class="c1"># pyre-fixme[21]</span>
+<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">common_pb2</span> <span class="k">as</span> <span class="n">common_pb</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">sc2.unit</span> <span class="kn">import</span> <span class="n">Unit</span>
+    <span class="kn">from</span> <span class="nn">sc2.units</span> <span class="kn">import</span> <span class="n">Units</span>
+
+<span class="n">EPSILON</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">8</span>
+
+
+<span class="k">def</span> <span class="nf">_sign</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="n">SupportsFloat</span> <span class="o">|</span> <span class="n">SupportsIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Pointlike">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike">[docs]</a>
+<span class="k">class</span> <span class="nc">Pointlike</span><span class="p">(</span><span class="nb">tuple</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pointlike</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="Pointlike.distance_to">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.distance_to">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate a single distance from a point or unit to another point or unit</span>
+
+<span class="sd">        :param target:&quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">position</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.distance_to_point2">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.distance_to_point2">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance_to_point2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Same as the function above, but should be a bit faster because of the dropped asserts</span>
+<span class="sd">        and conversion.</span>
+
+<span class="sd">        :param p:&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_distance_squared</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p2</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function used to not take the square root as the distances will stay proportionally the same.</span>
+<span class="sd">        This is to speed up the sorting process.</span>
+
+<span class="sd">        :param p2:&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+
+<div class="viewcode-block" id="Pointlike.sort_by_distance">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.sort_by_distance">[docs]</a>
+    <span class="k">def</span> <span class="nf">sort_by_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This returns the target points sorted as list.</span>
+<span class="sd">        You should not pass a set or dict since those are not sortable.</span>
+<span class="sd">        If you want to sort your units towards a point, use &#39;units.sorted_by_distance_to(point)&#39; instead.</span>
+
+<span class="sd">        :param ps:&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_point2</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">position</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.closest">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.closest">[docs]</a>
+    <span class="k">def</span> <span class="nf">closest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function assumes the 2d distance is meant</span>
+
+<span class="sd">        :param ps:&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">ps</span><span class="p">,</span> <span class="s2">&quot;ps is empty&quot;</span>
+
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">p</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.distance_to_closest">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.distance_to_closest">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance_to_closest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function assumes the 2d distance is meant</span>
+<span class="sd">        :param ps:&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">ps</span><span class="p">,</span> <span class="s2">&quot;ps is empty&quot;</span>
+        <span class="n">closest_distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">for</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">ps</span><span class="p">:</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="n">closest_distance</span><span class="p">:</span>
+                <span class="n">closest_distance</span> <span class="o">=</span> <span class="n">distance</span>
+        <span class="k">return</span> <span class="n">closest_distance</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.furthest">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.furthest">[docs]</a>
+    <span class="k">def</span> <span class="nf">furthest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Pointlike</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function assumes the 2d distance is meant</span>
+
+<span class="sd">        :param ps: Units object, or iterable of Unit or Point2&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">ps</span><span class="p">,</span> <span class="s2">&quot;ps is empty&quot;</span>
+
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">p</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.distance_to_furthest">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.distance_to_furthest">[docs]</a>
+    <span class="k">def</span> <span class="nf">distance_to_furthest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function assumes the 2d distance is meant</span>
+
+<span class="sd">        :param ps:&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">ps</span><span class="p">,</span> <span class="s2">&quot;ps is empty&quot;</span>
+        <span class="n">furthest_distance</span> <span class="o">=</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">for</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">ps</span><span class="p">:</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;=</span> <span class="n">furthest_distance</span><span class="p">:</span>
+                <span class="n">furthest_distance</span> <span class="o">=</span> <span class="n">distance</span>
+        <span class="k">return</span> <span class="n">furthest_distance</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.offset">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.offset">[docs]</a>
+    <span class="k">def</span> <span class="nf">offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pointlike</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param p:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)],</span> <span class="n">fillvalue</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.unit_axes_towards">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.unit_axes_towards">[docs]</a>
+    <span class="k">def</span> <span class="nf">unit_axes_towards</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pointlike</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param p:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">_sign</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)],</span> <span class="n">fillvalue</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Pointlike.towards">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Pointlike.towards">[docs]</a>
+    <span class="k">def</span> <span class="nf">towards</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Pointlike</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pointlike</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param p:</span>
+<span class="sd">        :param distance:</span>
+<span class="sd">        :param limit:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">position</span>
+        <span class="c1"># assert self != p, f&quot;self is {self}, p is {p}&quot;</span>
+        <span class="c1"># TODO test and fix this if statement</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">p</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="c1"># end of test</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">d</span> <span class="o">*</span> <span class="n">distance</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)],</span> <span class="n">fillvalue</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">EPSILON</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="Point2">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2">[docs]</a>
+<span class="k">class</span> <span class="nc">Point2</span><span class="p">(</span><span class="n">Pointlike</span><span class="p">):</span>
+<div class="viewcode-block" id="Point2.from_proto">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2.from_proto">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param data:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="c1"># pyre-fixme[11]</span>
+    <span class="k">def</span> <span class="nf">as_Point2D</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">common_pb</span><span class="o">.</span><span class="n">Point2D</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">common_pb</span><span class="o">.</span><span class="n">Point2D</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="c1"># pyre-fixme[11]</span>
+    <span class="k">def</span> <span class="nf">as_PointI</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">common_pb</span><span class="o">.</span><span class="n">PointI</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Represents points on the minimap. Values must be between 0 and 64.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">common_pb</span><span class="o">.</span><span class="n">PointI</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rounded</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This property exists in case Point2 is used as a vector.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This property exists in case Point2 is used as a vector.&quot;&quot;&quot;</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="c1"># Cannot normalize if length is zero</span>
+        <span class="k">assert</span> <span class="n">length</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">length</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">length</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">to2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">(</span><span class="bp">self</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">to3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Point3</span><span class="p">((</span><span class="o">*</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Point2.round">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2.round">[docs]</a>
+    <span class="k">def</span> <span class="nf">round</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decimals</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rounds each number in the tuple to the amount of given decimals.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">((</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">decimals</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">decimals</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="Point2.offset">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2.offset">[docs]</a>
+    <span class="k">def</span> <span class="nf">offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span></div>
+
+
+    <span class="k">def</span> <span class="nf">random_on_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>  <span class="c1"># interval</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">distance</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">distance</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">assert</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Distance is not greater than 0&quot;</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">distance</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">towards_with_random_angle</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span>
+        <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">max_difference</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="n">tx</span><span class="p">,</span> <span class="n">ty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to2</span><span class="o">.</span><span class="n">towards</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">to2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">ty</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="p">(</span><span class="n">angle</span> <span class="o">-</span> <span class="n">max_difference</span><span class="p">)</span> <span class="o">+</span> <span class="n">max_difference</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">distance</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Point2.circle_intersection">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2.circle_intersection">[docs]</a>
+    <span class="k">def</span> <span class="nf">circle_intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;self is point1, p is point2, r is the radius for circles originating in both points</span>
+<span class="sd">        Used in ramp finding</span>
+
+<span class="sd">        :param p:</span>
+<span class="sd">        :param r:&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span> <span class="o">!=</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;self is equal to p&quot;</span>
+        <span class="n">distance_between_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">r</span> <span class="o">&gt;=</span> <span class="n">distance_between_points</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="c1"># remaining distance from center towards the intersection, using pythagoras</span>
+        <span class="n">remaining_distance_from_center</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">distance_between_points</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="c1"># center of both points</span>
+        <span class="n">offset_to_center</span> <span class="o">=</span> <span class="n">Point2</span><span class="p">(((</span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset_to_center</span><span class="p">)</span>
+
+        <span class="c1"># stretch offset vector in the ratio of remaining distance from center to intersection</span>
+        <span class="n">vector_stretch_factor</span> <span class="o">=</span> <span class="n">remaining_distance_from_center</span> <span class="o">/</span> <span class="p">(</span><span class="n">distance_between_points</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">offset_to_center</span>
+        <span class="n">offset_to_center_stretched</span> <span class="o">=</span> <span class="n">Point2</span><span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">vector_stretch_factor</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">vector_stretch_factor</span><span class="p">))</span>
+
+        <span class="c1"># rotate vector by 90° and -90°</span>
+        <span class="n">vector_rotated_1</span> <span class="o">=</span> <span class="n">Point2</span><span class="p">((</span><span class="n">offset_to_center_stretched</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="n">offset_to_center_stretched</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">vector_rotated_2</span> <span class="o">=</span> <span class="n">Point2</span><span class="p">((</span><span class="o">-</span><span class="n">offset_to_center_stretched</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">offset_to_center_stretched</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">intersect1</span> <span class="o">=</span> <span class="n">center</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">vector_rotated_1</span><span class="p">)</span>
+        <span class="n">intersect2</span> <span class="o">=</span> <span class="n">center</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">vector_rotated_2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">intersect1</span><span class="p">,</span> <span class="n">intersect2</span><span class="p">}</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">neighbors4</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)),</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)),</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">neighbors8</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors4</span> <span class="o">|</span> <span class="p">{</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">negative_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">other</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_offset</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">-</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">!=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># pyre-ignore[16]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">other</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">other</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">is_same_as</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">dist</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_point2</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">dist</span>
+
+<div class="viewcode-block" id="Point2.direction_vector">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2.direction_vector">[docs]</a>
+    <span class="k">def</span> <span class="nf">direction_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a vector to a direction that can face vertically, horizontally or diagonal or be zero, e.g. (0, 0), (1, -1), (1, 0)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="n">_sign</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">_sign</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="Point2.manhattan_distance">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2.manhattan_distance">[docs]</a>
+    <span class="k">def</span> <span class="nf">manhattan_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Point2.center">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point2.center">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the central point for points in list</span>
+
+<span class="sd">        :param points:&quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Point2</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">p</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Point3">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point3">[docs]</a>
+<span class="k">class</span> <span class="nc">Point3</span><span class="p">(</span><span class="n">Point2</span><span class="p">):</span>
+<div class="viewcode-block" id="Point3.from_proto">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Point3.from_proto">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param data:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">z</span><span class="p">))</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="c1"># pyre-fixme[11]</span>
+    <span class="k">def</span> <span class="nf">as_Point</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">common_pb</span><span class="o">.</span><span class="n">Point</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">common_pb</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rounded</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Point3</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">to3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Point3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Point3</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Point2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Point3</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">))</span>
+        <span class="c1"># pyre-ignore[16]</span>
+        <span class="k">return</span> <span class="n">Point3</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">z</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="Size">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Size">[docs]</a>
+<span class="k">class</span> <span class="nc">Size</span><span class="p">(</span><span class="n">Point2</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="Rect">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Rect">[docs]</a>
+<span class="k">class</span> <span class="nc">Rect</span><span class="p">(</span><span class="nb">tuple</span><span class="p">):</span>
+<div class="viewcode-block" id="Rect.from_proto">
+<a class="viewcode-back" href="../../position/index.html#sc2.position.Rect.from_proto">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rect</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param data:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">data</span><span class="o">.</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">data</span><span class="o">.</span><span class="n">p1</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">p0</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the x-coordinate of the rectangle of its right side.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the y-coordinate of the rectangle of its top side.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Size</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rect</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

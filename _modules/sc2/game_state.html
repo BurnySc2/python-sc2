@@ -1,0 +1,676 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sc2.game_state &#8212; python-sc2  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/game_state';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ids/index.html">ids</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sc2.game_state</h1><div class="highlight"><pre>
+<span></span><span class="c1"># pyre-ignore-all-errors[11, 16]</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">sc2.constants</span> <span class="kn">import</span> <span class="n">IS_ENEMY</span><span class="p">,</span> <span class="n">IS_MINE</span><span class="p">,</span> <span class="n">FakeEffectID</span><span class="p">,</span> <span class="n">FakeEffectRadii</span>
+<span class="kn">from</span> <span class="nn">sc2.data</span> <span class="kn">import</span> <span class="n">Alliance</span><span class="p">,</span> <span class="n">DisplayType</span>
+<span class="kn">from</span> <span class="nn">sc2.ids.ability_id</span> <span class="kn">import</span> <span class="n">AbilityId</span>
+<span class="kn">from</span> <span class="nn">sc2.ids.effect_id</span> <span class="kn">import</span> <span class="n">EffectId</span>
+<span class="kn">from</span> <span class="nn">sc2.ids.upgrade_id</span> <span class="kn">import</span> <span class="n">UpgradeId</span>
+<span class="kn">from</span> <span class="nn">sc2.pixel_map</span> <span class="kn">import</span> <span class="n">PixelMap</span>
+<span class="kn">from</span> <span class="nn">sc2.position</span> <span class="kn">import</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">Point3</span>
+<span class="kn">from</span> <span class="nn">sc2.power_source</span> <span class="kn">import</span> <span class="n">PsionicMatrix</span>
+<span class="kn">from</span> <span class="nn">sc2.score</span> <span class="kn">import</span> <span class="n">ScoreDetails</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">sc2.dicts.generic_redirect_abilities</span> <span class="kn">import</span> <span class="n">GENERIC_REDIRECT_ABILITIES</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Unable to import &quot;GENERIC_REDIRECT_ABILITIES&quot;&#39;</span><span class="p">)</span>
+    <span class="n">GENERIC_REDIRECT_ABILITIES</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<div class="viewcode-block" id="Blip">
+<a class="viewcode-back" href="../../game_state/index.html#sc2.game_state.Blip">[docs]</a>
+<span class="k">class</span> <span class="nc">Blip</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param proto:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_blip</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detected by sensor tower.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">is_blip</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">DisplayType</span><span class="o">.</span><span class="n">Snapshot</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">DisplayType</span><span class="o">.</span><span class="n">Visible</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">alliance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alliance</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_mine</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span> <span class="o">==</span> <span class="n">Alliance</span><span class="o">.</span><span class="n">Self</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span> <span class="o">==</span> <span class="n">Alliance</span><span class="o">.</span><span class="n">Enemy</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;2d position of the blip.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">position3d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;3d position of the blip.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Point3</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Common">
+<a class="viewcode-back" href="../../game_state/index.html#sc2.game_state.Common">[docs]</a>
+<span class="k">class</span> <span class="nc">Common</span><span class="p">:</span>
+    <span class="n">ATTRIBUTES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;player_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;minerals&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vespene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;food_cap&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;food_used&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;food_army&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;food_workers&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;idle_worker_count&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;army_count&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;warp_gate_count&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;larva_count&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ATTRIBUTES</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">&#39; is not a valid attribute&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="EffectData">
+<a class="viewcode-back" href="../../game_state/index.html#sc2.game_state.EffectData">[docs]</a>
+<span class="k">class</span> <span class="nc">EffectData</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">,</span> <span class="n">fake</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param proto:</span>
+<span class="sd">        :param fake:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fake</span> <span class="o">=</span> <span class="n">fake</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EffectId</span> <span class="o">|</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake</span><span class="p">:</span>
+            <span class="c1"># Returns the string from constants.py, e.g. &quot;KD8CHARGE&quot;</span>
+            <span class="k">return</span> <span class="n">FakeEffectID</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">EffectId</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">effect_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">positions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">alliance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alliance</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_mine</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the effect is caused by me.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span> <span class="o">==</span> <span class="n">IS_MINE</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the effect is hostile.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span> <span class="o">==</span> <span class="n">IS_ENEMY</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">owner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">owner</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">FakeEffectRadii</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">radius</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> with radius </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ChatMessage</span><span class="p">:</span>
+    <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AbilityLookupTemplateClass</span><span class="p">:</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exact_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbilityId</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">AbilityId</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ability_id</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">generic_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbilityId</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See https://github.com/BurnySc2/python-sc2/blob/511c34f6b7ae51bd11e06ba91b6a9624dc04a0c0/sc2/dicts/generic_redirect_abilities.py#L13</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GENERIC_REDIRECT_ABILITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exact_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">exact_id</span><span class="p">)</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ActionRawUnitCommand</span><span class="p">(</span><span class="n">AbilityLookupTemplateClass</span><span class="p">):</span>
+    <span class="n">game_loop</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ability_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">unit_tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">queue_command</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">target_world_space_pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">target_unit_tag</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ActionRawToggleAutocast</span><span class="p">(</span><span class="n">AbilityLookupTemplateClass</span><span class="p">):</span>
+    <span class="n">game_loop</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ability_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">unit_tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ActionRawCameraMove</span><span class="p">:</span>
+    <span class="n">center_world_space</span><span class="p">:</span> <span class="n">Point2</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ActionError</span><span class="p">(</span><span class="n">AbilityLookupTemplateClass</span><span class="p">):</span>
+    <span class="n">ability_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">unit_tag</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="c1"># See here for the codes of &#39;result&#39;: https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/error.proto#L6</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">int</span>
+
+
+<div class="viewcode-block" id="GameState">
+<a class="viewcode-back" href="../../game_state/index.html#sc2.game_state.GameState">[docs]</a>
+<span class="k">class</span> <span class="nc">GameState</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response_observation</span><span class="p">,</span> <span class="n">previous_observation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param response_observation:</span>
+<span class="sd">        :param previous_observation:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Only filled in realtime=True in case the bot skips frames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span> <span class="o">=</span> <span class="n">previous_observation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response_observation</span> <span class="o">=</span> <span class="n">response_observation</span>
+
+        <span class="c1"># https://github.com/Blizzard/s2client-proto/blob/51662231c0965eba47d5183ed0a6336d5ae6b640/s2clientprotocol/sc2api.proto#L575</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation</span> <span class="o">=</span> <span class="n">response_observation</span><span class="o">.</span><span class="n">observation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">raw_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_result</span> <span class="o">=</span> <span class="n">response_observation</span><span class="o">.</span><span class="n">player_result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">common</span><span class="p">:</span> <span class="n">Common</span> <span class="o">=</span> <span class="n">Common</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">player_common</span><span class="p">)</span>
+
+        <span class="c1"># Area covered by Pylons and Warpprisms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psionic_matrix</span><span class="p">:</span> <span class="n">PsionicMatrix</span> <span class="o">=</span> <span class="n">PsionicMatrix</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_raw</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">power_sources</span><span class="p">)</span>
+        <span class="c1"># 22.4 per second on faster game speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_loop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">game_loop</span>
+
+        <span class="c1"># https://github.com/Blizzard/s2client-proto/blob/33f0ecf615aa06ca845ffe4739ef3133f37265a9/s2clientprotocol/score.proto#L31</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">:</span> <span class="n">ScoreDetails</span> <span class="o">=</span> <span class="n">ScoreDetails</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abilities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">abilities</span>  <span class="c1"># abilities of selected units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upgrades</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">UpgradeId</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">UpgradeId</span><span class="p">(</span><span class="n">upgrade</span><span class="p">)</span> <span class="k">for</span> <span class="n">upgrade</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_raw</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">upgrade_ids</span><span class="p">}</span>
+
+        <span class="c1"># self.visibility[point]: 0=Hidden, 1=Fogged, 2=Visible</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visibility</span><span class="p">:</span> <span class="n">PixelMap</span> <span class="o">=</span> <span class="n">PixelMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_raw</span><span class="o">.</span><span class="n">map_state</span><span class="o">.</span><span class="n">visibility</span><span class="p">)</span>
+        <span class="c1"># self.creep[point]: 0=No creep, 1=creep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">creep</span><span class="p">:</span> <span class="n">PixelMap</span> <span class="o">=</span> <span class="n">PixelMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_raw</span><span class="o">.</span><span class="n">map_state</span><span class="o">.</span><span class="n">creep</span><span class="p">,</span> <span class="n">in_bits</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Effects like ravager bile shot, lurker attack, everything in effect_id.py</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effects</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">EffectData</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span> <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_raw</span><span class="o">.</span><span class="n">effects</span><span class="p">}</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Usage:</span>
+<span class="sd">        for effect in self.state.effects:</span>
+<span class="sd">            if effect.id == EffectId.RAVAGERCORROSIVEBILECP:</span>
+<span class="sd">                positions = effect.positions</span>
+<span class="sd">                # dodge the ravager biles</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">dead_units</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A set of unit tags that died this frame&quot;&quot;&quot;</span>
+        <span class="n">_dead_units</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_raw</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">dead_units</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_dead_units</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">raw_data</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">dead_units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_dead_units</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List of chat messages sent this frame (by either player).&quot;&quot;&quot;</span>
+        <span class="n">previous_frame_chat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="o">.</span><span class="n">chat</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">ChatMessage</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">player_id</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">previous_frame_chat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_observation</span><span class="o">.</span><span class="n">chat</span><span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">alerts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Game alerts, see https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L683-L706</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">alerts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">alerts</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">alerts</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">actions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ActionRawUnitCommand</span> <span class="o">|</span> <span class="n">ActionRawToggleAutocast</span> <span class="o">|</span> <span class="n">ActionRawCameraMove</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List of successful actions since last frame.</span>
+<span class="sd">        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L630-L637</span>
+
+<span class="sd">        Each action is converted into Python dataclasses: ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">previous_frame_actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="o">.</span><span class="n">actions</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">previous_frame_actions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_observation</span><span class="o">.</span><span class="n">actions</span><span class="p">):</span>
+            <span class="n">action_raw</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">action_raw</span>
+            <span class="n">game_loop</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">game_loop</span>
+            <span class="k">if</span> <span class="n">action_raw</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;unit_command&quot;</span><span class="p">):</span>
+                <span class="c1"># Unit commands</span>
+                <span class="n">raw_unit_command</span> <span class="o">=</span> <span class="n">action_raw</span><span class="o">.</span><span class="n">unit_command</span>
+                <span class="k">if</span> <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;target_world_space_pos&quot;</span><span class="p">):</span>
+                    <span class="c1"># Actions that have a point as target</span>
+                    <span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">ActionRawUnitCommand</span><span class="p">(</span>
+                            <span class="n">game_loop</span><span class="p">,</span>
+                            <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">ability_id</span><span class="p">,</span>
+                            <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">unit_tags</span><span class="p">,</span>
+                            <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">queue_command</span><span class="p">,</span>
+                            <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">raw_unit_command</span><span class="o">.</span><span class="n">target_world_space_pos</span><span class="p">),</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Actions that have a unit as target</span>
+                    <span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">ActionRawUnitCommand</span><span class="p">(</span>
+                            <span class="n">game_loop</span><span class="p">,</span>
+                            <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">ability_id</span><span class="p">,</span>
+                            <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">unit_tags</span><span class="p">,</span>
+                            <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">queue_command</span><span class="p">,</span>
+                            <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">raw_unit_command</span><span class="o">.</span><span class="n">target_unit_tag</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">action_raw</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;toggle_autocast&quot;</span><span class="p">):</span>
+                <span class="c1"># Toggle autocast actions</span>
+                <span class="n">raw_toggle_autocast_action</span> <span class="o">=</span> <span class="n">action_raw</span><span class="o">.</span><span class="n">toggle_autocast</span>
+                <span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">ActionRawToggleAutocast</span><span class="p">(</span>
+                        <span class="n">game_loop</span><span class="p">,</span>
+                        <span class="n">raw_toggle_autocast_action</span><span class="o">.</span><span class="n">ability_id</span><span class="p">,</span>
+                        <span class="n">raw_toggle_autocast_action</span><span class="o">.</span><span class="n">unit_tags</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Camera move actions</span>
+                <span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ActionRawCameraMove</span><span class="p">(</span><span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">action_raw</span><span class="o">.</span><span class="n">camera_move</span><span class="o">.</span><span class="n">center_world_space</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">actions</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">actions_unit_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ActionRawUnitCommand</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List of successful unit actions since last frame.</span>
+<span class="sd">        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L185-L193</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pyre-ignore[7]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">action</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">ActionRawUnitCommand</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">))</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">actions_toggle_autocast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ActionRawToggleAutocast</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List of successful autocast toggle actions since last frame.</span>
+<span class="sd">        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/raw.proto#L199-L202</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pyre-ignore[7]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">action</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">ActionRawToggleAutocast</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">))</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">action_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ActionError</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List of erroneous actions since last frame.</span>
+<span class="sd">        See https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L648-L652</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">previous_frame_errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="o">.</span><span class="n">action_errors</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">ActionError</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">ability_id</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">unit_tag</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response_observation</span><span class="o">.</span><span class="n">action_errors</span><span class="p">,</span> <span class="n">previous_frame_errors</span><span class="p">)</span>
+        <span class="p">]</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

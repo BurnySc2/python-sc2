@@ -1,0 +1,1635 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sc2.ids.ability_id &#8212; python-sc2  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/ids/ability_id';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ids/index.html">ids</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sc2.ids.ability_id</h1><div class="highlight"><pre>
+<span></span><span class="c1"># pyre-ignore-all-errors[14]</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="c1"># DO NOT EDIT!</span>
+<span class="c1"># This file was automatically generated by &quot;generate_ids.py&quot;</span>
+
+<span class="kn">import</span> <span class="nn">enum</span>
+
+
+<div class="viewcode-block" id="AbilityId">
+<a class="viewcode-back" href="../../../ids/index.html#sc2.ids.ability_id.AbilityId">[docs]</a>
+<span class="k">class</span> <span class="nc">AbilityId</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">NULL_NULL</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">SMART</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">TAUNT_TAUNT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">STOP_STOP</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">STOP_HOLDFIRESPECIAL</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">STOP_CHEER</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">STOP_DANCE</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">HOLDFIRE_STOPSPECIAL</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">HOLDFIRE_HOLDFIRE</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">MOVE_MOVE</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">PATROL_PATROL</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="n">HOLDPOSITION_HOLD</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">SCAN_MOVE</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">MOVE_TURN</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">BEACON_CANCEL</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">BEACON_BEACONMOVE</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">ATTACK_ATTACK</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">ATTACK_ATTACKTOWARDS</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">ATTACK_ATTACKBARRAGE</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="n">EFFECT_SPRAY_TERRAN</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">EFFECT_SPRAY_ZERG</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">EFFECT_SPRAY_PROTOSS</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">EFFECT_SALVAGE</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">CORRUPTION_CORRUPTIONABILITY</span> <span class="o">=</span> <span class="mi">34</span>
+    <span class="n">CORRUPTION_CANCEL</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">BEHAVIOR_HOLDFIREON_GHOST</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">BEHAVIOR_HOLDFIREOFF_GHOST</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="n">MORPHTOINFESTEDTERRAN_INFESTEDTERRANS</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">EXPLODE_EXPLODE</span> <span class="o">=</span> <span class="mi">42</span>
+    <span class="n">RESEARCH_INTERCEPTORGRAVITONCATAPULT</span> <span class="o">=</span> <span class="mi">44</span>
+    <span class="n">FLEETBEACONRESEARCH_RESEARCHINTERCEPTORLAUNCHSPEEDUPGRADE</span> <span class="o">=</span> <span class="mi">45</span>
+    <span class="n">RESEARCH_PHOENIXANIONPULSECRYSTALS</span> <span class="o">=</span> <span class="mi">46</span>
+    <span class="n">FLEETBEACONRESEARCH_TEMPESTRANGEUPGRADE</span> <span class="o">=</span> <span class="mi">47</span>
+    <span class="n">FLEETBEACONRESEARCH_RESEARCHVOIDRAYSPEEDUPGRADE</span> <span class="o">=</span> <span class="mi">48</span>
+    <span class="n">FLEETBEACONRESEARCH_TEMPESTRESEARCHGROUNDATTACKUPGRADE</span> <span class="o">=</span> <span class="mi">49</span>
+    <span class="n">FUNGALGROWTH_FUNGALGROWTH</span> <span class="o">=</span> <span class="mi">74</span>
+    <span class="n">GUARDIANSHIELD_GUARDIANSHIELD</span> <span class="o">=</span> <span class="mi">76</span>
+    <span class="n">EFFECT_REPAIR_MULE</span> <span class="o">=</span> <span class="mi">78</span>
+    <span class="n">MORPHZERGLINGTOBANELING_BANELING</span> <span class="o">=</span> <span class="mi">80</span>
+    <span class="n">NEXUSTRAINMOTHERSHIP_MOTHERSHIP</span> <span class="o">=</span> <span class="mi">110</span>
+    <span class="n">FEEDBACK_FEEDBACK</span> <span class="o">=</span> <span class="mi">140</span>
+    <span class="n">EFFECT_MASSRECALL_STRATEGICRECALL</span> <span class="o">=</span> <span class="mi">142</span>
+    <span class="n">PLACEPOINTDEFENSEDRONE_POINTDEFENSEDRONE</span> <span class="o">=</span> <span class="mi">144</span>
+    <span class="n">HALLUCINATION_ARCHON</span> <span class="o">=</span> <span class="mi">146</span>
+    <span class="n">HALLUCINATION_COLOSSUS</span> <span class="o">=</span> <span class="mi">148</span>
+    <span class="n">HALLUCINATION_HIGHTEMPLAR</span> <span class="o">=</span> <span class="mi">150</span>
+    <span class="n">HALLUCINATION_IMMORTAL</span> <span class="o">=</span> <span class="mi">152</span>
+    <span class="n">HALLUCINATION_PHOENIX</span> <span class="o">=</span> <span class="mi">154</span>
+    <span class="n">HALLUCINATION_PROBE</span> <span class="o">=</span> <span class="mi">156</span>
+    <span class="n">HALLUCINATION_STALKER</span> <span class="o">=</span> <span class="mi">158</span>
+    <span class="n">HALLUCINATION_VOIDRAY</span> <span class="o">=</span> <span class="mi">160</span>
+    <span class="n">HALLUCINATION_WARPPRISM</span> <span class="o">=</span> <span class="mi">162</span>
+    <span class="n">HALLUCINATION_ZEALOT</span> <span class="o">=</span> <span class="mi">164</span>
+    <span class="n">HARVEST_GATHER_MULE</span> <span class="o">=</span> <span class="mi">166</span>
+    <span class="n">HARVEST_RETURN_MULE</span> <span class="o">=</span> <span class="mi">167</span>
+    <span class="n">SEEKERMISSILE_HUNTERSEEKERMISSILE</span> <span class="o">=</span> <span class="mi">169</span>
+    <span class="n">CALLDOWNMULE_CALLDOWNMULE</span> <span class="o">=</span> <span class="mi">171</span>
+    <span class="n">GRAVITONBEAM_GRAVITONBEAM</span> <span class="o">=</span> <span class="mi">173</span>
+    <span class="n">CANCEL_GRAVITONBEAM</span> <span class="o">=</span> <span class="mi">174</span>
+    <span class="n">BUILDINPROGRESSNYDUSCANAL_CANCEL</span> <span class="o">=</span> <span class="mi">175</span>
+    <span class="n">SIPHON_SIPHON</span> <span class="o">=</span> <span class="mi">177</span>
+    <span class="n">SIPHON_CANCEL</span> <span class="o">=</span> <span class="mi">178</span>
+    <span class="n">LEECH_LEECH</span> <span class="o">=</span> <span class="mi">179</span>
+    <span class="n">SPAWNCHANGELING_SPAWNCHANGELING</span> <span class="o">=</span> <span class="mi">181</span>
+    <span class="n">DISGUISEASZEALOT_ZEALOT</span> <span class="o">=</span> <span class="mi">183</span>
+    <span class="n">DISGUISEASMARINEWITHSHIELD_MARINE</span> <span class="o">=</span> <span class="mi">185</span>
+    <span class="n">DISGUISEASMARINEWITHOUTSHIELD_MARINE</span> <span class="o">=</span> <span class="mi">187</span>
+    <span class="n">DISGUISEASZERGLINGWITHWINGS_ZERGLING</span> <span class="o">=</span> <span class="mi">189</span>
+    <span class="n">DISGUISEASZERGLINGWITHOUTWINGS_ZERGLING</span> <span class="o">=</span> <span class="mi">191</span>
+    <span class="n">PHASESHIFT_PHASESHIFT</span> <span class="o">=</span> <span class="mi">193</span>
+    <span class="n">RALLY_BUILDING</span> <span class="o">=</span> <span class="mi">195</span>
+    <span class="n">RALLY_MORPHING_UNIT</span> <span class="o">=</span> <span class="mi">199</span>
+    <span class="n">RALLY_COMMANDCENTER</span> <span class="o">=</span> <span class="mi">203</span>
+    <span class="n">RALLY_NEXUS</span> <span class="o">=</span> <span class="mi">207</span>
+    <span class="n">RALLY_HATCHERY_UNITS</span> <span class="o">=</span> <span class="mi">211</span>
+    <span class="n">RALLY_HATCHERY_WORKERS</span> <span class="o">=</span> <span class="mi">212</span>
+    <span class="n">RESEARCH_GLIALREGENERATION</span> <span class="o">=</span> <span class="mi">216</span>
+    <span class="n">RESEARCH_TUNNELINGCLAWS</span> <span class="o">=</span> <span class="mi">217</span>
+    <span class="n">ROACHWARRENRESEARCH_ROACHSUPPLY</span> <span class="o">=</span> <span class="mi">218</span>
+    <span class="n">SAPSTRUCTURE_SAPSTRUCTURE</span> <span class="o">=</span> <span class="mi">245</span>
+    <span class="n">INFESTEDTERRANS_INFESTEDTERRANS</span> <span class="o">=</span> <span class="mi">247</span>
+    <span class="n">NEURALPARASITE_NEURALPARASITE</span> <span class="o">=</span> <span class="mi">249</span>
+    <span class="n">CANCEL_NEURALPARASITE</span> <span class="o">=</span> <span class="mi">250</span>
+    <span class="n">EFFECT_INJECTLARVA</span> <span class="o">=</span> <span class="mi">251</span>
+    <span class="n">EFFECT_STIM_MARAUDER</span> <span class="o">=</span> <span class="mi">253</span>
+    <span class="n">SUPPLYDROP_SUPPLYDROP</span> <span class="o">=</span> <span class="mi">255</span>
+    <span class="n">_250MMSTRIKECANNONS_250MMSTRIKECANNONS</span> <span class="o">=</span> <span class="mi">257</span>
+    <span class="n">_250MMSTRIKECANNONS_CANCEL</span> <span class="o">=</span> <span class="mi">258</span>
+    <span class="n">TEMPORALRIFT_TEMPORALRIFT</span> <span class="o">=</span> <span class="mi">259</span>
+    <span class="n">EFFECT_CHRONOBOOST</span> <span class="o">=</span> <span class="mi">261</span>
+    <span class="n">RESEARCH_ANABOLICSYNTHESIS</span> <span class="o">=</span> <span class="mi">263</span>
+    <span class="n">RESEARCH_CHITINOUSPLATING</span> <span class="o">=</span> <span class="mi">265</span>
+    <span class="n">WORMHOLETRANSIT_WORMHOLETRANSIT</span> <span class="o">=</span> <span class="mi">293</span>
+    <span class="n">HARVEST_GATHER_SCV</span> <span class="o">=</span> <span class="mi">295</span>
+    <span class="n">HARVEST_RETURN_SCV</span> <span class="o">=</span> <span class="mi">296</span>
+    <span class="n">HARVEST_GATHER_PROBE</span> <span class="o">=</span> <span class="mi">298</span>
+    <span class="n">HARVEST_RETURN_PROBE</span> <span class="o">=</span> <span class="mi">299</span>
+    <span class="n">ATTACKWARPPRISM_ATTACKWARPPRISM</span> <span class="o">=</span> <span class="mi">301</span>
+    <span class="n">ATTACKWARPPRISM_ATTACKTOWARDS</span> <span class="o">=</span> <span class="mi">302</span>
+    <span class="n">ATTACKWARPPRISM_ATTACKBARRAGE</span> <span class="o">=</span> <span class="mi">303</span>
+    <span class="n">CANCEL_QUEUE1</span> <span class="o">=</span> <span class="mi">304</span>
+    <span class="n">CANCELSLOT_QUEUE1</span> <span class="o">=</span> <span class="mi">305</span>
+    <span class="n">CANCEL_QUEUE5</span> <span class="o">=</span> <span class="mi">306</span>
+    <span class="n">CANCELSLOT_QUEUE5</span> <span class="o">=</span> <span class="mi">307</span>
+    <span class="n">CANCEL_QUEUECANCELTOSELECTION</span> <span class="o">=</span> <span class="mi">308</span>
+    <span class="n">CANCELSLOT_QUEUECANCELTOSELECTION</span> <span class="o">=</span> <span class="mi">309</span>
+    <span class="n">QUE5LONGBLEND_CANCEL</span> <span class="o">=</span> <span class="mi">310</span>
+    <span class="n">QUE5LONGBLEND_CANCELSLOT</span> <span class="o">=</span> <span class="mi">311</span>
+    <span class="n">CANCEL_QUEUEADDON</span> <span class="o">=</span> <span class="mi">312</span>
+    <span class="n">CANCELSLOT_ADDON</span> <span class="o">=</span> <span class="mi">313</span>
+    <span class="n">CANCEL_BUILDINPROGRESS</span> <span class="o">=</span> <span class="mi">314</span>
+    <span class="n">HALT_BUILDING</span> <span class="o">=</span> <span class="mi">315</span>
+    <span class="n">EFFECT_REPAIR_SCV</span> <span class="o">=</span> <span class="mi">316</span>
+    <span class="n">TERRANBUILD_COMMANDCENTER</span> <span class="o">=</span> <span class="mi">318</span>
+    <span class="n">TERRANBUILD_SUPPLYDEPOT</span> <span class="o">=</span> <span class="mi">319</span>
+    <span class="n">TERRANBUILD_REFINERY</span> <span class="o">=</span> <span class="mi">320</span>
+    <span class="n">TERRANBUILD_BARRACKS</span> <span class="o">=</span> <span class="mi">321</span>
+    <span class="n">TERRANBUILD_ENGINEERINGBAY</span> <span class="o">=</span> <span class="mi">322</span>
+    <span class="n">TERRANBUILD_MISSILETURRET</span> <span class="o">=</span> <span class="mi">323</span>
+    <span class="n">TERRANBUILD_BUNKER</span> <span class="o">=</span> <span class="mi">324</span>
+    <span class="n">TERRANBUILD_SENSORTOWER</span> <span class="o">=</span> <span class="mi">326</span>
+    <span class="n">TERRANBUILD_GHOSTACADEMY</span> <span class="o">=</span> <span class="mi">327</span>
+    <span class="n">TERRANBUILD_FACTORY</span> <span class="o">=</span> <span class="mi">328</span>
+    <span class="n">TERRANBUILD_STARPORT</span> <span class="o">=</span> <span class="mi">329</span>
+    <span class="n">TERRANBUILD_ARMORY</span> <span class="o">=</span> <span class="mi">331</span>
+    <span class="n">TERRANBUILD_FUSIONCORE</span> <span class="o">=</span> <span class="mi">333</span>
+    <span class="n">HALT_TERRANBUILD</span> <span class="o">=</span> <span class="mi">348</span>
+    <span class="n">RAVENBUILD_AUTOTURRET</span> <span class="o">=</span> <span class="mi">349</span>
+    <span class="n">RAVENBUILD_CANCEL</span> <span class="o">=</span> <span class="mi">379</span>
+    <span class="n">EFFECT_STIM_MARINE</span> <span class="o">=</span> <span class="mi">380</span>
+    <span class="n">BEHAVIOR_CLOAKON_GHOST</span> <span class="o">=</span> <span class="mi">382</span>
+    <span class="n">BEHAVIOR_CLOAKOFF_GHOST</span> <span class="o">=</span> <span class="mi">383</span>
+    <span class="n">SNIPE_SNIPE</span> <span class="o">=</span> <span class="mi">384</span>
+    <span class="n">MEDIVACHEAL_HEAL</span> <span class="o">=</span> <span class="mi">386</span>
+    <span class="n">SIEGEMODE_SIEGEMODE</span> <span class="o">=</span> <span class="mi">388</span>
+    <span class="n">UNSIEGE_UNSIEGE</span> <span class="o">=</span> <span class="mi">390</span>
+    <span class="n">BEHAVIOR_CLOAKON_BANSHEE</span> <span class="o">=</span> <span class="mi">392</span>
+    <span class="n">BEHAVIOR_CLOAKOFF_BANSHEE</span> <span class="o">=</span> <span class="mi">393</span>
+    <span class="n">LOAD_MEDIVAC</span> <span class="o">=</span> <span class="mi">394</span>
+    <span class="n">UNLOADALLAT_MEDIVAC</span> <span class="o">=</span> <span class="mi">396</span>
+    <span class="n">UNLOADUNIT_MEDIVAC</span> <span class="o">=</span> <span class="mi">397</span>
+    <span class="n">SCANNERSWEEP_SCAN</span> <span class="o">=</span> <span class="mi">399</span>
+    <span class="n">YAMATO_YAMATOGUN</span> <span class="o">=</span> <span class="mi">401</span>
+    <span class="n">MORPH_VIKINGASSAULTMODE</span> <span class="o">=</span> <span class="mi">403</span>
+    <span class="n">MORPH_VIKINGFIGHTERMODE</span> <span class="o">=</span> <span class="mi">405</span>
+    <span class="n">LOAD_BUNKER</span> <span class="o">=</span> <span class="mi">407</span>
+    <span class="n">UNLOADALL_BUNKER</span> <span class="o">=</span> <span class="mi">408</span>
+    <span class="n">UNLOADUNIT_BUNKER</span> <span class="o">=</span> <span class="mi">410</span>
+    <span class="n">UNLOADALL_COMMANDCENTER</span> <span class="o">=</span> <span class="mi">413</span>
+    <span class="n">UNLOADUNIT_COMMANDCENTER</span> <span class="o">=</span> <span class="mi">415</span>
+    <span class="n">LOADALL_COMMANDCENTER</span> <span class="o">=</span> <span class="mi">416</span>
+    <span class="n">LIFT_COMMANDCENTER</span> <span class="o">=</span> <span class="mi">417</span>
+    <span class="n">LAND_COMMANDCENTER</span> <span class="o">=</span> <span class="mi">419</span>
+    <span class="n">BUILD_TECHLAB_BARRACKS</span> <span class="o">=</span> <span class="mi">421</span>
+    <span class="n">BUILD_REACTOR_BARRACKS</span> <span class="o">=</span> <span class="mi">422</span>
+    <span class="n">CANCEL_BARRACKSADDON</span> <span class="o">=</span> <span class="mi">451</span>
+    <span class="n">LIFT_BARRACKS</span> <span class="o">=</span> <span class="mi">452</span>
+    <span class="n">BUILD_TECHLAB_FACTORY</span> <span class="o">=</span> <span class="mi">454</span>
+    <span class="n">BUILD_REACTOR_FACTORY</span> <span class="o">=</span> <span class="mi">455</span>
+    <span class="n">CANCEL_FACTORYADDON</span> <span class="o">=</span> <span class="mi">484</span>
+    <span class="n">LIFT_FACTORY</span> <span class="o">=</span> <span class="mi">485</span>
+    <span class="n">BUILD_TECHLAB_STARPORT</span> <span class="o">=</span> <span class="mi">487</span>
+    <span class="n">BUILD_REACTOR_STARPORT</span> <span class="o">=</span> <span class="mi">488</span>
+    <span class="n">CANCEL_STARPORTADDON</span> <span class="o">=</span> <span class="mi">517</span>
+    <span class="n">LIFT_STARPORT</span> <span class="o">=</span> <span class="mi">518</span>
+    <span class="n">LAND_FACTORY</span> <span class="o">=</span> <span class="mi">520</span>
+    <span class="n">LAND_STARPORT</span> <span class="o">=</span> <span class="mi">522</span>
+    <span class="n">COMMANDCENTERTRAIN_SCV</span> <span class="o">=</span> <span class="mi">524</span>
+    <span class="n">LAND_BARRACKS</span> <span class="o">=</span> <span class="mi">554</span>
+    <span class="n">MORPH_SUPPLYDEPOT_LOWER</span> <span class="o">=</span> <span class="mi">556</span>
+    <span class="n">MORPH_SUPPLYDEPOT_RAISE</span> <span class="o">=</span> <span class="mi">558</span>
+    <span class="n">BARRACKSTRAIN_MARINE</span> <span class="o">=</span> <span class="mi">560</span>
+    <span class="n">BARRACKSTRAIN_REAPER</span> <span class="o">=</span> <span class="mi">561</span>
+    <span class="n">BARRACKSTRAIN_GHOST</span> <span class="o">=</span> <span class="mi">562</span>
+    <span class="n">BARRACKSTRAIN_MARAUDER</span> <span class="o">=</span> <span class="mi">563</span>
+    <span class="n">FACTORYTRAIN_SIEGETANK</span> <span class="o">=</span> <span class="mi">591</span>
+    <span class="n">FACTORYTRAIN_THOR</span> <span class="o">=</span> <span class="mi">594</span>
+    <span class="n">FACTORYTRAIN_HELLION</span> <span class="o">=</span> <span class="mi">595</span>
+    <span class="n">TRAIN_HELLBAT</span> <span class="o">=</span> <span class="mi">596</span>
+    <span class="n">TRAIN_CYCLONE</span> <span class="o">=</span> <span class="mi">597</span>
+    <span class="n">FACTORYTRAIN_WIDOWMINE</span> <span class="o">=</span> <span class="mi">614</span>
+    <span class="n">STARPORTTRAIN_MEDIVAC</span> <span class="o">=</span> <span class="mi">620</span>
+    <span class="n">STARPORTTRAIN_BANSHEE</span> <span class="o">=</span> <span class="mi">621</span>
+    <span class="n">STARPORTTRAIN_RAVEN</span> <span class="o">=</span> <span class="mi">622</span>
+    <span class="n">STARPORTTRAIN_BATTLECRUISER</span> <span class="o">=</span> <span class="mi">623</span>
+    <span class="n">STARPORTTRAIN_VIKINGFIGHTER</span> <span class="o">=</span> <span class="mi">624</span>
+    <span class="n">STARPORTTRAIN_LIBERATOR</span> <span class="o">=</span> <span class="mi">626</span>
+    <span class="n">RESEARCH_HISECAUTOTRACKING</span> <span class="o">=</span> <span class="mi">650</span>
+    <span class="n">RESEARCH_TERRANSTRUCTUREARMORUPGRADE</span> <span class="o">=</span> <span class="mi">651</span>
+    <span class="n">ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">652</span>
+    <span class="n">ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">653</span>
+    <span class="n">ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">654</span>
+    <span class="n">RESEARCH_NEOSTEELFRAME</span> <span class="o">=</span> <span class="mi">655</span>
+    <span class="n">ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL1</span> <span class="o">=</span> <span class="mi">656</span>
+    <span class="n">ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL2</span> <span class="o">=</span> <span class="mi">657</span>
+    <span class="n">ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL3</span> <span class="o">=</span> <span class="mi">658</span>
+    <span class="n">MERCCOMPOUNDRESEARCH_REAPERSPEED</span> <span class="o">=</span> <span class="mi">683</span>
+    <span class="n">BUILD_NUKE</span> <span class="o">=</span> <span class="mi">710</span>
+    <span class="n">BARRACKSTECHLABRESEARCH_STIMPACK</span> <span class="o">=</span> <span class="mi">730</span>
+    <span class="n">RESEARCH_COMBATSHIELD</span> <span class="o">=</span> <span class="mi">731</span>
+    <span class="n">RESEARCH_CONCUSSIVESHELLS</span> <span class="o">=</span> <span class="mi">732</span>
+    <span class="n">RESEARCH_INFERNALPREIGNITER</span> <span class="o">=</span> <span class="mi">761</span>
+    <span class="n">FACTORYTECHLABRESEARCH_RESEARCHTRANSFORMATIONSERVOS</span> <span class="o">=</span> <span class="mi">763</span>
+    <span class="n">RESEARCH_DRILLINGCLAWS</span> <span class="o">=</span> <span class="mi">764</span>
+    <span class="n">FACTORYTECHLABRESEARCH_RESEARCHLOCKONRANGEUPGRADE</span> <span class="o">=</span> <span class="mi">765</span>
+    <span class="n">RESEARCH_SMARTSERVOS</span> <span class="o">=</span> <span class="mi">766</span>
+    <span class="n">FACTORYTECHLABRESEARCH_RESEARCHARMORPIERCINGROCKETS</span> <span class="o">=</span> <span class="mi">767</span>
+    <span class="n">RESEARCH_CYCLONERAPIDFIRELAUNCHERS</span> <span class="o">=</span> <span class="mi">768</span>
+    <span class="n">RESEARCH_CYCLONELOCKONDAMAGE</span> <span class="o">=</span> <span class="mi">769</span>
+    <span class="n">FACTORYTECHLABRESEARCH_CYCLONERESEARCHHURRICANETHRUSTERS</span> <span class="o">=</span> <span class="mi">770</span>
+    <span class="n">RESEARCH_BANSHEECLOAKINGFIELD</span> <span class="o">=</span> <span class="mi">790</span>
+    <span class="n">STARPORTTECHLABRESEARCH_RESEARCHMEDIVACENERGYUPGRADE</span> <span class="o">=</span> <span class="mi">792</span>
+    <span class="n">RESEARCH_RAVENCORVIDREACTOR</span> <span class="o">=</span> <span class="mi">793</span>
+    <span class="n">STARPORTTECHLABRESEARCH_RESEARCHSEEKERMISSILE</span> <span class="o">=</span> <span class="mi">796</span>
+    <span class="n">STARPORTTECHLABRESEARCH_RESEARCHDURABLEMATERIALS</span> <span class="o">=</span> <span class="mi">797</span>
+    <span class="n">RESEARCH_BANSHEEHYPERFLIGHTROTORS</span> <span class="o">=</span> <span class="mi">799</span>
+    <span class="n">STARPORTTECHLABRESEARCH_RESEARCHLIBERATORAGMODE</span> <span class="o">=</span> <span class="mi">800</span>
+    <span class="n">STARPORTTECHLABRESEARCH_RESEARCHRAPIDDEPLOYMENT</span> <span class="o">=</span> <span class="mi">802</span>
+    <span class="n">RESEARCH_RAVENRECALIBRATEDEXPLOSIVES</span> <span class="o">=</span> <span class="mi">803</span>
+    <span class="n">RESEARCH_HIGHCAPACITYFUELTANKS</span> <span class="o">=</span> <span class="mi">804</span>
+    <span class="n">RESEARCH_ADVANCEDBALLISTICS</span> <span class="o">=</span> <span class="mi">805</span>
+    <span class="n">STARPORTTECHLABRESEARCH_RAVENRESEARCHENHANCEDMUNITIONS</span> <span class="o">=</span> <span class="mi">806</span>
+    <span class="n">STARPORTTECHLABRESEARCH_RESEARCHRAVENINTERFERENCEMATRIX</span> <span class="o">=</span> <span class="mi">807</span>
+    <span class="n">RESEARCH_PERSONALCLOAKING</span> <span class="o">=</span> <span class="mi">820</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEPLATINGLEVEL1</span> <span class="o">=</span> <span class="mi">852</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEPLATINGLEVEL2</span> <span class="o">=</span> <span class="mi">853</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEPLATINGLEVEL3</span> <span class="o">=</span> <span class="mi">854</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">855</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">856</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">857</span>
+    <span class="n">ARMORYRESEARCH_TERRANSHIPPLATINGLEVEL1</span> <span class="o">=</span> <span class="mi">858</span>
+    <span class="n">ARMORYRESEARCH_TERRANSHIPPLATINGLEVEL2</span> <span class="o">=</span> <span class="mi">859</span>
+    <span class="n">ARMORYRESEARCH_TERRANSHIPPLATINGLEVEL3</span> <span class="o">=</span> <span class="mi">860</span>
+    <span class="n">ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">861</span>
+    <span class="n">ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">862</span>
+    <span class="n">ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">863</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1</span> <span class="o">=</span> <span class="mi">864</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2</span> <span class="o">=</span> <span class="mi">865</span>
+    <span class="n">ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3</span> <span class="o">=</span> <span class="mi">866</span>
+    <span class="n">PROTOSSBUILD_NEXUS</span> <span class="o">=</span> <span class="mi">880</span>
+    <span class="n">PROTOSSBUILD_PYLON</span> <span class="o">=</span> <span class="mi">881</span>
+    <span class="n">PROTOSSBUILD_ASSIMILATOR</span> <span class="o">=</span> <span class="mi">882</span>
+    <span class="n">PROTOSSBUILD_GATEWAY</span> <span class="o">=</span> <span class="mi">883</span>
+    <span class="n">PROTOSSBUILD_FORGE</span> <span class="o">=</span> <span class="mi">884</span>
+    <span class="n">PROTOSSBUILD_FLEETBEACON</span> <span class="o">=</span> <span class="mi">885</span>
+    <span class="n">PROTOSSBUILD_TWILIGHTCOUNCIL</span> <span class="o">=</span> <span class="mi">886</span>
+    <span class="n">PROTOSSBUILD_PHOTONCANNON</span> <span class="o">=</span> <span class="mi">887</span>
+    <span class="n">PROTOSSBUILD_STARGATE</span> <span class="o">=</span> <span class="mi">889</span>
+    <span class="n">PROTOSSBUILD_TEMPLARARCHIVE</span> <span class="o">=</span> <span class="mi">890</span>
+    <span class="n">PROTOSSBUILD_DARKSHRINE</span> <span class="o">=</span> <span class="mi">891</span>
+    <span class="n">PROTOSSBUILD_ROBOTICSBAY</span> <span class="o">=</span> <span class="mi">892</span>
+    <span class="n">PROTOSSBUILD_ROBOTICSFACILITY</span> <span class="o">=</span> <span class="mi">893</span>
+    <span class="n">PROTOSSBUILD_CYBERNETICSCORE</span> <span class="o">=</span> <span class="mi">894</span>
+    <span class="n">BUILD_SHIELDBATTERY</span> <span class="o">=</span> <span class="mi">895</span>
+    <span class="n">PROTOSSBUILD_CANCEL</span> <span class="o">=</span> <span class="mi">910</span>
+    <span class="n">LOAD_WARPPRISM</span> <span class="o">=</span> <span class="mi">911</span>
+    <span class="n">UNLOADALL_WARPPRISM</span> <span class="o">=</span> <span class="mi">912</span>
+    <span class="n">UNLOADALLAT_WARPPRISM</span> <span class="o">=</span> <span class="mi">913</span>
+    <span class="n">UNLOADUNIT_WARPPRISM</span> <span class="o">=</span> <span class="mi">914</span>
+    <span class="n">GATEWAYTRAIN_ZEALOT</span> <span class="o">=</span> <span class="mi">916</span>
+    <span class="n">GATEWAYTRAIN_STALKER</span> <span class="o">=</span> <span class="mi">917</span>
+    <span class="n">GATEWAYTRAIN_HIGHTEMPLAR</span> <span class="o">=</span> <span class="mi">919</span>
+    <span class="n">GATEWAYTRAIN_DARKTEMPLAR</span> <span class="o">=</span> <span class="mi">920</span>
+    <span class="n">GATEWAYTRAIN_SENTRY</span> <span class="o">=</span> <span class="mi">921</span>
+    <span class="n">TRAIN_ADEPT</span> <span class="o">=</span> <span class="mi">922</span>
+    <span class="n">STARGATETRAIN_PHOENIX</span> <span class="o">=</span> <span class="mi">946</span>
+    <span class="n">STARGATETRAIN_CARRIER</span> <span class="o">=</span> <span class="mi">948</span>
+    <span class="n">STARGATETRAIN_VOIDRAY</span> <span class="o">=</span> <span class="mi">950</span>
+    <span class="n">STARGATETRAIN_ORACLE</span> <span class="o">=</span> <span class="mi">954</span>
+    <span class="n">STARGATETRAIN_TEMPEST</span> <span class="o">=</span> <span class="mi">955</span>
+    <span class="n">ROBOTICSFACILITYTRAIN_WARPPRISM</span> <span class="o">=</span> <span class="mi">976</span>
+    <span class="n">ROBOTICSFACILITYTRAIN_OBSERVER</span> <span class="o">=</span> <span class="mi">977</span>
+    <span class="n">ROBOTICSFACILITYTRAIN_COLOSSUS</span> <span class="o">=</span> <span class="mi">978</span>
+    <span class="n">ROBOTICSFACILITYTRAIN_IMMORTAL</span> <span class="o">=</span> <span class="mi">979</span>
+    <span class="n">TRAIN_DISRUPTOR</span> <span class="o">=</span> <span class="mi">994</span>
+    <span class="n">NEXUSTRAIN_PROBE</span> <span class="o">=</span> <span class="mi">1006</span>
+    <span class="n">PSISTORM_PSISTORM</span> <span class="o">=</span> <span class="mi">1036</span>
+    <span class="n">CANCEL_HANGARQUEUE5</span> <span class="o">=</span> <span class="mi">1038</span>
+    <span class="n">CANCELSLOT_HANGARQUEUE5</span> <span class="o">=</span> <span class="mi">1039</span>
+    <span class="n">BROODLORDQUEUE2_CANCEL</span> <span class="o">=</span> <span class="mi">1040</span>
+    <span class="n">BROODLORDQUEUE2_CANCELSLOT</span> <span class="o">=</span> <span class="mi">1041</span>
+    <span class="n">BUILD_INTERCEPTORS</span> <span class="o">=</span> <span class="mi">1042</span>
+    <span class="n">FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">1062</span>
+    <span class="n">FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">1063</span>
+    <span class="n">FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">1064</span>
+    <span class="n">FORGERESEARCH_PROTOSSGROUNDARMORLEVEL1</span> <span class="o">=</span> <span class="mi">1065</span>
+    <span class="n">FORGERESEARCH_PROTOSSGROUNDARMORLEVEL2</span> <span class="o">=</span> <span class="mi">1066</span>
+    <span class="n">FORGERESEARCH_PROTOSSGROUNDARMORLEVEL3</span> <span class="o">=</span> <span class="mi">1067</span>
+    <span class="n">FORGERESEARCH_PROTOSSSHIELDSLEVEL1</span> <span class="o">=</span> <span class="mi">1068</span>
+    <span class="n">FORGERESEARCH_PROTOSSSHIELDSLEVEL2</span> <span class="o">=</span> <span class="mi">1069</span>
+    <span class="n">FORGERESEARCH_PROTOSSSHIELDSLEVEL3</span> <span class="o">=</span> <span class="mi">1070</span>
+    <span class="n">RESEARCH_GRAVITICBOOSTER</span> <span class="o">=</span> <span class="mi">1093</span>
+    <span class="n">RESEARCH_GRAVITICDRIVE</span> <span class="o">=</span> <span class="mi">1094</span>
+    <span class="n">RESEARCH_EXTENDEDTHERMALLANCE</span> <span class="o">=</span> <span class="mi">1097</span>
+    <span class="n">ROBOTICSBAYRESEARCH_RESEARCHIMMORTALREVIVE</span> <span class="o">=</span> <span class="mi">1099</span>
+    <span class="n">RESEARCH_PSISTORM</span> <span class="o">=</span> <span class="mi">1126</span>
+    <span class="n">ZERGBUILD_HATCHERY</span> <span class="o">=</span> <span class="mi">1152</span>
+    <span class="n">ZERGBUILD_CREEPTUMOR</span> <span class="o">=</span> <span class="mi">1153</span>
+    <span class="n">ZERGBUILD_EXTRACTOR</span> <span class="o">=</span> <span class="mi">1154</span>
+    <span class="n">ZERGBUILD_SPAWNINGPOOL</span> <span class="o">=</span> <span class="mi">1155</span>
+    <span class="n">ZERGBUILD_EVOLUTIONCHAMBER</span> <span class="o">=</span> <span class="mi">1156</span>
+    <span class="n">ZERGBUILD_HYDRALISKDEN</span> <span class="o">=</span> <span class="mi">1157</span>
+    <span class="n">ZERGBUILD_SPIRE</span> <span class="o">=</span> <span class="mi">1158</span>
+    <span class="n">ZERGBUILD_ULTRALISKCAVERN</span> <span class="o">=</span> <span class="mi">1159</span>
+    <span class="n">ZERGBUILD_INFESTATIONPIT</span> <span class="o">=</span> <span class="mi">1160</span>
+    <span class="n">ZERGBUILD_NYDUSNETWORK</span> <span class="o">=</span> <span class="mi">1161</span>
+    <span class="n">ZERGBUILD_BANELINGNEST</span> <span class="o">=</span> <span class="mi">1162</span>
+    <span class="n">BUILD_LURKERDEN</span> <span class="o">=</span> <span class="mi">1163</span>
+    <span class="n">ZERGBUILD_ROACHWARREN</span> <span class="o">=</span> <span class="mi">1165</span>
+    <span class="n">ZERGBUILD_SPINECRAWLER</span> <span class="o">=</span> <span class="mi">1166</span>
+    <span class="n">ZERGBUILD_SPORECRAWLER</span> <span class="o">=</span> <span class="mi">1167</span>
+    <span class="n">ZERGBUILD_CANCEL</span> <span class="o">=</span> <span class="mi">1182</span>
+    <span class="n">HARVEST_GATHER_DRONE</span> <span class="o">=</span> <span class="mi">1183</span>
+    <span class="n">HARVEST_RETURN_DRONE</span> <span class="o">=</span> <span class="mi">1184</span>
+    <span class="n">RESEARCH_ZERGMELEEWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">1186</span>
+    <span class="n">RESEARCH_ZERGMELEEWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">1187</span>
+    <span class="n">RESEARCH_ZERGMELEEWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">1188</span>
+    <span class="n">RESEARCH_ZERGGROUNDARMORLEVEL1</span> <span class="o">=</span> <span class="mi">1189</span>
+    <span class="n">RESEARCH_ZERGGROUNDARMORLEVEL2</span> <span class="o">=</span> <span class="mi">1190</span>
+    <span class="n">RESEARCH_ZERGGROUNDARMORLEVEL3</span> <span class="o">=</span> <span class="mi">1191</span>
+    <span class="n">RESEARCH_ZERGMISSILEWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">1192</span>
+    <span class="n">RESEARCH_ZERGMISSILEWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">1193</span>
+    <span class="n">RESEARCH_ZERGMISSILEWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">1194</span>
+    <span class="n">EVOLUTIONCHAMBERRESEARCH_EVOLVEPROPULSIVEPERISTALSIS</span> <span class="o">=</span> <span class="mi">1195</span>
+    <span class="n">UPGRADETOLAIR_LAIR</span> <span class="o">=</span> <span class="mi">1216</span>
+    <span class="n">CANCEL_MORPHLAIR</span> <span class="o">=</span> <span class="mi">1217</span>
+    <span class="n">UPGRADETOHIVE_HIVE</span> <span class="o">=</span> <span class="mi">1218</span>
+    <span class="n">CANCEL_MORPHHIVE</span> <span class="o">=</span> <span class="mi">1219</span>
+    <span class="n">UPGRADETOGREATERSPIRE_GREATERSPIRE</span> <span class="o">=</span> <span class="mi">1220</span>
+    <span class="n">CANCEL_MORPHGREATERSPIRE</span> <span class="o">=</span> <span class="mi">1221</span>
+    <span class="n">RESEARCH_PNEUMATIZEDCARAPACE</span> <span class="o">=</span> <span class="mi">1223</span>
+    <span class="n">LAIRRESEARCH_EVOLVEVENTRALSACKS</span> <span class="o">=</span> <span class="mi">1224</span>
+    <span class="n">RESEARCH_BURROW</span> <span class="o">=</span> <span class="mi">1225</span>
+    <span class="n">RESEARCH_ZERGLINGADRENALGLANDS</span> <span class="o">=</span> <span class="mi">1252</span>
+    <span class="n">RESEARCH_ZERGLINGMETABOLICBOOST</span> <span class="o">=</span> <span class="mi">1253</span>
+    <span class="n">RESEARCH_GROOVEDSPINES</span> <span class="o">=</span> <span class="mi">1282</span>
+    <span class="n">RESEARCH_MUSCULARAUGMENTS</span> <span class="o">=</span> <span class="mi">1283</span>
+    <span class="n">HYDRALISKDENRESEARCH_RESEARCHFRENZY</span> <span class="o">=</span> <span class="mi">1284</span>
+    <span class="n">HYDRALISKDENRESEARCH_RESEARCHLURKERRANGE</span> <span class="o">=</span> <span class="mi">1286</span>
+    <span class="n">RESEARCH_ZERGFLYERATTACKLEVEL1</span> <span class="o">=</span> <span class="mi">1312</span>
+    <span class="n">RESEARCH_ZERGFLYERATTACKLEVEL2</span> <span class="o">=</span> <span class="mi">1313</span>
+    <span class="n">RESEARCH_ZERGFLYERATTACKLEVEL3</span> <span class="o">=</span> <span class="mi">1314</span>
+    <span class="n">RESEARCH_ZERGFLYERARMORLEVEL1</span> <span class="o">=</span> <span class="mi">1315</span>
+    <span class="n">RESEARCH_ZERGFLYERARMORLEVEL2</span> <span class="o">=</span> <span class="mi">1316</span>
+    <span class="n">RESEARCH_ZERGFLYERARMORLEVEL3</span> <span class="o">=</span> <span class="mi">1317</span>
+    <span class="n">LARVATRAIN_DRONE</span> <span class="o">=</span> <span class="mi">1342</span>
+    <span class="n">LARVATRAIN_ZERGLING</span> <span class="o">=</span> <span class="mi">1343</span>
+    <span class="n">LARVATRAIN_OVERLORD</span> <span class="o">=</span> <span class="mi">1344</span>
+    <span class="n">LARVATRAIN_HYDRALISK</span> <span class="o">=</span> <span class="mi">1345</span>
+    <span class="n">LARVATRAIN_MUTALISK</span> <span class="o">=</span> <span class="mi">1346</span>
+    <span class="n">LARVATRAIN_ULTRALISK</span> <span class="o">=</span> <span class="mi">1348</span>
+    <span class="n">LARVATRAIN_ROACH</span> <span class="o">=</span> <span class="mi">1351</span>
+    <span class="n">LARVATRAIN_INFESTOR</span> <span class="o">=</span> <span class="mi">1352</span>
+    <span class="n">LARVATRAIN_CORRUPTOR</span> <span class="o">=</span> <span class="mi">1353</span>
+    <span class="n">LARVATRAIN_VIPER</span> <span class="o">=</span> <span class="mi">1354</span>
+    <span class="n">TRAIN_SWARMHOST</span> <span class="o">=</span> <span class="mi">1356</span>
+    <span class="n">MORPHTOBROODLORD_BROODLORD</span> <span class="o">=</span> <span class="mi">1372</span>
+    <span class="n">CANCEL_MORPHBROODLORD</span> <span class="o">=</span> <span class="mi">1373</span>
+    <span class="n">BURROWDOWN_BANELING</span> <span class="o">=</span> <span class="mi">1374</span>
+    <span class="n">BURROWBANELINGDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">1375</span>
+    <span class="n">BURROWUP_BANELING</span> <span class="o">=</span> <span class="mi">1376</span>
+    <span class="n">BURROWDOWN_DRONE</span> <span class="o">=</span> <span class="mi">1378</span>
+    <span class="n">BURROWDRONEDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">1379</span>
+    <span class="n">BURROWUP_DRONE</span> <span class="o">=</span> <span class="mi">1380</span>
+    <span class="n">BURROWDOWN_HYDRALISK</span> <span class="o">=</span> <span class="mi">1382</span>
+    <span class="n">BURROWHYDRALISKDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">1383</span>
+    <span class="n">BURROWUP_HYDRALISK</span> <span class="o">=</span> <span class="mi">1384</span>
+    <span class="n">BURROWDOWN_ROACH</span> <span class="o">=</span> <span class="mi">1386</span>
+    <span class="n">BURROWROACHDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">1387</span>
+    <span class="n">BURROWUP_ROACH</span> <span class="o">=</span> <span class="mi">1388</span>
+    <span class="n">BURROWDOWN_ZERGLING</span> <span class="o">=</span> <span class="mi">1390</span>
+    <span class="n">BURROWZERGLINGDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">1391</span>
+    <span class="n">BURROWUP_ZERGLING</span> <span class="o">=</span> <span class="mi">1392</span>
+    <span class="n">BURROWDOWN_INFESTORTERRAN</span> <span class="o">=</span> <span class="mi">1394</span>
+    <span class="n">BURROWUP_INFESTORTERRAN</span> <span class="o">=</span> <span class="mi">1396</span>
+    <span class="n">REDSTONELAVACRITTERBURROW_BURROWDOWN</span> <span class="o">=</span> <span class="mi">1398</span>
+    <span class="n">REDSTONELAVACRITTERINJUREDBURROW_BURROWDOWN</span> <span class="o">=</span> <span class="mi">1400</span>
+    <span class="n">REDSTONELAVACRITTERUNBURROW_BURROWUP</span> <span class="o">=</span> <span class="mi">1402</span>
+    <span class="n">REDSTONELAVACRITTERINJUREDUNBURROW_BURROWUP</span> <span class="o">=</span> <span class="mi">1404</span>
+    <span class="n">LOAD_OVERLORD</span> <span class="o">=</span> <span class="mi">1406</span>
+    <span class="n">UNLOADALLAT_OVERLORD</span> <span class="o">=</span> <span class="mi">1408</span>
+    <span class="n">UNLOADUNIT_OVERLORD</span> <span class="o">=</span> <span class="mi">1409</span>
+    <span class="n">MERGEABLE_CANCEL</span> <span class="o">=</span> <span class="mi">1411</span>
+    <span class="n">WARPABLE_CANCEL</span> <span class="o">=</span> <span class="mi">1412</span>
+    <span class="n">WARPGATETRAIN_ZEALOT</span> <span class="o">=</span> <span class="mi">1413</span>
+    <span class="n">WARPGATETRAIN_STALKER</span> <span class="o">=</span> <span class="mi">1414</span>
+    <span class="n">WARPGATETRAIN_HIGHTEMPLAR</span> <span class="o">=</span> <span class="mi">1416</span>
+    <span class="n">WARPGATETRAIN_DARKTEMPLAR</span> <span class="o">=</span> <span class="mi">1417</span>
+    <span class="n">WARPGATETRAIN_SENTRY</span> <span class="o">=</span> <span class="mi">1418</span>
+    <span class="n">TRAINWARP_ADEPT</span> <span class="o">=</span> <span class="mi">1419</span>
+    <span class="n">BURROWDOWN_QUEEN</span> <span class="o">=</span> <span class="mi">1433</span>
+    <span class="n">BURROWQUEENDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">1434</span>
+    <span class="n">BURROWUP_QUEEN</span> <span class="o">=</span> <span class="mi">1435</span>
+    <span class="n">LOAD_NYDUSNETWORK</span> <span class="o">=</span> <span class="mi">1437</span>
+    <span class="n">UNLOADALL_NYDASNETWORK</span> <span class="o">=</span> <span class="mi">1438</span>
+    <span class="n">UNLOADUNIT_NYDASNETWORK</span> <span class="o">=</span> <span class="mi">1440</span>
+    <span class="n">EFFECT_BLINK_STALKER</span> <span class="o">=</span> <span class="mi">1442</span>
+    <span class="n">BURROWDOWN_INFESTOR</span> <span class="o">=</span> <span class="mi">1444</span>
+    <span class="n">BURROWINFESTORDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">1445</span>
+    <span class="n">BURROWUP_INFESTOR</span> <span class="o">=</span> <span class="mi">1446</span>
+    <span class="n">MORPH_OVERSEER</span> <span class="o">=</span> <span class="mi">1448</span>
+    <span class="n">CANCEL_MORPHOVERSEER</span> <span class="o">=</span> <span class="mi">1449</span>
+    <span class="n">UPGRADETOPLANETARYFORTRESS_PLANETARYFORTRESS</span> <span class="o">=</span> <span class="mi">1450</span>
+    <span class="n">CANCEL_MORPHPLANETARYFORTRESS</span> <span class="o">=</span> <span class="mi">1451</span>
+    <span class="n">RESEARCH_NEURALPARASITE</span> <span class="o">=</span> <span class="mi">1455</span>
+    <span class="n">INFESTATIONPITRESEARCH_RESEARCHLOCUSTLIFETIMEINCREASE</span> <span class="o">=</span> <span class="mi">1456</span>
+    <span class="n">INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD</span> <span class="o">=</span> <span class="mi">1457</span>
+    <span class="n">RESEARCH_CENTRIFUGALHOOKS</span> <span class="o">=</span> <span class="mi">1482</span>
+    <span class="n">BURROWDOWN_ULTRALISK</span> <span class="o">=</span> <span class="mi">1512</span>
+    <span class="n">BURROWUP_ULTRALISK</span> <span class="o">=</span> <span class="mi">1514</span>
+    <span class="n">UPGRADETOORBITAL_ORBITALCOMMAND</span> <span class="o">=</span> <span class="mi">1516</span>
+    <span class="n">CANCEL_MORPHORBITAL</span> <span class="o">=</span> <span class="mi">1517</span>
+    <span class="n">MORPH_WARPGATE</span> <span class="o">=</span> <span class="mi">1518</span>
+    <span class="n">UPGRADETOWARPGATE_CANCEL</span> <span class="o">=</span> <span class="mi">1519</span>
+    <span class="n">MORPH_GATEWAY</span> <span class="o">=</span> <span class="mi">1520</span>
+    <span class="n">MORPHBACKTOGATEWAY_CANCEL</span> <span class="o">=</span> <span class="mi">1521</span>
+    <span class="n">LIFT_ORBITALCOMMAND</span> <span class="o">=</span> <span class="mi">1522</span>
+    <span class="n">LAND_ORBITALCOMMAND</span> <span class="o">=</span> <span class="mi">1524</span>
+    <span class="n">FORCEFIELD_FORCEFIELD</span> <span class="o">=</span> <span class="mi">1526</span>
+    <span class="n">FORCEFIELD_CANCEL</span> <span class="o">=</span> <span class="mi">1527</span>
+    <span class="n">MORPH_WARPPRISMPHASINGMODE</span> <span class="o">=</span> <span class="mi">1528</span>
+    <span class="n">PHASINGMODE_CANCEL</span> <span class="o">=</span> <span class="mi">1529</span>
+    <span class="n">MORPH_WARPPRISMTRANSPORTMODE</span> <span class="o">=</span> <span class="mi">1530</span>
+    <span class="n">TRANSPORTMODE_CANCEL</span> <span class="o">=</span> <span class="mi">1531</span>
+    <span class="n">RESEARCH_BATTLECRUISERWEAPONREFIT</span> <span class="o">=</span> <span class="mi">1532</span>
+    <span class="n">FUSIONCORERESEARCH_RESEARCHBALLISTICRANGE</span> <span class="o">=</span> <span class="mi">1533</span>
+    <span class="n">FUSIONCORERESEARCH_RESEARCHRAPIDREIGNITIONSYSTEM</span> <span class="o">=</span> <span class="mi">1534</span>
+    <span class="n">FUSIONCORERESEARCH_RESEARCHMEDIVACENERGYUPGRADE</span> <span class="o">=</span> <span class="mi">1535</span>
+    <span class="n">CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">1562</span>
+    <span class="n">CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">1563</span>
+    <span class="n">CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">1564</span>
+    <span class="n">CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL1</span> <span class="o">=</span> <span class="mi">1565</span>
+    <span class="n">CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL2</span> <span class="o">=</span> <span class="mi">1566</span>
+    <span class="n">CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL3</span> <span class="o">=</span> <span class="mi">1567</span>
+    <span class="n">RESEARCH_WARPGATE</span> <span class="o">=</span> <span class="mi">1568</span>
+    <span class="n">CYBERNETICSCORERESEARCH_RESEARCHHALLUCINATION</span> <span class="o">=</span> <span class="mi">1571</span>
+    <span class="n">RESEARCH_CHARGE</span> <span class="o">=</span> <span class="mi">1592</span>
+    <span class="n">RESEARCH_BLINK</span> <span class="o">=</span> <span class="mi">1593</span>
+    <span class="n">RESEARCH_ADEPTRESONATINGGLAIVES</span> <span class="o">=</span> <span class="mi">1594</span>
+    <span class="n">TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICSURGE</span> <span class="o">=</span> <span class="mi">1595</span>
+    <span class="n">TWILIGHTCOUNCILRESEARCH_RESEARCHAMPLIFIEDSHIELDING</span> <span class="o">=</span> <span class="mi">1596</span>
+    <span class="n">TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICAMPLIFIERS</span> <span class="o">=</span> <span class="mi">1597</span>
+    <span class="n">TACNUKESTRIKE_NUKECALLDOWN</span> <span class="o">=</span> <span class="mi">1622</span>
+    <span class="n">CANCEL_NUKE</span> <span class="o">=</span> <span class="mi">1623</span>
+    <span class="n">SALVAGEBUNKERREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1624</span>
+    <span class="n">SALVAGEBUNKER_SALVAGE</span> <span class="o">=</span> <span class="mi">1626</span>
+    <span class="n">EMP_EMP</span> <span class="o">=</span> <span class="mi">1628</span>
+    <span class="n">VORTEX_VORTEX</span> <span class="o">=</span> <span class="mi">1630</span>
+    <span class="n">TRAINQUEEN_QUEEN</span> <span class="o">=</span> <span class="mi">1632</span>
+    <span class="n">BURROWCREEPTUMORDOWN_BURROWDOWN</span> <span class="o">=</span> <span class="mi">1662</span>
+    <span class="n">TRANSFUSION_TRANSFUSION</span> <span class="o">=</span> <span class="mi">1664</span>
+    <span class="n">BARRACKSTECHLABMORPH_TECHLABBARRACKS</span> <span class="o">=</span> <span class="mi">1668</span>
+    <span class="n">FACTORYTECHLABMORPH_TECHLABFACTORY</span> <span class="o">=</span> <span class="mi">1670</span>
+    <span class="n">STARPORTTECHLABMORPH_TECHLABSTARPORT</span> <span class="o">=</span> <span class="mi">1672</span>
+    <span class="n">BARRACKSREACTORMORPH_REACTOR</span> <span class="o">=</span> <span class="mi">1676</span>
+    <span class="n">FACTORYREACTORMORPH_REACTOR</span> <span class="o">=</span> <span class="mi">1678</span>
+    <span class="n">STARPORTREACTORMORPH_REACTOR</span> <span class="o">=</span> <span class="mi">1680</span>
+    <span class="n">ATTACK_REDIRECT</span> <span class="o">=</span> <span class="mi">1682</span>
+    <span class="n">EFFECT_STIM_MARINE_REDIRECT</span> <span class="o">=</span> <span class="mi">1683</span>
+    <span class="n">EFFECT_STIM_MARAUDER_REDIRECT</span> <span class="o">=</span> <span class="mi">1684</span>
+    <span class="n">BURROWEDSTOP_STOPROACHBURROWED</span> <span class="o">=</span> <span class="mi">1685</span>
+    <span class="n">BURROWEDSTOP_HOLDFIRESPECIAL</span> <span class="o">=</span> <span class="mi">1686</span>
+    <span class="n">STOP_REDIRECT</span> <span class="o">=</span> <span class="mi">1691</span>
+    <span class="n">BEHAVIOR_GENERATECREEPON</span> <span class="o">=</span> <span class="mi">1692</span>
+    <span class="n">BEHAVIOR_GENERATECREEPOFF</span> <span class="o">=</span> <span class="mi">1693</span>
+    <span class="n">BUILD_CREEPTUMOR_QUEEN</span> <span class="o">=</span> <span class="mi">1694</span>
+    <span class="n">QUEENBUILD_CANCEL</span> <span class="o">=</span> <span class="mi">1724</span>
+    <span class="n">SPINECRAWLERUPROOT_SPINECRAWLERUPROOT</span> <span class="o">=</span> <span class="mi">1725</span>
+    <span class="n">SPINECRAWLERUPROOT_CANCEL</span> <span class="o">=</span> <span class="mi">1726</span>
+    <span class="n">SPORECRAWLERUPROOT_SPORECRAWLERUPROOT</span> <span class="o">=</span> <span class="mi">1727</span>
+    <span class="n">SPORECRAWLERUPROOT_CANCEL</span> <span class="o">=</span> <span class="mi">1728</span>
+    <span class="n">SPINECRAWLERROOT_SPINECRAWLERROOT</span> <span class="o">=</span> <span class="mi">1729</span>
+    <span class="n">CANCEL_SPINECRAWLERROOT</span> <span class="o">=</span> <span class="mi">1730</span>
+    <span class="n">SPORECRAWLERROOT_SPORECRAWLERROOT</span> <span class="o">=</span> <span class="mi">1731</span>
+    <span class="n">CANCEL_SPORECRAWLERROOT</span> <span class="o">=</span> <span class="mi">1732</span>
+    <span class="n">BUILD_CREEPTUMOR_TUMOR</span> <span class="o">=</span> <span class="mi">1733</span>
+    <span class="n">CANCEL_CREEPTUMOR</span> <span class="o">=</span> <span class="mi">1763</span>
+    <span class="n">BUILDAUTOTURRET_AUTOTURRET</span> <span class="o">=</span> <span class="mi">1764</span>
+    <span class="n">MORPH_ARCHON</span> <span class="o">=</span> <span class="mi">1766</span>
+    <span class="n">ARCHON_WARP_TARGET</span> <span class="o">=</span> <span class="mi">1767</span>
+    <span class="n">BUILD_NYDUSWORM</span> <span class="o">=</span> <span class="mi">1768</span>
+    <span class="n">BUILDNYDUSCANAL_SUMMONNYDUSCANALATTACKER</span> <span class="o">=</span> <span class="mi">1769</span>
+    <span class="n">BUILDNYDUSCANAL_CANCEL</span> <span class="o">=</span> <span class="mi">1798</span>
+    <span class="n">EFFECT_CHARGE</span> <span class="o">=</span> <span class="mi">1819</span>
+    <span class="n">HERDINTERACT_HERD</span> <span class="o">=</span> <span class="mi">1821</span>
+    <span class="n">FRENZY_FRENZY</span> <span class="o">=</span> <span class="mi">1823</span>
+    <span class="n">CONTAMINATE_CONTAMINATE</span> <span class="o">=</span> <span class="mi">1825</span>
+    <span class="n">INFESTEDTERRANSLAYEGG_INFESTEDTERRANS</span> <span class="o">=</span> <span class="mi">1829</span>
+    <span class="n">CANCEL_QUEUEPASIVE</span> <span class="o">=</span> <span class="mi">1831</span>
+    <span class="n">CANCELSLOT_QUEUEPASSIVE</span> <span class="o">=</span> <span class="mi">1832</span>
+    <span class="n">CANCEL_QUEUEPASSIVECANCELTOSELECTION</span> <span class="o">=</span> <span class="mi">1833</span>
+    <span class="n">CANCELSLOT_QUEUEPASSIVECANCELTOSELECTION</span> <span class="o">=</span> <span class="mi">1834</span>
+    <span class="n">MORPHTOGHOSTALTERNATE_MOVE</span> <span class="o">=</span> <span class="mi">1835</span>
+    <span class="n">MORPHTOGHOSTNOVA_MOVE</span> <span class="o">=</span> <span class="mi">1837</span>
+    <span class="n">DIGESTERCREEPSPRAY_DIGESTERCREEPSPRAY</span> <span class="o">=</span> <span class="mi">1839</span>
+    <span class="n">MORPHTOCOLLAPSIBLETERRANTOWERDEBRIS_CANCEL</span> <span class="o">=</span> <span class="mi">1842</span>
+    <span class="n">MORPHTOCOLLAPSIBLETERRANTOWERDEBRISRAMPLEFT_CANCEL</span> <span class="o">=</span> <span class="mi">1844</span>
+    <span class="n">MORPHTOCOLLAPSIBLETERRANTOWERDEBRISRAMPRIGHT_CANCEL</span> <span class="o">=</span> <span class="mi">1846</span>
+    <span class="n">MORPH_MOTHERSHIP</span> <span class="o">=</span> <span class="mi">1847</span>
+    <span class="n">CANCEL_MORPHMOTHERSHIP</span> <span class="o">=</span> <span class="mi">1848</span>
+    <span class="n">MOTHERSHIPSTASIS_MOTHERSHIPSTASIS</span> <span class="o">=</span> <span class="mi">1849</span>
+    <span class="n">CANCEL_MOTHERSHIPSTASIS</span> <span class="o">=</span> <span class="mi">1850</span>
+    <span class="n">MOTHERSHIPCOREWEAPON_MOTHERSHIPSTASIS</span> <span class="o">=</span> <span class="mi">1851</span>
+    <span class="n">NEXUSTRAINMOTHERSHIPCORE_MOTHERSHIPCORE</span> <span class="o">=</span> <span class="mi">1853</span>
+    <span class="n">MOTHERSHIPCORETELEPORT_MOTHERSHIPCORETELEPORT</span> <span class="o">=</span> <span class="mi">1883</span>
+    <span class="n">SALVAGEDRONEREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1885</span>
+    <span class="n">SALVAGEDRONE_SALVAGE</span> <span class="o">=</span> <span class="mi">1887</span>
+    <span class="n">SALVAGEZERGLINGREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1889</span>
+    <span class="n">SALVAGEZERGLING_SALVAGE</span> <span class="o">=</span> <span class="mi">1891</span>
+    <span class="n">SALVAGEQUEENREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1893</span>
+    <span class="n">SALVAGEQUEEN_SALVAGE</span> <span class="o">=</span> <span class="mi">1895</span>
+    <span class="n">SALVAGEROACHREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1897</span>
+    <span class="n">SALVAGEROACH_SALVAGE</span> <span class="o">=</span> <span class="mi">1899</span>
+    <span class="n">SALVAGEBANELINGREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1901</span>
+    <span class="n">SALVAGEBANELING_SALVAGE</span> <span class="o">=</span> <span class="mi">1903</span>
+    <span class="n">SALVAGEHYDRALISKREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1905</span>
+    <span class="n">SALVAGEHYDRALISK_SALVAGE</span> <span class="o">=</span> <span class="mi">1907</span>
+    <span class="n">SALVAGEINFESTORREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1909</span>
+    <span class="n">SALVAGEINFESTOR_SALVAGE</span> <span class="o">=</span> <span class="mi">1911</span>
+    <span class="n">SALVAGESWARMHOSTREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1913</span>
+    <span class="n">SALVAGESWARMHOST_SALVAGE</span> <span class="o">=</span> <span class="mi">1915</span>
+    <span class="n">SALVAGEULTRALISKREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">1917</span>
+    <span class="n">SALVAGEULTRALISK_SALVAGE</span> <span class="o">=</span> <span class="mi">1919</span>
+    <span class="n">DIGESTERTRANSPORT_LOADDIGESTER</span> <span class="o">=</span> <span class="mi">1921</span>
+    <span class="n">SPECTRESHIELD_SPECTRESHIELD</span> <span class="o">=</span> <span class="mi">1926</span>
+    <span class="n">XELNAGAHEALINGSHRINE_XELNAGAHEALINGSHRINE</span> <span class="o">=</span> <span class="mi">1928</span>
+    <span class="n">NEXUSINVULNERABILITY_NEXUSINVULNERABILITY</span> <span class="o">=</span> <span class="mi">1930</span>
+    <span class="n">NEXUSPHASESHIFT_NEXUSPHASESHIFT</span> <span class="o">=</span> <span class="mi">1932</span>
+    <span class="n">SPAWNCHANGELINGTARGET_SPAWNCHANGELING</span> <span class="o">=</span> <span class="mi">1934</span>
+    <span class="n">QUEENLAND_QUEENLAND</span> <span class="o">=</span> <span class="mi">1936</span>
+    <span class="n">QUEENFLY_QUEENFLY</span> <span class="o">=</span> <span class="mi">1938</span>
+    <span class="n">ORACLECLOAKFIELD_ORACLECLOAKFIELD</span> <span class="o">=</span> <span class="mi">1940</span>
+    <span class="n">FLYERSHIELD_FLYERSHIELD</span> <span class="o">=</span> <span class="mi">1942</span>
+    <span class="n">LOCUSTTRAIN_SWARMHOST</span> <span class="o">=</span> <span class="mi">1944</span>
+    <span class="n">EFFECT_MASSRECALL_MOTHERSHIPCORE</span> <span class="o">=</span> <span class="mi">1974</span>
+    <span class="n">SINGLERECALL_SINGLERECALL</span> <span class="o">=</span> <span class="mi">1976</span>
+    <span class="n">MORPH_HELLION</span> <span class="o">=</span> <span class="mi">1978</span>
+    <span class="n">RESTORESHIELDS_RESTORESHIELDS</span> <span class="o">=</span> <span class="mi">1980</span>
+    <span class="n">SCRYER_SCRYER</span> <span class="o">=</span> <span class="mi">1982</span>
+    <span class="n">LEECHRESOURCES_CANCEL</span> <span class="o">=</span> <span class="mi">1987</span>
+    <span class="n">SNIPEDOT_SNIPEDOT</span> <span class="o">=</span> <span class="mi">1988</span>
+    <span class="n">SWARMHOSTSPAWNLOCUSTS_LOCUSTMP</span> <span class="o">=</span> <span class="mi">1990</span>
+    <span class="n">CLONE_CLONE</span> <span class="o">=</span> <span class="mi">1992</span>
+    <span class="n">BUILDINGSHIELD_BUILDINGSHIELD</span> <span class="o">=</span> <span class="mi">1994</span>
+    <span class="n">MORPHTOCOLLAPSIBLEROCKTOWERDEBRIS_CANCEL</span> <span class="o">=</span> <span class="mi">1997</span>
+    <span class="n">MORPH_HELLBAT</span> <span class="o">=</span> <span class="mi">1998</span>
+    <span class="n">BUILDINGSTASIS_BUILDINGSTASIS</span> <span class="o">=</span> <span class="mi">2000</span>
+    <span class="n">MAXIUMTHRUST_MAXIMUMTHRUST</span> <span class="o">=</span> <span class="mi">2006</span>
+    <span class="n">BURROWDOWN_SWARMHOST</span> <span class="o">=</span> <span class="mi">2014</span>
+    <span class="n">MORPHTOSWARMHOSTBURROWEDMP_CANCEL</span> <span class="o">=</span> <span class="mi">2015</span>
+    <span class="n">BURROWUP_SWARMHOST</span> <span class="o">=</span> <span class="mi">2016</span>
+    <span class="n">SPAWNINFESTEDTERRAN_LOCUSTMP</span> <span class="o">=</span> <span class="mi">2018</span>
+    <span class="n">ATTACKPROTOSSBUILDING_ATTACKBUILDING</span> <span class="o">=</span> <span class="mi">2048</span>
+    <span class="n">ATTACKPROTOSSBUILDING_ATTACKTOWARDS</span> <span class="o">=</span> <span class="mi">2049</span>
+    <span class="n">ATTACKPROTOSSBUILDING_ATTACKBARRAGE</span> <span class="o">=</span> <span class="mi">2050</span>
+    <span class="n">BURROWEDBANELINGSTOP_STOPROACHBURROWED</span> <span class="o">=</span> <span class="mi">2051</span>
+    <span class="n">BURROWEDBANELINGSTOP_HOLDFIRESPECIAL</span> <span class="o">=</span> <span class="mi">2052</span>
+    <span class="n">STOP_BUILDING</span> <span class="o">=</span> <span class="mi">2057</span>
+    <span class="n">STOPPROTOSSBUILDING_HOLDFIRE</span> <span class="o">=</span> <span class="mi">2058</span>
+    <span class="n">STOPPROTOSSBUILDING_CHEER</span> <span class="o">=</span> <span class="mi">2059</span>
+    <span class="n">STOPPROTOSSBUILDING_DANCE</span> <span class="o">=</span> <span class="mi">2060</span>
+    <span class="n">BLINDINGCLOUD_BLINDINGCLOUD</span> <span class="o">=</span> <span class="mi">2063</span>
+    <span class="n">EYESTALK_EYESTALK</span> <span class="o">=</span> <span class="mi">2065</span>
+    <span class="n">EYESTALK_CANCEL</span> <span class="o">=</span> <span class="mi">2066</span>
+    <span class="n">EFFECT_ABDUCT</span> <span class="o">=</span> <span class="mi">2067</span>
+    <span class="n">VIPERCONSUME_VIPERCONSUME</span> <span class="o">=</span> <span class="mi">2069</span>
+    <span class="n">VIPERCONSUMEMINERALS_VIPERCONSUME</span> <span class="o">=</span> <span class="mi">2071</span>
+    <span class="n">VIPERCONSUMESTRUCTURE_VIPERCONSUME</span> <span class="o">=</span> <span class="mi">2073</span>
+    <span class="n">CANCEL_PROTOSSBUILDINGQUEUE</span> <span class="o">=</span> <span class="mi">2075</span>
+    <span class="n">PROTOSSBUILDINGQUEUE_CANCELSLOT</span> <span class="o">=</span> <span class="mi">2076</span>
+    <span class="n">QUE8_CANCEL</span> <span class="o">=</span> <span class="mi">2077</span>
+    <span class="n">QUE8_CANCELSLOT</span> <span class="o">=</span> <span class="mi">2078</span>
+    <span class="n">TESTZERG_CANCEL</span> <span class="o">=</span> <span class="mi">2080</span>
+    <span class="n">BEHAVIOR_BUILDINGATTACKON</span> <span class="o">=</span> <span class="mi">2081</span>
+    <span class="n">BEHAVIOR_BUILDINGATTACKOFF</span> <span class="o">=</span> <span class="mi">2082</span>
+    <span class="n">PICKUPSCRAPSMALL_PICKUPSCRAPSMALL</span> <span class="o">=</span> <span class="mi">2083</span>
+    <span class="n">PICKUPSCRAPMEDIUM_PICKUPSCRAPMEDIUM</span> <span class="o">=</span> <span class="mi">2085</span>
+    <span class="n">PICKUPSCRAPLARGE_PICKUPSCRAPLARGE</span> <span class="o">=</span> <span class="mi">2087</span>
+    <span class="n">PICKUPPALLETGAS_PICKUPPALLETGAS</span> <span class="o">=</span> <span class="mi">2089</span>
+    <span class="n">PICKUPPALLETMINERALS_PICKUPPALLETMINERALS</span> <span class="o">=</span> <span class="mi">2091</span>
+    <span class="n">MASSIVEKNOCKOVER_MASSIVEKNOCKOVER</span> <span class="o">=</span> <span class="mi">2093</span>
+    <span class="n">BURROWDOWN_WIDOWMINE</span> <span class="o">=</span> <span class="mi">2095</span>
+    <span class="n">WIDOWMINEBURROW_CANCEL</span> <span class="o">=</span> <span class="mi">2096</span>
+    <span class="n">BURROWUP_WIDOWMINE</span> <span class="o">=</span> <span class="mi">2097</span>
+    <span class="n">WIDOWMINEATTACK_WIDOWMINEATTACK</span> <span class="o">=</span> <span class="mi">2099</span>
+    <span class="n">TORNADOMISSILE_TORNADOMISSILE</span> <span class="o">=</span> <span class="mi">2101</span>
+    <span class="n">MOTHERSHIPCOREENERGIZE_MOTHERSHIPCOREENERGIZE</span> <span class="o">=</span> <span class="mi">2102</span>
+    <span class="n">MOTHERSHIPCOREENERGIZE_CANCEL</span> <span class="o">=</span> <span class="mi">2103</span>
+    <span class="n">LURKERASPECTMPFROMHYDRALISKBURROWED_LURKERMPFROMHYDRALISKBURROWED</span> <span class="o">=</span> <span class="mi">2104</span>
+    <span class="n">LURKERASPECTMPFROMHYDRALISKBURROWED_CANCEL</span> <span class="o">=</span> <span class="mi">2105</span>
+    <span class="n">LURKERASPECTMP_LURKERMP</span> <span class="o">=</span> <span class="mi">2106</span>
+    <span class="n">LURKERASPECTMP_CANCEL</span> <span class="o">=</span> <span class="mi">2107</span>
+    <span class="n">BURROWDOWN_LURKER</span> <span class="o">=</span> <span class="mi">2108</span>
+    <span class="n">BURROWLURKERMPDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">2109</span>
+    <span class="n">BURROWUP_LURKER</span> <span class="o">=</span> <span class="mi">2110</span>
+    <span class="n">MORPH_LURKERDEN</span> <span class="o">=</span> <span class="mi">2112</span>
+    <span class="n">CANCEL_MORPHLURKERDEN</span> <span class="o">=</span> <span class="mi">2113</span>
+    <span class="n">HALLUCINATION_ORACLE</span> <span class="o">=</span> <span class="mi">2114</span>
+    <span class="n">EFFECT_MEDIVACIGNITEAFTERBURNERS</span> <span class="o">=</span> <span class="mi">2116</span>
+    <span class="n">EXTENDINGBRIDGENEWIDE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2118</span>
+    <span class="n">EXTENDINGBRIDGENEWIDE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2120</span>
+    <span class="n">EXTENDINGBRIDGENWWIDE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2122</span>
+    <span class="n">EXTENDINGBRIDGENWWIDE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2124</span>
+    <span class="n">EXTENDINGBRIDGENEWIDE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2126</span>
+    <span class="n">EXTENDINGBRIDGENEWIDE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2128</span>
+    <span class="n">EXTENDINGBRIDGENWWIDE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2130</span>
+    <span class="n">EXTENDINGBRIDGENWWIDE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2132</span>
+    <span class="n">EXTENDINGBRIDGENEWIDE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2134</span>
+    <span class="n">EXTENDINGBRIDGENEWIDE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2136</span>
+    <span class="n">EXTENDINGBRIDGENWWIDE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2138</span>
+    <span class="n">EXTENDINGBRIDGENWWIDE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2140</span>
+    <span class="n">INVULNERABILITYSHIELD_INVULNERABILITYSHIELD</span> <span class="o">=</span> <span class="mi">2142</span>
+    <span class="n">CRITTERFLEE_CRITTERFLEE</span> <span class="o">=</span> <span class="mi">2144</span>
+    <span class="n">ORACLEREVELATION_ORACLEREVELATION</span> <span class="o">=</span> <span class="mi">2146</span>
+    <span class="n">ORACLEREVELATIONMODE_ORACLEREVELATIONMODE</span> <span class="o">=</span> <span class="mi">2148</span>
+    <span class="n">ORACLEREVELATIONMODE_CANCEL</span> <span class="o">=</span> <span class="mi">2149</span>
+    <span class="n">ORACLENORMALMODE_ORACLENORMALMODE</span> <span class="o">=</span> <span class="mi">2150</span>
+    <span class="n">ORACLENORMALMODE_CANCEL</span> <span class="o">=</span> <span class="mi">2151</span>
+    <span class="n">MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPRIGHT_CANCEL</span> <span class="o">=</span> <span class="mi">2153</span>
+    <span class="n">MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPLEFT_CANCEL</span> <span class="o">=</span> <span class="mi">2155</span>
+    <span class="n">VOIDSIPHON_VOIDSIPHON</span> <span class="o">=</span> <span class="mi">2156</span>
+    <span class="n">ULTRALISKWEAPONCOOLDOWN_ULTRALISKWEAPONCOOLDOWN</span> <span class="o">=</span> <span class="mi">2158</span>
+    <span class="n">MOTHERSHIPCOREPURIFYNEXUSCANCEL_CANCEL</span> <span class="o">=</span> <span class="mi">2160</span>
+    <span class="n">EFFECT_PHOTONOVERCHARGE</span> <span class="o">=</span> <span class="mi">2162</span>
+    <span class="n">XELNAGA_CAVERNS_DOORE_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2164</span>
+    <span class="n">XELNAGA_CAVERNS_DOOREOPENED_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2166</span>
+    <span class="n">XELNAGA_CAVERNS_DOORN_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2168</span>
+    <span class="n">XELNAGA_CAVERNS_DOORNE_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2170</span>
+    <span class="n">XELNAGA_CAVERNS_DOORNEOPENED_XELNAGA_CAVERNS_DOORDEFAULTOPEN</span> <span class="o">=</span> <span class="mi">2172</span>
+    <span class="n">XELNAGA_CAVERNS_DOORNOPENED_XELNAGA_CAVERNS_DOORDEFAULTOPEN</span> <span class="o">=</span> <span class="mi">2174</span>
+    <span class="n">XELNAGA_CAVERNS_DOORNW_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2176</span>
+    <span class="n">XELNAGA_CAVERNS_DOORNWOPENED_XELNAGA_CAVERNS_DOORDEFAULTOPEN</span> <span class="o">=</span> <span class="mi">2178</span>
+    <span class="n">XELNAGA_CAVERNS_DOORS_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2180</span>
+    <span class="n">XELNAGA_CAVERNS_DOORSE_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2182</span>
+    <span class="n">XELNAGA_CAVERNS_DOORSEOPENED_XELNAGA_CAVERNS_DOORDEFAULTOPEN</span> <span class="o">=</span> <span class="mi">2184</span>
+    <span class="n">XELNAGA_CAVERNS_DOORSOPENED_XELNAGA_CAVERNS_DOORDEFAULTOPEN</span> <span class="o">=</span> <span class="mi">2186</span>
+    <span class="n">XELNAGA_CAVERNS_DOORSW_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2188</span>
+    <span class="n">XELNAGA_CAVERNS_DOORSWOPENED_XELNAGA_CAVERNS_DOORDEFAULTOPEN</span> <span class="o">=</span> <span class="mi">2190</span>
+    <span class="n">XELNAGA_CAVERNS_DOORW_XELNAGA_CAVERNS_DOORDEFAULTCLOSE</span> <span class="o">=</span> <span class="mi">2192</span>
+    <span class="n">XELNAGA_CAVERNS_DOORWOPENED_XELNAGA_CAVERNS_DOORDEFAULTOPEN</span> <span class="o">=</span> <span class="mi">2194</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2196</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2198</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2200</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2202</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2204</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2206</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2208</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2210</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2212</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2214</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2216</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGENW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2218</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEH8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2220</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEH8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2222</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEV8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2224</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEV8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2226</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEH10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2228</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEH10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2230</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEV10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2232</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEV10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2234</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEH12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2236</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEH12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2238</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEV12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2240</span>
+    <span class="n">XELNAGA_CAVERNS_FLOATING_BRIDGEV12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2242</span>
+    <span class="n">EFFECT_TIMEWARP</span> <span class="o">=</span> <span class="mi">2244</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENESHORT8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2246</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENESHORT8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2248</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENWSHORT8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2250</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENWSHORT8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2252</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENESHORT10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2254</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENESHORT10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2256</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENWSHORT10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2258</span>
+    <span class="n">SNOWREFINERY_TERRAN_EXTENDINGBRIDGENWSHORT10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2260</span>
+    <span class="n">ARMORYRESEARCHSWARM_TERRANVEHICLEANDSHIPWEAPONSLEVEL1</span> <span class="o">=</span> <span class="mi">2294</span>
+    <span class="n">ARMORYRESEARCHSWARM_TERRANVEHICLEANDSHIPWEAPONSLEVEL2</span> <span class="o">=</span> <span class="mi">2295</span>
+    <span class="n">ARMORYRESEARCHSWARM_TERRANVEHICLEANDSHIPWEAPONSLEVEL3</span> <span class="o">=</span> <span class="mi">2296</span>
+    <span class="n">ARMORYRESEARCHSWARM_TERRANVEHICLEANDSHIPPLATINGLEVEL1</span> <span class="o">=</span> <span class="mi">2297</span>
+    <span class="n">ARMORYRESEARCHSWARM_TERRANVEHICLEANDSHIPPLATINGLEVEL2</span> <span class="o">=</span> <span class="mi">2298</span>
+    <span class="n">ARMORYRESEARCHSWARM_TERRANVEHICLEANDSHIPPLATINGLEVEL3</span> <span class="o">=</span> <span class="mi">2299</span>
+    <span class="n">CAUSTICSPRAY_CAUSTICSPRAY</span> <span class="o">=</span> <span class="mi">2324</span>
+    <span class="n">ORACLECLOAKINGFIELDTARGETED_ORACLECLOAKINGFIELDTARGETED</span> <span class="o">=</span> <span class="mi">2326</span>
+    <span class="n">EFFECT_IMMORTALBARRIER</span> <span class="o">=</span> <span class="mi">2328</span>
+    <span class="n">MORPHTORAVAGER_RAVAGER</span> <span class="o">=</span> <span class="mi">2330</span>
+    <span class="n">CANCEL_MORPHRAVAGER</span> <span class="o">=</span> <span class="mi">2331</span>
+    <span class="n">MORPH_LURKER</span> <span class="o">=</span> <span class="mi">2332</span>
+    <span class="n">CANCEL_MORPHLURKER</span> <span class="o">=</span> <span class="mi">2333</span>
+    <span class="n">ORACLEPHASESHIFT_ORACLEPHASESHIFT</span> <span class="o">=</span> <span class="mi">2334</span>
+    <span class="n">RELEASEINTERCEPTORS_RELEASEINTERCEPTORS</span> <span class="o">=</span> <span class="mi">2336</span>
+    <span class="n">EFFECT_CORROSIVEBILE</span> <span class="o">=</span> <span class="mi">2338</span>
+    <span class="n">BURROWDOWN_RAVAGER</span> <span class="o">=</span> <span class="mi">2340</span>
+    <span class="n">BURROWRAVAGERDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">2341</span>
+    <span class="n">BURROWUP_RAVAGER</span> <span class="o">=</span> <span class="mi">2342</span>
+    <span class="n">PURIFICATIONNOVA_PURIFICATIONNOVA</span> <span class="o">=</span> <span class="mi">2344</span>
+    <span class="n">EFFECT_PURIFICATIONNOVA</span> <span class="o">=</span> <span class="mi">2346</span>
+    <span class="n">IMPALE_IMPALE</span> <span class="o">=</span> <span class="mi">2348</span>
+    <span class="n">LOCKON_LOCKON</span> <span class="o">=</span> <span class="mi">2350</span>
+    <span class="n">LOCKONAIR_LOCKONAIR</span> <span class="o">=</span> <span class="mi">2352</span>
+    <span class="n">CANCEL_LOCKON</span> <span class="o">=</span> <span class="mi">2354</span>
+    <span class="n">CORRUPTIONBOMB_CORRUPTIONBOMB</span> <span class="o">=</span> <span class="mi">2356</span>
+    <span class="n">CORRUPTIONBOMB_CANCEL</span> <span class="o">=</span> <span class="mi">2357</span>
+    <span class="n">EFFECT_TACTICALJUMP</span> <span class="o">=</span> <span class="mi">2358</span>
+    <span class="n">OVERCHARGE_OVERCHARGE</span> <span class="o">=</span> <span class="mi">2360</span>
+    <span class="n">MORPH_THORHIGHIMPACTMODE</span> <span class="o">=</span> <span class="mi">2362</span>
+    <span class="n">THORAPMODE_CANCEL</span> <span class="o">=</span> <span class="mi">2363</span>
+    <span class="n">MORPH_THOREXPLOSIVEMODE</span> <span class="o">=</span> <span class="mi">2364</span>
+    <span class="n">CANCEL_MORPHTHOREXPLOSIVEMODE</span> <span class="o">=</span> <span class="mi">2365</span>
+    <span class="n">LIGHTOFAIUR_LIGHTOFAIUR</span> <span class="o">=</span> <span class="mi">2366</span>
+    <span class="n">EFFECT_MASSRECALL_MOTHERSHIP</span> <span class="o">=</span> <span class="mi">2368</span>
+    <span class="n">LOAD_NYDUSWORM</span> <span class="o">=</span> <span class="mi">2370</span>
+    <span class="n">UNLOADALL_NYDUSWORM</span> <span class="o">=</span> <span class="mi">2371</span>
+    <span class="n">BEHAVIOR_PULSARBEAMON</span> <span class="o">=</span> <span class="mi">2375</span>
+    <span class="n">BEHAVIOR_PULSARBEAMOFF</span> <span class="o">=</span> <span class="mi">2376</span>
+    <span class="n">PULSARBEAM_RIPFIELD</span> <span class="o">=</span> <span class="mi">2377</span>
+    <span class="n">PULSARCANNON_PULSARCANNON</span> <span class="o">=</span> <span class="mi">2379</span>
+    <span class="n">VOIDSWARMHOSTSPAWNLOCUST_VOIDSWARMHOSTSPAWNLOCUST</span> <span class="o">=</span> <span class="mi">2381</span>
+    <span class="n">LOCUSTMPFLYINGMORPHTOGROUND_LOCUSTMPFLYINGSWOOP</span> <span class="o">=</span> <span class="mi">2383</span>
+    <span class="n">LOCUSTMPMORPHTOAIR_LOCUSTMPFLYINGSWOOP</span> <span class="o">=</span> <span class="mi">2385</span>
+    <span class="n">EFFECT_LOCUSTSWOOP</span> <span class="o">=</span> <span class="mi">2387</span>
+    <span class="n">HALLUCINATION_DISRUPTOR</span> <span class="o">=</span> <span class="mi">2389</span>
+    <span class="n">HALLUCINATION_ADEPT</span> <span class="o">=</span> <span class="mi">2391</span>
+    <span class="n">EFFECT_VOIDRAYPRISMATICALIGNMENT</span> <span class="o">=</span> <span class="mi">2393</span>
+    <span class="n">AIURLIGHTBRIDGENE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2397</span>
+    <span class="n">AIURLIGHTBRIDGENE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2399</span>
+    <span class="n">AIURLIGHTBRIDGENE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2401</span>
+    <span class="n">AIURLIGHTBRIDGENE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2403</span>
+    <span class="n">AIURLIGHTBRIDGENE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2405</span>
+    <span class="n">AIURLIGHTBRIDGENE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2407</span>
+    <span class="n">AIURLIGHTBRIDGENW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2409</span>
+    <span class="n">AIURLIGHTBRIDGENW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2411</span>
+    <span class="n">AIURLIGHTBRIDGENW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2413</span>
+    <span class="n">AIURLIGHTBRIDGENW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2415</span>
+    <span class="n">AIURLIGHTBRIDGENW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2417</span>
+    <span class="n">AIURLIGHTBRIDGENW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2419</span>
+    <span class="n">AIURTEMPLEBRIDGENE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2421</span>
+    <span class="n">AIURTEMPLEBRIDGENE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2423</span>
+    <span class="n">AIURTEMPLEBRIDGENE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2425</span>
+    <span class="n">AIURTEMPLEBRIDGENE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2427</span>
+    <span class="n">AIURTEMPLEBRIDGENE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2429</span>
+    <span class="n">AIURTEMPLEBRIDGENE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2431</span>
+    <span class="n">AIURTEMPLEBRIDGENW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2433</span>
+    <span class="n">AIURTEMPLEBRIDGENW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2435</span>
+    <span class="n">AIURTEMPLEBRIDGENW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2437</span>
+    <span class="n">AIURTEMPLEBRIDGENW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2439</span>
+    <span class="n">AIURTEMPLEBRIDGENW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2441</span>
+    <span class="n">AIURTEMPLEBRIDGENW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2443</span>
+    <span class="n">SHAKURASLIGHTBRIDGENE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2445</span>
+    <span class="n">SHAKURASLIGHTBRIDGENE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2447</span>
+    <span class="n">SHAKURASLIGHTBRIDGENE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2449</span>
+    <span class="n">SHAKURASLIGHTBRIDGENE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2451</span>
+    <span class="n">SHAKURASLIGHTBRIDGENE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2453</span>
+    <span class="n">SHAKURASLIGHTBRIDGENE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2455</span>
+    <span class="n">SHAKURASLIGHTBRIDGENW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2457</span>
+    <span class="n">SHAKURASLIGHTBRIDGENW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2459</span>
+    <span class="n">SHAKURASLIGHTBRIDGENW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2461</span>
+    <span class="n">SHAKURASLIGHTBRIDGENW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2463</span>
+    <span class="n">SHAKURASLIGHTBRIDGENW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2465</span>
+    <span class="n">SHAKURASLIGHTBRIDGENW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2467</span>
+    <span class="n">VOIDMPIMMORTALREVIVEREBUILD_IMMORTAL</span> <span class="o">=</span> <span class="mi">2469</span>
+    <span class="n">VOIDMPIMMORTALREVIVEDEATH_IMMORTAL</span> <span class="o">=</span> <span class="mi">2471</span>
+    <span class="n">ARBITERMPSTASISFIELD_ARBITERMPSTASISFIELD</span> <span class="o">=</span> <span class="mi">2473</span>
+    <span class="n">ARBITERMPRECALL_ARBITERMPRECALL</span> <span class="o">=</span> <span class="mi">2475</span>
+    <span class="n">CORSAIRMPDISRUPTIONWEB_CORSAIRMPDISRUPTIONWEB</span> <span class="o">=</span> <span class="mi">2477</span>
+    <span class="n">MORPHTOGUARDIANMP_MORPHTOGUARDIANMP</span> <span class="o">=</span> <span class="mi">2479</span>
+    <span class="n">MORPHTOGUARDIANMP_CANCEL</span> <span class="o">=</span> <span class="mi">2480</span>
+    <span class="n">MORPHTODEVOURERMP_MORPHTODEVOURERMP</span> <span class="o">=</span> <span class="mi">2481</span>
+    <span class="n">MORPHTODEVOURERMP_CANCEL</span> <span class="o">=</span> <span class="mi">2482</span>
+    <span class="n">DEFILERMPCONSUME_DEFILERMPCONSUME</span> <span class="o">=</span> <span class="mi">2483</span>
+    <span class="n">DEFILERMPDARKSWARM_DEFILERMPDARKSWARM</span> <span class="o">=</span> <span class="mi">2485</span>
+    <span class="n">DEFILERMPPLAGUE_DEFILERMPPLAGUE</span> <span class="o">=</span> <span class="mi">2487</span>
+    <span class="n">DEFILERMPBURROW_BURROWDOWN</span> <span class="o">=</span> <span class="mi">2489</span>
+    <span class="n">DEFILERMPBURROW_CANCEL</span> <span class="o">=</span> <span class="mi">2490</span>
+    <span class="n">DEFILERMPUNBURROW_BURROWUP</span> <span class="o">=</span> <span class="mi">2491</span>
+    <span class="n">QUEENMPENSNARE_QUEENMPENSNARE</span> <span class="o">=</span> <span class="mi">2493</span>
+    <span class="n">QUEENMPSPAWNBROODLINGS_QUEENMPSPAWNBROODLINGS</span> <span class="o">=</span> <span class="mi">2495</span>
+    <span class="n">QUEENMPINFESTCOMMANDCENTER_QUEENMPINFESTCOMMANDCENTER</span> <span class="o">=</span> <span class="mi">2497</span>
+    <span class="n">LIGHTNINGBOMB_LIGHTNINGBOMB</span> <span class="o">=</span> <span class="mi">2499</span>
+    <span class="n">GRAPPLE_GRAPPLE</span> <span class="o">=</span> <span class="mi">2501</span>
+    <span class="n">ORACLESTASISTRAP_ORACLEBUILDSTASISTRAP</span> <span class="o">=</span> <span class="mi">2503</span>
+    <span class="n">BUILD_STASISTRAP</span> <span class="o">=</span> <span class="mi">2505</span>
+    <span class="n">CANCEL_STASISTRAP</span> <span class="o">=</span> <span class="mi">2535</span>
+    <span class="n">ORACLESTASISTRAPACTIVATE_ACTIVATESTASISWARD</span> <span class="o">=</span> <span class="mi">2536</span>
+    <span class="n">SELFREPAIR_SELFREPAIR</span> <span class="o">=</span> <span class="mi">2538</span>
+    <span class="n">SELFREPAIR_CANCEL</span> <span class="o">=</span> <span class="mi">2539</span>
+    <span class="n">AGGRESSIVEMUTATION_AGGRESSIVEMUTATION</span> <span class="o">=</span> <span class="mi">2540</span>
+    <span class="n">PARASITICBOMB_PARASITICBOMB</span> <span class="o">=</span> <span class="mi">2542</span>
+    <span class="n">ADEPTPHASESHIFT_ADEPTPHASESHIFT</span> <span class="o">=</span> <span class="mi">2544</span>
+    <span class="n">PURIFICATIONNOVAMORPH_PURIFICATIONNOVA</span> <span class="o">=</span> <span class="mi">2546</span>
+    <span class="n">PURIFICATIONNOVAMORPHBACK_PURIFICATIONNOVA</span> <span class="o">=</span> <span class="mi">2548</span>
+    <span class="n">BEHAVIOR_HOLDFIREON_LURKER</span> <span class="o">=</span> <span class="mi">2550</span>
+    <span class="n">BEHAVIOR_HOLDFIREOFF_LURKER</span> <span class="o">=</span> <span class="mi">2552</span>
+    <span class="n">LIBERATORMORPHTOAG_LIBERATORAGMODE</span> <span class="o">=</span> <span class="mi">2554</span>
+    <span class="n">LIBERATORMORPHTOAA_LIBERATORAAMODE</span> <span class="o">=</span> <span class="mi">2556</span>
+    <span class="n">MORPH_LIBERATORAGMODE</span> <span class="o">=</span> <span class="mi">2558</span>
+    <span class="n">MORPH_LIBERATORAAMODE</span> <span class="o">=</span> <span class="mi">2560</span>
+    <span class="n">TIMESTOP_TIMESTOP</span> <span class="o">=</span> <span class="mi">2562</span>
+    <span class="n">TIMESTOP_CANCEL</span> <span class="o">=</span> <span class="mi">2563</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2564</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2566</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2568</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2570</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2572</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2574</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2576</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2578</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2580</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2582</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2584</span>
+    <span class="n">AIURLIGHTBRIDGEABANDONEDNW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2586</span>
+    <span class="n">KD8CHARGE_KD8CHARGE</span> <span class="o">=</span> <span class="mi">2588</span>
+    <span class="n">PENETRATINGSHOT_PENETRATINGSHOT</span> <span class="o">=</span> <span class="mi">2590</span>
+    <span class="n">CLOAKINGDRONE_CLOAKINGDRONE</span> <span class="o">=</span> <span class="mi">2592</span>
+    <span class="n">CANCEL_ADEPTPHASESHIFT</span> <span class="o">=</span> <span class="mi">2594</span>
+    <span class="n">CANCEL_ADEPTSHADEPHASESHIFT</span> <span class="o">=</span> <span class="mi">2596</span>
+    <span class="n">SLAYNELEMENTALGRAB_SLAYNELEMENTALGRAB</span> <span class="o">=</span> <span class="mi">2598</span>
+    <span class="n">MORPHTOCOLLAPSIBLEPURIFIERTOWERDEBRIS_CANCEL</span> <span class="o">=</span> <span class="mi">2601</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2602</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2604</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2606</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2608</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2610</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2612</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2614</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2616</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2618</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2620</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2622</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2624</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2626</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2628</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2630</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2632</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2634</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2636</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2638</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2640</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2642</span>
+    <span class="n">PORTCITY_BRIDGE_UNITNW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2644</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2646</span>
+    <span class="n">PORTCITY_BRIDGE_UNITSW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2648</span>
+    <span class="n">PORTCITY_BRIDGE_UNITN8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2650</span>
+    <span class="n">PORTCITY_BRIDGE_UNITN8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2652</span>
+    <span class="n">PORTCITY_BRIDGE_UNITS8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2654</span>
+    <span class="n">PORTCITY_BRIDGE_UNITS8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2656</span>
+    <span class="n">PORTCITY_BRIDGE_UNITE8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2658</span>
+    <span class="n">PORTCITY_BRIDGE_UNITE8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2660</span>
+    <span class="n">PORTCITY_BRIDGE_UNITW8OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2662</span>
+    <span class="n">PORTCITY_BRIDGE_UNITW8_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2664</span>
+    <span class="n">PORTCITY_BRIDGE_UNITN10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2666</span>
+    <span class="n">PORTCITY_BRIDGE_UNITN10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2668</span>
+    <span class="n">PORTCITY_BRIDGE_UNITS10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2670</span>
+    <span class="n">PORTCITY_BRIDGE_UNITS10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2672</span>
+    <span class="n">PORTCITY_BRIDGE_UNITE10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2674</span>
+    <span class="n">PORTCITY_BRIDGE_UNITE10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2676</span>
+    <span class="n">PORTCITY_BRIDGE_UNITW10OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2678</span>
+    <span class="n">PORTCITY_BRIDGE_UNITW10_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2680</span>
+    <span class="n">PORTCITY_BRIDGE_UNITN12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2682</span>
+    <span class="n">PORTCITY_BRIDGE_UNITN12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2684</span>
+    <span class="n">PORTCITY_BRIDGE_UNITS12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2686</span>
+    <span class="n">PORTCITY_BRIDGE_UNITS12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2688</span>
+    <span class="n">PORTCITY_BRIDGE_UNITE12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2690</span>
+    <span class="n">PORTCITY_BRIDGE_UNITE12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2692</span>
+    <span class="n">PORTCITY_BRIDGE_UNITW12OUT_BRIDGEEXTEND</span> <span class="o">=</span> <span class="mi">2694</span>
+    <span class="n">PORTCITY_BRIDGE_UNITW12_BRIDGERETRACT</span> <span class="o">=</span> <span class="mi">2696</span>
+    <span class="n">TEMPESTDISRUPTIONBLAST_TEMPESTDISRUPTIONBLAST</span> <span class="o">=</span> <span class="mi">2698</span>
+    <span class="n">CANCEL_TEMPESTDISRUPTIONBLAST</span> <span class="o">=</span> <span class="mi">2699</span>
+    <span class="n">EFFECT_SHADOWSTRIDE</span> <span class="o">=</span> <span class="mi">2700</span>
+    <span class="n">EFFECT_SPAWNLOCUSTS</span> <span class="o">=</span> <span class="mi">2704</span>
+    <span class="n">LOCUSTMPFLYINGSWOOPATTACK_LOCUSTMPFLYINGSWOOP</span> <span class="o">=</span> <span class="mi">2706</span>
+    <span class="n">MORPH_OVERLORDTRANSPORT</span> <span class="o">=</span> <span class="mi">2708</span>
+    <span class="n">CANCEL_MORPHOVERLORDTRANSPORT</span> <span class="o">=</span> <span class="mi">2709</span>
+    <span class="n">EFFECT_GHOSTSNIPE</span> <span class="o">=</span> <span class="mi">2714</span>
+    <span class="n">CHANNELSNIPE_CANCEL</span> <span class="o">=</span> <span class="mi">2715</span>
+    <span class="n">PURIFYMORPHPYLON_MOTHERSHIPCOREWEAPON</span> <span class="o">=</span> <span class="mi">2716</span>
+    <span class="n">PURIFYMORPHPYLONBACK_MOTHERSHIPCOREWEAPON</span> <span class="o">=</span> <span class="mi">2718</span>
+    <span class="n">RESEARCH_SHADOWSTRIKE</span> <span class="o">=</span> <span class="mi">2720</span>
+    <span class="n">HEAL_MEDICHEAL</span> <span class="o">=</span> <span class="mi">2750</span>
+    <span class="n">LURKERASPECT_LURKER</span> <span class="o">=</span> <span class="mi">2752</span>
+    <span class="n">LURKERASPECT_CANCEL</span> <span class="o">=</span> <span class="mi">2753</span>
+    <span class="n">BURROWLURKERDOWN_BURROWDOWN</span> <span class="o">=</span> <span class="mi">2754</span>
+    <span class="n">BURROWLURKERDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">2755</span>
+    <span class="n">BURROWLURKERUP_BURROWUP</span> <span class="o">=</span> <span class="mi">2756</span>
+    <span class="n">D8CHARGE_D8CHARGE</span> <span class="o">=</span> <span class="mi">2758</span>
+    <span class="n">DEFENSIVEMATRIX_DEFENSIVEMATRIX</span> <span class="o">=</span> <span class="mi">2760</span>
+    <span class="n">MISSILEPODS_MISSILEPODS</span> <span class="o">=</span> <span class="mi">2762</span>
+    <span class="n">LOKIMISSILEPODS_MISSILEPODS</span> <span class="o">=</span> <span class="mi">2764</span>
+    <span class="n">HUTTRANSPORT_HUTLOAD</span> <span class="o">=</span> <span class="mi">2766</span>
+    <span class="n">HUTTRANSPORT_HUTUNLOADALL</span> <span class="o">=</span> <span class="mi">2767</span>
+    <span class="n">LEVIATHANSPAWNBROODLORD_SPAWNBROODLORD</span> <span class="o">=</span> <span class="mi">2773</span>
+    <span class="n">SS_CARRIERBOSSATTACKLAUNCH_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2775</span>
+    <span class="n">SS_CARRIERSPAWNINTERCEPTOR_SS_CARRIERSPAWNINTERCEPTOR</span> <span class="o">=</span> <span class="mi">2777</span>
+    <span class="n">SS_CARRIERBOSSATTACKTARGET_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2779</span>
+    <span class="n">SS_FIGHTERBOMB_SS_FIGHTERBOMB</span> <span class="o">=</span> <span class="mi">2781</span>
+    <span class="n">SS_PHOENIXSHOOTING_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2785</span>
+    <span class="n">SS_BATTLECRUISERMISSILEATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2789</span>
+    <span class="n">SS_LEVIATHANSPAWNBOMBS_SS_LEVIATHANSPAWNBOMBS</span> <span class="o">=</span> <span class="mi">2791</span>
+    <span class="n">SS_BATTLECRUISERHUNTERSEEKERATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2793</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKL1NODELAY_SS_LEVIATHANTENTACLEATTACKL1NODELAY</span> <span class="o">=</span> <span class="mi">2797</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKL2NODELAY_SS_LEVIATHANTENTACLEATTACKL2NODELAY</span> <span class="o">=</span> <span class="mi">2799</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKR1NODELAY_SS_LEVIATHANTENTACLEATTACKR1NODELAY</span> <span class="o">=</span> <span class="mi">2801</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKR2NODELAY_SS_LEVIATHANTENTACLEATTACKR2NODELAY</span> <span class="o">=</span> <span class="mi">2803</span>
+    <span class="n">SS_SCIENCEVESSELTELEPORT_ZERATULBLINK</span> <span class="o">=</span> <span class="mi">2805</span>
+    <span class="n">SS_TERRATRONBEAMATTACK_SS_TERRATRONBEAMATTACK</span> <span class="o">=</span> <span class="mi">2807</span>
+    <span class="n">SS_TERRATRONSAWATTACK_SS_TERRATRONSAWATTACK</span> <span class="o">=</span> <span class="mi">2809</span>
+    <span class="n">SS_WRAITHATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2811</span>
+    <span class="n">SS_SWARMGUARDIANATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2813</span>
+    <span class="n">SS_SCOUTATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2819</span>
+    <span class="n">SS_INTERCEPTORATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2821</span>
+    <span class="n">SS_CORRUPTORATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2823</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKL2_SS_LEVIATHANTENTACLEATTACKL2</span> <span class="o">=</span> <span class="mi">2825</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKR1_SS_LEVIATHANTENTACLEATTACKR1</span> <span class="o">=</span> <span class="mi">2827</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKL1_SS_LEVIATHANTENTACLEATTACKL1</span> <span class="o">=</span> <span class="mi">2829</span>
+    <span class="n">SS_LEVIATHANTENTACLEATTACKR2_SS_LEVIATHANTENTACLEATTACKR2</span> <span class="o">=</span> <span class="mi">2831</span>
+    <span class="n">SS_SCIENCEVESSELATTACK_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">2833</span>
+    <span class="n">LURKERASPECTFROMHYDRALISKBURROWED_LURKERFROMHYDRALISKBURROWED</span> <span class="o">=</span> <span class="mi">2836</span>
+    <span class="n">LURKERASPECTFROMHYDRALISKBURROWED_CANCEL</span> <span class="o">=</span> <span class="mi">2837</span>
+    <span class="n">UPGRADETOLURKERDEN_LURKERDEN</span> <span class="o">=</span> <span class="mi">2838</span>
+    <span class="n">UPGRADETOLURKERDEN_CANCEL</span> <span class="o">=</span> <span class="mi">2839</span>
+    <span class="n">ADVANCEDCONSTRUCTION_CANCEL</span> <span class="o">=</span> <span class="mi">2840</span>
+    <span class="n">BUILDINPROGRESSNONCANCELLABLE_CANCEL</span> <span class="o">=</span> <span class="mi">2842</span>
+    <span class="n">INFESTEDVENTSPAWNCORRUPTOR_SPAWNCORRUPTOR</span> <span class="o">=</span> <span class="mi">2844</span>
+    <span class="n">INFESTEDVENTSPAWNBROODLORD_SPAWNBROODLORD</span> <span class="o">=</span> <span class="mi">2846</span>
+    <span class="n">IRRADIATE_IRRADIATE</span> <span class="o">=</span> <span class="mi">2848</span>
+    <span class="n">IRRADIATE_CANCEL</span> <span class="o">=</span> <span class="mi">2849</span>
+    <span class="n">INFESTEDVENTSPAWNMUTALISK_LEVIATHANSPAWNMUTALISK</span> <span class="o">=</span> <span class="mi">2850</span>
+    <span class="n">MAKEVULTURESPIDERMINES_SPIDERMINEREPLENISH</span> <span class="o">=</span> <span class="mi">2852</span>
+    <span class="n">MEDIVACDOUBLEBEAMHEAL_HEAL</span> <span class="o">=</span> <span class="mi">2872</span>
+    <span class="n">MINDCONTROL_MINDCONTROL</span> <span class="o">=</span> <span class="mi">2874</span>
+    <span class="n">OBLITERATE_OBLITERATE</span> <span class="o">=</span> <span class="mi">2876</span>
+    <span class="n">VOODOOSHIELD_VOODOOSHIELD</span> <span class="o">=</span> <span class="mi">2878</span>
+    <span class="n">RELEASEMINION_RELEASEMINION</span> <span class="o">=</span> <span class="mi">2880</span>
+    <span class="n">ULTRASONICPULSE_ULTRASONICPULSE</span> <span class="o">=</span> <span class="mi">2882</span>
+    <span class="n">ARCHIVESEAL_ARCHIVESEAL</span> <span class="o">=</span> <span class="mi">2884</span>
+    <span class="n">ARTANISVORTEX_VORTEX</span> <span class="o">=</span> <span class="mi">2886</span>
+    <span class="n">ARTANISWORMHOLETRANSIT_WORMHOLETRANSIT</span> <span class="o">=</span> <span class="mi">2888</span>
+    <span class="n">BUNKERATTACK_BUNKERATTACK</span> <span class="o">=</span> <span class="mi">2890</span>
+    <span class="n">BUNKERATTACK_ATTACKTOWARDS</span> <span class="o">=</span> <span class="mi">2891</span>
+    <span class="n">BUNKERATTACK_ATTACKBARRAGE</span> <span class="o">=</span> <span class="mi">2892</span>
+    <span class="n">BUNKERSTOP_STOPBUNKER</span> <span class="o">=</span> <span class="mi">2893</span>
+    <span class="n">BUNKERSTOP_HOLDFIRESPECIAL</span> <span class="o">=</span> <span class="mi">2894</span>
+    <span class="n">CANCELTERRAZINEHARVEST_CANCEL</span> <span class="o">=</span> <span class="mi">2899</span>
+    <span class="n">LEVIATHANSPAWNMUTALISK_LEVIATHANSPAWNMUTALISK</span> <span class="o">=</span> <span class="mi">2901</span>
+    <span class="n">PARKCOLONISTVEHICLE_PARKCOLONISTVEHICLE</span> <span class="o">=</span> <span class="mi">2903</span>
+    <span class="n">STARTCOLONISTVEHICLE_STARTCOLONISTVEHICLE</span> <span class="o">=</span> <span class="mi">2905</span>
+    <span class="n">CONSUMPTION_CONSUMPTION</span> <span class="o">=</span> <span class="mi">2907</span>
+    <span class="n">CONSUMEDNA_CONSUMEDNA</span> <span class="o">=</span> <span class="mi">2909</span>
+    <span class="n">EGGPOP_EGGPOP</span> <span class="o">=</span> <span class="mi">2911</span>
+    <span class="n">EXPERIMENTALPLASMAGUN_EXPERIMENTALPLASMAGUN</span> <span class="o">=</span> <span class="mi">2913</span>
+    <span class="n">GATHERSPECIALOBJECT_GATHERSPECIALOBJECT</span> <span class="o">=</span> <span class="mi">2915</span>
+    <span class="n">LOKIUNDOCK_LIFT</span> <span class="o">=</span> <span class="mi">2919</span>
+    <span class="n">MINDBLAST_MINDBLAST</span> <span class="o">=</span> <span class="mi">2921</span>
+    <span class="n">MORPHTOINFESTEDCIVILIAN_MORPHTOINFESTEDCIVILIAN</span> <span class="o">=</span> <span class="mi">2923</span>
+    <span class="n">QUEENSHOCKWAVE_QUEENSHOCKWAVE</span> <span class="o">=</span> <span class="mi">2925</span>
+    <span class="n">TAURENOUTHOUSELIFTOFF_TAURENOUTHOUSEFLY</span> <span class="o">=</span> <span class="mi">2927</span>
+    <span class="n">TAURENOUTHOUSETRANSPORT_LOADTAURENOUTHOUSE</span> <span class="o">=</span> <span class="mi">2929</span>
+    <span class="n">TAURENOUTHOUSETRANSPORT_UNLOADTAURENOUTHOUSE</span> <span class="o">=</span> <span class="mi">2930</span>
+    <span class="n">TYCHUS03OMEGASTORM_OMEGASTORM</span> <span class="o">=</span> <span class="mi">2934</span>
+    <span class="n">RAYNORSNIPE_RAYNORSNIPE</span> <span class="o">=</span> <span class="mi">2936</span>
+    <span class="n">BONESHEAL_BONESHEAL</span> <span class="o">=</span> <span class="mi">2938</span>
+    <span class="n">BONESTOSSGRENADE_TOSSGRENADETYCHUS</span> <span class="o">=</span> <span class="mi">2940</span>
+    <span class="n">HERCULESTRANSPORT_MEDIVACLOAD</span> <span class="o">=</span> <span class="mi">2942</span>
+    <span class="n">HERCULESTRANSPORT_MEDIVACUNLOADALL</span> <span class="o">=</span> <span class="mi">2944</span>
+    <span class="n">SPECOPSDROPSHIPTRANSPORT_MEDIVACLOAD</span> <span class="o">=</span> <span class="mi">2947</span>
+    <span class="n">SPECOPSDROPSHIPTRANSPORT_MEDIVACUNLOADALL</span> <span class="o">=</span> <span class="mi">2949</span>
+    <span class="n">DUSKWINGBANSHEECLOAKINGFIELD_CLOAKONBANSHEE</span> <span class="o">=</span> <span class="mi">2952</span>
+    <span class="n">DUSKWINGBANSHEECLOAKINGFIELD_CLOAKOFF</span> <span class="o">=</span> <span class="mi">2953</span>
+    <span class="n">HYPERIONYAMATOSPECIAL_HYPERIONYAMATOGUN</span> <span class="o">=</span> <span class="mi">2954</span>
+    <span class="n">INFESTABLEHUTTRANSPORT_HUTLOAD</span> <span class="o">=</span> <span class="mi">2956</span>
+    <span class="n">INFESTABLEHUTTRANSPORT_HUTUNLOADALL</span> <span class="o">=</span> <span class="mi">2957</span>
+    <span class="n">DUTCHPLACETURRET_DUTCHPLACETURRET</span> <span class="o">=</span> <span class="mi">2961</span>
+    <span class="n">BURROWINFESTEDCIVILIANDOWN_BURROWDOWN</span> <span class="o">=</span> <span class="mi">2963</span>
+    <span class="n">BURROWINFESTEDCIVILIANUP_BURROWUP</span> <span class="o">=</span> <span class="mi">2965</span>
+    <span class="n">SELENDISHANGAR_INTERCEPTOR</span> <span class="o">=</span> <span class="mi">2967</span>
+    <span class="n">SIEGEBREAKERSIEGE_SIEGEMODE</span> <span class="o">=</span> <span class="mi">2989</span>
+    <span class="n">SIEGEBREAKERUNSIEGE_UNSIEGE</span> <span class="o">=</span> <span class="mi">2991</span>
+    <span class="n">SOULCHANNEL_CANCEL</span> <span class="o">=</span> <span class="mi">2994</span>
+    <span class="n">SENTRYGUNBURROW_BURROWTURRET</span> <span class="o">=</span> <span class="mi">2999</span>
+    <span class="n">SENTRYGUNUNBURROW_UNBURROWTURRET</span> <span class="o">=</span> <span class="mi">3001</span>
+    <span class="n">GRAVITONPRISON_GRAVITONPRISON</span> <span class="o">=</span> <span class="mi">3005</span>
+    <span class="n">IMPLOSION_IMPLOSION</span> <span class="o">=</span> <span class="mi">3007</span>
+    <span class="n">OMEGASTORM_OMEGASTORM</span> <span class="o">=</span> <span class="mi">3009</span>
+    <span class="n">PSIONICSHOCKWAVE_PSIONICSHOCKWAVE</span> <span class="o">=</span> <span class="mi">3011</span>
+    <span class="n">HYBRIDFAOESTUN_HYBRIDFAOESTUN</span> <span class="o">=</span> <span class="mi">3013</span>
+    <span class="n">SUMMONMERCENARIES_HIREKELMORIANMINERS</span> <span class="o">=</span> <span class="mi">3015</span>
+    <span class="n">SUMMONMERCENARIES_HIREDEVILDOGS</span> <span class="o">=</span> <span class="mi">3016</span>
+    <span class="n">SUMMONMERCENARIES_HIRESPARTANCOMPANY</span> <span class="o">=</span> <span class="mi">3017</span>
+    <span class="n">SUMMONMERCENARIES_HIREHAMMERSECURITIES</span> <span class="o">=</span> <span class="mi">3018</span>
+    <span class="n">SUMMONMERCENARIES_HIRESIEGEBREAKERS</span> <span class="o">=</span> <span class="mi">3019</span>
+    <span class="n">SUMMONMERCENARIES_HIREHELSANGELS</span> <span class="o">=</span> <span class="mi">3020</span>
+    <span class="n">SUMMONMERCENARIES_HIREDUSKWING</span> <span class="o">=</span> <span class="mi">3021</span>
+    <span class="n">SUMMONMERCENARIES_HIREDUKESREVENGE</span> <span class="o">=</span> <span class="mi">3022</span>
+    <span class="n">SUMMONMERCENARIESPH_HIREKELMORIANMINERSPH</span> <span class="o">=</span> <span class="mi">3045</span>
+    <span class="n">ENERGYNOVA_ENERGYNOVA</span> <span class="o">=</span> <span class="mi">3075</span>
+    <span class="n">THEMOROSDEVICE_THEMOROSDEVICE</span> <span class="o">=</span> <span class="mi">3077</span>
+    <span class="n">TOSSGRENADE_TOSSGRENADE</span> <span class="o">=</span> <span class="mi">3079</span>
+    <span class="n">VOIDSEEKERTRANSPORT_MEDIVACLOAD</span> <span class="o">=</span> <span class="mi">3081</span>
+    <span class="n">VOIDSEEKERTRANSPORT_MEDIVACUNLOADALL</span> <span class="o">=</span> <span class="mi">3083</span>
+    <span class="n">TERRANBUILDDROP_SUPPLYDEPOTDROP</span> <span class="o">=</span> <span class="mi">3086</span>
+    <span class="n">TERRANBUILDDROP_CANCEL</span> <span class="o">=</span> <span class="mi">3116</span>
+    <span class="n">ODINNUCLEARSTRIKE_ODINNUKECALLDOWN</span> <span class="o">=</span> <span class="mi">3117</span>
+    <span class="n">ODINNUCLEARSTRIKE_CANCEL</span> <span class="o">=</span> <span class="mi">3118</span>
+    <span class="n">ODINWRECKAGE_ODIN</span> <span class="o">=</span> <span class="mi">3119</span>
+    <span class="n">RESEARCHLABTRANSPORT_HUTLOAD</span> <span class="o">=</span> <span class="mi">3121</span>
+    <span class="n">RESEARCHLABTRANSPORT_HUTUNLOADALL</span> <span class="o">=</span> <span class="mi">3122</span>
+    <span class="n">COLONYSHIPTRANSPORT_MEDIVACLOAD</span> <span class="o">=</span> <span class="mi">3126</span>
+    <span class="n">COLONYSHIPTRANSPORT_MEDIVACUNLOADALL</span> <span class="o">=</span> <span class="mi">3128</span>
+    <span class="n">COLONYINFESTATION_COLONYINFESTATION</span> <span class="o">=</span> <span class="mi">3131</span>
+    <span class="n">DOMINATION_DOMINATION</span> <span class="o">=</span> <span class="mi">3133</span>
+    <span class="n">DOMINATION_CANCEL</span> <span class="o">=</span> <span class="mi">3134</span>
+    <span class="n">KARASSPLASMASURGE_KARASSPLASMASURGE</span> <span class="o">=</span> <span class="mi">3135</span>
+    <span class="n">KARASSPSISTORM_PSISTORM</span> <span class="o">=</span> <span class="mi">3137</span>
+    <span class="n">HYBRIDBLINK_ZERATULBLINK</span> <span class="o">=</span> <span class="mi">3139</span>
+    <span class="n">HYBRIDCPLASMABLAST_HYBRIDCPLASMABLAST</span> <span class="o">=</span> <span class="mi">3141</span>
+    <span class="n">HEROARMNUKE_NUKEARM</span> <span class="o">=</span> <span class="mi">3143</span>
+    <span class="n">HERONUCLEARSTRIKE_NUKECALLDOWN</span> <span class="o">=</span> <span class="mi">3163</span>
+    <span class="n">HERONUCLEARSTRIKE_CANCEL</span> <span class="o">=</span> <span class="mi">3164</span>
+    <span class="n">ODINBARRAGE_ODINBARRAGE</span> <span class="o">=</span> <span class="mi">3165</span>
+    <span class="n">ODINBARRAGE_CANCEL</span> <span class="o">=</span> <span class="mi">3166</span>
+    <span class="n">PURIFIERTOGGLEPOWER_PURIFIERPOWERDOWN</span> <span class="o">=</span> <span class="mi">3167</span>
+    <span class="n">PURIFIERTOGGLEPOWER_PURIFIERPOWERUP</span> <span class="o">=</span> <span class="mi">3168</span>
+    <span class="n">PHASEMINEBLAST_PHASEMINEBLAST</span> <span class="o">=</span> <span class="mi">3169</span>
+    <span class="n">VOIDSEEKERPHASEMINEBLAST_PHASEMINEBLAST</span> <span class="o">=</span> <span class="mi">3171</span>
+    <span class="n">TRANSPORTTRUCKTRANSPORT_TRANSPORTTRUCKLOAD</span> <span class="o">=</span> <span class="mi">3173</span>
+    <span class="n">TRANSPORTTRUCKTRANSPORT_TRANSPORTTRUCKUNLOADALL</span> <span class="o">=</span> <span class="mi">3174</span>
+    <span class="n">VAL03QUEENOFBLADESBURROW_BURROWDOWN</span> <span class="o">=</span> <span class="mi">3178</span>
+    <span class="n">VAL03QUEENOFBLADESDEEPTUNNEL_DEEPTUNNEL</span> <span class="o">=</span> <span class="mi">3180</span>
+    <span class="n">VAL03QUEENOFBLADESUNBURROW_BURROWUP</span> <span class="o">=</span> <span class="mi">3182</span>
+    <span class="n">LOKIYAMATO_LOKIYAMATOGUN</span> <span class="o">=</span> <span class="mi">3188</span>
+    <span class="n">DUKESREVENGEYAMATO_YAMATOGUN</span> <span class="o">=</span> <span class="mi">3190</span>
+    <span class="n">ZERATULBLINK_ZERATULBLINK</span> <span class="o">=</span> <span class="mi">3192</span>
+    <span class="n">ROGUEGHOSTCLOAK_CLOAKONSPECTRE</span> <span class="o">=</span> <span class="mi">3194</span>
+    <span class="n">ROGUEGHOSTCLOAK_CLOAKOFF</span> <span class="o">=</span> <span class="mi">3195</span>
+    <span class="n">VULTURESPIDERMINES_SPIDERMINE</span> <span class="o">=</span> <span class="mi">3196</span>
+    <span class="n">VULTUREQUEUE3_CANCEL</span> <span class="o">=</span> <span class="mi">3198</span>
+    <span class="n">VULTUREQUEUE3_CANCELSLOT</span> <span class="o">=</span> <span class="mi">3199</span>
+    <span class="n">SUPERWARPGATETRAIN_ZEALOT</span> <span class="o">=</span> <span class="mi">3200</span>
+    <span class="n">SUPERWARPGATETRAIN_STALKER</span> <span class="o">=</span> <span class="mi">3201</span>
+    <span class="n">SUPERWARPGATETRAIN_IMMORTAL</span> <span class="o">=</span> <span class="mi">3202</span>
+    <span class="n">SUPERWARPGATETRAIN_HIGHTEMPLAR</span> <span class="o">=</span> <span class="mi">3203</span>
+    <span class="n">SUPERWARPGATETRAIN_DARKTEMPLAR</span> <span class="o">=</span> <span class="mi">3204</span>
+    <span class="n">SUPERWARPGATETRAIN_SENTRY</span> <span class="o">=</span> <span class="mi">3205</span>
+    <span class="n">SUPERWARPGATETRAIN_CARRIER</span> <span class="o">=</span> <span class="mi">3206</span>
+    <span class="n">SUPERWARPGATETRAIN_PHOENIX</span> <span class="o">=</span> <span class="mi">3207</span>
+    <span class="n">SUPERWARPGATETRAIN_VOIDRAY</span> <span class="o">=</span> <span class="mi">3208</span>
+    <span class="n">SUPERWARPGATETRAIN_ARCHON</span> <span class="o">=</span> <span class="mi">3209</span>
+    <span class="n">SUPERWARPGATETRAIN_WARPINZERATUL</span> <span class="o">=</span> <span class="mi">3210</span>
+    <span class="n">SUPERWARPGATETRAIN_WARPINURUN</span> <span class="o">=</span> <span class="mi">3211</span>
+    <span class="n">SUPERWARPGATETRAIN_WARPINMOHANDAR</span> <span class="o">=</span> <span class="mi">3212</span>
+    <span class="n">SUPERWARPGATETRAIN_WARPINSELENDIS</span> <span class="o">=</span> <span class="mi">3213</span>
+    <span class="n">SUPERWARPGATETRAIN_WARPINSCOUT</span> <span class="o">=</span> <span class="mi">3214</span>
+    <span class="n">SUPERWARPGATETRAIN_COLOSSUS</span> <span class="o">=</span> <span class="mi">3215</span>
+    <span class="n">SUPERWARPGATETRAIN_WARPPRISM</span> <span class="o">=</span> <span class="mi">3216</span>
+    <span class="n">BURROWOMEGALISKDOWN_BURROWDOWN</span> <span class="o">=</span> <span class="mi">3220</span>
+    <span class="n">BURROWOMEGALISKUP_BURROWUP</span> <span class="o">=</span> <span class="mi">3222</span>
+    <span class="n">BURROWINFESTEDABOMINATIONDOWN_BURROWDOWN</span> <span class="o">=</span> <span class="mi">3224</span>
+    <span class="n">BURROWINFESTEDABOMINATIONUP_BURROWUP</span> <span class="o">=</span> <span class="mi">3226</span>
+    <span class="n">BURROWHUNTERKILLERDOWN_BURROWDOWN</span> <span class="o">=</span> <span class="mi">3228</span>
+    <span class="n">BURROWHUNTERKILLERDOWN_CANCEL</span> <span class="o">=</span> <span class="mi">3229</span>
+    <span class="n">BURROWHUNTERKILLERUP_BURROWUP</span> <span class="o">=</span> <span class="mi">3230</span>
+    <span class="n">NOVASNIPE_NOVASNIPE</span> <span class="o">=</span> <span class="mi">3232</span>
+    <span class="n">VORTEXPURIFIER_VORTEX</span> <span class="o">=</span> <span class="mi">3234</span>
+    <span class="n">TALDARIMVORTEX_VORTEX</span> <span class="o">=</span> <span class="mi">3236</span>
+    <span class="n">PURIFIERPLANETCRACKER_PLANETCRACKER</span> <span class="o">=</span> <span class="mi">3238</span>
+    <span class="n">BURROWINFESTEDTERRANCAMPAIGNDOWN_BURROWDOWN</span> <span class="o">=</span> <span class="mi">3240</span>
+    <span class="n">BURROWINFESTEDTERRANCAMPAIGNUP_BURROWUP</span> <span class="o">=</span> <span class="mi">3242</span>
+    <span class="n">INFESTEDMONSTERTRAIN_INFESTEDCIVILIAN</span> <span class="o">=</span> <span class="mi">3244</span>
+    <span class="n">INFESTEDMONSTERTRAIN_INFESTEDTERRANCAMPAIGN</span> <span class="o">=</span> <span class="mi">3245</span>
+    <span class="n">INFESTEDMONSTERTRAIN_INFESTEDABOMINATION</span> <span class="o">=</span> <span class="mi">3246</span>
+    <span class="n">BIODOMETRANSPORT_BIODOMELOAD</span> <span class="o">=</span> <span class="mi">3274</span>
+    <span class="n">BIODOMETRANSPORT_BIODOMEUNLOADALL</span> <span class="o">=</span> <span class="mi">3275</span>
+    <span class="n">ATTACKALLOWSINVULNERABLE_ATTACKALLOWSINVULNERABLE</span> <span class="o">=</span> <span class="mi">3295</span>
+    <span class="n">ATTACKALLOWSINVULNERABLE_ATTACKTOWARDS</span> <span class="o">=</span> <span class="mi">3296</span>
+    <span class="n">ATTACKALLOWSINVULNERABLE_ATTACKBARRAGE</span> <span class="o">=</span> <span class="mi">3297</span>
+    <span class="n">ZERATULSTUN_ZERATULSTUN</span> <span class="o">=</span> <span class="mi">3298</span>
+    <span class="n">WRAITHCLOAK_CLOAKOFF</span> <span class="o">=</span> <span class="mi">3301</span>
+    <span class="n">BARRACKSTECHREACTORMORPH_TECHLABBARRACKS</span> <span class="o">=</span> <span class="mi">3304</span>
+    <span class="n">FACTORYTECHREACTORMORPH_TECHLABFACTORY</span> <span class="o">=</span> <span class="mi">3306</span>
+    <span class="n">STARPORTTECHREACTORMORPH_TECHLABSTARPORT</span> <span class="o">=</span> <span class="mi">3308</span>
+    <span class="n">SS_FIGHTERSHOOTING_SS_SHOOTING</span> <span class="o">=</span> <span class="mi">3310</span>
+    <span class="n">RAYNORC4_PLANTC4CHARGE</span> <span class="o">=</span> <span class="mi">3312</span>
+    <span class="n">DUKESREVENGEDEFENSIVEMATRIX_DEFENSIVEMATRIX</span> <span class="o">=</span> <span class="mi">3314</span>
+    <span class="n">DUKESREVENGEMISSILEPODS_MISSILEPODS</span> <span class="o">=</span> <span class="mi">3316</span>
+    <span class="n">THORWRECKAGE_THOR</span> <span class="o">=</span> <span class="mi">3318</span>
+    <span class="n">_330MMBARRAGECANNONS_330MMBARRAGECANNONS</span> <span class="o">=</span> <span class="mi">3320</span>
+    <span class="n">_330MMBARRAGECANNONS_CANCEL</span> <span class="o">=</span> <span class="mi">3321</span>
+    <span class="n">THORREBORN_THOR</span> <span class="o">=</span> <span class="mi">3322</span>
+    <span class="n">THORREBORN_CANCEL</span> <span class="o">=</span> <span class="mi">3323</span>
+    <span class="n">SPECTRENUKE_SPECTRENUKECALLDOWN</span> <span class="o">=</span> <span class="mi">3324</span>
+    <span class="n">SPECTRENUKE_CANCEL</span> <span class="o">=</span> <span class="mi">3325</span>
+    <span class="n">SPECTRENUKESILOARMMAGAZINE_SPECTRENUKEARM</span> <span class="o">=</span> <span class="mi">3327</span>
+    <span class="n">COLONISTSHIPLIFTOFF_LIFT</span> <span class="o">=</span> <span class="mi">3346</span>
+    <span class="n">COLONISTSHIPLAND_LAND</span> <span class="o">=</span> <span class="mi">3348</span>
+    <span class="n">BIODOMECOMMANDLIFTOFF_LIFT</span> <span class="o">=</span> <span class="mi">3350</span>
+    <span class="n">BIODOMECOMMANDLAND_LAND</span> <span class="o">=</span> <span class="mi">3352</span>
+    <span class="n">HERCULESLIFTOFF_LIFT</span> <span class="o">=</span> <span class="mi">3354</span>
+    <span class="n">HERCULESLAND_HERCULESLAND</span> <span class="o">=</span> <span class="mi">3356</span>
+    <span class="n">LIGHTBRIDGEOFF_LIGHTBRIDGEOFF</span> <span class="o">=</span> <span class="mi">3358</span>
+    <span class="n">LIGHTBRIDGEON_LIGHTBRIDGEON</span> <span class="o">=</span> <span class="mi">3360</span>
+    <span class="n">LIBRARYDOWN_LIBRARYDOWN</span> <span class="o">=</span> <span class="mi">3362</span>
+    <span class="n">LIBRARYUP_LIBRARYUP</span> <span class="o">=</span> <span class="mi">3364</span>
+    <span class="n">TEMPLEDOORDOWN_TEMPLEDOORDOWN</span> <span class="o">=</span> <span class="mi">3366</span>
+    <span class="n">TEMPLEDOORUP_TEMPLEDOORUP</span> <span class="o">=</span> <span class="mi">3368</span>
+    <span class="n">TEMPLEDOORDOWNURDL_TEMPLEDOORDOWNURDL</span> <span class="o">=</span> <span class="mi">3370</span>
+    <span class="n">TEMPLEDOORUPURDL_TEMPLEDOORUPURDL</span> <span class="o">=</span> <span class="mi">3372</span>
+    <span class="n">PSYTROUSOXIDE_PSYTROUSOXIDEON</span> <span class="o">=</span> <span class="mi">3374</span>
+    <span class="n">PSYTROUSOXIDE_PSYTROUSOXIDEOFF</span> <span class="o">=</span> <span class="mi">3375</span>
+    <span class="n">BIOPLASMIDDISCHARGE_BIOPLASMIDDISCHARGE</span> <span class="o">=</span> <span class="mi">3378</span>
+    <span class="n">WRECKINGCREWASSAULTMODE_ASSAULTMODE</span> <span class="o">=</span> <span class="mi">3380</span>
+    <span class="n">WRECKINGCREWFIGHTERMODE_FIGHTERMODE</span> <span class="o">=</span> <span class="mi">3382</span>
+    <span class="n">BIOSTASIS_BIOSTASIS</span> <span class="o">=</span> <span class="mi">3384</span>
+    <span class="n">COLONISTTRANSPORTTRANSPORT_COLONISTTRANSPORTLOAD</span> <span class="o">=</span> <span class="mi">3386</span>
+    <span class="n">COLONISTTRANSPORTTRANSPORT_COLONISTTRANSPORTUNLOADALL</span> <span class="o">=</span> <span class="mi">3387</span>
+    <span class="n">DROPTOSUPPLYDEPOT_RAISE</span> <span class="o">=</span> <span class="mi">3391</span>
+    <span class="n">REFINERYTOAUTOMATEDREFINERY_RAISE</span> <span class="o">=</span> <span class="mi">3393</span>
+    <span class="n">HELIOSCRASHMORPH_CRASHMORPH</span> <span class="o">=</span> <span class="mi">3395</span>
+    <span class="n">NANOREPAIR_HEAL</span> <span class="o">=</span> <span class="mi">3397</span>
+    <span class="n">PICKUP_PICKUP</span> <span class="o">=</span> <span class="mi">3399</span>
+    <span class="n">PICKUPARCADE_PICKUP</span> <span class="o">=</span> <span class="mi">3401</span>
+    <span class="n">PICKUPGAS100_PICKUPGAS100</span> <span class="o">=</span> <span class="mi">3403</span>
+    <span class="n">PICKUPMINERALS100_PICKUPMINERALS100</span> <span class="o">=</span> <span class="mi">3405</span>
+    <span class="n">TAURENSTIMPACK_STIM</span> <span class="o">=</span> <span class="mi">3423</span>
+    <span class="n">TESTREVIVE_SCV</span> <span class="o">=</span> <span class="mi">3454</span>
+    <span class="n">TESTINTERACT_DESIGNATE</span> <span class="o">=</span> <span class="mi">3514</span>
+    <span class="n">CLIFFDOOROPEN0_SPACEPLATFORMDOOROPEN</span> <span class="o">=</span> <span class="mi">3515</span>
+    <span class="n">CLIFFDOORCLOSE0_SPACEPLATFORMDOORCLOSE</span> <span class="o">=</span> <span class="mi">3517</span>
+    <span class="n">CLIFFDOOROPEN1_SPACEPLATFORMDOOROPEN</span> <span class="o">=</span> <span class="mi">3519</span>
+    <span class="n">CLIFFDOORCLOSE1_SPACEPLATFORMDOORCLOSE</span> <span class="o">=</span> <span class="mi">3521</span>
+    <span class="n">DESTRUCTIBLEGATEDIAGONALBLURLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3523</span>
+    <span class="n">DESTRUCTIBLEGATEDIAGONALULBRLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3525</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTHORIZONTALBFLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3527</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTHORIZONTALLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3529</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTVERTICALLFLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3531</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTVERTICALLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3533</span>
+    <span class="n">DESTRUCTIBLEGATEDIAGONALBLUR_GATECLOSE</span> <span class="o">=</span> <span class="mi">3535</span>
+    <span class="n">DESTRUCTIBLEGATEDIAGONALULBR_GATECLOSE</span> <span class="o">=</span> <span class="mi">3537</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTHORIZONTALBF_GATECLOSE</span> <span class="o">=</span> <span class="mi">3539</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTHORIZONTAL_GATECLOSE</span> <span class="o">=</span> <span class="mi">3541</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTVERTICALLF_GATECLOSE</span> <span class="o">=</span> <span class="mi">3543</span>
+    <span class="n">DESTRUCTIBLEGATESTRAIGHTVERTICAL_GATECLOSE</span> <span class="o">=</span> <span class="mi">3545</span>
+    <span class="n">TESTLEARN_TESTLEARN</span> <span class="o">=</span> <span class="mi">3547</span>
+    <span class="n">TESTLEVELEDSPELL_YAMATOGUN</span> <span class="o">=</span> <span class="mi">3567</span>
+    <span class="n">METALGATEDIAGONALBLURLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3569</span>
+    <span class="n">METALGATEDIAGONALULBRLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3571</span>
+    <span class="n">METALGATESTRAIGHTHORIZONTALBFLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3573</span>
+    <span class="n">METALGATESTRAIGHTHORIZONTALLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3575</span>
+    <span class="n">METALGATESTRAIGHTVERTICALLFLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3577</span>
+    <span class="n">METALGATESTRAIGHTVERTICALLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3579</span>
+    <span class="n">METALGATEDIAGONALBLUR_GATECLOSE</span> <span class="o">=</span> <span class="mi">3581</span>
+    <span class="n">METALGATEDIAGONALULBR_GATECLOSE</span> <span class="o">=</span> <span class="mi">3583</span>
+    <span class="n">METALGATESTRAIGHTHORIZONTALBF_GATECLOSE</span> <span class="o">=</span> <span class="mi">3585</span>
+    <span class="n">METALGATESTRAIGHTHORIZONTAL_GATECLOSE</span> <span class="o">=</span> <span class="mi">3587</span>
+    <span class="n">METALGATESTRAIGHTVERTICALLF_GATECLOSE</span> <span class="o">=</span> <span class="mi">3589</span>
+    <span class="n">METALGATESTRAIGHTVERTICAL_GATECLOSE</span> <span class="o">=</span> <span class="mi">3591</span>
+    <span class="n">SECURITYGATEDIAGONALBLURLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3593</span>
+    <span class="n">SECURITYGATEDIAGONALULBRLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3595</span>
+    <span class="n">SECURITYGATESTRAIGHTHORIZONTALBFLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3597</span>
+    <span class="n">SECURITYGATESTRAIGHTHORIZONTALLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3599</span>
+    <span class="n">SECURITYGATESTRAIGHTVERTICALLFLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3601</span>
+    <span class="n">SECURITYGATESTRAIGHTVERTICALLOWERED_GATEOPEN</span> <span class="o">=</span> <span class="mi">3603</span>
+    <span class="n">SECURITYGATEDIAGONALBLUR_GATECLOSE</span> <span class="o">=</span> <span class="mi">3605</span>
+    <span class="n">SECURITYGATEDIAGONALULBR_GATECLOSE</span> <span class="o">=</span> <span class="mi">3607</span>
+    <span class="n">SECURITYGATESTRAIGHTHORIZONTALBF_GATECLOSE</span> <span class="o">=</span> <span class="mi">3609</span>
+    <span class="n">SECURITYGATESTRAIGHTHORIZONTAL_GATECLOSE</span> <span class="o">=</span> <span class="mi">3611</span>
+    <span class="n">SECURITYGATESTRAIGHTVERTICALLF_GATECLOSE</span> <span class="o">=</span> <span class="mi">3613</span>
+    <span class="n">SECURITYGATESTRAIGHTVERTICAL_GATECLOSE</span> <span class="o">=</span> <span class="mi">3615</span>
+    <span class="n">CHANGESHRINETERRAN_CHANGESHRINETERRAN</span> <span class="o">=</span> <span class="mi">3617</span>
+    <span class="n">CHANGESHRINEPROTOSS_CHANGESHRINEPROTOSS</span> <span class="o">=</span> <span class="mi">3619</span>
+    <span class="n">SPECTREHOLDFIRE_SPECTREHOLDFIRE</span> <span class="o">=</span> <span class="mi">3621</span>
+    <span class="n">SPECTREWEAPONSFREE_WEAPONSFREE</span> <span class="o">=</span> <span class="mi">3623</span>
+    <span class="n">GWALEARN_TESTLEARN</span> <span class="o">=</span> <span class="mi">3625</span>
+    <span class="n">LIGHTBRIDGEOFFTOPRIGHT_LIGHTBRIDGEOFF</span> <span class="o">=</span> <span class="mi">3647</span>
+    <span class="n">LIGHTBRIDGEONTOPRIGHT_LIGHTBRIDGEON</span> <span class="o">=</span> <span class="mi">3649</span>
+    <span class="n">TESTHEROGRAB_GRABZERGLING</span> <span class="o">=</span> <span class="mi">3651</span>
+    <span class="n">TESTHEROTHROW_THROWZERGLING</span> <span class="o">=</span> <span class="mi">3653</span>
+    <span class="n">TESTHERODEBUGMISSILEABILITY_TESTHERODEBUGMISSILEABILITY</span> <span class="o">=</span> <span class="mi">3655</span>
+    <span class="n">TESTHERODEBUGTRACKINGABILITY_TESTHERODEBUGTRACKINGABILITY</span> <span class="o">=</span> <span class="mi">3657</span>
+    <span class="n">TESTHERODEBUGTRACKINGABILITY_CANCEL</span> <span class="o">=</span> <span class="mi">3658</span>
+    <span class="n">CANCEL</span> <span class="o">=</span> <span class="mi">3659</span>
+    <span class="n">HALT</span> <span class="o">=</span> <span class="mi">3660</span>
+    <span class="n">BURROWDOWN</span> <span class="o">=</span> <span class="mi">3661</span>
+    <span class="n">BURROWUP</span> <span class="o">=</span> <span class="mi">3662</span>
+    <span class="n">LOADALL</span> <span class="o">=</span> <span class="mi">3663</span>
+    <span class="n">UNLOADALL</span> <span class="o">=</span> <span class="mi">3664</span>
+    <span class="n">STOP</span> <span class="o">=</span> <span class="mi">3665</span>
+    <span class="n">HARVEST_GATHER</span> <span class="o">=</span> <span class="mi">3666</span>
+    <span class="n">HARVEST_RETURN</span> <span class="o">=</span> <span class="mi">3667</span>
+    <span class="n">LOAD</span> <span class="o">=</span> <span class="mi">3668</span>
+    <span class="n">UNLOADALLAT</span> <span class="o">=</span> <span class="mi">3669</span>
+    <span class="n">CANCEL_LAST</span> <span class="o">=</span> <span class="mi">3671</span>
+    <span class="n">CANCEL_SLOT</span> <span class="o">=</span> <span class="mi">3672</span>
+    <span class="n">RALLY_UNITS</span> <span class="o">=</span> <span class="mi">3673</span>
+    <span class="n">ATTACK</span> <span class="o">=</span> <span class="mi">3674</span>
+    <span class="n">EFFECT_STIM</span> <span class="o">=</span> <span class="mi">3675</span>
+    <span class="n">BEHAVIOR_CLOAKON</span> <span class="o">=</span> <span class="mi">3676</span>
+    <span class="n">BEHAVIOR_CLOAKOFF</span> <span class="o">=</span> <span class="mi">3677</span>
+    <span class="n">LAND</span> <span class="o">=</span> <span class="mi">3678</span>
+    <span class="n">LIFT</span> <span class="o">=</span> <span class="mi">3679</span>
+    <span class="n">MORPH_ROOT</span> <span class="o">=</span> <span class="mi">3680</span>
+    <span class="n">MORPH_UPROOT</span> <span class="o">=</span> <span class="mi">3681</span>
+    <span class="n">BUILD_TECHLAB</span> <span class="o">=</span> <span class="mi">3682</span>
+    <span class="n">BUILD_REACTOR</span> <span class="o">=</span> <span class="mi">3683</span>
+    <span class="n">EFFECT_SPRAY</span> <span class="o">=</span> <span class="mi">3684</span>
+    <span class="n">EFFECT_REPAIR</span> <span class="o">=</span> <span class="mi">3685</span>
+    <span class="n">EFFECT_MASSRECALL</span> <span class="o">=</span> <span class="mi">3686</span>
+    <span class="n">EFFECT_BLINK</span> <span class="o">=</span> <span class="mi">3687</span>
+    <span class="n">BEHAVIOR_HOLDFIREON</span> <span class="o">=</span> <span class="mi">3688</span>
+    <span class="n">BEHAVIOR_HOLDFIREOFF</span> <span class="o">=</span> <span class="mi">3689</span>
+    <span class="n">RALLY_WORKERS</span> <span class="o">=</span> <span class="mi">3690</span>
+    <span class="n">BUILD_CREEPTUMOR</span> <span class="o">=</span> <span class="mi">3691</span>
+    <span class="n">RESEARCH_PROTOSSAIRARMOR</span> <span class="o">=</span> <span class="mi">3692</span>
+    <span class="n">RESEARCH_PROTOSSAIRWEAPONS</span> <span class="o">=</span> <span class="mi">3693</span>
+    <span class="n">RESEARCH_PROTOSSGROUNDARMOR</span> <span class="o">=</span> <span class="mi">3694</span>
+    <span class="n">RESEARCH_PROTOSSGROUNDWEAPONS</span> <span class="o">=</span> <span class="mi">3695</span>
+    <span class="n">RESEARCH_PROTOSSSHIELDS</span> <span class="o">=</span> <span class="mi">3696</span>
+    <span class="n">RESEARCH_TERRANINFANTRYARMOR</span> <span class="o">=</span> <span class="mi">3697</span>
+    <span class="n">RESEARCH_TERRANINFANTRYWEAPONS</span> <span class="o">=</span> <span class="mi">3698</span>
+    <span class="n">RESEARCH_TERRANSHIPWEAPONS</span> <span class="o">=</span> <span class="mi">3699</span>
+    <span class="n">RESEARCH_TERRANVEHICLEANDSHIPPLATING</span> <span class="o">=</span> <span class="mi">3700</span>
+    <span class="n">RESEARCH_TERRANVEHICLEWEAPONS</span> <span class="o">=</span> <span class="mi">3701</span>
+    <span class="n">RESEARCH_ZERGFLYERARMOR</span> <span class="o">=</span> <span class="mi">3702</span>
+    <span class="n">RESEARCH_ZERGFLYERATTACK</span> <span class="o">=</span> <span class="mi">3703</span>
+    <span class="n">RESEARCH_ZERGGROUNDARMOR</span> <span class="o">=</span> <span class="mi">3704</span>
+    <span class="n">RESEARCH_ZERGMELEEWEAPONS</span> <span class="o">=</span> <span class="mi">3705</span>
+    <span class="n">RESEARCH_ZERGMISSILEWEAPONS</span> <span class="o">=</span> <span class="mi">3706</span>
+    <span class="n">CANCEL_VOIDRAYPRISMATICALIGNMENT</span> <span class="o">=</span> <span class="mi">3707</span>
+    <span class="n">RESEARCH_ADAPTIVETALONS</span> <span class="o">=</span> <span class="mi">3709</span>
+    <span class="n">LURKERDENRESEARCH_RESEARCHLURKERRANGE</span> <span class="o">=</span> <span class="mi">3710</span>
+    <span class="n">MORPH_OBSERVERMODE</span> <span class="o">=</span> <span class="mi">3739</span>
+    <span class="n">MORPH_SURVEILLANCEMODE</span> <span class="o">=</span> <span class="mi">3741</span>
+    <span class="n">MORPH_OVERSIGHTMODE</span> <span class="o">=</span> <span class="mi">3743</span>
+    <span class="n">MORPH_OVERSEERMODE</span> <span class="o">=</span> <span class="mi">3745</span>
+    <span class="n">EFFECT_INTERFERENCEMATRIX</span> <span class="o">=</span> <span class="mi">3747</span>
+    <span class="n">EFFECT_REPAIRDRONE</span> <span class="o">=</span> <span class="mi">3749</span>
+    <span class="n">EFFECT_REPAIR_REPAIRDRONE</span> <span class="o">=</span> <span class="mi">3751</span>
+    <span class="n">EFFECT_ANTIARMORMISSILE</span> <span class="o">=</span> <span class="mi">3753</span>
+    <span class="n">EFFECT_CHRONOBOOSTENERGYCOST</span> <span class="o">=</span> <span class="mi">3755</span>
+    <span class="n">EFFECT_MASSRECALL_NEXUS</span> <span class="o">=</span> <span class="mi">3757</span>
+    <span class="n">NEXUSSHIELDRECHARGE_NEXUSSHIELDRECHARGE</span> <span class="o">=</span> <span class="mi">3759</span>
+    <span class="n">NEXUSSHIELDRECHARGEONPYLON_NEXUSSHIELDRECHARGEONPYLON</span> <span class="o">=</span> <span class="mi">3761</span>
+    <span class="n">INFESTORENSNARE_INFESTORENSNARE</span> <span class="o">=</span> <span class="mi">3763</span>
+    <span class="n">EFFECT_RESTORE</span> <span class="o">=</span> <span class="mi">3765</span>
+    <span class="n">NEXUSSHIELDOVERCHARGE_NEXUSSHIELDOVERCHARGE</span> <span class="o">=</span> <span class="mi">3767</span>
+    <span class="n">NEXUSSHIELDOVERCHARGEOFF_NEXUSSHIELDOVERCHARGEOFF</span> <span class="o">=</span> <span class="mi">3769</span>
+    <span class="n">ATTACK_BATTLECRUISER</span> <span class="o">=</span> <span class="mi">3771</span>
+    <span class="n">BATTLECRUISERATTACK_ATTACKTOWARDS</span> <span class="o">=</span> <span class="mi">3772</span>
+    <span class="n">BATTLECRUISERATTACK_ATTACKBARRAGE</span> <span class="o">=</span> <span class="mi">3773</span>
+    <span class="n">BATTLECRUISERATTACKEVALUATOR_MOTHERSHIPCOREATTACK</span> <span class="o">=</span> <span class="mi">3774</span>
+    <span class="n">MOVE_BATTLECRUISER</span> <span class="o">=</span> <span class="mi">3776</span>
+    <span class="n">PATROL_BATTLECRUISER</span> <span class="o">=</span> <span class="mi">3777</span>
+    <span class="n">HOLDPOSITION_BATTLECRUISER</span> <span class="o">=</span> <span class="mi">3778</span>
+    <span class="n">BATTLECRUISERMOVE_ACQUIREMOVE</span> <span class="o">=</span> <span class="mi">3779</span>
+    <span class="n">BATTLECRUISERMOVE_TURN</span> <span class="o">=</span> <span class="mi">3780</span>
+    <span class="n">BATTLECRUISERSTOPEVALUATOR_STOP</span> <span class="o">=</span> <span class="mi">3781</span>
+    <span class="n">STOP_BATTLECRUISER</span> <span class="o">=</span> <span class="mi">3783</span>
+    <span class="n">BATTLECRUISERSTOP_HOLDFIRE</span> <span class="o">=</span> <span class="mi">3784</span>
+    <span class="n">BATTLECRUISERSTOP_CHEER</span> <span class="o">=</span> <span class="mi">3785</span>
+    <span class="n">BATTLECRUISERSTOP_DANCE</span> <span class="o">=</span> <span class="mi">3786</span>
+    <span class="n">VIPERPARASITICBOMBRELAY_PARASITICBOMB</span> <span class="o">=</span> <span class="mi">3789</span>
+    <span class="n">PARASITICBOMBRELAYDODGE_PARASITICBOMB</span> <span class="o">=</span> <span class="mi">3791</span>
+    <span class="n">HOLDPOSITION</span> <span class="o">=</span> <span class="mi">3793</span>
+    <span class="n">MOVE</span> <span class="o">=</span> <span class="mi">3794</span>
+    <span class="n">PATROL</span> <span class="o">=</span> <span class="mi">3795</span>
+    <span class="n">UNLOADUNIT</span> <span class="o">=</span> <span class="mi">3796</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY1</span> <span class="o">=</span> <span class="mi">3797</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY2</span> <span class="o">=</span> <span class="mi">3798</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY3</span> <span class="o">=</span> <span class="mi">3799</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY4</span> <span class="o">=</span> <span class="mi">3800</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY5</span> <span class="o">=</span> <span class="mi">3801</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY6</span> <span class="o">=</span> <span class="mi">3802</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY7</span> <span class="o">=</span> <span class="mi">3803</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY8</span> <span class="o">=</span> <span class="mi">3804</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY9</span> <span class="o">=</span> <span class="mi">3805</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY10</span> <span class="o">=</span> <span class="mi">3806</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY11</span> <span class="o">=</span> <span class="mi">3807</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY12</span> <span class="o">=</span> <span class="mi">3808</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY13</span> <span class="o">=</span> <span class="mi">3809</span>
+    <span class="n">LOADOUTSPRAY_LOADOUTSPRAY14</span> <span class="o">=</span> <span class="mi">3810</span>
+    <span class="n">MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPLEFTGREEN_CANCEL</span> <span class="o">=</span> <span class="mi">3967</span>
+    <span class="n">MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPRIGHTGREEN_CANCEL</span> <span class="o">=</span> <span class="mi">3970</span>
+    <span class="n">BATTERYOVERCHARGE_BATTERYOVERCHARGE</span> <span class="o">=</span> <span class="mi">4107</span>
+    <span class="n">AMORPHOUSARMORCLOUD_AMORPHOUSARMORCLOUD</span> <span class="o">=</span> <span class="mi">4111</span>
+    <span class="n">SHIELDBATTERYRECHARGEEX5_SHIELDBATTERYRECHARGE</span> <span class="o">=</span> <span class="mi">4113</span>
+    <span class="n">SHIELDBATTERYRECHARGEEX5_STOP</span> <span class="o">=</span> <span class="mi">4114</span>
+    <span class="n">MORPHTOBANELING_BANELING</span> <span class="o">=</span> <span class="mi">4121</span>
+    <span class="n">MORPHTOBANELING_CANCEL</span> <span class="o">=</span> <span class="mi">4122</span>
+    <span class="n">MOTHERSHIPCLOAK_ORACLECLOAKFIELD</span> <span class="o">=</span> <span class="mi">4124</span>
+    <span class="n">ENERGYRECHARGE_ENERGYRECHARGE</span> <span class="o">=</span> <span class="mi">4126</span>
+    <span class="n">SALVAGEEFFECT_SALVAGE</span> <span class="o">=</span> <span class="mi">4128</span>
+    <span class="n">SALVAGESENSORTOWERREFUND_SALVAGE</span> <span class="o">=</span> <span class="mi">4130</span>
+    <span class="n">WORKERSTOPIDLEABILITYVESPENE_GATHER</span> <span class="o">=</span> <span class="mi">4132</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;AbilityId.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_missing_</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbilityId</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">NULL_NULL</span></div>
+
+
+
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">AbilityId</span><span class="p">:</span>
+    <span class="nb">globals</span><span class="p">()[</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

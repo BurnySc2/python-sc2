@@ -1,0 +1,1152 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sc2.units &#8212; python-sc2  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/units';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ids/index.html">ids</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sc2.units</h1><div class="highlight"><pre>
+<span></span><span class="c1"># pyre-ignore-all-errors[14, 15, 16]</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="kn">import</span> <span class="n">UnitTypeId</span>
+<span class="kn">from</span> <span class="nn">sc2.position</span> <span class="kn">import</span> <span class="n">Point2</span>
+<span class="kn">from</span> <span class="nn">sc2.unit</span> <span class="kn">import</span> <span class="n">Unit</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">sc2.bot_ai</span> <span class="kn">import</span> <span class="n">BotAI</span>
+
+
+<div class="viewcode-block" id="Units">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units">[docs]</a>
+<span class="k">class</span> <span class="nc">Units</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of Unit objects. Makes it easy to select units by selectors.&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">((</span><span class="n">Unit</span><span class="p">(</span><span class="n">raw_unit</span><span class="p">,</span> <span class="n">bot_object</span><span class="o">=</span><span class="n">bot_object</span><span class="p">)</span> <span class="k">for</span> <span class="n">raw_unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">),</span> <span class="n">bot_object</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Unit</span><span class="p">],</span> <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param units:</span>
+<span class="sd">        :param bot_object:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span> <span class="o">=</span> <span class="n">bot_object</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_types</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new mutable Units object from Units or list object.</span>
+
+<span class="sd">        :param unit_types:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">of_type</span><span class="p">(</span><span class="n">unit_types</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Unit</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">())</span>
+
+<div class="viewcode-block" id="Units.copy">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.copy">[docs]</a>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new mutable Units object from Units or list object.</span>
+
+<span class="sd">        :param units:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Units</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
+            <span class="n">chain</span><span class="p">(</span>
+                <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)),</span>
+            <span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Units</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
+            <span class="n">chain</span><span class="p">(</span>
+                <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)),</span>
+            <span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Units</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Units</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">self_unit</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span><span class="p">)),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">amount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Units.find_by_tag">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.find_by_tag">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_by_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param tag:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">tag</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">unit</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Units.by_tag">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.by_tag">[docs]</a>
+    <span class="k">def</span> <span class="nf">by_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param tag:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Unit not found&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">unit</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Units.take">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.take">[docs]</a>
+    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param n:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="bp">self</span><span class="p">[:</span><span class="n">n</span><span class="p">])</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">random_or</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span> <span class="k">else</span> <span class="n">other</span>
+
+<div class="viewcode-block" id="Units.random_group_of">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.random_group_of">[docs]</a>
+    <span class="k">def</span> <span class="nf">random_group_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns self if n &gt;= self.amount.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Units.in_attack_range_of">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.in_attack_range_of">[docs]</a>
+    <span class="k">def</span> <span class="nf">in_attack_range_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">bonus_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters units that are in attack range of the given unit.</span>
+<span class="sd">        This uses the unit and target unit.radius when calculating the distance, so it should be accurate.</span>
+<span class="sd">        Caution: This may not work well for static structures (bunker, sieged tank, planetary fortress, photon cannon, spine and spore crawler) because it seems attack ranges differ for static / immovable units.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                all_zerglings_my_marine_can_attack = enemy_zerglings.in_attack_range_of(my_marine)</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_mutalisks = self.enemy_units(UnitTypeId.MUTALISK)</span>
+<span class="sd">            my_marauder = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARAUDER), None)</span>
+<span class="sd">            if my_marauder:</span>
+<span class="sd">                all_mutalisks_my_marauder_can_attack = enemy_mutaliskss.in_attack_range_of(my_marauder)</span>
+<span class="sd">                # Is empty because mutalisk are flying and marauder cannot attack air</span>
+
+<span class="sd">        :param unit:</span>
+<span class="sd">        :param bonus_distance:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">target_in_range</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bonus_distance</span><span class="o">=</span><span class="n">bonus_distance</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Units.closest_distance_to">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.closest_distance_to">[docs]</a>
+    <span class="k">def</span> <span class="nf">closest_distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the distance between the closest unit from this group to the target unit.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                closest_zergling_distance = enemy_zerglings.closest_distance_to(my_marine)</span>
+<span class="sd">            # Contains the distance between the marine and the closest zergling</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Units.furthest_distance_to">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.furthest_distance_to">[docs]</a>
+    <span class="k">def</span> <span class="nf">furthest_distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the distance between the furthest unit from this group to the target unit</span>
+
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                furthest_zergling_distance = enemy_zerglings.furthest_distance_to(my_marine)</span>
+<span class="sd">                # Contains the distance between the marine and the furthest away zergling</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Units.closest_to">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.closest_to">[docs]</a>
+    <span class="k">def</span> <span class="nf">closest_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the closest unit (from this Units object) to the target unit or position.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                closest_zergling = enemy_zerglings.closest_to(my_marine)</span>
+<span class="sd">                # Contains the zergling that is closest to the target marine</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">unit1</span> <span class="k">for</span> <span class="n">unit1</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">),</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">unit2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit2</span><span class="p">,</span> <span class="n">position</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(((</span><span class="n">unit</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">my_tuple</span><span class="p">:</span> <span class="n">my_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Units.furthest_to">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.furthest_to">[docs]</a>
+    <span class="k">def</span> <span class="nf">furthest_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the furhest unit (from this Units object) to the target unit or position.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                furthest_zergling = enemy_zerglings.furthest_to(my_marine)</span>
+<span class="sd">                # Contains the zergling that is furthest away to the target marine</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">unit1</span> <span class="k">for</span> <span class="n">unit1</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">),</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">unit2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit2</span><span class="p">,</span> <span class="n">position</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(((</span><span class="n">unit</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">my_tuple</span><span class="p">:</span> <span class="n">my_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Units.closer_than">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.closer_than">[docs]</a>
+    <span class="k">def</span> <span class="nf">closer_than</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units (from this Units object) that are closer than &#39;distance&#39; away from target unit or position.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                close_zerglings = enemy_zerglings.closer_than(3, my_marine)</span>
+<span class="sd">                # Contains all zerglings that are distance 3 or less away from the marine (does not include unit radius in calculation)</span>
+
+<span class="sd">        :param distance:</span>
+<span class="sd">        :param position:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="n">distance_squared</span> <span class="o">=</span> <span class="n">distance</span><span class="o">**</span><span class="mi">2</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span>
+                <span class="n">unit</span>
+                <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">distance_squared</span>
+            <span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">)</span> <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">distance</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.further_than">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.further_than">[docs]</a>
+    <span class="k">def</span> <span class="nf">further_than</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units (from this Units object) that are further than &#39;distance&#39; away from target unit or position.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                far_zerglings = enemy_zerglings.further_than(3, my_marine)</span>
+<span class="sd">                # Contains all zerglings that are distance 3 or more away from the marine (does not include unit radius in calculation)</span>
+
+<span class="sd">        :param distance:</span>
+<span class="sd">        :param position:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="n">distance_squared</span> <span class="o">=</span> <span class="n">distance</span><span class="o">**</span><span class="mi">2</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span>
+                <span class="n">unit</span>
+                <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span>
+                <span class="k">if</span> <span class="n">distance_squared</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">)</span> <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.in_distance_between">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.in_distance_between">[docs]</a>
+    <span class="k">def</span> <span class="nf">in_distance_between</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">distance1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distance2</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns units that are further than distance1 and closer than distance2 to unit or position.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                zerglings_filtered = enemy_zerglings.in_distance_between(my_marine, 3, 5)</span>
+<span class="sd">                # Contains all zerglings that are between distance 3 and 5 away from the marine (does not include unit radius in calculation)</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param distance1:</span>
+<span class="sd">        :param distance2:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="n">distance1_squared</span> <span class="o">=</span> <span class="n">distance1</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">distance2_squared</span> <span class="o">=</span> <span class="n">distance2</span><span class="o">**</span><span class="mi">2</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span>
+                <span class="n">unit</span>
+                <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span>
+                <span class="k">if</span> <span class="n">distance1_squared</span>
+                <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+                <span class="o">&lt;</span> <span class="n">distance2_squared</span>
+            <span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">)</span> <span class="k">if</span> <span class="n">distance1</span> <span class="o">&lt;</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">distance2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.closest_n_units">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.closest_n_units">[docs]</a>
+    <span class="k">def</span> <span class="nf">closest_n_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the n closest units in distance to position.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                zerglings_filtered = enemy_zerglings.closest_n_units(my_marine, 5)</span>
+<span class="sd">                # Contains 5 zerglings that are the closest to the marine</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param n:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_list_sorted_by_distance_to</span><span class="p">(</span><span class="n">position</span><span class="p">)[:</span><span class="n">n</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Units.furthest_n_units">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.furthest_n_units">[docs]</a>
+    <span class="k">def</span> <span class="nf">furthest_n_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the n furhest units in distance to position.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            enemy_zerglings = self.enemy_units(UnitTypeId.ZERGLING)</span>
+<span class="sd">            my_marine = next((unit for unit in self.units if unit.type_id == UnitTypeId.MARINE), None)</span>
+<span class="sd">            if my_marine:</span>
+<span class="sd">                zerglings_filtered = enemy_zerglings.furthest_n_units(my_marine, 5)</span>
+<span class="sd">                # Contains 5 zerglings that are the furthest to the marine</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param n:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_list_sorted_by_distance_to</span><span class="p">(</span><span class="n">position</span><span class="p">)[</span><span class="o">-</span><span class="n">n</span><span class="p">:])</span></div>
+
+
+<div class="viewcode-block" id="Units.in_distance_of_group">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.in_distance_of_group">[docs]</a>
+    <span class="k">def</span> <span class="nf">in_distance_of_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_units</span><span class="p">:</span> <span class="n">Units</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns units that are closer than distance from any unit in the other units object.</span>
+
+<span class="sd">        :param other_units:</span>
+<span class="sd">        :param distance:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">other_units</span><span class="p">,</span> <span class="s2">&quot;Other units object is empty&quot;</span>
+        <span class="c1"># Return self because there are no enemies</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">distance_squared</span> <span class="o">=</span> <span class="n">distance</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">distance_squared</span>
+                <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">other_units</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">([])</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span>
+            <span class="n">self_unit</span>
+            <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">self_unit</span><span class="p">,</span> <span class="n">other_unit</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">distance_squared</span>
+                <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other_units</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.in_closest_distance_to_group">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.in_closest_distance_to_group">[docs]</a>
+    <span class="k">def</span> <span class="nf">in_closest_distance_to_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_units</span><span class="p">:</span> <span class="n">Units</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns unit in shortest distance from any unit in self to any unit in group.</span>
+
+<span class="sd">        Loops over all units in self, then loops over all units in other_units and calculates the shortest distance. Returns the units that is closest to any unit of &#39;other_units&#39;.</span>
+
+<span class="sd">        :param other_units:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">assert</span> <span class="n">other_units</span><span class="p">,</span> <span class="s2">&quot;Given units object is empty&quot;</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">self_unit</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">self_unit</span><span class="p">,</span> <span class="n">other_unit</span><span class="p">)</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other_units</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_list_sorted_closest_to_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function should be a bit faster than using units.sorted(key=lambda u: u.distance_to(position))</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param distance:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span> <span class="o">-</span> <span class="n">distance</span><span class="p">),</span>
+                <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="n">unit_dist_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">dist</span> <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">unit2</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">unit_dist_dict</span><span class="p">[</span><span class="n">unit2</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span> <span class="o">-</span> <span class="n">distance</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Units.n_closest_to_distance">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.n_closest_to_distance">[docs]</a>
+    <span class="k">def</span> <span class="nf">n_closest_to_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns n units that are the closest to distance away.</span>
+<span class="sd">        For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7] to position,</span>
+<span class="sd">        the units with distance [4, 5, 6] will be returned</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param distance:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_list_sorted_closest_to_distance</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">)[:</span><span class="n">n</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Units.n_furthest_to_distance">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.n_furthest_to_distance">[docs]</a>
+    <span class="k">def</span> <span class="nf">n_furthest_to_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inverse of the function &#39;n_closest_to_distance&#39;, returns the furthest units instead</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param distance:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_list_sorted_closest_to_distance</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">)[</span><span class="o">-</span><span class="n">n</span><span class="p">:])</span></div>
+
+
+<div class="viewcode-block" id="Units.subgroup">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.subgroup">[docs]</a>
+    <span class="k">def</span> <span class="nf">subgroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Unit</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new mutable Units object from Units or list object.</span>
+
+<span class="sd">        :param units:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.filter">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.filter">[docs]</a>
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Unit</span><span class="p">],</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters the current Units object and returns a new Units object.</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            from sc2.ids.unit_typeid import UnitTypeId</span>
+<span class="sd">            my_marines = self.units.filter(lambda unit: unit.type_id == UnitTypeId.MARINE)</span>
+
+<span class="sd">            completed_structures = self.structures.filter(lambda structure: structure.is_ready)</span>
+
+<span class="sd">            queens_with_energy_to_inject = self.units.filter(lambda unit: unit.type_id == UnitTypeId.QUEEN and unit.energy &gt;= 25)</span>
+
+<span class="sd">            orbitals_with_energy_to_mule = self.structures.filter(lambda structure: structure.type_id == UnitTypeId.ORBITALCOMMAND and structure.energy &gt;= 50)</span>
+
+<span class="sd">            my_units_that_can_shoot_up = self.units.filter(lambda unit: unit.can_attack_air)</span>
+
+<span class="sd">        See more unit properties in unit.py</span>
+
+<span class="sd">        :param pred:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="n">pred</span><span class="p">),</span> <span class="s2">&quot;Function is not callable&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span> <span class="nf">sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Unit</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_list_sorted_by_distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function should be a bit faster than using units.sorted(key=lambda u: u.distance_to(position))</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param reverse:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">position</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span>
+            <span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_units_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="n">unit_dist_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">dist</span> <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">dist</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">unit_dist_dict</span><span class="p">[</span><span class="n">unit2</span><span class="o">.</span><span class="n">tag</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Units.sorted_by_distance_to">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.sorted_by_distance_to">[docs]</a>
+    <span class="k">def</span> <span class="nf">sorted_by_distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function should be a bit faster than using units.sorted(key=lambda u: u.distance_to(position))</span>
+
+<span class="sd">        :param position:</span>
+<span class="sd">        :param reverse:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgroup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_list_sorted_by_distance_to</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Units.tags_in">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.tags_in">[docs]</a>
+    <span class="k">def</span> <span class="nf">tags_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters all units that have their tags in the &#39;other&#39; set/list/dict</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            my_inject_queens = self.units.tags_in(self.queen_tags_assigned_to_do_injects)</span>
+
+<span class="sd">            # Do not use the following as it is slower because it first loops over all units to filter out if they are queens and loops over those again to check if their tags are in the list/set</span>
+<span class="sd">            my_inject_queens_slow = self.units(QUEEN).tags_in(self.queen_tags_assigned_to_do_injects)</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">other</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.tags_not_in">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.tags_not_in">[docs]</a>
+    <span class="k">def</span> <span class="nf">tags_not_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters all units that have their tags not in the &#39;other&#39; set/list/dict</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            my_non_inject_queens = self.units.tags_not_in(self.queen_tags_assigned_to_do_injects)</span>
+
+<span class="sd">            # Do not use the following as it is slower because it first loops over all units to filter out if they are queens and loops over those again to check if their tags are in the list/set</span>
+<span class="sd">            my_non_inject_queens_slow = self.units(QUEEN).tags_not_in(self.queen_tags_assigned_to_do_injects)</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.of_type">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.of_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">of_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters all units that are of a specific type</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            # Use a set instead of lists in the argument</span>
+<span class="sd">            some_attack_units = self.units.of_type({ZERGLING, ROACH, HYDRALISK, BROODLORD})</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="p">{</span><span class="n">other</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">other</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.exclude_type">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.exclude_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filters all units that are not of a specific type</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            # Use a set instead of lists in the argument</span>
+<span class="sd">            ignore_units = self.enemy_units.exclude_type({LARVA, EGG, OVERLORD})</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="p">{</span><span class="n">other</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.same_tech">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.same_tech">[docs]</a>
+    <span class="k">def</span> <span class="nf">same_tech</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all structures that have the same base structure.</span>
+
+<span class="sd">        Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and others</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            # All command centers, flying command centers, orbital commands, flying orbital commands, planetary fortress</span>
+<span class="sd">            terran_townhalls = self.townhalls.same_tech(UnitTypeId.COMMANDCENTER)</span>
+
+<span class="sd">            # All hatcheries, lairs and hives</span>
+<span class="sd">            zerg_townhalls = self.townhalls.same_tech({UnitTypeId.HATCHERY})</span>
+
+<span class="sd">            # All spires and greater spires</span>
+<span class="sd">            spires = self.townhalls.same_tech({UnitTypeId.SPIRE})</span>
+<span class="sd">            # The following returns the same</span>
+<span class="sd">            spires = self.townhalls.same_tech({UnitTypeId.GREATERSPIRE})</span>
+
+<span class="sd">            # This also works with multiple unit types</span>
+<span class="sd">            zerg_townhalls_and_spires = self.structures.same_tech({UnitTypeId.HATCHERY, UnitTypeId.SPIRE})</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">set</span><span class="p">),</span> <span class="p">(</span>
+            <span class="s2">&quot;Please use a set as this filter function is already fairly slow. For example&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; &#39;self.units.same_tech(</span><span class="si">{UnitTypeId.LAIR}</span><span class="s2">)&#39;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">tech_alias_types</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">other</span><span class="p">}</span>
+        <span class="n">unit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span>
+        <span class="k">for</span> <span class="n">unit_type</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">same</span> <span class="ow">in</span> <span class="n">unit_data</span><span class="p">[</span><span class="n">unit_type</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">tech_alias</span><span class="p">:</span>
+                <span class="n">tech_alias_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">same</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span> <span class="ow">in</span> <span class="n">tech_alias_types</span>
+            <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">same</span> <span class="ow">in</span> <span class="n">tech_alias_types</span> <span class="k">for</span> <span class="n">same</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">tech_alias</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Units.same_unit">
+<a class="viewcode-back" href="../../units/index.html#sc2.units.Units.same_unit">[docs]</a>
+    <span class="k">def</span> <span class="nf">same_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units that have the same base unit while being in different modes.</span>
+
+<span class="sd">        Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit</span>
+
+<span class="sd">        Example::</span>
+
+<span class="sd">            # All command centers on the ground and flying</span>
+<span class="sd">            ccs = self.townhalls.same_unit(UnitTypeId.COMMANDCENTER)</span>
+
+<span class="sd">            # All orbital commands on the ground and flying</span>
+<span class="sd">            ocs = self.townhalls.same_unit(UnitTypeId.ORBITALCOMMAND)</span>
+
+<span class="sd">            # All roaches and burrowed roaches</span>
+<span class="sd">            roaches = self.units.same_unit(UnitTypeId.ROACH)</span>
+<span class="sd">            # This is useful because roach has a different type id when burrowed</span>
+<span class="sd">            burrowed_roaches = self.units(UnitTypeId.ROACHBURROWED)</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="p">{</span><span class="n">other</span><span class="p">}</span>
+        <span class="n">unit_alias_types</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">other</span><span class="p">}</span>
+        <span class="n">unit_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span>
+        <span class="k">for</span> <span class="n">unit_type</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+            <span class="n">unit_alias_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">unit_data</span><span class="p">[</span><span class="n">unit_type</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_alias</span><span class="p">)</span>
+        <span class="n">unit_alias_types</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span> <span class="ow">in</span> <span class="n">unit_alias_types</span>
+            <span class="ow">or</span> <span class="n">unit</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_alias</span> <span class="ow">in</span> <span class="n">unit_alias_types</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the central position of all units.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Units object is empty&quot;</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="nb">sum</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
+                <span class="nb">sum</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">selected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units that are selected by the human player.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_selected</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tags</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all unit tags as a set.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all structures that are ready (construction complete).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_ready</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">not_ready</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all structures that are not ready (construction not complete).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="ow">not</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_ready</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units or structures that are doing nothing (unit is standing still, structure is doing nothing).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_idle</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">owned</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deprecated: All your units.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_mine</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deprecated: All enemy units.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_enemy</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">flying</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units that are flying.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_flying</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">not_flying</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units that not are flying.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="ow">not</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_flying</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deprecated: All structures.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_structure</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">not_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deprecated: All units that are not structures.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="ow">not</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_structure</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gathering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all workers that are mining minerals or vespene (gather command).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_gathering</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">returning</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all workers that are carrying minerals or vespene and are returning to a townhall.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_returning</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">collecting</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all workers that are mining or returning resources.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_collecting</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">visible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units or structures that are visible.</span>
+<span class="sd">        TODO: add proper description on which units are exactly visible (not snapshots?)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_visible</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mineral_field</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units that are mineral fields.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_mineral_field</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vespene_geyser</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all units that are vespene geysers.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_vespene_geyser</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">prefer_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sorts units based on if they are idle. Idle units come first.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sorted</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_idle</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

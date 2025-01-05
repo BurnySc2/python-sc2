@@ -1,0 +1,1290 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sc2.bot_ai_internal &#8212; python-sc2  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/bot_ai_internal';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit/index.html">unit.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../units/index.html">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ids/index.html">ids</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sc2.bot_ai_internal</h1><div class="highlight"><pre>
+<span></span><span class="c1"># pyre-ignore-all-errors[6, 16, 29]</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">final</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="c1"># pyre-ignore[21]</span>
+<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">sc2api_pb2</span> <span class="k">as</span> <span class="n">sc_pb</span>
+
+<span class="kn">from</span> <span class="nn">sc2.cache</span> <span class="kn">import</span> <span class="n">property_cache_once_per_frame</span>
+<span class="kn">from</span> <span class="nn">sc2.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ALL_GAS</span><span class="p">,</span>
+    <span class="n">CREATION_ABILITY_FIX</span><span class="p">,</span>
+    <span class="n">IS_PLACEHOLDER</span><span class="p">,</span>
+    <span class="n">TERRAN_STRUCTURES_REQUIRE_SCV</span><span class="p">,</span>
+    <span class="n">FakeEffectID</span><span class="p">,</span>
+    <span class="n">abilityid_to_unittypeid</span><span class="p">,</span>
+    <span class="n">geyser_ids</span><span class="p">,</span>
+    <span class="n">mineral_ids</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sc2.data</span> <span class="kn">import</span> <span class="n">ActionResult</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">race_townhalls</span>
+<span class="kn">from</span> <span class="nn">sc2.game_data</span> <span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">GameData</span>
+<span class="kn">from</span> <span class="nn">sc2.game_state</span> <span class="kn">import</span> <span class="n">Blip</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">GameState</span>
+<span class="kn">from</span> <span class="nn">sc2.ids.ability_id</span> <span class="kn">import</span> <span class="n">AbilityId</span>
+<span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="kn">import</span> <span class="n">UnitTypeId</span>
+<span class="kn">from</span> <span class="nn">sc2.ids.upgrade_id</span> <span class="kn">import</span> <span class="n">UpgradeId</span>
+<span class="kn">from</span> <span class="nn">sc2.pixel_map</span> <span class="kn">import</span> <span class="n">PixelMap</span>
+<span class="kn">from</span> <span class="nn">sc2.position</span> <span class="kn">import</span> <span class="n">Point2</span>
+<span class="kn">from</span> <span class="nn">sc2.unit</span> <span class="kn">import</span> <span class="n">Unit</span>
+<span class="kn">from</span> <span class="nn">sc2.unit_command</span> <span class="kn">import</span> <span class="n">UnitCommand</span>
+<span class="kn">from</span> <span class="nn">sc2.units</span> <span class="kn">import</span> <span class="n">Units</span>
+
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+    <span class="c1"># pyre-ignore[21]</span>
+    <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span><span class="p">,</span> <span class="n">pdist</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">sc2.client</span> <span class="kn">import</span> <span class="n">Client</span>
+    <span class="kn">from</span> <span class="nn">sc2.game_info</span> <span class="kn">import</span> <span class="n">GameInfo</span>
+
+
+<div class="viewcode-block" id="BotAIInternal">
+<a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal">[docs]</a>
+<span class="k">class</span> <span class="nc">BotAIInternal</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for bots.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_variables</span><span class="p">()</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_initialize_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called from main.py internally&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://aiarena.net</span>
+        <span class="c1"># The bot ID will stay the same each game so your bot can &quot;adapt&quot; to the opponent</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;opponent_id&quot;</span><span class="p">):</span>
+            <span class="c1"># Prevent overwriting the opponent_id which is set here https://github.com/Hannessa/python-sc2-ladderbot/blob/master/__init__.py#L40</span>
+            <span class="c1"># otherwise set it to None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opponent_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Select distance calculation method, see _distances_override_functions function</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;distance_calculation_method&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distance_calculation_method</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="c1"># Select if the Unit.command should return UnitCommand objects. Set this to True if your bot uses &#39;self.do(unit(ability, target))&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;unit_command_uses_self_do&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit_command_uses_self_do</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">realtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">larva</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gas_buildings</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_own_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enemy_structures</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_enemy_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destructables</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">watchtowers</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mineral_field</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vespene_geyser</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">placeholders</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">techlab_tags</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reactor_tags</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minerals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vespene</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_army</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_workers</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">12</span>  <span class="c1"># Doesn&#39;t include workers in production</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_cap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">15</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_used</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">12</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_left</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idle_worker_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">army_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warp_gate_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitCommand</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blips</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Blip</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="c1"># pyre-ignore[11]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="p">:</span> <span class="n">Race</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enemy_race</span><span class="p">:</span> <span class="n">Race</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_units_created</span><span class="p">:</span> <span class="n">Counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unit_tags_seen_this_game</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_units_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_structures_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_structures_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_all_units_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">UpgradeId</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Point2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_after_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_step_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_step_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_step_step_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_time_in_on_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_steps_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Internally used to keep track which units received an action in this frame, so that self.train() function does not give the same larva two orders - cleared every frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit_tags_received_action</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_game_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See game_info.py&quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Using self._game_info is deprecated and may be removed soon. Please use self.game_info directly.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_game_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameData</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See game_data.py&quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Using self._game_data is deprecated and may be removed soon. Please use self.game_data directly.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Client</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See client.py&quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Using self._client is deprecated and may be removed soon. Please use self.client directly.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property_cache_once_per_frame</span>
+    <span class="k">def</span> <span class="nf">expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Same as the function above.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;You are using &#39;self.expansion_locations&#39;, please use &#39;self.expansion_locations_list&#39; (fast) or &#39;self.expansion_locations_dict&#39; (slow) instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion_locations_dict</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_find_expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ran once at the start of the game to calculate expansion locations.&quot;&quot;&quot;</span>
+        <span class="c1"># Idea: create a group for every resource, then merge these groups if</span>
+        <span class="c1"># any resource in a group is closer than a threshold to any resource of another group</span>
+
+        <span class="c1"># Distance we group resources by</span>
+        <span class="n">resource_spread_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">8.5</span>
+        <span class="c1"># Create a group for every resource</span>
+        <span class="n">resource_groups</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">resource</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span>
+            <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;MineralField450&quot;</span>  <span class="c1"># dont use low mineral count patches</span>
+        <span class="p">]</span>
+        <span class="c1"># Loop the merging process as long as we change something</span>
+        <span class="n">merged_group</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">height_grid</span><span class="p">:</span> <span class="n">PixelMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">terrain_height</span>
+        <span class="k">while</span> <span class="n">merged_group</span><span class="p">:</span>
+            <span class="n">merged_group</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># Check every combination of two groups</span>
+            <span class="k">for</span> <span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">resource_groups</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="c1"># Check if any pair of resource of these groups is closer than threshold together</span>
+                <span class="c1"># And that they are on the same terrain level</span>
+                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+                    <span class="n">resource_a</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource_b</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">resource_spread_threshold</span>
+                    <span class="c1"># check if terrain height measurement at resources is within 10 units</span>
+                    <span class="c1"># this is since some older maps have inconsistent terrain height</span>
+                    <span class="c1"># tiles at certain expansion locations</span>
+                    <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">height_grid</span><span class="p">[</span><span class="n">resource_a</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span><span class="p">]</span> <span class="o">-</span> <span class="n">height_grid</span><span class="p">[</span><span class="n">resource_b</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">10</span>
+                    <span class="k">for</span> <span class="n">resource_a</span><span class="p">,</span> <span class="n">resource_b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="c1"># Remove the single groups and add the merged group</span>
+                    <span class="n">resource_groups</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">group_a</span><span class="p">)</span>
+                    <span class="n">resource_groups</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">group_b</span><span class="p">)</span>
+                    <span class="n">resource_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_a</span> <span class="o">+</span> <span class="n">group_b</span><span class="p">)</span>
+                    <span class="n">merged_group</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+        <span class="c1"># Distance offsets we apply to center of each resource group to find expansion position</span>
+        <span class="n">offset_range</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">offset_range</span><span class="p">,</span> <span class="n">offset_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="mi">4</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">8</span>
+        <span class="p">]</span>
+        <span class="c1"># Dict we want to return</span>
+        <span class="n">centers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># For every resource group:</span>
+        <span class="k">for</span> <span class="n">resources</span> <span class="ow">in</span> <span class="n">resource_groups</span><span class="p">:</span>
+            <span class="c1"># Possible expansion points</span>
+            <span class="n">amount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span>
+            <span class="c1"># Calculate center, round and add 0.5 because expansion location will have (x.5, y.5)</span>
+            <span class="c1"># coordinates because bases have size 5.</span>
+            <span class="n">center_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span> <span class="o">/</span> <span class="n">amount</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
+            <span class="n">center_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span> <span class="o">/</span> <span class="n">amount</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
+            <span class="n">possible_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">Point2</span><span class="p">((</span><span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">center_x</span><span class="p">,</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">center_y</span><span class="p">))</span> <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">)</span>
+            <span class="c1"># Filter out points that are too near</span>
+            <span class="n">possible_points</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">point</span>
+                <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">possible_points</span>
+                <span class="c1"># Check if point can be built on</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">placement_grid</span><span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">rounded</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="c1"># Check if all resources have enough space to point</span>
+                <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="n">point</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">7</span> <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span> <span class="ow">in</span> <span class="n">geyser_ids</span> <span class="k">else</span> <span class="mi">6</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># Choose best fitting point</span>
+            <span class="n">result</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="n">possible_points</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">point</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource_</span><span class="p">)</span> <span class="k">for</span> <span class="n">resource_</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">centers</span><span class="p">[</span><span class="n">result</span><span class="p">]</span> <span class="o">=</span> <span class="n">resources</span>
+            <span class="c1"># Put all expansion locations in a list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="c1"># Maps all resource positions to the expansion position</span>
+            <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">[</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_correct_zerg_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The client incorrectly rounds zerg supply down instead of up (see</span>
+<span class="sd">        https://github.com/Blizzard/s2client-proto/issues/123), so self.supply_used</span>
+<span class="sd">        and friends return the wrong value when there are an odd number of zerglings</span>
+<span class="sd">        and banelings. This function corrects the bad values.&quot;&quot;&quot;</span>
+        <span class="c1"># TODO: remove when Blizzard/sc2client-proto#123 gets fixed.</span>
+        <span class="n">half_supply_units</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">,</span>
+            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLINGBURROWED</span><span class="p">,</span>
+            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BANELING</span><span class="p">,</span>
+            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BANELINGBURROWED</span><span class="p">,</span>
+            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BANELINGCOCOON</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">half_supply_units</span><span class="p">)</span><span class="o">.</span><span class="n">amount</span> <span class="o">%</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_used</span> <span class="o">+=</span> <span class="n">correction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_army</span> <span class="o">+=</span> <span class="n">correction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_left</span> <span class="o">-=</span> <span class="n">correction</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property_cache_once_per_frame</span>
+    <span class="k">def</span> <span class="nf">_abilities_count_and_build_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Cache for the already_pending function, includes protoss units warping in,</span>
+<span class="sd">        all units in production and all structures, and all morphs&quot;&quot;&quot;</span>
+        <span class="n">abilities_amount</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">max_build_progress</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">orders</span><span class="p">:</span>
+                <span class="n">abilities_amount</span><span class="p">[</span><span class="n">order</span><span class="o">.</span><span class="n">ability</span><span class="o">.</span><span class="n">exact_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_ready</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">race</span> <span class="o">!=</span> <span class="n">Race</span><span class="o">.</span><span class="n">Terran</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_structure</span><span class="p">):</span>
+                <span class="c1"># If an SCV is constructing a building, already_pending would count this structure twice</span>
+                <span class="c1"># (once from the SCV order, and once from &quot;not structure.is_ready&quot;)</span>
+                <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">CREATION_ABILITY_FIX</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ARCHON</span><span class="p">:</span>
+                        <span class="c1"># Hotfix for archons in morph state</span>
+                        <span class="n">creation_ability</span> <span class="o">=</span> <span class="n">AbilityId</span><span class="o">.</span><span class="n">ARCHON_WARP_TARGET</span>
+                        <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Hotfix for rich geysirs</span>
+                        <span class="n">creation_ability</span> <span class="o">=</span> <span class="n">CREATION_ABILITY_FIX</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">]</span>
+                        <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">creation_ability</span><span class="p">:</span> <span class="n">AbilityId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">exact_id</span>
+                    <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">max_build_progress</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                    <span class="n">max_build_progress</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">creation_ability</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">unit</span><span class="o">.</span><span class="n">build_progress</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">abilities_amount</span><span class="p">,</span> <span class="n">max_build_progress</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property_cache_once_per_frame</span>
+    <span class="k">def</span> <span class="nf">_worker_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function is used internally, do not use! It is to store all worker abilities.&quot;&quot;&quot;</span>
+        <span class="n">abilities_amount</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">structures_in_production</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">TERRAN_STRUCTURES_REQUIRE_SCV</span><span class="p">:</span>
+                <span class="n">structures_in_production</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+                <span class="n">structures_in_production</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">worker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">worker</span><span class="o">.</span><span class="n">orders</span><span class="p">:</span>
+                <span class="c1"># Skip if the SCV is constructing (not isinstance(order.target, int))</span>
+                <span class="c1"># or resuming construction (isinstance(order.target, int))</span>
+                <span class="k">if</span> <span class="n">order</span><span class="o">.</span><span class="n">target</span> <span class="ow">in</span> <span class="n">structures_in_production</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">abilities_amount</span><span class="p">[</span><span class="n">order</span><span class="o">.</span><span class="n">ability</span><span class="o">.</span><span class="n">exact_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">abilities_amount</span>
+
+<div class="viewcode-block" id="BotAIInternal.do">
+<a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.do">[docs]</a>
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">,</span>
+        <span class="n">subtract_cost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">subtract_supply</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">can_afford_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_warning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a unit action to the &#39;self.actions&#39; list which is then executed at the end of the frame.</span>
+
+<span class="sd">        Training a unit::</span>
+
+<span class="sd">            # Train an SCV from a random idle command center</span>
+<span class="sd">            cc = self.townhalls.idle.random_or(None)</span>
+<span class="sd">            # self.townhalls can be empty or there are no idle townhalls</span>
+<span class="sd">            if cc and self.can_afford(UnitTypeId.SCV):</span>
+<span class="sd">                cc.train(UnitTypeId.SCV)</span>
+
+<span class="sd">        Building a building::</span>
+
+<span class="sd">            # Building a barracks at the main ramp, requires 150 minerals and a depot</span>
+<span class="sd">            worker = self.workers.random_or(None)</span>
+<span class="sd">            barracks_placement_position = self.main_base_ramp.barracks_correct_placement</span>
+<span class="sd">            if worker and self.can_afford(UnitTypeId.BARRACKS):</span>
+<span class="sd">                worker.build(UnitTypeId.BARRACKS, barracks_placement_position)</span>
+
+<span class="sd">        Moving a unit::</span>
+
+<span class="sd">            # Move a random worker to the center of the map</span>
+<span class="sd">            worker = self.workers.random_or(None)</span>
+<span class="sd">            # worker can be None if all are dead</span>
+<span class="sd">            if worker:</span>
+<span class="sd">                worker.move(self.game_info.map_center)</span>
+
+<span class="sd">        :param action:</span>
+<span class="sd">        :param subtract_cost:</span>
+<span class="sd">        :param subtract_supply:</span>
+<span class="sd">        :param can_afford_check:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_command_uses_self_do</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_warning</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;You have used self.do(). Please consider putting &#39;self.unit_command_uses_self_do = True&#39; in your bot __init__() function or removing self.do().&quot;</span><span class="p">,</span>
+                    <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                    <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">action</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">UnitCommand</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Given unit command is not a command, but instead of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">subtract_cost</span><span class="p">:</span>
+            <span class="n">cost</span><span class="p">:</span> <span class="n">Cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">calculate_ability_cost</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">can_afford_check</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">minerals</span> <span class="o">&gt;=</span> <span class="n">cost</span><span class="o">.</span><span class="n">minerals</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">vespene</span> <span class="o">&gt;=</span> <span class="n">cost</span><span class="o">.</span><span class="n">vespene</span><span class="p">):</span>
+                <span class="c1"># Dont do action if can&#39;t afford</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">minerals</span> <span class="o">-=</span> <span class="n">cost</span><span class="o">.</span><span class="n">minerals</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vespene</span> <span class="o">-=</span> <span class="n">cost</span><span class="o">.</span><span class="n">vespene</span>
+        <span class="k">if</span> <span class="n">subtract_supply</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">ability</span> <span class="ow">in</span> <span class="n">abilityid_to_unittypeid</span><span class="p">:</span>
+            <span class="n">unit_type</span> <span class="o">=</span> <span class="n">abilityid_to_unittypeid</span><span class="p">[</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">]</span>
+            <span class="n">required_supply</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_supply_cost</span><span class="p">(</span><span class="n">unit_type</span><span class="p">)</span>
+            <span class="c1"># Overlord has -8</span>
+            <span class="k">if</span> <span class="n">required_supply</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">supply_used</span> <span class="o">+=</span> <span class="n">required_supply</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">supply_left</span> <span class="o">-=</span> <span class="n">required_supply</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit_tags_received_action</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="BotAIInternal.synchronous_do">
+<a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.synchronous_do">[docs]</a>
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">synchronous_do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Not recommended. Use self.do instead to reduce lag.</span>
+<span class="sd">        This function is only useful for realtime=True in the first frame of the game to instantly produce a worker</span>
+<span class="sd">        and split workers on the mineral patches.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">UnitCommand</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Given unit command is not a command, but instead of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot afford action </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ActionResult</span><span class="o">.</span><span class="n">Error</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">r</span><span class="p">:</span>  <span class="c1"># success</span>
+            <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">calculate_ability_cost</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">minerals</span> <span class="o">-=</span> <span class="n">cost</span><span class="o">.</span><span class="n">minerals</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vespene</span> <span class="o">-=</span> <span class="n">cost</span><span class="o">.</span><span class="n">vespene</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit_tags_received_action</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2"> (action: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span></div>
+
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_do_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitCommand</span><span class="p">],</span> <span class="n">prevent_double</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Used internally by main.py automatically, use self.do() instead!</span>
+
+<span class="sd">        :param actions:</span>
+<span class="sd">        :param prevent_double:&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">actions</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">prevent_double</span><span class="p">:</span>
+            <span class="n">actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prevent_double_actions</span><span class="p">,</span> <span class="n">actions</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">actions</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="BotAIInternal.prevent_double_actions">
+<a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.prevent_double_actions">[docs]</a>
+    <span class="nd">@final</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">prevent_double_actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param action:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Always add actions if queued</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">queue</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">orders</span><span class="p">:</span>
+            <span class="c1"># action: UnitCommand</span>
+            <span class="c1"># current_action: UnitOrder</span>
+            <span class="n">current_action</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">unit</span><span class="o">.</span><span class="n">orders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">ability</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="n">current_action</span><span class="o">.</span><span class="n">ability</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">current_action</span><span class="o">.</span><span class="n">ability</span><span class="o">.</span><span class="n">exact_id</span><span class="p">}:</span>
+                <span class="c1"># Different action, return True</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span>
+                    <span class="c1"># Same action, remove action if same target unit</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                    <span class="c1"># Same action, remove action if same target position</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_prepare_start</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">game_info</span><span class="p">,</span> <span class="n">game_data</span><span class="p">,</span> <span class="n">realtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ran until game start to set game and player data.</span>
+
+<span class="sd">        :param client:</span>
+<span class="sd">        :param player_id:</span>
+<span class="sd">        :param game_info:</span>
+<span class="sd">        :param game_data:</span>
+<span class="sd">        :param realtime:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">:</span> <span class="n">Client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">player_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="p">:</span> <span class="n">GameInfo</span> <span class="o">=</span> <span class="n">game_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="p">:</span> <span class="n">GameData</span> <span class="o">=</span> <span class="n">game_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">realtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">realtime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">base_build</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="p">:</span> <span class="n">Race</span> <span class="o">=</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">player_races</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">player_id</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">player_races</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enemy_race</span><span class="p">:</span> <span class="n">Race</span> <span class="o">=</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">player_races</span><span class="p">[</span><span class="mi">3</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_id</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distances_override_functions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_calculation_method</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_prepare_first_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;First step extra preparations. Must not be called before _prepare_step.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">player_start_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">position</span>
+            <span class="c1"># Calculate and cache expansion locations forever inside &#39;self._cache_expansion_locations&#39;, this is done to prevent a bug when this is run and cached later in the game</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_find_expansion_locations</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">map_ramps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">vision_blockers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">_find_ramps_and_vision_blockers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_prepare_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param state:</span>
+<span class="sd">        :param proto_game_info:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Set attributes from new state before on_step.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="n">GameState</span> <span class="o">=</span> <span class="n">state</span>  <span class="c1"># See game_state.py</span>
+        <span class="c1"># update pathing grid, which unfortunately is in GameInfo instead of GameState</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">pathing_grid</span> <span class="o">=</span> <span class="n">PixelMap</span><span class="p">(</span><span class="n">proto_game_info</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">start_raw</span><span class="o">.</span><span class="n">pathing_grid</span><span class="p">,</span> <span class="n">in_bits</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Required for events, needs to be before self.units are initialized so the old units are stored</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_units_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_structures_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">structure</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">structure</span> <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_structures_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">structure</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">structure</span> <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_structures</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_all_units_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span> <span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_units</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minerals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">minerals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vespene</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">vespene</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_army</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">food_army</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">food_workers</span>  <span class="c1"># Doesn&#39;t include workers in production</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_cap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">food_cap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_used</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">food_used</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_left</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">supply_cap</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">supply_used</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">race</span> <span class="o">==</span> <span class="n">Race</span><span class="o">.</span><span class="n">Zerg</span><span class="p">:</span>
+            <span class="c1"># Workaround Zerg supply rounding bug</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_correct_zerg_supply</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">race</span> <span class="o">==</span> <span class="n">Race</span><span class="o">.</span><span class="n">Protoss</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warp_gate_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">warp_gate_count</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">idle_worker_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">idle_worker_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">army_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">army_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_race</span> <span class="o">==</span> <span class="n">Race</span><span class="o">.</span><span class="n">Random</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_enemy_units</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enemy_race</span> <span class="o">=</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_enemy_units</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">race</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_prepare_units</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blips</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Blip</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">larva</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gas_buildings</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_own_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enemy_structures</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_enemy_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destructables</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">watchtowers</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mineral_field</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vespene_geyser</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">placeholders</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">techlab_tags</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reactor_tags</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="n">worker_types</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">DRONE</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">DRONEBURROWED</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SCV</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">PROBE</span><span class="p">}</span>
+
+        <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">observation_raw</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">is_blip</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">blips</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Blip</span><span class="p">(</span><span class="n">unit</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">unit_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="n">unit_type</span>
+                <span class="c1"># Convert these units to effects: reaper grenade, parasitic bomb dummy, forcefield</span>
+                <span class="k">if</span> <span class="n">unit_type</span> <span class="ow">in</span> <span class="n">FakeEffectID</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">EffectData</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">fake</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                    <span class="k">continue</span>
+                <span class="n">unit_obj</span> <span class="o">=</span> <span class="n">Unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">distance_calculation_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">base_build</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_build</span><span class="p">)</span>
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">IS_PLACEHOLDER</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">placeholders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">alliance</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="n">alliance</span>
+                <span class="c1"># Alliance.Neutral.value = 3</span>
+                <span class="k">if</span> <span class="n">alliance</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="c1"># XELNAGATOWER = 149</span>
+                    <span class="k">if</span> <span class="n">unit_type</span> <span class="o">==</span> <span class="mi">149</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">watchtowers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                    <span class="c1"># mineral field enums</span>
+                    <span class="k">elif</span> <span class="n">unit_type</span> <span class="ow">in</span> <span class="n">mineral_ids</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">mineral_field</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                    <span class="c1"># geyser enums</span>
+                    <span class="k">elif</span> <span class="n">unit_type</span> <span class="ow">in</span> <span class="n">geyser_ids</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">vespene_geyser</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                    <span class="c1"># all destructable rocks</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">destructables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                <span class="c1"># Alliance.Self.value = 1</span>
+                <span class="k">elif</span> <span class="n">alliance</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">all_own_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                    <span class="n">unit_id</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">=</span> <span class="n">unit_obj</span><span class="o">.</span><span class="n">type_id</span>
+                    <span class="k">if</span> <span class="n">unit_obj</span><span class="o">.</span><span class="n">is_structure</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">unit_id</span> <span class="ow">in</span> <span class="n">race_townhalls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">unit_id</span> <span class="ow">in</span> <span class="n">ALL_GAS</span> <span class="ow">or</span> <span class="n">unit_obj</span><span class="o">.</span><span class="n">vespene_contents</span><span class="p">:</span>
+                            <span class="c1"># TODO: remove &quot;or unit_obj.vespene_contents&quot; when a new linux client newer than version 4.10.0 is released</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">gas_buildings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">unit_id</span> <span class="ow">in</span> <span class="p">{</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">TECHLAB</span><span class="p">,</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKSTECHLAB</span><span class="p">,</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">FACTORYTECHLAB</span><span class="p">,</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">STARPORTTECHLAB</span><span class="p">,</span>
+                        <span class="p">}:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">techlab_tags</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">unit_obj</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">unit_id</span> <span class="ow">in</span> <span class="p">{</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">REACTOR</span><span class="p">,</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">BARRACKSREACTOR</span><span class="p">,</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">FACTORYREACTOR</span><span class="p">,</span>
+                            <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">STARPORTREACTOR</span><span class="p">,</span>
+                        <span class="p">}:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">reactor_tags</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">unit_obj</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">unit_id</span> <span class="ow">in</span> <span class="n">worker_types</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">unit_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">LARVA</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">larva</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                <span class="c1"># Alliance.Enemy.value = 4</span>
+                <span class="k">elif</span> <span class="n">alliance</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">all_enemy_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">unit_obj</span><span class="o">.</span><span class="n">is_structure</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">enemy_structures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit_obj</span><span class="p">)</span>
+
+        <span class="c1"># Force distance calculation and caching on all units using scipy pdist or cdist</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_calculation_method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdist</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_calculation_method</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}:</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdist</span>
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executed by main.py after each on_step function.&quot;&quot;&quot;</span>
+        <span class="c1"># Keep track of the bot on_step duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_after_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">step_duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_after_step</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_step_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">step_duration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_step_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_step_time</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">step_duration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_step_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_step_step_time</span> <span class="o">=</span> <span class="n">step_duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_time_in_on_step</span> <span class="o">+=</span> <span class="n">step_duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_total_steps_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Commit and clear bot actions</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_actions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="c1"># Clear set of unit tags that were given an order this frame by self.do()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit_tags_received_action</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="c1"># Commit debug queries</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_send_debug</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_advance_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Advances the game loop by amount of &#39;steps&#39;. This function is meant to be used as a debugging and testing tool only.</span>
+<span class="sd">        If you are using this, please be aware of the consequences, e.g. &#39;self.units&#39; will be filled with completely new data.&quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_after_step</span><span class="p">()</span>
+        <span class="c1"># Advance simulation by exactly &quot;steps&quot; frames</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">observation</span><span class="p">()</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">GameState</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">observation</span><span class="p">)</span>
+        <span class="n">proto_game_info</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">game_info</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestGameInfo</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_step</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">issue_events</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BotAIInternal.issue_events">
+<a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.issue_events">[docs]</a>
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">issue_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function will be automatically run from main.py and triggers the following functions:</span>
+<span class="sd">        - on_unit_created</span>
+<span class="sd">        - on_unit_destroyed</span>
+<span class="sd">        - on_building_construction_started</span>
+<span class="sd">        - on_building_construction_complete</span>
+<span class="sd">        - on_upgrade_complete</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_issue_unit_dead_events</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_issue_unit_added_events</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_issue_building_events</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_issue_upgrade_events</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_issue_vision_events</span><span class="p">()</span></div>
+
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_unit_added_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_previous_map</span> <span class="ow">and</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unit_tags_seen_this_game</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_unit_tags_seen_this_game</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_units_created</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_created</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_previous_map</span><span class="p">:</span>
+                <span class="n">previous_frame_unit</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_previous_map</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span>
+                <span class="c1"># Check if a unit took damage this frame and then trigger event</span>
+                <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">health</span> <span class="o">&lt;</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">health</span> <span class="ow">or</span> <span class="n">unit</span><span class="o">.</span><span class="n">shield</span> <span class="o">&lt;</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">shield</span><span class="p">:</span>
+                    <span class="n">damage_amount</span> <span class="o">=</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">health</span> <span class="o">-</span> <span class="n">unit</span><span class="o">.</span><span class="n">health</span> <span class="o">+</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">shield</span> <span class="o">-</span> <span class="n">unit</span><span class="o">.</span><span class="n">shield</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_took_damage</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">damage_amount</span><span class="p">)</span>
+                <span class="c1"># Check if a unit type has changed</span>
+                <span class="k">if</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">!=</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_type_changed</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_upgrade_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">difference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">upgrades</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span>
+        <span class="k">for</span> <span class="n">upgrade_completed</span> <span class="ow">in</span> <span class="n">difference</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_upgrade_complete</span><span class="p">(</span><span class="n">upgrade_completed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">upgrades</span>
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_building_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structures_previous_map</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">build_progress</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_building_construction_started</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Include starting townhall</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_units_created</span><span class="p">[</span><span class="n">structure</span><span class="o">.</span><span class="n">type_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_building_construction_complete</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">structure</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structures_previous_map</span><span class="p">:</span>
+                <span class="c1"># Check if a structure took damage this frame and then trigger event</span>
+                <span class="n">previous_frame_structure</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structures_previous_map</span><span class="p">[</span><span class="n">structure</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">structure</span><span class="o">.</span><span class="n">health</span> <span class="o">&lt;</span> <span class="n">previous_frame_structure</span><span class="o">.</span><span class="n">health</span>
+                    <span class="ow">or</span> <span class="n">structure</span><span class="o">.</span><span class="n">shield</span> <span class="o">&lt;</span> <span class="n">previous_frame_structure</span><span class="o">.</span><span class="n">shield</span>
+                <span class="p">):</span>
+                    <span class="n">damage_amount</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">previous_frame_structure</span><span class="o">.</span><span class="n">health</span>
+                        <span class="o">-</span> <span class="n">structure</span><span class="o">.</span><span class="n">health</span>
+                        <span class="o">+</span> <span class="n">previous_frame_structure</span><span class="o">.</span><span class="n">shield</span>
+                        <span class="o">-</span> <span class="n">structure</span><span class="o">.</span><span class="n">shield</span>
+                    <span class="p">)</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_took_damage</span><span class="p">(</span><span class="n">structure</span><span class="p">,</span> <span class="n">damage_amount</span><span class="p">)</span>
+                <span class="c1"># Check if a structure changed its type</span>
+                <span class="k">if</span> <span class="n">previous_frame_structure</span><span class="o">.</span><span class="n">type_id</span> <span class="o">!=</span> <span class="n">structure</span><span class="o">.</span><span class="n">type_id</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_type_changed</span><span class="p">(</span><span class="n">structure</span><span class="p">,</span> <span class="n">previous_frame_structure</span><span class="o">.</span><span class="n">type_id</span><span class="p">)</span>
+                <span class="c1"># Check if structure completed</span>
+                <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">build_progress</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">previous_frame_structure</span><span class="o">.</span><span class="n">build_progress</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_units_created</span><span class="p">[</span><span class="n">structure</span><span class="o">.</span><span class="n">type_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_building_construction_complete</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_vision_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Call events for enemy unit entered vision</span>
+        <span class="k">for</span> <span class="n">enemy_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">enemy_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_enemy_unit_entered_vision</span><span class="p">(</span><span class="n">enemy_unit</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">enemy_structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_structures</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">enemy_structure</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_structures_previous_map</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_enemy_unit_entered_vision</span><span class="p">(</span><span class="n">enemy_structure</span><span class="p">)</span>
+
+        <span class="c1"># Call events for enemy unit left vision</span>
+        <span class="n">enemy_units_left_vision</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="o">.</span><span class="n">tags</span>
+        <span class="k">for</span> <span class="n">enemy_unit_tag</span> <span class="ow">in</span> <span class="n">enemy_units_left_vision</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_enemy_unit_left_vision</span><span class="p">(</span><span class="n">enemy_unit_tag</span><span class="p">)</span>
+        <span class="n">enemy_structures_left_vision</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_enemy_structures_previous_map</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_structures</span><span class="o">.</span><span class="n">tags</span>
+        <span class="k">for</span> <span class="n">enemy_structure_tag</span> <span class="ow">in</span> <span class="n">enemy_structures_left_vision</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_enemy_unit_left_vision</span><span class="p">(</span><span class="n">enemy_structure_tag</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_unit_dead_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">unit_tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">dead_units</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_units_previous_map</span><span class="p">):</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_destroyed</span><span class="p">(</span><span class="n">unit_tag</span><span class="p">)</span>
+
+    <span class="c1"># DISTANCE CALCULATION</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_units_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_pdist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_cdist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_cdist</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_calculate_distances_method1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
+        <span class="c1"># Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]</span>
+        <span class="n">flat_positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">coord</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
+        <span class="c1"># Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]</span>
+        <span class="n">positions_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span>
+            <span class="n">flat_positions</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+            <span class="n">count</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions_array</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span>
+        <span class="c1"># See performance benchmarks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span> <span class="o">=</span> <span class="n">pdist</span><span class="p">(</span><span class="n">positions_array</span><span class="p">,</span> <span class="s2">&quot;sqeuclidean&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_calculate_distances_method2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
+        <span class="c1"># Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]</span>
+        <span class="n">flat_positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">coord</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
+        <span class="c1"># Converts to numpy array, then converts the flat array back to shape (n, 2): [[1, 2], [3, 4]]</span>
+        <span class="n">positions_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span>
+            <span class="n">flat_positions</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+            <span class="n">count</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions_array</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span>
+        <span class="c1"># See performance benchmarks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cached_cdist</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">positions_array</span><span class="p">,</span> <span class="n">positions_array</span><span class="p">,</span> <span class="s2">&quot;sqeuclidean&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_cdist</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_calculate_distances_method3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Nearly same as above, but without asserts&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
+        <span class="n">flat_positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">coord</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
+        <span class="n">positions_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span>
+            <span class="n">flat_positions</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+            <span class="n">count</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="c1"># See performance benchmarks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cached_cdist</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">positions_array</span><span class="p">,</span> <span class="n">positions_array</span><span class="p">,</span> <span class="s2">&quot;sqeuclidean&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_cdist</span>
+
+    <span class="c1"># Helper functions</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">square_to_condensed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># Converts indices of a square matrix to condensed matrix</span>
+        <span class="c1"># https://stackoverflow.com/a/36867493/10882657</span>
+        <span class="k">assert</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">,</span> <span class="s2">&quot;No diagonal elements in condensed matrix! Diagonal elements are zero&quot;</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_count</span> <span class="o">*</span> <span class="n">j</span> <span class="o">-</span> <span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">j</span>
+
+<div class="viewcode-block" id="BotAIInternal.convert_tuple_to_numpy_array">
+<a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array">[docs]</a>
+    <span class="nd">@final</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">convert_tuple_to_numpy_array</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a single position to a 2d numpy array with 1 row and 2 columns.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span></div>
+
+
+    <span class="c1"># Fast and simple calculation functions</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">distance_math_hypot</span><span class="p">(</span>
+        <span class="n">p1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+        <span class="n">p2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@final</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">distance_math_hypot_squared</span><span class="p">(</span>
+        <span class="n">p1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+        <span class="n">p2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">pow</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">pow</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_distance_squared_unit_to_unit_method0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot_squared</span><span class="p">(</span><span class="n">unit1</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">,</span> <span class="n">unit2</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
+
+    <span class="c1"># Distance calculation using the pre-calculated matrix above</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_distance_squared_unit_to_unit_method1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="c1"># If checked on units if they have the same tag, return distance 0 as these are not in the 1 dimensional pdist array - would result in an error otherwise</span>
+        <span class="k">if</span> <span class="n">unit1</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">unit2</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="c1"># Calculate index, needs to be after pdist has been calculated and cached</span>
+        <span class="n">condensed_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">square_to_condensed</span><span class="p">(</span><span class="n">unit1</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">,</span> <span class="n">unit2</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">condensed_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span><span class="p">)</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Condensed index is larger than amount of calculated distances: </span><span class="si">{</span><span class="n">condensed_index</span><span class="si">}</span><span class="s2"> &lt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span><span class="p">)</span><span class="si">}</span><span class="s2">, units that caused the assert error: </span><span class="si">{</span><span class="n">unit1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">unit2</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdist</span><span class="p">[</span><span class="n">condensed_index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">distance</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_distance_squared_unit_to_unit_method2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="c1"># Calculate index, needs to be after cdist has been calculated and cached</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdist</span><span class="p">[</span><span class="n">unit1</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">,</span> <span class="n">unit2</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">]</span>
+
+    <span class="c1"># Distance calculation using the fastest distance calculation functions</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_distance_pos_to_pos</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pos1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+        <span class="n">pos2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_distance_units_to_pos</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">units</span><span class="p">:</span> <span class="n">Units</span><span class="p">,</span>
+        <span class="n">pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function does not scale well, if len(units) &gt; 100 it gets fairly slow&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_distance_unit_to_points</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span>
+        <span class="n">points</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function does not scale well, if len(points) &gt; 100 it gets fairly slow&quot;&quot;&quot;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="n">position_tuple</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">)</span>
+
+    <span class="nd">@final</span>
+    <span class="k">def</span> <span class="nf">_distances_override_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Overrides the internal distance calculation functions at game start in bot_ai.py self._prepare_start() function</span>
+<span class="sd">        method 0: Use python&#39;s math.hypot</span>
+<span class="sd">        The following methods calculate the distances between all units once:</span>
+<span class="sd">        method 1: Use scipy&#39;s pdist condensed matrix (1d array)</span>
+<span class="sd">        method 2: Use scipy&#39;s cidst square matrix (2d array)</span>
+<span class="sd">        method 3: Use scipy&#39;s cidst square matrix (2d array) without asserts (careful: very weird error messages, but maybe slightly faster)&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">method</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Selected method was: </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit_method0</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit_method1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_distances_method1</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit_method2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_distances_method2</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_squared_unit_to_unit_method2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_distances_method3</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
