@@ -154,9 +154,9 @@ RESEARCH_INFO: dict[UnitTypeId, dict[UpgradeId, dict[str, Union[AbilityId, bool,
         },
     },
     UnitTypeId.FACTORYTECHLAB: {
+        UpgradeId.CYCLONELOCKONDAMAGEUPGRADE: {"ability": AbilityId.RESEARCH_CYCLONELOCKONDAMAGE},
         UpgradeId.DRILLCLAWS: {"ability": AbilityId.RESEARCH_DRILLINGCLAWS, "required_building": UnitTypeId.ARMORY},
         UpgradeId.HIGHCAPACITYBARRELS: {"ability": AbilityId.RESEARCH_INFERNALPREIGNITER},
-        UpgradeId.HURRICANETHRUSTERS: {"ability": AbilityId.FACTORYTECHLABRESEARCH_CYCLONERESEARCHHURRICANETHRUSTERS},
         UpgradeId.SMARTSERVOS: {"ability": AbilityId.RESEARCH_SMARTSERVOS, "required_building": UnitTypeId.ARMORY},
     },
     UnitTypeId.FLEETBEACON: {
@@ -264,6 +264,10 @@ RESEARCH_INFO: dict[UnitTypeId, dict[UpgradeId, dict[str, Union[AbilityId, bool,
     UnitTypeId.HYDRALISKDEN: {
         UpgradeId.EVOLVEGROOVEDSPINES: {"ability": AbilityId.RESEARCH_GROOVEDSPINES},
         UpgradeId.EVOLVEMUSCULARAUGMENTS: {"ability": AbilityId.RESEARCH_MUSCULARAUGMENTS},
+        UpgradeId.FRENZY: {
+            "ability": AbilityId.HYDRALISKDENRESEARCH_RESEARCHFRENZY,
+            "required_building": UnitTypeId.HIVE,
+        },
     },
     UnitTypeId.INFESTATIONPIT: {UpgradeId.NEURALPARASITE: {"ability": AbilityId.RESEARCH_NEURALPARASITE}},
     UnitTypeId.LAIR: {

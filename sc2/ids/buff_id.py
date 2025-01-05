@@ -309,6 +309,7 @@ class BuffId(enum.Enum):
     TAKENDAMAGE = 299
     RAVENSCRAMBLERMISSILECARRIER = 300
     BATTERYOVERCHARGE = 301
+    HYDRALISKFRENZY = 302
 
     def __repr__(self) -> str:
         return f"BuffId.{self.name}"

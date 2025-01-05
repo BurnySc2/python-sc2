@@ -107,7 +107,7 @@ TRAIN_INFO: dict[UnitTypeId, dict[UnitTypeId, dict[str, Union[AbilityId, bool, U
         },
     },
     UnitTypeId.FACTORY: {
-        UnitTypeId.CYCLONE: {"ability": AbilityId.TRAIN_CYCLONE},
+        UnitTypeId.CYCLONE: {"ability": AbilityId.TRAIN_CYCLONE, "requires_techlab": True},
         UnitTypeId.HELLION: {"ability": AbilityId.FACTORYTRAIN_HELLION},
         UnitTypeId.HELLIONTANK: {"ability": AbilityId.TRAIN_HELLBAT, "required_building": UnitTypeId.ARMORY},
         UnitTypeId.SIEGETANK: {"ability": AbilityId.FACTORYTRAIN_SIEGETANK, "requires_techlab": True},

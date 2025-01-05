@@ -132,7 +132,12 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.BUNKER: {AbilityId.EFFECT_SALVAGE, AbilityId.LOAD_BUNKER, AbilityId.RALLY_BUILDING, AbilityId.SMART},
+    UnitTypeId.BUNKER: {
+        AbilityId.LOAD_BUNKER,
+        AbilityId.RALLY_BUILDING,
+        AbilityId.SALVAGEEFFECT_SALVAGE,
+        AbilityId.SMART,
+    },
     UnitTypeId.BYPASSARMORDRONE: {AbilityId.ATTACK_ATTACK, AbilityId.MOVE_MOVE, AbilityId.SMART, AbilityId.STOP_STOP},
     UnitTypeId.CARRIER: {
         AbilityId.ATTACK_ATTACK,
@@ -237,7 +242,6 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.SMART,
         AbilityId.STOP_STOP,
     },
-    UnitTypeId.CREEPTUMOR: {AbilityId.BUILD_CREEPTUMOR_TUMOR, AbilityId.SMART},
     UnitTypeId.CREEPTUMORBURROWED: {AbilityId.BUILD_CREEPTUMOR, AbilityId.BUILD_CREEPTUMOR_TUMOR, AbilityId.SMART},
     UnitTypeId.CYBERNETICSCORE: {
         AbilityId.CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL1,
@@ -379,7 +383,7 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.FACTORYTECHLAB: {
-        AbilityId.FACTORYTECHLABRESEARCH_CYCLONERESEARCHHURRICANETHRUSTERS,
+        AbilityId.RESEARCH_CYCLONELOCKONDAMAGE,
         AbilityId.RESEARCH_DRILLINGCLAWS,
         AbilityId.RESEARCH_INFERNALPREIGNITER,
         AbilityId.RESEARCH_SMARTSERVOS,
@@ -531,7 +535,11 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.HYDRALISKBURROWED: {AbilityId.BURROWUP_HYDRALISK},
-    UnitTypeId.HYDRALISKDEN: {AbilityId.RESEARCH_GROOVEDSPINES, AbilityId.RESEARCH_MUSCULARAUGMENTS},
+    UnitTypeId.HYDRALISKDEN: {
+        AbilityId.HYDRALISKDENRESEARCH_RESEARCHFRENZY,
+        AbilityId.RESEARCH_GROOVEDSPINES,
+        AbilityId.RESEARCH_MUSCULARAUGMENTS,
+    },
     UnitTypeId.IMMORTAL: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.HOLDPOSITION_HOLD,
@@ -541,12 +549,6 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.INFESTATIONPIT: {AbilityId.RESEARCH_NEURALPARASITE},
-    UnitTypeId.INFESTEDTERRANSEGG: {
-        AbilityId.HOLDPOSITION_HOLD,
-        AbilityId.MOVE_MOVE,
-        AbilityId.PATROL_PATROL,
-        AbilityId.SMART,
-    },
     UnitTypeId.INFESTOR: {
         AbilityId.AMORPHOUSARMORCLOUD_AMORPHOUSARMORCLOUD,
         AbilityId.BURROWDOWN_INFESTOR,
@@ -697,6 +699,7 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.EFFECT_MASSRECALL_STRATEGICRECALL,
         AbilityId.EFFECT_TIMEWARP,
         AbilityId.HOLDPOSITION_HOLD,
+        AbilityId.MOTHERSHIPCLOAK_ORACLECLOAKFIELD,
         AbilityId.MOVE_MOVE,
         AbilityId.PATROL_PATROL,
         AbilityId.SMART,
@@ -733,9 +736,9 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.STOP_STOP,
     },
     UnitTypeId.NEXUS: {
-        AbilityId.BATTERYOVERCHARGE_BATTERYOVERCHARGE,
         AbilityId.EFFECT_CHRONOBOOSTENERGYCOST,
         AbilityId.EFFECT_MASSRECALL_NEXUS,
+        AbilityId.ENERGYRECHARGE_ENERGYRECHARGE,
         AbilityId.NEXUSTRAINMOTHERSHIP_MOTHERSHIP,
         AbilityId.NEXUSTRAIN_PROBE,
         AbilityId.RALLY_NEXUS,
@@ -1018,6 +1021,7 @@ UNIT_ABILITIES: dict[UnitTypeId, set[AbilityId]] = {
         AbilityId.TERRANBUILD_STARPORT,
         AbilityId.TERRANBUILD_SUPPLYDEPOT,
     },
+    UnitTypeId.SENSORTOWER: {AbilityId.SALVAGEEFFECT_SALVAGE},
     UnitTypeId.SENTRY: {
         AbilityId.ATTACK_ATTACK,
         AbilityId.FORCEFIELD_FORCEFIELD,
