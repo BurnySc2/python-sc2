@@ -1,0 +1,1230 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>units.py &#8212; python-sc2  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'units/index';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="game_data.py" href="../game_data/index.html" />
+    <link rel="prev" title="unit.py" href="../unit/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">units.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pixel_map/index.html">pixel_map.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocol/index.html">protocol.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../score/index.html">score.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unit_command/index.html">unit_command.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/units/index.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>units.py</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.by_tag"><code class="docutils literal notranslate"><span class="pre">Units.by_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.center"><code class="docutils literal notranslate"><span class="pre">Units.center</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closer_than"><code class="docutils literal notranslate"><span class="pre">Units.closer_than()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closest_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.closest_distance_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closest_n_units"><code class="docutils literal notranslate"><span class="pre">Units.closest_n_units()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closest_to"><code class="docutils literal notranslate"><span class="pre">Units.closest_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.collecting"><code class="docutils literal notranslate"><span class="pre">Units.collecting</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.copy"><code class="docutils literal notranslate"><span class="pre">Units.copy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.enemy"><code class="docutils literal notranslate"><span class="pre">Units.enemy</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.exclude_type"><code class="docutils literal notranslate"><span class="pre">Units.exclude_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.filter"><code class="docutils literal notranslate"><span class="pre">Units.filter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.find_by_tag"><code class="docutils literal notranslate"><span class="pre">Units.find_by_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.flying"><code class="docutils literal notranslate"><span class="pre">Units.flying</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.further_than"><code class="docutils literal notranslate"><span class="pre">Units.further_than()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.furthest_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.furthest_distance_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.furthest_n_units"><code class="docutils literal notranslate"><span class="pre">Units.furthest_n_units()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.furthest_to"><code class="docutils literal notranslate"><span class="pre">Units.furthest_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.gathering"><code class="docutils literal notranslate"><span class="pre">Units.gathering</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.idle"><code class="docutils literal notranslate"><span class="pre">Units.idle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_attack_range_of"><code class="docutils literal notranslate"><span class="pre">Units.in_attack_range_of()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_closest_distance_to_group"><code class="docutils literal notranslate"><span class="pre">Units.in_closest_distance_to_group()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_distance_between"><code class="docutils literal notranslate"><span class="pre">Units.in_distance_between()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_distance_of_group"><code class="docutils literal notranslate"><span class="pre">Units.in_distance_of_group()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.mineral_field"><code class="docutils literal notranslate"><span class="pre">Units.mineral_field</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.n_closest_to_distance"><code class="docutils literal notranslate"><span class="pre">Units.n_closest_to_distance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.n_furthest_to_distance"><code class="docutils literal notranslate"><span class="pre">Units.n_furthest_to_distance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.not_flying"><code class="docutils literal notranslate"><span class="pre">Units.not_flying</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.not_ready"><code class="docutils literal notranslate"><span class="pre">Units.not_ready</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.not_structure"><code class="docutils literal notranslate"><span class="pre">Units.not_structure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.of_type"><code class="docutils literal notranslate"><span class="pre">Units.of_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.owned"><code class="docutils literal notranslate"><span class="pre">Units.owned</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.prefer_idle"><code class="docutils literal notranslate"><span class="pre">Units.prefer_idle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.random_group_of"><code class="docutils literal notranslate"><span class="pre">Units.random_group_of()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.ready"><code class="docutils literal notranslate"><span class="pre">Units.ready</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.returning"><code class="docutils literal notranslate"><span class="pre">Units.returning</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.same_tech"><code class="docutils literal notranslate"><span class="pre">Units.same_tech()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.same_unit"><code class="docutils literal notranslate"><span class="pre">Units.same_unit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.selected"><code class="docutils literal notranslate"><span class="pre">Units.selected</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.sorted_by_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.sorted_by_distance_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.structure"><code class="docutils literal notranslate"><span class="pre">Units.structure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.subgroup"><code class="docutils literal notranslate"><span class="pre">Units.subgroup()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.tags"><code class="docutils literal notranslate"><span class="pre">Units.tags</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.tags_in"><code class="docutils literal notranslate"><span class="pre">Units.tags_in()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.tags_not_in"><code class="docutils literal notranslate"><span class="pre">Units.tags_not_in()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.take"><code class="docutils literal notranslate"><span class="pre">Units.take()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.vespene_geyser"><code class="docutils literal notranslate"><span class="pre">Units.vespene_geyser</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.visible"><code class="docutils literal notranslate"><span class="pre">Units.visible</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="toctree-wrapper compound">
+</div>
+<section id="units-py">
+<h1>units.py<a class="headerlink" href="#units-py" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="sc2.units.Units">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.units.</span></span><span class="sig-name descname"><span class="pre">Units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bot_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../bot_ai/index.html#sc2.bot_ai.BotAI" title="sc2.bot_ai.BotAI"><span class="pre">BotAI</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sc2.units.Units" title="Link to this definition">#</a></dt>
+<dd><p>A collection of Unit objects. Makes it easy to select units by selectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>units</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]</span>)</p></li>
+<li><p><strong>bot_object</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../bot_ai/index.html#sc2.bot_ai.BotAI" title="sc2.bot_ai.BotAI"><code class="xref py py-class docutils literal notranslate"><span class="pre">BotAI</span></code></a></span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.by_tag">
+<span class="sig-name descname"><span class="pre">by_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a></span></span><a class="headerlink" href="#sc2.units.Units.by_tag" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tag</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.center">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></em><a class="headerlink" href="#sc2.units.Units.center" title="Link to this definition">#</a></dt>
+<dd><p>Returns the central position of all units.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.closer_than">
+<span class="sig-name descname"><span class="pre">closer_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.closer_than" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units (from this Units object) that are closer than ‘distance’ away from target unit or position.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">close_zerglings</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">closer_than</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">my_marine</span><span class="p">)</span>
+    <span class="c1"># Contains all zerglings that are distance 3 or less away from the marine (does not include unit radius in calculation)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.closest_distance_to">
+<span class="sig-name descname"><span class="pre">closest_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#sc2.units.Units.closest_distance_to" title="Link to this definition">#</a></dt>
+<dd><p>Returns the distance between the closest unit from this group to the target unit.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">closest_zergling_distance</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">closest_distance_to</span><span class="p">(</span><span class="n">my_marine</span><span class="p">)</span>
+<span class="c1"># Contains the distance between the marine and the closest zergling</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.closest_n_units">
+<span class="sig-name descname"><span class="pre">closest_n_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.closest_n_units" title="Link to this definition">#</a></dt>
+<dd><p>Returns the n closest units in distance to position.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">zerglings_filtered</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">closest_n_units</span><span class="p">(</span><span class="n">my_marine</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="c1"># Contains 5 zerglings that are the closest to the marine</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p></li>
+<li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.closest_to">
+<span class="sig-name descname"><span class="pre">closest_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a></span></span><a class="headerlink" href="#sc2.units.Units.closest_to" title="Link to this definition">#</a></dt>
+<dd><p>Returns the closest unit (from this Units object) to the target unit or position.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">closest_zergling</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">closest_to</span><span class="p">(</span><span class="n">my_marine</span><span class="p">)</span>
+    <span class="c1"># Contains the zergling that is closest to the target marine</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.collecting">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collecting</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.collecting" title="Link to this definition">#</a></dt>
+<dd><p>Returns all workers that are mining or returning resources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.copy" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new mutable Units object from Units or list object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>units</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.enemy">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enemy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.enemy" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated: All enemy units.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.exclude_type">
+<span class="sig-name descname"><span class="pre">exclude_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.exclude_type" title="Link to this definition">#</a></dt>
+<dd><p>Filters all units that are not of a specific type</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a set instead of lists in the argument</span>
+<span class="n">ignore_units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="o">.</span><span class="n">exclude_type</span><span class="p">({</span><span class="n">LARVA</span><span class="p">,</span> <span class="n">EGG</span><span class="p">,</span> <span class="n">OVERLORD</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.filter" title="Link to this definition">#</a></dt>
+<dd><p>Filters the current Units object and returns a new Units object.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="kn">import</span> <span class="n">UnitTypeId</span>
+<span class="n">my_marines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">)</span>
+
+<span class="n">completed_structures</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">structure</span><span class="p">:</span> <span class="n">structure</span><span class="o">.</span><span class="n">is_ready</span><span class="p">)</span>
+
+<span class="n">queens_with_energy_to_inject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">QUEEN</span> <span class="ow">and</span> <span class="n">unit</span><span class="o">.</span><span class="n">energy</span> <span class="o">&gt;=</span> <span class="mi">25</span><span class="p">)</span>
+
+<span class="n">orbitals_with_energy_to_mule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">structure</span><span class="p">:</span> <span class="n">structure</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span> <span class="ow">and</span> <span class="n">structure</span><span class="o">.</span><span class="n">energy</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="n">my_units_that_can_shoot_up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unit</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">can_attack_air</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See more unit properties in unit.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pred</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.find_by_tag">
+<span class="sig-name descname"><span class="pre">find_by_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#sc2.units.Units.find_by_tag" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tag</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.flying">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flying</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.flying" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units that are flying.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.further_than">
+<span class="sig-name descname"><span class="pre">further_than</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.further_than" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units (from this Units object) that are further than ‘distance’ away from target unit or position.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">far_zerglings</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">further_than</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">my_marine</span><span class="p">)</span>
+    <span class="c1"># Contains all zerglings that are distance 3 or more away from the marine (does not include unit radius in calculation)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.furthest_distance_to">
+<span class="sig-name descname"><span class="pre">furthest_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#sc2.units.Units.furthest_distance_to" title="Link to this definition">#</a></dt>
+<dd><p>Returns the distance between the furthest unit from this group to the target unit</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">furthest_zergling_distance</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">furthest_distance_to</span><span class="p">(</span><span class="n">my_marine</span><span class="p">)</span>
+    <span class="c1"># Contains the distance between the marine and the furthest away zergling</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.furthest_n_units">
+<span class="sig-name descname"><span class="pre">furthest_n_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.furthest_n_units" title="Link to this definition">#</a></dt>
+<dd><p>Returns the n furhest units in distance to position.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">zerglings_filtered</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">furthest_n_units</span><span class="p">(</span><span class="n">my_marine</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="c1"># Contains 5 zerglings that are the furthest to the marine</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p></li>
+<li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.furthest_to">
+<span class="sig-name descname"><span class="pre">furthest_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a></span></span><a class="headerlink" href="#sc2.units.Units.furthest_to" title="Link to this definition">#</a></dt>
+<dd><p>Returns the furhest unit (from this Units object) to the target unit or position.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">furthest_zergling</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">furthest_to</span><span class="p">(</span><span class="n">my_marine</span><span class="p">)</span>
+    <span class="c1"># Contains the zergling that is furthest away to the target marine</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.gathering">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gathering</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.gathering" title="Link to this definition">#</a></dt>
+<dd><p>Returns all workers that are mining minerals or vespene (gather command).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.idle">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">idle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.idle" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units or structures that are doing nothing (unit is standing still, structure is doing nothing).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.in_attack_range_of">
+<span class="sig-name descname"><span class="pre">in_attack_range_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bonus_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.in_attack_range_of" title="Link to this definition">#</a></dt>
+<dd><p>Filters units that are in attack range of the given unit.
+This uses the unit and target unit.radius when calculating the distance, so it should be accurate.
+Caution: This may not work well for static structures (bunker, sieged tank, planetary fortress, photon cannon, spine and spore crawler) because it seems attack ranges differ for static / immovable units.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">all_zerglings_my_marine_can_attack</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">in_attack_range_of</span><span class="p">(</span><span class="n">my_marine</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_mutalisks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MUTALISK</span><span class="p">)</span>
+<span class="n">my_marauder</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARAUDER</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marauder</span><span class="p">:</span>
+    <span class="n">all_mutalisks_my_marauder_can_attack</span> <span class="o">=</span> <span class="n">enemy_mutaliskss</span><span class="o">.</span><span class="n">in_attack_range_of</span><span class="p">(</span><span class="n">my_marauder</span><span class="p">)</span>
+    <span class="c1"># Is empty because mutalisk are flying and marauder cannot attack air</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></span>)</p></li>
+<li><p><strong>bonus_distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.in_closest_distance_to_group">
+<span class="sig-name descname"><span class="pre">in_closest_distance_to_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a></span></span><a class="headerlink" href="#sc2.units.Units.in_closest_distance_to_group" title="Link to this definition">#</a></dt>
+<dd><p>Returns unit in shortest distance from any unit in self to any unit in group.</p>
+<p>Loops over all units in self, then loops over all units in other_units and calculates the shortest distance. Returns the units that is closest to any unit of ‘other_units’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other_units</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.in_distance_between">
+<span class="sig-name descname"><span class="pre">in_distance_between</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.in_distance_between" title="Link to this definition">#</a></dt>
+<dd><p>Returns units that are further than distance1 and closer than distance2 to unit or position.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enemy_zerglings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ZERGLING</span><span class="p">)</span>
+<span class="n">my_marine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">MARINE</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">my_marine</span><span class="p">:</span>
+    <span class="n">zerglings_filtered</span> <span class="o">=</span> <span class="n">enemy_zerglings</span><span class="o">.</span><span class="n">in_distance_between</span><span class="p">(</span><span class="n">my_marine</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="c1"># Contains all zerglings that are between distance 3 and 5 away from the marine (does not include unit radius in calculation)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</span>)</p></li>
+<li><p><strong>distance1</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+<li><p><strong>distance2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.in_distance_of_group">
+<span class="sig-name descname"><span class="pre">in_distance_of_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.in_distance_of_group" title="Link to this definition">#</a></dt>
+<dd><p>Returns units that are closer than distance from any unit in the other units object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other_units</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span>)</p></li>
+<li><p><strong>distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.mineral_field">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mineral_field</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.mineral_field" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units that are mineral fields.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.n_closest_to_distance">
+<span class="sig-name descname"><span class="pre">n_closest_to_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.n_closest_to_distance" title="Link to this definition">#</a></dt>
+<dd><p>Returns n units that are the closest to distance away.
+For example if the distance is set to 5 and you want 3 units, from units with distance [3, 4, 5, 6, 7] to position,
+the units with distance [4, 5, 6] will be returned</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p></li>
+<li><p><strong>distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+<li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.n_furthest_to_distance">
+<span class="sig-name descname"><span class="pre">n_furthest_to_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.n_furthest_to_distance" title="Link to this definition">#</a></dt>
+<dd><p>Inverse of the function ‘n_closest_to_distance’, returns the furthest units instead</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p></li>
+<li><p><strong>distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+<li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.not_flying">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_flying</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_flying" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units that not are flying.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.not_ready">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_ready" title="Link to this definition">#</a></dt>
+<dd><p>Returns all structures that are not ready (construction not complete).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.not_structure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">not_structure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.not_structure" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated: All units that are not structures.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.of_type">
+<span class="sig-name descname"><span class="pre">of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.of_type" title="Link to this definition">#</a></dt>
+<dd><p>Filters all units that are of a specific type</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a set instead of lists in the argument</span>
+<span class="n">some_attack_units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">of_type</span><span class="p">({</span><span class="n">ZERGLING</span><span class="p">,</span> <span class="n">ROACH</span><span class="p">,</span> <span class="n">HYDRALISK</span><span class="p">,</span> <span class="n">BROODLORD</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.owned">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">owned</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.owned" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated: All your units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.prefer_idle">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prefer_idle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.prefer_idle" title="Link to this definition">#</a></dt>
+<dd><p>Sorts units based on if they are idle. Idle units come first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.random_group_of">
+<span class="sig-name descname"><span class="pre">random_group_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.random_group_of" title="Link to this definition">#</a></dt>
+<dd><p>Returns self if n &gt;= self.amount.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.ready">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.ready" title="Link to this definition">#</a></dt>
+<dd><p>Returns all structures that are ready (construction complete).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.returning">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.returning" title="Link to this definition">#</a></dt>
+<dd><p>Returns all workers that are carrying minerals or vespene and are returning to a townhall.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.same_tech">
+<span class="sig-name descname"><span class="pre">same_tech</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.same_tech" title="Link to this definition">#</a></dt>
+<dd><p>Returns all structures that have the same base structure.</p>
+<p>Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and others</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># All command centers, flying command centers, orbital commands, flying orbital commands, planetary fortress</span>
+<span class="n">terran_townhalls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
+
+<span class="c1"># All hatcheries, lairs and hives</span>
+<span class="n">zerg_townhalls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">HATCHERY</span><span class="p">})</span>
+
+<span class="c1"># All spires and greater spires</span>
+<span class="n">spires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">})</span>
+<span class="c1"># The following returns the same</span>
+<span class="n">spires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">GREATERSPIRE</span><span class="p">})</span>
+
+<span class="c1"># This also works with multiple unit types</span>
+<span class="n">zerg_townhalls_and_spires</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">same_tech</span><span class="p">({</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">HATCHERY</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">SPIRE</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.same_unit">
+<span class="sig-name descname"><span class="pre">same_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.same_unit" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units that have the same base unit while being in different modes.</p>
+<p>Untested: This should return the equivalents for WarpPrism, Observer, Overseer, SupplyDepot and other units that have different modes but still act as the same unit</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># All command centers on the ground and flying</span>
+<span class="n">ccs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_unit</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">COMMANDCENTER</span><span class="p">)</span>
+
+<span class="c1"># All orbital commands on the ground and flying</span>
+<span class="n">ocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">same_unit</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ORBITALCOMMAND</span><span class="p">)</span>
+
+<span class="c1"># All roaches and burrowed roaches</span>
+<span class="n">roaches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">same_unit</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ROACH</span><span class="p">)</span>
+<span class="c1"># This is useful because roach has a different type id when burrowed</span>
+<span class="n">burrowed_roaches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ROACHBURROWED</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitTypeId</span></code></a>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.selected">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">selected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.selected" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units that are selected by the human player.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.sorted_by_distance_to">
+<span class="sig-name descname"><span class="pre">sorted_by_distance_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.sorted_by_distance_to" title="Link to this definition">#</a></dt>
+<dd><p>This function should be a bit faster than using units.sorted(key=lambda u: u.distance_to(position))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> | <a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point2</span></code></a></span>)</p></li>
+<li><p><strong>reverse</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.structure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">structure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.structure" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated: All structures.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.subgroup">
+<span class="sig-name descname"><span class="pre">subgroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><span class="pre">Unit</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.subgroup" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new mutable Units object from Units or list object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>units</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="../unit/index.html#sc2.unit.Unit" title="sc2.unit.Unit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.tags">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.units.Units.tags" title="Link to this definition">#</a></dt>
+<dd><p>Returns all unit tags as a set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.tags_in">
+<span class="sig-name descname"><span class="pre">tags_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.tags_in" title="Link to this definition">#</a></dt>
+<dd><p>Filters all units that have their tags in the ‘other’ set/list/dict</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_inject_queens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">tags_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+
+<span class="c1"># Do not use the following as it is slower because it first loops over all units to filter out if they are queens and loops over those again to check if their tags are in the list/set</span>
+<span class="n">my_inject_queens_slow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">QUEEN</span><span class="p">)</span><span class="o">.</span><span class="n">tags_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.tags_not_in">
+<span class="sig-name descname"><span class="pre">tags_not_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.tags_not_in" title="Link to this definition">#</a></dt>
+<dd><p>Filters all units that have their tags not in the ‘other’ set/list/dict</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_non_inject_queens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">tags_not_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+
+<span class="c1"># Do not use the following as it is slower because it first loops over all units to filter out if they are queens and loops over those again to check if their tags are in the list/set</span>
+<span class="n">my_non_inject_queens_slow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">QUEEN</span><span class="p">)</span><span class="o">.</span><span class="n">tags_not_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queen_tags_assigned_to_do_injects</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sc2.units.Units.take">
+<span class="sig-name descname"><span class="pre">take</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></span></span><a class="headerlink" href="#sc2.units.Units.take" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">Units</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.vespene_geyser">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vespene_geyser</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.vespene_geyser" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units that are vespene geysers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sc2.units.Units.visible">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">visible</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.units.Units" title="sc2.units.Units"><span class="pre">Units</span></a></em><a class="headerlink" href="#sc2.units.Units.visible" title="Link to this definition">#</a></dt>
+<dd><p>Returns all units or structures that are visible.
+TODO: add proper description on which units are exactly visible (not snapshots?)</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../unit/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">unit.py</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../game_data/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">game_data.py</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.by_tag"><code class="docutils literal notranslate"><span class="pre">Units.by_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.center"><code class="docutils literal notranslate"><span class="pre">Units.center</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closer_than"><code class="docutils literal notranslate"><span class="pre">Units.closer_than()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closest_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.closest_distance_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closest_n_units"><code class="docutils literal notranslate"><span class="pre">Units.closest_n_units()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.closest_to"><code class="docutils literal notranslate"><span class="pre">Units.closest_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.collecting"><code class="docutils literal notranslate"><span class="pre">Units.collecting</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.copy"><code class="docutils literal notranslate"><span class="pre">Units.copy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.enemy"><code class="docutils literal notranslate"><span class="pre">Units.enemy</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.exclude_type"><code class="docutils literal notranslate"><span class="pre">Units.exclude_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.filter"><code class="docutils literal notranslate"><span class="pre">Units.filter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.find_by_tag"><code class="docutils literal notranslate"><span class="pre">Units.find_by_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.flying"><code class="docutils literal notranslate"><span class="pre">Units.flying</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.further_than"><code class="docutils literal notranslate"><span class="pre">Units.further_than()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.furthest_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.furthest_distance_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.furthest_n_units"><code class="docutils literal notranslate"><span class="pre">Units.furthest_n_units()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.furthest_to"><code class="docutils literal notranslate"><span class="pre">Units.furthest_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.gathering"><code class="docutils literal notranslate"><span class="pre">Units.gathering</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.idle"><code class="docutils literal notranslate"><span class="pre">Units.idle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_attack_range_of"><code class="docutils literal notranslate"><span class="pre">Units.in_attack_range_of()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_closest_distance_to_group"><code class="docutils literal notranslate"><span class="pre">Units.in_closest_distance_to_group()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_distance_between"><code class="docutils literal notranslate"><span class="pre">Units.in_distance_between()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.in_distance_of_group"><code class="docutils literal notranslate"><span class="pre">Units.in_distance_of_group()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.mineral_field"><code class="docutils literal notranslate"><span class="pre">Units.mineral_field</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.n_closest_to_distance"><code class="docutils literal notranslate"><span class="pre">Units.n_closest_to_distance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.n_furthest_to_distance"><code class="docutils literal notranslate"><span class="pre">Units.n_furthest_to_distance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.not_flying"><code class="docutils literal notranslate"><span class="pre">Units.not_flying</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.not_ready"><code class="docutils literal notranslate"><span class="pre">Units.not_ready</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.not_structure"><code class="docutils literal notranslate"><span class="pre">Units.not_structure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.of_type"><code class="docutils literal notranslate"><span class="pre">Units.of_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.owned"><code class="docutils literal notranslate"><span class="pre">Units.owned</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.prefer_idle"><code class="docutils literal notranslate"><span class="pre">Units.prefer_idle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.random_group_of"><code class="docutils literal notranslate"><span class="pre">Units.random_group_of()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.ready"><code class="docutils literal notranslate"><span class="pre">Units.ready</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.returning"><code class="docutils literal notranslate"><span class="pre">Units.returning</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.same_tech"><code class="docutils literal notranslate"><span class="pre">Units.same_tech()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.same_unit"><code class="docutils literal notranslate"><span class="pre">Units.same_unit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.selected"><code class="docutils literal notranslate"><span class="pre">Units.selected</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.sorted_by_distance_to"><code class="docutils literal notranslate"><span class="pre">Units.sorted_by_distance_to()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.structure"><code class="docutils literal notranslate"><span class="pre">Units.structure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.subgroup"><code class="docutils literal notranslate"><span class="pre">Units.subgroup()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.tags"><code class="docutils literal notranslate"><span class="pre">Units.tags</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.tags_in"><code class="docutils literal notranslate"><span class="pre">Units.tags_in()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.tags_not_in"><code class="docutils literal notranslate"><span class="pre">Units.tags_not_in()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.take"><code class="docutils literal notranslate"><span class="pre">Units.take()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.vespene_geyser"><code class="docutils literal notranslate"><span class="pre">Units.vespene_geyser</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.units.Units.visible"><code class="docutils literal notranslate"><span class="pre">Units.visible</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
