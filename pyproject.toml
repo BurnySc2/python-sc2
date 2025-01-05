@@ -1,5 +1,5 @@
 [project]
-name = "sc2"
+name = "burnysc2"
 version = "7.0.4"
 description = "A StarCraft II API Client for Python 3"
 authors = [{ name = "BurnySc2", email = "gamingburny@gmail.com" }]
@@ -65,9 +65,15 @@ dev = [
     "yapf>=0.43.0",
 ]
 
+[tool.setuptools]
+license-files = []
+package-dir = { "" = "sc2" }
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+# https://packaging.python.org/en/latest/tutorials/packaging-projects/#choosing-a-build-backend
+# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#custom-discovery
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
 [project.urls]
 Repository = "https://github.com/Burnysc2/python-sc2"
