@@ -1,6 +1,6 @@
 [project]
 name = "burnysc2"
-version = "7.0.4"
+version = "7.0.5"
 description = "A StarCraft II API Client for Python 3"
 authors = [{ name = "BurnySc2", email = "gamingburny@gmail.com" }]
 requires-python = ">=3.9, <3.13"
@@ -67,7 +67,7 @@ dev = [
 
 [tool.setuptools]
 license-files = []
-package-dir = { "" = "sc2" }
+package-dir = { sc2 = "sc2" }
 
 [build-system]
 # https://packaging.python.org/en/latest/tutorials/packaging-projects/#choosing-a-build-backend
