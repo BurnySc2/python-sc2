@@ -1,71 +1,150 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../">
-<head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>game_info.py &mdash; python-sc2  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>game_info.py &#8212; python-sc2  documentation</title>
   
-      <script src="../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../_static/doctools.js?v=9a2dae69"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/js/theme.js"></script>
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'game_info/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="game_state.py" href="../game_state/index.html" />
-    <link rel="prev" title="game_data.py" href="../game_data/index.html" /> 
-</head>
+    <link rel="prev" title="game_data.py" href="../game_data/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="../index.html" class="icon icon-home">
-            python-sc2
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_data/index.html">game_data.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">game_info.py</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#sc2.game_info.Ramp"><code class="docutils literal notranslate"><span class="pre">Ramp</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.barracks_can_fit_addon"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_can_fit_addon</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.barracks_correct_placement"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_correct_placement</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.barracks_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_in_middle</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.corner_depots"><code class="docutils literal notranslate"><span class="pre">Ramp.corner_depots</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.depot_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.depot_in_middle</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.protoss_wall_buildings"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_buildings</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.protoss_wall_pylon"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_pylon</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.protoss_wall_warpin"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_warpin</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.upper"><code class="docutils literal notranslate"><span class="pre">Ramp.upper</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_info.Ramp.upper2_for_ramp_wall"><code class="docutils literal notranslate"><span class="pre">Ramp.upper2_for_ramp_wall</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#sc2.game_info.GameInfo"><code class="docutils literal notranslate"><span class="pre">GameInfo</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">game_info.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../position/index.html">position.py</a></li>
@@ -76,96 +155,240 @@
 <li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">python-sc2</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">game_info.py</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/game_info/index.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/game_info/index.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
   </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>game_info.py</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp"><code class="docutils literal notranslate"><span class="pre">Ramp</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.barracks_can_fit_addon"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_can_fit_addon</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.barracks_correct_placement"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_correct_placement</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.barracks_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_in_middle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.corner_depots"><code class="docutils literal notranslate"><span class="pre">Ramp.corner_depots</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.depot_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.depot_in_middle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.protoss_wall_buildings"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_buildings</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.protoss_wall_pylon"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_pylon</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.protoss_wall_warpin"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_warpin</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.upper"><code class="docutils literal notranslate"><span class="pre">Ramp.upper</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.upper2_for_ramp_wall"><code class="docutils literal notranslate"><span class="pre">Ramp.upper2_for_ramp_wall</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.GameInfo"><code class="docutils literal notranslate"><span class="pre">GameInfo</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <div class="toctree-wrapper compound">
 </div>
 <section id="game-info-py">
-<h1>game_info.py<a class="headerlink" href="#game-info-py" title="Link to this heading"></a></h1>
+<h1>game_info.py<a class="headerlink" href="#game-info-py" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_info.</span></span><span class="sig-name descname"><span class="pre">Ramp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">game_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_info.Ramp" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_info.</span></span><span class="sig-name descname"><span class="pre">Ramp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">game_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_info.Ramp" title="Link to this definition">#</a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.barracks_can_fit_addon">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">barracks_can_fit_addon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_info.Ramp.barracks_can_fit_addon" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">barracks_can_fit_addon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sc2.game_info.Ramp.barracks_can_fit_addon" title="Link to this definition">#</a></dt>
 <dd><p>Test if a barracks can fit an addon at natural ramp</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.barracks_correct_placement">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">barracks_correct_placement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.barracks_correct_placement" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">barracks_correct_placement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.barracks_correct_placement" title="Link to this definition">#</a></dt>
 <dd><p>Corrected placement so that an addon can fit</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.barracks_in_middle">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">barracks_in_middle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.barracks_in_middle" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">barracks_in_middle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.barracks_in_middle" title="Link to this definition">#</a></dt>
 <dd><p>Barracks position in the middle of the 2 depots</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.corner_depots">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">corner_depots</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.corner_depots" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">corner_depots</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.corner_depots" title="Link to this definition">#</a></dt>
 <dd><p>Finds the 2 depot positions on the outside</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.depot_in_middle">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">depot_in_middle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.depot_in_middle" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">depot_in_middle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.depot_in_middle" title="Link to this definition">#</a></dt>
 <dd><p>Depot in the middle of the 3 depots</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.protoss_wall_buildings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">protoss_wall_buildings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_buildings" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">protoss_wall_buildings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_buildings" title="Link to this definition">#</a></dt>
 <dd><p>List of two positions for 3x3 buildings that form a wall with a spot for a one unit block.
 These buildings can be powered by a pylon on the protoss_wall_pylon position.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.protoss_wall_pylon">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">protoss_wall_pylon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_pylon" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">protoss_wall_pylon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_pylon" title="Link to this definition">#</a></dt>
 <dd><p>Pylon position that powers the two wall buildings and the warpin position.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.protoss_wall_warpin">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">protoss_wall_warpin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_warpin" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">protoss_wall_warpin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_info.Ramp.protoss_wall_warpin" title="Link to this definition">#</a></dt>
 <dd><p>Position for a unit to block the wall created by protoss_wall_buildings.
 Powered by protoss_wall_pylon.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.upper">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.upper" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.upper" title="Link to this definition">#</a></dt>
 <dd><p>Returns the upper points of a ramp.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_info.Ramp.upper2_for_ramp_wall">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upper2_for_ramp_wall</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.upper2_for_ramp_wall" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upper2_for_ramp_wall</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../position/index.html#sc2.position.Point2" title="sc2.position.Point2"><span class="pre">Point2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sc2.game_info.Ramp.upper2_for_ramp_wall" title="Link to this definition">#</a></dt>
 <dd><p>Returns the 2 upper ramp points of the main base ramp required for the supply depot and barracks placement properties used in this file.</p>
 </dd></dl>
 
@@ -173,40 +396,123 @@ Powered by protoss_wall_pylon.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_info.GameInfo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_info.</span></span><span class="sig-name descname"><span class="pre">GameInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_info.GameInfo" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_info.</span></span><span class="sig-name descname"><span class="pre">GameInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_info.GameInfo" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../game_data/index.html" class="btn btn-neutral float-left" title="game_data.py" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../game_state/index.html" class="btn btn-neutral float-right" title="game_state.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                </article>
+              
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2019, tweakimp BurnySc2.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../game_data/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">game_data.py</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="../game_state/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">game_state.py</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-</body>
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp"><code class="docutils literal notranslate"><span class="pre">Ramp</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.barracks_can_fit_addon"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_can_fit_addon</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.barracks_correct_placement"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_correct_placement</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.barracks_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.barracks_in_middle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.corner_depots"><code class="docutils literal notranslate"><span class="pre">Ramp.corner_depots</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.depot_in_middle"><code class="docutils literal notranslate"><span class="pre">Ramp.depot_in_middle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.protoss_wall_buildings"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_buildings</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.protoss_wall_pylon"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_pylon</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.protoss_wall_warpin"><code class="docutils literal notranslate"><span class="pre">Ramp.protoss_wall_warpin</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.upper"><code class="docutils literal notranslate"><span class="pre">Ramp.upper</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.Ramp.upper2_for_ramp_wall"><code class="docutils literal notranslate"><span class="pre">Ramp.upper2_for_ramp_wall</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_info.GameInfo"><code class="docutils literal notranslate"><span class="pre">GameInfo</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>

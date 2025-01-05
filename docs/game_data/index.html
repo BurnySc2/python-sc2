@@ -1,77 +1,149 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../">
-<head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>game_data.py &mdash; python-sc2  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>game_data.py &#8212; python-sc2  documentation</title>
   
-      <script src="../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../_static/doctools.js?v=9a2dae69"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/js/theme.js"></script>
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'game_data/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="game_info.py" href="../game_info/index.html" />
-    <link rel="prev" title="units.py" href="../units/index.html" /> 
-</head>
+    <link rel="prev" title="units.py" href="../units/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="../index.html" class="icon icon-home">
-            python-sc2
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">python-sc2  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../text_files/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../text_files/docker.html">Using docker to run SC2 bots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bot_ai/index.html">bot_ai.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../unit/index.html">unit.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../units/index.html">units.py</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">game_data.py</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.GameData"><code class="docutils literal notranslate"><span class="pre">GameData</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.AbilityData"><code class="docutils literal notranslate"><span class="pre">AbilityData</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.button_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.button_name</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.exact_id"><code class="docutils literal notranslate"><span class="pre">AbilityData.exact_id</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.friendly_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.friendly_name</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.id"><code class="docutils literal notranslate"><span class="pre">AbilityData.id</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.AbilityData.link_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.link_name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.UnitTypeData"><code class="docutils literal notranslate"><span class="pre">UnitTypeData</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.cargo_size"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cargo_size</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cost_zerg_corrected</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.footprint_radius"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.footprint_radius</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.morph_cost"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.morph_cost</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.tech_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_alias</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.tech_requirement"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_requirement</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sc2.game_data.UnitTypeData.unit_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.unit_alias</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.UpgradeData"><code class="docutils literal notranslate"><span class="pre">UpgradeData</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sc2.game_data.Cost"><code class="docutils literal notranslate"><span class="pre">Cost</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">game_data.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_info/index.html">game_info.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../game_state/index.html">game_state.py</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../client/index.html">client.py</a></li>
@@ -83,69 +155,220 @@
 <li class="toctree-l1"><a class="reference internal" href="../ids/index.html">ids</a></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">python-sc2</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">game_data.py</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/game_data/index.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/game_data/index.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
   </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>game_data.py</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.GameData"><code class="docutils literal notranslate"><span class="pre">GameData</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData"><code class="docutils literal notranslate"><span class="pre">AbilityData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.button_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.button_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.exact_id"><code class="docutils literal notranslate"><span class="pre">AbilityData.exact_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.friendly_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.friendly_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.id"><code class="docutils literal notranslate"><span class="pre">AbilityData.id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.link_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.link_name</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData"><code class="docutils literal notranslate"><span class="pre">UnitTypeData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.cargo_size"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cargo_size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cost_zerg_corrected</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.footprint_radius"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.footprint_radius</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.morph_cost"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.morph_cost</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.tech_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_alias</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.tech_requirement"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_requirement</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.unit_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.unit_alias</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UpgradeData"><code class="docutils literal notranslate"><span class="pre">UpgradeData</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.Cost"><code class="docutils literal notranslate"><span class="pre">Cost</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <div class="toctree-wrapper compound">
 </div>
 <section id="game-data-py">
-<h1>game_data.py<a class="headerlink" href="#game-data-py" title="Link to this heading"></a></h1>
+<h1>game_data.py<a class="headerlink" href="#game-data-py" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_data.GameData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">GameData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.GameData" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">GameData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.GameData" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">AbilityData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.AbilityData" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">AbilityData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.AbilityData" title="Link to this definition">#</a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData.button_name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">button_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.game_data.AbilityData.button_name" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">button_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.game_data.AbilityData.button_name" title="Link to this definition">#</a></dt>
 <dd><p>For Stimpack this returns ‘Stimpack’</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData.exact_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exact_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.exact_id" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exact_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.exact_id" title="Link to this definition">#</a></dt>
 <dd><p>Returns the exact ID of the ability</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData.friendly_name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">friendly_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.game_data.AbilityData.friendly_name" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">friendly_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.game_data.AbilityData.friendly_name" title="Link to this definition">#</a></dt>
 <dd><p>For Stimpack this returns ‘Research Stimpack’</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.id" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.ability_id.AbilityId" title="sc2.ids.ability_id.AbilityId"><span class="pre">AbilityId</span></a></em><a class="headerlink" href="#sc2.game_data.AbilityData.id" title="Link to this definition">#</a></dt>
 <dd><p>Returns the generic remap ID. See sc2/dicts/generic_redirect_abilities.py</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.AbilityData.link_name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">link_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.game_data.AbilityData.link_name" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">link_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sc2.game_data.AbilityData.link_name" title="Link to this definition">#</a></dt>
 <dd><p>For Stimpack this returns ‘BarracksTechLabResearch’</p>
 </dd></dl>
 
@@ -153,34 +376,34 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">UnitTypeData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.UnitTypeData" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">UnitTypeData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.UnitTypeData" title="Link to this definition">#</a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.cargo_size">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cargo_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.cargo_size" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cargo_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.cargo_size" title="Link to this definition">#</a></dt>
 <dd><p>How much cargo this unit uses up in cargo_space</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.cost_zerg_corrected">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cost_zerg_corrected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">Cost</span></a></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cost_zerg_corrected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">Cost</span></a></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected" title="Link to this definition">#</a></dt>
 <dd><p>This returns 25 for extractor and 200 for spawning pool instead of 75 and 250 respectively</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.footprint_radius">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">footprint_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.footprint_radius" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">footprint_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.footprint_radius" title="Link to this definition">#</a></dt>
 <dd><p>See unit.py footprint_radius</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.morph_cost">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">morph_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">Cost</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.morph_cost" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">morph_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sc2.game_data.Cost" title="sc2.game_data.Cost"><span class="pre">Cost</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.morph_cost" title="Link to this definition">#</a></dt>
 <dd><p>This returns 150 minerals for OrbitalCommand instead of 550</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.tech_alias">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_alias" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_alias" title="Link to this definition">#</a></dt>
 <dd><p>Building tech equality, e.g. OrbitalCommand is the same as CommandCenter
 Building tech equality, e.g. Hive is the same as Lair and Hatchery
 For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]
@@ -189,13 +412,13 @@ For SCV, this returns None</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.tech_requirement">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_requirement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_requirement" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tech_requirement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.tech_requirement" title="Link to this definition">#</a></dt>
 <dd><p>Tech-building requirement of buildings - may work for units but unreliably</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sc2.game_data.UnitTypeData.unit_alias">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.unit_alias" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_alias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../ids/index.html#sc2.ids.unit_typeid.UnitTypeId" title="sc2.ids.unit_typeid.UnitTypeId"><span class="pre">UnitTypeId</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sc2.game_data.UnitTypeData.unit_alias" title="Link to this definition">#</a></dt>
 <dd><p>Building type equality, e.g. FlyingOrbitalCommand is the same as OrbitalCommand</p>
 </dd></dl>
 
@@ -203,12 +426,12 @@ For SCV, this returns None</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_data.UpgradeData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">UpgradeData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.UpgradeData" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">UpgradeData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.UpgradeData" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sc2.game_data.Cost">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">Cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minerals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vespene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.Cost" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.game_data.</span></span><span class="sig-name descname"><span class="pre">Cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minerals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vespene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sc2.game_data.Cost" title="Link to this definition">#</a></dt>
 <dd><p>The cost of an action, a structure, a unit or a research upgrade.
 The time is given in frames (22.4 frames per game second).</p>
 </dd></dl>
@@ -216,34 +439,124 @@ The time is given in frames (22.4 frames per game second).</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../units/index.html" class="btn btn-neutral float-left" title="units.py" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../game_info/index.html" class="btn btn-neutral float-right" title="game_info.py" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                </article>
+              
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2019, tweakimp BurnySc2.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../units/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">units.py</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="../game_info/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">game_info.py</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-</body>
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.GameData"><code class="docutils literal notranslate"><span class="pre">GameData</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData"><code class="docutils literal notranslate"><span class="pre">AbilityData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.button_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.button_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.exact_id"><code class="docutils literal notranslate"><span class="pre">AbilityData.exact_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.friendly_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.friendly_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.id"><code class="docutils literal notranslate"><span class="pre">AbilityData.id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.AbilityData.link_name"><code class="docutils literal notranslate"><span class="pre">AbilityData.link_name</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData"><code class="docutils literal notranslate"><span class="pre">UnitTypeData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.cargo_size"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cargo_size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.cost_zerg_corrected"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.cost_zerg_corrected</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.footprint_radius"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.footprint_radius</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.morph_cost"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.morph_cost</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.tech_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_alias</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.tech_requirement"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.tech_requirement</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UnitTypeData.unit_alias"><code class="docutils literal notranslate"><span class="pre">UnitTypeData.unit_alias</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.UpgradeData"><code class="docutils literal notranslate"><span class="pre">UpgradeData</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sc2.game_data.Cost"><code class="docutils literal notranslate"><span class="pre">Cost</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By tweakimp, BurnySc2
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, tweakimp BurnySc2.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>

@@ -58,9 +58,9 @@ dev = [
     "radon>=6.0.1",
     # Linter
     "ruff>=0.8.3",
+    "sphinx-book-theme>=1.1.3",
     "sphinx>=7.4.7",
     "sphinx-autodoc-typehints>=2.3.0",
-    "sphinx-rtd-theme>=3.0.2",
     "toml>=0.10.2",
     "yapf>=0.43.0",
 ]
