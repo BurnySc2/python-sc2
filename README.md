@@ -132,7 +132,7 @@ You can find more examples in the [`examples/`](/examples) folder.
 The API supports a number of options for configuring how it operates.
 
 ### `unit_command_uses_self_do`
-Set this to 'True' if your bot is issueing commands using `self.do(Unit(Ability, Target))` instead of `Unit(Ability, Target)`.
+Set this to 'True' if your bot is issuing commands using `self.do(Unit(Ability, Target))` instead of `Unit(Ability, Target)`.
 ```python
 class MyBot(BotAI):
     def __init__(self):
