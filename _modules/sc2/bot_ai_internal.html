@@ -15,31 +15,28 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/bot_ai_internal';</script>
@@ -47,7 +44,6 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,8 +59,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -72,6 +79,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -79,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -98,8 +106,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -129,11 +136,15 @@
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
@@ -160,14 +171,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -216,16 +222,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -253,26 +267,26 @@
                   
   <h1>Source code for sc2.bot_ai_internal</h1><div class="highlight"><pre>
 <span></span><span class="c1"># pyre-ignore-all-errors[6, 16, 29]</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">final</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">suppress</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">final</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
 <span class="c1"># pyre-ignore[21]</span>
-<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">sc2api_pb2</span> <span class="k">as</span> <span class="n">sc_pb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">sc2api_pb2</span> <span class="k">as</span> <span class="n">sc_pb</span>
 
-<span class="kn">from</span> <span class="nn">sc2.cache</span> <span class="kn">import</span> <span class="n">property_cache_once_per_frame</span>
-<span class="kn">from</span> <span class="nn">sc2.constants</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">property_cache_once_per_frame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ALL_GAS</span><span class="p">,</span>
     <span class="n">CREATION_ABILITY_FIX</span><span class="p">,</span>
     <span class="n">IS_PLACEHOLDER</span><span class="p">,</span>
@@ -282,38 +296,38 @@
     <span class="n">geyser_ids</span><span class="p">,</span>
     <span class="n">mineral_ids</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">sc2.data</span> <span class="kn">import</span> <span class="n">ActionResult</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">race_townhalls</span>
-<span class="kn">from</span> <span class="nn">sc2.game_data</span> <span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">GameData</span>
-<span class="kn">from</span> <span class="nn">sc2.game_state</span> <span class="kn">import</span> <span class="n">Blip</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">GameState</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.ability_id</span> <span class="kn">import</span> <span class="n">AbilityId</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="kn">import</span> <span class="n">UnitTypeId</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.upgrade_id</span> <span class="kn">import</span> <span class="n">UpgradeId</span>
-<span class="kn">from</span> <span class="nn">sc2.pixel_map</span> <span class="kn">import</span> <span class="n">PixelMap</span>
-<span class="kn">from</span> <span class="nn">sc2.position</span> <span class="kn">import</span> <span class="n">Point2</span>
-<span class="kn">from</span> <span class="nn">sc2.unit</span> <span class="kn">import</span> <span class="n">Unit</span>
-<span class="kn">from</span> <span class="nn">sc2.unit_command</span> <span class="kn">import</span> <span class="n">UnitCommand</span>
-<span class="kn">from</span> <span class="nn">sc2.units</span> <span class="kn">import</span> <span class="n">Units</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionResult</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">race_townhalls</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">GameData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_state</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blip</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">GameState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.ability_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.unit_typeid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitTypeId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.upgrade_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">UpgradeId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.pixel_map</span><span class="w"> </span><span class="kn">import</span> <span class="n">PixelMap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.unit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.unit_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitCommand</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">Units</span>
 
 <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
     <span class="c1"># pyre-ignore[21]</span>
-    <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span><span class="p">,</span> <span class="n">pdist</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">cdist</span><span class="p">,</span> <span class="n">pdist</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">sc2.client</span> <span class="kn">import</span> <span class="n">Client</span>
-    <span class="kn">from</span> <span class="nn">sc2.game_info</span> <span class="kn">import</span> <span class="n">GameInfo</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameInfo</span>
 
 
 <div class="viewcode-block" id="BotAIInternal">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal">[docs]</a>
-<span class="k">class</span> <span class="nc">BotAIInternal</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BotAIInternal</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for bots.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_variables</span><span class="p">()</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_initialize_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Called from main.py internally&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://aiarena.net</span>
@@ -388,7 +402,7 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_game_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameInfo</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_game_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameInfo</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;See game_info.py&quot;&quot;&quot;</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Using self._game_info is deprecated and may be removed soon. Please use self.game_info directly.&quot;</span><span class="p">,</span>
@@ -399,7 +413,7 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_game_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_game_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameData</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;See game_data.py&quot;&quot;&quot;</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Using self._game_data is deprecated and may be removed soon. Please use self.game_data directly.&quot;</span><span class="p">,</span>
@@ -410,7 +424,7 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Client</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Client</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;See client.py&quot;&quot;&quot;</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Using self._client is deprecated and may be removed soon. Please use self.client directly.&quot;</span><span class="p">,</span>
@@ -421,9 +435,11 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span> <span class="nf">expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Same as the function above.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
+        <span class="p">)</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;You are using &#39;self.expansion_locations&#39;, please use &#39;self.expansion_locations_list&#39; (fast) or &#39;self.expansion_locations_dict&#39; (slow) instead.&quot;</span><span class="p">,</span>
             <span class="ne">DeprecationWarning</span><span class="p">,</span>
@@ -432,7 +448,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion_locations_dict</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_find_expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ran once at the start of the game to calculate expansion locations.&quot;&quot;&quot;</span>
         <span class="c1"># Idea: create a group for every resource, then merge these groups if</span>
         <span class="c1"># any resource in a group is closer than a threshold to any resource of another group</span>
@@ -510,7 +526,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">[</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_correct_zerg_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_correct_zerg_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The client incorrectly rounds zerg supply down instead of up (see</span>
 <span class="sd">        https://github.com/Blizzard/s2client-proto/issues/123), so self.supply_used</span>
 <span class="sd">        and friends return the wrong value when there are an odd number of zerglings</span>
@@ -530,7 +546,7 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span> <span class="nf">_abilities_count_and_build_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_abilities_count_and_build_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Cache for the already_pending function, includes protoss units warping in,</span>
 <span class="sd">        all units in production and all structures, and all morphs&quot;&quot;&quot;</span>
         <span class="n">abilities_amount</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -562,7 +578,7 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span> <span class="nf">_worker_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_worker_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This function is used internally, do not use! It is to store all worker abilities.&quot;&quot;&quot;</span>
         <span class="n">abilities_amount</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
         <span class="n">structures_in_production</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -582,7 +598,7 @@
 <div class="viewcode-block" id="BotAIInternal.do">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.do">[docs]</a>
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">,</span>
         <span class="n">subtract_cost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -630,9 +646,9 @@
                 <span class="p">)</span>
             <span class="k">return</span> <span class="n">action</span>
 
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">action</span><span class="p">,</span> <span class="n">UnitCommand</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Given unit command is not a command, but instead of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">UnitCommand</span><span class="p">),</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Given unit command is not a command, but instead of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">subtract_cost</span><span class="p">:</span>
             <span class="n">cost</span><span class="p">:</span> <span class="n">Cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">calculate_ability_cost</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">can_afford_check</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">minerals</span> <span class="o">&gt;=</span> <span class="n">cost</span><span class="o">.</span><span class="n">minerals</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">vespene</span> <span class="o">&gt;=</span> <span class="n">cost</span><span class="o">.</span><span class="n">vespene</span><span class="p">):</span>
@@ -655,15 +671,15 @@
 <div class="viewcode-block" id="BotAIInternal.synchronous_do">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.synchronous_do">[docs]</a>
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">synchronous_do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">synchronous_do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Not recommended. Use self.do instead to reduce lag.</span>
 <span class="sd">        This function is only useful for realtime=True in the first frame of the game to instantly produce a worker</span>
 <span class="sd">        and split workers on the mineral patches.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">action</span><span class="p">,</span> <span class="n">UnitCommand</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Given unit command is not a command, but instead of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">UnitCommand</span><span class="p">),</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Given unit command is not a command, but instead of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot afford action </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">ActionResult</span><span class="o">.</span><span class="n">Error</span>
@@ -679,7 +695,7 @@
 
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_do_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitCommand</span><span class="p">],</span> <span class="n">prevent_double</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_do_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitCommand</span><span class="p">],</span> <span class="n">prevent_double</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Used internally by main.py after each step</span>
 
 <span class="sd">        :param actions:</span>
@@ -695,7 +711,7 @@
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.prevent_double_actions">[docs]</a>
     <span class="nd">@final</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">prevent_double_actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prevent_double_actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param action:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -722,7 +738,7 @@
 
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_prepare_start</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_start</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">game_info</span><span class="p">,</span> <span class="n">game_data</span><span class="p">,</span> <span class="n">realtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -750,7 +766,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_distances_override_functions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_calculation_method</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_prepare_first_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_first_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;First step extra preparations. Must not be called before _prepare_step.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">player_start_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">position</span>
@@ -760,7 +776,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_prepare_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param state:</span>
 <span class="sd">        :param proto_game_info:</span>
@@ -801,7 +817,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">enemy_race</span> <span class="o">=</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_enemy_units</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">race</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_prepare_units</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_units</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blips</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Blip</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
@@ -905,7 +921,7 @@
             <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdist</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Executed by main.py after each on_step function.&quot;&quot;&quot;</span>
         <span class="c1"># Keep track of the bot on_step duration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_after_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
@@ -927,7 +943,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_advance_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_advance_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Advances the game loop by amount of &#39;steps&#39;. This function is meant to be used as a debugging and testing tool only.</span>
 <span class="sd">        If you are using this, please be aware of the consequences, e.g. &#39;self.units&#39; will be filled with completely new data.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_after_step</span><span class="p">()</span>
@@ -942,7 +958,7 @@
 <div class="viewcode-block" id="BotAIInternal.issue_events">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.issue_events">[docs]</a>
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">issue_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">issue_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This function will be automatically run from main.py and triggers the following functions:</span>
 <span class="sd">        - on_unit_created</span>
 <span class="sd">        - on_unit_destroyed</span>
@@ -958,7 +974,7 @@
 
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_unit_added_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_unit_added_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_previous_map</span> <span class="ow">and</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unit_tags_seen_this_game</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_unit_tags_seen_this_game</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
@@ -975,14 +991,14 @@
                     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_type_changed</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_upgrade_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_upgrade_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">difference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">upgrades</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span>
         <span class="k">for</span> <span class="n">upgrade_completed</span> <span class="ow">in</span> <span class="n">difference</span><span class="p">:</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_upgrade_complete</span><span class="p">(</span><span class="n">upgrade_completed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">upgrades</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_building_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_building_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structures_previous_map</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">build_progress</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1014,7 +1030,7 @@
                     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_building_construction_complete</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_vision_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_vision_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Call events for enemy unit entered vision</span>
         <span class="k">for</span> <span class="n">enemy_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">enemy_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="p">:</span>
@@ -1032,7 +1048,7 @@
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_enemy_unit_left_vision</span><span class="p">(</span><span class="n">enemy_structure_tag</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_issue_unit_dead_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_unit_dead_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">unit_tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">dead_units</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_units_previous_map</span><span class="p">):</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_destroyed</span><span class="p">(</span><span class="n">unit_tag</span><span class="p">)</span>
 
@@ -1040,12 +1056,12 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_units_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_units_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="p">)</span>
 
     <span class="nd">@final</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_pdist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_pdist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances</span><span class="p">()</span>
@@ -1053,14 +1069,14 @@
 
     <span class="nd">@final</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_cdist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_cdist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;As property, so it will be recalculated each time it is called, or return from cache if it is called multiple times in teh same game_loop.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_cdist</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_calculate_distances_method1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_distances_method1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
         <span class="c1"># Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]</span>
         <span class="n">flat_positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">coord</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
@@ -1077,7 +1093,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_calculate_distances_method2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_distances_method2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
         <span class="c1"># Converts tuple [(1, 2), (3, 4)] to flat list like [1, 2, 3, 4]</span>
         <span class="n">flat_positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">coord</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
@@ -1094,7 +1110,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_cdist</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_calculate_distances_method3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_distances_method3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Nearly same as above, but without asserts&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
         <span class="n">flat_positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">coord</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span> <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
@@ -1111,7 +1127,7 @@
     <span class="c1"># Helper functions</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">square_to_condensed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">square_to_condensed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="c1"># Converts indices of a square matrix to condensed matrix</span>
         <span class="c1"># https://stackoverflow.com/a/36867493/10882657</span>
         <span class="k">assert</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">,</span> <span class="s2">&quot;No diagonal elements in condensed matrix! Diagonal elements are zero&quot;</span>
@@ -1123,7 +1139,7 @@
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array">[docs]</a>
     <span class="nd">@final</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">convert_tuple_to_numpy_array</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_tuple_to_numpy_array</span><span class="p">(</span><span class="n">pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a single position to a 2d numpy array with 1 row and 2 columns.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span></div>
 
@@ -1132,7 +1148,7 @@
 
     <span class="nd">@final</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">distance_math_hypot</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_math_hypot</span><span class="p">(</span>
         <span class="n">p1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
         <span class="n">p2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -1140,40 +1156,40 @@
 
     <span class="nd">@final</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">distance_math_hypot_squared</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_math_hypot_squared</span><span class="p">(</span>
         <span class="n">p1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
         <span class="n">p2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">pow</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">pow</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_distance_squared_unit_to_unit_method0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distance_squared_unit_to_unit_method0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot_squared</span><span class="p">(</span><span class="n">unit1</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">,</span> <span class="n">unit2</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">)</span>
 
     <span class="c1"># Distance calculation using the pre-calculated matrix above</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_distance_squared_unit_to_unit_method1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distance_squared_unit_to_unit_method1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="c1"># If checked on units if they have the same tag, return distance 0 as these are not in the 1 dimensional pdist array - would result in an error otherwise</span>
         <span class="k">if</span> <span class="n">unit1</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="n">unit2</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
         <span class="c1"># Calculate index, needs to be after pdist has been calculated and cached</span>
         <span class="n">condensed_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">square_to_condensed</span><span class="p">(</span><span class="n">unit1</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">,</span> <span class="n">unit2</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="n">condensed_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span><span class="p">)</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Condensed index is larger than amount of calculated distances: </span><span class="si">{</span><span class="n">condensed_index</span><span class="si">}</span><span class="s2"> &lt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span><span class="p">)</span><span class="si">}</span><span class="s2">, units that caused the assert error: </span><span class="si">{</span><span class="n">unit1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">unit2</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="n">condensed_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span><span class="p">),</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Condensed index is larger than amount of calculated distances: </span><span class="si">{</span><span class="n">condensed_index</span><span class="si">}</span><span class="s2"> &lt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cached_pdist</span><span class="p">)</span><span class="si">}</span><span class="s2">, units that caused the assert error: </span><span class="si">{</span><span class="n">unit1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">unit2</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
         <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdist</span><span class="p">[</span><span class="n">condensed_index</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">distance</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_distance_squared_unit_to_unit_method2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distance_squared_unit_to_unit_method2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit1</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit2</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="c1"># Calculate index, needs to be after cdist has been calculated and cached</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdist</span><span class="p">[</span><span class="n">unit1</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">,</span> <span class="n">unit2</span><span class="o">.</span><span class="n">distance_calculation_index</span><span class="p">]</span>
 
     <span class="c1"># Distance calculation using the fastest distance calculation functions</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_distance_pos_to_pos</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distance_pos_to_pos</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pos1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
         <span class="n">pos2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
@@ -1181,7 +1197,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_distance_units_to_pos</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distance_units_to_pos</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">units</span><span class="p">:</span> <span class="n">Units</span><span class="p">,</span>
         <span class="n">pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
@@ -1190,7 +1206,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_distance_unit_to_points</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distance_unit_to_points</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span>
         <span class="n">points</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
@@ -1200,7 +1216,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_math_hypot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span> <span class="nf">_distances_override_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distances_override_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Overrides the internal distance calculation functions at game start in bot_ai.py self._prepare_start() function</span>
 <span class="sd">        method 0: Use python&#39;s math.hypot</span>
 <span class="sd">        The following methods calculate the distances between all units once:</span>
@@ -1282,8 +1298,8 @@ By tweakimp, BurnySc2
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -15,31 +15,28 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/client';</script>
@@ -47,7 +44,6 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,8 +59,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -72,6 +79,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -79,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -98,8 +106,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -129,11 +136,15 @@
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
@@ -160,14 +171,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -216,16 +222,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -253,37 +267,37 @@
                   
   <h1>Source code for sc2.client</h1><div class="highlight"><pre>
 <span></span><span class="c1"># pyre-ignore-all-errors[6, 9, 16, 29, 58]</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
 <span class="c1"># pyre-ignore[21]</span>
-<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">debug_pb2</span> <span class="k">as</span> <span class="n">debug_pb</span>
-<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">query_pb2</span> <span class="k">as</span> <span class="n">query_pb</span>
-<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">raw_pb2</span> <span class="k">as</span> <span class="n">raw_pb</span>
-<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">sc2api_pb2</span> <span class="k">as</span> <span class="n">sc_pb</span>
-<span class="kn">from</span> <span class="nn">s2clientprotocol</span> <span class="kn">import</span> <span class="n">spatial_pb2</span> <span class="k">as</span> <span class="n">spatial_pb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">debug_pb2</span> <span class="k">as</span> <span class="n">debug_pb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">query_pb2</span> <span class="k">as</span> <span class="n">query_pb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">raw_pb2</span> <span class="k">as</span> <span class="n">raw_pb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">sc2api_pb2</span> <span class="k">as</span> <span class="n">sc_pb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">spatial_pb2</span> <span class="k">as</span> <span class="n">spatial_pb</span>
 
-<span class="kn">from</span> <span class="nn">sc2.action</span> <span class="kn">import</span> <span class="n">combine_actions</span>
-<span class="kn">from</span> <span class="nn">sc2.data</span> <span class="kn">import</span> <span class="n">ActionResult</span><span class="p">,</span> <span class="n">ChatChannel</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">Status</span>
-<span class="kn">from</span> <span class="nn">sc2.game_data</span> <span class="kn">import</span> <span class="n">AbilityData</span><span class="p">,</span> <span class="n">GameData</span>
-<span class="kn">from</span> <span class="nn">sc2.game_info</span> <span class="kn">import</span> <span class="n">GameInfo</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.ability_id</span> <span class="kn">import</span> <span class="n">AbilityId</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="kn">import</span> <span class="n">UnitTypeId</span>
-<span class="kn">from</span> <span class="nn">sc2.position</span> <span class="kn">import</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">Point3</span>
-<span class="kn">from</span> <span class="nn">sc2.protocol</span> <span class="kn">import</span> <span class="n">ConnectionAlreadyClosedError</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">ProtocolError</span>
-<span class="kn">from</span> <span class="nn">sc2.renderer</span> <span class="kn">import</span> <span class="n">Renderer</span>
-<span class="kn">from</span> <span class="nn">sc2.unit</span> <span class="kn">import</span> <span class="n">Unit</span>
-<span class="kn">from</span> <span class="nn">sc2.units</span> <span class="kn">import</span> <span class="n">Units</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.action</span><span class="w"> </span><span class="kn">import</span> <span class="n">combine_actions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionResult</span><span class="p">,</span> <span class="n">ChatChannel</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">Status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityData</span><span class="p">,</span> <span class="n">GameData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameInfo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.ability_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.unit_typeid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitTypeId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">Point3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.protocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnectionAlreadyClosedError</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">ProtocolError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.renderer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.unit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">Units</span>
 
 
 <div class="viewcode-block" id="Client">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client">[docs]</a>
-<span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">save_replay_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Client</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">save_replay_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param ws:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -305,10 +319,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_affects_selection</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">in_game</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">in_game</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="ow">in</span> <span class="p">{</span><span class="n">Status</span><span class="o">.</span><span class="n">in_game</span><span class="p">,</span> <span class="n">Status</span><span class="o">.</span><span class="n">in_replay</span><span class="p">}</span>
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">join_game</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">race</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observed_player_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">portconfig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rgb_render_config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">join_game</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">race</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">observed_player_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">portconfig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rgb_render_config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">ifopts</span> <span class="o">=</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">InterfaceOptions</span><span class="p">(</span>
             <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -361,7 +375,7 @@
 
 <div class="viewcode-block" id="Client.leave">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.leave">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">leave</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">leave</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;You can use &#39;await self.client.leave()&#39; to surrender midst game.&quot;&quot;&quot;</span>
         <span class="n">is_resign</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_game_result</span> <span class="ow">is</span> <span class="kc">None</span>
 
@@ -380,14 +394,14 @@
                 <span class="k">raise</span></div>
 
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">save_replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">save_replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Requesting replay from server&quot;</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">save_replay</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestSaveReplay</span><span class="p">())</span>
         <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">save_replay</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved replay to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">observation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_loop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">observation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_loop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">game_loop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">observation</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestObservation</span><span class="p">(</span><span class="n">game_loop</span><span class="o">=</span><span class="n">game_loop</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
@@ -413,13 +427,13 @@
 
 <div class="viewcode-block" id="Client.step">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.step">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;EXPERIMENTAL: Change self._client.game_step during the step function to increase or decrease steps per second&quot;&quot;&quot;</span>
         <span class="n">step_size</span> <span class="o">=</span> <span class="n">step_size</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_step</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestStep</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">step_size</span><span class="p">))</span></div>
 
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_game_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameData</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_game_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameData</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestData</span><span class="p">(</span><span class="n">ability_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unit_type_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">upgrade_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">buff_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">effect_id</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="p">)</span>
@@ -427,7 +441,7 @@
 
 <div class="viewcode-block" id="Client.dump_data">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.dump_data">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">dump_data</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">dump_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ability_id</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">unit_type_id</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -455,11 +469,11 @@
             <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="p">))</span></div>
 
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_game_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameInfo</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_game_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameInfo</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">game_info</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestGameInfo</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">GameInfo</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">game_info</span><span class="p">)</span>
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">return_successes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">return_successes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">actions</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -478,7 +492,7 @@
 
 <div class="viewcode-block" id="Client.query_pathing">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.query_pathing">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">query_pathing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_pathing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Caution: returns &quot;None&quot; when path not found</span>
 <span class="sd">        Try to combine queries with the function below because the pathing query is generally slow.</span>
 
@@ -499,7 +513,7 @@
 
 <div class="viewcode-block" id="Client.query_pathings">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.query_pathings">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">query_pathings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zipped_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_pathings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zipped_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])</span>
 <span class="sd">        -&gt; returns [distance1, distance2]</span>
 <span class="sd">        Caution: returns 0 when path not found</span>
@@ -522,7 +536,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">pathing</span><span class="p">]</span></div>
 
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_query_building_placement_fast</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_query_building_placement_fast</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">ability</span><span class="p">:</span> <span class="n">AbilityId</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">],</span> <span class="n">ignore_resources</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -546,7 +560,7 @@
 
 <div class="viewcode-block" id="Client.query_building_placement">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.query_building_placement">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">query_building_placement</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_building_placement</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ability</span><span class="p">:</span> <span class="n">AbilityData</span><span class="p">,</span>
         <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">],</span>
@@ -574,7 +588,7 @@
 
 <div class="viewcode-block" id="Client.query_available_abilities">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.query_available_abilities">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">query_available_abilities</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_available_abilities</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span> <span class="o">|</span> <span class="n">Units</span><span class="p">,</span> <span class="n">ignore_resource_requirements</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Query abilities of multiple units&quot;&quot;&quot;</span>
@@ -600,7 +614,7 @@
 
 <div class="viewcode-block" id="Client.query_available_abilities_with_tag">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.query_available_abilities_with_tag">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">query_available_abilities_with_tag</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_available_abilities_with_tag</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span> <span class="o">|</span> <span class="n">Units</span><span class="p">,</span> <span class="n">ignore_resource_requirements</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Query abilities of multiple units&quot;&quot;&quot;</span>
@@ -616,7 +630,7 @@
 
 <div class="viewcode-block" id="Client.chat_send">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.chat_send">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">chat_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">team_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">team_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes a message to the chat&quot;&quot;&quot;</span>
         <span class="n">ch</span> <span class="o">=</span> <span class="n">ChatChannel</span><span class="o">.</span><span class="n">Team</span> <span class="k">if</span> <span class="n">team_only</span> <span class="k">else</span> <span class="n">ChatChannel</span><span class="o">.</span><span class="n">Broadcast</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
@@ -628,7 +642,7 @@
 
 <div class="viewcode-block" id="Client.toggle_autocast">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.toggle_autocast">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">toggle_autocast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span> <span class="o">|</span> <span class="n">Units</span><span class="p">,</span> <span class="n">ability</span><span class="p">:</span> <span class="n">AbilityId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">toggle_autocast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span> <span class="o">|</span> <span class="n">Units</span><span class="p">,</span> <span class="n">ability</span><span class="p">:</span> <span class="n">AbilityId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle autocast of all specified units</span>
 
 <span class="sd">        :param units:</span>
@@ -655,7 +669,7 @@
 
 <div class="viewcode-block" id="Client.debug_create_unit">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_create_unit">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_create_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_spawn_commands</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">UnitTypeId</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_create_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_spawn_commands</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">UnitTypeId</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Usage example (will spawn 5 marines in the center of the map for player ID 1):</span>
 <span class="sd">        await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])</span>
 
@@ -688,7 +702,7 @@
 
 <div class="viewcode-block" id="Client.debug_kill_unit">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_kill_unit">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_kill_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_tags</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_kill_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_tags</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param unit_tags:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -705,7 +719,7 @@
 
 <div class="viewcode-block" id="Client.move_camera">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.move_camera">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Moves camera to the target position</span>
 
 <span class="sd">        :param position:&quot;&quot;&quot;</span>
@@ -729,7 +743,7 @@
 
 <div class="viewcode-block" id="Client.obs_move_camera">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.obs_move_camera">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">obs_move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">obs_move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Moves observer camera to the target position. Only works when observing (e.g. watching the replay).</span>
 
 <span class="sd">        :param position:&quot;&quot;&quot;</span>
@@ -751,7 +765,7 @@
 
 <div class="viewcode-block" id="Client.move_camera_spatial">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.move_camera_spatial">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">move_camera_spatial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">move_camera_spatial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Moves camera to the target position using the spatial aciton interface</span>
 
 <span class="sd">        :param position:&quot;&quot;&quot;</span>
@@ -766,14 +780,14 @@
 
 <div class="viewcode-block" id="Client.debug_text_simple">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_text_simple">[docs]</a>
-    <span class="k">def</span> <span class="nf">debug_text_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_text_simple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Draws a text in the top left corner of the screen (up to a max of 6 messages fit there).&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawItemScreenText</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_point</span><span class="o">=</span><span class="n">Point2</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_text_screen">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_text_screen">[docs]</a>
-    <span class="k">def</span> <span class="nf">debug_text_screen</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_text_screen</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">|</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span>
@@ -795,7 +809,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawItemScreenText</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">start_point</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">size</span><span class="p">))</span></div>
 
 
-    <span class="k">def</span> <span class="nf">debug_text_2d</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_text_2d</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">|</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span>
@@ -806,7 +820,7 @@
 
 <div class="viewcode-block" id="Client.debug_text_world">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_text_world">[docs]</a>
-    <span class="k">def</span> <span class="nf">debug_text_world</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_text_world</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -824,12 +838,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawItemWorldText</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">start_point</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">size</span><span class="p">))</span></div>
 
 
-    <span class="k">def</span> <span class="nf">debug_text_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_text_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug_text_world</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Client.debug_line_out">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_line_out">[docs]</a>
-    <span class="k">def</span> <span class="nf">debug_line_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p0</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_line_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p0</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Draws a line from p0 to p1.</span>
 
@@ -848,7 +862,7 @@
 
 <div class="viewcode-block" id="Client.debug_box_out">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_box_out">[docs]</a>
-    <span class="k">def</span> <span class="nf">debug_box_out</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_box_out</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">p_min</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span>
         <span class="n">p_max</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span>
@@ -872,7 +886,7 @@
 
 <div class="viewcode-block" id="Client.debug_box2_out">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_box2_out">[docs]</a>
-    <span class="k">def</span> <span class="nf">debug_box2_out</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_box2_out</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pos</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span>
         <span class="n">half_vertex_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span>
@@ -895,7 +909,7 @@
 
 <div class="viewcode-block" id="Client.debug_sphere_out">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_sphere_out">[docs]</a>
-    <span class="k">def</span> <span class="nf">debug_sphere_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_sphere_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Draws a sphere at point p with radius r.</span>
 
@@ -909,7 +923,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug_spheres</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawItemSphere</span><span class="p">(</span><span class="n">start_point</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">))</span></div>
 
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">_send_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_send_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sends the debug draw execution. This is run by main.py now automatically, if there is any items in the list. You do not need to run this manually any longer.</span>
 <span class="sd">        Check examples/terran/ramp_wall.py for example drawing. Each draw request needs to be sent again in every single on_step iteration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -965,12 +979,12 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_debug_draw_last_frame</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_leave</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_leave</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">end_game</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugEndGame</span><span class="p">())]))</span>
 
 <div class="viewcode-block" id="Client.debug_set_unit_value">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_set_unit_value">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_set_unit_value</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_set_unit_value</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">unit_tags</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">unit_value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets a &quot;unit value&quot; (Energy, Life or Shields) of the given units to the given value.</span>
@@ -981,12 +995,12 @@
             <span class="n">unit_tags</span> <span class="o">=</span> <span class="n">unit_tags</span><span class="o">.</span><span class="n">tags</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit_tags</span><span class="p">,</span> <span class="n">Unit</span><span class="p">):</span>
             <span class="n">unit_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">unit_tags</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span>
-            <span class="n">unit_tags</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;unit_tags argument needs to be an iterable (list, dict, set, Units), given argument is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">unit_tags</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">unit_value</span> <span class="o">&lt;=</span> <span class="mi">3</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;unit_value needs to be between 1 and 3 (1 for energy, 2 for life, 3 for shields), given argument is </span><span class="si">{</span><span class="n">unit_value</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">unit_tags</span><span class="p">,</span> <span class="s2">&quot;__iter__&quot;</span><span class="p">),</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;unit_tags argument needs to be an iterable (list, dict, set, Units), given argument is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">unit_tags</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">unit_value</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;unit_value needs to be between 1 and 3 (1 for energy, 2 for life, 3 for shields), given argument is </span><span class="si">{</span><span class="n">unit_value</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">tag</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">unit_tags</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Unit tags have invalid value: </span><span class="si">{</span><span class="n">unit_tags</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)),</span> <span class="s2">&quot;Value needs to be of type int or float&quot;</span>
         <span class="k">assert</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Value can&#39;t be negative&quot;</span>
@@ -1006,7 +1020,7 @@
 
 <div class="viewcode-block" id="Client.debug_hang">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_hang">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_hang</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay_in_seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_hang</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay_in_seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Freezes the SC2 client. Not recommended to be used.&quot;&quot;&quot;</span>
         <span class="n">delay_in_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">delay_in_seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
@@ -1018,91 +1032,91 @@
 
 <div class="viewcode-block" id="Client.debug_show_map">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_show_map">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_show_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_show_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reveals the whole map for the bot. Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_control_enemy">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_control_enemy">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_control_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_control_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Allows control over enemy units and structures similar to team games control - does not allow the bot to spend the opponent&#39;s ressources. Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_food">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_food">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_food</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_food</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Should disable food usage (does not seem to work?). Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_free">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_free">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_free</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_free</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Units, structures and upgrades are free of mineral and gas cost. Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">4</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_all_resources">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_all_resources">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_all_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_all_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gives 5000 minerals and 5000 vespene to the bot.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_god">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_god">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_god</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_god</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Your units and structures no longer take any damage. Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">6</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_minerals">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_minerals">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_minerals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_minerals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gives 5000 minerals to the bot.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_gas">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_gas">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_gas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_gas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gives 5000 vespene to the bot. This does not seem to be working.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">8</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_cooldown">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_cooldown">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_cooldown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_cooldown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Disables cooldowns of unit abilities for the bot. Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">9</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_tech_tree">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_tech_tree">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_tech_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_tech_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes all tech requirements (e.g. can build a factory without having a barracks). Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">10</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_upgrade">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_upgrade">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_upgrade</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_upgrade</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Researches all currently available upgrades. E.g. using it once unlocks combat shield, stimpack and 1-1. Using it a second time unlocks 2-2 and all other upgrades stay researched.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_fast_build">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_fast_build">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">debug_fast_build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_fast_build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the build time of units and structures and upgrades to zero. Using it a second time disables it again.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">12</span><span class="p">)]))</span></div>
 
 
 <div class="viewcode-block" id="Client.quick_save">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.quick_save">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">quick_save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">quick_save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves the current game state to an in-memory bookmark.</span>
 <span class="sd">        See: https://github.com/Blizzard/s2client-proto/blob/eeaf5efaea2259d7b70247211dff98da0a2685a2/s2clientprotocol/sc2api.proto#L93&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">quick_save</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestQuickSave</span><span class="p">())</span></div>
@@ -1110,7 +1124,7 @@
 
 <div class="viewcode-block" id="Client.quick_load">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.quick_load">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">quick_load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">quick_load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the game state from the previously stored in-memory bookmark.</span>
 <span class="sd">        Caution:</span>
 <span class="sd">            - The SC2 Client will crash if the game wasn&#39;t quicksaved</span>
@@ -1121,9 +1135,9 @@
 
 
 
-<span class="k">class</span> <span class="nc">DrawItem</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DrawItem</span><span class="p">:</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">to_debug_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_debug_color</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper function for color conversion&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
@@ -1143,14 +1157,14 @@
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">g</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">b</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">DrawItemScreenText</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DrawItemScreenText</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="n">start_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">text</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">font_size</span>
 
-    <span class="k">def</span> <span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugText</span><span class="p">(</span>
             <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_debug_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">),</span>
             <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span>
@@ -1159,18 +1173,18 @@
             <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">DrawItemWorldText</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DrawItemWorldText</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">text</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">font_size</span>
 
-    <span class="k">def</span> <span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugText</span><span class="p">(</span>
             <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_debug_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">),</span>
             <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span>
@@ -1179,55 +1193,55 @@
             <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">DrawItemLine</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DrawItemLine</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">end_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
 
-    <span class="k">def</span> <span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugLine</span><span class="p">(</span>
             <span class="n">line</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">p0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="o">.</span><span class="n">as_Point</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="o">.</span><span class="n">as_Point</span><span class="p">),</span>
             <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_debug_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">),</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">DrawItemBox</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DrawItemBox</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">end_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
 
-    <span class="k">def</span> <span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugBox</span><span class="p">(</span>
             <span class="nb">min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="o">.</span><span class="n">as_Point</span><span class="p">,</span>
             <span class="nb">max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="o">.</span><span class="n">as_Point</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_debug_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">),</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">DrawItemSphere</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DrawItemSphere</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">radius</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
 
-    <span class="k">def</span> <span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugSphere</span><span class="p">(</span>
             <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="o">.</span><span class="n">as_Point</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_radius</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_debug_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">))</span>
 </pre></div>
 
@@ -1291,8 +1305,8 @@ By tweakimp, BurnySc2
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

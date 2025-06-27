@@ -15,31 +15,28 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc2/bot_ai';</script>
@@ -47,7 +44,6 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,8 +59,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -72,6 +79,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -79,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -98,8 +106,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -129,11 +136,15 @@
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
@@ -160,14 +171,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -216,16 +222,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -253,20 +267,20 @@
                   
   <h1>Source code for sc2.bot_ai</h1><div class="highlight"><pre>
 <span></span><span class="c1"># pyre-ignore-all-errors[6, 16]</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
-<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
-<span class="kn">from</span> <span class="nn">sc2.bot_ai_internal</span> <span class="kn">import</span> <span class="n">BotAIInternal</span>
-<span class="kn">from</span> <span class="nn">sc2.cache</span> <span class="kn">import</span> <span class="n">property_cache_once_per_frame</span>
-<span class="kn">from</span> <span class="nn">sc2.constants</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.bot_ai_internal</span><span class="w"> </span><span class="kn">import</span> <span class="n">BotAIInternal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">property_cache_once_per_frame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">CREATION_ABILITY_FIX</span><span class="p">,</span>
     <span class="n">EQUIVALENTS_FOR_TECH_PROGRESS</span><span class="p">,</span>
     <span class="n">PROTOSS_TECH_REQUIREMENT</span><span class="p">,</span>
@@ -274,43 +288,43 @@
     <span class="n">TERRAN_TECH_REQUIREMENT</span><span class="p">,</span>
     <span class="n">ZERG_TECH_REQUIREMENT</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">sc2.data</span> <span class="kn">import</span> <span class="n">Alert</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">Target</span>
-<span class="kn">from</span> <span class="nn">sc2.dicts.unit_research_abilities</span> <span class="kn">import</span> <span class="n">RESEARCH_INFO</span>
-<span class="kn">from</span> <span class="nn">sc2.dicts.unit_train_build_abilities</span> <span class="kn">import</span> <span class="n">TRAIN_INFO</span>
-<span class="kn">from</span> <span class="nn">sc2.dicts.unit_trained_from</span> <span class="kn">import</span> <span class="n">UNIT_TRAINED_FROM</span>
-<span class="kn">from</span> <span class="nn">sc2.dicts.upgrade_researched_from</span> <span class="kn">import</span> <span class="n">UPGRADE_RESEARCHED_FROM</span>
-<span class="kn">from</span> <span class="nn">sc2.game_data</span> <span class="kn">import</span> <span class="n">AbilityData</span><span class="p">,</span> <span class="n">Cost</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.ability_id</span> <span class="kn">import</span> <span class="n">AbilityId</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.unit_typeid</span> <span class="kn">import</span> <span class="n">UnitTypeId</span>
-<span class="kn">from</span> <span class="nn">sc2.ids.upgrade_id</span> <span class="kn">import</span> <span class="n">UpgradeId</span>
-<span class="kn">from</span> <span class="nn">sc2.position</span> <span class="kn">import</span> <span class="n">Point2</span>
-<span class="kn">from</span> <span class="nn">sc2.unit</span> <span class="kn">import</span> <span class="n">Unit</span>
-<span class="kn">from</span> <span class="nn">sc2.units</span> <span class="kn">import</span> <span class="n">Units</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Alert</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">Target</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.dicts.unit_research_abilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">RESEARCH_INFO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.dicts.unit_train_build_abilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">TRAIN_INFO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.dicts.unit_trained_from</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNIT_TRAINED_FROM</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.dicts.upgrade_researched_from</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPGRADE_RESEARCHED_FROM</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityData</span><span class="p">,</span> <span class="n">Cost</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.ability_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.unit_typeid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitTypeId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.upgrade_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">UpgradeId</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.unit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">Units</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">sc2.game_info</span> <span class="kn">import</span> <span class="n">Ramp</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ramp</span>
 
 
 <div class="viewcode-block" id="BotAI">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI">[docs]</a>
-<span class="k">class</span> <span class="nc">BotAI</span><span class="p">(</span><span class="n">BotAIInternal</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BotAI</span><span class="p">(</span><span class="n">BotAIInternal</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for bots.&quot;&quot;&quot;</span>
 
     <span class="n">EXPANSION_GAP_THRESHOLD</span> <span class="o">=</span> <span class="mi">15</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns time in seconds, assumes the game is played on &#39;faster&#39;&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span> <span class="o">/</span> <span class="mf">22.4</span>  <span class="c1"># / (1/1.4) * (1/16)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time_formatted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time_formatted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns time as string in min:sec format&quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="mi">60</span><span class="p">)</span><span class="si">:</span><span class="s2">02</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">60</span><span class="p">)</span><span class="si">:</span><span class="s2">02</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">step_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a tuple of step duration in milliseconds.</span>
 <span class="sd">        First value is the minimum step duration - the shortest the bot ever took</span>
 <span class="sd">        Second value is the average step duration</span>
@@ -330,7 +344,7 @@
     <span class="c1"># pyre-ignore[11]</span>
 <div class="viewcode-block" id="BotAI.alert">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.alert">[docs]</a>
-    <span class="k">def</span> <span class="nf">alert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alert_code</span><span class="p">:</span> <span class="n">Alert</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">alert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alert_code</span><span class="p">:</span> <span class="n">Alert</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if alert is triggered in the current step.</span>
 <span class="sd">        Possible alerts are listed here https://github.com/Blizzard/s2client-proto/blob/e38efed74c03bec90f74b330ea1adda9215e655f/s2clientprotocol/sc2api.proto#L679-L702</span>
@@ -373,7 +387,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">start_location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the spawn location of the bot, using the position of the first created townhall.</span>
 <span class="sd">        This will be None if the bot is run on an arcade or custom map that does not feature townhalls at game start.</span>
@@ -381,12 +395,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">player_start_location</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">enemy_start_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enemy_start_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Possible start locations for enemies.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">start_locations</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">main_base_ramp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ramp</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">main_base_ramp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ramp</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the Ramp instance of the closest main-ramp to start location.</span>
 <span class="sd">        Look in game_info.py for more information about the Ramp class</span>
 
@@ -409,20 +423,24 @@
         <span class="k">return</span> <span class="n">found_main_base_ramp</span>
 
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span> <span class="nf">expansion_locations_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">expansion_locations_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of expansion positions, not sorted in any way.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span>
 
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span> <span class="nf">expansion_locations_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">expansion_locations_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns dict with the correct expansion position Point2 object as key,</span>
 <span class="sd">        resources as Units (mineral fields and vespene geysers) as value.</span>
 
 <span class="sd">        Caution: This function is slow. If you only need the expansion locations, use the property above.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
+        <span class="p">)</span>
         <span class="n">expansion_locations</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">pos</span><span class="p">:</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
             <span class="c1"># It may be that some resources are not mapped to an expansion location</span>
@@ -435,7 +453,7 @@
         <span class="k">return</span> <span class="n">expansion_locations</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">units_created</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">units_created</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a Counter for all your units and buildings you have created so far.</span>
 
 <span class="sd">        This may be used for statistics (at the end of the game) or for strategic decision making.</span>
@@ -456,7 +474,7 @@
 
 <div class="viewcode-block" id="BotAI.get_available_abilities">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.get_available_abilities">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_available_abilities</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_available_abilities</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span> <span class="o">|</span> <span class="n">Units</span><span class="p">,</span> <span class="n">ignore_resource_requirements</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns available abilities of one or more units. Right now only checks cooldown, energy cost, and whether the ability has been researched.</span>
@@ -476,7 +494,7 @@
 
 <div class="viewcode-block" id="BotAI.expand_now">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.expand_now">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">expand_now</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">expand_now</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">building</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">max_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
@@ -510,14 +528,14 @@
 
 <div class="viewcode-block" id="BotAI.get_next_expansion">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.get_next_expansion">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_next_expansion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_next_expansion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find next expansion location.&quot;&quot;&quot;</span>
 
         <span class="n">closest</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion_locations_list</span><span class="p">:</span>
 
-            <span class="k">def</span> <span class="nf">is_near_to_expansion</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">is_near_to_expansion</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXPANSION_GAP_THRESHOLD</span>
 
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">is_near_to_expansion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span><span class="p">)):</span>
@@ -538,7 +556,7 @@
 
 <div class="viewcode-block" id="BotAI.distribute_workers">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.distribute_workers">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">distribute_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">distribute_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Distributes workers across all the bases taken.</span>
 <span class="sd">        Keyword `resource_ratio` takes a float. If the current minerals to gas</span>
@@ -646,12 +664,12 @@
 
 
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span> <span class="nf">owned_expansions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">owned_expansions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dict of expansions owned by the player with mapping {expansion_location: townhall_structure}.&quot;&quot;&quot;</span>
         <span class="n">owned</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion_locations_list</span><span class="p">:</span>
 
-            <span class="k">def</span> <span class="nf">is_near_to_expansion</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">is_near_to_expansion</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXPANSION_GAP_THRESHOLD</span>
 
             <span class="n">th</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">townhalls</span> <span class="k">if</span> <span class="n">is_near_to_expansion</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
@@ -661,7 +679,7 @@
 
 <div class="viewcode-block" id="BotAI.calculate_supply_cost">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.calculate_supply_cost">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_supply_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_supply_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function calculates the required supply to train or morph a unit.</span>
 <span class="sd">        The total supply of a baneling is 0.5, but a zergling already uses up 0.5 supply, so the morph supply cost is 0.</span>
@@ -692,7 +710,7 @@
 
 <div class="viewcode-block" id="BotAI.can_feed">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.can_feed">[docs]</a>
-    <span class="k">def</span> <span class="nf">can_feed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">can_feed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if you have enough free supply to build the unit</span>
 
 <span class="sd">        Example::</span>
@@ -710,7 +728,7 @@
 
 <div class="viewcode-block" id="BotAI.calculate_unit_value">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.calculate_unit_value">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_unit_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cost</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_unit_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cost</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Unlike the function below, this function returns the value of a unit given by the API (e.g. the resources lost value on kill).</span>
 
@@ -728,7 +746,7 @@
 
 <div class="viewcode-block" id="BotAI.calculate_cost">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.calculate_cost">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">UpgradeId</span> <span class="o">|</span> <span class="n">AbilityId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cost</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">UpgradeId</span> <span class="o">|</span> <span class="n">AbilityId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cost</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the required build, train or morph cost of a unit. It is recommended to use the UnitTypeId instead of the ability to create the unit.</span>
 <span class="sd">        The total cost to create a ravager is 100/100, but the actual morph cost from roach to ravager is only 25/75, so this function returns 25/75.</span>
@@ -783,7 +801,7 @@
 
 <div class="viewcode-block" id="BotAI.can_afford">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.can_afford">[docs]</a>
-    <span class="k">def</span> <span class="nf">can_afford</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">UpgradeId</span> <span class="o">|</span> <span class="n">AbilityId</span><span class="p">,</span> <span class="n">check_supply_cost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">can_afford</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">UpgradeId</span> <span class="o">|</span> <span class="n">AbilityId</span><span class="p">,</span> <span class="n">check_supply_cost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests if the player has enough resources to build a unit or structure.</span>
 
 <span class="sd">        Example::</span>
@@ -813,7 +831,7 @@
 
 <div class="viewcode-block" id="BotAI.can_cast">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.can_cast">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">can_cast</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">can_cast</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span>
         <span class="n">ability_id</span><span class="p">:</span> <span class="n">AbilityId</span><span class="p">,</span>
@@ -876,7 +894,7 @@
 
 <div class="viewcode-block" id="BotAI.select_build_worker">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.select_build_worker">[docs]</a>
-    <span class="k">def</span> <span class="nf">select_build_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_build_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Unit</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Select a worker to build a building with.</span>
 
 <span class="sd">        Example::</span>
@@ -908,7 +926,7 @@
 
 <div class="viewcode-block" id="BotAI.can_place_single">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.can_place_single">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">can_place_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">building</span><span class="p">:</span> <span class="n">AbilityId</span> <span class="o">|</span> <span class="n">UnitTypeId</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">can_place_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">building</span><span class="p">:</span> <span class="n">AbilityId</span> <span class="o">|</span> <span class="n">UnitTypeId</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks the placement for only one position.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">building</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="p">):</span>
             <span class="n">creation_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">building</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span>
@@ -918,7 +936,7 @@
 
 <div class="viewcode-block" id="BotAI.can_place">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.can_place">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">can_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">building</span><span class="p">:</span> <span class="n">AbilityData</span> <span class="o">|</span> <span class="n">AbilityId</span> <span class="o">|</span> <span class="n">UnitTypeId</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">can_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">building</span><span class="p">:</span> <span class="n">AbilityData</span> <span class="o">|</span> <span class="n">AbilityId</span> <span class="o">|</span> <span class="n">UnitTypeId</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests if a building can be placed in the given locations.</span>
 
 <span class="sd">        Example::</span>
@@ -951,15 +969,15 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_place_single</span><span class="p">(</span><span class="n">building</span><span class="p">,</span> <span class="n">positions</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expected an iterable (list, tuple), but was: </span><span class="si">{</span><span class="n">positions</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Point2</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;List is expected to have Point2, but instead had: </span><span class="si">{</span><span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Point2</span><span class="p">),</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;List is expected to have Point2, but instead had: </span><span class="si">{</span><span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_query_building_placement_fast</span><span class="p">(</span><span class="n">building</span><span class="p">,</span> <span class="n">positions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BotAI.find_placement">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.find_placement">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">find_placement</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">find_placement</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">building</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="n">AbilityId</span><span class="p">,</span>
         <span class="n">near</span><span class="p">:</span> <span class="n">Point2</span><span class="p">,</span>
@@ -1031,7 +1049,7 @@
     <span class="c1"># TODO: improve using cache per frame</span>
 <div class="viewcode-block" id="BotAI.already_pending_upgrade">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.already_pending_upgrade">[docs]</a>
-    <span class="k">def</span> <span class="nf">already_pending_upgrade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upgrade_type</span><span class="p">:</span> <span class="n">UpgradeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">already_pending_upgrade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upgrade_type</span><span class="p">:</span> <span class="n">UpgradeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if an upgrade is being researched</span>
 
 <span class="sd">        Returns values are::</span>
@@ -1059,7 +1077,7 @@
 
 <div class="viewcode-block" id="BotAI.structure_type_build_progress">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.structure_type_build_progress">[docs]</a>
-    <span class="k">def</span> <span class="nf">structure_type_build_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure_type</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">structure_type_build_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure_type</span><span class="p">:</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the build progress of a structure type.</span>
 
@@ -1086,9 +1104,9 @@
 
 <span class="sd">        :param structure_type:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">structure_type</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="p">)</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Needs to be int or UnitTypeId, but was: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">structure_type</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">structure_type</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">UnitTypeId</span><span class="p">)),</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Needs to be int or UnitTypeId, but was: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">structure_type</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">structure_type</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="n">structure_type_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">structure_type</span>
             <span class="n">structure_type</span> <span class="o">=</span> <span class="n">UnitTypeId</span><span class="p">(</span><span class="n">structure_type_value</span><span class="p">)</span>
@@ -1115,7 +1133,7 @@
 
 <div class="viewcode-block" id="BotAI.tech_requirement_progress">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.tech_requirement_progress">[docs]</a>
-    <span class="k">def</span> <span class="nf">tech_requirement_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tech_requirement_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the tech requirement progress for a specific building</span>
 
 <span class="sd">        Example::</span>
@@ -1156,7 +1174,7 @@
 
 <div class="viewcode-block" id="BotAI.already_pending">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.already_pending">[docs]</a>
-    <span class="k">def</span> <span class="nf">already_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UpgradeId</span> <span class="o">|</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">already_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UpgradeId</span> <span class="o">|</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a number of buildings or units already in progress, or if a</span>
 <span class="sd">        worker is en route to build it. This also includes queued orders for</span>
@@ -1188,7 +1206,7 @@
 
 <div class="viewcode-block" id="BotAI.worker_en_route_to_build">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.worker_en_route_to_build">[docs]</a>
-    <span class="k">def</span> <span class="nf">worker_en_route_to_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">worker_en_route_to_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This function counts how many workers are on the way to start the construction a building.</span>
 
 <span class="sd">        :param unit_type:&quot;&quot;&quot;</span>
@@ -1197,7 +1215,7 @@
 
 
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span> <span class="nf">structures_without_construction_SCVs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">structures_without_construction_SCVs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Units</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all structures that do not have an SCV constructing it.</span>
 <span class="sd">        Warning: this function may move to become a Units filter.&quot;&quot;&quot;</span>
         <span class="n">worker_targets</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -1220,7 +1238,7 @@
 
 <div class="viewcode-block" id="BotAI.build">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.build">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">build</span><span class="p">(</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">building</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">,</span>
         <span class="n">near</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
@@ -1266,7 +1284,7 @@
 
 <div class="viewcode-block" id="BotAI.train">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.train">[docs]</a>
-    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">unit_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">,</span>
         <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -1414,7 +1432,7 @@
 
 <div class="viewcode-block" id="BotAI.research">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.research">[docs]</a>
-    <span class="k">def</span> <span class="nf">research</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upgrade_type</span><span class="p">:</span> <span class="n">UpgradeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">research</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upgrade_type</span><span class="p">:</span> <span class="n">UpgradeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Researches an upgrade from a structure that can research it, if it is idle and powered (protoss).</span>
 <span class="sd">        Returns True if the research was started.</span>
@@ -1435,9 +1453,9 @@
 
 <span class="sd">        :param upgrade_type:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="n">upgrade_type</span> <span class="ow">in</span> <span class="n">UPGRADE_RESEARCHED_FROM</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Could not find upgrade </span><span class="si">{</span><span class="n">upgrade_type</span><span class="si">}</span><span class="s2"> in &#39;research from&#39;-dictionary&quot;</span>
+        <span class="k">assert</span> <span class="n">upgrade_type</span> <span class="ow">in</span> <span class="n">UPGRADE_RESEARCHED_FROM</span><span class="p">,</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Could not find upgrade </span><span class="si">{</span><span class="n">upgrade_type</span><span class="si">}</span><span class="s2"> in &#39;research from&#39;-dictionary&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># Not affordable</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">upgrade_type</span><span class="p">):</span>
@@ -1478,6 +1496,8 @@
                 <span class="n">structure</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">research_structure_types</span>
                 <span class="c1"># If structure hasn&#39;t received an action/order this frame</span>
                 <span class="ow">and</span> <span class="n">structure</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_tags_received_action</span>
+                <span class="c1"># Structure is ready / completed</span>
+                <span class="ow">and</span> <span class="n">structure</span><span class="o">.</span><span class="n">is_ready</span>
                 <span class="c1"># Structure is idle</span>
                 <span class="ow">and</span> <span class="n">structure</span><span class="o">.</span><span class="n">is_idle</span>
                 <span class="c1"># Structure belongs to protoss and is powered (near pylon)</span>
@@ -1495,7 +1515,7 @@
 
 <div class="viewcode-block" id="BotAI.chat_send">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.chat_send">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">chat_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">team_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">team_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a chat message to the SC2 Client.</span>
 
 <span class="sd">        Example::</span>
@@ -1510,7 +1530,7 @@
 
 <div class="viewcode-block" id="BotAI.in_map_bounds">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.in_map_bounds">[docs]</a>
-    <span class="k">def</span> <span class="nf">in_map_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">in_map_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests if a 2 dimensional point is within the map boundaries of the pixelmaps.</span>
 
 <span class="sd">        :param pos:&quot;&quot;&quot;</span>
@@ -1527,7 +1547,7 @@
     <span class="c1"># For the functions below, make sure you are inside the boundaries of the map size.</span>
 <div class="viewcode-block" id="BotAI.get_terrain_height">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.get_terrain_height">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_terrain_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_terrain_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns terrain height at a position.</span>
 <span class="sd">        Caution: terrain height is different from a unit&#39;s z-coordinate.</span>
 
@@ -1539,7 +1559,7 @@
 
 <div class="viewcode-block" id="BotAI.get_terrain_z_height">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.get_terrain_z_height">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_terrain_z_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_terrain_z_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns terrain z-height at a position.</span>
 
 <span class="sd">        :param pos:&quot;&quot;&quot;</span>
@@ -1550,7 +1570,7 @@
 
 <div class="viewcode-block" id="BotAI.in_placement_grid">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.in_placement_grid">[docs]</a>
-    <span class="k">def</span> <span class="nf">in_placement_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">in_placement_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if you can place something at a position.</span>
 <span class="sd">        Remember, buildings usually use 2x2, 3x3 or 5x5 of these grid points.</span>
 <span class="sd">        Caution: some x and y offset might be required, see ramp code in game_info.py</span>
@@ -1563,7 +1583,7 @@
 
 <div class="viewcode-block" id="BotAI.in_pathing_grid">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.in_pathing_grid">[docs]</a>
-    <span class="k">def</span> <span class="nf">in_pathing_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">in_pathing_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if a ground unit can pass through a grid point.</span>
 
 <span class="sd">        :param pos:&quot;&quot;&quot;</span>
@@ -1574,7 +1594,7 @@
 
 <div class="viewcode-block" id="BotAI.is_visible">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.is_visible">[docs]</a>
-    <span class="k">def</span> <span class="nf">is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if you have vision on a grid point.</span>
 
 <span class="sd">        :param pos:&quot;&quot;&quot;</span>
@@ -1586,7 +1606,7 @@
 
 <div class="viewcode-block" id="BotAI.has_creep">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.has_creep">[docs]</a>
-    <span class="k">def</span> <span class="nf">has_creep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_creep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if there is creep on the grid point.</span>
 
 <span class="sd">        :param pos:&quot;&quot;&quot;</span>
@@ -1597,7 +1617,7 @@
 
 <div class="viewcode-block" id="BotAI.on_unit_destroyed">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_unit_destroyed">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_unit_destroyed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_tag</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_unit_destroyed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_tag</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class.</span>
 <span class="sd">        Note that this function uses unit tags and not the unit objects</span>
@@ -1611,7 +1631,7 @@
 
 <div class="viewcode-block" id="BotAI.on_unit_created">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_unit_created">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_unit_created</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_unit_created</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Override this in your bot class. This function is called when a unit is created.</span>
 
 <span class="sd">        :param unit:&quot;&quot;&quot;</span></div>
@@ -1619,7 +1639,7 @@
 
 <div class="viewcode-block" id="BotAI.on_unit_type_changed">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_unit_type_changed">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_unit_type_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">previous_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_unit_type_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">previous_type</span><span class="p">:</span> <span class="n">UnitTypeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Override this in your bot class. This function is called when a unit type has changed. To get the current UnitTypeId of the unit, use &#39;unit.type_id&#39;</span>
 
 <span class="sd">        This may happen when a larva morphed to an egg, siege tank sieged, a zerg unit burrowed, a hatchery morphed to lair,</span>
@@ -1636,7 +1656,7 @@
 
 <div class="viewcode-block" id="BotAI.on_building_construction_started">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_building_construction_started">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_building_construction_started</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_building_construction_started</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class.</span>
 <span class="sd">        This function is called when a building construction has started.</span>
@@ -1647,7 +1667,7 @@
 
 <div class="viewcode-block" id="BotAI.on_building_construction_complete">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_building_construction_complete">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_building_construction_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_building_construction_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class. This function is called when a building</span>
 <span class="sd">        construction is completed.</span>
@@ -1658,7 +1678,7 @@
 
 <div class="viewcode-block" id="BotAI.on_upgrade_complete">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_upgrade_complete">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_upgrade_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upgrade</span><span class="p">:</span> <span class="n">UpgradeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_upgrade_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upgrade</span><span class="p">:</span> <span class="n">UpgradeId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class. This function is called with the upgrade id of an upgrade that was not finished last step and is now.</span>
 
@@ -1668,7 +1688,7 @@
 
 <div class="viewcode-block" id="BotAI.on_unit_took_damage">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_unit_took_damage">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_unit_took_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">amount_damage_taken</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_unit_took_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">,</span> <span class="n">amount_damage_taken</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class. This function is called when your own unit (unit or structure) took damage.</span>
 <span class="sd">        It will not be called if the unit died this frame.</span>
@@ -1688,7 +1708,7 @@
 
 <div class="viewcode-block" id="BotAI.on_enemy_unit_entered_vision">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_enemy_unit_entered_vision">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_enemy_unit_entered_vision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_enemy_unit_entered_vision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class. This function is called when an enemy unit (unit or structure) entered vision (which was not visible last frame).</span>
 
@@ -1698,7 +1718,7 @@
 
 <div class="viewcode-block" id="BotAI.on_enemy_unit_left_vision">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_enemy_unit_left_vision">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_enemy_unit_left_vision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_tag</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_enemy_unit_left_vision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_tag</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).</span>
 <span class="sd">        Same as the self.on_unit_destroyed event, this function is called with the unit&#39;s tag because the unit is no longer visible anymore.</span>
@@ -1715,7 +1735,7 @@
 
 <div class="viewcode-block" id="BotAI.on_before_start">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_before_start">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_before_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_before_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class. This function is called before &quot;on_start&quot;</span>
 <span class="sd">        and before &quot;prepare_first_step&quot; that calculates expansion locations.</span>
@@ -1726,7 +1746,7 @@
 
 <div class="viewcode-block" id="BotAI.on_start">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_start">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override this in your bot class.</span>
 <span class="sd">        At this point, game_data, game_info and the first iteration of game_state (self.state) are available.</span>
@@ -1735,7 +1755,7 @@
 
 <div class="viewcode-block" id="BotAI.on_step">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_step">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        You need to implement this function!</span>
 <span class="sd">        Override this in your bot class.</span>
@@ -1749,7 +1769,7 @@
     <span class="c1"># pyre-ignore[11]</span>
 <div class="viewcode-block" id="BotAI.on_end">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.on_end">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">on_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_result</span><span class="p">:</span> <span class="n">Result</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_result</span><span class="p">:</span> <span class="n">Result</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Override this in your bot class. This function is called at the end of a game.</span>
 <span class="sd">        Unsure if this function will be called on the laddermanager client as the bot process may forcefully be terminated.</span>
 
@@ -1818,8 +1838,8 @@ By tweakimp, BurnySc2
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
