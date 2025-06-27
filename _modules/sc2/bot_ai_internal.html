@@ -325,7 +325,7 @@
         <span class="c1"># Select distance calculation method, see _distances_override_functions function</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;distance_calculation_method&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">distance_calculation_method</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="c1"># Select if the Unit.command should return UnitCommand objects. Set this to True if your bot uses &#39;self.do(unit(ability, target))&#39;</span>
+        <span class="c1"># Select if the Unit.command should return UnitCommand objects. Set this to True if your bot uses &#39;unit(ability, target)&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;unit_command_uses_self_do&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">unit_command_uses_self_do</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># This value will be set to True by main.py in self._prepare_start if game is played in realtime (if true, the bot will have limited time per step)</span>
@@ -680,7 +680,7 @@
 
     <span class="nd">@final</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">_do_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitCommand</span><span class="p">],</span> <span class="n">prevent_double</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Used internally by main.py automatically, use self.do() instead!</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Used internally by main.py after each step</span>
 
 <span class="sd">        :param actions:</span>
 <span class="sd">        :param prevent_double:&quot;&quot;&quot;</span>
@@ -919,7 +919,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_actions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-        <span class="c1"># Clear set of unit tags that were given an order this frame by self.do()</span>
+        <span class="c1"># Clear set of unit tags that were given an order this frame</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unit_tags_received_action</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="c1"># Commit debug queries</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_send_debug</span><span class="p">()</span>
