@@ -264,7 +264,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">sc2.pixel_map</span> <span class="kn">import</span> <span class="n">PixelMap</span>
-<span class="kn">from</span> <span class="nn">sc2.player</span> <span class="kn">import</span> <span class="n">Player</span><span class="p">,</span> <span class="n">Race</span>
+<span class="kn">from</span> <span class="nn">sc2.player</span> <span class="kn">import</span> <span class="n">Player</span>
 <span class="kn">from</span> <span class="nn">sc2.position</span> <span class="kn">import</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">Size</span>
 
 
@@ -496,7 +496,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">map_ramps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Ramp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Filled later by BotAI._prepare_first_step</span>
         <span class="c1"># pyre-ignore[8]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vision_blockers</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Point2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Filled later by BotAI._prepare_first_step</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_races</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Race</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_races</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">p</span><span class="o">.</span><span class="n">player_id</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">race_actual</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">race_requested</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">player_info</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_locations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
