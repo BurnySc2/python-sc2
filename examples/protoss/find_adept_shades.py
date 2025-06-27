@@ -10,9 +10,7 @@ from sc2.player import Bot, Computer
 from sc2.position import Point2
 
 
-# pylint: disable=W0231
 class FindAdeptShadesBot(BotAI):
-
     def __init__(self):
         self.shaded = False
         self.shades_mapping = {}
@@ -28,6 +26,7 @@ class FindAdeptShadesBot(BotAI):
         if adepts and not self.shaded:
             # Wait for adepts to spawn and then cast ability
             for adept in adepts:
+                # pyre-ignore[16]
                 adept(AbilityId.ADEPTPHASESHIFT_ADEPTPHASESHIFT, self.game_info.map_center)
             self.shaded = True
         elif self.shades_mapping:
@@ -39,6 +38,7 @@ class FindAdeptShadesBot(BotAI):
                     # logger.info(f"Remaining shade time: {shade.buff_duration_remain} / {shade.buff_duration_max}")
                     pass
                 if adept and shade:
+                    # pyre-ignore[16]
                     self.client.debug_line_out(adept, shade, (0, 255, 0))
             # logger.info(self.shades_mapping)
         elif self.shaded:
@@ -53,6 +53,7 @@ class FindAdeptShadesBot(BotAI):
                 previous_shade_location = shade.position.towards(
                     forward_position, -(self.client.game_step / 16) * shade.movement_speed
                 )  # See docstring of movement_speed attribute
+                # pyre-ignore[6]
                 closest_adept = remaining_adepts.closest_to(previous_shade_location)
                 self.shades_mapping[closest_adept.tag] = shade.tag
 
@@ -60,8 +61,7 @@ class FindAdeptShadesBot(BotAI):
 def main():
     run_game(
         maps.get("(2)CatalystLE"),
-        [Bot(Race.Protoss, FindAdeptShadesBot()),
-         Computer(Race.Protoss, Difficulty.Medium)],
+        [Bot(Race.Protoss, FindAdeptShadesBot()), Computer(Race.Protoss, Difficulty.Medium)],
         realtime=False,
     )
 

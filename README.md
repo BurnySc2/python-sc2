@@ -7,7 +7,7 @@ An easy-to-use library for writing AI Bots for StarCraft II in Python 3. The ult
 
 **This library (currently) covers only the raw scripted interface.** At this time I don't intend to add support for graphics-based interfaces.
 
-The [documentation can be found here](https://burnysc2.github.io/python-sc2/docs/index.html).
+The [documentation can be found here](https://burnysc2.github.io/python-sc2/index.html).
 For bot authors, looking directly at the files in the [sc2 folder](/sc2) can also be of benefit: bot_ai.py, unit.py, units.py, client.py, game_info.py and game_state.py. Most functions in those files have docstrings, example usages and type hinting.
 
 I am planning to change this fork more radically than the main repository, for bot performance benefits and to add functions to help new bot authors. This may break older bots in the future, however I try to add deprecation warnings to give a heads up notification. This means that the [video tutorial made by sentdex](https://pythonprogramming.net/starcraft-ii-ai-python-sc2-tutorial/) is outdated and does no longer directly work with this fork.
@@ -18,7 +18,7 @@ For a list of ongoing changes and differences to the main repository of Dentosal
 
 By installing this library you agree to be bound by the terms of the [AI and Machine Learning License](http://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html).
 
-For this fork, you'll need Python 3.8 or newer.
+For this fork, you'll need Python 3.10 or newer.
 
 Install the pypi package:
 ```
@@ -26,10 +26,9 @@ pip install --upgrade burnysc2
 ```
 or directly from develop branch:
 ```
-pip install poetry
 pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/archive/develop.zip
 ```
-Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments or poetry.
+Both commands will use the `sc2` library folder, so you will not be able to have Dentosal's and this fork installed at the same time, unless you use virtual environments.
 
 ## StarCraft II
 You'll need a StarCraft II executable. If you are running Windows or macOS, just install SC2 from [blizzard app](https://starcraft2.com/).
@@ -89,7 +88,7 @@ Extract these maps into their respective *subdirectories* in the SC2 maps direct
 e.g. `install-dir/Maps/Ladder2017Season1/`
 
 #### Bot ladder maps
-Maps that are run on the [SC2 AI Ladder](http://sc2ai.net/) and [SC2 AI Arena](https://aiarena.net/) can be downloaded [from the sc2ai wiki](http://wiki.sc2ai.net/Ladder_Maps) and [the aiarena wiki](https://aiarena.net/wiki/bot-development/getting-started/#wiki-toc-maps).   
+Maps that are run on the [SC2 AI Arena Ladder](https://aiarena.net/) can be downloaded [from the SC2 AI Arena Wiki](https://aiarena.net/wiki/bot-development/getting-started/#wiki-toc-maps).   
 **Extract these maps into the *root* of the SC2 maps directory** (otherwise ladder replays won't work).  
 e.g. `install-dir/Maps/AcropolisLE.SC2Map`
 
@@ -173,7 +172,7 @@ class MyBot(BotAI):
 
 ## Community - Help and support
 
-You have questions but don't want to create an issue? Join the [Starcraft 2 AI Discord server](https://discordapp.com/invite/zXHU4wM) or [aiarena.net Discord server](https://discord.gg/yDBzbtC). Questions about this repository can be asked in text channel #python. There are discussions and questions about SC2 bot programming and this repository every day.
+You have questions but don't want to create an issue? Join the [SC2 AI Arena Discord server](https://discordapp.com/invite/zXHU4wM). Questions about this repository can be asked in text channel #python. There are discussions and questions about SC2 bot programming and this repository every day.
 
 ## Bug reports, feature requests and ideas
 
@@ -186,6 +185,6 @@ Git commit messages use [imperative-style messages](https://stackoverflow.com/a/
 
 To run pre-commit hooks (which run autoformatting and autosort imports) you can run
 ```sh
-poetry run pre-commit install
-poetry run pre-commit run --all-files
+uv run pre-commit install
+uv run pre-commit run --all-files --hook-stage push
 ```

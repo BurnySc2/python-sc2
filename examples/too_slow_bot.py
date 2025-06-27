@@ -9,7 +9,6 @@ from sc2.player import Bot, Computer
 
 
 class SlowBot(ProxyRaxBot):
-
     async def on_step(self, iteration):
         await asyncio.sleep(random.random())
         await super().on_step(iteration)

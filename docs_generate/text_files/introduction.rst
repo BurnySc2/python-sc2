@@ -6,7 +6,7 @@ This is an overview to the BurnySc2/python-sc2 library which can be found here: 
 
 Requirements
 -------------
-- Python 3.8 or newer
+- Python 3.10 or newer
 - StarCraft 2 Client installation in the **default installation path** which should be ``C:\Program Files (x86)\StarCraft II``
 
 Installation
@@ -15,7 +15,6 @@ Install through pip using ``pip install burnysc2`` if Python is in your environm
 
 Alternatively (of if the command above doesn't work) you can install a specific branch directly from github, here the develop branch::
 
-    pip install poetry
     pip install --upgrade --force-reinstall https://github.com/BurnySc2/python-sc2/archive/develop.zip
 
 Creating a bot
@@ -80,10 +79,10 @@ Information about the enemy player::
     self.enemy_structures: Units
 
     # Enemy spawn locations as a list of Point2 points
-    self.enemy_start_locations: List[Point2]
+    self.enemy_start_locations: list[Point2]
 
     # Enemy units that are inside your sensor tower range
-    self.blips: Set[Blip]
+    self.blips: set[Blip]
 
     # The enemy race. If the enemy chose random, this will stay at random forever
     self.enemy_race: Race
@@ -99,7 +98,7 @@ Other information::
     self.all_units: Units # All units combined: yours, enemy's and neutral
 
     # Locations of possible expansions
-    self.expansion_locations: Dict[Point2, Units]
+    self.expansion_locations: dict[Point2, Units]
 
     # Game data about units, abilities and upgrades (see game_data.py)
     self.game_data: GameData

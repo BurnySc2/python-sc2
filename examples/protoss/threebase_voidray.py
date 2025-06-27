@@ -9,8 +9,6 @@ from sc2.player import Bot, Computer
 
 
 class ThreebaseVoidrayBot(BotAI):
-
-    # pylint: disable=R0912
     async def on_step(self, iteration):
         target_base_count = 3
         target_stargate_count = 3
@@ -54,8 +52,11 @@ class ThreebaseVoidrayBot(BotAI):
 
         # If we are low on supply, build pylon
         if (
-            self.supply_left < 2 and self.already_pending(UnitTypeId.PYLON) == 0
-            or self.supply_used > 15 and self.supply_left < 4 and self.already_pending(UnitTypeId.PYLON) < 2
+            self.supply_left < 2
+            and self.already_pending(UnitTypeId.PYLON) == 0
+            or self.supply_used > 15
+            and self.supply_left < 4
+            and self.already_pending(UnitTypeId.PYLON) < 2
         ):
             # Always check if you can afford something before you build it
             if self.can_afford(UnitTypeId.PYLON):
@@ -109,8 +110,8 @@ class ThreebaseVoidrayBot(BotAI):
             pylon = self.structures(UnitTypeId.PYLON).ready.random
             if (
                 self.townhalls.ready.amount + self.already_pending(UnitTypeId.NEXUS) >= target_base_count
-                and self.structures(UnitTypeId.STARGATE).ready.amount + self.already_pending(UnitTypeId.STARGATE) <
-                target_stargate_count
+                and self.structures(UnitTypeId.STARGATE).ready.amount + self.already_pending(UnitTypeId.STARGATE)
+                < target_stargate_count
             ):
                 if self.can_afford(UnitTypeId.STARGATE):
                     await self.build(UnitTypeId.STARGATE, near=pylon)
@@ -125,8 +126,7 @@ class ThreebaseVoidrayBot(BotAI):
 def main():
     run_game(
         maps.get("(2)CatalystLE"),
-        [Bot(Race.Protoss, ThreebaseVoidrayBot()),
-         Computer(Race.Protoss, Difficulty.Easy)],
+        [Bot(Race.Protoss, ThreebaseVoidrayBot()), Computer(Race.Protoss, Difficulty.Easy)],
         realtime=False,
     )
 

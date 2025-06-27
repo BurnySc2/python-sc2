@@ -1,34 +1,103 @@
 # If you change the name, change the link on  the README.md for the badge too
 name: Tests
 
-
 on:
   push:
     paths:
-    - sc2/**
-    - examples/**
-    - test/**
-    - docs_generate/**
-    - pyproject.toml
-    - poetry.lock
-    - README.md
-    - .github/workflows/ci.yml
+      - sc2/**
+      - examples/**
+      - test/**
+      - docs_generate/**
+      - .pre-commit-config.yaml
+      - generate_dicts_from_data_json.py
+      - generate_id_constants_from_stableid.py
+      - uv.lock
+      - pyproject.toml
+      - README.md
+      - .github/workflows/ci.yml
   pull_request:
     branches:
-    - master
-    - develop
+      - master
+      - develop
 
 env:
   # Docker image version, see https://hub.docker.com/r/burnysc2/python-sc2-docker/tags
   # This version should always lack behind one version behind the docker-ci.yml because it is possible that it doesn't exist
-  VERSION_NUMBER: '1.0.1'
-  LATEST_PYTHON_VERSION: '3.10'
-  LATEST_SC2_VERSION: '4.10'
+  VERSION_NUMBER: "1.0.4"
+  # TODO Change to '3.13' when a new image has been pushed
+  LATEST_PYTHON_VERSION: "3.12"
+  LATEST_SC2_VERSION: "4.10"
 
 jobs:
+  run_pre_commit_hook:
+    name: Run pre-commit hook
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --no-cache --no-install-project
+          uv run pre-commit install
+
+      - name: Run pre-commit hooks
+        run: uv run pre-commit run --all-files --hook-stage push
+
+  generate_dicts_from_data_json:
+    name: Generate dicts from data.json
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --no-cache --no-install-project
+          uv run pre-commit install
+
+      - name: Run generate dicts
+        # Check if newly generated file is the same as existing file
+        # Run pre-commit hook to format files, always return exit code 0 to not end CI run
+        run: |
+          mv sc2/dicts sc2/dicts_old
+          uv run python generate_dicts_from_data_json.py
+          uv run pre-commit run --all-files --hook-stage push || true
+          rm -rf sc2/dicts/__pycache__ sc2/dicts_old/__pycache__
+
+      - name: Upload generated dicts folder as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Generated_dicts
+          path: sc2/dicts
+
+      - name: Compare generated dict files
+        # Exit code will be 0 if the results of both commands are equal
+        run: |
+          [[ `ls sc2/dicts | md5sum` == `ls sc2/dicts_old | md5sum` ]]
+
   run_pytest_tests:
     # Run pytest tests on pickle files (pre-generated SC2 API observations)
     name: Run pytest
+    needs: [run_pre_commit_hook, generate_dicts_from_data_json]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
@@ -37,79 +106,55 @@ jobs:
         # Python 3.6 fails due to: https://www.python.org/dev/peps/pep-0563/
         # If all type annotations were removed, this library should run in py3.6 and perhaps even 3.5
         # Python 3.7 support has been dropped due to missing cached_property (new since Python 3.8) https://docs.python.org/3/library/functools.html#functools.cached_property
+        # Python 3.8 support has been dropped because numpy >=1.26.0 requires Python >=3.9 (this numpy version is required to run python 3.12)
+        # Python 3.9 support has been dropped since numpy >=2.1.0 (this numpy version is required to run python 3.13)
         os: [macos-latest, windows-latest, ubuntu-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      id: setup-python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install Poetry
-      run: |
-        pip install poetry
+      - name: Install uv
+        run: pip install uv
 
-    - name: Make poetry use local .venv folder
-      run: poetry config virtualenvs.in-project true
+      - name: Install dependencies
+        run: uv sync --frozen --no-cache --no-install-project
 
-    - name: Set up cache
-      if: matrix.os != 'windows-latest'
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+      - name: Run pytest
+        run: uv run python -m pytest test
 
-    - name: Install dependencies
-      run: |
-        poetry install
+        # Run benchmarks
+      - name: Run benchmark benchmark_array_creation
+        run: uv run python -m pytest test/benchmark_array_creation.py
 
-    - name: Run yapf autoformat
-      if: matrix.os != 'windows-latest'
-      run: |
-        poetry run yapf --in-place $(git ls-files '*.py')
+      - name: Run benchmark benchmark_distance_two_points
+        run: uv run python -m pytest test/benchmark_distance_two_points.py
 
-    - name: Run pylint on sc2 folder
-      if: matrix.os != 'windows-latest'
-      run: |
-        poetry run pylint $(git ls-files '*.py' | grep -E 'sc2/.*')
+      - name: Run benchmark benchmark_distances_cdist
+        run: uv run python -m pytest test/benchmark_distances_cdist.py
 
-    - name: Run pylint on examples folder
-      if: matrix.os != 'windows-latest'
-      run: |
-        poetry run pylint $(git ls-files '*.py' | grep -E 'examples/.*')
+      - name: Run benchmark benchmark_distances_points_to_point
+        run: uv run python -m pytest test/benchmark_distances_points_to_point.py
 
-    - name: Run pytest
-      run: |
-        poetry run pytest test
+      - name: Run benchmark benchmark_distances_units
+        run: uv run python -m pytest test/benchmark_distances_units.py
 
-      # Run benchmarks
-    - name: Run benchmark benchmark_array_creation
-      run: |
-        poetry run pytest test/benchmark_array_creation.py
+      - name: Run benchmark benchmark_bot_ai_prepare_units
+        run: uv run python -m pytest test/benchmark_prepare_units.py
 
-    - name: Run benchmark benchmark_distance_two_points
-      run: |
-        poetry run pytest test/benchmark_distance_two_points.py
-
-    - name: Run benchmark benchmark_distances_cdist
-      run: |
-        poetry run pytest test/benchmark_distances_cdist.py
-
-    - name: Run benchmark benchmark_distances_points_to_point
-      run: |
-        poetry run pytest test/benchmark_distances_points_to_point.py
-
-    - name: Run benchmark benchmark_distances_units
-      run: |
-        poetry run pytest test/benchmark_distances_units.py
+      - name: Run benchmark benchmark_bot_ai_init
+        run: uv run python -m pytest test/benchmark_bot_ai_init.py
 
   run_test_bots:
     # Run test bots that download the SC2 linux client and run it
     name: Run testbots linux
+    needs: [run_pytest_tests]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     strategy:
@@ -117,206 +162,265 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.8', '3.9', '3.10']
-        sc2-version: ['4.10']
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        sc2-version: ["4.10"]
     env:
       IMAGE_NAME: burnysc2/python-sc2:local
 
     steps:
-    # Copy data from repository
-    - uses: actions/checkout@v2
+      # Copy data from repository
+      - uses: actions/checkout@v3
 
-    - name: Print directories and files
-      run: |
-        sudo apt-get install tree
-        tree
+      - name: Print directories and files
+        run: sudo apt-get install tree && tree
 
-    - name: Load and build docker image
-      # Build docker image from Dockerfile using specific python and sc2 version
-      env:
-        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
-      run: |
-        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS .
+      - name: Load and build docker image
+        # Build docker image from Dockerfile using specific python and sc2 version
+        env:
+          BUILD_ARGS: --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }}
+        run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
 
-    - name: Run autotest_bot.py
-      # Run bot and list resulting files (replay file, stable_id.json)
-      run: |
-        docker run -i -d --name my_container $IMAGE_NAME
-        docker exec -i my_container bash -c "python test/travis_test_script.py test/autotest_bot.py"
-        docker exec -i my_container bash -c "tree"
-        docker rm -f my_container
+      - name: Run autotest_bot.py
+        # Run bot and list resulting files (replay file, stable_id.json)
+        run: |
+          docker run -i -d --name my_container --env 'PYTHONPATH=/root/python-sc2' $IMAGE_NAME
+          docker exec -i my_container bash -c "python test/travis_test_script.py test/autotest_bot.py"
+          docker exec -i my_container bash -c "tree"
+          docker rm -f my_container
 
-    - name: Run upgradestest_bot.py
-      run: |
-        docker run -i -d --name my_container $IMAGE_NAME
-        docker exec -i my_container bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
-        docker exec -i my_container bash -c "tree"
-        docker rm -f my_container
+      - name: Run upgradestest_bot.py
+        run: |
+          docker run -i -d --name my_container --env 'PYTHONPATH=/root/python-sc2' $IMAGE_NAME
+          docker exec -i my_container bash -c "python test/travis_test_script.py test/upgradestest_bot.py"
+          docker exec -i my_container bash -c "tree"
+          docker rm -f my_container
 
-    - name: Run damagetest_bot.py
-      run: |
-        docker run -i -d --name my_container $IMAGE_NAME
-        docker exec -i my_container bash -c "python test/travis_test_script.py test/damagetest_bot.py"
-        docker exec -i my_container bash -c "tree"
-        docker rm -f my_container
+      - name: Run damagetest_bot.py
+        run: |
+          docker run -i -d --name my_container --env 'PYTHONPATH=/root/python-sc2' $IMAGE_NAME
+          docker exec -i my_container bash -c "python test/travis_test_script.py test/damagetest_bot.py"
+          docker exec -i my_container bash -c "tree"
+          docker rm -f my_container
 
-    - name: Run queries_test_bot.py
-      run: |
-        docker run -i -d --name my_container $IMAGE_NAME
-        docker exec -i my_container bash -c "python test/travis_test_script.py test/queries_test_bot.py"
-        docker exec -i my_container bash -c "tree"
-        docker rm -f my_container
+      - name: Run queries_test_bot.py
+        run: |
+          docker run -i -d --name my_container --env 'PYTHONPATH=/root/python-sc2' $IMAGE_NAME
+          docker exec -i my_container bash -c "python test/travis_test_script.py test/queries_test_bot.py"
+          docker exec -i my_container bash -c "tree"
+          docker rm -f my_container
 
   run_example_bots:
     # Run example bots against computer
     name: Run example bots against computer
-    runs-on: ${{ matrix.os }}
+    needs: [run_pytest_tests]
+    runs-on: ubuntu-latest
     timeout-minutes: 60
-    strategy:
-      # Do not allow this test to cancel. Finish all jobs regardless of error
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
     env:
       IMAGE_NAME: burnysc2/python-sc2-docker:local
 
     steps:
-    # Copy data from repository
-    - uses: actions/checkout@v2
+      # Copy data from repository
+      - uses: actions/checkout@v3
 
-    - name: Print directories and files
-      run: |
-        sudo apt-get install tree
-        tree
+      - name: Print directories and files
+        run: sudo apt-get install tree && tree
 
-    - name: Load and build docker image
-      # Build docker image from Dockerfile using specific python and sc2 version
-      env:
-        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
-      run: |
-        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+      - name: Load and build docker image
+        # Build docker image from Dockerfile using specific python and sc2 version
+        env:
+          BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
+        run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
 
-    - name: Run example bots vs computer
-      run: |
-        docker run -i -d --name my_container $IMAGE_NAME
-        docker exec -i my_container bash -c "python test/run_example_bots_vs_computer.py"
-        docker exec -i my_container bash -c "tree"
-        docker rm -f my_container
+      - name: Run example bots vs computer
+        run: |
+          docker run -i -d --name my_container --env 'PYTHONPATH=/root/python-sc2' $IMAGE_NAME
+          docker exec -i my_container bash -c "python test/run_example_bots_vs_computer.py"
+          docker exec -i my_container bash -c "tree"
+          docker rm -f my_container
 
-# TODO Fix in main.py "run_multiple_games" or "a_run_multiple_games" or "a_run_multiple_games_nokill"
-#  run_bot_vs_bot:
-#    # Run bot vs bot
-#    name: Run example bots against each other
-#    runs-on: ${{ matrix.os }}
-#    timeout-minutes: 30
-#    strategy:
-#      # Do not allow this test to cancel. Finish all jobs regardless of error
-#      fail-fast: false
-#      matrix:
-#        os: [ubuntu-latest]
-#        python-version: ['3.10']
-#        sc2-version: ['4.10']
-#    steps:
-#    # Copy data from repository
-#    - uses: actions/checkout@v2
-#
-#    - name: Print directories and files
-#      run: |
-#        sudo apt-get install tree
-#        tree
-#
-#    - name: Load and build docker image
-#      # Build docker image from Dockerfile using python 3.8
-#      run: |
-#        docker build -t test_image -f test/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python-version }} --build-arg SC2_VERSION=${{ matrix.sc2-version }} --build-arg VERSION_NUMBER=$VERSION_NUMBER .
-#
-#    - name: Run example bots vs each other
-#      run: |
-#        docker run -it -d --name my_container test_image
-#        docker exec -i my_container bash -c "python test/run_example_bots_vs_each_other.py"
-#        docker exec -i my_container bash -c "tree"
-#        docker rm -f my_container
+  # TODO Fix in main.py "run_multiple_games" or "a_run_multiple_games" or "a_run_multiple_games_nokill"
+  #  run_bot_vs_bot:
+  #    # Run bot vs bot
+  #    name: Run example bots against each other
+  #    needs: [run_pytest_tests]
+  #    timeout-minutes: 60
+  #    env:
+  #      IMAGE_NAME: burnysc2/python-sc2-docker:local
+  #
+  #    steps:
+  #    # Copy data from repository
+  #    - uses: actions/checkout@v3
+  #
+  #    - name: Print directories and files
+  #      run: |
+  #        sudo apt-get install tree
+  #        tree
+  #
+  #    - name: Load and build docker image
+  #      # Build docker image from Dockerfile using specific python and sc2 version
+  #      env:
+  #        BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
+  #      run: |
+  #        docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+  #
+  #    - name: Run example bots vs each other
+  #      run: |
+  #        docker run -i -d --name my_container --env 'PYTHONPATH=/root/python-sc2' $IMAGE_NAME
+  #        docker exec -i my_container bash -c "python test/run_example_bots_vs_each_other.py"
+  #        docker exec -i my_container bash -c "tree"
+  #        docker rm -f my_container
+
+  run_coverage:
+    # Run and upload coverage report
+    # This coverage test does not cover the whole testing range, check /bat_files/rune_code_coverage.bat
+    name: Run coverage
+    needs: [run_test_bots, run_example_bots]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      IMAGE_NAME: burnysc2/python-sc2-docker:local
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Load and build docker image
+        # Build docker image from Dockerfile using specific python and sc2 version
+        env:
+          BUILD_ARGS: --build-arg PYTHON_VERSION=${{ env.LATEST_PYTHON_VERSION }} --build-arg SC2_VERSION=${{ env.LATEST_SC2_VERSION }}
+        run: docker build -f test/Dockerfile -t $IMAGE_NAME $BUILD_ARGS --build-arg VERSION_NUMBER=${{ env.VERSION_NUMBER }} .
+
+      - name: Set up container
+        run: |
+          mkdir htmlcov
+          docker run -i -d \
+            -v $(pwd)/htmlcov:/root/python-sc2/htmlcov \
+            --name my_container \
+            --env 'PYTHONPATH=/root/python-sc2/' \
+            --entrypoint /bin/bash \
+            $IMAGE_NAME
+          echo "Install dev requirements because only non dev requirements exist in the docker image at the moment"
+          docker exec -i my_container bash -c "pip install uv \
+              && uv sync --frozen --no-cache --no-install-project"
+
+      - name: Run coverage on tests
+        run: docker exec -i my_container bash -c "uv run pytest --cov=./"
+
+      - name: Run coverage on autotest_bot.py
+        run: docker exec -i my_container bash -c "uv run coverage run -a test/travis_test_script.py test/autotest_bot.py"
+
+      - name: Run coverage on upgradestest_bot.py
+        run: docker exec -i my_container bash -c "uv run coverage run -a test/travis_test_script.py test/upgradestest_bot.py"
+
+      - name: Run coverage on damagetest_bot.py
+        run: docker exec -i my_container bash -c "uv run coverage run -a test/travis_test_script.py test/damagetest_bot.py"
+
+      - name: Run coverage on queries_test_bot.py
+        run: docker exec -i my_container bash -c "uv run coverage run -a test/travis_test_script.py test/queries_test_bot.py"
+
+      # Bots might run differently long each time and create flucuations in code coverage - better to mock behavior instead
+      #    - name: Run coverage on example bots
+      #      run: |
+      #        docker exec -i my_container bash -c "uv run coverage run -a test/run_example_bots_vs_computer.py"
+
+      - name: Generate xml coverage file
+        run: |
+          docker exec -i my_container bash -c "uv run coverage xml"
+          docker cp my_container:/root/python-sc2/coverage.xml $(pwd)/coverage.xml
+
+      - name: Generate html coverage files in htmlcov/ folder
+        run: |
+          docker exec -i my_container bash -c "uv run coverage html"
+          echo "Upload htmlcov folder because it was mounted in container, so it will be available in host machine"
+
+      - name: Upload htmlcov/ folder as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Coverage_report
+          path: htmlcov
+
+  run_radon:
+    name: Run radon complexity analysis
+    needs: [run_test_bots, run_example_bots]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.LATEST_PYTHON_VERSION }}
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv sync --frozen --no-cache --no-install-project
+
+      - name: Run uv radon
+        run: uv run radon cc sc2/ -a -nb
 
   release_to_github_pages:
     name: GitHub Pages
+    needs: [run_test_bots, run_example_bots]
     runs-on: ubuntu-latest
-    timeout-minutes: 3
-    needs: [run_pytest_tests, run_test_bots, run_example_bots]
+    timeout-minutes: 5
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ env.LATEST_PYTHON_VERSION }}
+      - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
-    - name: Install Poetry
-      run: |
-        pip install poetry
+      - name: Install uv
+        run: pip install uv
 
-    - name: Make poetry use local .venv folder
-      run: poetry config virtualenvs.in-project true
+      - name: Install dependencies
+        run: uv sync --frozen --no-cache --no-install-project
 
-    - name: Set up cache
-      if: matrix.os != 'windows-latest'
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: ${{ matrix.os }}-${{ steps.setup-python.outputs.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+      - name: Build docs from scratch
+        run: |
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=./docs/index.html\" />" > index.html
+          mkdir -p docs
+          cd docs_generate
+          uv run sphinx-build -a -E -b html . ../docs
 
-    - name: Install dependencies
-      run: |
-        poetry install
+      - name: Debug-list all generated files
+        run: sudo apt-get install tree && tree
 
-    - name: Build docs from scratch
-      run: |
-        echo "<meta http-equiv=\"refresh\" content=\"0; url=./docs/index.html\" />" > index.html
-        mkdir -p docs
-        cd docs_generate
-        poetry run sphinx-build -a -E -b html . ../docs
-
-    - name: Remove files unrelated to docs
-      run: |
-        rm -rf data dockerfiles docs_generate examples sc2 test
-        rm poetry.lock
-
-    - name: Publish to Github Pages
-      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BASE_BRANCH: develop   # The branch the action should deploy from.
-        BRANCH: gh-pages   # The branch the action should deploy to.
-        FOLDER: .   # The folder the action should deploy.
+      - name: Publish to Github Pages
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BASE_BRANCH: develop # The branch the action should deploy from.
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs # The folder the action should deploy.
 
   release_to_pypi:
-    name: Pypi
+    name: Pypi package release
+    needs: [run_test_bots, run_example_bots]
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [run_pytest_tests, run_test_bots, run_example_bots]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ env.LATEST_PYTHON_VERSION }}
+      - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
-    - name: Install Poetry
-      run: |
-        pip install poetry
+      - name: Install uv
+        run: pip install uv
 
-    - name: Build package
-        # Builds package to dist/* directory
-      run: |
-        poetry build
+      - name: Build package
+        run: uv build
 
-    - name: Publish
-        # Publish package on pypi
-      if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-      continue-on-error: true
-      run: |
-        poetry publish --username ${{ secrets.pypi_username }} --password ${{ secrets.pypi_password }}
-
+      - name: Publish to pypi
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        continue-on-error: true
+        run: uv publish --token ${{ secrets.PYPI_PYTHON_SC2_TOKEN }}

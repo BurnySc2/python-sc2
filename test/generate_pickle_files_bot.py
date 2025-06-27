@@ -1,35 +1,31 @@
+# pyre-ignore-all-errors[16]
 """
 This "bot" will loop over several available ladder maps and generate the pickle file in the "/test/pickle_data/" subfolder.
 These will then be used to run tests from the test script "test_pickled_data.py"
 """
-import os
-import sys
+
+import lzma
+import pickle
+from pathlib import Path
+
+from loguru import logger
+
+# pyre-ignore[21]
+from s2clientprotocol import sc2api_pb2 as sc_pb
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
-from sc2.main import run_game
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
-import lzma
-import os
-import pickle
-from typing import Set
-
-from loguru import logger
-from s2clientprotocol import sc2api_pb2 as sc_pb
-
 from sc2.data import Difficulty, Race
 from sc2.game_data import GameData
 from sc2.game_info import GameInfo
 from sc2.game_state import GameState
 from sc2.ids.unit_typeid import UnitTypeId
+from sc2.main import run_game
 from sc2.player import Bot, Computer
 from sc2.protocol import ProtocolError
 
 
 class ExporterBot(BotAI):
-
     def __init__(self):
         BotAI.__init__(self)
         self.map_name: str = None
@@ -37,18 +33,18 @@ class ExporterBot(BotAI):
     async def on_step(self, iteration):
         pass
 
-    def get_pickle_file_path(self) -> str:
-        folder_path = os.path.dirname(__file__)
+    def get_pickle_file_path(self) -> Path:
+        folder_path = Path(__file__).parent
         subfolder_name = "pickle_data"
         file_name = f"{self.map_name}.xz"
-        file_path = os.path.join(folder_path, subfolder_name, file_name)
+        file_path = folder_path / subfolder_name / file_name
         return file_path
 
-    def get_combat_file_path(self) -> str:
-        folder_path = os.path.dirname(__file__)
+    def get_combat_file_path(self) -> Path:
+        folder_path = Path(__file__).parent
         subfolder_name = "combat_data"
         file_name = f"{self.map_name}.xz"
-        file_path = os.path.join(folder_path, subfolder_name, file_name)
+        file_path = folder_path / subfolder_name / file_name
         return file_path
 
     async def store_data_to_file(self, file_path: str):
@@ -66,7 +62,7 @@ class ExporterBot(BotAI):
         _game_info = GameInfo(raw_game_info.game_info)
         _game_state = GameState(raw_observation)
 
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        Path(file_path).parent.mkdir(exist_ok=True, parents=True)
         with lzma.open(file_path, "wb") as f:
             pickle.dump([raw_game_data, raw_game_info, raw_observation], f)
 
@@ -81,14 +77,15 @@ class ExporterBot(BotAI):
         await self.client.debug_god()
 
         # Spawn one of each unit
-        # await self.client.debug_create_unit([[unit_id, 1, self.game_info.map_center, 1] for unit_id in self.game_data.units])
-        valid_units: Set[UnitTypeId] = {
+        valid_units: set[UnitTypeId] = {
             UnitTypeId(unit_id)
             for unit_id, data in self.game_data.units.items()
-            if data._proto.race != Race.NoRace and data._proto.race != Race.Random and data._proto.available
+            if data._proto.race != Race.NoRace
+            and data._proto.race != Race.Random
+            and data._proto.available
             # Dont cloak units
-            and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP and
-            (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
+            and UnitTypeId(unit_id) != UnitTypeId.MOTHERSHIP
+            and (data._proto.mineral_cost or data._proto.movement_speed or data._proto.weapons)
         }
 
         # Create units for self
@@ -104,11 +101,9 @@ class ExporterBot(BotAI):
         await self.store_data_to_file(file_path)
 
         await self.client.leave()
-        return
 
 
 def main():
-
     maps_ = [
         "16-BitLE",
         "2000AtmospheresAIE",
@@ -117,6 +112,7 @@ def main():
         "AcidPlantLE",
         "AcolyteLE",
         "AcropolisLE",
+        "AncientCisternAIE",
         "Artana",
         "AscensiontoAiurLE",
         "AutomatonLE",
@@ -140,6 +136,7 @@ def main():
         "DefendersLandingLE",
         "DigitalFrontier",
         "DiscoBloodbathLE",
+        "DragonScalesAIE",
         "DreamcatcherLE",
         "EastwatchLE",
         "Ephemeron",
@@ -151,12 +148,15 @@ def main():
         "FractureLE",
         "FrostLE",
         "GlitteringAshesAIE",
+        "GoldenauraAIE",
         "GoldenWall506",
         "GoldenWallLE",
+        "GresvanAIE",
         "HardwireAIE",
         "HonorgroundsLE",
         "IceandChrome506",
         "IceandChromeLE",
+        "InfestationStationAIE",
         "InsideAndOutAIE",
         "InterloperLE",
         "JagannathaAIE",
@@ -183,6 +183,7 @@ def main():
         "RedshiftLE",
         "Reminiscence",
         "RomanticideAIE",
+        "RoyalBloodAIE",
         "Sanglune",
         "SequencerLE",
         "SimulacrumLE",
@@ -200,6 +201,12 @@ def main():
         "WorldofSleepersLE",
         "YearZeroLE",
         "ZenLE",
+        "Equilibrium513AIE",
+        "GoldenAura513AIE",
+        "HardLead513AIE",
+        "Oceanborn513AIE",
+        "SiteDelta513AIE",
+        "Gresvan513AIE",
     ]
 
     for map_ in maps_:
@@ -207,7 +214,7 @@ def main():
             bot = ExporterBot()
             bot.map_name = map_
             file_path = bot.get_pickle_file_path()
-            if os.path.isfile(file_path):
+            if Path(file_path).is_file():
                 logger.warning(
                     f"Pickle file for map {map_} was already generated. Skipping. If you wish to re-generate files, please remove them first."
                 )

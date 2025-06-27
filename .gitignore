@@ -28,6 +28,6 @@ mini_games/
 .coverage
 /htmlcov
 
-/bat_files/temp/
+docs/
 
-/docs
+.pyre

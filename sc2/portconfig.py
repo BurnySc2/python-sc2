@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import json
 
+# pyre-fixme[21]
 import portpicker
 
 
@@ -22,7 +25,7 @@ class Portconfig:
     E.g. for 1v1, there will be only 1 guest. For 2v2 (coming soonTM), there would be 3 guests.
     """
 
-    def __init__(self, guests=1, server_ports=None, player_ports=None):
+    def __init__(self, guests: int = 1, server_ports=None, player_ports=None) -> None:
         self.shared = None
         self._picked_ports = []
         if server_ports:
@@ -36,19 +39,19 @@ class Portconfig:
             self.players = [[portpicker.pick_unused_port() for _ in range(2)] for _ in range(guests)]
             self._picked_ports.extend(port for player in self.players for port in player)
 
-    def clean(self):
+    def clean(self) -> None:
         while self._picked_ports:
             portpicker.return_port(self._picked_ports.pop())
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Portconfig(shared={self.shared}, server={self.server}, players={self.players})"
 
     @property
-    def as_json(self):
+    def as_json(self) -> str:
         return json.dumps({"shared": self.shared, "server": self.server, "players": self.players})
 
     @classmethod
-    def contiguous_ports(cls, guests=1, attempts=40):
+    def contiguous_ports(cls, guests: int = 1, attempts: int = 40) -> Portconfig:
         """Returns a Portconfig with adjacent ports"""
         for _ in range(attempts):
             start = portpicker.pick_unused_port()
@@ -64,6 +67,6 @@ class Portconfig:
         raise portpicker.NoFreePortFoundError()
 
     @classmethod
-    def from_json(cls, json_data):
+    def from_json(cls, json_data: bytearray | bytes | str) -> Portconfig:
         data = json.loads(json_data)
         return cls(server_ports=data["server"], player_ports=data["players"])

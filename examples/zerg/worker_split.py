@@ -18,9 +18,8 @@ from sc2.units import Units
 
 
 class WorkerSplitBot(BotAI):
-
     async def on_before_start(self):
-        """ This function is run before the expansion locations and ramps are calculated. These calculations can take up to a second, depending on the CPU. """
+        """This function is run before the expansion locations and ramps are calculated. These calculations can take up to a second, depending on the CPU."""
         mf: Units = self.mineral_field
         for w in self.workers:
             w.gather(mf.closest_to(w))
@@ -29,7 +28,7 @@ class WorkerSplitBot(BotAI):
         await asyncio.sleep(3)
 
     async def on_start(self):
-        """ This function is run after the expansion locations and ramps are calculated. """
+        """This function is run after the expansion locations and ramps are calculated."""
 
     async def on_step(self, iteration):
         if iteration % 10 == 0:

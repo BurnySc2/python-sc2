@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from __future__ import annotations
 
 from sc2 import maps
 from sc2.bot_ai import BotAI
@@ -13,9 +13,8 @@ from sc2.units import Units
 
 
 class BCRushBot(BotAI):
-
-    def select_target(self) -> Tuple[Point2, bool]:
-        """ Select an enemy target the units should attack. """
+    def select_target(self) -> tuple[Point2, bool]:
+        """Select an enemy target the units should attack."""
         targets: Units = self.enemy_structures
         if targets:
             return targets.random.position, True
@@ -24,12 +23,12 @@ class BCRushBot(BotAI):
         if targets:
             return targets.random.position, True
 
-        if self.units and min((u.position.distance_to(self.enemy_start_locations[0]) for u in self.units)) < 5:
+        if self.units and min(u.position.distance_to(self.enemy_start_locations[0]) for u in self.units) < 5:
+            # pyre-ignore[7]
             return self.enemy_start_locations[0].position, False
 
         return self.mineral_field.random.position, False
 
-    # pylint: disable=R0912
     async def on_step(self, iteration):
         ccs: Units = self.townhalls
         # If we no longer have townhalls, attack with all workers
@@ -102,8 +101,9 @@ class BCRushBot(BotAI):
                 # Build starport once we can build starports, up to 2
                 elif (
                     factories.ready
-                    and self.structures.of_type({UnitTypeId.STARPORT, UnitTypeId.STARPORTFLYING}).ready.amount +
-                    self.already_pending(UnitTypeId.STARPORT) < 2
+                    and self.structures.of_type({UnitTypeId.STARPORT, UnitTypeId.STARPORTFLYING}).ready.amount
+                    + self.already_pending(UnitTypeId.STARPORT)
+                    < 2
                 ):
                     if self.can_afford(UnitTypeId.STARPORT):
                         await self.build(
@@ -111,8 +111,8 @@ class BCRushBot(BotAI):
                             near=cc.position.towards(self.game_info.map_center, 15).random_on_distance(8),
                         )
 
-        def starport_points_to_build_addon(sp_position: Point2) -> List[Point2]:
-            """ Return all points that need to be checked when trying to build an addon. Returns 4 points. """
+        def starport_points_to_build_addon(sp_position: Point2) -> list[Point2]:
+            """Return all points that need to be checked when trying to build an addon. Returns 4 points."""
             addon_offset: Point2 = Point2((2.5, -0.5))
             addon_position: Point2 = sp_position + addon_offset
             addon_points = [
@@ -126,15 +126,17 @@ class BCRushBot(BotAI):
             if not sp.has_add_on and self.can_afford(UnitTypeId.STARPORTTECHLAB):
                 addon_points = starport_points_to_build_addon(sp.position)
                 if all(
-                    self.in_map_bounds(addon_point) and self.in_placement_grid(addon_point)
-                    and self.in_pathing_grid(addon_point) for addon_point in addon_points
+                    self.in_map_bounds(addon_point)
+                    and self.in_placement_grid(addon_point)
+                    and self.in_pathing_grid(addon_point)
+                    for addon_point in addon_points
                 ):
                     sp.build(UnitTypeId.STARPORTTECHLAB)
                 else:
                     sp(AbilityId.LIFT)
 
-        def starport_land_positions(sp_position: Point2) -> List[Point2]:
-            """ Return all points that need to be checked when trying to land at a location where there is enough space to build an addon. Returns 13 points. """
+        def starport_land_positions(sp_position: Point2) -> list[Point2]:
+            """Return all points that need to be checked when trying to land at a location where there is enough space to build an addon. Returns 13 points."""
             land_positions = [(sp_position + Point2((x, y))).rounded for x in range(-1, 2) for y in range(-1, 2)]
             return land_positions + starport_points_to_build_addon(sp_position)
 
@@ -147,10 +149,10 @@ class BCRushBot(BotAI):
             offset_point: Point2 = Point2((-0.5, -0.5))
             possible_land_positions = (sp.position.rounded + offset_point + p for p in possible_land_positions_offset)
             for target_land_position in possible_land_positions:
-                land_and_addon_points: List[Point2] = starport_land_positions(target_land_position)
+                land_and_addon_points: list[Point2] = starport_land_positions(target_land_position)
                 if all(
-                    self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos)
-                    and self.in_pathing_grid(land_pos) for land_pos in land_and_addon_points
+                    self.in_map_bounds(land_pos) and self.in_placement_grid(land_pos) and self.in_pathing_grid(land_pos)
+                    for land_pos in land_and_addon_points
                 ):
                     sp(AbilityId.LAND, target_land_position)
                     break

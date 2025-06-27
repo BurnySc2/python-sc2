@@ -1,10 +1,6 @@
 """
 Testing what the fastest way is to create a 1D Array with 2 values
 """
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import random
 
@@ -144,4 +140,4 @@ def test_numpy_ones(benchmark):
 
 
 # Run this file using
-# poetry run pytest test/test_benchmark_array_creation.py --benchmark-compare
+# uv run pytest test/test_benchmark_array_creation.py --benchmark-compare

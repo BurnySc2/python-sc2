@@ -1,7 +1,8 @@
 """
 This script shows how to let two custom bots play against each other.
 """
-from typing import List
+
+from __future__ import annotations
 
 from loguru import logger
 
@@ -14,7 +15,7 @@ from sc2.player import Bot
 
 
 def main_old():
-    result: List[Result] = run_game(
+    result: list[Result] = run_game(
         maps.get("AcropolisLE"),
         [
             Bot(Race.Protoss, WarpGateBot()),

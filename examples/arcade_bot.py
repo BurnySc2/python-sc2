@@ -19,7 +19,8 @@ Improvements that could be made:
 - Make marines constantly run if they have a ling/bane very close to them
 - Split marines before engaging
 """
-from typing import Union
+
+from __future__ import annotations
 
 from loguru import logger
 
@@ -37,7 +38,6 @@ from sc2.unit import Unit
 
 
 class MarineSplitChallenge(BotAI):
-
     async def on_start(self):
         await self.chat_send("Edit this message for automatic chat commands.")
         self.client.game_step = 2
@@ -45,9 +45,7 @@ class MarineSplitChallenge(BotAI):
     async def on_step(self, iteration):
         # do marine micro vs zerglings
         for unit in self.units(UnitTypeId.MARINE):
-
             if self.enemy_units:
-
                 # attack (or move towards) zerglings / banelings
                 if unit.weapon_cooldown <= self.client.game_step / 2:
                     enemies_in_range = self.enemy_units.filter(unit.target_in_range)
@@ -57,7 +55,8 @@ class MarineSplitChallenge(BotAI):
                         # Use stimpack
                         if (
                             self.already_pending_upgrade(UpgradeId.STIMPACK) == 1
-                            and not unit.has_buff(BuffId.STIMPACK) and unit.health > 10
+                            and not unit.has_buff(BuffId.STIMPACK)
+                            and unit.health > 10
                         ):
                             unit(AbilityId.EFFECT_STIM)
 
@@ -97,15 +96,17 @@ class MarineSplitChallenge(BotAI):
 
     def position_around_unit(
         self,
-        pos: Union[Unit, Point2, Point3],
+        pos: Unit | Point2 | Point3,
         distance: int = 1,
         step_size: int = 1,
         exclude_out_of_bounds: bool = True,
     ):
+        # pyre-ignore[16]
         pos = pos.position.rounded
         positions = {
             pos.offset(Point2((x, y)))
-            for x in range(-distance, distance + 1, step_size) for y in range(-distance, distance + 1, step_size)
+            for x in range(-distance, distance + 1, step_size)
+            for y in range(-distance, distance + 1, step_size)
             if (x, y) != (0, 0)
         }
         # filter positions outside map size
@@ -113,6 +114,7 @@ class MarineSplitChallenge(BotAI):
             positions = {
                 p
                 for p in positions
+                # pyre-ignore[16]
                 if 0 <= p[0] < self.game_info.pathing_grid.width and 0 <= p[1] < self.game_info.pathing_grid.height
             }
         return positions

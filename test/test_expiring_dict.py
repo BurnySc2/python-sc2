@@ -1,21 +1,14 @@
-import os
-import sys
 from contextlib import suppress
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from sc2.expiring_dict import ExpiringDict
 
 
 def test_class():
-
     class State:
-
         def __init__(self):
             self.game_loop = 0
 
     class BotAI:
-
         def __init__(self):
             self.state = State()
 
@@ -61,15 +54,13 @@ def test_class():
         assert test.get(key, with_age=True)[1] in {0, 1}
 
     c = 0
-    for key in test.keys():
+    for _key in test:
         c += 1
-        pass
     assert c == 4
 
     c = 0
     for value in test.values():
         c += 1
-        pass
     assert c == 4
 
     # Update from another dict
@@ -87,13 +78,13 @@ def test_class():
 
     assert len(test) == 0
 
-    for key in test.keys():
+    for _key in test:
         assert False
 
-    for value in test.values():
+    for _value in test.values():
         assert False
 
-    for key, value in test.items():
+    for _key, _value in test.items():
         assert False
 
     assert "new_key" not in test

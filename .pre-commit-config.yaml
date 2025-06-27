@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.2.0
+  rev: v4.4.0
   hooks:
     # Check yaml files like this one and github actions if they are valid
   - id: check-yaml
@@ -14,16 +14,9 @@ repos:
 
 # Check github action workflow files
 - repo: https://github.com/sirosen/check-jsonschema
-  rev: 0.14.3
+  rev: 0.22.0
   hooks:
   - id: check-github-workflows
-
-# Remove unused imports
-- repo: https://github.com/hadialqattan/pycln
-  rev: v1.3.1
-  hooks:
-  - id: pycln
-    args: [--config=pyproject.toml]
 
 # Convert relative to absolute imports
 - repo: https://github.com/MarcoGorelli/absolufy-imports
@@ -31,16 +24,8 @@ repos:
   hooks:
   - id: absolufy-imports
 
-# Sort imports
-- repo: https://github.com/pycqa/isort
-  rev: 5.5.4
-  hooks:
-  - id: isort
-    files: \.(py)$
-    args: [--settings-path=pyproject.toml]
-
 - repo: https://github.com/pre-commit/pygrep-hooks
-  rev: v1.9.0
+  rev: v1.10.0
   hooks:
   # Check for bad code
   - id: python-no-eval
@@ -51,33 +36,24 @@ repos:
 - repo: local
   hooks:
   # Autoformat code
-  - id: yapf
-    name: format python code
-    stages: [commit]
+  - id: ruff-format-check
+    name: Check if files are formatted
+    stages: [push]
     language: system
-    entry: /bin/bash -c "poetry run yapf --in-place $(git ls-files '*.py')"
+    entry: uv run ruff format . --check --diff
     pass_filenames: false
 
-  - id: pylint
-    name: pylint
-    stages: [commit]
+  - id: ruff-lint
+    name: Lint files
+    stages: [push]
     language: system
-    entry: /bin/bash -c "poetry run pylint $(git ls-files '*.py' | grep -E '(sc2)|(examples)/.*')"
+    entry: uv run ruff check .
     pass_filenames: false
 
-# TODO Types before enabling this
-#  # Run mypy type checks
-#  - id: mypy
-#    name: mypy
-#    stages: [commit]
-#    language: system
-#    entry: /bin/bash -c "poetry run mypy $(git ls-files '*.py' | grep -E '(sc2)|(examples)/.*')"
-#    pass_filenames: false
-
-  # Run tests
-  - id: pytest
-    name: pytest
-    stages: [commit]
-    language: system
-    entry: poetry run pytest test
-    pass_filenames: false
+  # TODO Fix issues
+  # - id: pyrefly
+  #   name: Static types checking with pyrefly
+  #   stages: [push]
+  #   language: system
+  #   entry: uv run pyrefly check
+  #   pass_filenames: false

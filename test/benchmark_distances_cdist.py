@@ -1,8 +1,4 @@
-import os
-import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-
+# pyre-ignore-all-errors[21]
 import random
 
 import numpy as np
@@ -52,11 +48,6 @@ def distance_matrix_scipy_cdist_jaccard(ps):
 def distance_matrix_scipy_cdist_jensenshannon(ps):
     # Calculate distances between each of the points
     return cdist(ps, ps, "jensenshannon")
-
-
-def distance_matrix_scipy_cdist_kulsinski(ps):
-    # Calculate distances between each of the points
-    return cdist(ps, ps, "kulsinski")
 
 
 def distance_matrix_scipy_cdist_mahalanobis(ps):
@@ -134,8 +125,7 @@ amount = 200
 min_value = 0
 max_value = 300
 points = np.array(
-    [np.array([random.uniform(min_value, max_value),
-               random.uniform(min_value, max_value)]) for _ in range(amount)]
+    [np.array([random.uniform(min_value, max_value), random.uniform(min_value, max_value)]) for _ in range(amount)]
 )
 
 
@@ -181,11 +171,6 @@ def test_distance_matrix_scipy_cdist_jaccard(benchmark):
 
 def test_distance_matrix_scipy_cdist_jensenshannon(benchmark):
     result = benchmark(distance_matrix_scipy_cdist_jensenshannon, points)
-    # assert check_result(result, correct_result)
-
-
-def test_distance_matrix_scipy_cdist_kulsinski(benchmark):
-    result = benchmark(distance_matrix_scipy_cdist_kulsinski, points)
     # assert check_result(result, correct_result)
 
 
@@ -260,4 +245,4 @@ def test_distance_matrix_scipy_pdist_squared(benchmark):
 
 
 # Run this file using
-# poetry run pytest test/test_benchmark_distances_cdist.py --benchmark-compare
+# uv run pytest test/test_benchmark_distances_cdist.py --benchmark-compare

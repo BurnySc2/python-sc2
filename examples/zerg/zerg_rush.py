@@ -15,16 +15,13 @@ from sc2.unit import Unit
 from sc2.units import Units
 
 
-# pylint: disable=W0231
 class ZergRushBot(BotAI):
-
     def __init__(self):
         self.on_end_called = False
 
     async def on_start(self):
         self.client.game_step = 2
 
-    # pylint: disable=R0912
     async def on_step(self, iteration):
         if iteration == 0:
             await self.chat_send("(glhf)")
@@ -63,8 +60,9 @@ class ZergRushBot(BotAI):
                     drone.gather(mineral, queue=True)
 
         # If we have 100 vespene, this will try to research zergling speed once the spawning pool is at 100% completion
-        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED
-                                        ) == 0 and self.can_afford(UpgradeId.ZERGLINGMOVEMENTSPEED):
+        if self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0 and self.can_afford(
+            UpgradeId.ZERGLINGMOVEMENTSPEED
+        ):
             spawning_pools_ready: Units = self.structures(UnitTypeId.SPAWNINGPOOL).ready
             if spawning_pools_ready:
                 self.research(UpgradeId.ZERGLINGMOVEMENTSPEED)
@@ -75,7 +73,8 @@ class ZergRushBot(BotAI):
 
         # While we have less than 88 vespene mined: send drones into extractor one frame at a time
         if (
-            self.gas_buildings.ready and self.vespene < 88
+            self.gas_buildings.ready
+            and self.vespene < 88
             and self.already_pending_upgrade(UpgradeId.ZERGLINGMOVEMENTSPEED) == 0
         ):
             extractor: Unit = self.gas_buildings.first
@@ -101,7 +100,8 @@ class ZergRushBot(BotAI):
         # If we have no extractor, build extractor
         if (
             self.gas_buildings.amount + self.already_pending(UnitTypeId.EXTRACTOR) == 0
-            and self.can_afford(UnitTypeId.EXTRACTOR) and self.workers
+            and self.can_afford(UnitTypeId.EXTRACTOR)
+            and self.workers
         ):
             drone: Unit = self.workers.random
             target: Unit = self.vespene_geyser.closest_to(drone)
@@ -136,6 +136,7 @@ class ZergRushBot(BotAI):
                 color = Point3((0, 255, 0))
             self.client.debug_box2_out(pos, half_vertex_length=0.25, color=color)
 
+    # pyre-ignore[11]
     async def on_end(self, game_result: Result):
         self.on_end_called = True
         logger.info(f"{self.time_formatted} On end was called")

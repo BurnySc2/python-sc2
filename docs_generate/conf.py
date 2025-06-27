@@ -13,9 +13,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(".."))
-
-import sphinx_rtd_theme  # nopycln: import
+sys.path.insert(0, os.path.abspath(".."))  # noqa: PTH100
 
 # -- Project information -----------------------------------------------------
 
@@ -31,8 +29,14 @@ author = "tweakimp, BurnySc2"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx_autodoc_typehints",
-    "sphinx_rtd_theme",
+    # https://www.sphinx-doc.org/en/master/usage/extensions/viewcode.html
+    "sphinx.ext.viewcode",
 ]
+
+# autodoc_typehints options https://github.com/agronholm/sphinx-autodoc-typehints#options
+always_document_param_types = True
+typehints_use_signature = True
+typehints_use_signature_return = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -52,7 +56,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # http://www.sphinx-doc.org/en/stable/theming.html
 # https://www.writethedocs.org/guide/tools/sphinx-themes/
 # https://sphinx-themes.org/
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_book_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
