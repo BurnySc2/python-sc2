@@ -729,7 +729,7 @@
 
 <div class="viewcode-block" id="Client.obs_move_camera">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.obs_move_camera">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">obs_move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">obs_move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Units</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Moves observer camera to the target position. Only works when observing (e.g. watching the replay).</span>
 
 <span class="sd">        :param position:&quot;&quot;&quot;</span>
@@ -741,7 +741,9 @@
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">obs_action</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestObserverAction</span><span class="p">(</span>
                 <span class="n">actions</span><span class="o">=</span><span class="p">[</span>
-                    <span class="n">sc_pb</span><span class="o">.</span><span class="n">ObserverAction</span><span class="p">(</span><span class="n">camera_move</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">ActionObserverCameraMove</span><span class="p">(</span><span class="n">world_pos</span><span class="o">=</span><span class="n">position</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">))</span>
+                    <span class="n">sc_pb</span><span class="o">.</span><span class="n">ObserverAction</span><span class="p">(</span>
+                        <span class="n">camera_move</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">ActionObserverCameraMove</span><span class="p">(</span><span class="n">world_pos</span><span class="o">=</span><span class="n">position</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">)</span>
+                    <span class="p">)</span>
                 <span class="p">]</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
