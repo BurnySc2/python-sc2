@@ -389,7 +389,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_units_previous_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Unit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">UpgradeId</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Point2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_after_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_min_step_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
@@ -447,6 +447,146 @@ document.write(`
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion_locations_dict</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_cluster_center</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the geometric center (centroid) of a given group of units.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        group: A list of Unit objects representing the group of units for</span>
+<span class="sd">                            which the center is to be calculated.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        ValueError: If the provided group is empty.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        Point2: The calculated centroid of the group as a Point2 object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">group</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot calculate center of empty group&quot;</span><span class="p">)</span>
+
+        <span class="n">total_x</span> <span class="o">=</span> <span class="n">total_y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+            <span class="n">total_x</span> <span class="o">+=</span> <span class="n">unit</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">total_y</span> <span class="o">+=</span> <span class="n">unit</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="p">((</span><span class="n">total_x</span> <span class="o">/</span> <span class="n">count</span><span class="p">,</span> <span class="n">total_y</span> <span class="o">/</span> <span class="n">count</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_expansion_location</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">resources</span><span class="p">:</span> <span class="n">Units</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">],</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">offsets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the most suitable expansion location for resources.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            resources: The list of resource entities or units near which the</span>
+<span class="sd">                expansion location needs to be found.</span>
+<span class="sd">            amount: The total number of resource entities or units to consider.</span>
+<span class="sd">            offsets (list[tuple[float, float]): A list of coordinate pairs denoting position</span>
+<span class="sd">                offsets to consider around the center of resources.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The calculated optimal expansion Point2 if a suitable position is found;</span>
+<span class="sd">                otherwise, None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Normal single expansion logic for regular bases</span>
+        <span class="c1"># Calculate center, round and add 0.5 because expansion location will have (x.5, y.5)</span>
+        <span class="c1"># coordinates because bases have size 5.</span>
+        <span class="n">center_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span> <span class="o">/</span> <span class="n">amount</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
+        <span class="n">center_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span> <span class="o">/</span> <span class="n">amount</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
+        <span class="n">possible_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">Point2</span><span class="p">((</span><span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">center_x</span><span class="p">,</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">center_y</span><span class="p">))</span> <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">)</span>
+        <span class="c1"># Filter out points that are too near</span>
+        <span class="n">possible_points</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">point</span>
+            <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">possible_points</span>
+            <span class="c1"># Check if point can be built on</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">placement_grid</span><span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">rounded</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="c1"># Check if all resources have enough space to point</span>
+            <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="n">point</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">7</span> <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span> <span class="ow">in</span> <span class="n">geyser_ids</span> <span class="k">else</span> <span class="mi">6</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="c1"># Choose best fitting point</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+            <span class="n">possible_points</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">point</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource_</span><span class="p">)</span> <span class="k">for</span> <span class="n">resource_</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_has_opposite_side_geyser_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minerals</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">],</span> <span class="n">gas_geysers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines whether the gas geysers have an opposite-side mineral line layout.</span>
+
+<span class="sd">        The method evaluates if two gas geysers are located on opposite sides of a</span>
+<span class="sd">        mineral line.</span>
+<span class="sd">        If this returns True we consider this location has 2 valid expansion locations</span>
+<span class="sd">        either side of the mineral line.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            minerals:</span>
+<span class="sd">                A list of mineral fields at this location.</span>
+<span class="sd">            gas_geysers : list[Unit]</span>
+<span class="sd">                A list of gas geysers at this location.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool</span>
+<span class="sd">                True if the geysers fulfill the opposite-side layout condition with</span>
+<span class="sd">                respect to the mineral line, otherwise False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Need exactly 2 geysers and enough minerals for a line</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gas_geysers</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">minerals</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Find the two minerals that are furthest apart</span>
+        <span class="n">max_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">mineral_1</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">=</span> <span class="n">minerals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">mineral_2</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">=</span> <span class="n">minerals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">minerals</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">minerals</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]:</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">m1</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="n">max_distance</span><span class="p">:</span>
+                    <span class="n">max_distance</span> <span class="o">=</span> <span class="n">distance</span>
+                    <span class="n">mineral_1</span> <span class="o">=</span> <span class="n">m1</span>
+                    <span class="n">mineral_2</span> <span class="o">=</span> <span class="n">m2</span>
+
+        <span class="c1"># ensure line is long enough</span>
+        <span class="k">if</span> <span class="n">max_distance</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Create line from the two furthest minerals</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">mineral_1</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">mineral_1</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">mineral_2</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">mineral_2</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="n">geyser_1</span><span class="p">,</span> <span class="n">geyser_2</span> <span class="o">=</span> <span class="n">gas_geysers</span>
+
+        <span class="c1"># Check if the mineral line is more vertical than horizontal</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
+            <span class="c1"># Vertical line: use x-coordinate to determine sides</span>
+            <span class="n">line_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="n">x2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="n">side_1</span> <span class="o">=</span> <span class="n">geyser_1</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">line_x</span>
+            <span class="n">side_2</span> <span class="o">=</span> <span class="n">geyser_2</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">line_x</span>
+
+            <span class="c1"># Must be on opposite sides and far enough from the line</span>
+            <span class="k">return</span> <span class="n">side_1</span> <span class="o">*</span> <span class="n">side_2</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">side_1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">side_2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span>
+
+        <span class="c1"># Calculate line equation: y = mx + b</span>
+        <span class="n">slope</span> <span class="o">=</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>
+        <span class="n">intercept</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">x1</span>
+
+        <span class="c1"># Function to determine which side of the line a point is on</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">side_of_line</span><span class="p">(</span><span class="n">point</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">point</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">point</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">intercept</span>
+
+        <span class="n">side_1</span> <span class="o">=</span> <span class="n">side_of_line</span><span class="p">(</span><span class="n">geyser_1</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+        <span class="n">side_2</span> <span class="o">=</span> <span class="n">side_of_line</span><span class="p">(</span><span class="n">geyser_2</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="c1"># Check if geysers are on opposite sides</span>
+        <span class="n">opposite_sides</span> <span class="o">=</span> <span class="n">side_1</span> <span class="o">*</span> <span class="n">side_2</span> <span class="o">&lt;</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">opposite_sides</span>
+
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_find_expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ran once at the start of the game to calculate expansion locations.&quot;&quot;&quot;</span>
@@ -454,7 +594,7 @@ document.write(`
         <span class="c1"># any resource in a group is closer than a threshold to any resource of another group</span>
 
         <span class="c1"># Distance we group resources by</span>
-        <span class="n">resource_spread_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">8.5</span>
+        <span class="n">resource_spread_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.5</span>
         <span class="c1"># Create a group for every resource</span>
         <span class="n">resource_groups</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">[</span><span class="n">resource</span><span class="p">]</span>
@@ -470,13 +610,13 @@ document.write(`
             <span class="k">for</span> <span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">resource_groups</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
                 <span class="c1"># Check if any pair of resource of these groups is closer than threshold together</span>
                 <span class="c1"># And that they are on the same terrain level</span>
-                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
-                    <span class="n">resource_a</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource_b</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">resource_spread_threshold</span>
-                    <span class="c1"># check if terrain height measurement at resources is within 10 units</span>
-                    <span class="c1"># this is since some older maps have inconsistent terrain height</span>
-                    <span class="c1"># tiles at certain expansion locations</span>
-                    <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">height_grid</span><span class="p">[</span><span class="n">resource_a</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span><span class="p">]</span> <span class="o">-</span> <span class="n">height_grid</span><span class="p">[</span><span class="n">resource_b</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">10</span>
-                    <span class="k">for</span> <span class="n">resource_a</span><span class="p">,</span> <span class="n">resource_b</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">)</span>
+                <span class="n">center_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cluster_center</span><span class="p">(</span><span class="n">group_a</span><span class="p">)</span>
+                <span class="n">center_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cluster_center</span><span class="p">(</span><span class="n">group_b</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">center_a</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">center_b</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">resource_spread_threshold</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="nb">abs</span><span class="p">(</span><span class="n">height_grid</span><span class="p">[</span><span class="n">res_a</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span><span class="p">]</span> <span class="o">-</span> <span class="n">height_grid</span><span class="p">[</span><span class="n">res_b</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">10</span>
+                    <span class="k">for</span> <span class="n">res_a</span> <span class="ow">in</span> <span class="n">group_a</span>
+                    <span class="k">for</span> <span class="n">res_b</span> <span class="ow">in</span> <span class="n">group_b</span>
                 <span class="p">):</span>
                     <span class="c1"># Remove the single groups and add the merged group</span>
                     <span class="n">resource_groups</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">group_a</span><span class="p">)</span>
@@ -484,8 +624,9 @@ document.write(`
                     <span class="n">resource_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_a</span> <span class="o">+</span> <span class="n">group_b</span><span class="p">)</span>
                     <span class="n">merged_group</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="k">break</span>
+
         <span class="c1"># Distance offsets we apply to center of each resource group to find expansion position</span>
-        <span class="n">offset_range</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="n">offset_range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span>
         <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">offset_range</span><span class="p">,</span> <span class="n">offset_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -497,33 +638,41 @@ document.write(`
         <span class="k">for</span> <span class="n">resources</span> <span class="ow">in</span> <span class="n">resource_groups</span><span class="p">:</span>
             <span class="c1"># Possible expansion points</span>
             <span class="n">amount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span>
-            <span class="c1"># Calculate center, round and add 0.5 because expansion location will have (x.5, y.5)</span>
-            <span class="c1"># coordinates because bases have size 5.</span>
-            <span class="n">center_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span> <span class="o">/</span> <span class="n">amount</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
-            <span class="n">center_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span> <span class="o">/</span> <span class="n">amount</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
-            <span class="n">possible_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">Point2</span><span class="p">((</span><span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">center_x</span><span class="p">,</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">center_y</span><span class="p">))</span> <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">)</span>
-            <span class="c1"># Filter out points that are too near</span>
-            <span class="n">possible_points</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">point</span>
-                <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">possible_points</span>
-                <span class="c1"># Check if point can be built on</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">placement_grid</span><span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">rounded</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
-                <span class="c1"># Check if all resources have enough space to point</span>
-                <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
-                    <span class="n">point</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">7</span> <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span> <span class="ow">in</span> <span class="n">geyser_ids</span> <span class="k">else</span> <span class="mi">6</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="c1"># this check is needed for TorchesAIE where the gold mineral wall has a</span>
+            <span class="c1"># unit type of `RichMineralField` so we can only filter out by amount of resources</span>
+            <span class="k">if</span> <span class="n">amount</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">minerals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">resources</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">geyser_ids</span><span class="p">]</span>
+            <span class="n">gas_geysers</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">resources</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span> <span class="ow">in</span> <span class="n">geyser_ids</span><span class="p">]</span>
+
+            <span class="c1"># Check if we have exactly 2 gas geysers positioned above/below the mineral line</span>
+            <span class="c1"># Needed for TorchesAIE where one gold base has 2 expansion locations</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_opposite_side_geyser_layout</span><span class="p">(</span><span class="n">minerals</span><span class="p">,</span> <span class="n">gas_geysers</span><span class="p">):</span>
+                <span class="c1"># Create expansion locations for each geyser + minerals</span>
+                <span class="k">for</span> <span class="n">geyser</span> <span class="ow">in</span> <span class="n">gas_geysers</span><span class="p">:</span>
+                    <span class="n">local_resources</span> <span class="o">=</span> <span class="n">minerals</span> <span class="o">+</span> <span class="p">[</span><span class="n">geyser</span><span class="p">]</span>
+                    <span class="n">result</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_expansion_location</span><span class="p">(</span><span class="n">local_resources</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">local_resources</span><span class="p">),</span> <span class="n">offsets</span><span class="p">)</span>
+                    <span class="n">centers</span><span class="p">[</span><span class="n">result</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_resources</span>
+                    <span class="c1"># Put all expansion locations in a list</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                    <span class="c1"># Maps all resource positions to the expansion position</span>
+                    <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">local_resources</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">resource</span><span class="o">.</span><span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">[</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">[</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">result</span><span class="p">}</span>
+
+                <span class="k">continue</span>
+
             <span class="c1"># Choose best fitting point</span>
-            <span class="n">result</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
-                <span class="n">possible_points</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">point</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">resource_</span><span class="p">)</span> <span class="k">for</span> <span class="n">resource_</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">result</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_expansion_location</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">offsets</span><span class="p">)</span>
             <span class="n">centers</span><span class="p">[</span><span class="n">result</span><span class="p">]</span> <span class="o">=</span> <span class="n">resources</span>
             <span class="c1"># Put all expansion locations in a list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
             <span class="c1"># Maps all resource positions to the expansion position</span>
             <span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">[</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_resource_location_to_expansion_position_dict</span><span class="p">[</span><span class="n">resource</span><span class="o">.</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">result</span><span class="p">}</span>
 
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_correct_zerg_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
