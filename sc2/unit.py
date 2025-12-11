@@ -927,7 +927,11 @@ class Unit:
     def is_detector(self) -> bool:
         """Checks if the unit is a detector. Has to be completed
         in order to detect and Photoncannons also need to be powered."""
-        return self.is_ready and (self.type_id in IS_DETECTOR or self.type_id == UNIT_PHOTONCANNON and self.is_powered) or self.type_id == UnitTypeId.OBSERVER
+        return (
+            self.is_ready
+            and (self.type_id in IS_DETECTOR or self.type_id == UNIT_PHOTONCANNON and self.is_powered)
+            or self.type_id == UnitTypeId.OBSERVER
+        )
 
     @property
     def radar_range(self) -> float:
