@@ -1341,24 +1341,24 @@ class Unit:
         # Hardcode the correct ID.
         if upgrade == UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL1:
             return self(
-                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1, 
-                queue=queue, 
+                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1,
+                queue=queue,
                 subtract_cost=True,
                 can_afford_check=can_afford_check,
             )
 
         if upgrade == UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL2:
             return self(
-                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2, 
-                queue=queue, 
+                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2,
+                queue=queue,
                 subtract_cost=True,
                 can_afford_check=can_afford_check,
             )
 
         if upgrade == UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL3:
             return self(
-                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3, 
-                queue=queue, 
+                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3,
+                queue=queue,
                 subtract_cost=True,
                 can_afford_check=can_afford_check,
             )
