@@ -275,6 +275,7 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">raw_pb2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheDict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">CAN_BE_ATTACKED</span><span class="p">,</span>
@@ -325,11 +326,12 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.buff_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">BuffId</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.unit_typeid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitTypeId</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.upgrade_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">UpgradeId</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">Point3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">HasPosition2D</span><span class="p">,</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">_PointLike</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.unit_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitCommand</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.bot_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">BotAI</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.bot_ai_internal</span><span class="w"> </span><span class="kn">import</span> <span class="n">BotAIInternal</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityData</span><span class="p">,</span> <span class="n">UnitTypeData</span>
 
 
@@ -339,7 +341,7 @@ document.write(`
     <span class="n">tag</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RallyTarget</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">RallyTarget</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RallyTarget</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">proto</span><span class="o">.</span><span class="n">point</span><span class="p">),</span>
             <span class="n">proto</span><span class="o">.</span><span class="n">tag</span> <span class="k">if</span> <span class="n">proto</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
@@ -353,7 +355,7 @@ document.write(`
     <span class="n">progress</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UnitOrder</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_proto</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">UnitOrder</span><span class="p">,</span> <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UnitOrder</span><span class="p">:</span>
         <span class="n">target</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">proto</span><span class="o">.</span><span class="n">target_unit_tag</span>
         <span class="k">if</span> <span class="n">proto</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;target_world_space_pos&quot;</span><span class="p">):</span>
             <span class="n">target</span> <span class="o">=</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">proto</span><span class="o">.</span><span class="n">target_world_space_pos</span><span class="p">)</span>
@@ -371,13 +373,13 @@ document.write(`
 
 <div class="viewcode-block" id="Unit">
 <a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Unit</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Unit</span><span class="p">(</span><span class="n">HasPosition2D</span><span class="p">):</span>
     <span class="n">class_cache</span> <span class="o">=</span> <span class="n">CacheDict</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">proto_data</span><span class="p">,</span>
-        <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">,</span>
+        <span class="n">proto_data</span><span class="p">:</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">Unit</span><span class="p">,</span>
+        <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span> <span class="o">|</span> <span class="n">BotAIInternal</span><span class="p">,</span>
         <span class="n">distance_calculation_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -388,7 +390,7 @@ document.write(`
 <span class="sd">        :param base_build:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto_data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">:</span> <span class="n">BotAI</span> <span class="o">=</span> <span class="n">bot_object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span> <span class="o">=</span> <span class="n">bot_object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game_loop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">bot_object</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_build</span> <span class="o">=</span> <span class="n">base_build</span>
         <span class="c1"># Index used in the 2D numpy array to access the 2D distance between two units</span>
@@ -432,37 +434,37 @@ document.write(`
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is a structure.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">IS_STRUCTURE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="n">IS_STRUCTURE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_light</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit has the &#39;light&#39; attribute.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">IS_LIGHT</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="n">IS_LIGHT</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_armored</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit has the &#39;armored&#39; attribute.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">IS_ARMORED</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="n">IS_ARMORED</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_biological</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit has the &#39;biological&#39; attribute.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">IS_BIOLOGICAL</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="n">IS_BIOLOGICAL</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_mechanical</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit has the &#39;mechanical&#39; attribute.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">IS_MECHANICAL</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="n">IS_MECHANICAL</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_massive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit has the &#39;massive&#39; attribute.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">IS_MASSIVE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="n">IS_MASSIVE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_psionic</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit has the &#39;psionic&#39; attribute.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">IS_PSIONIC</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="n">IS_PSIONIC</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tech_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -800,7 +802,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>  <span class="c1"># pyright: ignore[reportIncompatibleMethodOverride]</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the 2d position of the unit.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 
@@ -811,7 +813,7 @@ document.write(`
 
 <div class="viewcode-block" id="Unit.distance_to">
 <a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.distance_to">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">_PointLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Using the 2d distance between self and p.</span>
 <span class="sd">        To calculate the 3d distance, use unit.position3d.distance_to(p)</span>
 
@@ -824,7 +826,7 @@ document.write(`
 
 <div class="viewcode-block" id="Unit.distance_to_squared">
 <a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.distance_to_squared">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">distance_to_squared</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_to_squared</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">_PointLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Using the 2d distance squared between self and p. Slightly faster than distance_to, so when filtering a lot of units, this function is recommended to be used.</span>
 <span class="sd">        To calculate the 3d distance, use unit.position3d.distance_to(p)</span>
 
@@ -992,7 +994,7 @@ document.write(`
             <span class="c1"># TODO: hardcode hellbats when they have blueflame or attack upgrades</span>
             <span class="k">for</span> <span class="n">bonus</span> <span class="ow">in</span> <span class="n">weapon</span><span class="o">.</span><span class="n">damage_bonus</span><span class="p">:</span>
                 <span class="c1"># More about damage bonus https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L55</span>
-                <span class="k">if</span> <span class="n">bonus</span><span class="o">.</span><span class="n">attribute</span> <span class="ow">in</span> <span class="n">target</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">bonus</span><span class="o">.</span><span class="n">attribute</span> <span class="ow">in</span> <span class="n">target</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
                     <span class="n">bonus_damage_per_upgrade</span> <span class="o">=</span> <span class="p">(</span>
                         <span class="mi">0</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">attack_upgrade_level</span>
@@ -1328,7 +1330,7 @@ document.write(`
 <span class="sd">        from the first order, returns None if the unit is idle&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orders</span><span class="p">:</span>
             <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">target</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">target</span>
             <span class="k">return</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>

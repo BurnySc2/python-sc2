@@ -282,9 +282,7 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
-<span class="c1"># pyre-ignore[21]</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">sc2api_pb2</span> <span class="k">as</span> <span class="n">sc_pb</span>
-
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">property_cache_once_per_frame</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ALL_GAS</span><span class="p">,</span>
@@ -303,14 +301,13 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.unit_typeid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitTypeId</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.upgrade_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">UpgradeId</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.pixel_map</span><span class="w"> </span><span class="kn">import</span> <span class="n">PixelMap</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">_PointLike</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.unit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unit</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.unit_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitCommand</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">Units</span>
 
 <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-    <span class="c1"># pyre-ignore[21]</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">cdist</span><span class="p">,</span> <span class="n">pdist</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -860,7 +857,7 @@ document.write(`
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.prevent_double_actions">[docs]</a>
     <span class="nd">@final</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">prevent_double_actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prevent_double_actions</span><span class="p">(</span><span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param action:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -888,7 +885,13 @@ document.write(`
 
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_start</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">game_info</span><span class="p">,</span> <span class="n">game_data</span><span class="p">,</span> <span class="n">realtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">,</span>
+        <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">game_info</span><span class="p">:</span> <span class="n">GameInfo</span><span class="p">,</span>
+        <span class="n">game_data</span><span class="p">:</span> <span class="n">GameData</span><span class="p">,</span>
+        <span class="n">realtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Ran until game start to set game and player data.</span>
@@ -925,13 +928,13 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">:</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param state:</span>
 <span class="sd">        :param proto_game_info:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Set attributes from new state before on_step.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="n">GameState</span> <span class="o">=</span> <span class="n">state</span>  <span class="c1"># See game_state.py</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>  <span class="c1"># See game_state.py</span>
         <span class="c1"># update pathing grid, which unfortunately is in GameInfo instead of GameState</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">pathing_grid</span> <span class="o">=</span> <span class="n">PixelMap</span><span class="p">(</span><span class="n">proto_game_info</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">start_raw</span><span class="o">.</span><span class="n">pathing_grid</span><span class="p">,</span> <span class="n">in_bits</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="c1"># Required for events, needs to be before self.units are initialized so the old units are stored</span>
@@ -1298,16 +1301,16 @@ document.write(`
     <span class="nd">@final</span>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">distance_math_hypot</span><span class="p">(</span>
-        <span class="n">p1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
-        <span class="n">p2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+        <span class="n">p1</span><span class="p">:</span> <span class="n">_PointLike</span><span class="p">,</span>
+        <span class="n">p2</span><span class="p">:</span> <span class="n">_PointLike</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="nd">@final</span>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">distance_math_hypot_squared</span><span class="p">(</span>
-        <span class="n">p1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
-        <span class="n">p2</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point2</span><span class="p">,</span>
+        <span class="n">p1</span><span class="p">:</span> <span class="n">_PointLike</span><span class="p">,</span>
+        <span class="n">p2</span><span class="p">:</span> <span class="n">_PointLike</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">pow</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">pow</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 

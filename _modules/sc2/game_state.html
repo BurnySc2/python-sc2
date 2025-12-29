@@ -275,6 +275,7 @@ document.write(`
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">raw_pb2</span><span class="p">,</span> <span class="n">sc2api_pb2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">IS_ENEMY</span><span class="p">,</span> <span class="n">IS_MINE</span><span class="p">,</span> <span class="n">FakeEffectID</span><span class="p">,</span> <span class="n">FakeEffectRadii</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Alliance</span><span class="p">,</span> <span class="n">DisplayType</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.ability_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityId</span>
@@ -295,7 +296,7 @@ document.write(`
 <div class="viewcode-block" id="Blip">
 <a class="viewcode-back" href="../../game_state/index.html#sc2.game_state.Blip">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Blip</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">Unit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param proto:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -355,7 +356,7 @@ document.write(`
         <span class="s2">&quot;larva_count&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">sc2api_pb2</span><span class="o">.</span><span class="n">PlayerCommon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -367,7 +368,7 @@ document.write(`
 <div class="viewcode-block" id="EffectData">
 <a class="viewcode-back" href="../../game_state/index.html#sc2.game_state.EffectData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EffectData</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">,</span> <span class="n">fake</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">Effect</span> <span class="o">|</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">Unit</span><span class="p">,</span> <span class="n">fake</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param proto:</span>
 <span class="sd">        :param fake:</span>
@@ -377,20 +378,20 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EffectId</span> <span class="o">|</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="p">,</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">Unit</span><span class="p">):</span>
             <span class="c1"># Returns the string from constants.py, e.g. &quot;KD8CHARGE&quot;</span>
             <span class="k">return</span> <span class="n">FakeEffectID</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_type</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">EffectId</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">effect_id</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">positions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="p">,</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">Unit</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">{</span><span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)}</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">alliance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alliance</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span>
+        <span class="k">return</span> <span class="n">Alliance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_mine</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -470,7 +471,11 @@ document.write(`
 <div class="viewcode-block" id="GameState">
 <a class="viewcode-back" href="../../game_state/index.html#sc2.game_state.GameState">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GameState</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response_observation</span><span class="p">,</span> <span class="n">previous_observation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">response_observation</span><span class="p">:</span> <span class="n">sc2api_pb2</span><span class="o">.</span><span class="n">ResponseObservation</span><span class="p">,</span>
+        <span class="n">previous_observation</span><span class="p">:</span> <span class="n">sc2api_pb2</span><span class="o">.</span><span class="n">ResponseObservation</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param response_observation:</span>
 <span class="sd">        :param previous_observation:</span>
@@ -531,7 +536,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Game alerts, see https://github.com/Blizzard/s2client-proto/blob/01ab351e21c786648e4c6693d4aad023a176d45c/s2clientprotocol/sc2api.proto#L683-L706</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">alerts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">alerts</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">alerts</span>
 
@@ -544,7 +549,7 @@ document.write(`
 <span class="sd">        Each action is converted into Python dataclasses: ActionRawUnitCommand, ActionRawToggleAutocast, ActionRawCameraMove</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">previous_frame_actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span><span class="o">.</span><span class="n">actions</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_observation</span> <span class="k">else</span> <span class="p">[]</span>
-        <span class="n">actions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ActionRawUnitCommand</span> <span class="o">|</span> <span class="n">ActionRawToggleAutocast</span> <span class="o">|</span> <span class="n">ActionRawCameraMove</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">previous_frame_actions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_observation</span><span class="o">.</span><span class="n">actions</span><span class="p">):</span>
             <span class="n">action_raw</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">action_raw</span>
             <span class="n">game_loop</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">game_loop</span>

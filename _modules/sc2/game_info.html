@@ -277,6 +277,7 @@ document.write(`
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">sc2api_pb2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.pixel_map</span><span class="w"> </span><span class="kn">import</span> <span class="n">PixelMap</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.player</span><span class="w"> </span><span class="kn">import</span> <span class="n">Player</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span><span class="p">,</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">Size</span>
@@ -392,10 +393,10 @@ document.write(`
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">corner_depots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">corner_depots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Finds the 2 depot positions on the outside&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper2_for_ramp_wall</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">frozenset</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper2_for_ramp_wall</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">points</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper2_for_ramp_wall</span><span class="p">)</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span><span class="o">.</span><span class="n">offset</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x_offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_offset</span><span class="p">))</span>
@@ -403,7 +404,7 @@ document.write(`
             <span class="n">center</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">towards</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">distance_to_point2</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">depot_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depot_in_middle</span>
             <span class="k">if</span> <span class="n">depot_position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="nb">frozenset</span><span class="p">()</span>
+                <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
             <span class="c1"># Offset from middle depot to corner depots is (2, 1)</span>
             <span class="n">intersects</span> <span class="o">=</span> <span class="n">center</span><span class="o">.</span><span class="n">circle_intersection</span><span class="p">(</span><span class="n">depot_position</span><span class="p">,</span> <span class="mi">5</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">intersects</span>
@@ -490,7 +491,7 @@ document.write(`
 <div class="viewcode-block" id="GameInfo">
 <a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.GameInfo">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GameInfo</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">sc2api_pb2</span><span class="o">.</span><span class="n">ResponseGameInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Player</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Player</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">player_info</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">map_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">map_name</span>

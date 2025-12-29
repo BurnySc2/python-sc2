@@ -274,6 +274,7 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">data_pb2</span><span class="p">,</span> <span class="n">sc2api_pb2</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">Race</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.ability_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityId</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.unit_typeid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitTypeId</span>
@@ -290,7 +291,7 @@ document.write(`
 <div class="viewcode-block" id="GameData">
 <a class="viewcode-back" href="../../game_data/index.html#sc2.game_data.GameData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GameData</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">sc2api_pb2</span><span class="o">.</span><span class="n">ResponseData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param data:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -350,14 +351,14 @@ document.write(`
     <span class="n">ability_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ability_id</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">ability_id</span> <span class="ow">in</span> <span class="n">AbilityId</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># sorted list</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">id_exists</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ability_id</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">id_exists</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ability_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ability_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Wrong type: </span><span class="si">{</span><span class="n">ability_id</span><span class="si">}</span><span class="s2"> is not int&quot;</span>
         <span class="k">if</span> <span class="n">ability_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">bisect_left</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">ability_ids</span><span class="p">,</span> <span class="n">ability_id</span><span class="p">)</span>  <span class="c1"># quick binary search</span>
         <span class="k">return</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">ability_ids</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ability_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">ability_id</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_data</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_data</span><span class="p">:</span> <span class="n">GameData</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">data_pb2</span><span class="o">.</span><span class="n">AbilityData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_game_data</span> <span class="o">=</span> <span class="n">game_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto</span>
 
@@ -407,7 +408,7 @@ document.write(`
 <div class="viewcode-block" id="UnitTypeData">
 <a class="viewcode-back" href="../../game_data/index.html#sc2.game_data.UnitTypeData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">UnitTypeData</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_data</span><span class="p">:</span> <span class="n">GameData</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_data</span><span class="p">:</span> <span class="n">GameData</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">data_pb2</span><span class="o">.</span><span class="n">UnitTypeData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param game_data:</span>
 <span class="sd">        :param proto:</span>
@@ -448,12 +449,10 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">footprint_radius</span>
 
     <span class="nd">@property</span>
-    <span class="c1"># pyre-ignore[11]</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Attribute</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Attribute</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span><span class="p">]</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">has_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="c1"># pyre-ignore[6]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="n">Attribute</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span>
 
@@ -501,7 +500,6 @@ document.write(`
         <span class="k">return</span> <span class="n">UnitTypeId</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">unit_alias</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="c1"># pyre-ignore[11]</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">race</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Race</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">race</span><span class="p">)</span>
 
@@ -512,8 +510,7 @@ document.write(`
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cost_zerg_corrected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cost</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This returns 25 for extractor and 200 for spawning pool instead of 75 and 250 respectively&quot;&quot;&quot;</span>
-        <span class="c1"># pyre-ignore[16]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">race</span> <span class="o">==</span> <span class="n">Race</span><span class="o">.</span><span class="n">Zerg</span> <span class="ow">and</span> <span class="n">Attribute</span><span class="o">.</span><span class="n">Structure</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">race</span> <span class="o">==</span> <span class="n">Race</span><span class="o">.</span><span class="n">Zerg</span> <span class="ow">and</span> <span class="n">Attribute</span><span class="o">.</span><span class="n">Structure</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Cost</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">mineral_cost</span> <span class="o">-</span> <span class="mi">50</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">vespene_cost</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">build_time</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost</span>
 
@@ -559,7 +556,7 @@ document.write(`
 <div class="viewcode-block" id="UpgradeData">
 <a class="viewcode-back" href="../../game_data/index.html#sc2.game_data.UpgradeData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">UpgradeData</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_data</span><span class="p">:</span> <span class="n">GameData</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_data</span><span class="p">:</span> <span class="n">GameData</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">data_pb2</span><span class="o">.</span><span class="n">UpgradeData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param game_data:</span>
 <span class="sd">        :param proto:</span>

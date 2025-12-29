@@ -273,13 +273,14 @@ document.write(`
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2clientprotocol.common_pb2</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageData</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.position</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2</span>
 
 
 <div class="viewcode-block" id="PixelMap">
 <a class="viewcode-back" href="../../pixel_map/index.html#sc2.pixel_map.PixelMap">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PixelMap</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">,</span> <span class="n">in_bits</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proto</span><span class="p">:</span> <span class="n">ImageData</span><span class="p">,</span> <span class="n">in_bits</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param proto:</span>
 <span class="sd">        :param in_bits:</span>
