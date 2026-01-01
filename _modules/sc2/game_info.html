@@ -311,6 +311,8 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">height_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Point2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height_map</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
 
+<div class="viewcode-block" id="Ramp.upper">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.upper">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">upper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the upper points of a ramp.&quot;&quot;&quot;</span>
@@ -323,13 +325,17 @@ document.write(`
                 <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">}</span>
             <span class="k">elif</span> <span class="n">height</span> <span class="o">==</span> <span class="n">current_max</span><span class="p">:</span>
                 <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Ramp.upper2_for_ramp_wall">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.upper2_for_ramp_wall">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">upper2_for_ramp_wall</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the 2 upper ramp points of the main base ramp required for the supply depot and barracks placement properties used in this file.&quot;&quot;&quot;</span>
         <span class="c1"># From bottom center, find 2 points that are furthest away (within the same ramp)</span>
-        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">heapq</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">distance_to_point2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">heapq</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">distance_to_point2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">)))</span></div>
+
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">top_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
@@ -356,6 +362,8 @@ document.write(`
         <span class="n">pos</span> <span class="o">=</span> <span class="n">Point2</span><span class="p">((</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="n">length</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="n">length</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">pos</span>
 
+<div class="viewcode-block" id="Ramp.barracks_in_middle">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.barracks_in_middle">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">barracks_in_middle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Barracks position in the middle of the 2 depots&quot;&quot;&quot;</span>
@@ -370,8 +378,11 @@ document.write(`
             <span class="n">any_lower_point</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">))</span>
             <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">intersects</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">distance_to_point2</span><span class="p">(</span><span class="n">any_lower_point</span><span class="p">))</span>
 
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Ramp.depot_in_middle">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.depot_in_middle">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">depot_in_middle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Depot in the middle of the 3 depots&quot;&quot;&quot;</span>
@@ -390,8 +401,11 @@ document.write(`
             <span class="n">any_lower_point</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">))</span>
             <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">intersects</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">distance_to_point2</span><span class="p">(</span><span class="n">any_lower_point</span><span class="p">))</span>
 
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Ramp.corner_depots">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.corner_depots">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">corner_depots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Finds the 2 depot positions on the outside&quot;&quot;&quot;</span>
@@ -409,8 +423,11 @@ document.write(`
             <span class="n">intersects</span> <span class="o">=</span> <span class="n">center</span><span class="o">.</span><span class="n">circle_intersection</span><span class="p">(</span><span class="n">depot_position</span><span class="p">,</span> <span class="mi">5</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">intersects</span>
 
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Ramp.barracks_can_fit_addon">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.barracks_can_fit_addon">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">barracks_can_fit_addon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Test if a barracks can fit an addon at natural ramp&quot;&quot;&quot;</span>
@@ -418,8 +435,11 @@ document.write(`
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper2_for_ramp_wall</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">barracks_in_middle</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corner_depots</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">depot</span><span class="p">:</span> <span class="n">depot</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">x</span>
 
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Ramp.barracks_correct_placement">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.barracks_correct_placement">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">barracks_correct_placement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Corrected placement so that an addon can fit&quot;&quot;&quot;</span>
@@ -430,8 +450,11 @@ document.write(`
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">barracks_in_middle</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">barracks_in_middle</span><span class="o">.</span><span class="n">offset</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Ramp.protoss_wall_pylon">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.protoss_wall_pylon">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">protoss_wall_pylon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -445,8 +468,11 @@ document.write(`
         <span class="c1"># direction up the ramp</span>
         <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">barracks_in_middle</span><span class="o">.</span><span class="n">negative_offset</span><span class="p">(</span><span class="n">middle</span><span class="p">)</span>
         <span class="c1"># pyre-ignore[7]</span>
-        <span class="k">return</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">direction</span>
+        <span class="k">return</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">direction</span></div>
 
+
+<div class="viewcode-block" id="Ramp.protoss_wall_buildings">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.protoss_wall_buildings">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">protoss_wall_buildings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -467,8 +493,11 @@ document.write(`
             <span class="n">wall2</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">+</span> <span class="p">(</span><span class="n">middle</span> <span class="o">-</span> <span class="n">wall1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.5</span>
             <span class="k">return</span> <span class="nb">frozenset</span><span class="p">([</span><span class="n">wall1</span><span class="p">,</span> <span class="n">wall2</span><span class="p">])</span>
 
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not implemented. Trying to access a ramp that has a wrong amount of upper points.&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Ramp.protoss_wall_warpin">
+<a class="viewcode-back" href="../../game_info/index.html#sc2.game_info.Ramp.protoss_wall_warpin">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">protoss_wall_warpin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -485,6 +514,7 @@ document.write(`
         <span class="c1"># sort depots based on distance to start to get wallin orientation</span>
         <span class="n">sorted_depots</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corner_depots</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">player_start_location</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">sorted_depots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">negative_offset</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span></div>
+</div>
 
 
 

@@ -421,15 +421,21 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the name of the unit.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">name</span>
 
+<div class="viewcode-block" id="Unit.race">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.race">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">race</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Race</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the race of the unit&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">race</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">race</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.tag">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.tag">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the unique tag of the unit.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">tag</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">tag</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -466,36 +472,47 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit has the &#39;psionic&#39; attribute.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">IS_PSIONIC</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">attributes</span>
 
+<div class="viewcode-block" id="Unit.tech_alias">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.tech_alias">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tech_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Building tech equality, e.g. OrbitalCommand is the same as CommandCenter</span>
 <span class="sd">        For Hive, this returns [UnitTypeId.Hatchery, UnitTypeId.Lair]</span>
 <span class="sd">        For SCV, this returns None&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">tech_alias</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">tech_alias</span></div>
 
+
+<div class="viewcode-block" id="Unit.unit_alias">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.unit_alias">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">unit_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UnitTypeId</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Building type equality, e.g. FlyingOrbitalCommand is the same as OrbitalCommand</span>
 <span class="sd">        For flying OrbitalCommand, this returns UnitTypeId.OrbitalCommand</span>
 <span class="sd">        For SCV, this returns None&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">unit_alias</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">unit_alias</span></div>
+
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_weapons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the weapons of the unit.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">weapons</span>
 
+<div class="viewcode-block" id="Unit.can_attack">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.can_attack">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">can_attack</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit can attack at all.&quot;&quot;&quot;</span>
         <span class="c1"># TODO BATTLECRUISER doesnt have weapons in proto?!</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="p">{</span><span class="n">UNIT_BATTLECRUISER</span><span class="p">,</span> <span class="n">UNIT_ORACLE</span><span class="p">}</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="p">{</span><span class="n">UNIT_BATTLECRUISER</span><span class="p">,</span> <span class="n">UNIT_ORACLE</span><span class="p">}</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">can_attack_both</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit can attack both ground and air units.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_attack_ground</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_attack_air</span>
 
+<div class="viewcode-block" id="Unit.can_attack_ground">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.can_attack_ground">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">can_attack_ground</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit can attack ground units.&quot;&quot;&quot;</span>
@@ -503,8 +520,11 @@ document.write(`
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">weapon</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="n">TARGET_GROUND</span> <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
+
+<div class="viewcode-block" id="Unit.ground_dps">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.ground_dps">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">ground_dps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the dps against ground units. Does not include upgrades.&quot;&quot;&quot;</span>
@@ -512,8 +532,11 @@ document.write(`
             <span class="n">weapon</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">weapon</span> <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span> <span class="k">if</span> <span class="n">weapon</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="n">TARGET_GROUND</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">weapon</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">weapon</span><span class="o">.</span><span class="n">damage</span> <span class="o">*</span> <span class="n">weapon</span><span class="o">.</span><span class="n">attacks</span><span class="p">)</span> <span class="o">/</span> <span class="n">weapon</span><span class="o">.</span><span class="n">speed</span>
-        <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
 
+
+<div class="viewcode-block" id="Unit.ground_range">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.ground_range">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">ground_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the range against ground units. Does not include upgrades.&quot;&quot;&quot;</span>
@@ -525,8 +548,11 @@ document.write(`
             <span class="n">weapon</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">weapon</span> <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span> <span class="k">if</span> <span class="n">weapon</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="n">TARGET_GROUND</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">weapon</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">weapon</span><span class="o">.</span><span class="n">range</span>
-        <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
 
+
+<div class="viewcode-block" id="Unit.can_attack_air">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.can_attack_air">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">can_attack_air</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit can air attack at all. Does not include upgrades.&quot;&quot;&quot;</span>
@@ -534,8 +560,11 @@ document.write(`
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">weapon</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="n">TARGET_AIR</span> <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
+
+<div class="viewcode-block" id="Unit.air_dps">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.air_dps">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">air_dps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the dps against air units. Does not include upgrades.&quot;&quot;&quot;</span>
@@ -543,8 +572,11 @@ document.write(`
             <span class="n">weapon</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">weapon</span> <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span> <span class="k">if</span> <span class="n">weapon</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="n">TARGET_AIR</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">weapon</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">weapon</span><span class="o">.</span><span class="n">damage</span> <span class="o">*</span> <span class="n">weapon</span><span class="o">.</span><span class="n">attacks</span><span class="p">)</span> <span class="o">/</span> <span class="n">weapon</span><span class="o">.</span><span class="n">speed</span>
-        <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
 
+
+<div class="viewcode-block" id="Unit.air_range">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.air_range">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">air_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the range against air units. Does not include upgrades.&quot;&quot;&quot;</span>
@@ -554,8 +586,11 @@ document.write(`
             <span class="n">weapon</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">weapon</span> <span class="k">for</span> <span class="n">weapon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapons</span> <span class="k">if</span> <span class="n">weapon</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="n">TARGET_AIR</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">weapon</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">weapon</span><span class="o">.</span><span class="n">range</span>
-        <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
 
+
+<div class="viewcode-block" id="Unit.bonus_damage">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.bonus_damage">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">bonus_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a tuple of form &#39;(bonus damage, armor type)&#39; if unit does &#39;bonus damage&#39; against &#39;armor type&#39;.</span>
@@ -566,7 +601,8 @@ document.write(`
                 <span class="k">if</span> <span class="n">weapon</span><span class="o">.</span><span class="n">damage_bonus</span><span class="p">:</span>
                     <span class="n">b</span> <span class="o">=</span> <span class="n">weapon</span><span class="o">.</span><span class="n">damage_bonus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="k">return</span> <span class="n">b</span><span class="o">.</span><span class="n">bonus</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">attribute</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">armor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -585,10 +621,13 @@ document.write(`
 <span class="sd">        Does not include upgrades or buffs.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type_data</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">movement_speed</span>
 
+<div class="viewcode-block" id="Unit.real_speed">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.real_speed">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">real_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;See &#39;calculate_speed&#39;.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_speed</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_speed</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="Unit.calculate_speed">
 <a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.calculate_speed">[docs]</a>
@@ -672,12 +711,15 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the maximum health of the unit. Does not include shields.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health_max</span>
 
+<div class="viewcode-block" id="Unit.health_percentage">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.health_percentage">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">health_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the percentage of health the unit has. Does not include shields.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health_max</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health_max</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health_max</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">shield</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -689,13 +731,18 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the maximum shield points the unit can have. Returns 0 for non-protoss units.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield_max</span>
 
+<div class="viewcode-block" id="Unit.shield_percentage">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.shield_percentage">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">shield_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the percentage of shield points the unit has. Returns 0 for non-protoss units.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield_max</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield_max</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield_max</span></div>
 
+
+<div class="viewcode-block" id="Unit.shield_health_percentage">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.shield_health_percentage">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">shield_health_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the percentage of combined shield + hp points the unit has.</span>
@@ -703,7 +750,8 @@ document.write(`
         <span class="n">max_</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield_max</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health_max</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_progress</span>
         <span class="k">if</span> <span class="n">max_</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">shield</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">health</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -715,12 +763,15 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the maximum amount of energy the unit can have. Returns 0 for units without energy.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">energy_max</span>
 
+<div class="viewcode-block" id="Unit.energy_percentage">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.energy_percentage">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">energy_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the percentage of amount of energy the unit has. Returns 0 for units without energy.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">energy_max</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">energy</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">energy_max</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">energy</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">energy_max</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">age_in_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -737,6 +788,8 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns True if this Unit object is referenced from the future and is outdated.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_loop</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
 
+<div class="viewcode-block" id="Unit.is_snapshot">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_snapshot">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is only available as a snapshot for the bot.</span>
@@ -746,8 +799,11 @@ document.write(`
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">IS_SNAPSHOT</span>
         <span class="c1"># TODO: Fixed in version 5.0.4, remove if a new linux binary is released: https://github.com/Blizzard/s2client-proto/issues/167</span>
         <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">visibility</span><span class="o">.</span><span class="n">data_numpy</span><span class="p">[</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">visibility</span><span class="o">.</span><span class="n">data_numpy</span><span class="p">[</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">2</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_visible">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_visible">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is visible for the bot.</span>
@@ -756,7 +812,8 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_build</span> <span class="o">&gt;=</span> <span class="mi">82457</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">IS_VISIBLE</span>
         <span class="c1"># TODO: Remove when a new linux binary (5.0.4 or newer) is released</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">IS_VISIBLE</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_snapshot</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">IS_VISIBLE</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_snapshot</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_placeholder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -801,15 +858,21 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the 2d position of the unit as tuple without conversion to Point2.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span>
 
+<div class="viewcode-block" id="Unit.position">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.position">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>  <span class="c1"># pyright: ignore[reportIncompatibleMethodOverride]</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the 2d position of the unit.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.position3d">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.position3d">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">position3d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point3</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the 3d position of the unit.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Point3</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Point3</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="Unit.distance_to">
 <a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.distance_to">[docs]</a>
@@ -1194,36 +1257,51 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is revealed or not cloaked and therefore can be attacked.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">cloak</span> <span class="ow">in</span> <span class="n">CAN_BE_ATTACKED</span>
 
+<div class="viewcode-block" id="Unit.buffs">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.buffs">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">buffs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">BuffId</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the set of current buffs the unit has.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">BuffId</span><span class="p">(</span><span class="n">buff_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">buff_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">buff_ids</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">BuffId</span><span class="p">(</span><span class="n">buff_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">buff_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">buff_ids</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_carrying_minerals">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_carrying_minerals">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_carrying_minerals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a worker or MULE is carrying (gold-)minerals.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="n">IS_CARRYING_MINERALS</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">IS_CARRYING_MINERALS</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffs</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_carrying_vespene">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_carrying_vespene">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_carrying_vespene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a worker is carrying vespene gas.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="n">IS_CARRYING_VESPENE</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">IS_CARRYING_VESPENE</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffs</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_carrying_resource">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_carrying_resource">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_carrying_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a worker is carrying a resource.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="n">IS_CARRYING_RESOURCES</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">IS_CARRYING_RESOURCES</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffs</span><span class="p">)</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">detect_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the detection distance of the unit.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">detect_range</span>
 
+<div class="viewcode-block" id="Unit.is_detector">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_detector">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_detector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is a detector. Has to be completed</span>
 <span class="sd">        in order to detect and Photoncannons also need to be powered.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_ready</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">IS_DETECTOR</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UNIT_PHOTONCANNON</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_powered</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_ready</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">IS_DETECTOR</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UNIT_PHOTONCANNON</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_powered</span><span class="p">)</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">radar_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -1318,12 +1396,17 @@ document.write(`
 
     <span class="c1"># PROPERTIES BELOW THIS COMMENT ARE NOT POPULATED FOR ENEMIES</span>
 
+<div class="viewcode-block" id="Unit.orders">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.orders">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">orders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitOrder</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the a list of the current orders.&quot;&quot;&quot;</span>
         <span class="c1"># TODO: add examples on how to use unit orders</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">UnitOrder</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">orders</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">UnitOrder</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">orders</span><span class="p">]</span></div>
 
+
+<div class="viewcode-block" id="Unit.order_target">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.order_target">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">order_target</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the target tag (if it is a Unit) or Point2 (if it is a Position)</span>
@@ -1333,7 +1416,8 @@ document.write(`
             <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">target</span>
             <span class="k">return</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1352,59 +1436,86 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">orders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ability</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">abilities</span></div>
 
 
+<div class="viewcode-block" id="Unit.is_moving">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_moving">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is moving.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">AbilityId</span><span class="o">.</span><span class="n">MOVE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">AbilityId</span><span class="o">.</span><span class="n">MOVE</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_attacking">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_attacking">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_attacking</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is attacking.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_ATTACKING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_ATTACKING</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_patrolling">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_patrolling">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_patrolling</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a unit is patrolling.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_PATROLLING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_PATROLLING</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_gathering">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_gathering">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_gathering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a unit is on its way to a mineral field or vespene geyser to mine.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_GATHERING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_GATHERING</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_returning">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_returning">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_returning</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a unit is returning from mineral field or vespene geyser to deliver resources to townhall.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_RETURNING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_RETURNING</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_collecting">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_collecting">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_collecting</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if a unit is gathering or returning.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_COLLECTING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_COLLECTING</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_constructing_scv">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_constructing_scv">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_constructing_scv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is an SCV that is currently building.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_CONSTRUCTING_SCV</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_CONSTRUCTING_SCV</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_transforming">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_transforming">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_transforming</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit transforming.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">transforming</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">transforming</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type_id</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">transforming</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">transforming</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">type_id</span><span class="p">])</span></div>
 
+
+<div class="viewcode-block" id="Unit.is_repairing">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.is_repairing">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_repairing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the unit is an SCV or MULE that is currently repairing.</span>
 <span class="sd">        Only works for own units.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_REPAIRING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_using_ability</span><span class="p">(</span><span class="n">IS_REPAIRING</span><span class="p">)</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_on_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -1416,16 +1527,24 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if unit has an addon attached.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">add_on_tag</span><span class="p">)</span>
 
+<div class="viewcode-block" id="Unit.has_techlab">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.has_techlab">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_techlab</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a structure is connected to a techlab addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_on_tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">techlab_tags</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_on_tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">techlab_tags</span></div>
 
+
+<div class="viewcode-block" id="Unit.has_reactor">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.has_reactor">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_reactor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a structure is connected to a reactor addon. This should only ever return True for BARRACKS, FACTORY, STARPORT.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_on_tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">reactor_tags</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_on_tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">reactor_tags</span></div>
 
+
+<div class="viewcode-block" id="Unit.add_on_land_position">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.add_on_land_position">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_on_land_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;If this unit is an addon (techlab, reactor), returns the position</span>
@@ -1433,8 +1552,11 @@ document.write(`
 
 <span class="sd">        Why offset (-2.5, 0.5)? See description in &#39;add_on_position&#39;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">Point2</span><span class="p">((</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">Point2</span><span class="p">((</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)))</span></div>
 
+
+<div class="viewcode-block" id="Unit.add_on_position">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.add_on_position">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_on_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;If this unit is a terran production building (BARRACKS, FACTORY, STARPORT),</span>
@@ -1446,17 +1568,24 @@ document.write(`
 <span class="sd">        The total distance from center to center on the x-axis is 2.5.</span>
 <span class="sd">        The distance from center to center on the y-axis is -0.5.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">Point2</span><span class="p">((</span><span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">Point2</span><span class="p">((</span><span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)))</span></div>
 
+
+<div class="viewcode-block" id="Unit.passengers">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.passengers">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">passengers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Unit</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">Unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">passengers</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">Unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">passengers</span><span class="p">}</span></div>
 
+
+<div class="viewcode-block" id="Unit.passengers_tags">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.passengers_tags">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">passengers_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the tags of the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">passengers</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">passengers</span><span class="p">}</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cargo_used</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -1528,10 +1657,13 @@ document.write(`
         <span class="c1"># TODO What does this do?</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">engaged_target_tag</span>
 
+<div class="viewcode-block" id="Unit.rally_targets">
+<a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.rally_targets">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">rally_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">RallyTarget</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the queue of rallytargets of the structure.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">RallyTarget</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">rally_target</span><span class="p">)</span> <span class="k">for</span> <span class="n">rally_target</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">rally_targets</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">RallyTarget</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">rally_target</span><span class="p">)</span> <span class="k">for</span> <span class="n">rally_target</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">rally_targets</span><span class="p">]</span></div>
+
 
     <span class="c1"># Unit functions</span>
 

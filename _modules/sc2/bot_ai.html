@@ -399,6 +399,8 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Possible start locations for enemies.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">start_locations</span>
 
+<div class="viewcode-block" id="BotAI.main_base_ramp">
+<a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai.BotAI.main_base_ramp">[docs]</a>
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">main_base_ramp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ramp</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the Ramp instance of the closest main-ramp to start location.</span>
@@ -420,7 +422,8 @@ document.write(`
                 <span class="p">(</span><span class="n">ramp</span> <span class="k">for</span> <span class="n">ramp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_info</span><span class="o">.</span><span class="n">map_ramps</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ramp</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">}),</span>
                 <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_location</span><span class="o">.</span><span class="n">distance_to</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">top_center</span><span class="p">),</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">found_main_base_ramp</span>
+        <span class="k">return</span> <span class="n">found_main_base_ramp</span></div>
+
 
     <span class="nd">@property_cache_once_per_frame</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">expansion_locations_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Point2</span><span class="p">]:</span>
