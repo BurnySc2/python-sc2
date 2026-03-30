@@ -283,7 +283,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span> <span class="o">=</span> <span class="n">proto</span><span class="o">.</span><span class="n">score_details</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        TODO this is super ugly, how can we improve this summary?</span>
 <span class="sd">        Print summary to file with:</span>
@@ -375,6 +375,7 @@ document.write(`
             <span class="s2">&quot;current_apm&quot;</span><span class="p">,</span>
             <span class="s2">&quot;current_effective_apm&quot;</span><span class="p">,</span>
         <span class="p">]</span>
+        <span class="c1"># pyrefly: ignore</span>
         <span class="k">return</span> <span class="p">[[</span><span class="n">value</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)]</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
 
     <span class="nd">@property</span>

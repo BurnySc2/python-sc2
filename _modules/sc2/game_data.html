@@ -266,8 +266,7 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for sc2.game_data</h1><div class="highlight"><pre>
-<span></span><span class="c1"># pyre-ignore-all-errors[29]</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">bisect</span><span class="w"> </span><span class="kn">import</span> <span class="n">bisect_left</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">suppress</span>
@@ -319,7 +318,6 @@ document.write(`
             <span class="k">if</span> <span class="ow">not</span> <span class="n">AbilityData</span><span class="o">.</span><span class="n">id_exists</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
                 <span class="k">continue</span>
 
-            <span class="c1"># pyre-ignore[16]</span>
             <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">is_free_morph</span><span class="p">:</span>
                 <span class="k">continue</span>
 
@@ -541,9 +539,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">_game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">tech_alias</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">minerals</span> <span class="k">for</span> <span class="n">tech_alias</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tech_alias</span>
         <span class="p">)</span>
         <span class="n">tech_alias_cost_vespene</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">tech_alias</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">vespene</span>
-            <span class="c1"># pyre-ignore[16]</span>
-            <span class="k">for</span> <span class="n">tech_alias</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tech_alias</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">tech_alias</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">vespene</span> <span class="k">for</span> <span class="n">tech_alias</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tech_alias</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">Cost</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">mineral_cost</span> <span class="o">-</span> <span class="n">tech_alias_cost_minerals</span><span class="p">,</span>

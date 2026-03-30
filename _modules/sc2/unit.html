@@ -266,8 +266,7 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for sc2.unit</h1><div class="highlight"><pre>
-<span></span><span class="c1"># pyre-ignore-all-errors[11, 16, 29]</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -321,7 +320,7 @@ document.write(`
     <span class="n">UNIT_PHOTONCANNON</span><span class="p">,</span>
     <span class="n">transforming</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Alliance</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">CloakState</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">race_gas</span><span class="p">,</span> <span class="n">warpgate_abilities</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc2.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Attribute</span><span class="p">,</span> <span class="n">CloakState</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">Target</span><span class="p">,</span> <span class="n">race_gas</span><span class="p">,</span> <span class="n">warpgate_abilities</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.ability_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityId</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.buff_id</span><span class="w"> </span><span class="kn">import</span> <span class="n">BuffId</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.ids.unit_typeid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnitTypeId</span>
@@ -331,7 +330,6 @@ document.write(`
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.bot_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">BotAI</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.bot_ai_internal</span><span class="w"> </span><span class="kn">import</span> <span class="n">BotAIInternal</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbilityData</span><span class="p">,</span> <span class="n">UnitTypeData</span>
 
 
@@ -379,7 +377,7 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">proto_data</span><span class="p">:</span> <span class="n">raw_pb2</span><span class="o">.</span><span class="n">Unit</span><span class="p">,</span>
-        <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span> <span class="o">|</span> <span class="n">BotAIInternal</span><span class="p">,</span>
+        <span class="n">bot_object</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">,</span>
         <span class="n">distance_calculation_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">base_build</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -592,7 +590,7 @@ document.write(`
 <div class="viewcode-block" id="Unit.bonus_damage">
 <a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.bonus_damage">[docs]</a>
     <span class="nd">@cached_property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">bonus_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bonus_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a tuple of form &#39;(bonus damage, armor type)&#39; if unit does &#39;bonus damage&#39; against &#39;armor type&#39;.</span>
 <span class="sd">        Possible armor typs are: &#39;Light&#39;, &#39;Armored&#39;, &#39;Biological&#39;, &#39;Mechanical&#39;, &#39;Psionic&#39;, &#39;Massive&#39;, &#39;Structure&#39;.&quot;&quot;&quot;</span>
         <span class="c1"># TODO: Consider units with ability attacks (Oracle, Baneling) or multiple attacks (Thor).</span>
@@ -798,7 +796,8 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_build</span> <span class="o">&gt;=</span> <span class="mi">82457</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">IS_SNAPSHOT</span>
         <span class="c1"># TODO: Fixed in version 5.0.4, remove if a new linux binary is released: https://github.com/Blizzard/s2client-proto/issues/167</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span>
+        <span class="c1"># pyrefly: ignore</span>
+        <span class="n">position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">rounded</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">visibility</span><span class="o">.</span><span class="n">data_numpy</span><span class="p">[</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">2</span></div>
 
 
@@ -834,7 +833,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">display_type</span> <span class="o">==</span> <span class="n">IS_PLACEHOLDER</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">alliance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alliance</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">alliance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the team the unit belongs to.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">alliance</span>
 
@@ -861,7 +860,7 @@ document.write(`
 <div class="viewcode-block" id="Unit.position">
 <a class="viewcode-back" href="../../unit/index.html#sc2.unit.Unit.position">[docs]</a>
     <span class="nd">@cached_property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>  <span class="c1"># pyright: ignore[reportIncompatibleMethodOverride]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point2</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the 2d position of the unit.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Point2</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span></div>
 
@@ -941,9 +940,7 @@ document.write(`
                 <span class="o">&lt;=</span> <span class="p">(</span><span class="n">cast_range</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">target</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">bonus_distance</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
             <span class="p">)</span>
         <span class="c1"># For casting abilities on the ground, like queen creep tumor, ravager bile, HT storm</span>
-        <span class="k">if</span> <span class="n">ability_target_type</span> <span class="ow">in</span> <span class="p">{</span><span class="n">Target</span><span class="o">.</span><span class="n">Point</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">Target</span><span class="o">.</span><span class="n">PointOrUnit</span><span class="o">.</span><span class="n">value</span><span class="p">}</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">target</span><span class="p">,</span> <span class="p">(</span><span class="n">Point2</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
-        <span class="p">):</span>
+        <span class="k">if</span> <span class="n">ability_target_type</span> <span class="ow">in</span> <span class="p">{</span><span class="n">Target</span><span class="o">.</span><span class="n">Point</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">Target</span><span class="o">.</span><span class="n">PointOrUnit</span><span class="o">.</span><span class="n">value</span><span class="p">}</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Point2</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">_distance_pos_to_pos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position_tuple</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
                 <span class="o">&lt;=</span> <span class="n">cast_range</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">+</span> <span class="n">bonus_distance</span>
@@ -1402,6 +1399,7 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">orders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitOrder</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the a list of the current orders.&quot;&quot;&quot;</span>
         <span class="c1"># TODO: add examples on how to use unit orders</span>
+        <span class="c1"># pyrefly: ignore</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">UnitOrder</span><span class="o">.</span><span class="n">from_proto</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">orders</span><span class="p">]</span></div>
 
 
@@ -1576,6 +1574,7 @@ document.write(`
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">passengers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Unit</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the units inside a Bunker, CommandCenter, PlanetaryFortress, Medivac, Nydus, Overlord or WarpPrism.&quot;&quot;&quot;</span>
+        <span class="c1"># pyrefly: ignore</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">Unit</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proto</span><span class="o">.</span><span class="n">passengers</span><span class="p">}</span></div>
 
 
@@ -1693,8 +1692,12 @@ document.write(`
 <span class="sd">        :param queue:</span>
 <span class="sd">        :param can_afford_check:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">creation_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span>
+        <span class="k">if</span> <span class="n">creation_ability</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
             <span class="n">subtract_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">can_afford_check</span><span class="o">=</span><span class="n">can_afford_check</span><span class="p">,</span>
@@ -1716,7 +1719,7 @@ document.write(`
 <span class="sd">            SCV.build(COMMANDCENTER, position)</span>
 <span class="sd">            hatchery.build(UnitTypeId.LAIR)</span>
 <span class="sd">            # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position</span>
-<span class="sd">            SCV.build(REFINERY, target_vespene_geysir)</span>
+<span class="sd">            SCV.build(REFINERY, target_vespene_geyser)</span>
 
 <span class="sd">        :param unit:</span>
 <span class="sd">        :param position:</span>
@@ -1727,8 +1730,11 @@ document.write(`
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">Unit</span><span class="p">),</span> <span class="p">(</span>
                 <span class="s2">&quot;When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir.&quot;</span>
             <span class="p">)</span>
+        <span class="n">creation_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span>
+        <span class="k">if</span> <span class="n">creation_ability</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">target</span><span class="o">=</span><span class="n">position</span><span class="p">,</span>
             <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
             <span class="n">subtract_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1748,7 +1754,7 @@ document.write(`
 <span class="sd">        Usage::</span>
 
 <span class="sd">            # Target for refinery, assimilator and extractor needs to be the vespene geysir unit, not its position</span>
-<span class="sd">            SCV.build_gas(target_vespene_geysir)</span>
+<span class="sd">            SCV.build_gas(target_vespene_geyser)</span>
 
 <span class="sd">        :param target_geysir:</span>
 <span class="sd">        :param queue:</span>
@@ -1758,8 +1764,11 @@ document.write(`
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_geysir</span><span class="p">,</span> <span class="n">Unit</span><span class="p">),</span> <span class="p">(</span>
             <span class="s2">&quot;When building the gas structure, the target needs to be a unit (the vespene geysir) not the position of the vespene geysir.&quot;</span>
         <span class="p">)</span>
+        <span class="n">creation_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">gas_structure_type_id</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span>
+        <span class="k">if</span> <span class="n">creation_ability</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">gas_structure_type_id</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">target</span><span class="o">=</span><span class="n">target_geysir</span><span class="p">,</span>
             <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
             <span class="n">subtract_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1782,8 +1791,11 @@ document.write(`
 <span class="sd">        :param queue:</span>
 <span class="sd">        :param can_afford_check:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">research_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">upgrades</span><span class="p">[</span><span class="n">upgrade</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">research_ability</span>
+        <span class="k">if</span> <span class="n">research_ability</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">upgrades</span><span class="p">[</span><span class="n">upgrade</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">research_ability</span><span class="o">.</span><span class="n">exact_id</span><span class="p">,</span>
+            <span class="n">research_ability</span><span class="o">.</span><span class="n">exact_id</span><span class="p">,</span>
             <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
             <span class="n">subtract_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">can_afford_check</span><span class="o">=</span><span class="n">can_afford_check</span><span class="p">,</span>
@@ -1804,9 +1816,11 @@ document.write(`
 <span class="sd">        :param queue:</span>
 <span class="sd">        :param can_afford_check:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">normal_creation_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">creation_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span>
+        <span class="k">if</span> <span class="n">creation_ability</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">(</span>
-            <span class="n">warpgate_abilities</span><span class="p">[</span><span class="n">normal_creation_ability</span><span class="p">],</span>
+            <span class="n">warpgate_abilities</span><span class="p">[</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
             <span class="n">target</span><span class="o">=</span><span class="n">position</span><span class="p">,</span>
             <span class="n">subtract_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">subtract_supply</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

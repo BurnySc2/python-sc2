@@ -266,8 +266,7 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for sc2.bot_ai_internal</h1><div class="highlight"><pre>
-<span></span><span class="c1"># pyre-ignore-all-errors[6, 16, 29]</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
@@ -313,6 +312,7 @@ document.write(`
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.game_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameInfo</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sc2.bot_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">BotAI</span>
 
 
 <div class="viewcode-block" id="BotAIInternal">
@@ -320,11 +320,11 @@ document.write(`
 <span class="k">class</span><span class="w"> </span><span class="nc">BotAIInternal</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for bots.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_variables</span><span class="p">()</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Called from main.py internally&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># Specific opponent bot ID used in sc2ai ladder games http://sc2ai.net/ and on ai arena https://aiarena.net</span>
@@ -373,8 +373,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">warp_gate_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UnitCommand</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blips</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Blip</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="c1"># pyre-ignore[11]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="p">:</span> <span class="n">Race</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Will be set on AbstractPlayer init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="p">:</span> <span class="n">Race</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pyrefly: ignore</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">enemy_race</span><span class="p">:</span> <span class="n">Race</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generated_frame</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_units_created</span><span class="p">:</span> <span class="n">Counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -432,7 +433,7 @@ document.write(`
 
     <span class="nd">@final</span>
     <span class="nd">@property_cache_once_per_frame</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">expansion_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Units</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Same as the function above.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expansion_positions_list</span><span class="p">,</span> <span class="p">(</span>
             <span class="s2">&quot;self._find_expansion_locations() has not been run yet, so accessing the list of expansion locations is pointless.&quot;</span>
@@ -461,7 +462,8 @@ document.write(`
         <span class="k">if</span> <span class="ow">not</span> <span class="n">group</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot calculate center of empty group&quot;</span><span class="p">)</span>
 
-        <span class="n">total_x</span> <span class="o">=</span> <span class="n">total_y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
             <span class="n">total_x</span> <span class="o">+=</span> <span class="n">unit</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span>
             <span class="n">total_y</span> <span class="o">+=</span> <span class="n">unit</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
@@ -624,7 +626,7 @@ document.write(`
 
         <span class="c1"># Distance offsets we apply to center of each resource group to find expansion position</span>
         <span class="n">offset_range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span>
-        <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">offsets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">offset_range</span><span class="p">,</span> <span class="n">offset_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="mi">4</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">8</span>
@@ -707,17 +709,20 @@ document.write(`
                 <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="ow">in</span> <span class="n">CREATION_ABILITY_FIX</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="n">UnitTypeId</span><span class="o">.</span><span class="n">ARCHON</span><span class="p">:</span>
                         <span class="c1"># Hotfix for archons in morph state</span>
-                        <span class="n">creation_ability</span> <span class="o">=</span> <span class="n">AbilityId</span><span class="o">.</span><span class="n">ARCHON_WARP_TARGET</span>
-                        <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span>
+                        <span class="n">creation_ability_id</span> <span class="o">=</span> <span class="n">AbilityId</span><span class="o">.</span><span class="n">ARCHON_WARP_TARGET</span>
+                        <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># Hotfix for rich geysirs</span>
-                        <span class="n">creation_ability</span> <span class="o">=</span> <span class="n">CREATION_ABILITY_FIX</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">]</span>
-                        <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">creation_ability_id</span> <span class="o">=</span> <span class="n">CREATION_ABILITY_FIX</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">]</span>
+                        <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">creation_ability</span><span class="p">:</span> <span class="n">AbilityId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span><span class="o">.</span><span class="n">exact_id</span>
-                    <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">max_build_progress</span><span class="p">[</span><span class="n">creation_ability</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
-                    <span class="n">max_build_progress</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">creation_ability</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">unit</span><span class="o">.</span><span class="n">build_progress</span>
+                    <span class="n">creation_ability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">type_id</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">creation_ability</span>
+                    <span class="k">if</span> <span class="n">creation_ability</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">creation_ability_id</span> <span class="o">=</span> <span class="n">creation_ability</span><span class="o">.</span><span class="n">exact_id</span>
+                    <span class="n">abilities_amount</span><span class="p">[</span><span class="n">creation_ability_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">max_build_progress</span><span class="p">[</span><span class="n">creation_ability_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                    <span class="n">max_build_progress</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">creation_ability_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">unit</span><span class="o">.</span><span class="n">build_progress</span>
                 <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">abilities_amount</span><span class="p">,</span> <span class="n">max_build_progress</span>
@@ -745,7 +750,7 @@ document.write(`
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.do">[docs]</a>
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">do</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">,</span>
         <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">,</span>
         <span class="n">subtract_cost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">subtract_supply</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -817,7 +822,7 @@ document.write(`
 <div class="viewcode-block" id="BotAIInternal.synchronous_do">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.synchronous_do">[docs]</a>
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">synchronous_do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">synchronous_do</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">UnitCommand</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Not recommended. Use self.do instead to reduce lag.</span>
 <span class="sd">        This function is only useful for realtime=True in the first frame of the game to instantly produce a worker</span>
@@ -829,7 +834,7 @@ document.write(`
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot afford action </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">ActionResult</span><span class="o">.</span><span class="n">Error</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">:</span> <span class="n">ActionResult</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>  <span class="c1"># pyrefly: ignore</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">r</span><span class="p">:</span>  <span class="c1"># success</span>
             <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_data</span><span class="o">.</span><span class="n">calculate_ability_cost</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">ability</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">minerals</span> <span class="o">-=</span> <span class="n">cost</span><span class="o">.</span><span class="n">minerals</span>
@@ -872,11 +877,14 @@ document.write(`
                 <span class="c1"># Different action, return True</span>
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span>  <span class="c1"># pyrefly: ignore</span>
                     <span class="c1"># Same action, remove action if same target unit</span>
                     <span class="k">return</span> <span class="kc">False</span>
             <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="c1"># pyrefly: ignore</span>
+                    <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">current_action</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">y</span>
+                <span class="p">):</span>
                     <span class="c1"># Same action, remove action if same target position</span>
                     <span class="k">return</span> <span class="kc">False</span>
             <span class="k">return</span> <span class="kc">True</span>
@@ -928,7 +936,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_time_before_step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">:</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_step</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">proto_game_info</span><span class="p">:</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param state:</span>
 <span class="sd">        :param proto_game_info:</span>
@@ -969,7 +977,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">enemy_race</span> <span class="o">=</span> <span class="n">Race</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_enemy_units</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">race</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_units</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_units</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Set of enemy units detected by own sensor tower, as blips have less unit information than normal visible units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blips</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Blip</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_units</span><span class="p">:</span> <span class="n">Units</span> <span class="o">=</span> <span class="n">Units</span><span class="p">([],</span> <span class="bp">self</span><span class="p">)</span>
@@ -1095,7 +1103,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">game_loop</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_advance_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_advance_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Advances the game loop by amount of &#39;steps&#39;. This function is meant to be used as a debugging and testing tool only.</span>
 <span class="sd">        If you are using this, please be aware of the consequences, e.g. &#39;self.units&#39; will be filled with completely new data.&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_after_step</span><span class="p">()</span>
@@ -1110,7 +1118,7 @@ document.write(`
 <div class="viewcode-block" id="BotAIInternal.issue_events">
 <a class="viewcode-back" href="../../bot_ai/index.html#sc2.bot_ai_internal.BotAIInternal.issue_events">[docs]</a>
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">issue_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">issue_events</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This function will be automatically run from main.py and triggers the following functions:</span>
 <span class="sd">        - on_unit_created</span>
 <span class="sd">        - on_unit_destroyed</span>
@@ -1126,7 +1134,7 @@ document.write(`
 
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_unit_added_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_unit_added_events</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units_previous_map</span> <span class="ow">and</span> <span class="n">unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unit_tags_seen_this_game</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_unit_tags_seen_this_game</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
@@ -1143,14 +1151,14 @@ document.write(`
                     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_type_changed</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">previous_frame_unit</span><span class="o">.</span><span class="n">type_id</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_upgrade_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_upgrade_events</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">difference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">upgrades</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span>
         <span class="k">for</span> <span class="n">upgrade_completed</span> <span class="ow">in</span> <span class="n">difference</span><span class="p">:</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_upgrade_complete</span><span class="p">(</span><span class="n">upgrade_completed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_previous_upgrades</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">upgrades</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_building_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_building_events</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structures_previous_map</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">structure</span><span class="o">.</span><span class="n">build_progress</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1182,7 +1190,7 @@ document.write(`
                     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_building_construction_complete</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_vision_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_vision_events</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Call events for enemy unit entered vision</span>
         <span class="k">for</span> <span class="n">enemy_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">enemy_units</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">enemy_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_units_previous_map</span><span class="p">:</span>
@@ -1200,7 +1208,7 @@ document.write(`
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_enemy_unit_left_vision</span><span class="p">(</span><span class="n">enemy_structure_tag</span><span class="p">)</span>
 
     <span class="nd">@final</span>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_unit_dead_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_issue_unit_dead_events</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">BotAI</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">unit_tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">dead_units</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_units_previous_map</span><span class="p">):</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_unit_destroyed</span><span class="p">(</span><span class="n">unit_tag</span><span class="p">)</span>
 

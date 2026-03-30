@@ -266,12 +266,11 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for sc2.client</h1><div class="highlight"><pre>
-<span></span><span class="c1"># pyre-ignore-all-errors[6, 9, 16, 29, 58]</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aiohttp</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientWebSocketResponse</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
@@ -307,8 +306,10 @@ document.write(`
         <span class="c1"># How many frames will be waited between iterations before the next one is called</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game_step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_replay_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">save_replay_path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_player_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_game_result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># The following will be set on join_game()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_player_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pyrefly: ignore</span>
+        <span class="c1"># The following will be set on leave()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_game_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Result</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pyrefly: ignore</span>
         <span class="c1"># Store a hash value of all the debug requests to prevent sending the same ones again if they haven&#39;t changed last frame</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug_hash_tuple_last_iteration</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug_draw_last_frame</span> <span class="o">=</span> <span class="kc">False</span>
@@ -359,26 +360,26 @@ document.write(`
         <span class="k">if</span> <span class="n">race</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observed_player_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;observed_player_id is of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">observed_player_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="c1"># join as observer</span>
-            <span class="n">req</span> <span class="o">=</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestJoinGame</span><span class="p">(</span><span class="n">observed_player_id</span><span class="o">=</span><span class="n">observed_player_id</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">ifopts</span><span class="p">)</span>
+            <span class="n">request</span> <span class="o">=</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestJoinGame</span><span class="p">(</span><span class="n">observed_player_id</span><span class="o">=</span><span class="n">observed_player_id</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">ifopts</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">race</span><span class="p">,</span> <span class="n">Race</span><span class="p">)</span>
-            <span class="n">req</span> <span class="o">=</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestJoinGame</span><span class="p">(</span><span class="n">race</span><span class="o">=</span><span class="n">race</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">ifopts</span><span class="p">)</span>
+            <span class="n">request</span> <span class="o">=</span> <span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestJoinGame</span><span class="p">(</span><span class="n">race</span><span class="o">=</span><span class="n">race</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">ifopts</span><span class="p">)</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
 
         <span class="k">if</span> <span class="n">portconfig</span><span class="p">:</span>
-            <span class="n">req</span><span class="o">.</span><span class="n">server_ports</span><span class="o">.</span><span class="n">game_port</span> <span class="o">=</span> <span class="n">portconfig</span><span class="o">.</span><span class="n">server</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">req</span><span class="o">.</span><span class="n">server_ports</span><span class="o">.</span><span class="n">base_port</span> <span class="o">=</span> <span class="n">portconfig</span><span class="o">.</span><span class="n">server</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">server_ports</span><span class="o">.</span><span class="n">game_port</span> <span class="o">=</span> <span class="n">portconfig</span><span class="o">.</span><span class="n">server</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">server_ports</span><span class="o">.</span><span class="n">base_port</span> <span class="o">=</span> <span class="n">portconfig</span><span class="o">.</span><span class="n">server</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="k">for</span> <span class="n">ppc</span> <span class="ow">in</span> <span class="n">portconfig</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">client_ports</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">client_ports</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>  <span class="c1"># pyrefly: ignore</span>
                 <span class="n">p</span><span class="o">.</span><span class="n">game_port</span> <span class="o">=</span> <span class="n">ppc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">p</span><span class="o">.</span><span class="n">base_port</span> <span class="o">=</span> <span class="n">ppc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;name is of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">req</span><span class="o">.</span><span class="n">player_name</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">player_name</span> <span class="o">=</span> <span class="n">name</span>
 
-        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">join_game</span><span class="o">=</span><span class="n">req</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_game_result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">join_game</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_game_result</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pyrefly: ignore</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_player_id</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">join_game</span><span class="o">.</span><span class="n">player_id</span>
         <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">join_game</span><span class="o">.</span><span class="n">player_id</span>
 
@@ -423,7 +424,7 @@ document.write(`
                 <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">observation</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestObservation</span><span class="p">())</span>
                 <span class="k">assert</span> <span class="n">result</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">player_result</span>
 
-            <span class="n">player_id_to_result</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">player_id_to_result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Result</span><span class="p">]()</span>
             <span class="k">for</span> <span class="n">pr</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">observation</span><span class="o">.</span><span class="n">player_result</span><span class="p">:</span>
                 <span class="n">player_id_to_result</span><span class="p">[</span><span class="n">pr</span><span class="o">.</span><span class="n">player_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">Result</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_game_result</span> <span class="o">=</span> <span class="n">player_id_to_result</span>
@@ -490,18 +491,23 @@ document.write(`
 
         <span class="c1"># On realtime=True, might get an error here: sc2.protocol.ProtocolError: [&#39;Not in a game&#39;]</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
-                <span class="n">action</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestAction</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">(</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">Action</span><span class="p">(</span><span class="n">action_raw</span><span class="o">=</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">combine_actions</span><span class="p">(</span><span class="n">actions</span><span class="p">)))</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+                <span class="n">action</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestAction</span><span class="p">(</span>
+                    <span class="c1"># pyrefly: ignore</span>
+                    <span class="n">actions</span><span class="o">=</span><span class="p">(</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">Action</span><span class="p">(</span><span class="n">action_raw</span><span class="o">=</span><span class="n">action</span><span class="p">)</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">combine_actions</span><span class="p">(</span><span class="n">actions</span><span class="p">))</span>
+                <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="n">ProtocolError</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">return_successes</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">ActionResult</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">result</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">ActionResult</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">result</span> <span class="k">if</span> <span class="n">ActionResult</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ActionResult</span><span class="o">.</span><span class="n">Success</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">ActionResult</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">result</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">ActionResult</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">result</span> <span class="k">if</span> <span class="n">ActionResult</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ActionResult</span><span class="o">.</span><span class="n">Success</span>
+        <span class="p">]</span>
 
 <div class="viewcode-block" id="Client.query_pathing">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.query_pathing">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_pathing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_pathing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Caution: returns &quot;None&quot; when path not found</span>
 <span class="sd">        Try to combine queries with the function below because the pathing query is generally slow.</span>
 
@@ -522,25 +528,25 @@ document.write(`
 
 <div class="viewcode-block" id="Client.query_pathings">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.query_pathings">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_pathings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zipped_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">query_pathings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zipped_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Unit</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Usage: await self.query_pathings([[unit1, target2], [unit2, target2]])</span>
 <span class="sd">        -&gt; returns [distance1, distance2]</span>
 <span class="sd">        Caution: returns 0 when path not found</span>
 
 <span class="sd">        :param zipped_list:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">zipped_list</span><span class="p">,</span> <span class="s2">&quot;No zipped_list&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Unit</span><span class="p">)),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">Point2</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">Point2</span><span class="p">):</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQueryPathing</span><span class="p">(</span><span class="n">start_pos</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">,</span> <span class="n">end_pos</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">)</span> <span class="k">for</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">zipped_list</span>
+        <span class="k">assert</span> <span class="n">zipped_list</span><span class="p">,</span> <span class="s2">&quot;No entry in zipped_list&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQueryPathing</span><span class="p">(</span>
+                <span class="c1"># pyrefly: ignore</span>
+                <span class="n">unit_tag</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">tag</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">Unit</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="c1"># pyrefly: ignore</span>
+                <span class="n">start_pos</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">Unit</span><span class="p">)</span> <span class="k">else</span> <span class="n">p1</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">,</span>
+                <span class="n">end_pos</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="p">(</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQueryPathing</span><span class="p">(</span><span class="n">unit_tag</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">end_pos</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">)</span> <span class="k">for</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">zipped_list</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">zipped_list</span>
+        <span class="p">)</span>
+        <span class="c1"># pyrefly: ignore</span>
         <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQuery</span><span class="p">(</span><span class="n">pathing</span><span class="o">=</span><span class="n">path</span><span class="p">))</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">pathing</span><span class="p">]</span></div>
 
@@ -557,6 +563,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">query</span><span class="o">=</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQuery</span><span class="p">(</span>
+                <span class="c1"># pyrefly: ignore</span>
                 <span class="n">placements</span><span class="o">=</span><span class="p">(</span>
                     <span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQueryBuildingPlacement</span><span class="p">(</span><span class="n">ability_id</span><span class="o">=</span><span class="n">ability</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">target_pos</span><span class="o">=</span><span class="n">position</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">positions</span>
@@ -584,6 +591,7 @@ document.write(`
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ability</span><span class="p">,</span> <span class="n">AbilityData</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">query</span><span class="o">=</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQuery</span><span class="p">(</span>
+                <span class="c1"># pyrefly: ignore</span>
                 <span class="n">placements</span><span class="o">=</span><span class="p">(</span>
                     <span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQueryBuildingPlacement</span><span class="p">(</span><span class="n">ability_id</span><span class="o">=</span><span class="n">ability</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">target_pos</span><span class="o">=</span><span class="n">position</span><span class="o">.</span><span class="n">as_Point2D</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">positions</span>
@@ -610,13 +618,14 @@ document.write(`
         <span class="k">assert</span> <span class="n">units</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">query</span><span class="o">=</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQuery</span><span class="p">(</span>
+                <span class="c1"># pyrefly: ignore</span>
                 <span class="n">abilities</span><span class="o">=</span><span class="p">(</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQueryAvailableAbilities</span><span class="p">(</span><span class="n">unit_tag</span><span class="o">=</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">),</span>
                 <span class="n">ignore_resource_requirements</span><span class="o">=</span><span class="n">ignore_resource_requirements</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Fix for bots that only query a single unit, may be removed soon &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">input_was_a_list</span><span class="p">:</span>
-            <span class="c1"># pyre-fixme[7]</span>
+            <span class="c1"># pyrefly: ignore</span>
             <span class="k">return</span> <span class="p">[[</span><span class="n">AbilityId</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ability_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">abilities</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">abilities</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">[[</span><span class="n">AbilityId</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ability_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">abilities</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">abilities</span><span class="p">]</span></div>
 
@@ -627,9 +636,9 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span> <span class="o">|</span> <span class="n">Units</span><span class="p">,</span> <span class="n">ignore_resource_requirements</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="n">AbilityId</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Query abilities of multiple units&quot;&quot;&quot;</span>
-
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">query</span><span class="o">=</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQuery</span><span class="p">(</span>
+                <span class="c1"># pyrefly: ignore</span>
                 <span class="n">abilities</span><span class="o">=</span><span class="p">(</span><span class="n">query_pb</span><span class="o">.</span><span class="n">RequestQueryAvailableAbilities</span><span class="p">(</span><span class="n">unit_tag</span><span class="o">=</span><span class="n">unit</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">),</span>
                 <span class="n">ignore_resource_requirements</span><span class="o">=</span><span class="n">ignore_resource_requirements</span><span class="p">,</span>
             <span class="p">)</span>
@@ -644,7 +653,11 @@ document.write(`
         <span class="n">ch</span> <span class="o">=</span> <span class="n">ChatChannel</span><span class="o">.</span><span class="n">Team</span> <span class="k">if</span> <span class="n">team_only</span> <span class="k">else</span> <span class="n">ChatChannel</span><span class="o">.</span><span class="n">Broadcast</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">action</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestAction</span><span class="p">(</span>
-                <span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">Action</span><span class="p">(</span><span class="n">action_chat</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">ActionChat</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="n">ch</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">))]</span>
+                <span class="n">actions</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">sc_pb</span><span class="o">.</span><span class="n">Action</span><span class="p">(</span>
+                        <span class="n">action_chat</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">ActionChat</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="n">ch</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>  <span class="c1"># type: ignore[bad-argument-type]</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
 
@@ -667,7 +680,9 @@ document.write(`
                     <span class="n">sc_pb</span><span class="o">.</span><span class="n">Action</span><span class="p">(</span>
                         <span class="n">action_raw</span><span class="o">=</span><span class="n">raw_pb</span><span class="o">.</span><span class="n">ActionRaw</span><span class="p">(</span>
                             <span class="n">toggle_autocast</span><span class="o">=</span><span class="n">raw_pb</span><span class="o">.</span><span class="n">ActionRawToggleAutocast</span><span class="p">(</span>
-                                <span class="n">ability_id</span><span class="o">=</span><span class="n">ability</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">unit_tags</span><span class="o">=</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">)</span>
+                                <span class="n">ability_id</span><span class="o">=</span><span class="n">ability</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                <span class="c1"># pyrefly: ignore</span>
+                                <span class="n">unit_tags</span><span class="o">=</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">),</span>
                             <span class="p">)</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
@@ -678,22 +693,18 @@ document.write(`
 
 <div class="viewcode-block" id="Client.debug_create_unit">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_create_unit">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_create_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit_spawn_commands</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">UnitTypeId</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_create_unit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">unit_spawn_commands</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">UnitTypeId</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Point2</span> <span class="o">|</span> <span class="n">Point3</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Usage example (will spawn 5 marines in the center of the map for player ID 1):</span>
 <span class="sd">        await self._client.debug_create_unit([[UnitTypeId.MARINE, 5, self._game_info.map_center, 1]])</span>
 
 <span class="sd">        :param unit_spawn_commands:&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit_spawn_commands</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">unit_spawn_commands</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit_spawn_commands</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">unit_spawn_commands</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">4</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit_spawn_commands</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">UnitTypeId</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">unit_spawn_commands</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># careful, in realtime=True this function may create more units</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit_spawn_commands</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="n">Point2</span><span class="p">,</span> <span class="n">Point3</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">unit_spawn_commands</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">unit_spawn_commands</span><span class="p">,</span> <span class="s2">&quot;List is empty&quot;</span>
 
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span>
+                <span class="c1"># pyrefly: ignore</span>
                 <span class="n">debug</span><span class="o">=</span><span class="p">(</span>
                     <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span>
                         <span class="n">create_unit</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCreateUnit</span><span class="p">(</span>
@@ -722,6 +733,7 @@ document.write(`
         <span class="k">assert</span> <span class="n">unit_tags</span>
 
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="c1"># pyrefly: ignore</span>
             <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">kill_unit</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugKillUnit</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="n">unit_tags</span><span class="p">))])</span>
         <span class="p">)</span></div>
 
@@ -972,15 +984,19 @@ document.write(`
                             <span class="n">debug</span><span class="o">=</span><span class="p">[</span>
                                 <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span>
                                     <span class="n">draw</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugDraw</span><span class="p">(</span>
+                                        <span class="c1"># pyrefly: ignore</span>
                                         <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">to_proto</span><span class="p">()</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_texts</span><span class="p">]</span>
                                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_texts</span>
                                         <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                                        <span class="c1"># pyrefly: ignore</span>
                                         <span class="n">lines</span><span class="o">=</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">to_proto</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_lines</span><span class="p">]</span>
                                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_lines</span>
                                         <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                                        <span class="c1"># pyrefly: ignore</span>
                                         <span class="n">boxes</span><span class="o">=</span><span class="p">[</span><span class="n">box</span><span class="o">.</span><span class="n">to_proto</span><span class="p">()</span> <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_boxes</span><span class="p">]</span>
                                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_boxes</span>
                                         <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                                        <span class="c1"># pyrefly: ignore</span>
                                         <span class="n">spheres</span><span class="o">=</span><span class="p">[</span><span class="n">sphere</span><span class="o">.</span><span class="n">to_proto</span><span class="p">()</span> <span class="k">for</span> <span class="n">sphere</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_spheres</span><span class="p">]</span>
                                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_spheres</span>
                                         <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
@@ -1002,6 +1018,7 @@ document.write(`
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
                 <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span>
                     <span class="n">debug</span><span class="o">=</span><span class="p">[</span>
+                        <span class="c1"># pyrefly: ignore</span>
                         <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">draw</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugDraw</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boxes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spheres</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
                     <span class="p">]</span>
                 <span class="p">)</span>
@@ -1038,7 +1055,9 @@ document.write(`
                 <span class="n">debug</span><span class="o">=</span><span class="p">(</span>
                     <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span>
                         <span class="n">unit_value</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugSetUnitValue</span><span class="p">(</span>
-                            <span class="n">unit_value</span><span class="o">=</span><span class="n">unit_value</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">unit_tag</span><span class="o">=</span><span class="n">unit_tag</span>
+                            <span class="n">unit_value</span><span class="o">=</span><span class="n">unit_value</span><span class="p">,</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+                            <span class="n">value</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+                            <span class="n">unit_tag</span><span class="o">=</span><span class="n">unit_tag</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                     <span class="k">for</span> <span class="n">unit_tag</span> <span class="ow">in</span> <span class="n">unit_tags</span>
@@ -1054,7 +1073,14 @@ document.write(`
         <span class="n">delay_in_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">delay_in_seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
             <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span>
-                <span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">test_process</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugTestProcess</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">delay_ms</span><span class="o">=</span><span class="n">delay_in_ms</span><span class="p">))]</span>
+                <span class="n">debug</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span>
+                        <span class="n">test_process</span><span class="o">=</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugTestProcess</span><span class="p">(</span>
+                            <span class="n">test</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># pyrefly: ignore</span>
+                            <span class="n">delay_ms</span><span class="o">=</span><span class="n">delay_in_ms</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
 
@@ -1063,84 +1089,108 @@ document.write(`
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_show_map">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_show_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reveals the whole map for the bot. Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_control_enemy">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_control_enemy">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_control_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Allows control over enemy units and structures similar to team games control - does not allow the bot to spend the opponent&#39;s ressources. Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_food">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_food">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_food</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Should disable food usage (does not seem to work?). Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_free">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_free">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_free</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Units, structures and upgrades are free of mineral and gas cost. Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">4</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">4</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_all_resources">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_all_resources">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_all_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gives 5000 minerals and 5000 vespene to the bot.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">5</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_god">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_god">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_god</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Your units and structures no longer take any damage. Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">6</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">6</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_minerals">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_minerals">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_minerals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gives 5000 minerals to the bot.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_gas">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_gas">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_gas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gives 5000 vespene to the bot. This does not seem to be working.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">8</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">8</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_cooldown">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_cooldown">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_cooldown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Disables cooldowns of unit abilities for the bot. Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">9</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">9</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_tech_tree">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_tech_tree">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_tech_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes all tech requirements (e.g. can build a factory without having a barracks). Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">10</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">10</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_upgrade">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_upgrade">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_upgrade</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Researches all currently available upgrades. E.g. using it once unlocks combat shield, stimpack and 1-1. Using it a second time unlocks 2-2 and all other upgrades stay researched.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.debug_fast_build">
 <a class="viewcode-back" href="../../client/index.html#sc2.client.Client.debug_fast_build">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">debug_fast_build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the build time of units and structures and upgrades to zero. Using it a second time disables it again.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">12</span><span class="p">)]))</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">debug</span><span class="o">=</span><span class="n">sc_pb</span><span class="o">.</span><span class="n">RequestDebug</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="p">[</span><span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugCommand</span><span class="p">(</span><span class="n">game_state</span><span class="o">=</span><span class="mi">12</span><span class="p">)])</span>  <span class="c1"># pyrefly: ignore[bad-argument-type]</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Client.quick_save">
@@ -1172,12 +1222,12 @@ document.write(`
             <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
         <span class="c1"># Need to check if not of type Point3 because Point3 inherits from tuple</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">Point3</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">g</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">b</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="c1"># In case color is of type Point3</span>
         <span class="n">r</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
         <span class="n">g</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
         <span class="n">b</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
-        <span class="c1"># pyre-ignore[20]</span>
+
         <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">*=</span> <span class="mi">255</span>
             <span class="n">g</span> <span class="o">*=</span> <span class="mi">255</span>
@@ -1204,6 +1254,7 @@ document.write(`
             <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_debug_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">),</span>
             <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span>
             <span class="n">virtual_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="o">.</span><span class="n">to3</span><span class="o">.</span><span class="n">as_Point</span><span class="p">,</span>
+            <span class="c1"># pyrefly: ignore</span>
             <span class="n">world_pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1215,20 +1266,21 @@ document.write(`
 <span class="k">class</span><span class="w"> </span><span class="nc">DrawItemWorldText</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">text</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">font_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span> <span class="o">=</span> <span class="n">start_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span> <span class="o">=</span> <span class="n">font_size</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugText</span><span class="p">(</span>
             <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_debug_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">),</span>
             <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span>
+            <span class="c1"># pyrefly: ignore</span>
             <span class="n">virtual_pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">world_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="o">.</span><span class="n">as_Point</span><span class="p">,</span>
             <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_font_size</span><span class="p">,</span>
@@ -1241,13 +1293,13 @@ document.write(`
 <span class="k">class</span><span class="w"> </span><span class="nc">DrawItemLine</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span><span class="p">,</span>
+        <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span><span class="p">,</span>
         <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">end_point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span> <span class="o">=</span> <span class="n">start_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span> <span class="o">=</span> <span class="n">end_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugLine</span><span class="p">(</span>
@@ -1262,13 +1314,13 @@ document.write(`
 <span class="k">class</span><span class="w"> </span><span class="nc">DrawItemBox</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span><span class="p">,</span>
+        <span class="n">end_point</span><span class="p">:</span> <span class="n">Point3</span><span class="p">,</span>
         <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">end_point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span> <span class="o">=</span> <span class="n">start_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_point</span> <span class="o">=</span> <span class="n">end_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugBox</span><span class="p">(</span>
@@ -1284,13 +1336,13 @@ document.write(`
 <span class="k">class</span><span class="w"> </span><span class="nc">DrawItemSphere</span><span class="p">(</span><span class="n">DrawItem</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">start_point</span><span class="p">:</span> <span class="n">Point3</span><span class="p">,</span>
+        <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="n">Point3</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">start_point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">radius</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">:</span> <span class="n">Point3</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_point</span> <span class="o">=</span> <span class="n">start_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">to_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">debug_pb</span><span class="o">.</span><span class="n">DebugSphere</span><span class="p">(</span>

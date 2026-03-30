@@ -395,6 +395,11 @@ document.write(`
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.bot_ai.</span></span><span class="sig-name descname"><span class="pre">BotAI</span></span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/sc2/bot_ai.html#BotAI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sc2.bot_ai.BotAI" title="Link to this definition">#</a></dt>
 <dd><p>Base class for bots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.bot_ai.BotAI" title="sc2.bot_ai.BotAI"><code class="xref py py-class docutils literal notranslate"><span class="pre">BotAI</span></code></a></span>)</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai.BotAI.alert">
 <span class="sig-name descname"><span class="pre">alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alert_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Alert</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/sc2/bot_ai.html#BotAI.alert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sc2.bot_ai.BotAI.alert" title="Link to this definition">#</a></dt>
@@ -1389,6 +1394,11 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 <dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sc2.bot_ai_internal.</span></span><span class="sig-name descname"><span class="pre">BotAIInternal</span></span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/sc2/bot_ai_internal.html#BotAIInternal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal" title="Link to this definition">#</a></dt>
 <dd><p>Base class for bots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.bot_ai.BotAI" title="sc2.bot_ai.BotAI"><code class="xref py py-class docutils literal notranslate"><span class="pre">BotAI</span></code></a></span>)</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array">
 <em class="property"><span class="k"><span class="pre">final</span></span><span class="w"> </span><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convert_tuple_to_numpy_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/sc2/bot_ai_internal.html#BotAIInternal.convert_tuple_to_numpy_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sc2.bot_ai_internal.BotAIInternal.convert_tuple_to_numpy_array" title="Link to this definition">#</a></dt>
@@ -1438,6 +1448,7 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 <li><p><strong>subtract_cost</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>)</p></li>
 <li><p><strong>subtract_supply</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>)</p></li>
 <li><p><strong>can_afford_check</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>)</p></li>
+<li><p><strong>self</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.bot_ai.BotAI" title="sc2.bot_ai.BotAI"><code class="xref py py-class docutils literal notranslate"><span class="pre">BotAI</span></code></a></span>)</p></li>
 <li><p><strong>ignore_warning</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>)</p></li>
 </ul>
 </dd>
@@ -1457,8 +1468,11 @@ Issues would arrise in e.g. siege tank morphing to sieged tank, and then morphin
 - on_building_construction_complete
 - on_upgrade_complete</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.bot_ai.BotAI" title="sc2.bot_ai.BotAI"><code class="xref py py-class docutils literal notranslate"><span class="pre">BotAI</span></code></a></span>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1484,7 +1498,10 @@ This function is only useful for realtime=True in the first frame of the game to
 and split workers on the mineral patches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>action</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></span>)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#sc2.bot_ai.BotAI" title="sc2.bot_ai.BotAI"><code class="xref py py-class docutils literal notranslate"><span class="pre">BotAI</span></code></a></span>)</p></li>
+<li><p><strong>action</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="../unit_command/index.html#sc2.unit_command.UnitCommand" title="sc2.unit_command.UnitCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCommand</span></code></a></span>)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
