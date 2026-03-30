@@ -1339,6 +1339,32 @@ class Unit(HasPosition2D):
         :param queue:
         :param can_afford_check:
         """
+        # Avoid a bug where Terran mech armor research does not start due to an incorrect exact_id from the protobuf. 
+        # Hardcode the correct ID.
+        if upgrade == UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL1:
+            return self(
+                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1,
+                queue=queue,
+                subtract_cost=True,
+                can_afford_check=can_afford_check,
+            )
+
+        if upgrade == UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL2:
+            return self(
+                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2,
+                queue=queue,
+                subtract_cost=True,
+                can_afford_check=can_afford_check,
+            )
+
+        if upgrade == UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL3:
+            return self(
+                AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3,
+                queue=queue,
+                subtract_cost=True,
+                can_afford_check=can_afford_check,
+            )
+
         return self(
             self._bot_object.game_data.upgrades[upgrade.value].research_ability.exact_id,
             queue=queue,
