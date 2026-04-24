@@ -280,8 +280,8 @@ class GameState:
                     # Actions that have a point as target
                     actions.append(
                         ActionRawUnitCommand(
-                            game_loop,
                             raw_unit_command.ability_id,
+                            game_loop,
                             list(raw_unit_command.unit_tags),
                             raw_unit_command.queue_command,
                             Point2.from_proto(raw_unit_command.target_world_space_pos),
@@ -291,8 +291,8 @@ class GameState:
                     # Actions that have a unit as target
                     actions.append(
                         ActionRawUnitCommand(
-                            game_loop,
                             raw_unit_command.ability_id,
+                            game_loop,
                             list(raw_unit_command.unit_tags),
                             raw_unit_command.queue_command,
                             None,
@@ -304,8 +304,8 @@ class GameState:
                 raw_toggle_autocast_action = action_raw.toggle_autocast
                 actions.append(
                     ActionRawToggleAutocast(
-                        game_loop,
                         raw_toggle_autocast_action.ability_id,
+                        game_loop,
                         list(raw_toggle_autocast_action.unit_tags),
                     )
                 )
