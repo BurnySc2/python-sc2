@@ -833,7 +833,7 @@ class Unit(HasPosition2D):
         """Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
         return self._proto.facing
 
-    def facing_difference(self, target: Point2 | Unit) -> float:
+    def relative_facing(self, target: Point2 | Unit) -> float:
         """The angle difference (in radians) between the facing direction and the target point or unit.
 
         The returned angle is positive if the unit is facing left of the target, and negative otherwise.
@@ -856,7 +856,7 @@ class Unit(HasPosition2D):
         :param other_unit:
         :param angle_error:
         """
-        return abs(self.facing_difference(other_unit)) < angle_error
+        return abs(self.relative_facing(other_unit)) < angle_error
 
     @property
     def footprint_radius(self) -> float | None:
