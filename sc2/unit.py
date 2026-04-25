@@ -833,20 +833,30 @@ class Unit(HasPosition2D):
         """Returns direction the unit is facing as a float in range [0,2π). 0 is in direction of x axis."""
         return self._proto.facing
 
-    def is_facing(self, other_unit: Unit, angle_error: float = 0.05) -> bool:
-        """Check if this unit is facing the target unit. If you make angle_error too small, there might be rounding errors. If you make angle_error too big, this function might return false positives.
+    def facing_difference(self, target: Point2 | Unit) -> float:
+        """The angle difference (in radians) between the facing direction and the target point or unit.
+
+        The returned angle is positive if the unit is facing left of the target, and negative otherwise.
+        """
+        target_point = target.position if isinstance(target, Unit) else target
+        dx = target_point.x - self.position.x
+        dy = target_point.y - self.position.y
+        angle = math.atan2(dy, dx)
+        # Plain subtraction (angle - facing) can land outside [-π, π), so we add π, normalize, and remove π again
+        difference = (angle - self.facing + math.pi) % (2 * math.pi) - math.pi
+
+        return difference
+
+    def is_facing(self, other_unit: Point2 | Unit, angle_error: float = 0.05) -> bool:
+        """Check if this unit is facing the target point or unit within a tolerance (in units of radians).
+
+        If you make angle_error too small, there might be rounding errors.
+        If you make angle_error too big, this function might return false positives.
 
         :param other_unit:
         :param angle_error:
         """
-        # TODO perhaps return default True for units that cannot 'face' another unit? e.g. structures (planetary fortress, bunker, missile turret, photon cannon, spine, spore) or sieged tanks
-        angle = math.atan2(
-            other_unit.position_tuple[1] - self.position_tuple[1], other_unit.position_tuple[0] - self.position_tuple[0]
-        )
-        if angle < 0:
-            angle += math.pi * 2
-        angle_difference = math.fabs(angle - self.facing)
-        return angle_difference < angle_error
+        return abs(self.facing_difference(other_unit)) < angle_error
 
     @property
     def footprint_radius(self) -> float | None:
