@@ -271,7 +271,7 @@ class BotAI(BotAIInternal):
 
         return closest
 
-    async def distribute_workers(self, resource_ratio: float = 2) -> None:
+        async def distribute_workers(self, resource_ratio: float = 2) -> None:
         """
         Distributes workers across all the bases taken.
         Keyword `resource_ratio` takes a float. If the current minerals to gas
@@ -351,13 +351,13 @@ class BotAI(BotAIInternal):
                 if not possible_mining_places:
                     possible_mining_places = deficit_mining_places
                 # find closest mining place
-                current_place = min(deficit_mining_places, key=lambda place: place.distance_to(worker))
+                current_place = min(possible_mining_places, key=lambda place: place.distance_to(worker))
+
                 # remove it from the list
                 deficit_mining_places.remove(current_place)
                 # if current place is a gas extraction site, go there
                 if current_place.vespene_contents:
-                    worker.gather(current_place)
-                # if current place is a gas extraction site,
+                    self.do(worker.gather(current_place))
                 # go to the mineral field that is near and has the most minerals left
                 else:
                     local_minerals = (
@@ -366,17 +366,17 @@ class BotAI(BotAIInternal):
                     # local_minerals can be empty if townhall is misplaced
                     target_mineral = max(local_minerals, key=lambda mineral: mineral.mineral_contents, default=None)
                     if target_mineral:
-                        worker.gather(target_mineral)
+                        self.do(worker.gather(target_mineral))
             # more workers to distribute than free mining spots
             # send to closest if worker is doing nothing
             elif worker.is_idle and all_minerals_near_base:
                 target_mineral = min(all_minerals_near_base, key=lambda mineral: mineral.distance_to(worker))
-                worker.gather(target_mineral)
+                self.do(worker.gather(target_mineral))
             else:
                 # there are no deficit mining places and worker is not idle
                 # so dont move him
                 pass
-
+                
     @property_cache_once_per_frame
     def owned_expansions(self) -> dict[Point2, Unit]:
         """Dict of expansions owned by the player with mapping {expansion_location: townhall_structure}."""
