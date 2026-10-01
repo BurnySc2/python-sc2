@@ -804,6 +804,14 @@ def test_units():
     assert scvs.random_or(1)
     assert townhalls.random_or(0)
     assert scvs.random_group_of(11)
+    # Set operations dedupe by tag and keep the order: self first, then other
+    head = Units(scvs[:6], bot)
+    tail = Units(scvs[4:], bot)
+    assert [u.tag for u in head | tail] == [u.tag for u in scvs]
+    assert [u.tag for u in head + tail] == [u.tag for u in scvs]
+    assert [u.tag for u in head & tail] == [u.tag for u in scvs[4:6]]
+    assert [u.tag for u in head - tail] == [u.tag for u in scvs[:4]]
+    assert [u.tag for u in head - head] == []
     assert not scvs.random_group_of(0)
     assert not townhalls.random_group_of(0)
     # assert not scvs.in_attack_range_of(townhalls.first)

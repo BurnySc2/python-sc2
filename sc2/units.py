@@ -50,11 +50,9 @@ class Units(list[Unit]):
         """
         :param other:
         """
+        self_tags = {self_unit.tag for self_unit in self}
         return Units(
-            chain(
-                iter(self),
-                (other_unit for other_unit in other if other_unit.tag not in (self_unit.tag for self_unit in self)),
-            ),
+            chain(iter(self), (other_unit for other_unit in other if other_unit.tag not in self_tags)),
             self._bot_object,
         )
 
@@ -62,11 +60,9 @@ class Units(list[Unit]):
         """
         :param other:
         """
+        self_tags = {self_unit.tag for self_unit in self}
         return Units(
-            chain(
-                iter(self),
-                (other_unit for other_unit in other if other_unit.tag not in (self_unit.tag for self_unit in self)),
-            ),
+            chain(iter(self), (other_unit for other_unit in other if other_unit.tag not in self_tags)),
             self._bot_object,
         )
 
@@ -74,8 +70,9 @@ class Units(list[Unit]):
         """
         :param other:
         """
+        self_tags = {self_unit.tag for self_unit in self}
         return Units(
-            (other_unit for other_unit in other if other_unit.tag in (self_unit.tag for self_unit in self)),
+            (other_unit for other_unit in other if other_unit.tag in self_tags),
             self._bot_object,
         )
 
@@ -83,8 +80,9 @@ class Units(list[Unit]):
         """
         :param other:
         """
+        other_tags = {other_unit.tag for other_unit in other}
         return Units(
-            (self_unit for self_unit in self if self_unit.tag not in (other_unit.tag for other_unit in other)),
+            (self_unit for self_unit in self if self_unit.tag not in other_tags),
             self._bot_object,
         )
 
