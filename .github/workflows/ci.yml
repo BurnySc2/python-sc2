@@ -1,24 +1,24 @@
 # If you change the name, change the link on  the README.md for the badge too
 name: Tests
 
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 on:
   push:
-    paths:
-      - sc2/**
-      - examples/**
-      - test/**
-      - docs_generate/**
-      - .pre-commit-config.yaml
-      - generate_dicts_from_data_json.py
-      - generate_id_constants_from_stableid.py
-      - uv.lock
-      - pyproject.toml
-      - README.md
-      - .github/workflows/ci.yml
+    branches:
+      - master
+      - develop
   pull_request:
     branches:
       - master
       - develop
+  workflow_dispatch: {}
 
 env:
   # Docker image version, see https://hub.docker.com/r/burnysc2/python-sc2-docker/tags
@@ -35,19 +35,21 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        run: pip install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install dependencies
         run: |
-          uv sync --frozen --no-cache --no-install-project
+          uv sync --frozen --no-install-project
           uv run pre-commit install
 
       - name: Run pre-commit hooks
@@ -59,19 +61,21 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        run: pip install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install dependencies
         run: |
-          uv sync --frozen --no-cache --no-install-project
+          uv sync --frozen --no-install-project
           uv run pre-commit install
 
       - name: Run generate dicts
@@ -112,19 +116,21 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
         id: setup-python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install uv
-        run: pip install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --frozen --no-cache --no-install-project
+        run: uv sync --frozen --no-install-project
 
       - name: Run pytest
         run: uv run python -m pytest test
@@ -169,7 +175,7 @@ jobs:
 
     steps:
       # Copy data from repository
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Print directories and files
         run: sudo apt-get install tree && tree
@@ -220,7 +226,7 @@ jobs:
 
     steps:
       # Copy data from repository
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Print directories and files
         run: sudo apt-get install tree && tree
@@ -249,7 +255,7 @@ jobs:
   #
   #    steps:
   #    # Copy data from repository
-  #    - uses: actions/checkout@v3
+  #    - uses: actions/checkout@v4
   #
   #    - name: Print directories and files
   #      run: |
@@ -281,7 +287,7 @@ jobs:
       IMAGE_NAME: burnysc2/python-sc2-docker:local
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Load and build docker image
         # Build docker image from Dockerfile using specific python and sc2 version
@@ -345,18 +351,20 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        run: pip install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --frozen --no-cache --no-install-project
+        run: uv sync --frozen --no-install-project
 
       - name: Run uv radon
         run: uv run radon cc sc2/ -a -nb
@@ -368,18 +376,20 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        run: pip install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --frozen --no-cache --no-install-project
+        run: uv sync --frozen --no-install-project
 
       - name: Build docs from scratch
         run: |
@@ -407,15 +417,17 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        run: pip install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Remove test folder to not include it in package
         run: rm -rf test
