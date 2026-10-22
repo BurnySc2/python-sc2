@@ -323,11 +323,9 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param other:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">self_tags</span> <span class="o">=</span> <span class="p">{</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
-            <span class="n">chain</span><span class="p">(</span>
-                <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
-                <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)),</span>
-            <span class="p">),</span>
+            <span class="n">chain</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self_tags</span><span class="p">)),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -335,11 +333,9 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param other:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">self_tags</span> <span class="o">=</span> <span class="p">{</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
-            <span class="n">chain</span><span class="p">(</span>
-                <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
-                <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)),</span>
-            <span class="p">),</span>
+            <span class="n">chain</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self_tags</span><span class="p">)),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -347,8 +343,9 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param other:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">self_tags</span> <span class="o">=</span> <span class="p">{</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
-            <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">other_unit</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span> <span class="k">if</span> <span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">self_tags</span><span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -356,8 +353,9 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param other:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">other_tags</span> <span class="o">=</span> <span class="p">{</span><span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">Units</span><span class="p">(</span>
-            <span class="p">(</span><span class="n">self_unit</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">other_unit</span><span class="o">.</span><span class="n">tag</span> <span class="k">for</span> <span class="n">other_unit</span> <span class="ow">in</span> <span class="n">other</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">self_unit</span> <span class="k">for</span> <span class="n">self_unit</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">self_unit</span><span class="o">.</span><span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other_tags</span><span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bot_object</span><span class="p">,</span>
         <span class="p">)</span>
 
