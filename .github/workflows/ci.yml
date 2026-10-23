@@ -35,15 +35,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10
         with:
           enable-cache: true
 
@@ -61,15 +61,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10
         with:
           enable-cache: true
 
@@ -88,7 +88,7 @@ jobs:
           rm -rf sc2/dicts/__pycache__ sc2/dicts_old/__pycache__
 
       - name: Upload generated dicts folder as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Generated_dicts
           path: sc2/dicts
@@ -116,16 +116,16 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python ${{ matrix.python-version }}
         id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10
         with:
           enable-cache: true
 
@@ -175,7 +175,7 @@ jobs:
 
     steps:
       # Copy data from repository
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Print directories and files
         run: sudo apt-get install tree && tree
@@ -226,7 +226,7 @@ jobs:
 
     steps:
       # Copy data from repository
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Print directories and files
         run: sudo apt-get install tree && tree
@@ -255,7 +255,7 @@ jobs:
   #
   #    steps:
   #    # Copy data from repository
-  #    - uses: actions/checkout@v4
+  #    - uses: actions/checkout@v7
   #
   #    - name: Print directories and files
   #      run: |
@@ -287,7 +287,7 @@ jobs:
       IMAGE_NAME: burnysc2/python-sc2-docker:local
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Load and build docker image
         # Build docker image from Dockerfile using specific python and sc2 version
@@ -339,7 +339,7 @@ jobs:
           echo "Upload htmlcov folder because it was mounted in container, so it will be available in host machine"
 
       - name: Upload htmlcov/ folder as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Coverage_report
           path: htmlcov
@@ -351,15 +351,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10
         with:
           enable-cache: true
 
@@ -376,15 +376,15 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10
         with:
           enable-cache: true
 
@@ -403,7 +403,7 @@ jobs:
 
       - name: Publish to Github Pages
         if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-        uses: JamesIves/github-pages-deploy-action@releases/v4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BASE_BRANCH: develop # The branch the action should deploy from.
@@ -417,15 +417,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python ${{ env.LATEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.LATEST_PYTHON_VERSION }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10
         with:
           enable-cache: true
 
