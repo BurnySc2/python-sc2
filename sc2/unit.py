@@ -50,6 +50,7 @@ from sc2.constants import (
     UNIT_COLOSSUS,
     UNIT_ORACLE,
     UNIT_PHOTONCANNON,
+    UNIT_VOIDRAY,
     transforming,
 )
 from sc2.data import Attribute, CloakState, Race, Target, race_gas, warpgate_abilities
@@ -217,7 +218,7 @@ class Unit(HasPosition2D):
     def can_attack(self) -> bool:
         """Checks if the unit can attack at all."""
         # TODO BATTLECRUISER doesnt have weapons in proto?!
-        return bool(self._weapons) or self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}
+        return bool(self._weapons) or self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE, UNIT_VOIDRAY}
 
     @property
     def can_attack_both(self) -> bool:
@@ -227,7 +228,7 @@ class Unit(HasPosition2D):
     @cached_property
     def can_attack_ground(self) -> bool:
         """Checks if the unit can attack ground units."""
-        if self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE}:
+        if self.type_id in {UNIT_BATTLECRUISER, UNIT_ORACLE, UNIT_VOIDRAY}:
             return True
         if self._weapons:
             return any(weapon.type in TARGET_GROUND for weapon in self._weapons)
@@ -247,7 +248,7 @@ class Unit(HasPosition2D):
         """Returns the range against ground units. Does not include upgrades."""
         if self.type_id == UNIT_ORACLE:
             return 4
-        if self.type_id == UNIT_BATTLECRUISER:
+        if self.type_id in {UNIT_BATTLECRUISER, UNIT_VOIDRAY}:
             return 6
         if self.can_attack_ground:
             weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_GROUND), None)
@@ -258,7 +259,7 @@ class Unit(HasPosition2D):
     @cached_property
     def can_attack_air(self) -> bool:
         """Checks if the unit can air attack at all. Does not include upgrades."""
-        if self.type_id == UNIT_BATTLECRUISER:
+        if self.type_id in {UNIT_BATTLECRUISER, UNIT_VOIDRAY}:
             return True
         if self._weapons:
             return any(weapon.type in TARGET_AIR for weapon in self._weapons)
@@ -276,7 +277,7 @@ class Unit(HasPosition2D):
     @cached_property
     def air_range(self) -> float:
         """Returns the range against air units. Does not include upgrades."""
-        if self.type_id == UNIT_BATTLECRUISER:
+        if self.type_id in {UNIT_BATTLECRUISER, UNIT_VOIDRAY}:
             return 6
         if self.can_attack_air:
             weapon = next((weapon for weapon in self._weapons if weapon.type in TARGET_AIR), None)
