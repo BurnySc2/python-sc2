@@ -279,12 +279,14 @@ class UnitTypeData:
             self._proto.build_time,
         )
 
+
 # Workaround for Blizzard protobuf returning wrong ability IDs (ARMORYRESEARCHSWARM_...)
 UPGRADE_RESEARCH_OVERRIDES: dict[UpgradeId, AbilityId] = {
     UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL1: AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1,
     UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL2: AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2,
     UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL3: AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3,
 }
+
 
 class UpgradeData:
     def __init__(self, game_data: GameData, proto) -> None:
