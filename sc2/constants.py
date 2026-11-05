@@ -168,6 +168,7 @@ IS_MASSIVE: int = Attribute.Massive.value
 IS_PSIONIC: int = Attribute.Psionic.value
 UNIT_BATTLECRUISER: UnitTypeId = UnitTypeId.BATTLECRUISER
 UNIT_ORACLE: UnitTypeId = UnitTypeId.ORACLE
+UNIT_VOIDRAY: UnitTypeId = UnitTypeId.VOIDRAY
 TARGET_GROUND: set[int] = {TargetType.Ground.value, TargetType.Any.value}
 TARGET_AIR: set[int] = {TargetType.Air.value, TargetType.Any.value}
 TARGET_BOTH: set[int] = TARGET_GROUND | TARGET_AIR

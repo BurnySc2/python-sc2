@@ -782,6 +782,24 @@ def test_unit():
     # assert marauder1.calculate_damage_vs_target(marauder_15_hp, include_overkill_damage=False)[0] == 15
 
 
+def test_units_without_weapon_data():
+    """The game data lists no weapon for these units; their attacks are hardcoded."""
+    bot: BotAI = get_map_specific_bot(random.choice(MAPS))
+    proto = type(bot.workers.random._proto)()
+    proto.CopyFrom(bot.workers.random._proto)
+    proto.unit_type = UnitTypeId.VOIDRAY.value
+    void_ray = Unit(proto, bot)
+    try:
+        assert not void_ray._weapons
+        assert void_ray.can_attack
+        assert void_ray.can_attack_both
+        assert void_ray.ground_range == 6
+        assert void_ray.air_range == 6
+    finally:
+        # test_units counts the entries in this shared cache
+        Unit.class_cache.pop(UnitTypeId.VOIDRAY.value, None)
+
+
 def test_units():
     bot: BotAI = get_map_specific_bot(random.choice(MAPS))
     scvs = bot.workers
