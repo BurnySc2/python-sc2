@@ -162,7 +162,7 @@ class Unit(HasPosition2D):
     @property
     def is_structure(self) -> bool:
         """Checks if the unit is a structure."""
-        return IS_STRUCTURE in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.structure_types
 
     @property
     def is_light(self) -> bool:

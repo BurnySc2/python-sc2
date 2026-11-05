@@ -722,6 +722,7 @@ class BotAIInternal(ABC):
         self.reactor_tags: set[int] = set()
 
         worker_types: set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
+        structure_types: frozenset[int] = self.game_data.structure_types
 
         index: int = 0
         for unit in self.state.observation_raw.units:
@@ -760,7 +761,7 @@ class BotAIInternal(ABC):
                 elif alliance == 1:
                     self.all_own_units.append(unit_obj)
                     unit_id: UnitTypeId = unit_obj.type_id
-                    if unit_obj.is_structure:
+                    if unit_type in structure_types:
                         self.structures.append(unit_obj)
                         if unit_id in race_townhalls[self.race]:
                             self.townhalls.append(unit_obj)
@@ -790,7 +791,7 @@ class BotAIInternal(ABC):
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
                     self.all_enemy_units.append(unit_obj)
-                    if unit_obj.is_structure:
+                    if unit_type in structure_types:
                         self.enemy_structures.append(unit_obj)
                     else:
                         self.enemy_units.append(unit_obj)
