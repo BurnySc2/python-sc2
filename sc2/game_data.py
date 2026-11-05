@@ -307,7 +307,7 @@ class UpgradeData:
         return UpgradeId(self._proto.upgrade_id)
 
     @property
-    def research_ability(self) -> Optional[AbilityData]:
+    def research_ability(self) -> AbilityData | None:
         # Check if the upgrade has a known protobuf ability ID bug
         if self.id in UPGRADE_RESEARCH_OVERRIDES:
             ability_id = UPGRADE_RESEARCH_OVERRIDES[self.id].value
