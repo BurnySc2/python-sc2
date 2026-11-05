@@ -34,7 +34,6 @@ from sc2.constants import (
     IS_RETURNING,
     IS_REVEALED,
     IS_SNAPSHOT,
-    IS_STRUCTURE,
     IS_VISIBLE,
     OFF_CREEP_SPEED_INCREASE_DICT,
     OFF_CREEP_SPEED_UPGRADE_DICT,
@@ -162,7 +161,7 @@ class Unit(HasPosition2D):
     @property
     def is_structure(self) -> bool:
         """Checks if the unit is a structure."""
-        return IS_STRUCTURE in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.structure_types
 
     @property
     def is_light(self) -> bool:

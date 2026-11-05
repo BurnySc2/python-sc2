@@ -31,6 +31,10 @@ class GameData:
         }
         self.units: dict[int, UnitTypeData] = {u.unit_id: UnitTypeData(self, u) for u in data.units if u.available}
         self.upgrades: dict[int, UpgradeData] = {u.upgrade_id: UpgradeData(self, u) for u in data.upgrades}
+        # Precomputed structure type IDs (raw ints) for O(1) membership checks
+        self.structure_types: frozenset[int] = frozenset(
+            u.unit_id for u in data.units if u.available and Attribute.Structure.value in u.attributes
+        )
         # Cached UnitTypeIds so that conversion does not take long. This needs to be moved elsewhere if a new GameData object is created multiple times per game
 
     @lru_cache(maxsize=256)
