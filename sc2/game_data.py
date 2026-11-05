@@ -8,6 +8,7 @@ from functools import lru_cache
 
 from sc2.data import Attribute, Race
 from sc2.ids.ability_id import AbilityId
+from sc2.ids.upgrade_id import UpgradeId
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.unit_command import UnitCommand
 
@@ -278,6 +279,12 @@ class UnitTypeData:
             self._proto.build_time,
         )
 
+# Workaround for Blizzard protobuf returning wrong ability IDs (ARMORYRESEARCHSWARM_...)
+UPGRADE_RESEARCH_OVERRIDES: dict[UpgradeId, AbilityId] = {
+    UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL1: AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1,
+    UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL2: AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2,
+    UpgradeId.TERRANVEHICLEANDSHIPARMORSLEVEL3: AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3,
+}
 
 class UpgradeData:
     def __init__(self, game_data: GameData, proto) -> None:
@@ -296,7 +303,15 @@ class UpgradeData:
         return self._proto.name
 
     @property
-    def research_ability(self) -> AbilityData | None:
+    def id(self) -> UpgradeId:
+        return UpgradeId(self._proto.upgrade_id)
+
+    @property
+    def research_ability(self) -> Optional[AbilityData]:
+        # Check if the upgrade has a known protobuf ability ID bug
+        if self.id in UPGRADE_RESEARCH_OVERRIDES:
+            ability_id = UPGRADE_RESEARCH_OVERRIDES[self.id].value
+            return self._game_data.abilities.get(ability_id)
         if self._proto.ability_id == 0:
             return None
         if self._proto.ability_id not in self._game_data.abilities:
