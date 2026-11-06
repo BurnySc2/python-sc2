@@ -31,10 +31,45 @@ class GameData:
         }
         self.units: dict[int, UnitTypeData] = {u.unit_id: UnitTypeData(self, u) for u in data.units if u.available}
         self.upgrades: dict[int, UpgradeData] = {u.upgrade_id: UpgradeData(self, u) for u in data.upgrades}
-        # Precomputed structure type IDs (raw ints) for O(1) membership checks
-        self.structure_types: frozenset[int] = frozenset(
-            u.unit_id for u in data.units if u.available and Attribute.Structure.value in u.attributes
-        )
+        # Precompute unit type IDs (raw ints) per attribute for instant O(1) checks
+        armored = set()
+        biological = set()
+        light = set()
+        massive = set()
+        mechanical = set()
+        psionic = set()
+        structures = set()
+        unit_attributes: Dict[int, FrozenSet[int]] = {}
+
+        for u in data.units:
+            if not u.available:
+                continue
+            uid = u.unit_id
+            attrs = u.attributes
+            unit_attributes[uid] = frozenset(attrs)
+            if Attribute.Armored.value in attrs:
+                armored.add(uid)
+            if Attribute.Biological.value in attrs:
+                biological.add(uid)
+            if Attribute.Light.value in attrs:
+                light.add(uid)
+            if Attribute.Massive.value in attrs:
+                massive.add(uid)
+            if Attribute.Mechanical.value in attrs:
+                mechanical.add(uid)
+            if Attribute.Psionic.value in attrs:
+                psionic.add(uid)
+            if Attribute.Structure.value in attrs:
+                structures.add(uid)
+
+        self.armored_type_ids: FrozenSet[int] = frozenset(armored)
+        self.biological_type_ids: FrozenSet[int] = frozenset(biological)
+        self.light_type_ids: FrozenSet[int] = frozenset(light)
+        self.massive_type_ids: FrozenSet[int] = frozenset(massive)
+        self.mechanical_type_ids: FrozenSet[int] = frozenset(mechanical)
+        self.psionic_type_ids: FrozenSet[int] = frozenset(psionic)
+        self.structure_type_ids: FrozenSet[int] = frozenset(structures)
+        self.unit_attributes: Dict[int, FrozenSet[int]] = unit_attributes
         # Cached UnitTypeIds so that conversion does not take long. This needs to be moved elsewhere if a new GameData object is created multiple times per game
 
     @lru_cache(maxsize=256)

@@ -433,7 +433,7 @@ class BotAIInternal(ABC):
         for unit in self.units + self.structures:
             for order in unit.orders:
                 abilities_amount[order.ability.exact_id] += 1
-            if not unit.is_ready and (self.race != Race.Terran or not unit.is_structure):
+            if not unit.is_ready and (self.race != Race.Terran or unit._proto.unit_type not in self.game_data.structure_type_ids):
                 # If an SCV is constructing a building, already_pending would count this structure twice
                 # (once from the SCV order, and once from "not structure.is_ready")
                 if unit.type_id in CREATION_ABILITY_FIX:
@@ -761,7 +761,7 @@ class BotAIInternal(ABC):
                 elif alliance == 1:
                     self.all_own_units.append(unit_obj)
                     unit_id: UnitTypeId = unit_obj.type_id
-                    if unit_type in structure_types:
+                    if unit_type in structure_type_ids:
                         self.structures.append(unit_obj)
                         if unit_id in race_townhalls[self.race]:
                             self.townhalls.append(unit_obj)
@@ -791,7 +791,7 @@ class BotAIInternal(ABC):
                 # Alliance.Enemy.value = 4
                 elif alliance == 4:
                     self.all_enemy_units.append(unit_obj)
-                    if unit_type in structure_types:
+                    if unit_type in structure_type_ids:
                         self.enemy_structures.append(unit_obj)
                     else:
                         self.enemy_units.append(unit_obj)

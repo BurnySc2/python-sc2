@@ -11,9 +11,7 @@ from sc2.cache import CacheDict
 from sc2.constants import (
     CAN_BE_ATTACKED,
     DAMAGE_BONUS_PER_UPGRADE,
-    IS_ARMORED,
     IS_ATTACKING,
-    IS_BIOLOGICAL,
     IS_CARRYING_MINERALS,
     IS_CARRYING_RESOURCES,
     IS_CARRYING_VESPENE,
@@ -24,12 +22,9 @@ from sc2.constants import (
     IS_ENEMY,
     IS_GATHERING,
     IS_LIGHT,
-    IS_MASSIVE,
-    IS_MECHANICAL,
     IS_MINE,
     IS_PATROLLING,
     IS_PLACEHOLDER,
-    IS_PSIONIC,
     IS_REPAIRING,
     IS_RETURNING,
     IS_REVEALED,
@@ -160,38 +155,38 @@ class Unit(HasPosition2D):
 
     @property
     def is_structure(self) -> bool:
-        """Checks if the unit is a structure."""
-        return self._proto.unit_type in self._bot_object.game_data.structure_types
+        """ Checks if the unit is a structure. """
+        return self._proto.unit_type in self._bot_object.game_data.structure_type_ids
 
     @property
     def is_light(self) -> bool:
         """Checks if the unit has the 'light' attribute."""
-        return IS_LIGHT in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.light_type_ids
 
     @property
     def is_armored(self) -> bool:
         """Checks if the unit has the 'armored' attribute."""
-        return IS_ARMORED in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.armored_type_ids
 
     @property
     def is_biological(self) -> bool:
         """Checks if the unit has the 'biological' attribute."""
-        return IS_BIOLOGICAL in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.biological_type_ids
 
     @property
     def is_mechanical(self) -> bool:
         """Checks if the unit has the 'mechanical' attribute."""
-        return IS_MECHANICAL in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.mechanical_type_ids
 
     @property
     def is_massive(self) -> bool:
         """Checks if the unit has the 'massive' attribute."""
-        return IS_MASSIVE in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.massive_type_ids
 
     @property
     def is_psionic(self) -> bool:
         """Checks if the unit has the 'psionic' attribute."""
-        return IS_PSIONIC in self._type_data._proto.attributes
+        return self._proto.unit_type in self._bot_object.game_data.psionic_type_ids
 
     @cached_property
     def tech_alias(self) -> list[UnitTypeId] | None:
@@ -703,7 +698,7 @@ class Unit(HasPosition2D):
             # TODO: hardcode hellbats when they have blueflame or attack upgrades
             for bonus in weapon.damage_bonus:
                 # More about damage bonus https://github.com/Blizzard/s2client-proto/blob/b73eb59ac7f2c52b2ca585db4399f2d3202e102a/s2clientprotocol/data.proto#L55
-                if bonus.attribute in target._type_data._proto.attributes:
+                if bonus.attribute in self._bot_object.game_data.unit_attributes.get(target._proto.unit_type, ()):
                     bonus_damage_per_upgrade = (
                         0
                         if not self.attack_upgrade_level
