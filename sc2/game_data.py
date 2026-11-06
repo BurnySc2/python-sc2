@@ -39,14 +39,14 @@ class GameData:
         mechanical = set()
         psionic = set()
         structures = set()
-        unit_attributes: dict[int, [int]] = {}
+        unit_attributes: Dict[int, frozenset[int]] = {}
 
         for u in data.units:
             if not u.available:
                 continue
             uid = u.unit_id
             attrs = u.attributes
-            unit_attributes[uid] = (attrs)
+            unit_attributes[uid] = frozenset(attrs)
             if Attribute.Armored.value in attrs:
                 armored.add(uid)
             if Attribute.Biological.value in attrs:
@@ -62,7 +62,7 @@ class GameData:
             if Attribute.Structure.value in attrs:
                 structures.add(uid)
 
-        self.armored_type_ids: [int] = frozenset(armored)
+        self.armored_type_ids: frozenset[int] = frozenset(armored)
         self.biological_type_ids: frozenset[int] = frozenset(biological)
         self.light_type_ids: frozenset[int] = frozenset(light)
         self.massive_type_ids: frozenset[int] = frozenset(massive)
