@@ -39,7 +39,7 @@ class GameData:
         mechanical = set()
         psionic = set()
         structures = set()
-        unit_attributes: Dict[int, frozenset[int]] = {}
+        unit_attributes: dict[int, frozenset[int]] = {}
 
         for u in data.units:
             if not u.available:
