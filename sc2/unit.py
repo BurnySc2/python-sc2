@@ -11,6 +11,7 @@ from sc2.cache import CacheDict
 from sc2.constants import (
     CAN_BE_ATTACKED,
     DAMAGE_BONUS_PER_UPGRADE,
+    DETECTOR_TYPE_IDS,
     IS_ARMORED,
     IS_ATTACKING,
     IS_BIOLOGICAL,
@@ -20,7 +21,6 @@ from sc2.constants import (
     IS_CLOAKED,
     IS_COLLECTING,
     IS_CONSTRUCTING_SCV,
-    IS_DETECTOR,
     IS_ENEMY,
     IS_GATHERING,
     IS_LIGHT,
@@ -37,6 +37,7 @@ from sc2.constants import (
     IS_VISIBLE,
     OFF_CREEP_SPEED_INCREASE_DICT,
     OFF_CREEP_SPEED_UPGRADE_DICT,
+    PHOTONCANNON_TYPE_ID,
     SPEED_ALTERING_BUFFS,
     SPEED_INCREASE_DICT,
     SPEED_INCREASE_ON_CREEP_DICT,
@@ -48,7 +49,6 @@ from sc2.constants import (
     UNIT_BATTLECRUISER,
     UNIT_COLOSSUS,
     UNIT_ORACLE,
-    UNIT_PHOTONCANNON,
     transforming,
 )
 from sc2.data import Attribute, CloakState, Race, Target, race_gas, warpgate_abilities
@@ -921,11 +921,16 @@ class Unit(HasPosition2D):
         """Returns the detection distance of the unit."""
         return self._proto.detect_range
 
-    @cached_property
+    @property
     def is_detector(self) -> bool:
         """Checks if the unit is a detector. Has to be completed
         in order to detect and Photoncannons also need to be powered."""
-        return self.is_ready and (self.type_id in IS_DETECTOR or self.type_id == UNIT_PHOTONCANNON and self.is_powered)
+        unit_type = self._proto.unit_type
+        if unit_type in DETECTOR_TYPE_IDS:
+            return self.is_ready
+        if unit_type == PHOTONCANNON_TYPE_ID:
+            return self.is_ready and self.is_powered
+        return False
 
     @property
     def radar_range(self) -> float:

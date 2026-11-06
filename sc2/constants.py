@@ -222,6 +222,8 @@ IS_DETECTOR: set[UnitTypeId] = {
     UnitTypeId.OVERSEERSIEGEMODE,
     UnitTypeId.SPORECRAWLER,
 }
+DETECTOR_TYPE_IDS: frozenset[int] = frozenset(u.value for u in list(IS_DETECTOR))
+PHOTONCANNON_TYPE_ID: int = UnitTypeId.PHOTONCANNON.value
 SPEED_UPGRADE_DICT: dict[UnitTypeId, UpgradeId] = {
     # Terran
     UnitTypeId.MEDIVAC: UpgradeId.MEDIVACRAPIDDEPLOYMENT,
