@@ -39,14 +39,14 @@ class GameData:
         mechanical = set()
         psionic = set()
         structures = set()
-        unit_attributes: Dict[int, FrozenSet[int]] = {}
+        unit_attributes: dict[int, [int]] = {}
 
         for u in data.units:
             if not u.available:
                 continue
             uid = u.unit_id
             attrs = u.attributes
-            unit_attributes[uid] = frozenset(attrs)
+            unit_attributes[uid] = (attrs)
             if Attribute.Armored.value in attrs:
                 armored.add(uid)
             if Attribute.Biological.value in attrs:
@@ -62,14 +62,14 @@ class GameData:
             if Attribute.Structure.value in attrs:
                 structures.add(uid)
 
-        self.armored_type_ids: FrozenSet[int] = frozenset(armored)
-        self.biological_type_ids: FrozenSet[int] = frozenset(biological)
-        self.light_type_ids: FrozenSet[int] = frozenset(light)
-        self.massive_type_ids: FrozenSet[int] = frozenset(massive)
-        self.mechanical_type_ids: FrozenSet[int] = frozenset(mechanical)
-        self.psionic_type_ids: FrozenSet[int] = frozenset(psionic)
-        self.structure_type_ids: FrozenSet[int] = frozenset(structures)
-        self.unit_attributes: Dict[int, FrozenSet[int]] = unit_attributes
+        self.armored_type_ids: [int] = frozenset(armored)
+        self.biological_type_ids: frozenset[int] = frozenset(biological)
+        self.light_type_ids: frozenset[int] = frozenset(light)
+        self.massive_type_ids: frozenset[int] = frozenset(massive)
+        self.mechanical_type_ids: frozenset[int] = frozenset(mechanical)
+        self.psionic_type_ids: frozenset[int] = frozenset(psionic)
+        self.structure_type_ids: frozenset[int] = frozenset(structures)
+        self.unit_attributes: dict[int, frozenset[int]] = unit_attributes
         # Cached UnitTypeIds so that conversion does not take long. This needs to be moved elsewhere if a new GameData object is created multiple times per game
 
     @lru_cache(maxsize=256)
