@@ -155,7 +155,7 @@ class Unit(HasPosition2D):
 
     @property
     def is_structure(self) -> bool:
-        """Checks if the unit is a structure. """
+        """Checks if the unit is a structure."""
         return self._proto.unit_type in self._bot_object.game_data.structure_type_ids
 
     @property
