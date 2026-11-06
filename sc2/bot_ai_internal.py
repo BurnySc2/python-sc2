@@ -722,7 +722,7 @@ class BotAIInternal(ABC):
         self.reactor_tags: set[int] = set()
 
         worker_types: set[UnitTypeId] = {UnitTypeId.DRONE, UnitTypeId.DRONEBURROWED, UnitTypeId.SCV, UnitTypeId.PROBE}
-        structure_types: frozenset[int] = self.game_data.structure_types
+        structure_type_ids: frozenset[int] = self.game_data.structure_type_ids
 
         index: int = 0
         for unit in self.state.observation_raw.units:
