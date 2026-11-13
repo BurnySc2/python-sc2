@@ -8,7 +8,7 @@ from abc import ABC
 from collections import Counter
 from collections.abc import Generator, Iterable
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, final
+from typing import TYPE_CHECKING, Any, cast, final
 
 import numpy as np
 from loguru import logger
@@ -429,7 +429,7 @@ class BotAIInternal(ABC):
         all units in production and all structures, and all morphs"""
         abilities_amount: Counter[AbilityId] = Counter()
         max_build_progress: dict[AbilityId, float] = {}
-        ability_by_id = AbilityId._value2member_map_
+        ability_by_id = cast(Dict[int, AbilityId], AbilityId._value2member_map_)        
         structure_type_ids = self.game_data.structure_type_ids
         is_terran = self.race == Race.Terran
 
