@@ -8,7 +8,7 @@ from abc import ABC
 from collections import Counter
 from collections.abc import Generator, Iterable
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, final
+from typing import TYPE_CHECKING, Any, cast, final
 
 import numpy as np
 from loguru import logger
@@ -429,31 +429,44 @@ class BotAIInternal(ABC):
         all units in production and all structures, and all morphs"""
         abilities_amount: Counter[AbilityId] = Counter()
         max_build_progress: dict[AbilityId, float] = {}
+        ability_by_id = cast(dict[int, AbilityId], AbilityId._value2member_map_)        
+        structure_type_ids = self.game_data.structure_type_ids
+        is_terran = self.race == Race.Terran
+
         unit: Unit
-        for unit in self.units + self.structures:
-            for order in unit.orders:
-                abilities_amount[order.ability.exact_id] += 1
-            if not unit.is_ready and (self.race != Race.Terran or not unit.is_structure):
-                # If an SCV is constructing a building, already_pending would count this structure twice
-                # (once from the SCV order, and once from "not structure.is_ready")
-                if unit.type_id in CREATION_ABILITY_FIX:
-                    if unit.type_id == UnitTypeId.ARCHON:
-                        # Hotfix for archons in morph state
-                        creation_ability_id = AbilityId.ARCHON_WARP_TARGET
-                        abilities_amount[creation_ability_id] += 2
-                    else:
-                        # Hotfix for rich geysirs
-                        creation_ability_id = CREATION_ABILITY_FIX[unit.type_id]
-                        abilities_amount[creation_ability_id] += 1
-                else:
-                    creation_ability = self.game_data.units[unit.type_id.value].creation_ability
-                    if creation_ability is None:
-                        continue
-                    creation_ability_id = creation_ability.exact_id
-                    abilities_amount[creation_ability_id] += 1
-                max_build_progress[creation_ability_id] = max(
-                    max_build_progress.get(creation_ability_id, 0), unit.build_progress
-                )
+        for unit in self.all_own_units:
+            proto = unit._proto
+
+            # Read the raw protobuf orders: this avoids constructing a
+            # UnitOrder and a Point2 for every order.
+            for order in proto.orders:
+                abilities_amount[ability_by_id[order.ability_id]] += 1
+
+            if proto.build_progress == 1:
+                continue
+            # An SCV constructing a Terran structure is already counted by its
+            # build order; do not count the structure a second time.
+            if is_terran and proto.unit_type in structure_type_ids:
+                continue
+
+            unit_type = unit.type_id
+            creation_ability = CREATION_ABILITY_FIX.get(unit_type)
+            if creation_ability is None:
+                creation_ability_data = self.game_data.units[proto.unit_type].creation_ability
+                if creation_ability_data is None:
+                    continue
+                creation_ability = creation_ability_data.exact_id
+                abilities_amount[creation_ability] += 1
+            elif unit_type == UnitTypeId.ARCHON:
+                creation_ability = AbilityId.ARCHON_WARP_TARGET
+                abilities_amount[creation_ability] += 2
+            else:
+                # Hotfix for rich geysirs, cocoons, interceptors, etc.
+                abilities_amount[creation_ability] += 1
+
+            max_build_progress[creation_ability] = max(
+                max_build_progress.get(creation_ability, 0), proto.build_progress
+            )
 
         return abilities_amount, max_build_progress
 
